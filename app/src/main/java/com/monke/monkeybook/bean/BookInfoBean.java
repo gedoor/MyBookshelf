@@ -191,14 +191,14 @@ public class BookInfoBean implements Parcelable,Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         BookInfoBean bookInfoBean = (BookInfoBean) super.clone();
-        bookInfoBean.name = new String(name);
-        bookInfoBean.tag = new String(tag);
-        bookInfoBean.noteUrl = new String(noteUrl);
-        bookInfoBean.chapterUrl = new String(chapterUrl);
-        bookInfoBean.coverUrl = new String(coverUrl);
-        bookInfoBean.author = new String(author);
-        bookInfoBean.introduce = new String(introduce);
-        bookInfoBean.origin = new String(origin);
+        bookInfoBean.name = name;
+        bookInfoBean.tag = tag;
+        bookInfoBean.noteUrl = noteUrl;
+        bookInfoBean.chapterUrl = chapterUrl;
+        bookInfoBean.coverUrl = coverUrl;
+        bookInfoBean.author = author;
+        bookInfoBean.introduce = introduce;
+        bookInfoBean.origin = origin;
         if(chapterlist!=null){
             List<ChapterListBean> newList = new ArrayList<>();
             Iterator<ChapterListBean> iterator = chapterlist.iterator();

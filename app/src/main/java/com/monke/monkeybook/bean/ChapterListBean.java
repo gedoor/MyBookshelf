@@ -137,11 +137,11 @@ public class ChapterListBean implements Parcelable,Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         ChapterListBean chapterListBean = (ChapterListBean) super.clone();
-        chapterListBean.noteUrl = new String(noteUrl);
-        chapterListBean.durChapterUrl = new String(durChapterUrl);
-        chapterListBean.durChapterName = new String(durChapterName);
-        chapterListBean.tag = new String(tag);
-        chapterListBean.hasCache = new Boolean(hasCache);
+        chapterListBean.noteUrl = noteUrl;
+        chapterListBean.durChapterUrl = durChapterUrl;
+        chapterListBean.durChapterName = durChapterName;
+        chapterListBean.tag = tag;
+        chapterListBean.hasCache = hasCache;
         chapterListBean.bookContentBean = new BookContentBean();
         return chapterListBean;
     }

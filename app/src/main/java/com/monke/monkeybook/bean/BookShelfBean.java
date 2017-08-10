@@ -136,8 +136,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
     @Override
     public Object clone() throws CloneNotSupportedException {
         BookShelfBean bookShelfBean = (BookShelfBean) super.clone();
-        bookShelfBean.noteUrl = new String(noteUrl);
-        bookShelfBean.tag = new String(tag);
+        bookShelfBean.noteUrl = noteUrl;
+        bookShelfBean.tag = tag;
         bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
         return bookShelfBean;
     }
