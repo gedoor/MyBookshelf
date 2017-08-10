@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RefreshProgressBar">
+        <attr name="max_progress" format="integer"/>
+        <attr name="dur_progress" format="integer"/>
+        <attr name="second_dur_progress" format="dimension"/>
+        <attr name="second_max_progress" format="dimension"/>
+        <attr name="bg_color" format="color"/>
+        <attr name="second_color" format="color"/>
+        <attr name="font_color" format="color"/>
+        <attr name="speed" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="TagFlowLayout">
+        <attr name="auto_select_effect" format="boolean"></attr>
+        <attr name="max_select" format="integer"></attr>
+        <attr name="gravity">
+            <enum name="left" value="-1" />
+            <enum name="center" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SmoothCheckBox">
+        <attr name="duration" format="integer"/>
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="color_tick" format="color"/>
+        <attr name="color_checked" format="color"/>
+        <attr name="color_unchecked" format="color"/>
+        <attr name="color_unchecked_stroke" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="RecyclerViewBar">
+        <attr name="slider_height" format="dimension"/>
+        <attr name="slider_paddingLeft" format="dimension"/>
+        <attr name="slider_paddingRight" format="dimension"/>
+    </declare-styleable>
+</resources>

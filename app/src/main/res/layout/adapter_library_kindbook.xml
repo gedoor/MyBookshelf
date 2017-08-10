@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="101dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp">
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_cover_default"
+            android:transitionName="img_cover"
+            android:layout_marginTop="3dp"/>
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textColor="@color/tv_btn_black"
+            android:textSize="12sp"
+            app:minTextSize="10sp"
+            android:text="小说名"
+            android:layout_gravity="center_horizontal|bottom"/>
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tv_author"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:singleLine="true"
+            android:gravity="center"
+            android:textColor="@color/tv_btn_normal_black"
+            android:textSize="11sp"
+            app:minTextSize="8sp"
+            android:text="作者"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="3dp"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"/>
+</FrameLayout>

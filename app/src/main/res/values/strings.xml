@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MONKOVEL</string>
+
+    <string name="umeng_key">5954b3f999f0c76d1b001600</string>
+
+    <string name="baidu_app_id">9942412</string>
+    <string name="baidu_app_key">5cZ5UKGW2tqEXK0dUiv4ngLEQ7I4Bf6s</string>
+
+    <string name="net_error_10001">没有网络</string>
+    <string name="net_error_10002">网络连接超时</string>
+    <string name="net_error_10003">数据解析失败</string>
+
+    <string name="tv_read_durprogress">观看至:%s</string>
+    <string name="tv_book_name">《%s》</string>
+    <string name="tv_searchbook_lastest">最新章节:%s</string>
+    <string name="tv_pop_checkaddshelf">是否将《%s》放入书架？</string>
+    <string name="tv_importbook_count">共%s个Text文件</string>
+</resources>

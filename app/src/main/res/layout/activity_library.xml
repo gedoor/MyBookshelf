@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_library"
+    android:id="@+id/ll_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_return"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_ib_pre"
+            android:clickable="true"
+            android:src="@drawable/selector_icon_return" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="45dp"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:singleLine="true"
+            android:text="书城"
+            android:textColor="#343434"
+            android:textSize="16sp" />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.monke.monkeybook.widget.refreshview.RefreshScrollView
+            android:id="@+id/rscv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/view_kind" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"
+                    android:paddingBottom="15dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="15dp">
+
+                    <FrameLayout
+                        android:id="@+id/fl_search"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:transitionName="to_search">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_search_content"
+                            android:gravity="center"
+                            android:hint="搜书名、作者"
+                            android:textColorHint="#6f6f6f"
+                            android:textSize="13sp" />
+
+                        <ImageView
+                            android:layout_width="13dp"
+                            android:layout_height="13dp"
+                            android:layout_gravity="center_vertical|left"
+                            android:layout_marginLeft="10dp"
+                            android:src="@drawable/icon_search_nor" />
+                    </FrameLayout>
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+                <com.monke.monkeybook.widget.libraryview.LibraryKindBookListView
+                    android:id="@+id/lkbv_kindbooklist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:paddingBottom="10dp"
+                    android:background="#ffffff"/>
+                <com.monke.monkeybook.widget.libraryview.LibraryNewBooksView
+                    android:id="@+id/lav_hotauthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff"/>
+            </LinearLayout>
+        </com.monke.monkeybook.widget.refreshview.RefreshScrollView>
+        <com.monke.monkeybook.widget.refreshview.RefreshProgressBar
+            android:id="@+id/rpb_progress"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            app:bg_color="#00000000"
+            app:font_color="#767676"
+            app:second_color="#c1c1c1"
+            app:second_max_progress="80dp"
+            app:speed="2dp"
+            android:visibility="visible"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@drawable/bg_shadow"
+            android:layout_gravity="top"/>
+    </FrameLayout>
+</LinearLayout>

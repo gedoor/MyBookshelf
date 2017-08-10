@@ -1,0 +1,40 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="CAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryDark">#767676</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="CAppTransparentTheme" parent="CAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="anim_pop_checkaddshelf">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_checkaddshelf_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_checkaddshelf_out</item>
+    </style>
+
+    <style name="anim_pop_chapterlist">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_chapterlist_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_chapterlist_out</item>
+    </style>'
+
+    <style name="anim_pop_moresetting">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_moresetting_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_moresetting_out</item>
+    </style>
+
+    <style name="anim_pop_windowlight">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_windowlight_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_windowlight_out</item>
+    </style>
+    <style name="anim_pop_windowmenumore">
+        <item name="android:windowEnterAnimation">@anim/anim_pop_windowmenumore_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_pop_windowmenumore_out</item>
+    </style>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/tv_text_addshelf_pre" android:state_pressed="false" android:state_enabled="true"/>
+    <item android:drawable="@color/tv_text_addshelf_deep_pre" android:state_pressed="true" android:state_enabled="true"/>
+
+    <item android:drawable="@color/tv_text_addshelf_nor" android:state_enabled="false"/>
+</selector>
