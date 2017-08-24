@@ -13,13 +13,17 @@ import com.monke.basemvplib.IView;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActivity implements IView {
+    public final static String start_share_ele= "start_with_share_ele";
     protected Bundle savedInstanceState;
     protected T mPresenter;
-
+    private Boolean startShareAnim = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
+        if(getIntent()!=null){
+            startShareAnim = getIntent().getBooleanExtra(start_share_ele,false);
+        }
         AppActivityManager.getInstance().add(this);
         initSDK();
         onCreateActivity();
@@ -128,6 +132,7 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent.putExtra(start_share_ele,true);
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, view, transitionName).toBundle());
         } else {
             startActivityByAnim(intent, animIn, animExit);
@@ -136,5 +141,9 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
 
     public Context getContext(){
         return this;
+    }
+
+    public Boolean getStart_share_ele() {
+        return startShareAnim;
     }
 }

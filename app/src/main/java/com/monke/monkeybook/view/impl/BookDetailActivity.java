@@ -216,9 +216,15 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    finishAfterTransition();
+                    if(getStart_share_ele()){
+                        finishAfterTransition();
+                    }else{
+                        finish();
+                        overridePendingTransition(0,android.R.anim.fade_out);
+                    }
                 } else {
                     finish();
+                    overridePendingTransition(0,android.R.anim.fade_out);
                 }
             }
         });
@@ -240,9 +246,15 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    finishAfterTransition();
+                    if(getStart_share_ele()){
+                        finishAfterTransition();
+                    }else{
+                        finish();
+                        overridePendingTransition(0,android.R.anim.fade_out);
+                    }
                 } else {
                     finish();
+                    overridePendingTransition(0,android.R.anim.fade_out);
                 }
             }
         });

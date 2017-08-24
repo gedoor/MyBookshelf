@@ -9,8 +9,8 @@ android {
         applicationId "com.monke.monkeybook"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 7
-        versionName "1.2.2"
+        versionCode 8
+        versionName "1.2.3"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
     }
 
@@ -23,14 +23,7 @@ android {
         }
     }
 
-    signingConfigs {
-        config {
-            keyAlias 'monkeybook'
-            keyPassword 'zqh19931118'
-            storeFile file('D:/WorkSpace/Android/PersonalKey/Monke_keystore.jks')
-            storePassword 'zqh19931118'
-        }
-    }
+
     lintOptions {
         abortOnError false
     }

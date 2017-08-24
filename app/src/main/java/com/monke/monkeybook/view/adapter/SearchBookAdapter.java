@@ -151,14 +151,11 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public void addAll(List<SearchBookBean> newData) {
-        if (newData != null && newData.size() > 0) {
-            int position = getItemcount();
-            if (newData != null && newData.size() > 0) {
-                searchBooks.addAll(newData);
-            }
-            notifyItemInserted(position);
-            notifyItemRangeChanged(position, newData.size());
+    public void addAll(List<SearchBookBean> newDatas) {
+        if(newDatas!=null && newDatas.size()>0){
+            int oldCount = getItemcount();
+            searchBooks.addAll(newDatas);
+            notifyItemRangeInserted(oldCount,newDatas.size());
         }
     }
 
