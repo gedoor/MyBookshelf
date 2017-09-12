@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
 import com.monke.basemvplib.impl.BaseModelImpl;
@@ -17,16 +18,13 @@ import com.monke.monkeybook.common.api.IGxwztvApi;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IGxwztvBookModel;
 import com.monke.monkeybook.presenter.impl.LibraryPresenterImpl;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;

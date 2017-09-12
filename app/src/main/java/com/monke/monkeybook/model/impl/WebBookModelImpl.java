@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.bean.BookContentBean;
@@ -25,10 +26,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
-        if (bookShelfBean.getTag().equals(EasouBookModelImpl.TAG)) {
-            return EasouBookModelImpl.getInstance().getBookInfo(bookShelfBean);
-        }
-        else if(bookShelfBean.getTag().equals(GxwztvBookModelImpl.TAG)){
+        if(bookShelfBean.getTag().equals(GxwztvBookModelImpl.TAG)){
             return GxwztvBookModelImpl.getInstance().getBookInfo(bookShelfBean);
         }
         else if(bookShelfBean.getTag().equals(LingdiankanshuStationBookModelImpl.TAG)){
@@ -47,10 +45,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, OnGetChapterListListener getChapterListListener) {
-        if (bookShelfBean.getTag().equals(EasouBookModelImpl.TAG)) {
-            EasouBookModelImpl.getInstance().getChapterList(bookShelfBean, getChapterListListener);
-        }
-        else if(bookShelfBean.getTag().equals(GxwztvBookModelImpl.TAG)){
+        if(bookShelfBean.getTag().equals(GxwztvBookModelImpl.TAG)){
             GxwztvBookModelImpl.getInstance().getChapterList(bookShelfBean, getChapterListListener);
         }
         else if(bookShelfBean.getTag().equals(LingdiankanshuStationBookModelImpl.TAG)){
@@ -69,10 +64,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex, String tag) {
-        if (tag.equals(EasouBookModelImpl.TAG)) {
-            return EasouBookModelImpl.getInstance().getBookContent(durChapterUrl, durChapterIndex);
-        }
-        else if(tag.equals(GxwztvBookModelImpl.TAG)){
+        if(tag.equals(GxwztvBookModelImpl.TAG)){
             return GxwztvBookModelImpl.getInstance().getBookContent(durChapterUrl, durChapterIndex);
         }
         else if(tag.equals(LingdiankanshuStationBookModelImpl.TAG)){
@@ -93,10 +85,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<List<SearchBookBean>> searchOtherBook(String content,int page,String tag){
-        if(tag.equals(EasouBookModelImpl.TAG)){
-            return EasouBookModelImpl.getInstance().searchBook(content, page, 0);
-        }
-        else if(tag.equals(GxwztvBookModelImpl.TAG)){
+        if(tag.equals(GxwztvBookModelImpl.TAG)){
             return GxwztvBookModelImpl.getInstance().searchBook(content, page);
         }
         else if(tag.equals(LingdiankanshuStationBookModelImpl.TAG)){
@@ -111,14 +100,6 @@ public class WebBookModelImpl implements IWebBookModel {
                 }
             });
         }
-    }
-
-    /**
-     * 搜索书籍   //专用
-     */
-    @Override
-    public Observable<List<SearchBookBean>> searchBook(String content, int page,int rankKind) {
-        return EasouBookModelImpl.getInstance().searchBook(content, page, rankKind);
     }
     /**
      * 获取分类书籍

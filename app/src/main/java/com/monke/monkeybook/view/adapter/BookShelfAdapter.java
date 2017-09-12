@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
 import android.os.Handler;
@@ -36,11 +37,11 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
     private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener {
-        public void toSearch();
+        void toSearch();
 
-        public void onClick(BookShelfBean bookShelfBean, int index);
+        void onClick(BookShelfBean bookShelfBean, int index);
 
-        public void onLongClick(View view, BookShelfBean bookShelfBean, int index);
+        void onLongClick(View view, BookShelfBean bookShelfBean, int index);
     }
 
     public BookShelfAdapter() {

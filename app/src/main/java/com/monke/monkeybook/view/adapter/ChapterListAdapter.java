@@ -1,7 +1,7 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.widget.ChapterListView;

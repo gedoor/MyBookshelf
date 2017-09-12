@@ -1,7 +1,7 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.model.IWebContentModel;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

@@ -1,7 +1,11 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.bean;
 
 import java.util.List;
 
+/**
+ * 书城 书籍分类推荐列表
+ */
 public class LibraryKindBookListBean {
     private String kindName;
     private String kindUrl;

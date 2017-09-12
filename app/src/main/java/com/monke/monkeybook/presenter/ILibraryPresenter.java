@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import com.monke.basemvplib.IPresenter;
@@ -5,7 +6,7 @@ import java.util.LinkedHashMap;
 
 public interface ILibraryPresenter extends IPresenter{
 
-    public LinkedHashMap<String, String> getKinds();
+    LinkedHashMap<String, String> getKinds();
 
-    public void getLibraryData();
+    void getLibraryData();
 }

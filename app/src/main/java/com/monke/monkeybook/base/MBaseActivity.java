@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.base;
 
 import com.monke.basemvplib.IPresenter;

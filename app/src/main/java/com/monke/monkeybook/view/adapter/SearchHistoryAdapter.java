@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
     }
 
     public interface OnItemClickListener{
-        public void itemClick(SearchHistoryBean searchHistoryBean);
+        void itemClick(SearchHistoryBean searchHistoryBean);
     }
     private SearchHistoryAdapter.OnItemClickListener onItemClickListener;
 

@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import android.app.Activity;
@@ -10,27 +11,27 @@ import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 
 public interface IBookReadPresenter extends IPresenter{
 
-    public int getOpen_from();
+    int getOpen_from();
 
-    public BookShelfBean getBookShelf();
+    BookShelfBean getBookShelf();
 
-    public void initContent();
+    void initContent();
 
-    public void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);
+    void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);
 
-    public void updateProgress(int chapterIndex, int pageIndex);
+    void updateProgress(int chapterIndex, int pageIndex);
 
-    public void saveProgress();
+    void saveProgress();
 
-    public String getChapterTitle(int chapterIndex);
+    String getChapterTitle(int chapterIndex);
 
-    public void setPageLineCount(int pageLineCount);
+    void setPageLineCount(int pageLineCount);
 
-    public void addToShelf(final ReadBookPresenterImpl.OnAddListner addListner);
+    void addToShelf(final ReadBookPresenterImpl.OnAddListner addListner);
 
-    public Boolean getAdd();
+    Boolean getAdd();
 
-    public void initData(Activity activity);
+    void initData(Activity activity);
 
-    public void openBookFromOther(Activity activity);
+    void openBookFromOther(Activity activity);
 }

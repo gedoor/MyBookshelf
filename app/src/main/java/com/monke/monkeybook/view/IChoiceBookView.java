@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view;
 
 import com.monke.basemvplib.IView;
@@ -7,23 +8,23 @@ import java.util.List;
 
 public interface IChoiceBookView extends IView{
 
-    public void refreshSearchBook(List<SearchBookBean> books);
+    void refreshSearchBook(List<SearchBookBean> books);
 
-    public void loadMoreSearchBook(List<SearchBookBean> books);
+    void loadMoreSearchBook(List<SearchBookBean> books);
 
-    public void refreshFinish(Boolean isAll);
+    void refreshFinish(Boolean isAll);
 
-    public void loadMoreFinish(Boolean isAll);
+    void loadMoreFinish(Boolean isAll);
 
-    public void searchBookError();
+    void searchBookError();
 
-    public void addBookShelfSuccess(List<SearchBookBean> searchBooks);
+    void addBookShelfSuccess(List<SearchBookBean> searchBooks);
 
-    public void addBookShelfFailed(int code);
+    void addBookShelfFailed(int code);
 
-    public ChoiceBookAdapter getSearchBookAdapter();
+    ChoiceBookAdapter getSearchBookAdapter();
 
-    public void updateSearchItem(int index);
+    void updateSearchItem(int index);
 
-    public void startRefreshAnim();
+    void startRefreshAnim();
 }

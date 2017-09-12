@@ -9,8 +9,8 @@ android {
         applicationId "com.monke.monkeybook"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 8
-        versionName "1.2.3"
+        versionCode 9
+        versionName "1.2.4"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
     }
 
@@ -22,7 +22,6 @@ android {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "pyger"]
         }
     }
-
 
     lintOptions {
         abortOnError false

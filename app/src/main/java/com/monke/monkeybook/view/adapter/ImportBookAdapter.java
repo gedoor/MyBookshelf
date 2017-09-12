@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
 import android.os.Environment;
@@ -20,7 +21,7 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
     private List<File> selectDatas;
 
     public interface OnCheckBookListener{
-        public void checkBook(int count);
+        void checkBook(int count);
     }
 
     private OnCheckBookListener checkBookListener;

@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.service;
 
 import android.app.NotificationManager;
@@ -29,7 +30,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.view.impl.MainActivity;
-
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;

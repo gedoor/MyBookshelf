@@ -1,24 +1,43 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view;
 
 import com.monke.basemvplib.IView;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.view.adapter.BookShelfAdapter;
 
 import java.util.List;
 
 public interface IMainView extends IView{
 
-    public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
+    /**
+     * 刷新书架书籍小说信息 更新UI
+     * @param bookShelfBeanList
+     */
+    void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
 
-    public void activityRefreshView();
+    /**
+     * 执行刷新书架小说信息
+     */
+    void activityRefreshView();
 
-    public void refreshFinish();
+    /**
+     * 刷新完成
+     */
+    void refreshFinish();
 
-    public void refreshError(String error);
+    /**
+     * 刷新错误
+     * @param error
+     */
+    void refreshError(String error);
 
-    public List<BookShelfBean> getBookShelfAdapterDatas();
+    /**
+     * 刷新书籍  UI进度修改
+     */
+    void refreshRecyclerViewItemAdd();
 
-    public void refreshRecyclerViewItemAdd();
-
-    public void setRecyclerMaxProgress(int x);
+    /**
+     * 设置刷新进度条最大值
+     * @param x
+     */
+    void setRecyclerMaxProgress(int x);
 }

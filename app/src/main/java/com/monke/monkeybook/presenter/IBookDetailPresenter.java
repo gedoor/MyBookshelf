@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import com.monke.basemvplib.IPresenter;
@@ -6,17 +7,17 @@ import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface IBookDetailPresenter extends IPresenter{
 
-    public int getOpenfrom();
+    int getOpenfrom();
 
-    public SearchBookBean getSearchBook();
+    SearchBookBean getSearchBook();
 
-    public BookShelfBean getBookShelf();
+    BookShelfBean getBookShelf();
 
-    public Boolean getInBookShelf();
+    Boolean getInBookShelf();
 
-    public void getBookShelfInfo();
+    void getBookShelfInfo();
 
-    public void addToBookShelf();
+    void addToBookShelf();
 
-    public void removeFromBookShelf();
+    void removeFromBookShelf();
 }

@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view;
 
 import android.graphics.Paint;
@@ -5,23 +6,40 @@ import com.monke.basemvplib.IView;
 
 public interface IBookReadView extends IView{
 
-    public Paint getPaint();
+    /**
+     * 获取当前阅读界面UI画笔
+     * @return
+     */
+    Paint getPaint();
 
-    public int getContentWidth();
+    /**
+     * 获取当前小说内容可绘制宽度
+     * @return
+     */
+    int getContentWidth();
 
-    public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex);
+    /**
+     * 小说数据初始化成功
+     * @param durChapterIndex
+     * @param chapterAll
+     * @param durPageIndex
+     */
+    void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex);
 
-    public void startLoadingBook();
+    /**
+     * 开始加载
+     */
+    void startLoadingBook();
 
-    public void setHpbReadProgressMax(int count);
+    void setHpbReadProgressMax(int count);
 
-    public void initPop();
+    void initPop();
 
-    public void showLoadBook();
+    void showLoadBook();
 
-    public void dimissLoadBook();
+    void dimissLoadBook();
 
-    public void loadLocationBookError();
+    void loadLocationBookError();
 
-    public void showDownloadMenu();
+    void showDownloadMenu();
 }

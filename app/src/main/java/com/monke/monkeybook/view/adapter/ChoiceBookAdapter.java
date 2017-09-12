@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
@@ -20,9 +21,9 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> searchBooks;
 
     public interface OnItemClickListener {
-        public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
+        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
 
-        public void clickItem(View animView, int position, SearchBookBean searchBookBean);
+        void clickItem(View animView, int position, SearchBookBean searchBookBean);
     }
 
     private OnItemClickListener itemClickListener;

@@ -1,11 +1,10 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook;
 
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.widget.Toast;
-
 import com.monke.monkeybook.service.DownloadService;
 import com.umeng.analytics.MobclickAgent;
 

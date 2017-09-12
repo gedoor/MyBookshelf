@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import com.monke.basemvplib.IPresenter;
@@ -5,25 +6,25 @@ import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface ISearchPresenter extends IPresenter{
 
-    public Boolean getHasSearch();
+    Boolean getHasSearch();
 
-    public void setHasSearch(Boolean hasSearch);
+    void setHasSearch(Boolean hasSearch);
 
-    public void insertSearchHistory();
+    void insertSearchHistory();
 
-    public void querySearchHistory();
+    void querySearchHistory();
 
-    public void cleanSearchHistory();
+    void cleanSearchHistory();
 
-    public int getPage();
+    int getPage();
 
-    public void initPage();
+    void initPage();
 
-    public void toSearchBooks(String key);
+    void toSearchBooks(String key,Boolean fromError);
 
-    public void addBookToShelf(final SearchBookBean searchBookBean);
+    void addBookToShelf(final SearchBookBean searchBookBean);
 
-    public Boolean getInput();
+    Boolean getInput();
 
-    public void setInput(Boolean input);
+    void setInput(Boolean input);
 }

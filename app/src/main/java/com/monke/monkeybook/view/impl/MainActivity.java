@@ -1,8 +1,10 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.impl;
 
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -52,6 +54,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void initData() {
         bookShelfAdapter = new BookShelfAdapter();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -195,11 +202,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     public void refreshError(String error) {
         refreshFinish();
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public List<BookShelfBean> getBookShelfAdapterDatas() {
-        return bookShelfAdapter.getBooks();
     }
 
     @Override

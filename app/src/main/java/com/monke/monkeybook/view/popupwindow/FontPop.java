@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.Context;
@@ -9,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.ReadBookControl;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FontPop extends PopupWindow{

@@ -1,12 +1,11 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.ErrorAnalyContentManager;
 import com.monke.monkeybook.bean.BookContentBean;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.TextNode;
-
 import java.util.List;
 
 public class ContentCommendModelImpl {

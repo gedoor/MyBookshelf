@@ -1,13 +1,10 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.model.IWebContentModel;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
-
-import java.util.List;
 
 public class ContentZhulangModelImpl implements IWebContentModel{
     public static final String TAG = "http://book.zhulang.com";

@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.impl;
 
 import android.Manifest;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
@@ -43,10 +43,8 @@ import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import me.grantland.widget.AutofitTextView;
 
 public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView {

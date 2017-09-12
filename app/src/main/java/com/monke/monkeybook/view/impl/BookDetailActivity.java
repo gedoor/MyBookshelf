@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.impl;
 
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.BitIntentDataManager;
@@ -22,7 +22,6 @@ import com.monke.monkeybook.utils.BlurTransformation;
 import com.monke.monkeybook.view.IBookDetailView;
 
 public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
-
     private FrameLayout iflContent;
     private ImageView ivBlurCover;
     private ImageView ivCover;

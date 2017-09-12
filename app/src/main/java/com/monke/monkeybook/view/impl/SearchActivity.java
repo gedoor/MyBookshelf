@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.impl;
 
 import android.animation.Animator;
@@ -25,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.monke.immerselayout.StatusBarUtils;
@@ -42,7 +44,9 @@ import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
+
 import java.util.List;
+
 import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchActivity extends MBaseActivity<ISearchPresenter> implements ISearchView {
@@ -100,7 +104,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             public void onClick(View v) {
                 //刷新失败 ，重试
                 mPresenter.initPage();
-                mPresenter.toSearchBooks(null);
+                mPresenter.toSearchBooks(null,true);
                 rfRvSearchBooks.startRefresh();
             }
         });
@@ -192,12 +196,12 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void startLoadmore() {
-                mPresenter.toSearchBooks(null);
+                mPresenter.toSearchBooks(null, false);
             }
 
             @Override
             public void loadMoreErrorTryAgain() {
-                mPresenter.toSearchBooks(null);
+                mPresenter.toSearchBooks(null, true);
             }
         });
     }
@@ -220,7 +224,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 @Override
                 public void run() {
                     mPresenter.initPage();
-                    mPresenter.toSearchBooks(key);
+                    mPresenter.toSearchBooks(key, false);
                     rfRvSearchBooks.startRefresh();
                 }
             }, 300);
@@ -516,7 +520,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     public Boolean checkIsExist(SearchBookBean searchBookBean) {
         Boolean result = false;
         for (int i = 0; i < searchBookAdapter.getItemcount(); i++) {
-            if(searchBookAdapter.getSearchBooks().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && searchBookAdapter.getSearchBooks().get(i).getTag().equals(searchBookBean.getTag())){
+            if (searchBookAdapter.getSearchBooks().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && searchBookAdapter.getSearchBooks().get(i).getTag().equals(searchBookBean.getTag())) {
                 result = true;
                 break;
             }

@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.Context;
@@ -14,8 +15,8 @@ public class CheckAddShelfPop extends PopupWindow{
     private View view;
 
     public interface OnItemClickListener {
-        public void clickExit();
-        public void clickAddShelf();
+        void clickExit();
+        void clickAddShelf();
     }
     private OnItemClickListener itemClick;
     private String bookName;

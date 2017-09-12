@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter.impl;
 
 import android.Manifest;
@@ -316,7 +317,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 TextPaint mPaint = (TextPaint) mView.getPaint();
                 mPaint.setSubpixelText(true);
                 Layout tempLayout = new StaticLayout(paragraphstr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                ;
                 List<String> linesdata = new ArrayList<String>();
                 for (int i = 0; i < tempLayout.getLineCount(); i++) {
                     linesdata.add(paragraphstr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));

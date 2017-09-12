@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.bean;
 
 import android.os.Parcel;
@@ -7,6 +8,9 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
+/**
+ * 章节列表
+ */
 @Entity
 public class ChapterListBean implements Parcelable,Cloneable{
 

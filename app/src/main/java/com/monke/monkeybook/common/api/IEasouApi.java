@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.common.api;
 
 import io.reactivex.Observable;
@@ -5,6 +6,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Url;
 
+/**
+ * 宜搜小说API (质量太差  废弃)
+ */
 public interface IEasouApi {
     @GET
     @Headers({"Accept:text/html,application/xhtml+xml,application/xml",

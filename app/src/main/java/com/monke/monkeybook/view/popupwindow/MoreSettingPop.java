@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.Context;
@@ -6,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.PopupWindow;
-
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.ReadBookControl;

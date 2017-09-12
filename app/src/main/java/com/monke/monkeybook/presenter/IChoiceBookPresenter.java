@@ -1,3 +1,4 @@
+//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import com.monke.basemvplib.IPresenter;
@@ -5,13 +6,13 @@ import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface IChoiceBookPresenter extends IPresenter{
 
-    public int getPage();
+    int getPage();
 
-    public void initPage();
+    void initPage();
 
-    public void toSearchBooks(String key);
+    void toSearchBooks(String key);
 
-    public void addBookToShelf(final SearchBookBean searchBookBean);
+    void addBookToShelf(final SearchBookBean searchBookBean);
 
-    public String getTitle();
+    String getTitle();
 }
