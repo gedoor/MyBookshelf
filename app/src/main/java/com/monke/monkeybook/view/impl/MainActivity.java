@@ -65,7 +65,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void bindView() {
-        int d = 0;
+        int d = 1;
 
         downloadListPop = new DownloadListPop(MainActivity.this);
 
