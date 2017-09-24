@@ -65,6 +65,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void bindView() {
+        int f = 0;
+
         downloadListPop = new DownloadListPop(MainActivity.this);
 
         rfRvShelf = (RefreshRecyclerView) findViewById(R.id.rf_rv_shelf);
