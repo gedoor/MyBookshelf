@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
 import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.monke.monkeybook.BitIntentDataManager;
@@ -25,6 +26,7 @@ import com.monke.monkeybook.view.adapter.BookShelfAdapter;
 import com.monke.monkeybook.view.popupwindow.DownloadListPop;
 import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
+
 import java.util.List;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
@@ -64,6 +66,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void bindView() {
         downloadListPop = new DownloadListPop(MainActivity.this);
+
+        int a = 0;
 
         rfRvShelf = (RefreshRecyclerView) findViewById(R.id.rf_rv_shelf);
 
@@ -164,7 +168,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void firstRequest() {
         //通过百度API 判断是否有更新
-        try{
+        try {
             BDAutoUpdateSDK.uiUpdateAction(this, new UICheckUpdateCallback() {
                 @Override
                 public void onNoUpdateFound() {
@@ -176,7 +180,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
                 }
             });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         mPresenter.queryBookShelf(false);
