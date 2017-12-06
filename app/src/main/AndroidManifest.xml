@@ -49,7 +49,7 @@
             android:name=".view.impl.ReadBookActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW"></action>
                 <category android:name="android.intent.category.DEFAULT"></category>
                 <data android:mimeType="text/plain"></data>
