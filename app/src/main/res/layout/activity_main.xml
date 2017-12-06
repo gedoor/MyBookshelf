@@ -78,28 +78,5 @@
             app:second_max_progress="80dp"
             app:speed="2dp" />
     </LinearLayout>
-    <FrameLayout
-        android:id="@+id/fl_warn"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_gravity="bottom"
-        android:background="#70000000">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="所有小说来源均来自各个网站，本APP仅提供转载服务"
-            android:textSize="12sp"
-            android:textColor="#ffffff"
-            android:singleLine="true"
-            android:ellipsize="marquee"/>
-        <ImageView
-            android:id="@+id/iv_warn_close"
-            android:layout_width="35dp"
-            android:layout_height="match_parent"
-            android:paddingLeft="13dp"
-            android:paddingRight="8dp"
-            android:layout_gravity="center_vertical|right"
-            android:src="@drawable/icon_close"/>
-    </FrameLayout>
+
 </com.monke.immerselayout.ImmerseFrameLayout>

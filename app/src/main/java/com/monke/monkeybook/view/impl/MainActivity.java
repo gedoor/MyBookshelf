@@ -75,9 +75,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         ibDownload = (ImageButton) findViewById(R.id.ib_download);
 
         rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfAdapter, new LinearLayoutManager(this));
-
-        flWarn = (FrameLayout) findViewById(R.id.fl_warn);
-        ivWarnClose = (ImageView) findViewById(R.id.iv_warn_close);
     }
 
     @Override
@@ -141,12 +138,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             }
         });
 
-        ivWarnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flWarn.setVisibility(View.GONE);
-            }
-        });
     }
 
     private void bindRvShelfEvent() {
