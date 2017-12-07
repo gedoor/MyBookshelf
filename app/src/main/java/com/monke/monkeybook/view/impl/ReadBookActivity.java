@@ -340,7 +340,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
             @Override
             public void loaddata(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
+                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex, false);
             }
 
             @Override

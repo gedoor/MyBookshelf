@@ -151,10 +151,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     @Override
-    public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex) {
+    public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex, boolean reLoad) {
         //载入正文
         if (null != bookShelf && bookShelf.getBookInfoBean().getChapterlist().size() > 0) {
-            if (null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean() && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()) {
+            if (null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
+                    && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()) {
                 if (bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize() && bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
                     int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
@@ -192,7 +193,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                 public void onNext(List<String> value) {
                                     bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().clear();
                                     bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().addAll(value);
-                                    loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
+                                    loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex, false);
                                 }
 
                                 @Override
@@ -219,7 +220,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                             public void onNext(ReadBookContentBean tempList) {
                                 if (tempList.getBookContentList() != null && tempList.getBookContentList().size() > 0 && tempList.getBookContentList().get(0).getDurCapterContent() != null) {
                                     bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(tempList.getBookContentList().get(0));
-                                    loadContent(bookContentView, bookTag, chapterIndex, tempList.getPageIndex());
+                                    loadContent(bookContentView, bookTag, chapterIndex, tempList.getPageIndex(), false);
                                 } else {
                                     final int finalPageIndex1 = tempList.getPageIndex();
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(new Function<BookContentBean, BookContentBean>() {
@@ -242,7 +243,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                                     if (value.getDurChapterUrl() != null && value.getDurChapterUrl().length() > 0) {
                                                         bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(value);
                                                         if (bookTag == bookContentView.getqTag())
-                                                            loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex1);
+                                                            loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex1, false);
                                                     } else {
                                                         if (bookContentView != null && bookTag == bookContentView.getqTag())
                                                             bookContentView.loadError();
