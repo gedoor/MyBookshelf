@@ -97,6 +97,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         setContentView(R.layout.activity_bookread);
     }
 
+    //初始化正文
     @Override
     protected void initData() {
         mPresenter.saveProgress();
@@ -203,7 +204,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
             public void itemClick(int index) {
-                csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
+                csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DURPAGEINDEXBEGIN, false);
             }
         });
 
@@ -288,7 +290,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 }
                 if ((realDur - 1) != mPresenter.getBookShelf().getDurChapter()) {
                     csvBook.setInitData(realDur - 1,
-                            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
+                            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                            BookContentView.DURPAGEINDEXBEGIN, false);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
@@ -326,9 +329,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             @Override
             public void onClick(View v) {
                 //刷新按钮
+                llMenuTop.startAnimation(menuTopOut);
+                llMenuBottom.startAnimation(menuBottomOut);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
+                        BookContentView.DURPAGEINDEXBEGIN, true);
             }
         });
 
@@ -343,8 +348,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
             //正文
             @Override
-            public void loaddata(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex, false);
+            public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex, boolean isReload) {
+                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex, isReload);
             }
 
             @Override
@@ -384,7 +389,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 //上一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
+                        BookContentView.DURPAGEINDEXBEGIN, false);
             }
         });
 
@@ -394,7 +399,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 //下一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
+                        BookContentView.DURPAGEINDEXBEGIN, false);
             }
         });
 
@@ -471,7 +476,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     @Override
     public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex) {
-        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex);
+        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex, false);
     }
 
     @Override

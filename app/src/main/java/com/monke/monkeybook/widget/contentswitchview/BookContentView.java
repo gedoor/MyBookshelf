@@ -90,19 +90,19 @@ public class BookContentView extends FrameLayout {
             @Override
             public void onClick(View v) {
                 if (loadDataListener != null)
-                    loading();
+                    loading(false);
             }
         });
     }
 
-    public void loading() {
+    public void loading(boolean isReload) {
         llError.setVisibility(GONE);
         tvLoading.setVisibility(VISIBLE);
         llContent.setVisibility(INVISIBLE);
         qTag = System.currentTimeMillis();
         //执行请求操作
         if (loadDataListener != null) {
-            loadDataListener.loaddata(this, qTag, durChapterIndex, durPageIndex);
+            loadDataListener.loadData(this, qTag, durChapterIndex, durPageIndex, isReload);
         }
     }
 
@@ -148,7 +148,7 @@ public class BookContentView extends FrameLayout {
         }
     }
 
-    public void loadData(String title, int durChapterIndex, int chapterAll, int durPageIndex) {
+    public void loadData(String title, int durChapterIndex, int chapterAll, int durPageIndex, boolean isReload) {
         this.title = title;
         this.durChapterIndex = durChapterIndex;
         this.chapterAll = chapterAll;
@@ -156,7 +156,7 @@ public class BookContentView extends FrameLayout {
         tvTitle.setText(title);
         tvPage.setText("");
 
-        loading();
+        loading(isReload);
     }
 
     public ContentSwitchView.LoadDataListener getLoadDataListener() {

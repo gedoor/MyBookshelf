@@ -296,10 +296,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    public void setInitData(int durChapterIndex, int chapterAll, int durPageIndex) {
+    public void setInitData(int durChapterIndex, int chapterAll, int durPageIndex, boolean reload) {
         updateOtherPage(durChapterIndex, chapterAll, durPageIndex, -1);
         durPageView.setLoadDataListener(loadDataListener, this);
-        durPageView.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex);
+        durPageView.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex, reload);
 
         if (loadDataListener != null)
             loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
@@ -351,17 +351,20 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (state == ONLYNEXT || state == PREANDNEXT) {
             int temp = (state == ONLYNEXT ? 1 : 2);
             if (pageAll > 0 && durPageIndex >= 0 && durPageIndex < pageAll - 1)
-                viewContents.get(temp).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex + 1);
+                viewContents.get(temp).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex + 1, false);
             else
-                viewContents.get(temp).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "", durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN);
+                viewContents.get(temp).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "",
+                        durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN, false);
         } else if (state == ONLYPRE || state == NONE) {
             BookContentView next = new BookContentView(getContext());
             next.setReadBookControl(readBookControl);
             next.setLoadDataListener(loadDataListener, this);
             if (pageAll > 0 && durPageIndex >= 0 && durPageIndex < pageAll - 1)
-                next.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex + 1);
+                next.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "",
+                        durChapterIndex, chapterAll, durPageIndex + 1, false);
             else
-                next.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "", durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN);
+                next.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "",
+                        durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN, false);
             viewContents.add(next);
             this.addView(next, 0);
         }
@@ -373,16 +376,20 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             pre.setReadBookControl(readBookControl);
             pre.setLoadDataListener(loadDataListener, this);
             if (pageAll > 0 && durPageIndex >= 0 && durPageIndex > 0)
-                pre.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex - 1);
+                pre.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "",
+                        durChapterIndex, chapterAll, durPageIndex - 1, false);
             else
-                pre.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "", durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND);
+                pre.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "",
+                        durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND, false);
             viewContents.add(0, pre);
             this.addView(pre);
         } else if (state == ONLYPRE || state == PREANDNEXT) {
             if (pageAll > 0 && durPageIndex >= 0 && durPageIndex > 0)
-                viewContents.get(0).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "", durChapterIndex, chapterAll, durPageIndex - 1);
+                viewContents.get(0).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex) : "",
+                        durChapterIndex, chapterAll, durPageIndex - 1, false);
             else
-                viewContents.get(0).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "", durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND);
+                viewContents.get(0).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "",
+                        durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND, false);
         }
     }
 
@@ -395,7 +402,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     }
 
     public interface LoadDataListener {
-        public void loaddata(BookContentView bookContentView, long tag, int chapterIndex, int pageIndex);
+        public void loadData(BookContentView bookContentView, long tag, int chapterIndex, int pageIndex, boolean isReload);
 
         public void updateProgress(int chapterIndex, int pageIndex);
 

@@ -151,11 +151,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     @Override
-    public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex, boolean reLoad) {
+    public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex, boolean isReload) {
         //载入正文
         if (null != bookShelf && bookShelf.getBookInfoBean().getChapterlist().size() > 0) {
             if (null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
-                    && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()) {
+                    && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()
+                    && !isReload) {
                 if (bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize() && bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
                     int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
