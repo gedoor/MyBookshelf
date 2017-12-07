@@ -6,6 +6,15 @@
     android:orientation="vertical"
     android:background="#767676">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,6 +75,7 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/bg_ib_pre"
                 android:src="@drawable/selector_iv_add" />
+
         </LinearLayout>
 
         <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
