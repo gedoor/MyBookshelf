@@ -144,6 +144,7 @@ public class ChapterListView extends FrameLayout{
                 if(itemClickListener!=null){
                     itemClickListener.itemClick(index);
                     rvbSlider.scrollToPositionWithOffset(index);
+                    dimissChapterList();
                 }
             }
         });
