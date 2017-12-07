@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 26
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.monke.monkeybook"
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 10
         versionName "1.2.5"
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
@@ -59,7 +59,7 @@ dependencies {
     //ProgressBar
     implementation 'com.zhangmonke:MProgressBar:1.0.1'
     //Glide
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
     //AutofitTextView
     implementation 'me.grantland:autofittextview:0.2.1'
     //删除粒子效果
