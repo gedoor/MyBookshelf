@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
@@ -43,8 +44,10 @@ import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import me.grantland.widget.AutofitTextView;
 
 public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView {
@@ -59,6 +62,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private LinearLayout llMenuTop;
     private LinearLayout llMenuBottom;
     private ImageButton ivReturn;
+    private ImageButton ivRefresh;
     private ImageView ivMenuMore;
     private AutofitTextView atvTitle;
     private TextView tvPre;
@@ -153,6 +157,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         llMenuTop = (LinearLayout) findViewById(R.id.ll_menu_top);
         llMenuBottom = (LinearLayout) findViewById(R.id.ll_menu_bottom);
         ivReturn = (ImageButton) findViewById(R.id.iv_return);
+        ivRefresh = (ImageButton) findViewById(R.id.iv_refresh);
         ivMenuMore = (ImageView) findViewById(R.id.iv_more);
         atvTitle = (AutofitTextView) findViewById(R.id.atv_title);
 
@@ -282,7 +287,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     realDur = 1;
                 }
                 if ((realDur - 1) != mPresenter.getBookShelf().getDurChapter()) {
-                    csvBook.setInitData(realDur - 1, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
+                    csvBook.setInitData(realDur - 1,
+                            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
@@ -307,18 +313,30 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 }
             }
         });
+
         ivReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });//返回按钮
+
+        ivRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DURPAGEINDEXBEGIN);
+            }
+        });//刷新按钮
+
         ivMenuMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f));
             }
-        });
+        });//菜单
+
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
             @Override
             public void loaddata(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
@@ -354,20 +372,25 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 llMenuTop.startAnimation(menuTopIn);
                 llMenuBottom.startAnimation(menuBottomIn);
             }
-        });
+        });//正文
 
         tvPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
-        });
+        });//上一章
+
         tvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), BookContentView.DURPAGEINDEXBEGIN);
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
-        });
+        });//下一章
 
         llCatalog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -381,7 +404,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     }
                 }, menuTopOut.getDuration());
             }
-        });
+        });//目录
 
         llLight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -395,7 +418,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     }
                 }, menuTopOut.getDuration());
             }
-        });
+        });//亮度
 
         llFont.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -409,7 +432,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     }
                 }, menuTopOut.getDuration());
             }
-        });
+        });//字体
 
         llSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -423,7 +446,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     }
                 }, menuTopOut.getDuration());
             }
-        });
+        });//设置
     }
 
     @Override
