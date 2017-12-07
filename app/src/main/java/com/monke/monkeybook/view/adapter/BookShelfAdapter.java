@@ -20,7 +20,10 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
@@ -95,6 +98,8 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 
     private void bindOtherViewHolder(final OtherViewHolder holder, int index) {
         final int index_1 = index * 3;
+        Date lastUp;
+        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if (needAnim) {
             final Animation animation = AnimationUtils.loadAnimation(holder.flContent_1.getContext(), R.anim.anim_bookshelf_item);
             animation.setAnimationListener(new AnimatontStartListener() {
@@ -116,6 +121,8 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         }
         Glide.with(holder.ivCover_1.getContext()).load(books.get(index_1).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
         holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
+        lastUp = new Date(books.get(index_1).getBookInfoBean().getFinalRefreshData());
+        holder.tvLastUp_1.setText(fm.format(lastUp));
 
         holder.ibContent_1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +165,8 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
             }
             Glide.with(holder.ivCover_2.getContext()).load(books.get(index_2).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
             holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
+            lastUp = new Date(books.get(index_2).getBookInfoBean().getFinalRefreshData());
+            holder.tvLastUp_2.setText(fm.format(lastUp));
 
             holder.ibContent_2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,6 +210,8 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
                 }
                 Glide.with(holder.ivCover_3.getContext()).load(books.get(index_3).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
                 holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
+                lastUp = new Date(books.get(index_3).getBookInfoBean().getFinalRefreshData());
+                holder.tvLastUp_3.setText(fm.format(lastUp));
 
                 holder.ibContent_3.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -339,16 +350,19 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         FrameLayout flContent_1;
         ImageView ivCover_1;
         AutofitTextView tvName_1;
+        AutofitTextView tvLastUp_1;
         ImageButton ibContent_1;
 
         FrameLayout flContent_2;
         ImageView ivCover_2;
         AutofitTextView tvName_2;
+        AutofitTextView tvLastUp_2;
         ImageButton ibContent_2;
 
         FrameLayout flContent_3;
         ImageView ivCover_3;
         AutofitTextView tvName_3;
+        AutofitTextView tvLastUp_3;
         ImageButton ibContent_3;
 
         public OtherViewHolder(View itemView) {
@@ -356,16 +370,19 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
             flContent_1 = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
             ivCover_1 = (ImageView) itemView.findViewById(R.id.iv_cover_1);
             tvName_1 = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
+            tvLastUp_1 = (AutofitTextView) itemView.findViewById(R.id.tv_last_up_1);
             ibContent_1 = (ImageButton) itemView.findViewById(R.id.ib_content_1);
 
             flContent_2 = (FrameLayout) itemView.findViewById(R.id.fl_content_2);
             ivCover_2 = (ImageView) itemView.findViewById(R.id.iv_cover_2);
             tvName_2 = (AutofitTextView) itemView.findViewById(R.id.tv_name_2);
+            tvLastUp_2 = (AutofitTextView) itemView.findViewById(R.id.tv_last_up_2);
             ibContent_2 = (ImageButton) itemView.findViewById(R.id.ib_content_2);
 
             flContent_3 = (FrameLayout) itemView.findViewById(R.id.fl_content_3);
             ivCover_3 = (ImageView) itemView.findViewById(R.id.iv_cover_3);
             tvName_3 = (AutofitTextView) itemView.findViewById(R.id.tv_name_3);
+            tvLastUp_3 = (AutofitTextView) itemView.findViewById(R.id.tv_last_up_3);
             ibContent_3 = (ImageButton) itemView.findViewById(R.id.ib_content_3);
         }
     }
