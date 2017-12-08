@@ -205,7 +205,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             @Override
             public void itemClick(int index) {
                 csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN, false);
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
@@ -291,7 +291,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 if ((realDur - 1) != mPresenter.getBookShelf().getDurChapter()) {
                     csvBook.setInitData(realDur - 1,
                             mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                            BookContentView.DURPAGEINDEXBEGIN, false);
+                            BookContentView.DURPAGEINDEXBEGIN);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
@@ -333,7 +333,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 llMenuBottom.startAnimation(menuBottomOut);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN, true);
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
@@ -348,8 +348,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
             //正文
             @Override
-            public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex, boolean isReload) {
-                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex, isReload);
+            public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
+                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
             }
 
             @Override
@@ -389,7 +389,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 //上一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN, false);
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
@@ -399,7 +399,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 //下一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN, false);
+                        BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
@@ -476,7 +476,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     @Override
     public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex) {
-        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex, false);
+        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex);
     }
 
     @Override
