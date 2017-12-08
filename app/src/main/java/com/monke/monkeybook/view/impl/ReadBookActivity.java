@@ -377,6 +377,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             public void onClick(View v) {
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                        .getBookContentBean().setDurCapterContent(null);
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                        .setBookContentBean(null);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                         BookContentView.DURPAGEINDEXBEGIN);
