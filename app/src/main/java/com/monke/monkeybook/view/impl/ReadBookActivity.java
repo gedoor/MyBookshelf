@@ -317,36 +317,16 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
 
-        ivReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //返回按钮
-                finish();
-            }
-        });
-
-        ivRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //刷新按钮
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
-            }
-        });
-
+        //菜单
         ivMenuMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //菜单
                 readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f));
             }
         });
 
+        //正文
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
-            //正文
             @Override
             public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
                 mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
@@ -383,30 +363,50 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
 
+        //返回按钮
+        ivReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        //刷新按钮
+        ivRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                llMenuTop.startAnimation(menuTopOut);
+                llMenuBottom.startAnimation(menuBottomOut);
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DURPAGEINDEXBEGIN);
+            }
+        });
+
+        //上一章
         tvPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //上一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                         BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
+        //下一章
         tvNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //下一章
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                         BookContentView.DURPAGEINDEXBEGIN);
             }
         });
 
+        //目录
         llCatalog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //目录
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
                 new Handler().postDelayed(new Runnable() {
@@ -418,10 +418,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
 
+        //亮度
         llLight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //亮度
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
                 new Handler().postDelayed(new Runnable() {
@@ -433,10 +433,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
 
+        //字体
         llFont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //字体
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
                 new Handler().postDelayed(new Runnable() {
@@ -448,10 +448,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
 
+        //设置
         llSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //设置
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
                 new Handler().postDelayed(new Runnable() {
