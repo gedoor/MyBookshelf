@@ -48,7 +48,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="26dp"
                 android:layout_gravity="bottom"
                 android:background="#7f000000"
                 android:orientation="vertical">
@@ -66,18 +66,6 @@
                     android:textSize="12sp"
                     app:minTextSize="7sp" />
 
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/tv_last_up_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:gravity="center"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textSize="12sp"
-                    app:minTextSize="7sp" />
             </LinearLayout>
 
             <ImageButton
@@ -109,7 +97,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="26dp"
                 android:layout_gravity="bottom"
                 android:background="#7f000000"
                 android:orientation="vertical">
@@ -128,18 +116,6 @@
                     android:textSize="12sp"
                     app:minTextSize="7sp" />
 
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/tv_last_up_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:gravity="center"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textSize="12sp"
-                    app:minTextSize="7sp" />
             </LinearLayout>
 
             <ImageButton
@@ -171,7 +147,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="26dp"
                 android:layout_gravity="bottom"
                 android:background="#7f000000"
                 android:orientation="vertical">
@@ -190,18 +166,6 @@
                     android:textSize="12sp"
                     app:minTextSize="7sp" />
 
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/tv_last_up_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:gravity="center"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:singleLine="true"
-                    android:textColor="#ffffff"
-                    android:textSize="12sp"
-                    app:minTextSize="7sp" />
             </LinearLayout>
 
             <ImageButton

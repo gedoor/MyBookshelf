@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
@@ -21,13 +22,12 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
+public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     private final int TYPE_LASTEST = 1;
     private final int TYPE_OTHER = 2;
 
@@ -47,7 +47,7 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         void onLongClick(View view, BookShelfBean bookShelfBean, int index);
     }
 
-    public BookShelfAdapter() {
+    public BookShelfListAdapter() {
         super(false);
         books = new ArrayList<>();
     }
@@ -71,11 +71,7 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemViewtype(int position) {
-        if (position == 0) {
-            return TYPE_LASTEST;
-        } else {
             return TYPE_OTHER;
-        }
     }
 
     @Override
@@ -83,7 +79,7 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         if (viewType == TYPE_LASTEST) {
             return new LastestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_lastest, parent, false));
         } else {
-            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_other, parent, false));
+            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf, parent, false));
         }
     }
 
@@ -96,140 +92,48 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    private void bindOtherViewHolder(final OtherViewHolder holder, int index) {
-        final int index_1 = index * 3;
+    private void bindOtherViewHolder(final OtherViewHolder holder, final int index) {
         if (needAnim) {
-            final Animation animation = AnimationUtils.loadAnimation(holder.flContent_1.getContext(), R.anim.anim_bookshelf_item);
+            final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
             animation.setAnimationListener(new AnimatontStartListener() {
                 @Override
                 void onAnimStart(Animation animation) {
                     needAnim = false;
-                    holder.flContent_1.setVisibility(View.VISIBLE);
+                    holder.flContent.setVisibility(View.VISIBLE);
                 }
             });
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (null != holder)
-                        holder.flContent_1.startAnimation(animation);
+                        holder.flContent.startAnimation(animation);
                 }
-            }, index_1 * DURANIMITEM);
+            }, index * DURANIMITEM);
         } else {
-            holder.flContent_1.setVisibility(View.VISIBLE);
+            holder.flContent.setVisibility(View.VISIBLE);
         }
-        Glide.with(holder.ivCover_1.getContext()).load(books.get(index_1).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
-        holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
+        Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
 
-        holder.ibContent_1.setOnClickListener(new View.OnClickListener() {
+        holder.ibContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (itemClickListener != null)
-                    itemClickListener.onClick(books.get(index_1), index_1);
+                    itemClickListener.onClick(books.get(index), index);
             }
         });
-        holder.ibContent_1.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.ibContent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (itemClickListener != null) {
-                    itemClickListener.onLongClick(holder.ivCover_1, books.get(index_1), index_1);
+                    itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
                     return true;
                 } else
                     return false;
             }
         });
 
-        final int index_2 = index_1 + 1;
-        if (index_2 < books.size()) {
-            if (needAnim) {
-                final Animation animation = AnimationUtils.loadAnimation(holder.flContent_2.getContext(), R.anim.anim_bookshelf_item);
-                animation.setAnimationListener(new AnimatontStartListener() {
-                    @Override
-                    void onAnimStart(Animation animation) {
-                        needAnim = false;
-                        holder.flContent_2.setVisibility(View.VISIBLE);
-                    }
-                });
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != holder)
-                            holder.flContent_2.startAnimation(animation);
-                    }
-                }, index_2 * DURANIMITEM);
-            } else {
-                holder.flContent_2.setVisibility(View.VISIBLE);
-            }
-            Glide.with(holder.ivCover_2.getContext()).load(books.get(index_2).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
-            holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
-
-            holder.ibContent_2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (itemClickListener != null)
-                        itemClickListener.onClick(books.get(index_2), index_2);
-                }
-            });
-            holder.ibContent_2.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (itemClickListener != null) {
-                        if (itemClickListener != null)
-                            itemClickListener.onLongClick(holder.ivCover_2, books.get(index_2), index_2);
-                        return true;
-                    } else
-                        return false;
-                }
-            });
-
-            final int index_3 = index_2 + 1;
-            if (index_3 < books.size()) {
-                if (needAnim) {
-                    final Animation animation = AnimationUtils.loadAnimation(holder.flContent_3.getContext(), R.anim.anim_bookshelf_item);
-                    animation.setAnimationListener(new AnimatontStartListener() {
-                        @Override
-                        void onAnimStart(Animation animation) {
-                            needAnim = false;
-                            holder.flContent_3.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (null != holder)
-                                holder.flContent_3.startAnimation(animation);
-                        }
-                    }, index_3 * DURANIMITEM);
-                } else {
-                    holder.flContent_3.setVisibility(View.VISIBLE);
-                }
-                Glide.with(holder.ivCover_3.getContext()).load(books.get(index_3).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
-                holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
-
-                holder.ibContent_3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (itemClickListener != null)
-                            itemClickListener.onClick(books.get(index_3), index_3);
-                    }
-                });
-                holder.ibContent_3.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        if (itemClickListener != null) {
-                            if (itemClickListener != null)
-                                itemClickListener.onLongClick(holder.ivCover_3, books.get(index_3), index_3);
-                            return true;
-                        } else
-                            return false;
-                    }
-                });
-            }else{
-                holder.flContent_3.setVisibility(View.INVISIBLE);
-            }
-        }else{
-            holder.flContent_2.setVisibility(View.INVISIBLE);
-            holder.flContent_3.setVisibility(View.INVISIBLE);
-        }
     }
 
     private void bindLastestViewHolder(final LastestViewHolder holder, final int index) {
@@ -339,37 +243,18 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
     }
 
     class OtherViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent_1;
-        ImageView ivCover_1;
-        AutofitTextView tvName_1;
-        ImageButton ibContent_1;
-
-        FrameLayout flContent_2;
-        ImageView ivCover_2;
-        AutofitTextView tvName_2;
-        ImageButton ibContent_2;
-
-        FrameLayout flContent_3;
-        ImageView ivCover_3;
-        AutofitTextView tvName_3;
-        ImageButton ibContent_3;
+        FrameLayout flContent;
+        ImageView ivCover;
+        AutofitTextView tvName;
+        ImageButton ibContent;
 
         public OtherViewHolder(View itemView) {
             super(itemView);
-            flContent_1 = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
-            ivCover_1 = (ImageView) itemView.findViewById(R.id.iv_cover_1);
-            tvName_1 = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
-            ibContent_1 = (ImageButton) itemView.findViewById(R.id.ib_content_1);
+            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
+            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover_1);
+            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
+            ibContent = (ImageButton) itemView.findViewById(R.id.ib_content_1);
 
-            flContent_2 = (FrameLayout) itemView.findViewById(R.id.fl_content_2);
-            ivCover_2 = (ImageView) itemView.findViewById(R.id.iv_cover_2);
-            tvName_2 = (AutofitTextView) itemView.findViewById(R.id.tv_name_2);
-            ibContent_2 = (ImageButton) itemView.findViewById(R.id.ib_content_2);
-
-            flContent_3 = (FrameLayout) itemView.findViewById(R.id.fl_content_3);
-            ivCover_3 = (ImageView) itemView.findViewById(R.id.iv_cover_3);
-            tvName_3 = (AutofitTextView) itemView.findViewById(R.id.tv_name_3);
-            ibContent_3 = (ImageButton) itemView.findViewById(R.id.ib_content_3);
         }
     }
 

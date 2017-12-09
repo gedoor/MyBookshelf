@@ -7,14 +7,15 @@
 
     <ImageView
         android:id="@+id/iv_cover_1"
-        android:layout_width="100dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/img_cover_default"
         android:transitionName="img_cover" />
 
     <me.grantland.widget.AutofitTextView
-        android:id="@+id/tv_name_1"
+        android:id="@+id/tv_name"
+        android:text="书名"
         app:minTextSize="7sp"
         android:layout_width="match_parent"
         android:layout_height="26dp"
@@ -22,12 +23,58 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_toEndOf="@+id/iv_cover_1"
-        android:gravity="center"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:singleLine="true"
-        android:textColor="#ffffff"
+        android:textColor="#393838"
         android:textSize="16sp" />
 
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_read"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tv_name"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_toEndOf="@+id/iv_cover_1"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:singleLine="true"
+        android:text="当前阅读"
+        android:textColor="#393838"
+        android:textSize="12sp"
+        app:minTextSize="7sp" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_last"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tv_read"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_toEndOf="@+id/iv_cover_1"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:singleLine="true"
+        android:text="最新章节"
+        android:textColor="#393838"
+        android:textSize="12sp"
+        app:minTextSize="7sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_durcursor"
+        android:layout_width="match_parent"
+        android:layout_toEndOf="@+id/iv_cover_1"
+        android:layout_below="@+id/tv_last"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="9dp"
+            android:layout_height="15dp"
+            android:src="@drawable/icon_cursor" />
+    </LinearLayout>
 
 </RelativeLayout>
