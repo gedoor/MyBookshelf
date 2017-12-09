@@ -22,7 +22,8 @@ import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.MainPresenterImpl;
 import com.monke.monkeybook.view.IMainView;
-import com.monke.monkeybook.view.adapter.BookShelfAdapter;
+import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
+import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.popupwindow.DownloadListPop;
 import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
@@ -36,7 +37,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ImageButton ibDownload;
 
     private RefreshRecyclerView rfRvShelf;
-    private BookShelfAdapter bookShelfAdapter;
+    private BookShelfGridAdapter bookShelfGridAdapter;
+    private BookShelfListAdapter bookShelfListAdapter;
 
     private FrameLayout flWarn;
     private ImageView ivWarnClose;
@@ -55,7 +57,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void initData() {
-        bookShelfAdapter = new BookShelfAdapter();
+        bookShelfListAdapter = new BookShelfListAdapter();
     }
 
     @Override
@@ -74,7 +76,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         ibAdd = (ImageButton) findViewById(R.id.ib_add);
         ibDownload = (ImageButton) findViewById(R.id.ib_download);
 
-        rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfAdapter, new LinearLayoutManager(this));
+        rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
     }
 
     @Override
@@ -105,7 +107,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
             }
         });
-        bookShelfAdapter.setItemClickListener(new BookShelfAdapter.OnItemClickListener() {
+        bookShelfListAdapter.setItemClickListener(new BookShelfListAdapter.OnItemClickListener() {
             @Override
             public void toSearch() {
                 //点击去选书
@@ -144,7 +146,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         rfRvShelf.setBaseRefreshListener(new OnRefreshWithProgressListener() {
             @Override
             public int getMaxProgress() {
-                return bookShelfAdapter.getBooks().size();
+                return bookShelfListAdapter.getBooks().size();
             }
 
             @Override
@@ -177,7 +179,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
-        bookShelfAdapter.replaceAll(bookShelfBeanList);
+        bookShelfListAdapter.replaceAll(bookShelfBeanList);
     }
 
     @Override

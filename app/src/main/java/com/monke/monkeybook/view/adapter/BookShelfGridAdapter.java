@@ -21,13 +21,11 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
+public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     private final int TYPE_LASTEST = 1;
     private final int TYPE_OTHER = 2;
 
@@ -47,7 +45,7 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
         void onLongClick(View view, BookShelfBean bookShelfBean, int index);
     }
 
-    public BookShelfAdapter() {
+    public BookShelfGridAdapter() {
         super(false);
         books = new ArrayList<>();
     }
@@ -81,9 +79,9 @@ public class BookShelfAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_LASTEST) {
-            return new LastestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_lastest, parent, false));
+            return new LastestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_lastest, parent, false));
         } else {
-            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_other, parent, false));
+            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_other, parent, false));
         }
     }
 

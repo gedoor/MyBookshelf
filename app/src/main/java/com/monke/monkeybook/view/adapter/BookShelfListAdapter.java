@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,15 +53,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemcount() {
-        if (books.size() == 0) {
-            return 1;
-        } else {
-            if (books.size() % 3 == 0) {
-                return 1 + books.size() / 3;
-            } else {
-                return 1 + (books.size() / 3 + 1);
-            }
-        }
+        return books.size();
     }
 
     public int getRealItemCount() {
@@ -71,25 +62,17 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemViewtype(int position) {
-            return TYPE_OTHER;
+        return TYPE_OTHER;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_LASTEST) {
-            return new LastestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_lastest, parent, false));
-        } else {
-            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf, parent, false));
-        }
+        return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_list, parent, false));
     }
 
     @Override
     public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_LASTEST) {
-            bindLastestViewHolder((LastestViewHolder) holder, position);
-        } else {
-            bindOtherViewHolder((OtherViewHolder) holder, position - 1);
-        }
+        bindOtherViewHolder((OtherViewHolder) holder, position);
     }
 
     private void bindOtherViewHolder(final OtherViewHolder holder, final int index) {
@@ -114,7 +97,48 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         }
         Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
-        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
+        holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
+        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist() && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
+            holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.tv_read_durprogress),
+                    books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
+            holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
+                    books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getBookInfoBean().getChapterlist().size()-1).getDurChapterName()));
+        }
+        holder.llDurcursor.setVisibility(View.VISIBLE);
+        holder.mpbDurprogress.setVisibility(View.VISIBLE);
+        holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
+        float speed = books.get(index).getBookInfoBean().getChapterlist().size()*1.0f/100;
+
+        holder.mpbDurprogress.setSpeed(speed<=0?1:speed);
+        holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
+            @Override
+            public void moveStartProgress(float dur) {
+
+            }
+
+            @Override
+            public void durProgressChange(float dur) {
+                float rate = dur / holder.mpbDurprogress.getMaxProgress();
+                holder.llDurcursor.setPadding((int) (holder.mpbDurprogress.getMeasuredWidth() * rate), 0, 0, 0);
+            }
+
+            @Override
+            public void moveStopProgress(float dur) {
+
+            }
+
+            @Override
+            public void setDurProgress(float dur) {
+
+            }
+        });
+        if (needAnim) {
+            holder.mpbDurprogress.setDurProgressWithAnim(books.get(index).getDurChapter());
+        } else {
+            holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
+        }
+
+
 
         holder.ibContent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,79 +160,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     }
 
-    private void bindLastestViewHolder(final LastestViewHolder holder, final int index) {
-        if (books.size() == 0) {
-            holder.tvWatch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != itemClickListener) {
-                        itemClickListener.toSearch();
-                    }
-                }
-            });
-            holder.ivCover.setImageResource(R.drawable.img_cover_default);
-            holder.flLastestTip.setVisibility(View.INVISIBLE);
-            holder.tvName.setText("最近阅读的书在这里");
-            holder.tvDurprogress.setText("");
-            holder.llDurcursor.setVisibility(View.INVISIBLE);
-            holder.mpbDurprogress.setVisibility(View.INVISIBLE);
-            holder.mpbDurprogress.setProgressListener(null);
-            holder.tvWatch.setText("去选书");
-        } else {
-            Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
-
-            holder.flLastestTip.setVisibility(View.VISIBLE);
-
-            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
-
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist() && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
-                holder.tvDurprogress.setText(String.format(holder.tvDurprogress.getContext().getString(R.string.tv_read_durprogress), books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
-            }
-            holder.llDurcursor.setVisibility(View.VISIBLE);
-            holder.mpbDurprogress.setVisibility(View.VISIBLE);
-            holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-            float speed = books.get(index).getBookInfoBean().getChapterlist().size()*1.0f/100;
-
-            holder.mpbDurprogress.setSpeed(speed<=0?1:speed);
-            holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
-                @Override
-                public void moveStartProgress(float dur) {
-
-                }
-
-                @Override
-                public void durProgressChange(float dur) {
-                    float rate = dur / holder.mpbDurprogress.getMaxProgress();
-                    holder.llDurcursor.setPadding((int) (holder.mpbDurprogress.getMeasuredWidth() * rate), 0, 0, 0);
-                }
-
-                @Override
-                public void moveStopProgress(float dur) {
-
-                }
-
-                @Override
-                public void setDurProgress(float dur) {
-
-                }
-            });
-            if (needAnim) {
-                holder.mpbDurprogress.setDurProgressWithAnim(books.get(index).getDurChapter());
-            } else {
-                holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
-            }
-            holder.tvWatch.setText("继续阅读");
-            holder.tvWatch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != itemClickListener) {
-                        itemClickListener.onClick(books.get(index), index);
-                    }
-                }
-            });
-        }
-    }
-
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -221,39 +172,26 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         this.needAnim = needAnim;
     }
 
-    class LastestViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivCover;
-        FrameLayout flLastestTip;
-        AutofitTextView tvName;
-        AutofitTextView tvDurprogress;
-        LinearLayout llDurcursor;
-        MHorProgressBar mpbDurprogress;
-        TextView tvWatch;
-
-        public LastestViewHolder(View itemView) {
-            super(itemView);
-            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
-            flLastestTip = (FrameLayout) itemView.findViewById(R.id.fl_lastest_tip);
-            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name);
-            tvDurprogress = (AutofitTextView) itemView.findViewById(R.id.tv_durprogress);
-            llDurcursor = (LinearLayout) itemView.findViewById(R.id.ll_durcursor);
-            mpbDurprogress = (MHorProgressBar) itemView.findViewById(R.id.mpb_durprogress);
-            tvWatch = (TextView) itemView.findViewById(R.id.tv_watch);
-        }
-    }
-
     class OtherViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
         ImageView ivCover;
         AutofitTextView tvName;
+        AutofitTextView tvRead;
+        AutofitTextView tvLast;
+        LinearLayout llDurcursor;
+        MHorProgressBar mpbDurprogress;
         ImageButton ibContent;
 
         public OtherViewHolder(View itemView) {
             super(itemView);
-            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
-            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover_1);
-            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
-            ibContent = (ImageButton) itemView.findViewById(R.id.ib_content_1);
+            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
+            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
+            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name);
+            tvRead = (AutofitTextView) itemView.findViewById(R.id.tv_read);
+            tvLast = (AutofitTextView) itemView.findViewById(R.id.tv_last);
+            llDurcursor = (LinearLayout) itemView.findViewById(R.id.ll_durcursor);
+            mpbDurprogress = (MHorProgressBar) itemView.findViewById(R.id.mpb_durprogress);
+            ibContent = (ImageButton) itemView.findViewById(R.id.ib_content);
 
         }
     }
