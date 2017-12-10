@@ -86,6 +86,20 @@
 
             <View
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/btn_bg_press"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/atv_url"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:singleLine="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:background="@color/bdp_white"/>
+
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="@drawable/bg_shadow" />
         </LinearLayout>

@@ -65,6 +65,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private ImageButton ivRefresh;
     private ImageView ivMenuMore;
     private AutofitTextView atvTitle;
+    private AutofitTextView atvUrl;
     private TextView tvPre;
     private TextView tvNext;
     private MHorProgressBar hpbReadProgress;
@@ -161,6 +162,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         ivRefresh = (ImageButton) findViewById(R.id.iv_refresh);
         ivMenuMore = (ImageView) findViewById(R.id.iv_more);
         atvTitle = (AutofitTextView) findViewById(R.id.atv_title);
+        atvUrl = (AutofitTextView) findViewById(R.id.atv_url);
 
         tvPre = (TextView) findViewById(R.id.tv_pre);
         tvNext = (TextView) findViewById(R.id.tv_next);
@@ -336,10 +338,12 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
 
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0)
+                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0) {
                     atvTitle.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
-                else
+                    atvUrl.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getNoteUrl());
+                } else {
                     atvTitle.setText("无章节");
+                }
                 if (hpbReadProgress.getDurProgress() != chapterIndex + 1)
                     hpbReadProgress.setDurProgress(chapterIndex + 1);
             }
@@ -384,6 +388,14 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                         mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                         BookContentView.DURPAGEINDEXBEGIN);
+            }
+        });
+
+        //打开URL
+        atvUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
