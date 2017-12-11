@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -340,7 +341,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
                 if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0) {
                     atvTitle.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
-                    atvUrl.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getNoteUrl());
+                    atvUrl.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterUrl());
                 } else {
                     atvTitle.setText("无章节");
                 }
@@ -395,7 +396,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         atvUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String url = atvUrl.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
             }
         });
 
