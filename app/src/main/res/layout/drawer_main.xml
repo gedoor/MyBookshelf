@@ -14,7 +14,7 @@
             android:padding="6dp">
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="80dp"
+                android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:contentDescription="@string/app_name"
                 app:srcCompat="@drawable/icon_monkovel_black" />

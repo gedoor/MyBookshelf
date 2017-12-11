@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,7 @@ import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.popupwindow.DownloadListPop;
 import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
+import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.util.List;
 
@@ -48,13 +51,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private RefreshRecyclerView rfRvShelf;
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
+    private boolean viewIsList;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private FrameLayout flWarn;
-    private ImageView ivWarnClose;
-
     private DownloadListPop downloadListPop;
+    private SharedPreferences preferences;
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -75,7 +77,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void initData() {
-        bookShelfListAdapter = new BookShelfListAdapter();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        viewIsList = preferences.getBoolean("bookshelfIsList", true);
+        if (viewIsList) {
+            bookShelfListAdapter = new BookShelfListAdapter();
+        } else {
+            bookShelfGridAdapter = new BookShelfGridAdapter();
+        }
     }
 
     @Override
@@ -93,8 +101,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         downloadListPop = new DownloadListPop(MainActivity.this);
 
         rfRvShelf = (RefreshRecyclerView) findViewById(R.id.rf_rv_shelf);
-
-        rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
+        if (viewIsList) {
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
+        } else {
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter, new LinearLayoutManager(this));
+        }
     }
 
     @Override
@@ -107,7 +118,15 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void bindEvent() {
         bindRvShelfEvent();
-        bookShelfListAdapter.setItemClickListener(new BookShelfListAdapter.OnItemClickListener() {
+        if (viewIsList) {
+            bookShelfListAdapter.setItemClickListener(getAdapterListener());
+        } else {
+            bookShelfGridAdapter.setItemClickListener(getAdapterListener());
+        }
+    }
+
+    private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
+        return new RefreshRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void toSearch() {
                 //点击去选书
@@ -138,9 +157,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 BitIntentDataManager.getInstance().putData(key, bookShelfBean);
                 startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
             }
-        });
-
+        };
     }
+
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -150,12 +169,19 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        SharedPreferences.Editor editor = preferences.edit();
         int id = item.getItemId();
         switch (id) {
             case R.id.action_search:
                 //点击搜索
                 startActivityByAnim(new Intent(this, SearchActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                return true;
+            case R.id.action_list_grid:
+                editor.putBoolean("bookshelfIsList", !viewIsList);
+                editor.apply();
+                finish();
+                startActivity(getIntent());
                 return true;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
@@ -175,25 +201,42 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
-
+    //初始化侧边栏
     private void initDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerToggle.syncState();
         drawer.addDrawerListener(mDrawerToggle);
 
-//        setUpNavigationView();
+        setUpNavigationView();
     }
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+    //侧边栏按钮
+    private void setUpNavigationView() {
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            drawer.closeDrawers();
+            switch (menuItem.getItemId()) {
+                case R.id.action_library:
+                    startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
+                    break;
+            }
+            return true;
+        });
+    }
+
 
     private void bindRvShelfEvent() {
         rfRvShelf.setBaseRefreshListener(new OnRefreshWithProgressListener() {
             @Override
             public int getMaxProgress() {
-                return bookShelfListAdapter.getBooks().size();
+                if (viewIsList) {
+                    return bookShelfListAdapter.getBooks().size();
+                } else {
+                    return bookShelfGridAdapter.getBooks().size();
+                }
             }
 
             @Override
@@ -226,7 +269,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
-        bookShelfListAdapter.replaceAll(bookShelfBeanList);
+        if (viewIsList) {
+            bookShelfListAdapter.replaceAll(bookShelfBeanList);
+        } else {
+            bookShelfGridAdapter.replaceAll(bookShelfBeanList);
+        }
     }
 
     @Override

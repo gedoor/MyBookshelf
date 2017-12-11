@@ -5,12 +5,10 @@
 
     <item
         android:id="@+id/action_search"
+        android:checkable="true"
         android:icon="@drawable/ic_search_black_24dp"
+        android:orderInCategory="100"
         android:title="@string/action_search"
         app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_list_grid"
-        android:title="@string/action_list_grid" />
 
 </menu>

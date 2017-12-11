@@ -40,7 +40,7 @@
                 android:layout_height="15dp"
                 android:layout_gravity="center_vertical|left"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/icon_search_nor" />
+                android:src="@drawable/ic_search_black_24dp" />
         </FrameLayout>
         <TextView
             android:id="@+id/tv_tosearch"

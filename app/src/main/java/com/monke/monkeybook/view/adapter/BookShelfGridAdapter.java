@@ -37,14 +37,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     private OnItemClickListener itemClickListener;
 
-    public interface OnItemClickListener {
-        void toSearch();
-
-        void onClick(BookShelfBean bookShelfBean, int index);
-
-        void onLongClick(View view, BookShelfBean bookShelfBean, int index);
-    }
-
     public BookShelfGridAdapter() {
         super(false);
         books = new ArrayList<>();

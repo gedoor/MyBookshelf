@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookShelfBean;
 
 public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     private final int LOADMORETYPE = 2001;
@@ -25,6 +26,14 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public interface OnClickTryAgainListener {
         public void loadMoreErrorTryAgain();
+    }
+
+    public interface OnItemClickListener {
+        void toSearch();
+
+        void onClick(BookShelfBean bookShelfBean, int index);
+
+        void onLongClick(View view, BookShelfBean bookShelfBean, int index);
     }
 
     public RefreshRecyclerViewAdapter(Boolean needLoadMore) {

@@ -4,6 +4,10 @@
     <string name="action_search">搜索</string>
     <string name="action_list">列表视图</string>
     <string name="action_grid">网格视图</string>
+    <string name="action_list_grid">列表/网格</string>
+    <string name="book_library">书城</string>
+    <string name="setting">设置</string>
+    <string name="about">关于</string>
 
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>

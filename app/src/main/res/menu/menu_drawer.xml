@@ -3,10 +3,18 @@
 
     <item
         android:id="@+id/action_library"
-        android:orderInCategory="100"
-        android:checkable="true"
-        android:title="@string/action_search"
-        android:icon="@drawable/selector_iv_library"
-        app:showAsAction="always" />
+        android:title="@string/book_library"
+        android:icon="@drawable/ic_store_black_24dp" />
+
+    <item
+        android:id="@+id/action_setting"
+        android:title="@string/setting"
+        android:icon="@drawable/icon_setting_nor" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/about"
+        android:icon="@drawable/ic_beach_access_black_24dp" />
+
 
 </menu>

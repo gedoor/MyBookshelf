@@ -2,7 +2,13 @@
 package com.monke.monkeybook.view.impl;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,13 +35,14 @@ import com.monke.monkeybook.widget.refreshview.RefreshScrollView;
 import java.util.Iterator;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements ILibraryView {
     private RefreshScrollView rscvContent;
     private RefreshProgressBar rpbProgress;
 
     private LinearLayout llContent;
-    private ImageButton ibReturn;
-    private FrameLayout flSearch;
 
     private Animation animIn;
     private Animation animOut;
@@ -44,6 +51,9 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
 
     private LibraryNewBooksView lavHotauthor;
     private LibraryKindBookListView lkbvKindbooklist;
+
+    @BindView(R.id.main_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected ILibraryPresenter initInjector() {
@@ -68,13 +78,15 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
 
     @Override
     protected void bindView() {
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        setupActionBar();
+
         rscvContent = (RefreshScrollView) findViewById(R.id.rscv_content);
         rpbProgress = (RefreshProgressBar) findViewById(R.id.rpb_progress);
         rscvContent.setRpb(rpbProgress);
 
         llContent = (LinearLayout) findViewById(R.id.ll_content);
-        ibReturn = (ImageButton) findViewById(R.id.ib_return);
-        flSearch = (FrameLayout) findViewById(R.id.fl_search);
 
         kindLl = (LinearLayout) findViewById(R.id.kind_ll);
         initKind();
@@ -124,6 +136,37 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
         }
     }
 
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.book_library);
+        }
+    }
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_library_activity, menu);
+        return true;
+    }
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_search:
+                //点击搜索
+                startActivityByAnim(new Intent(this, SearchActivity.class),
+                        toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void bindEvent() {
         animIn.setAnimationListener(new Animation.AnimationListener() {
@@ -158,21 +201,6 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             @Override
             public void onAnimationRepeat(Animation animation) {
 
-            }
-        });
-        ibReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        flSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击搜索
-                startActivityByAnim(new Intent(LibraryActivity.this, SearchActivity.class),
-                        flSearch, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
