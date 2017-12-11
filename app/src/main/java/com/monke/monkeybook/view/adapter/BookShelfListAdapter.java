@@ -27,8 +27,8 @@ import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
-    private final int TYPE_LASTEST = 1;
-    private final int TYPE_OTHER = 2;
+    public static final int VIEW_TYPE_ITEM = 1;
+    public static final int VIEW_TYPE_EMPTY = 0;
 
     private final long DURANIMITEM = 30;   //item动画启动间隔
 
@@ -53,6 +53,12 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemcount() {
+        //如果mData.size()为0的话，只引入一个布局，就是emptyView
+        //那么，这个recyclerView的itemCount为1
+        if (books.size() == 0) {
+            return 1;
+        }
+        //如果不为0，按正常的流程跑
         return books.size();
     }
 
@@ -62,17 +68,29 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemViewtype(int position) {
-        return TYPE_OTHER;
+        //在这里进行判断，如果我们的集合的长度为0时，我们就使用emptyView的布局
+        if (books.size() == 0) {
+            return VIEW_TYPE_EMPTY;
+        }
+        //如果有数据，则使用ITEM的布局
+        return VIEW_TYPE_ITEM;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_empty, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        }
         return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_list, parent, false));
     }
 
     @Override
     public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
-        bindOtherViewHolder((OtherViewHolder) holder, position);
+        if (holder instanceof OtherViewHolder) {
+            bindOtherViewHolder((OtherViewHolder) holder, position);
+        }
     }
 
     private void bindOtherViewHolder(final OtherViewHolder holder, final int index) {
@@ -102,14 +120,14 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.tv_read_durprogress),
                     books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
-                    books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getBookInfoBean().getChapterlist().size()-1).getDurChapterName()));
+                    books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getBookInfoBean().getChapterlist().size() - 1).getDurChapterName()));
         }
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-        float speed = books.get(index).getBookInfoBean().getChapterlist().size()*1.0f/100;
+        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 100;
 
-        holder.mpbDurprogress.setSpeed(speed<=0?1:speed);
+        holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
         holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -137,7 +155,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
         }
-
 
 
         holder.ibContent.setOnClickListener(new View.OnClickListener() {

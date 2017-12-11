@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">阅读</string>
+    <string name="bookshelf_empty">书架还空着，先去添加吧！</string>
 
     <string name="umeng_key">5954b3f999f0c76d1b001600</string>
 
