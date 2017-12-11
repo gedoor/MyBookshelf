@@ -14,6 +14,10 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="anim_pop_checkaddshelf">
         <item name="android:windowEnterAnimation">@anim/anim_pop_checkaddshelf_in</item>
         <item name="android:windowExitAnimation">@anim/anim_pop_checkaddshelf_out</item>

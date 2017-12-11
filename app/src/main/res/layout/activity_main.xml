@@ -1,92 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.monke.immerselayout.ImmerseFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.DrawerLayout
+    android:id="@+id/drawer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#767676">
+    android:background="@color/bdp_white">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="?attr/colorPrimary"-->
-        <!--android:minHeight="?attr/actionBarSize"-->
-        <!--android:theme="?attr/actionBarTheme" />-->
+    <include layout="@layout/content_main" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/id_left_menu"
+        android:layout_width="180dp"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical">
+        android:layout_gravity="start"
+        android:background="@color/bdp_white"
+        android:clickable="true"
+        android:orientation="vertical"
+        tools:ignore="KeyboardInaccessibleWidget">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:orientation="horizontal">
+        <include layout="@layout/drawer_main" />
 
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="119dp"
-                android:layout_height="21dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/icon_monkovel_black" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/ib_money"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/bg_ib_pre"
-                android:src="@drawable/selector_iv_money"
-                android:visibility="gone" />
-            <ImageButton
-                android:id="@+id/ib_download"
-                android:layout_width="44dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="3dp"
-                android:background="@drawable/bg_ib_pre"
-                android:src="@drawable/selector_icon_donwload_main"
-                android:transitionName="ic_search" />
-            <ImageButton
-                android:id="@+id/ib_library"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/bg_ib_pre"
-                android:src="@drawable/selector_iv_library"
-                android:transitionName="ic_search" />
-
-            <ImageButton
-                android:id="@+id/ib_add"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/bg_ib_pre"
-                android:src="@drawable/selector_iv_add" />
-
-        </LinearLayout>
-
-        <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
-            android:id="@+id/rf_rv_shelf"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:bg_color="#00000000"
-            app:font_color="#767676"
-            app:second_color="#c1c1c1"
-            app:second_max_progress="80dp"
-            app:speed="2dp" />
     </LinearLayout>
 
-</com.monke.immerselayout.ImmerseFrameLayout>
+</android.support.v4.widget.DrawerLayout>

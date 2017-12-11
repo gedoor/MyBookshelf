@@ -21,10 +21,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.impl.MainActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTask"/>
+
         <activity
             android:name=".view.impl.SearchActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"

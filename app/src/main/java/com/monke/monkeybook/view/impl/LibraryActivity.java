@@ -171,7 +171,8 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             @Override
             public void onClick(View v) {
                 //点击搜索
-                startActivityByAnim(new Intent(LibraryActivity.this, SearchActivity.class), flSearch, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivityByAnim(new Intent(LibraryActivity.this, SearchActivity.class),
+                        flSearch, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

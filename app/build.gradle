@@ -36,10 +36,10 @@ android {
     }
 }
 
-repositories{
-        flatDir{
-            dirs 'libs'
-        }
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -78,6 +78,9 @@ dependencies {
     implementation files('libs/juniversalchardet-1.0.3.jar')
     implementation files('libs/umeng-analytics-v6.1.1.jar')
     implementation files('libs/utdid4all-1.0.4.jar')
+
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
 
 greendao {

@@ -2,8 +2,19 @@
 package com.monke.monkeybook.view.impl;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,20 +41,27 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
 
-public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
-    private ImageButton ibMoney;
-    private ImageButton ibLibrary;
-    private ImageButton ibAdd;
-    private ImageButton ibDownload;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
     private RefreshRecyclerView rfRvShelf;
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
+
+    private ActionBarDrawerToggle mDrawerToggle;
 
     private FrameLayout flWarn;
     private ImageView ivWarnClose;
 
     private DownloadListPop downloadListPop;
+
+    @BindView(R.id.drawer)
+    DrawerLayout drawer;
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+    @BindView(R.id.main_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -67,46 +85,28 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void bindView() {
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        setupActionBar();
+        initDrawer();
+
         downloadListPop = new DownloadListPop(MainActivity.this);
 
         rfRvShelf = (RefreshRecyclerView) findViewById(R.id.rf_rv_shelf);
-
-        ibMoney = (ImageButton) findViewById(R.id.ib_money);
-        ibLibrary = (ImageButton) findViewById(R.id.ib_library);
-        ibAdd = (ImageButton) findViewById(R.id.ib_add);
-        ibDownload = (ImageButton) findViewById(R.id.ib_download);
 
         rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // 这个必须要，没有的话进去的默认是个箭头。。正常应该是三横杠的
+        mDrawerToggle.syncState();
+    }
+
+    @Override
     protected void bindEvent() {
         bindRvShelfEvent();
-        ibDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                downloadListPop.showAsDropDown(ibDownload);
-            }
-        });
-        ibMoney.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击打赏
-            }
-        });
-        ibLibrary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
-            }
-        });
-        ibAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击更多
-                startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
-            }
-        });
         bookShelfListAdapter.setItemClickListener(new BookShelfListAdapter.OnItemClickListener() {
             @Override
             public void toSearch() {
@@ -140,6 +140,52 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             }
         });
 
+    }
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_search:
+                //点击搜索
+                startActivityByAnim(new Intent(this, SearchActivity.class),
+                        toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                return true;
+            case android.R.id.home:
+                if (drawer.isDrawerOpen(GravityCompat.START)
+                        ) {
+                    drawer.closeDrawers();
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle.syncState();
+        drawer.addDrawerListener(mDrawerToggle);
+
+//        setUpNavigationView();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void bindRvShelfEvent() {

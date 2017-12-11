@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_library"
+        android:orderInCategory="100"
+        android:checkable="true"
+        android:title="@string/action_search"
+        android:icon="@drawable/selector_iv_library"
+        app:showAsAction="always" />
+
+</menu>
