@@ -168,6 +168,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
         return super.onOptionsItemSelected(item);
     }
+    //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

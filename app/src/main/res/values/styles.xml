@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="CAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#767676</item>
+        <item name="colorPrimary">@color/bdp_white</item>
+        <item name="colorPrimaryDark">@color/btn_bg_press_2</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -14,7 +14,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

@@ -11,4 +11,15 @@
         android:icon="@drawable/icon_search_sel"
         app:showAsAction="always" />
 
+    <group
+        android:id="@+id/navigation_drawer_menu_category_sections"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/navReminder"
+            android:title="@string/action_list" />
+        <item
+            android:id="@+id/navSolarTerms"
+            android:title="@string/action_grid" />
+    </group>
+
 </menu>
