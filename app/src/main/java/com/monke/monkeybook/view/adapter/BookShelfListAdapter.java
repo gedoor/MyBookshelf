@@ -120,9 +120,9 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 100;
+        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 10;
 
-        holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
+        holder.mpbDurprogress.setSpeed(speed <= 0 ? 10 : speed);
         holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -151,7 +151,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
         }
 
-        //
         holder.ibContent.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(books.get(index), index);
