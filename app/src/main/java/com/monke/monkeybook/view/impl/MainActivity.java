@@ -232,6 +232,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
 
     private void bindRvShelfEvent() {
+        //下拉刷新
         rfRvShelf.setBaseRefreshListener(new OnRefreshWithProgressListener() {
             @Override
             public int getMaxProgress() {
