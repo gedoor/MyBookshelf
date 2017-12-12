@@ -86,6 +86,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
         if (index<=value.size()-1) {
+            int chapterSize = value.get(index).getBookInfoBean().getChapterlist().size();
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override
                 public void success(BookShelfBean bookShelfBean) {
@@ -102,18 +103,19 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         }
     }
 
-    private void saveBookToShelf(final List<BookShelfBean> datas, final int index){
+    private void saveBookToShelf(final List<BookShelfBean> datas, final int index) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(datas.get(index).getBookInfoBean().getChapterlist());
             e.onNext(datas.get(index));
             e.onComplete();
-        }).subscribeOn(Schedulers.io())
+        })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
                         mView.refreshRecyclerViewItemAdd();
-                        refreshBookShelf(datas,index+1);
+                        refreshBookShelf(datas, index + 1);
                     }
 
                     @Override
