@@ -116,6 +116,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
                     books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getBookInfoBean().getChapterlist().size() - 1).getDurChapterName()));
         }
+        //进度条
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
@@ -150,23 +151,18 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
         }
 
-
-        holder.ibContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClickListener != null)
-                    itemClickListener.onClick(books.get(index), index);
-            }
+        //
+        holder.ibContent.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.onClick(books.get(index), index);
         });
-        holder.ibContent.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (itemClickListener != null) {
-                    itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
-                    return true;
-                } else
-                    return false;
-            }
+
+        holder.ibContent.setOnLongClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                return true;
+            } else
+                return false;
         });
 
     }

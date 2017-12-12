@@ -1,20 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_library"
-        android:title="@string/book_library"
-        android:icon="@drawable/ic_store_black_24dp" />
+    <group
+        android:id="@+id/drawer_menu_library">
+        <item
+            android:id="@+id/action_library"
+            android:title="@string/book_library"
+            android:icon="@drawable/ic_store_black_24dp" />
 
-    <item
-        android:id="@+id/action_setting"
-        android:title="@string/setting"
-        android:icon="@drawable/icon_setting_nor" />
+        <item
+            android:id="@+id/action_add_local"
+            android:title="@string/book_local"
+            android:icon="@drawable/ic_add_black_24dp" />
+    </group>
 
-    <item
-        android:id="@+id/action_about"
-        android:title="@string/about"
-        android:icon="@drawable/ic_beach_access_black_24dp" />
+    <group
+        android:id="@+id/drawer_menu_setting">
+        <item
+            android:id="@+id/action_setting"
+            android:title="@string/setting"
+            android:icon="@drawable/icon_setting_nor" />
 
+        <item
+            android:id="@+id/action_about"
+            android:title="@string/about"
+            android:icon="@drawable/ic_beach_access_black_24dp" />
+    </group>
 
 </menu>

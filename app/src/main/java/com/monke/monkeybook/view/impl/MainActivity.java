@@ -222,6 +222,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 case R.id.action_library:
                     startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
                     break;
+                case R.id.action_add_local:
+                    startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
+                    break;
             }
             return true;
         });
