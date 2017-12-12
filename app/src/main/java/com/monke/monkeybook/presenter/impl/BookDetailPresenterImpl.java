@@ -80,39 +80,30 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     @Override
     public void getBookShelfInfo() {
-        Observable.create(new ObservableOnSubscribe<List<BookShelfBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<BookShelfBean>> e) throws Exception {
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-                if (temp == null)
-                    temp = new ArrayList<BookShelfBean>();
-                e.onNext(temp);
-                e.onComplete();
-            }
-        }).flatMap(new Function<List<BookShelfBean>, ObservableSource<BookShelfBean>>() {
-            @Override
-            public ObservableSource<BookShelfBean> apply(List<BookShelfBean> bookShelfBeen) throws Exception {
-                bookShelfs.addAll(bookShelfBeen);
+        Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            if (temp == null)
+                temp = new ArrayList<BookShelfBean>();
+            e.onNext(temp);
+            e.onComplete();
+        }).flatMap(bookShelfBeen -> {
+            bookShelfs.addAll(bookShelfBeen);
 
-                final BookShelfBean bookShelfResult = new BookShelfBean();
-                bookShelfResult.setNoteUrl(searchBook.getNoteUrl());
-                bookShelfResult.setFinalDate(System.currentTimeMillis());
-                bookShelfResult.setDurChapter(0);
-                bookShelfResult.setDurChapterPage(0);
-                bookShelfResult.setTag(searchBook.getTag());
-                return WebBookModelImpl.getInstance().getBookInfo(bookShelfResult);
-            }
-        }).map(new Function<BookShelfBean, BookShelfBean>() {
-            @Override
-            public BookShelfBean apply(BookShelfBean bookShelfBean) throws Exception {
-                for(int i=0;i<bookShelfs.size();i++){
-                    if(bookShelfs.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())){
-                        inBookShelf = true;
-                        break;
-                    }
+            final BookShelfBean bookShelfResult = new BookShelfBean();
+            bookShelfResult.setNoteUrl(searchBook.getNoteUrl());
+            bookShelfResult.setFinalDate(System.currentTimeMillis());
+            bookShelfResult.setDurChapter(0);
+            bookShelfResult.setDurChapterPage(0);
+            bookShelfResult.setTag(searchBook.getTag());
+            return WebBookModelImpl.getInstance().getBookInfo(bookShelfResult);
+        }).map(bookShelfBean -> {
+            for(int i=0;i<bookShelfs.size();i++){
+                if(bookShelfs.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())){
+                    inBookShelf = true;
+                    break;
                 }
-                return bookShelfBean;
             }
+            return bookShelfBean;
         }).subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity)mView.getContext()).<BookShelfBean>bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,16 +136,13 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     @Override
     public void addToBookShelf() {
         if (bookShelf != null) {
-            Observable.create(new ObservableOnSubscribe<Boolean>() {
-                @Override
-                public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
-                    //网络数据获取成功  存入BookShelf表数据库
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
-                    e.onNext(true);
-                    e.onComplete();
-                }
+            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
+                //网络数据获取成功  存入BookShelf表数据库
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                e.onNext(true);
+                e.onComplete();
             }).subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity)mView.getContext()).<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
@@ -180,22 +168,19 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     @Override
     public void removeFromBookShelf() {
         if (bookShelf != null) {
-            Observable.create(new ObservableOnSubscribe<Boolean>() {
-                @Override
-                public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelf.getNoteUrl());
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelf.getBookInfoBean().getNoteUrl());
-                    List<String> keys = new ArrayList<String>();
-                    if(bookShelf.getBookInfoBean().getChapterlist().size()>0){
-                        for(int i=0;i<bookShelf.getBookInfoBean().getChapterlist().size();i++){
-                            keys.add(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                        }
+            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelf.getNoteUrl());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelf.getBookInfoBean().getNoteUrl());
+                List<String> keys = new ArrayList<String>();
+                if(bookShelf.getBookInfoBean().getChapterlist().size()>0){
+                    for(int i=0;i<bookShelf.getBookInfoBean().getChapterlist().size();i++){
+                        keys.add(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
                     }
-                    DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelf.getBookInfoBean().getChapterlist());
-                    e.onNext(true);
-                    e.onComplete();
                 }
+                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
+                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelf.getBookInfoBean().getChapterlist());
+                e.onNext(true);
+                e.onComplete();
             }).subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity)mView.getContext()).<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
@@ -260,7 +245,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 }
             }
         }
-        if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
+        if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl()))
+                || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = false;
             if (null != searchBook) {
                 searchBook.setAdd(false);

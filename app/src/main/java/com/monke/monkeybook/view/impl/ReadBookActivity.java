@@ -29,6 +29,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.DownloadChapterListBean;
 import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.utils.DensityUtil;
@@ -384,6 +385,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 llMenuBottom.startAnimation(menuBottomOut);
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                         .getBookContentBean().setDurCapterContent(null);
+                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
+                        .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                         .setBookContentBean(null);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),

@@ -33,50 +33,47 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
 
     @Override
     public Observable<LocBookShelfBean> importBook(final File book) {
-        return Observable.create(new ObservableOnSubscribe<LocBookShelfBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<LocBookShelfBean> e) throws Exception {
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                FileInputStream in = new FileInputStream(book);
-                byte[] buffer = new byte[2048];
-                int len;
-                while ((len = in.read(buffer, 0, 2048)) != -1) {
-                    md.update(buffer, 0, len);
-                }
-                in.close();
-                in = null;
-
-                String md5 = new BigInteger(1, md.digest()).toString(16);
-                BookShelfBean bookShelfBean = null;
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(md5)).build().list();
-                Boolean isNew = true;
-                if (temp!=null && temp.size()>0) {
-                    isNew = false;
-                    bookShelfBean = temp.get(0);
-                    bookShelfBean.setBookInfoBean(DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).build().list().get(0));
-                } else {
-                    bookShelfBean = new BookShelfBean();
-                    bookShelfBean.setFinalDate(System.currentTimeMillis());
-                    bookShelfBean.setDurChapter(0);
-                    bookShelfBean.setDurChapterPage(0);
-                    bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
-                    bookShelfBean.setNoteUrl(md5);
-
-                    bookShelfBean.getBookInfoBean().setAuthor("佚名");
-                    bookShelfBean.getBookInfoBean().setName(book.getName().replace(".txt", "").replace(".TXT", ""));
-                    bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
-                    bookShelfBean.getBookInfoBean().setCoverUrl("");
-                    bookShelfBean.getBookInfoBean().setNoteUrl(md5);
-                    bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);
-
-                    saveChapter(book, md5);
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-                }
-                bookShelfBean.getBookInfoBean().setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
-                e.onNext(new LocBookShelfBean(isNew,bookShelfBean));
-                e.onComplete();
+        return Observable.create(e -> {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            FileInputStream in = new FileInputStream(book);
+            byte[] buffer = new byte[2048];
+            int len;
+            while ((len = in.read(buffer, 0, 2048)) != -1) {
+                md.update(buffer, 0, len);
             }
+            in.close();
+            in = null;
+
+            String md5 = new BigInteger(1, md.digest()).toString(16);
+            BookShelfBean bookShelfBean = null;
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(md5)).build().list();
+            Boolean isNew = true;
+            if (temp!=null && temp.size()>0) {
+                isNew = false;
+                bookShelfBean = temp.get(0);
+                bookShelfBean.setBookInfoBean(DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).build().list().get(0));
+            } else {
+                bookShelfBean = new BookShelfBean();
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
+                bookShelfBean.setDurChapter(0);
+                bookShelfBean.setDurChapterPage(0);
+                bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
+                bookShelfBean.setNoteUrl(md5);
+
+                bookShelfBean.getBookInfoBean().setAuthor("佚名");
+                bookShelfBean.getBookInfoBean().setName(book.getName().replace(".txt", "").replace(".TXT", ""));
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+                bookShelfBean.getBookInfoBean().setCoverUrl("");
+                bookShelfBean.getBookInfoBean().setNoteUrl(md5);
+                bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);
+
+                saveChapter(book, md5);
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            }
+            bookShelfBean.getBookInfoBean().setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
+            e.onNext(new LocBookShelfBean(isNew,bookShelfBean));
+            e.onComplete();
         });
     }
 

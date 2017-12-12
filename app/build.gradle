@@ -57,7 +57,6 @@ dependencies {
     api project(':basemvplib')
     //GreenDao
     implementation 'org.greenrobot:greendao:3.0.1'
-    implementation 'org.greenrobot:greendao-generator:3.0.0'
     //JSOUP
     implementation 'org.jsoup:jsoup:1.10.2'
     //沉浸式状态栏
@@ -88,7 +87,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 1
+    schemaVersion 2
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }

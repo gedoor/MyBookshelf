@@ -156,9 +156,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         if (null != bookShelf && bookShelf.getBookInfoBean().getChapterlist().size() > 0) {
             if (null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
                     && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()) {
-                if (bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize() && bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
+                if (bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
+                        && bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
-                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
+                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().
+                            get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
 
                     if (pageIndex == BookContentView.DURPAGEINDEXBEGIN) {
                         pageIndex = 0;
@@ -217,21 +219,22 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                         .subscribe(new SimpleObserver<ReadBookContentBean>() {
                             @Override
                             public void onNext(ReadBookContentBean tempList) {
-                                if (tempList.getBookContentList() != null && tempList.getBookContentList().size() > 0 && tempList.getBookContentList().get(0).getDurCapterContent() != null) {
+                                if (tempList.getBookContentList() != null && tempList.getBookContentList().size() > 0
+                                        && tempList.getBookContentList().get(0).getDurCapterContent() != null) {
                                     bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(tempList.getBookContentList().get(0));
                                     loadContent(bookContentView, bookTag, chapterIndex, tempList.getPageIndex());
                                 } else {
                                     final int finalPageIndex1 = tempList.getPageIndex();
-                                    WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(new Function<BookContentBean, BookContentBean>() {
-                                        @Override
-                                        public BookContentBean apply(BookContentBean bookContentBean) throws Exception {
-                                            if (bookContentBean.getRight()) {
-                                                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
-                                                bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setHasCache(true);
-                                                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex));
-                                            }
-                                            return bookContentBean;
+                                    //网络获取正文
+                                    WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).
+                                            getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(bookContentBean -> {
+                                        if (bookContentBean.getRight()) {
+                                            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
+                                            bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setHasCache(true);
+                                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
+                                                    .update(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex));
                                         }
+                                        return bookContentBean;
                                     })
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribeOn(Schedulers.newThread())

@@ -29,6 +29,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     private long finalDate;  //最后阅读时间
 
+    private boolean hasUpdate;
+
     private String tag;
 
     @Transient
@@ -47,13 +49,14 @@ public class BookShelfBean implements Parcelable,Cloneable{
         bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
     }
 
-    @Generated(hash = 2028192361)
+    @Generated(hash = 1561902583)
     public BookShelfBean(String noteUrl, int durChapter, int durChapterPage, long finalDate,
-            String tag) {
+            boolean hasUpdate, String tag) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
         this.finalDate = finalDate;
+        this.hasUpdate = hasUpdate;
         this.tag = tag;
     }
 
@@ -131,6 +134,15 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setBookInfoBean(BookInfoBean bookInfoBean) {
         this.bookInfoBean = bookInfoBean;
+    }
+
+
+    public void setHasUpdate(boolean hasUpdate) {
+        this.hasUpdate = hasUpdate;
+    }
+
+    public boolean getHasUpdate() {
+        return hasUpdate;
     }
 
     @Override
