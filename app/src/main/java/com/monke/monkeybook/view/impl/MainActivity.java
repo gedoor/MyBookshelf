@@ -176,13 +176,16 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 //点击搜索
                 startActivityByAnim(new Intent(this, SearchActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
-                return true;
+                break;
+            case R.id.action_download:
+                downloadListPop.showAsDropDown(toolbar);
+                break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
                 finish();
                 startActivity(getIntent());
-                return true;
+                break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
                         ) {
@@ -190,7 +193,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 } else {
                     drawer.openDrawer(GravityCompat.START);
                 }
-                return true;
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

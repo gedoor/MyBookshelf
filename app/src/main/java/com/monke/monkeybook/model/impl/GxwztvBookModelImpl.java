@@ -229,6 +229,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //获取目录
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitObject(TAG).create(IGxwztvApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl()

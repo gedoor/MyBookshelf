@@ -29,7 +29,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     private long finalDate;  //最后阅读时间
 
-    private boolean hasUpdate;
+    private boolean hasUpdate;  //是否有更新
 
     private String tag;
 

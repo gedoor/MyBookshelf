@@ -2,6 +2,7 @@
     <string name="app_name">阅读</string>
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>
     <string name="action_search">搜索</string>
+    <string name="action_download">下载</string>
     <string name="action_list">列表视图</string>
     <string name="action_grid">网格视图</string>
     <string name="action_list_grid">列表/网格</string>

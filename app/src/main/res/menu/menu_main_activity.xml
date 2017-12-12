@@ -10,6 +10,10 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_download"
+        android:title="@string/action_download" />
+
+    <item
         android:id="@+id/action_list_grid"
         android:title="@string/action_list_grid" />
 
