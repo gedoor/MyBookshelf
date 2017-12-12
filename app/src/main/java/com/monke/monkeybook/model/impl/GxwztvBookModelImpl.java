@@ -231,12 +231,8 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(IGxwztvApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(new Function<String, ObservableSource<WebChapterBean<BookShelfBean>>>() {
-            @Override
-            public ObservableSource<WebChapterBean<BookShelfBean>> apply(String s) throws Exception {
-                return analyChapterList(s, bookShelfBean);
-            }
-        })
+        getRetrofitObject(TAG).create(IGxwztvApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl()
+                .replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -258,15 +254,12 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     }
 
     private Observable<WebChapterBean<BookShelfBean>> analyChapterList(final String s, final BookShelfBean bookShelfBean) {
-        return Observable.create(new ObservableOnSubscribe<WebChapterBean<BookShelfBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<WebChapterBean<BookShelfBean>> e) throws Exception {
-                bookShelfBean.setTag(TAG);
-                WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
-                bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
-                e.onNext(new WebChapterBean<BookShelfBean>(bookShelfBean, temp.getNext()));
-                e.onComplete();
-            }
+        return Observable.create(e -> {
+            bookShelfBean.setTag(TAG);
+            WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
+            bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
+            e.onNext(new WebChapterBean<BookShelfBean>(bookShelfBean, temp.getNext()));
+            e.onComplete();
         });
     }
 

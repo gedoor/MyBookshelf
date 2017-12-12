@@ -32,8 +32,9 @@ import io.reactivex.schedulers.Schedulers;
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
 
     public void queryBookShelf(final Boolean needRefresh) {
-        if (needRefresh)
+        if (needRefresh) {
             mView.activityRefreshView();
+        }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                     .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
@@ -102,13 +103,10 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     private void saveBookToShelf(final List<BookShelfBean> datas, final int index){
-        Observable.create(new ObservableOnSubscribe<BookShelfBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(datas.get(index).getBookInfoBean().getChapterlist());
-                e.onNext(datas.get(index));
-                e.onComplete();
-            }
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(datas.get(index).getBookInfoBean().getChapterlist());
+            e.onNext(datas.get(index));
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
