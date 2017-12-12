@@ -21,19 +21,29 @@
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_name"
-            android:text="@string/tv_book_name"
-            app:minTextSize="7sp"
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_toEndOf="@+id/iv_cover"
-            android:paddingStart="12dp"
+            android:layout_toStartOf="@+id/iv_has_new"
             android:paddingEnd="2dp"
+            android:paddingStart="12dp"
             android:singleLine="true"
+            android:text="@string/tv_book_name"
             android:textColor="#393838"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            app:minTextSize="7sp" />
+
+        <ImageView
+            android:id="@+id/iv_has_new"
+            android:visibility="invisible"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_circle_black_24dp" />
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_read"

@@ -90,7 +90,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override
                 public void success(BookShelfBean bookShelfBean) {
-                    saveBookToShelf(value,index);
+                    boolean hasUpdate = chapterSize < value.get(index).getBookInfoBean().getChapterlist().size();
+                    saveBookToShelf(value, index, hasUpdate);
                 }
 
                 @Override
@@ -103,9 +104,13 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         }
     }
 
-    private void saveBookToShelf(final List<BookShelfBean> datas, final int index) {
+    private void saveBookToShelf(final List<BookShelfBean> datas, final int index, final boolean hasUpdate) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(datas.get(index).getBookInfoBean().getChapterlist());
+            if (hasUpdate) {
+                datas.get(index).setHasUpdate(true);
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(datas.get(index));
+            }
             e.onNext(datas.get(index));
             e.onComplete();
         })

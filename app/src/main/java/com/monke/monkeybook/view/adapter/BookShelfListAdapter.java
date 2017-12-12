@@ -115,14 +115,19 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                     books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
                     books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getBookInfoBean().getChapterlist().size() - 1).getDurChapterName()));
+            if (books.get(index).getHasUpdate()) {
+                holder.ivHasNew.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivHasNew.setVisibility(View.INVISIBLE);
+            }
         }
         //进度条
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 10;
+        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 60;
 
-        holder.mpbDurprogress.setSpeed(speed <= 0 ? 10 : speed);
+        holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
         holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -181,6 +186,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     class OtherViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
         ImageView ivCover;
+        ImageView ivHasNew;
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
@@ -192,6 +198,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             super(itemView);
             flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
             ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
+            ivHasNew = (ImageView) itemView.findViewById(R.id.iv_has_new);
             tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name);
             tvRead = (AutofitTextView) itemView.findViewById(R.id.tv_read);
             tvLast = (AutofitTextView) itemView.findViewById(R.id.tv_last);
