@@ -188,6 +188,10 @@ public class BookInfoBean implements Parcelable,Cloneable{
     public void setOrigin(String origin) {
         this.origin = origin;
     }
+    //最新章节
+    public ChapterListBean getLastChapter() {
+        return chapterlist.get(chapterlist.size()-1);
+    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
