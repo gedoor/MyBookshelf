@@ -30,6 +30,7 @@ import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IMainPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
@@ -135,6 +136,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
             @Override
             public void onClick(BookShelfBean bookShelfBean, int index) {
+                bookShelfBean.setHasUpdate(false);
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
                 intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
