@@ -46,6 +46,15 @@
                 android:src="@drawable/img_cover_default"
                 android:transitionName="img_cover" />
 
+            <ImageView
+                android:id="@+id/iv_has_new_1"
+                android:visibility="invisible"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -95,6 +104,15 @@
                 android:src="@drawable/img_cover_default"
                 android:transitionName="img_cover" />
 
+            <ImageView
+                android:id="@+id/iv_has_new_2"
+                android:visibility="invisible"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -118,12 +136,6 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/ib_content_2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_ib_pre2" />
-
         </FrameLayout>
 
         <View
@@ -144,6 +156,15 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_cover_default"
                 android:transitionName="img_cover" />
+
+            <ImageView
+                android:id="@+id/iv_has_new_3"
+                android:visibility="invisible"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -170,6 +191,12 @@
 
             <ImageButton
                 android:id="@+id/ib_content_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
+            <ImageButton
+                android:id="@+id/ib_content_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_ib_pre2" />
