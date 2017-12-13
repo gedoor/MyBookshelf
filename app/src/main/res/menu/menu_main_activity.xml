@@ -11,10 +11,14 @@
 
     <item
         android:id="@+id/action_download"
-        android:title="@string/action_download" />
+        android:icon="@drawable/ic_download_black_24dp"
+        android:title="@string/action_download"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_list_grid"
-        android:title="@string/action_list_grid" />
+        android:icon="@drawable/ic_view_quilt_black_24dp"
+        android:title="@string/action_list_grid"
+        app:showAsAction="never"/>
 
 </menu>
