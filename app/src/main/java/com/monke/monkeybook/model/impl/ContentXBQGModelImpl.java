@@ -36,7 +36,7 @@ public class ContentXBQGModelImpl extends BaseModelImpl implements IStationBookM
 
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com").create(ILingdiankanshuApi.class).searchBook(content, page - 1, "16865089933227718744").flatMap(s -> analySearchBook(s));
+        return getRetrofitObject("http://zhannei.baidu.com").create(ILingdiankanshuApi.class).searchBook(content, page - 1, "5199337987683747968").flatMap(s -> analySearchBook(s));
     }
 
     public Observable<List<SearchBookBean>> analySearchBook(final String s) {
@@ -53,7 +53,7 @@ public class ContentXBQGModelImpl extends BaseModelImpl implements IStationBookM
                         item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0).getElementsByClass("result-game-item-info-tag").get(1).getElementsByTag("span").get(1).text());
 //                            item.setState();
                         item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0).getElementsByClass("result-game-item-info-tag").get(3).getElementsByTag("a").get(0).text());
-                        item.setOrigin("lingdiankanshu.co");
+                        item.setOrigin("xxbiquge.com");
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).text());
                         item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).attr("href"));
                         item.setCoverUrl(booksE.get(i).getElementsByTag("img").get(0).attr("src"));
@@ -113,7 +113,7 @@ public class ContentXBQGModelImpl extends BaseModelImpl implements IStationBookM
 
         bookInfoBean.setIntroduce(content.toString());
         bookInfoBean.setChapterUrl(novelUrl);
-        bookInfoBean.setOrigin("gxwztv.com");
+        bookInfoBean.setOrigin("xxbiquge.com");
         return bookInfoBean;
     }
 
@@ -157,7 +157,7 @@ public class ContentXBQGModelImpl extends BaseModelImpl implements IStationBookM
         List<ChapterListBean> chapterBeans = new ArrayList<ChapterListBean>();
         for (int i = 0; i < chapterlist.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(novelUrl + chapterlist.get(i).getElementsByTag("a").get(0).attr("href"));   //id
+            temp.setDurChapterUrl(TAG + chapterlist.get(i).getElementsByTag("a").get(0).attr("href"));   //id
             temp.setDurChapterIndex(i);
             temp.setDurChapterName(chapterlist.get(i).getElementsByTag("a").get(0).text());
             temp.setNoteUrl(novelUrl);

@@ -17,6 +17,7 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
+import com.monke.monkeybook.model.impl.ContentXBQGModelImpl;
 import com.monke.monkeybook.model.impl.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.impl.LingdiankanshuStationBookModelImpl;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
@@ -94,6 +95,14 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         lingdiankanshu.put(DURREQUESTTIME, 1);
         lingdiankanshu.put(MAXREQUESTTIME, 3);
         searchEngine.add(lingdiankanshu);
+
+        Map xbqg = new HashMap();
+        xbqg.put(TAG_KEY, ContentXBQGModelImpl.TAG);
+        xbqg.put(HASMORE_KEY, true);
+        xbqg.put(HASLOAD_KEY, false);
+        xbqg.put(DURREQUESTTIME, 1);
+        xbqg.put(MAXREQUESTTIME, 3);
+        searchEngine.add(xbqg);
     }
 
     @Override
@@ -310,7 +319,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
+    //添加书集
     @Override
     public void addBookToShelf(final SearchBookBean searchBookBean) {
         final BookShelfBean bookShelfResult = new BookShelfBean();
