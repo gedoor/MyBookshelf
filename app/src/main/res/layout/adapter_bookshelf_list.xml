@@ -43,7 +43,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:padding="6dp"
-            android:src="@drawable/ic_circle_black_24dp" />
+            android:src="@drawable/ic_circle_red_24dp" />
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_read"
