@@ -87,6 +87,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     }
 
     private void bindOtherViewHolder(final OtherViewHolder holder, int index) {
+        //第一列
         final int index_1 = index * 3;
         if (needAnim) {
             final Animation animation = AnimationUtils.loadAnimation(holder.flContent_1.getContext(), R.anim.anim_bookshelf_item);
@@ -106,6 +107,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
         Glide.with(holder.ivCover_1.getContext()).load(books.get(index_1).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
         holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
+        if (books.get(index_1).getHasUpdate()) {
+            holder.ivHasNew_1.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivHasNew_1.setVisibility(View.INVISIBLE);
+        }
 
         holder.ibContent_1.setOnClickListener(v -> {
             if (itemClickListener != null)
@@ -118,7 +124,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             } else
                 return false;
         });
-
+        //第二列
         final int index_2 = index_1 + 1;
         if (index_2 < books.size()) {
             if (needAnim) {
@@ -139,7 +145,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             }
             Glide.with(holder.ivCover_2.getContext()).load(books.get(index_2).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
             holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
-
+            if (books.get(index_2).getHasUpdate()) {
+                holder.ivHasNew_2.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivHasNew_2.setVisibility(View.INVISIBLE);
+            }
             holder.ibContent_2.setOnClickListener(v -> {
                 if (itemClickListener != null)
                     itemClickListener.onClick(books.get(index_2), index_2);
@@ -152,7 +162,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 } else
                     return false;
             });
-
+            //第三列
             final int index_3 = index_2 + 1;
             if (index_3 < books.size()) {
                 if (needAnim) {
@@ -173,7 +183,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 }
                 Glide.with(holder.ivCover_3.getContext()).load(books.get(index_3).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
                 holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
-
+                if (books.get(index_3).getHasUpdate()) {
+                    holder.ivHasNew_3.setVisibility(View.VISIBLE);
+                } else {
+                    holder.ivHasNew_3.setVisibility(View.INVISIBLE);
+                }
                 holder.ibContent_3.setOnClickListener(v -> {
                     if (itemClickListener != null)
                         itemClickListener.onClick(books.get(index_3), index_3);
@@ -298,16 +312,19 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     class OtherViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent_1;
         ImageView ivCover_1;
+        ImageView ivHasNew_1;
         AutofitTextView tvName_1;
         ImageButton ibContent_1;
 
         FrameLayout flContent_2;
         ImageView ivCover_2;
+        ImageView ivHasNew_2;
         AutofitTextView tvName_2;
         ImageButton ibContent_2;
 
         FrameLayout flContent_3;
         ImageView ivCover_3;
+        ImageView ivHasNew_3;
         AutofitTextView tvName_3;
         ImageButton ibContent_3;
 
@@ -315,16 +332,19 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             super(itemView);
             flContent_1 = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
             ivCover_1 = (ImageView) itemView.findViewById(R.id.iv_cover_1);
+            ivHasNew_1 = (ImageView) itemView.findViewById(R.id.iv_has_new_1);
             tvName_1 = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
             ibContent_1 = (ImageButton) itemView.findViewById(R.id.ib_content_1);
 
             flContent_2 = (FrameLayout) itemView.findViewById(R.id.fl_content_2);
             ivCover_2 = (ImageView) itemView.findViewById(R.id.iv_cover_2);
+            ivHasNew_2 = (ImageView) itemView.findViewById(R.id.iv_has_new_2);
             tvName_2 = (AutofitTextView) itemView.findViewById(R.id.tv_name_2);
             ibContent_2 = (ImageButton) itemView.findViewById(R.id.ib_content_2);
 
             flContent_3 = (FrameLayout) itemView.findViewById(R.id.fl_content_3);
             ivCover_3 = (ImageView) itemView.findViewById(R.id.iv_cover_3);
+            ivHasNew_3 = (ImageView) itemView.findViewById(R.id.iv_has_new_3);
             tvName_3 = (AutofitTextView) itemView.findViewById(R.id.tv_name_3);
             ibContent_3 = (ImageButton) itemView.findViewById(R.id.ib_content_3);
         }
