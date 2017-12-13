@@ -88,6 +88,9 @@ public class WebBookModelImpl implements IWebBookModel {
         else if(tag.equals(LingdiankanshuStationBookModelImpl.TAG)){
             return LingdiankanshuStationBookModelImpl.getInstance().searchBook(content, page);
         }
+        else if(tag.equals(ContentXBQGModelImpl.TAG)){
+            return ContentXBQGModelImpl.getInstance().searchBook(content, page);
+        }
         else{
             return Observable.create(e -> {
                 e.onNext(new ArrayList<SearchBookBean>());

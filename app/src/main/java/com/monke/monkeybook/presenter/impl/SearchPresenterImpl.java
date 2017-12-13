@@ -216,7 +216,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         }
         searchBook(durSearchKey, startThisSearchTime, fromError);
     }
-
+    //搜索书集
     private void searchBook(final String content, final long searchTime, Boolean fromError) {
         if (searchTime == startThisSearchTime) {
             Boolean canLoad = false;
