@@ -208,7 +208,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             holder.flContent_3.setVisibility(View.INVISIBLE);
         }
     }
-
+    //最近阅读
     private void bindLastestViewHolder(final LastestViewHolder holder, final int index) {
         if (books.size() == 0) {
             holder.tvWatch.setOnClickListener(v -> {
@@ -231,8 +231,10 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
             holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
 
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist() && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
-                holder.tvDurprogress.setText(String.format(holder.tvDurprogress.getContext().getString(R.string.tv_read_durprogress), books.get(index).getBookInfoBean().getChapterlist().get(books.get(index).getDurChapter()).getDurChapterName()));
+            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist()
+                    && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
+                holder.tvDurprogress.setText(String.format(holder.tvDurprogress.getContext().getString(R.string.tv_read_durprogress),
+                        books.get(index).getDurChapterListBean().getDurChapterName()));
             }
             holder.llDurcursor.setVisibility(View.VISIBLE);
             holder.mpbDurprogress.setVisibility(View.VISIBLE);
