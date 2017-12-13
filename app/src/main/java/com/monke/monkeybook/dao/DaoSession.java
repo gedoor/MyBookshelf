@@ -83,12 +83,12 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
-        bookContentBeanDaoConfig.getIdentityScope().clear();
-        bookInfoBeanDaoConfig.getIdentityScope().clear();
-        bookShelfBeanDaoConfig.getIdentityScope().clear();
-        chapterListBeanDaoConfig.getIdentityScope().clear();
-        downloadChapterBeanDaoConfig.getIdentityScope().clear();
-        searchHistoryBeanDaoConfig.getIdentityScope().clear();
+        bookContentBeanDaoConfig.clearIdentityScope();
+        bookInfoBeanDaoConfig.clearIdentityScope();
+        bookShelfBeanDaoConfig.clearIdentityScope();
+        chapterListBeanDaoConfig.clearIdentityScope();
+        downloadChapterBeanDaoConfig.clearIdentityScope();
+        searchHistoryBeanDaoConfig.clearIdentityScope();
     }
 
     public BookContentBeanDao getBookContentBeanDao() {

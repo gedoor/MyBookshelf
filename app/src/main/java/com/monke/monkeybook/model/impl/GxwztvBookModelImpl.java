@@ -133,6 +133,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //搜索
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         return getRetrofitObject(TAG).create(IGxwztvApi.class).searchBook(content, page).flatMap(s -> analySearchBook(s));

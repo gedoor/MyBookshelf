@@ -1,17 +1,31 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.dao;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.monke.monkeybook.MApplication;
 
 public class DbHelper {
-    private DaoMaster.DevOpenHelper mHelper;
+    private DaoOpenHelper mHelper;
     private SQLiteDatabase db;
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
 
+    public class DaoOpenHelper extends DaoMaster.OpenHelper {
+        public DaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+            super(context, name, factory);
+        }
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            MigrationHelper.migrate(db, BookContentBeanDao.class, BookInfoBeanDao.class, BookShelfBeanDao.class,
+                    ChapterListBeanDao.class, DownloadChapterBeanDao.class, SearchHistoryBeanDao.class);
+        }
+    }
+
     private DbHelper(){
-        mHelper = new DaoMaster.DevOpenHelper(MApplication.getInstance(), "monkebook_db", null);
+        mHelper = new DaoOpenHelper(MApplication.getInstance(), "monkebook_db", null);
         db = mHelper.getWritableDatabase();
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
         mDaoMaster = new DaoMaster(db);
@@ -38,4 +52,5 @@ public class DbHelper {
     public SQLiteDatabase getDb() {
         return db;
     }
+
 }

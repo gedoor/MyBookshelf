@@ -56,7 +56,8 @@ dependencies {
     implementation 'com.android.support:support-compat:26.1.0'
     api project(':basemvplib')
     //GreenDao
-    implementation 'org.greenrobot:greendao:3.0.1'
+    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v1.4.0'
     //JSOUP
     implementation 'org.jsoup:jsoup:1.10.2'
     //沉浸式状态栏

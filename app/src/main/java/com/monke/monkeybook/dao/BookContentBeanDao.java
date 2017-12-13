@@ -22,13 +22,13 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
     /**
      * Properties of entity BookContentBean.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property DurChapterUrl = new Property(0, String.class, "durChapterUrl", true, "DUR_CHAPTER_URL");
         public final static Property DurChapterIndex = new Property(1, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
         public final static Property DurCapterContent = new Property(2, String.class, "durCapterContent", false, "DUR_CAPTER_CONTENT");
         public final static Property Tag = new Property(3, String.class, "tag", false, "TAG");
-    };
+    }
 
 
     public BookContentBeanDao(DaoConfig config) {
@@ -133,6 +133,11 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(BookContentBean entity) {
+        return entity.getDurChapterUrl() != null;
     }
 
     @Override
