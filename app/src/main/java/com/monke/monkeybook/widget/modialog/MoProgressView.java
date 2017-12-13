@@ -56,12 +56,7 @@ public class MoProgressView extends LinearLayout {
         TextView msgTv = (TextView) findViewById(R.id.msg_tv);
         msgTv.setText(msg);
         TextView tvClose = (TextView) findViewById(R.id.tv_close);
-        tvClose.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(v);
-            }
-        });
+        tvClose.setOnClickListener(v -> listener.onClick(v));
     }
 
     //单个按钮的信息提示框
@@ -159,20 +154,17 @@ public class MoProgressView extends LinearLayout {
                 }
             }
         });
-        tvDownload.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(edtStart.getText().length()>0 && edtEnd.getText().length()>0){
-                    if(Integer.parseInt(edtStart.getText().toString())>Integer.parseInt(edtEnd.getText().toString())){
-                        Toast.makeText(context,"输入错误",Toast.LENGTH_SHORT).show();
-                    }else{
-                        if(clickDownload!=null){
-                            clickDownload.download(Integer.parseInt(edtStart.getText().toString())-1,Integer.parseInt(edtEnd.getText().toString())-1);
-                        }
-                    }
+        tvDownload.setOnClickListener(v -> {
+            if(edtStart.getText().length()>0 && edtEnd.getText().length()>0){
+                if(Integer.parseInt(edtStart.getText().toString())>Integer.parseInt(edtEnd.getText().toString())){
+                    Toast.makeText(context,"输入错误",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(context,"请输入要离线的章节",Toast.LENGTH_SHORT).show();
+                    if(clickDownload!=null){
+                        clickDownload.download(Integer.parseInt(edtStart.getText().toString())-1,Integer.parseInt(edtEnd.getText().toString())-1);
+                    }
                 }
+            }else{
+                Toast.makeText(context,"请输入要离线的章节",Toast.LENGTH_SHORT).show();
             }
         });
     }

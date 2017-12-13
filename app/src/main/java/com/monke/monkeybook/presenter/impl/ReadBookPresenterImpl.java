@@ -283,14 +283,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     @Override
     public void saveProgress() {
         if (bookShelf != null) {
-            Observable.create(new ObservableOnSubscribe<BookShelfBean>() {
-                @Override
-                public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
-                    bookShelf.setFinalDate(System.currentTimeMillis());
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
-                    e.onNext(bookShelf);
-                    e.onComplete();
-                }
+            Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+                bookShelf.setFinalDate(System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                e.onNext(bookShelf);
+                e.onComplete();
             }).subscribeOn(Schedulers.newThread())
                     .subscribe(new SimpleObserver<BookShelfBean>() {
                         @Override
@@ -315,19 +312,16 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     public Observable<List<String>> SeparateParagraphtoLines(final String paragraphstr) {
-        return Observable.create(new ObservableOnSubscribe<List<String>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<String>> e) throws Exception {
-                TextPaint mPaint = (TextPaint) mView.getPaint();
-                mPaint.setSubpixelText(true);
-                Layout tempLayout = new StaticLayout(paragraphstr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                List<String> linesdata = new ArrayList<String>();
-                for (int i = 0; i < tempLayout.getLineCount(); i++) {
-                    linesdata.add(paragraphstr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
-                }
-                e.onNext(linesdata);
-                e.onComplete();
+        return Observable.create(e -> {
+            TextPaint mPaint = (TextPaint) mView.getPaint();
+            mPaint.setSubpixelText(true);
+            Layout tempLayout = new StaticLayout(paragraphstr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            List<String> linesdata = new ArrayList<String>();
+            for (int i = 0; i < tempLayout.getLineCount(); i++) {
+                linesdata.add(paragraphstr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
+            e.onNext(linesdata);
+            e.onComplete();
         });
     }
 
@@ -337,17 +331,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     private void checkInShelf() {
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-                if (temp == null || temp.size() == 0) {
-                    isAdd = false;
-                } else
-                    isAdd = true;
-                e.onNext(isAdd);
-                e.onComplete();
-            }
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
+            if (temp == null || temp.size() == 0) {
+                isAdd = false;
+            } else
+                isAdd = true;
+            e.onNext(isAdd);
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .compose(((BaseActivity) mView.getContext()).<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -373,18 +364,15 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     @Override
     public void addToShelf(final OnAddListner addListner) {
         if (bookShelf != null) {
-            Observable.create(new ObservableOnSubscribe<Boolean>() {
-                @Override
-                public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
-                    //网络数据获取成功  存入BookShelf表数据库
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
-                    RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
-                    isAdd = true;
-                    e.onNext(true);
-                    e.onComplete();
-                }
+            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
+                //网络数据获取成功  存入BookShelf表数据库
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
+                isAdd = true;
+                e.onNext(true);
+                e.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SimpleObserver<Object>() {
@@ -407,36 +395,33 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     public Observable<String> getRealFilePath(final Context context, final Uri uri) {
-        return Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> e) throws Exception {
-                String data = "";
-                if (null != uri) {
-                    final String scheme = uri.getScheme();
-                    if (scheme == null)
-                        data = uri.getPath();
-                    else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
-                        data = uri.getPath();
-                    } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-                        Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
-                        if (null != cursor) {
-                            if (cursor.moveToFirst()) {
-                                int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                                if (index > -1) {
-                                    data = cursor.getString(index);
-                                }
+        return Observable.create(e -> {
+            String data = "";
+            if (null != uri) {
+                final String scheme = uri.getScheme();
+                if (scheme == null)
+                    data = uri.getPath();
+                else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+                    data = uri.getPath();
+                } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+                    Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
+                    if (null != cursor) {
+                        if (cursor.moveToFirst()) {
+                            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                            if (index > -1) {
+                                data = cursor.getString(index);
                             }
-                            cursor.close();
                         }
+                        cursor.close();
+                    }
 
-                        if ((data == null || data.length() <= 0) && uri.getPath() != null && uri.getPath().contains("/storage/emulated/")) {
-                            data = uri.getPath().substring(uri.getPath().indexOf("/storage/emulated/"));
-                        }
+                    if ((data == null || data.length() <= 0) && uri.getPath() != null && uri.getPath().contains("/storage/emulated/")) {
+                        data = uri.getPath().substring(uri.getPath().indexOf("/storage/emulated/"));
                     }
                 }
-                e.onNext(data == null ? "" : data);
-                e.onComplete();
             }
+            e.onNext(data == null ? "" : data);
+            e.onComplete();
         });
     }
 }

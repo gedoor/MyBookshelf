@@ -29,15 +29,12 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
     }
     @Override
     public void searchLocationBook(){
-        Observable.create(new ObservableOnSubscribe<File>() {
-            @Override
-            public void subscribe(ObservableEmitter<File> e) throws Exception {
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)){
-                    searchBook(e,new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
-                }
-                e.onComplete();
+        Observable.create((ObservableOnSubscribe<File>) e -> {
+            if (Environment.getExternalStorageState().equals(
+                    Environment.MEDIA_MOUNTED)){
+                searchBook(e,new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
             }
+            e.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SimpleObserver<File>() {
@@ -75,12 +72,7 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
 
     @Override
     public void importBooks(List<File> books){
-        Observable.fromIterable(books).flatMap(new Function<File, ObservableSource<LocBookShelfBean>>() {
-            @Override
-            public ObservableSource<LocBookShelfBean> apply(File file) throws Exception {
-                return ImportBookModelImpl.getInstance().importBook(file);
-            }
-        })
+        Observable.fromIterable(books).flatMap(file -> ImportBookModelImpl.getInstance().importBook(file))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<LocBookShelfBean>() {

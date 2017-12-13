@@ -96,17 +96,14 @@ public class SmoothCheckBox extends View implements Checkable {
         mTickPoints[1] = new Point();
         mTickPoints[2] = new Point();
 
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggle();
-                mTickDrawing = false;
-                mDrewDistance = 0;
-                if (isChecked()) {
-                    startCheckedAnimation();
-                } else {
-                    startUnCheckedAnimation();
-                }
+        setOnClickListener(v -> {
+            toggle();
+            mTickDrawing = false;
+            mDrewDistance = 0;
+            if (isChecked()) {
+                startCheckedAnimation();
+            } else {
+                startUnCheckedAnimation();
             }
         });
     }
@@ -299,12 +296,7 @@ public class SmoothCheckBox extends View implements Checkable {
 
         // invalidate
         if (mDrewDistance < mLeftLineDistance + mRightLineDistance) {
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    postInvalidate();
-                }
-            }, 10);
+            postDelayed(() -> postInvalidate(), 10);
         }
     }
 
@@ -312,25 +304,19 @@ public class SmoothCheckBox extends View implements Checkable {
         ValueAnimator animator = ValueAnimator.ofFloat(1.0f, 0f);
         animator.setDuration(mAnimDuration / 3 * 2);
         animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mScaleVal = (float) animation.getAnimatedValue();
-                mFloorColor = getGradientColor(mUnCheckedColor, mCheckedColor, 1 - mScaleVal);
-                postInvalidate();
-            }
+        animator.addUpdateListener(animation -> {
+            mScaleVal = (float) animation.getAnimatedValue();
+            mFloorColor = getGradientColor(mUnCheckedColor, mCheckedColor, 1 - mScaleVal);
+            postInvalidate();
         });
         animator.start();
 
         ValueAnimator floorAnimator = ValueAnimator.ofFloat(1.0f, 0.8f, 1.0f);
         floorAnimator.setDuration(mAnimDuration);
         floorAnimator.setInterpolator(new LinearInterpolator());
-        floorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mFloorScale = (float) animation.getAnimatedValue();
-                postInvalidate();
-            }
+        floorAnimator.addUpdateListener(animation -> {
+            mFloorScale = (float) animation.getAnimatedValue();
+            postInvalidate();
         });
         floorAnimator.start();
 
@@ -341,36 +327,27 @@ public class SmoothCheckBox extends View implements Checkable {
         ValueAnimator animator = ValueAnimator.ofFloat(0f, 1.0f);
         animator.setDuration(mAnimDuration);
         animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mScaleVal = (float) animation.getAnimatedValue();
-                mFloorColor = getGradientColor(mCheckedColor, mFloorUnCheckedColor, mScaleVal);
-                postInvalidate();
-            }
+        animator.addUpdateListener(animation -> {
+            mScaleVal = (float) animation.getAnimatedValue();
+            mFloorColor = getGradientColor(mCheckedColor, mFloorUnCheckedColor, mScaleVal);
+            postInvalidate();
         });
         animator.start();
 
         ValueAnimator floorAnimator = ValueAnimator.ofFloat(1.0f, 0.8f, 1.0f);
         floorAnimator.setDuration(mAnimDuration);
         floorAnimator.setInterpolator(new LinearInterpolator());
-        floorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mFloorScale = (float) animation.getAnimatedValue();
-                postInvalidate();
-            }
+        floorAnimator.addUpdateListener(animation -> {
+            mFloorScale = (float) animation.getAnimatedValue();
+            postInvalidate();
         });
         floorAnimator.start();
     }
 
     private void drawTickDelayed() {
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTickDrawing = true;
-                postInvalidate();
-            }
+        postDelayed(() -> {
+            mTickDrawing = true;
+            postInvalidate();
         }, mAnimDuration);
     }
 

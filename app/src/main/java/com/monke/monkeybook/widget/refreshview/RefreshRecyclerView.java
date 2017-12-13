@@ -169,12 +169,9 @@ public class RefreshRecyclerView extends FrameLayout {
     }
 
     public void setRefreshRecyclerViewAdapter(RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
-        refreshRecyclerViewAdapter.setClickTryAgainListener(new RefreshRecyclerViewAdapter.OnClickTryAgainListener() {
-            @Override
-            public void loadMoreErrorTryAgain() {
-                if (loadMoreListener != null)
-                    loadMoreListener.loadMoreErrorTryAgain();
-            }
+        refreshRecyclerViewAdapter.setClickTryAgainListener(() -> {
+            if (loadMoreListener != null)
+                loadMoreListener.loadMoreErrorTryAgain();
         });
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(refreshRecyclerViewAdapter);

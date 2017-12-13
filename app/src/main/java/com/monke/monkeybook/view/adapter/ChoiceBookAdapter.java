@@ -96,19 +96,13 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             ((Viewholder) holder).tvAddShelf.setEnabled(true);
         }
 
-        ((Viewholder) holder).flContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClickListener != null)
-                    itemClickListener.clickItem(((Viewholder) holder).ivCover, realposition, searchBooks.get(realposition));
-            }
+        ((Viewholder) holder).flContent.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.clickItem(((Viewholder) holder).ivCover, realposition, searchBooks.get(realposition));
         });
-        ((Viewholder) holder).tvAddShelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClickListener != null)
-                    itemClickListener.clickAddShelf(((Viewholder) holder).tvAddShelf, realposition, searchBooks.get(realposition));
-            }
+        ((Viewholder) holder).tvAddShelf.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.clickAddShelf(((Viewholder) holder).tvAddShelf, realposition, searchBooks.get(realposition));
         });
     }
 

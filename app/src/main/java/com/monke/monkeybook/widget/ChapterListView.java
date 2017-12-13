@@ -71,12 +71,7 @@ public class ChapterListView extends FrameLayout{
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                flBg.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dimissChapterList();
-                    }
-                });
+                flBg.setOnClickListener(v -> dimissChapterList());
             }
 
             @Override
@@ -138,14 +133,11 @@ public class ChapterListView extends FrameLayout{
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
         tvListCount.setText("共"+bookShelfBean.getBookInfoBean().getChapterlist().size()+"章");
-        chapterListAdapter = new ChapterListAdapter(bookShelfBean, new OnItemClickListener() {
-            @Override
-            public void itemClick(int index) {
-                if(itemClickListener!=null){
-                    itemClickListener.itemClick(index);
-                    rvbSlider.scrollToPositionWithOffset(index);
-                    dimissChapterList();
-                }
+        chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
+            if(itemClickListener!=null){
+                itemClickListener.itemClick(index);
+                rvbSlider.scrollToPositionWithOffset(index);
+                dimissChapterList();
             }
         });
         rvList.setAdapter(chapterListAdapter);

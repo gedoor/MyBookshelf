@@ -21,12 +21,9 @@ public class LibraryNewBooksAdapter extends TagAdapter<LibraryNewBookBean> {
         TextView tv = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_library_hotauthor_item,
                 parent, false);
         tv.setText(libraryNewBookBean.getName());
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(null != clickNewBookListener){
-                    clickNewBookListener.clickNewBook(libraryNewBookBean);
-                }
+        tv.setOnClickListener(v -> {
+            if(null != clickNewBookListener){
+                clickNewBookListener.clickNewBook(libraryNewBookBean);
             }
         });
         return tv;

@@ -37,18 +37,8 @@ public class MoreSettingPop extends PopupWindow{
     }
 
     private void bindEvent() {
-        sbKey.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                readBookControl.setCanKeyTurn(isChecked);
-            }
-        });
-        sbClick.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                readBookControl.setCanClickTurn(isChecked);
-            }
-        });
+        sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
+        sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
     }
 
     private void bindView() {

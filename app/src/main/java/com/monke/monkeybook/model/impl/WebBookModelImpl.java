@@ -71,12 +71,9 @@ public class WebBookModelImpl implements IWebBookModel {
             return LingdiankanshuStationBookModelImpl.getInstance().getBookContent(durChapterUrl, durChapterIndex);
         }
         else
-            return Observable.create(new ObservableOnSubscribe<BookContentBean>() {
-                @Override
-                public void subscribe(ObservableEmitter<BookContentBean> e) throws Exception {
-                    e.onNext(new BookContentBean());
-                    e.onComplete();
-                }
+            return Observable.create(e -> {
+                e.onNext(new BookContentBean());
+                e.onComplete();
             });
     }
 
@@ -92,12 +89,9 @@ public class WebBookModelImpl implements IWebBookModel {
             return LingdiankanshuStationBookModelImpl.getInstance().searchBook(content, page);
         }
         else{
-            return Observable.create(new ObservableOnSubscribe<List<SearchBookBean>>() {
-                @Override
-                public void subscribe(ObservableEmitter<List<SearchBookBean>> e) throws Exception {
-                    e.onNext(new ArrayList<SearchBookBean>());
-                    e.onComplete();
-                }
+            return Observable.create(e -> {
+                e.onNext(new ArrayList<SearchBookBean>());
+                e.onComplete();
             });
         }
     }

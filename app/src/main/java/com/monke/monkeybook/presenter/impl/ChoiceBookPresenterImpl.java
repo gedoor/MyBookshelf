@@ -40,14 +40,11 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
     public ChoiceBookPresenterImpl(final Intent intent) {
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");
-        Observable.create(new ObservableOnSubscribe<List<BookShelfBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<BookShelfBean>> e) throws Exception {
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-                if (temp == null)
-                    temp = new ArrayList<BookShelfBean>();
-                e.onNext(temp);
-            }
+        Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            if (temp == null)
+                temp = new ArrayList<BookShelfBean>();
+            e.onNext(temp);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<BookShelfBean>>() {
@@ -161,16 +158,13 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
     }
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean){
-        Observable.create(new ObservableOnSubscribe<BookShelfBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterlist());
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                //网络数据获取成功  存入BookShelf表数据库
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-                e.onNext(bookShelfBean);
-                e.onComplete();
-            }
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterlist());
+            DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+            //网络数据获取成功  存入BookShelf表数据库
+            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            e.onNext(bookShelfBean);
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(((BaseActivity)mView.getContext()).<BookShelfBean>bindUntilEvent(ActivityEvent.DESTROY))

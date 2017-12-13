@@ -42,25 +42,17 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
         holder.tvSize.setText(convertByte(datas.get(position).length()));
         holder.tvLoc.setText(datas.get(position).getAbsolutePath().replace(Environment.getExternalStorageDirectory().getAbsolutePath(),"存储空间"));
 
-        holder.scbSelect.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-                if(isChecked){
-                    selectDatas.add(datas.get(position));
-                }else{
-                    selectDatas.remove(datas.get(position));
-                }
-                checkBookListener.checkBook(selectDatas.size());
+        holder.scbSelect.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            if(isChecked){
+                selectDatas.add(datas.get(position));
+            }else{
+                selectDatas.remove(datas.get(position));
             }
+            checkBookListener.checkBook(selectDatas.size());
         });
         if(canCheck){
             holder.scbSelect.setVisibility(View.VISIBLE);
-            holder.llContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    holder.scbSelect.setChecked(!holder.scbSelect.isChecked(),true);
-                }
-            });
+            holder.llContent.setOnClickListener(v -> holder.scbSelect.setChecked(!holder.scbSelect.isChecked(),true));
         }else{
             holder.scbSelect.setVisibility(View.INVISIBLE);
             holder.llContent.setOnClickListener(null);

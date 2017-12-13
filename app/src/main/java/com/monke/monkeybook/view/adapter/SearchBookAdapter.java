@@ -95,19 +95,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             ((Viewholder) holder).tvAddShelf.setEnabled(true);
         }
 
-        ((Viewholder) holder).flContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClickListener != null)
-                    itemClickListener.clickItem(((Viewholder) holder).ivCover, position, searchBooks.get(position));
-            }
+        ((Viewholder) holder).flContent.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.clickItem(((Viewholder) holder).ivCover, position, searchBooks.get(position));
         });
-        ((Viewholder) holder).tvAddShelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClickListener != null)
-                    itemClickListener.clickAddShelf(((Viewholder) holder).tvAddShelf, position, searchBooks.get(position));
-            }
+        ((Viewholder) holder).tvAddShelf.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.clickAddShelf(((Viewholder) holder).tvAddShelf, position, searchBooks.get(position));
         });
     }
 

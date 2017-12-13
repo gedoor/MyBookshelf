@@ -65,12 +65,9 @@ public class LibraryKindBookView extends LinearLayout{
         tvKindName.setText(data.getKindName());
         if(hasMore){
             tvMore.setVisibility(VISIBLE);
-            tvMore.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(itemListener!=null)
-                        itemListener.onClickMore(data.getKindName(),data.getKindUrl());
-                }
+            tvMore.setOnClickListener(v -> {
+                if(itemListener!=null)
+                    itemListener.onClickMore(data.getKindName(),data.getKindUrl());
             });
         }else{
             tvMore.setVisibility(GONE);

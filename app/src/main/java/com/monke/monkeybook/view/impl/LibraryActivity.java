@@ -119,12 +119,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             textView.setPadding(0, DensityUtil.dp2px(this, 5), 0, DensityUtil.dp2px(this, 5));
             textView.setLines(1);
             textView.setTextColor(getResources().getColorStateList(R.color.selector_kind_tv_color));
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this, resultTemp.getKey(),resultTemp.getValue());
-                }
-            });
+            textView.setOnClickListener(v -> ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this, resultTemp.getKey(),resultTemp.getValue()));
             linearLayout.addView(textView);
             temp++;
         }
@@ -204,12 +199,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             }
         });
 
-        rscvContent.setBaseRefreshListener(new BaseRefreshListener() {
-            @Override
-            public void startRefresh() {
-                mPresenter.getLibraryData();
-            }
-        });
+        rscvContent.setBaseRefreshListener(() -> mPresenter.getLibraryData());
     }
 
     private Boolean isExiting = false;
@@ -225,19 +215,16 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
     @Override
     public void updateUI(final LibraryBean library) {
         //获取数据后刷新UI
-        lavHotauthor.updateData(library.getLibraryNewBooks(), new LibraryNewBooksView.OnClickAuthorListener() {
-            @Override
-            public void clickNewBook(LibraryNewBookBean libraryNewBookBean) {
-                SearchBookBean searchBookBean = new SearchBookBean();
-                searchBookBean.setName(libraryNewBookBean.getName());
-                searchBookBean.setNoteUrl(libraryNewBookBean.getUrl());
-                searchBookBean.setTag(libraryNewBookBean.getTag());
-                searchBookBean.setOrigin(libraryNewBookBean.getOrgin());
-                Intent intent = new Intent(LibraryActivity.this, BookDetailActivity.class);
-                intent.putExtra("from", BookDetailPresenterImpl.FROM_SEARCH);
-                intent.putExtra("data", searchBookBean);
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        lavHotauthor.updateData(library.getLibraryNewBooks(), libraryNewBookBean -> {
+            SearchBookBean searchBookBean = new SearchBookBean();
+            searchBookBean.setName(libraryNewBookBean.getName());
+            searchBookBean.setNoteUrl(libraryNewBookBean.getUrl());
+            searchBookBean.setTag(libraryNewBookBean.getTag());
+            searchBookBean.setOrigin(libraryNewBookBean.getOrgin());
+            Intent intent = new Intent(LibraryActivity.this, BookDetailActivity.class);
+            intent.putExtra("from", BookDetailPresenterImpl.FROM_SEARCH);
+            intent.putExtra("data", searchBookBean);
+            startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
         });
         lkbvKindbooklist.updateData(library.getKindBooks(), new LibraryKindBookListView.OnItemListener() {
             @Override

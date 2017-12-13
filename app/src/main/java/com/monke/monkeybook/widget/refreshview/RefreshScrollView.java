@@ -39,44 +39,41 @@ public class RefreshScrollView extends ScrollView{
     }
 
     private void init() {
-        touchListener = new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
+        touchListener = (v, event) -> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    durTouchY = event.getY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (durTouchY == -1000000)
                         durTouchY = event.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (durTouchY == -1000000)
-                            durTouchY = event.getY();
-                        float dY = event.getY() - durTouchY;  //>0下拉
-                        durTouchY = event.getY();
-                        if (baseRefreshListener != null && !isRefreshing && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress() && getScrollY()<=0) {
-                            if (rpb.getVisibility() != View.VISIBLE) {
-                                rpb.setVisibility(View.VISIBLE);
-                            }
-                            rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
-                            if (rpb.getSecondDurProgress() <= 0) {
-                                return false;
-                            } else {
-                                return true;
-                            }
+                    float dY = event.getY() - durTouchY;  //>0下拉
+                    durTouchY = event.getY();
+                    if (baseRefreshListener != null && !isRefreshing && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress() && getScrollY()<=0) {
+                        if (rpb.getVisibility() != View.VISIBLE) {
+                            rpb.setVisibility(View.VISIBLE);
                         }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
-                            if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && !isRefreshing) {
-                                startRefresh();
-                            } else {
-                                rpb.setSecondDurProgressWithAnim(0);
-                            }
+                        rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                        if (rpb.getSecondDurProgress() <= 0) {
+                            return false;
+                        } else {
+                            return true;
                         }
-                        durTouchY = -1000000;
-                        break;
-                }
-                return false;
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
+                        if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && !isRefreshing) {
+                            startRefresh();
+                        } else {
+                            rpb.setSecondDurProgressWithAnim(0);
+                        }
+                    }
+                    durTouchY = -1000000;
+                    break;
             }
+            return false;
         };
         this.setOnTouchListener(touchListener);
     }

@@ -59,21 +59,15 @@ public class DownloadListPop extends PopupWindow {
     }
 
     private void bindEvent() {
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, new Object());
-                tvNone.setVisibility(View.VISIBLE);
-            }
+        tvCancel.setOnClickListener(v -> {
+            RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, new Object());
+            tvNone.setVisibility(View.VISIBLE);
         });
-        tvDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvDownload.getText().equals("开始下载")) {
-                    RxBus.get().post(RxBusTag.START_DOWNLOAD, new Object());
-                } else {
-                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, new Object());
-                }
+        tvDownload.setOnClickListener(v -> {
+            if (tvDownload.getText().equals("开始下载")) {
+                RxBus.get().post(RxBusTag.START_DOWNLOAD, new Object());
+            } else {
+                RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, new Object());
             }
         });
     }
@@ -89,29 +83,26 @@ public class DownloadListPop extends PopupWindow {
     }
 
     private void initWait() {
-        Observable.create(new ObservableOnSubscribe<DownloadChapterBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<DownloadChapterBean> e) throws Exception {
-                List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-                if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
-                    for (BookShelfBean bookItem : bookShelfBeanList) {
-                        if (!bookItem.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                            List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
-                            if (downloadChapterList != null && downloadChapterList.size() > 0) {
-                                e.onNext(downloadChapterList.get(0));
-                                e.onComplete();
-                                return;
-                            }
+        Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
+            List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+            if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
+                for (BookShelfBean bookItem : bookShelfBeanList) {
+                    if (!bookItem.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                        List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
+                        if (downloadChapterList != null && downloadChapterList.size() > 0) {
+                            e.onNext(downloadChapterList.get(0));
+                            e.onComplete();
+                            return;
                         }
                     }
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                    e.onNext(new DownloadChapterBean());
-                } else {
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                    e.onNext(new DownloadChapterBean());
                 }
-                e.onComplete();
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
+                e.onNext(new DownloadChapterBean());
+            } else {
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
+                e.onNext(new DownloadChapterBean());
             }
+            e.onComplete();
         })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())

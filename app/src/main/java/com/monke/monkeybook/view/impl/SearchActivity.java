@@ -99,14 +99,11 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresherror, null);
-        viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //刷新失败 ，重试
-                mPresenter.initPage();
-                mPresenter.toSearchBooks(null,true);
-                rfRvSearchBooks.startRefresh();
-            }
+        viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
+            //刷新失败 ，重试
+            mPresenter.initPage();
+            mPresenter.toSearchBooks(null,true);
+            rfRvSearchBooks.startRefresh();
         });
         rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_nodata, null),
                 viewRefreshError);
@@ -130,14 +127,11 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void bindEvent() {
 
-        tvSearchHistoryClean.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < tflSearchHistory.getChildCount(); i++) {
-                    explosionField.explode(tflSearchHistory.getChildAt(i));
-                }
-                mPresenter.cleanSearchHistory();
+        tvSearchHistoryClean.setOnClickListener(v -> {
+            for (int i = 0; i < tflSearchHistory.getChildCount(); i++) {
+                explosionField.explode(tflSearchHistory.getChildAt(i));
             }
+            mPresenter.cleanSearchHistory();
         });
         edtContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,38 +151,29 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 mPresenter.querySearchHistory();
             }
         });
-        edtContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                    toSearch();
-                    return true;
-                } else
-                    return false;
-            }
+        edtContent.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                toSearch();
+                return true;
+            } else
+                return false;
         });
-        tvTosearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mPresenter.getInput()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        finishAfterTransition();
-                    } else {
-                        finish();
-                    }
+        tvTosearch.setOnClickListener(v -> {
+            if (!mPresenter.getInput()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAfterTransition();
                 } else {
-                    //搜索
-                    toSearch();
+                    finish();
                 }
+            } else {
+                //搜索
+                toSearch();
             }
         });
 
-        searchHistoryAdapter.setOnItemClickListener(new SearchHistoryAdapter.OnItemClickListener() {
-            @Override
-            public void itemClick(SearchHistoryBean searchHistoryBean) {
-                edtContent.setText(searchHistoryBean.getContent());
-                toSearch();
-            }
+        searchHistoryAdapter.setOnItemClickListener(searchHistoryBean -> {
+            edtContent.setText(searchHistoryBean.getContent());
+            toSearch();
         });
 
         bindKeyBoardEvent();
@@ -220,13 +205,10 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             mPresenter.insertSearchHistory();
             closeKeyBoard();
             //执行搜索请求
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mPresenter.initPage();
-                    mPresenter.toSearchBooks(key, false);
-                    rfRvSearchBooks.startRefresh();
-                }
+            new Handler().postDelayed(() -> {
+                mPresenter.initPage();
+                mPresenter.toSearchBooks(key, false);
+                rfRvSearchBooks.startRefresh();
             }, 300);
         } else {
             YoYo.with(Techniques.Shake).playOn(flSearchContent);
@@ -234,38 +216,35 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     }
 
     private void bindKeyBoardEvent() {
-        llSearchHistory.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                llSearchHistory.getWindowVisibleDisplayFrame(r);
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) llSearchHistory.getLayoutParams();
+        llSearchHistory.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            llSearchHistory.getWindowVisibleDisplayFrame(r);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) llSearchHistory.getLayoutParams();
 
-                int height = llSearchHistory.getContext().getResources().getDisplayMetrics().heightPixels;
-                int diff = height - r.bottom;
-                if (diff != 0 && Math.abs(diff) != StatusBarUtils.getNavi_height()) {
-                    if (layoutParams.bottomMargin != diff) {
-                        layoutParams.setMargins(0, 0, 0, Math.abs(diff));
-                        llSearchHistory.setLayoutParams(layoutParams);
-                        //打开输入
-                        if (llSearchHistory.getVisibility() != View.VISIBLE)
-                            openOrCloseHistory(true);
-                    }
-                } else {
-                    if (layoutParams.bottomMargin != 0) {
-                        if (!mPresenter.getHasSearch()) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                finishAfterTransition();
-                            } else {
-                                finish();
-                            }
+            int height = llSearchHistory.getContext().getResources().getDisplayMetrics().heightPixels;
+            int diff = height - r.bottom;
+            if (diff != 0 && Math.abs(diff) != StatusBarUtils.getNavi_height()) {
+                if (layoutParams.bottomMargin != diff) {
+                    layoutParams.setMargins(0, 0, 0, Math.abs(diff));
+                    llSearchHistory.setLayoutParams(layoutParams);
+                    //打开输入
+                    if (llSearchHistory.getVisibility() != View.VISIBLE)
+                        openOrCloseHistory(true);
+                }
+            } else {
+                if (layoutParams.bottomMargin != 0) {
+                    if (!mPresenter.getHasSearch()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            finishAfterTransition();
                         } else {
-                            layoutParams.setMargins(0, 0, 0, 0);
-                            llSearchHistory.setLayoutParams(layoutParams);
-                            //关闭输入
-                            if (llSearchHistory.getVisibility() == View.VISIBLE)
-                                openOrCloseHistory(false);
+                            finish();
                         }
+                    } else {
+                        layoutParams.setMargins(0, 0, 0, 0);
+                        llSearchHistory.setLayoutParams(layoutParams);
+                        //关闭输入
+                        if (llSearchHistory.getVisibility() == View.VISIBLE)
+                            openOrCloseHistory(false);
                     }
                 }
             }
@@ -274,12 +253,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        openKeyBoard();
-                    }
-                }, 100);
+                new Handler().postDelayed(() -> openKeyBoard(), 100);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 } else

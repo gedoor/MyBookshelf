@@ -60,12 +60,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
         animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
 
-        importBookAdapter = new ImportBookAdapter(new ImportBookAdapter.OnCheckBookListener() {
-            @Override
-            public void checkBook(int count) {
-                tvAddshelf.setVisibility(count == 0 ? View.INVISIBLE : View.VISIBLE);
-            }
-        });
+        importBookAdapter = new ImportBookAdapter(count -> tvAddshelf.setVisibility(count == 0 ? View.INVISIBLE : View.VISIBLE));
     }
 
     @Override
@@ -88,20 +83,17 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     protected void bindEvent() {
-        tvScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(ImportBookActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    //申请权限
-                    ImportBookActivity.this.requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            0x11);
-                } else {
-                    mPresenter.searchLocationBook();
-                    tvScan.setVisibility(View.INVISIBLE);
-                    rlLoading.start();
-                }
+        tvScan.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(ImportBookActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //申请权限
+                ImportBookActivity.this.requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        0x11);
+            } else {
+                mPresenter.searchLocationBook();
+                tvScan.setVisibility(View.INVISIBLE);
+                rlLoading.start();
             }
         });
         animOut.setAnimationListener(new Animation.AnimationListener() {
@@ -122,20 +114,12 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
             }
         });
-        ivReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        ivReturn.setOnClickListener(v -> finish());
 
-        tvAddshelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //添加书籍
-                moProgressHUD.showLoading("放入书架中...");
-                mPresenter.importBooks(importBookAdapter.getSelectDatas());
-            }
+        tvAddshelf.setOnClickListener(v -> {
+            //添加书籍
+            moProgressHUD.showLoading("放入书架中...");
+            mPresenter.importBooks(importBookAdapter.getSelectDatas());
         });
     }
 
@@ -191,17 +175,9 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
                 rlLoading.start();
             }else{
                 if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            moProgressHUD.dismiss();
-                        }
-                    }, "设置", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            moProgressHUD.dismiss();
-                            PremissionCheck.requestPermissionSetting(ImportBookActivity.this);
-                        }
+                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> moProgressHUD.dismiss(), "设置", v -> {
+                        moProgressHUD.dismiss();
+                        PremissionCheck.requestPermissionSetting(ImportBookActivity.this);
                     });
                 }else{
                     Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();

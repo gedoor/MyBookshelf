@@ -136,12 +136,9 @@ public class MoProgressHUD {
         //消失动画
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
             if (!isFinishing) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        outAnim.setAnimationListener(outAnimListener);
-                        mSharedView.getChildAt(0).startAnimation(outAnim);
-                    }
+                new Handler().post(() -> {
+                    outAnim.setAnimationListener(outAnimListener);
+                    mSharedView.getChildAt(0).startAnimation(outAnim);
                 });
             }
         }
@@ -171,12 +168,9 @@ public class MoProgressHUD {
 
     public void dismissImmediately() {
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    rootView.removeView(mSharedView);
-                    decorView.removeView(rootView);
-                }
+            new Handler().post(() -> {
+                rootView.removeView(mSharedView);
+                decorView.removeView(rootView);
             });
         }
         isFinishing = false;
@@ -208,12 +202,7 @@ public class MoProgressHUD {
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(null);
-        mSharedView.showInfo(msg, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        mSharedView.showInfo(msg, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }
@@ -256,18 +245,8 @@ public class MoProgressHUD {
         initAnimation();
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        mSharedView.showDownloadList(startIndex, endIndex, all, clickDownload, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        rootView.setOnClickListener(v -> dismiss());
+        mSharedView.showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }

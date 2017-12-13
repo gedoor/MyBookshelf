@@ -46,14 +46,11 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<LibraryBean> getLibraryData(final ACache aCache) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getLibraryData("").flatMap(new Function<String, ObservableSource<LibraryBean>>() {
-            @Override
-            public ObservableSource<LibraryBean> apply(String s) throws Exception {
-                if (s != null && s.length() > 0 && aCache != null) {
-                    aCache.put(LibraryPresenterImpl.LIBRARY_CACHE_KEY, s);
-                }
-                return analyLibraryData(s);
+        return getRetrofitObject(TAG).create(IGxwztvApi.class).getLibraryData("").flatMap(s -> {
+            if (s != null && s.length() > 0 && aCache != null) {
+                aCache.put(LibraryPresenterImpl.LIBRARY_CACHE_KEY, s);
             }
+            return analyLibraryData(s);
         });
     }
 
@@ -62,147 +59,128 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<LibraryBean> analyLibraryData(final String data) {
-        return Observable.create(new ObservableOnSubscribe<LibraryBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<LibraryBean> e) throws Exception {
-                LibraryBean result = new LibraryBean();
-                Document doc = Jsoup.parse(data);
-                Element contentE = doc.getElementsByClass("container").get(0);
-                //解析最新书籍
-                Elements newBookEs = contentE.getElementsByClass("list-group-item text-nowrap modal-open");
-                List<LibraryNewBookBean> libraryNewBooks = new ArrayList<LibraryNewBookBean>();
-                for (int i = 0; i < newBookEs.size(); i++) {
-                    Element itemE = newBookEs.get(i).getElementsByTag("a").get(0);
-                    LibraryNewBookBean item = new LibraryNewBookBean(itemE.text(), TAG + itemE.attr("href"), TAG, "gxwztv.com");
-                    libraryNewBooks.add(item);
-                }
-                result.setLibraryNewBooks(libraryNewBooks);
-                //////////////////////////////////////////////////////////////////////
-                List<LibraryKindBookListBean> kindBooks = new ArrayList<LibraryKindBookListBean>();
-                //解析男频女频
-                Elements hotEs = contentE.getElementsByClass("col-xs-12");
-                for (int i = 1; i < hotEs.size(); i++) {
-                    LibraryKindBookListBean kindItem = new LibraryKindBookListBean();
-                    kindItem.setKindName(hotEs.get(i).getElementsByClass("panel-title").get(0).text());
-                    Elements bookEs = hotEs.get(i).getElementsByClass("panel-body").get(0).getElementsByTag("li");
-
-                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
-                    for (int j = 0; j < bookEs.size(); j++) {
-                        SearchBookBean searchBookBean = new SearchBookBean();
-                        searchBookBean.setOrigin("gxwztv.com");
-                        searchBookBean.setTag(TAG);
-                        searchBookBean.setName(bookEs.get(j).getElementsByTag("span").get(0).text());
-                        searchBookBean.setNoteUrl(TAG + bookEs.get(j).getElementsByTag("a").get(0).attr("href"));
-                        searchBookBean.setCoverUrl(bookEs.get(j).getElementsByTag("img").get(0).attr("src"));
-                        books.add(searchBookBean);
-                    }
-                    kindItem.setBooks(books);
-                    kindBooks.add(kindItem);
-                }
-                //解析部分分类推荐
-                Elements kindEs = contentE.getElementsByClass("panel panel-info index-category-qk");
-                for (int i = 0; i < kindEs.size(); i++) {
-                    LibraryKindBookListBean kindItem = new LibraryKindBookListBean();
-                    kindItem.setKindName(kindEs.get(i).getElementsByClass("panel-title").get(0).text());
-                    kindItem.setKindUrl(TAG + kindEs.get(i).getElementsByClass("listMore").get(0).getElementsByTag("a").get(0).attr("href"));
-
-                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
-                    Element firstBookE = kindEs.get(i).getElementsByTag("dl").get(0);
-                    SearchBookBean firstBook = new SearchBookBean();
-                    firstBook.setTag(TAG);
-                    firstBook.setOrigin("gxwztv.com");
-                    firstBook.setName(firstBookE.getElementsByTag("a").get(1).text());
-                    firstBook.setNoteUrl(TAG + firstBookE.getElementsByTag("a").get(0).attr("href"));
-                    firstBook.setCoverUrl(firstBookE.getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src"));
-                    firstBook.setKind(kindItem.getKindName());
-                    books.add(firstBook);
-
-                    Elements otherBookEs = kindEs.get(i).getElementsByClass("book_textList").get(0).getElementsByTag("li");
-                    for (int j = 0; j < otherBookEs.size(); j++) {
-                        SearchBookBean item = new SearchBookBean();
-                        item.setTag(TAG);
-                        item.setOrigin("gxwztv.com");
-                        item.setKind(kindItem.getKindName());
-                        item.setNoteUrl(TAG+otherBookEs.get(j).getElementsByTag("a").get(0).attr("href"));
-                        item.setName(otherBookEs.get(j).getElementsByTag("a").get(0).text());
-                        books.add(item);
-                    }
-                    kindItem.setBooks(books);
-                    kindBooks.add(kindItem);
-                }
-                //////////////
-                result.setKindBooks(kindBooks);
-                e.onNext(result);
-                e.onComplete();
+        return Observable.create(e -> {
+            LibraryBean result = new LibraryBean();
+            Document doc = Jsoup.parse(data);
+            Element contentE = doc.getElementsByClass("container").get(0);
+            //解析最新书籍
+            Elements newBookEs = contentE.getElementsByClass("list-group-item text-nowrap modal-open");
+            List<LibraryNewBookBean> libraryNewBooks = new ArrayList<LibraryNewBookBean>();
+            for (int i = 0; i < newBookEs.size(); i++) {
+                Element itemE = newBookEs.get(i).getElementsByTag("a").get(0);
+                LibraryNewBookBean item = new LibraryNewBookBean(itemE.text(), TAG + itemE.attr("href"), TAG, "gxwztv.com");
+                libraryNewBooks.add(item);
             }
+            result.setLibraryNewBooks(libraryNewBooks);
+            //////////////////////////////////////////////////////////////////////
+            List<LibraryKindBookListBean> kindBooks = new ArrayList<LibraryKindBookListBean>();
+            //解析男频女频
+            Elements hotEs = contentE.getElementsByClass("col-xs-12");
+            for (int i = 1; i < hotEs.size(); i++) {
+                LibraryKindBookListBean kindItem = new LibraryKindBookListBean();
+                kindItem.setKindName(hotEs.get(i).getElementsByClass("panel-title").get(0).text());
+                Elements bookEs = hotEs.get(i).getElementsByClass("panel-body").get(0).getElementsByTag("li");
+
+                List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                for (int j = 0; j < bookEs.size(); j++) {
+                    SearchBookBean searchBookBean = new SearchBookBean();
+                    searchBookBean.setOrigin("gxwztv.com");
+                    searchBookBean.setTag(TAG);
+                    searchBookBean.setName(bookEs.get(j).getElementsByTag("span").get(0).text());
+                    searchBookBean.setNoteUrl(TAG + bookEs.get(j).getElementsByTag("a").get(0).attr("href"));
+                    searchBookBean.setCoverUrl(bookEs.get(j).getElementsByTag("img").get(0).attr("src"));
+                    books.add(searchBookBean);
+                }
+                kindItem.setBooks(books);
+                kindBooks.add(kindItem);
+            }
+            //解析部分分类推荐
+            Elements kindEs = contentE.getElementsByClass("panel panel-info index-category-qk");
+            for (int i = 0; i < kindEs.size(); i++) {
+                LibraryKindBookListBean kindItem = new LibraryKindBookListBean();
+                kindItem.setKindName(kindEs.get(i).getElementsByClass("panel-title").get(0).text());
+                kindItem.setKindUrl(TAG + kindEs.get(i).getElementsByClass("listMore").get(0).getElementsByTag("a").get(0).attr("href"));
+
+                List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                Element firstBookE = kindEs.get(i).getElementsByTag("dl").get(0);
+                SearchBookBean firstBook = new SearchBookBean();
+                firstBook.setTag(TAG);
+                firstBook.setOrigin("gxwztv.com");
+                firstBook.setName(firstBookE.getElementsByTag("a").get(1).text());
+                firstBook.setNoteUrl(TAG + firstBookE.getElementsByTag("a").get(0).attr("href"));
+                firstBook.setCoverUrl(firstBookE.getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src"));
+                firstBook.setKind(kindItem.getKindName());
+                books.add(firstBook);
+
+                Elements otherBookEs = kindEs.get(i).getElementsByClass("book_textList").get(0).getElementsByTag("li");
+                for (int j = 0; j < otherBookEs.size(); j++) {
+                    SearchBookBean item = new SearchBookBean();
+                    item.setTag(TAG);
+                    item.setOrigin("gxwztv.com");
+                    item.setKind(kindItem.getKindName());
+                    item.setNoteUrl(TAG+otherBookEs.get(j).getElementsByTag("a").get(0).attr("href"));
+                    item.setName(otherBookEs.get(j).getElementsByTag("a").get(0).text());
+                    books.add(item);
+                }
+                kindItem.setBooks(books);
+                kindBooks.add(kindItem);
+            }
+            //////////////
+            result.setKindBooks(kindBooks);
+            e.onNext(result);
+            e.onComplete();
         });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).searchBook(content, page).flatMap(new Function<String, ObservableSource<List<SearchBookBean>>>() {
-            @Override
-            public ObservableSource<List<SearchBookBean>> apply(String s) throws Exception {
-                return analySearchBook(s);
-            }
-        });
+        return getRetrofitObject(TAG).create(IGxwztvApi.class).searchBook(content, page).flatMap(s -> analySearchBook(s));
     }
 
     public Observable<List<SearchBookBean>> analySearchBook(final String s) {
-        return Observable.create(new ObservableOnSubscribe<List<SearchBookBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<SearchBookBean>> e) throws Exception {
-                try {
-                    Document doc = Jsoup.parse(s);
-                    Elements booksE = doc.getElementById("novel-list").getElementsByClass("list-group-item clearfix");
-                    if (null != booksE && booksE.size() >= 2) {
-                        List<SearchBookBean> books = new ArrayList<SearchBookBean>();
-                        for (int i = 1; i < booksE.size(); i++) {
-                            SearchBookBean item = new SearchBookBean();
-                            item.setTag(TAG);
-                            item.setAuthor(booksE.get(i).getElementsByClass("col-xs-2").get(0).text());
-                            item.setKind(booksE.get(i).getElementsByClass("col-xs-1").get(0).text());
-                            item.setLastChapter(booksE.get(i).getElementsByClass("col-xs-4").get(0).getElementsByTag("a").get(0).text());
-                            item.setOrigin("gxwztv.com");
-                            item.setName(booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).text());
-                            item.setNoteUrl(TAG + booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).attr("href"));
-                            item.setCoverUrl("noimage");
-                            books.add(item);
-                        }
-                        e.onNext(books);
-                    } else {
-                        e.onNext(new ArrayList<SearchBookBean>());
+        return Observable.create(e -> {
+            try {
+                Document doc = Jsoup.parse(s);
+                Elements booksE = doc.getElementById("novel-list").getElementsByClass("list-group-item clearfix");
+                if (null != booksE && booksE.size() >= 2) {
+                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                    for (int i = 1; i < booksE.size(); i++) {
+                        SearchBookBean item = new SearchBookBean();
+                        item.setTag(TAG);
+                        item.setAuthor(booksE.get(i).getElementsByClass("col-xs-2").get(0).text());
+                        item.setKind(booksE.get(i).getElementsByClass("col-xs-1").get(0).text());
+                        item.setLastChapter(booksE.get(i).getElementsByClass("col-xs-4").get(0).getElementsByTag("a").get(0).text());
+                        item.setOrigin("gxwztv.com");
+                        item.setName(booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).text());
+                        item.setNoteUrl(TAG + booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).attr("href"));
+                        item.setCoverUrl("noimage");
+                        books.add(item);
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                    e.onNext(books);
+                } else {
                     e.onNext(new ArrayList<SearchBookBean>());
                 }
-                e.onComplete();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                e.onNext(new ArrayList<SearchBookBean>());
             }
+            e.onComplete();
         });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(new Function<String, ObservableSource<BookShelfBean>>() {
-            @Override
-            public ObservableSource<BookShelfBean> apply(String s) throws Exception {
-                return analyBookInfo(s, bookShelfBean);
-            }
-        });
+        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
-        return Observable.create(new ObservableOnSubscribe<BookShelfBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
-                bookShelfBean.setTag(TAG);
-                bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
-                e.onNext(bookShelfBean);
-                e.onComplete();
-            }
+        return Observable.create(e -> {
+            bookShelfBean.setTag(TAG);
+            bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
+            e.onNext(bookShelfBean);
+            e.onComplete();
         });
     }
 
@@ -285,47 +263,39 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(new Function<String, ObservableSource<BookContentBean>>() {
-            @Override
-            public ObservableSource<BookContentBean> apply(String s) throws Exception {
-                return analyBookContent(s, durChapterUrl, durChapterIndex);
-            }
-        });
+        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
-        return Observable.create(new ObservableOnSubscribe<BookContentBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<BookContentBean> e) throws Exception {
-                BookContentBean bookContentBean = new BookContentBean();
-                bookContentBean.setDurChapterIndex(durChapterIndex);
-                bookContentBean.setDurChapterUrl(durChapterUrl);
-                bookContentBean.setTag(TAG);
-                try {
-                    Document doc = Jsoup.parse(s);
-                    List<TextNode> contentEs = doc.getElementById("txtContent").textNodes();
-                    StringBuilder content = new StringBuilder();
-                    for (int i = 0; i < contentEs.size(); i++) {
-                        String temp = contentEs.get(i).text().trim();
-                        temp = temp.replaceAll(" ", "").replaceAll(" ", "");
-                        if (temp.length() > 0) {
-                            content.append("\u3000\u3000" + temp);
-                            if (i < contentEs.size() - 1) {
-                                content.append("\r\n");
-                            }
+        return Observable.create(e -> {
+            BookContentBean bookContentBean = new BookContentBean();
+            bookContentBean.setDurChapterIndex(durChapterIndex);
+            bookContentBean.setDurChapterUrl(durChapterUrl);
+            bookContentBean.setTag(TAG);
+            try {
+                Document doc = Jsoup.parse(s);
+                List<TextNode> contentEs = doc.getElementById("txtContent").textNodes();
+                StringBuilder content = new StringBuilder();
+                for (int i = 0; i < contentEs.size(); i++) {
+                    String temp = contentEs.get(i).text().trim();
+                    temp = temp.replaceAll(" ", "").replaceAll(" ", "");
+                    if (temp.length() > 0) {
+                        content.append("\u3000\u3000" + temp);
+                        if (i < contentEs.size() - 1) {
+                            content.append("\r\n");
                         }
                     }
-                    bookContentBean.setDurCapterContent(content.toString());
-                    bookContentBean.setRight(true);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                    bookContentBean.setDurCapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + "站点暂时不支持解析，请反馈给Monke QQ:1105075896,半小时内解决，超级效率的程序员");
-                    bookContentBean.setRight(false);
                 }
-                e.onNext(bookContentBean);
-                e.onComplete();
+                bookContentBean.setDurCapterContent(content.toString());
+                bookContentBean.setRight(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
+                bookContentBean.setDurCapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + "站点暂时不支持解析，请反馈给Monke QQ:1105075896,半小时内解决，超级效率的程序员");
+                bookContentBean.setRight(false);
             }
+            e.onNext(bookContentBean);
+            e.onComplete();
         });
     }
 
@@ -337,11 +307,6 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
-        return getRetrofitObject(GxwztvBookModelImpl.TAG).create(IGxwztvApi.class).getKindBooks(url.replace(GxwztvBookModelImpl.TAG, "")).flatMap(new Function<String, ObservableSource<List<SearchBookBean>>>() {
-            @Override
-            public ObservableSource<List<SearchBookBean>> apply(String s) throws Exception {
-                return analySearchBook(s);
-            }
-        });
+        return getRetrofitObject(GxwztvBookModelImpl.TAG).create(IGxwztvApi.class).getKindBooks(url.replace(GxwztvBookModelImpl.TAG, "")).flatMap(s -> analySearchBook(s));
     }
 }

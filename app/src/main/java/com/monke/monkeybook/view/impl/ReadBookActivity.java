@@ -112,12 +112,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                vMenuBg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        llMenuTop.startAnimation(menuTopOut);
-                        llMenuBottom.startAnimation(menuBottomOut);
-                    }
+                vMenuBg.setOnClickListener(v -> {
+                    llMenuTop.startAnimation(menuTopOut);
+                    llMenuBottom.startAnimation(menuBottomOut);
                 });
             }
 
@@ -183,12 +180,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     private void initCsvBook() {
-        csvBook.bookReadInit(new ContentSwitchView.OnBookReadInitListener() {
-            @Override
-            public void success() {
-                mPresenter.initData(ReadBookActivity.this);
-            }
-        });
+        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
     }
 
     @Override
@@ -205,13 +197,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 checkAddShelfPop.dismiss();
             }
         });
-        chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
-            @Override
-            public void itemClick(int index) {
-                csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
-            }
-        });
+        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                BookContentView.DURPAGEINDEXBEGIN));
 
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
@@ -229,45 +216,36 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         readBookMenuMorePop = new ReadBookMenuMorePop(this);
-        readBookMenuMorePop.setOnClickDownload(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readBookMenuMorePop.dismiss();
-                if (flMenu.getVisibility() == View.VISIBLE) {
-                    llMenuTop.startAnimation(menuTopOut);
-                    llMenuBottom.startAnimation(menuBottomOut);
-                }
-                //弹出离线下载界面
-                int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
-                if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
-                    endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1;
-                }
-                moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), new MoProgressHUD.OnClickDownload() {
-                    @Override
-                    public void download(final int start, final int end) {
-                        moProgressHUD.dismiss();
-                        mPresenter.addToShelf(new ReadBookPresenterImpl.OnAddListner() {
-                            @Override
-                            public void addSuccess() {
-                                List<DownloadChapterBean> result = new ArrayList<DownloadChapterBean>();
-                                for (int i = start; i <= end; i++) {
-                                    DownloadChapterBean item = new DownloadChapterBean();
-                                    item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
-                                    item.setDurChapterIndex(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                                    item.setDurChapterName(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                                    item.setDurChapterUrl(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                                    item.setTag(mPresenter.getBookShelf().getTag());
-                                    item.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
-                                    item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
-                                    result.add(item);
-                                }
-                                RxBus.get().post(RxBusTag.ADD_DOWNLOAD_TASK, new DownloadChapterListBean(result));
-                            }
-                        });
-
-                    }
-                });
+        readBookMenuMorePop.setOnClickDownload(v -> {
+            readBookMenuMorePop.dismiss();
+            if (flMenu.getVisibility() == View.VISIBLE) {
+                llMenuTop.startAnimation(menuTopOut);
+                llMenuBottom.startAnimation(menuBottomOut);
             }
+            //弹出离线下载界面
+            int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
+            if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
+                endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1;
+            }
+            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
+                moProgressHUD.dismiss();
+                mPresenter.addToShelf(() -> {
+                    List<DownloadChapterBean> result = new ArrayList<DownloadChapterBean>();
+                    for (int i = start; i <= end; i++) {
+                        DownloadChapterBean item = new DownloadChapterBean();
+                        item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
+                        item.setDurChapterIndex(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                        item.setDurChapterName(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                        item.setDurChapterUrl(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                        item.setTag(mPresenter.getBookShelf().getTag());
+                        item.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
+                        item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
+                        result.add(item);
+                    }
+                    RxBus.get().post(RxBusTag.ADD_DOWNLOAD_TASK, new DownloadChapterListBean(result));
+                });
+
+            });
         });
 
         moreSettingPop = new MoreSettingPop(this);
@@ -322,12 +300,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //菜单
-        ivMenuMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f));
-            }
-        });
+        ivMenuMore.setOnClickListener(v -> readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
 
         //正文
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
@@ -370,120 +343,67 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //返回按钮
-        ivReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        ivReturn.setOnClickListener(v -> finish());
 
         //刷新按钮
-        ivRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
-                        .getBookContentBean().setDurCapterContent(null);
-                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                        .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
-                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
-                        .setBookContentBean(null);
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
-            }
+        ivRefresh.setOnClickListener(v -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                    .getBookContentBean().setDurCapterContent(null);
+            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
+                    .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
+            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                    .setBookContentBean(null);
+            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                    mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                    BookContentView.DURPAGEINDEXBEGIN);
         });
 
         //打开URL
-        atvUrl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = atvUrl.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
-            }
+        atvUrl.setOnClickListener(v -> {
+            String url = atvUrl.getText().toString();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
         });
 
         //上一章
-        tvPre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
-            }
-        });
+        tvPre.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                BookContentView.DURPAGEINDEXBEGIN));
 
         //下一章
-        tvNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                        BookContentView.DURPAGEINDEXBEGIN);
-            }
-        });
+        tvNext.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                BookContentView.DURPAGEINDEXBEGIN));
 
         //目录
-        llCatalog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        chapterListView.show(mPresenter.getBookShelf().getDurChapter());
-                    }
-                }, menuTopOut.getDuration());
-            }
+        llCatalog.setOnClickListener(v -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+            new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
         });
 
         //亮度
-        llLight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0);
-                    }
-                }, menuTopOut.getDuration());
-            }
+        llLight.setOnClickListener(v -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+            new Handler().postDelayed(() -> windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //字体
-        llFont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fontPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0);
-                    }
-                }, menuTopOut.getDuration());
-            }
+        llFont.setOnClickListener(v -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+            new Handler().postDelayed(() -> fontPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置
-        llSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0);
-                    }
-                }, menuTopOut.getDuration());
-            }
+        llSetting.setOnClickListener(v -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+            new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
     }
 
@@ -584,17 +504,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             } else {
                 if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     showCheckPremission = true;
-                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finish();
-                        }
-                    }, "设置", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            PremissionCheck.requestPermissionSetting(ReadBookActivity.this);
-                        }
-                    });
+                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> finish(), "设置", v -> PremissionCheck.requestPermissionSetting(ReadBookActivity.this));
                 } else {
                     Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();
                 }

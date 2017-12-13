@@ -30,46 +30,43 @@ public class ErrorAnalyContentManager {
     }
 
     public void writeNewErrorUrl(final String url){
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
-                File dir = new File(filePath);
-                if(!dir.exists()){
-                    dir.mkdirs();
-                }
-
-                File file2 = new File(filePath,"ErrorAnalyUrlsDetail.txt");
-                if(!file2.exists()) {
-                    file2.createNewFile();
-                }
-                FileOutputStream fileOutputStream2 = new FileOutputStream(file2,true);
-                fileOutputStream2.write((url+"    \r\n").getBytes());
-                fileOutputStream2.flush();
-                fileOutputStream2.close();
-                ///////////////////////////////////////////////////////////////////////
-                File file1 = new File(filePath,"ErrorAnalyUrls.txt");
-                if(!file1.exists()) {
-                    file1.createNewFile();
-                }
-                FileInputStream inputStream = new FileInputStream(file1);
-                byte[] bytes = new byte[1024];
-                ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
-                while (inputStream.read(bytes) != -1) {
-                    arrayOutputStream.write(bytes, 0, bytes.length);
-                }
-                inputStream.close();
-                arrayOutputStream.close();
-                String content = new String(arrayOutputStream.toByteArray());
-                if(!content.contains(url.substring(0,url.indexOf('/',8)))){
-                    FileOutputStream fileOutputStream1 = new FileOutputStream(file1,true);
-                    fileOutputStream1.write((url.substring(0,url.indexOf('/',8))+"    \r\n").getBytes());
-                    fileOutputStream1.flush();
-                    fileOutputStream1.close();
-                }
-                e.onNext(true);
-                e.onComplete();
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
+            File dir = new File(filePath);
+            if(!dir.exists()){
+                dir.mkdirs();
             }
+
+            File file2 = new File(filePath,"ErrorAnalyUrlsDetail.txt");
+            if(!file2.exists()) {
+                file2.createNewFile();
+            }
+            FileOutputStream fileOutputStream2 = new FileOutputStream(file2,true);
+            fileOutputStream2.write((url+"    \r\n").getBytes());
+            fileOutputStream2.flush();
+            fileOutputStream2.close();
+            ///////////////////////////////////////////////////////////////////////
+            File file1 = new File(filePath,"ErrorAnalyUrls.txt");
+            if(!file1.exists()) {
+                file1.createNewFile();
+            }
+            FileInputStream inputStream = new FileInputStream(file1);
+            byte[] bytes = new byte[1024];
+            ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+            while (inputStream.read(bytes) != -1) {
+                arrayOutputStream.write(bytes, 0, bytes.length);
+            }
+            inputStream.close();
+            arrayOutputStream.close();
+            String content = new String(arrayOutputStream.toByteArray());
+            if(!content.contains(url.substring(0,url.indexOf('/',8)))){
+                FileOutputStream fileOutputStream1 = new FileOutputStream(file1,true);
+                fileOutputStream1.write((url.substring(0,url.indexOf('/',8))+"    \r\n").getBytes());
+                fileOutputStream1.flush();
+                fileOutputStream1.close();
+            }
+            e.onNext(true);
+            e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,26 +84,23 @@ public class ErrorAnalyContentManager {
     }
 
     public void writeMayByNetError(final String url){
-        Observable.create(new ObservableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
-                File dir = new File(filePath);
-                if(!dir.exists()){
-                    dir.mkdirs();
-                }
-
-                File file = new File(filePath,"ErrorNetUrl.txt");
-                if(!file.exists()) {
-                    file.createNewFile();
-                }
-                FileOutputStream fileOutputStream2 = new FileOutputStream(file,true);
-                fileOutputStream2.write((url+"    \r\n").getBytes());
-                fileOutputStream2.flush();
-                fileOutputStream2.close();
-                e.onNext(true);
-                e.onComplete();
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
+            File dir = new File(filePath);
+            if(!dir.exists()){
+                dir.mkdirs();
             }
+
+            File file = new File(filePath,"ErrorNetUrl.txt");
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fileOutputStream2 = new FileOutputStream(file,true);
+            fileOutputStream2.write((url+"    \r\n").getBytes());
+            fileOutputStream2.flush();
+            fileOutputStream2.close();
+            e.onNext(true);
+            e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

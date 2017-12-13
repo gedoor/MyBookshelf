@@ -53,55 +53,34 @@ public class FontPop extends PopupWindow{
     }
 
     private void bindEvent() {
-        flSmaller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateText(readBookControl.getTextKindIndex()-1);
-                changeProListener.textChange(readBookControl.getTextKindIndex());
-            }
+        flSmaller.setOnClickListener(v -> {
+            updateText(readBookControl.getTextKindIndex()-1);
+            changeProListener.textChange(readBookControl.getTextKindIndex());
         });
-        flBigger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateText(readBookControl.getTextKindIndex()+1);
-                changeProListener.textChange(readBookControl.getTextKindIndex());
-            }
+        flBigger.setOnClickListener(v -> {
+            updateText(readBookControl.getTextKindIndex()+1);
+            changeProListener.textChange(readBookControl.getTextKindIndex());
         });
-        tvTextSizedDefault.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateText(ReadBookControl.DEFAULT_TEXT);
-                changeProListener.textChange(readBookControl.getTextKindIndex());
-            }
+        tvTextSizedDefault.setOnClickListener(v -> {
+            updateText(ReadBookControl.DEFAULT_TEXT);
+            changeProListener.textChange(readBookControl.getTextKindIndex());
         });
 
-        civBgWhite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateBg(0);
-                changeProListener.bgChange(readBookControl.getTextDrawableIndex());
-            }
+        civBgWhite.setOnClickListener(v -> {
+            updateBg(0);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
-        civBgYellow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateBg(1);
-                changeProListener.bgChange(readBookControl.getTextDrawableIndex());
-            }
+        civBgYellow.setOnClickListener(v -> {
+            updateBg(1);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
-        civBgGreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateBg(2);
-                changeProListener.bgChange(readBookControl.getTextDrawableIndex());
-            }
+        civBgGreen.setOnClickListener(v -> {
+            updateBg(2);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
-        civBgBlack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateBg(3);
-                changeProListener.bgChange(readBookControl.getTextDrawableIndex());
-            }
+        civBgBlack.setOnClickListener(v -> {
+            updateBg(3);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
     }
 

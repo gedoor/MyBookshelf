@@ -39,12 +39,9 @@ public class LibraryKindBookAdapter extends RecyclerView.Adapter<LibraryKindBook
                 .into(holder.ivCover);
         holder.tvName.setText(datas.get(position).getName());
         holder.tvAuthor.setText(datas.get(position).getAuthor());
-        holder.ibContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemListener != null)
-                    itemListener.onClickBook(holder.ivCover,datas.get(position));
-            }
+        holder.ibContent.setOnClickListener(v -> {
+            if (itemListener != null)
+                itemListener.onClickBook(holder.ivCover,datas.get(position));
         });
     }
 

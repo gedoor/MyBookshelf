@@ -56,29 +56,23 @@ public class WindowLightPop extends PopupWindow {
     }
 
     private void bindEvent() {
-        llFollowSys.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (scbFollowSys.isChecked()) {
-                    scbFollowSys.setChecked(false, true);
-                } else {
-                    scbFollowSys.setChecked(true, true);
-                }
+        llFollowSys.setOnClickListener(v -> {
+            if (scbFollowSys.isChecked()) {
+                scbFollowSys.setChecked(false, true);
+            } else {
+                scbFollowSys.setChecked(true, true);
             }
         });
-        scbFollowSys.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-                isFollowSys = isChecked;
-                if (isChecked) {
-                    //跟随系统
-                    hpbLight.setCanTouch(false);
-                    setScreenBrightness();
-                } else {
-                    //不跟随系统
-                    hpbLight.setCanTouch(true);
-                    hpbLight.setDurProgress(light);
-                }
+        scbFollowSys.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            isFollowSys = isChecked;
+            if (isChecked) {
+                //跟随系统
+                hpbLight.setCanTouch(false);
+                setScreenBrightness();
+            } else {
+                //不跟随系统
+                hpbLight.setCanTouch(true);
+                hpbLight.setDurProgress(light);
             }
         });
         hpbLight.setProgressListener(new OnProgressListener() {

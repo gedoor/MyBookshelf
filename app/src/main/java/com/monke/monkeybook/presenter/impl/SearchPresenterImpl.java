@@ -56,15 +56,12 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     private Boolean isInput = false;
 
     public SearchPresenterImpl() {
-        Observable.create(new ObservableOnSubscribe<List<BookShelfBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<BookShelfBean>> e) throws Exception {
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-                if (temp == null)
-                    temp = new ArrayList<BookShelfBean>();
-                e.onNext(temp);
-                e.onComplete();
-            }
+        Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            if (temp == null)
+                temp = new ArrayList<BookShelfBean>();
+            e.onNext(temp);
+            e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<BookShelfBean>>() {
@@ -113,25 +110,22 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     public void insertSearchHistory() {
         final int type = SearchPresenterImpl.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
-        Observable.create(new ObservableOnSubscribe<SearchHistoryBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<SearchHistoryBean> e) throws Exception {
-                List<SearchHistoryBean> datas = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
-                        .queryBuilder()
-                        .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.eq(content))
-                        .limit(1)
-                        .build().list();
-                SearchHistoryBean searchHistoryBean = null;
-                if (null != datas && datas.size() > 0) {
-                    searchHistoryBean = datas.get(0);
-                    searchHistoryBean.setDate(System.currentTimeMillis());
-                    DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
-                } else {
-                    searchHistoryBean = new SearchHistoryBean(type, content, System.currentTimeMillis());
-                    DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
-                }
-                e.onNext(searchHistoryBean);
+        Observable.create((ObservableOnSubscribe<SearchHistoryBean>) e -> {
+            List<SearchHistoryBean> datas = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+                    .queryBuilder()
+                    .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.eq(content))
+                    .limit(1)
+                    .build().list();
+            SearchHistoryBean searchHistoryBean = null;
+            if (null != datas && datas.size() > 0) {
+                searchHistoryBean = datas.get(0);
+                searchHistoryBean.setDate(System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().update(searchHistoryBean);
+            } else {
+                searchHistoryBean = new SearchHistoryBean(type, content, System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insert(searchHistoryBean);
             }
+            e.onNext(searchHistoryBean);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<SearchHistoryBean>() {
@@ -151,12 +145,9 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     public void cleanSearchHistory() {
         final int type = SearchPresenterImpl.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
-        Observable.create(new ObservableOnSubscribe<Integer>() {
-            @Override
-            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-                int a = DbHelper.getInstance().getDb().delete(SearchHistoryBeanDao.TABLENAME, SearchHistoryBeanDao.Properties.Type.columnName + "=? and " + SearchHistoryBeanDao.Properties.Content.columnName + " like ?", new String[]{String.valueOf(type), "%" + content + "%"});
-                e.onNext(a);
-            }
+        Observable.create((ObservableOnSubscribe<Integer>) e -> {
+            int a = DbHelper.getInstance().getDb().delete(SearchHistoryBeanDao.TABLENAME, SearchHistoryBeanDao.Properties.Type.columnName + "=? and " + SearchHistoryBeanDao.Properties.Content.columnName + " like ?", new String[]{String.valueOf(type), "%" + content + "%"});
+            e.onNext(a);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Integer>() {
@@ -178,17 +169,14 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     public void querySearchHistory() {
         final int type = SearchPresenterImpl.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
-        Observable.create(new ObservableOnSubscribe<List<SearchHistoryBean>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<SearchHistoryBean>> e) throws Exception {
-                List<SearchHistoryBean> datas = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
-                        .queryBuilder()
-                        .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
-                        .orderDesc(SearchHistoryBeanDao.Properties.Date)
-                        .limit(20)
-                        .build().list();
-                e.onNext(datas);
-            }
+        Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
+            List<SearchHistoryBean> datas = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
+                    .queryBuilder()
+                    .where(SearchHistoryBeanDao.Properties.Type.eq(type), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
+                    .orderDesc(SearchHistoryBeanDao.Properties.Date)
+                    .limit(20)
+                    .build().list();
+            e.onNext(datas);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<SearchHistoryBean>>() {
@@ -358,16 +346,13 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     }
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
-        Observable.create(new ObservableOnSubscribe<BookShelfBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<BookShelfBean> e) throws Exception {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterlist());
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                //网络数据获取成功  存入BookShelf表数据库
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-                e.onNext(bookShelfBean);
-                e.onComplete();
-            }
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterlist());
+            DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+            //网络数据获取成功  存入BookShelf表数据库
+            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            e.onNext(bookShelfBean);
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {

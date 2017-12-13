@@ -33,12 +33,9 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
         TextView tv = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchhistory_item,
                 parent, false);
         tv.setText(searchHistoryBean.getContent());
-        tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(null != onItemClickListener){
-                    onItemClickListener.itemClick(searchHistoryBean);
-                }
+        tv.setOnClickListener(v -> {
+            if(null != onItemClickListener){
+                onItemClickListener.itemClick(searchHistoryBean);
             }
         });
         return tv;

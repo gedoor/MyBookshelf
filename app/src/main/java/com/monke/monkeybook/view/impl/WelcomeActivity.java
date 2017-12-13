@@ -43,14 +43,11 @@ public class WelcomeActivity extends MBaseActivity {
 
     @Override
     protected void bindEvent() {
-        welAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float alpha = (Float) animation.getAnimatedValue();
-                ivBg.setAlpha(alpha);
-                ivIcon.setAlpha(alpha);
-                tvIntro.setAlpha(1f - alpha);
-            }
+        welAnimator.addUpdateListener(animation -> {
+            float alpha = (Float) animation.getAnimatedValue();
+            ivBg.setAlpha(alpha);
+            ivIcon.setAlpha(alpha);
+            tvIntro.setAlpha(1f - alpha);
         });
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override

@@ -212,13 +212,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (null != view) {
             long temp = Math.abs(view.getLeft() - orderX) / (getWidth() / animDuration);
             ValueAnimator tempAnim = ValueAnimator.ofInt(view.getLeft(), orderX).setDuration(temp);
-            tempAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (null != view) {
-                        int value = (int) animation.getAnimatedValue();
-                        view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
-                    }
+            tempAnim.addUpdateListener(animation -> {
+                if (null != view) {
+                    int value = (int) animation.getAnimatedValue();
+                    view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
                 }
             });
             tempAnim.addListener(new Animator.AnimatorListener() {
@@ -283,13 +280,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (null != view) {
             long temp = Math.abs(view.getLeft() - orderX) / (getWidth() / animDuration);
             ValueAnimator tempAnim = ValueAnimator.ofInt(view.getLeft(), orderX).setDuration(temp);
-            tempAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (null != view) {
-                        int value = (int) animation.getAnimatedValue();
-                        view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
-                    }
+            tempAnim.addUpdateListener(animation -> {
+                if (null != view) {
+                    int value = (int) animation.getAnimatedValue();
+                    view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
                 }
             });
             tempAnim.start();

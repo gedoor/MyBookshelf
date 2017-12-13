@@ -77,42 +77,39 @@ public class RecyclerViewBar extends LinearLayout {
     private float finalY = -10000;
 
     private void initIvSlider() {
-        ivSlider.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        finalY = event.getY();
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        if (finalY >= 0) {
-                            float tempY = event.getY();
-                            float durY = tempY - finalY;
-                            updateSlider(durY);
+        ivSlider.setOnTouchListener((v, event) -> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    finalY = event.getY();
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    if (finalY >= 0) {
+                        float tempY = event.getY();
+                        float durY = tempY - finalY;
+                        updateSlider(durY);
 
-                            showSlide();
-                        } else {
-                            finalY = event.getY();
-                        }
+                        showSlide();
+                    } else {
+                        finalY = event.getY();
+                    }
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    if (finalY >= 0) {
+                        finalY = -10000;
+                        timeCountDown.cancel();
+                        timeCountDown.start();
                         return true;
-                    case MotionEvent.ACTION_UP:
-                        if (finalY >= 0) {
-                            finalY = -10000;
-                            timeCountDown.cancel();
-                            timeCountDown.start();
-                            return true;
-                        }
-                        break;
-                    default:
-                        if (finalY >= 0) {
-                            finalY = -10000;
-                            return true;
-                        }
-                        break;
-                }
-                return false;
+                    }
+                    break;
+                default:
+                    if (finalY >= 0) {
+                        finalY = -10000;
+                        return true;
+                    }
+                    break;
             }
+            return false;
         });
     }
 

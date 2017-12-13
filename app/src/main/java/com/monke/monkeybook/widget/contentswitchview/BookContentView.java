@@ -86,12 +86,9 @@ public class BookContentView extends FrameLayout {
         tvErrorInfo = (TextView) view.findViewById(R.id.tv_error_info);
         tvLoadAgain = (TextView) view.findViewById(R.id.tv_load_again);
 
-        tvLoadAgain.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (loadDataListener != null)
-                    loading();
-            }
+        tvLoadAgain.setOnClickListener(v -> {
+            if (loadDataListener != null)
+                loading();
         });
     }
 
