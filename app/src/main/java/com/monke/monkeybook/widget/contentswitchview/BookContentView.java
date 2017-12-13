@@ -231,7 +231,7 @@ public class BookContentView extends FrameLayout {
         float ascent = tvContent.getPaint().ascent();
         float descent = tvContent.getPaint().descent();
         float textHeight = descent - ascent;
-        return (int) ((height * 1.0f - tvContent.getLineSpacingExtra()) / (textHeight + tvContent.getLineSpacingExtra()));
+        return (int) ((height * 1.0f - tvContent.getLineSpacingExtra()) / (textHeight + tvContent.getLineSpacingExtra())) + 1;
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
