@@ -19,7 +19,7 @@ import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.impl.ContentXBQGModelImpl;
 import com.monke.monkeybook.model.impl.GxwztvBookModelImpl;
-import com.monke.monkeybook.model.impl.LingdiankanshuStationBookModelImpl;
+import com.monke.monkeybook.model.impl.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -89,7 +88,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         searchEngine.add(gxwztvMap);
 
         Map lingdiankanshu = new HashMap();
-        lingdiankanshu.put(TAG_KEY, LingdiankanshuStationBookModelImpl.TAG);
+        lingdiankanshu.put(TAG_KEY, LingdiankanshuModelImpl.TAG);
         lingdiankanshu.put(HASMORE_KEY, true);
         lingdiankanshu.put(HASLOAD_KEY, false);
         lingdiankanshu.put(DURREQUESTTIME, 1);

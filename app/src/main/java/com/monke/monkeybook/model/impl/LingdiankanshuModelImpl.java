@@ -21,18 +21,14 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class LingdiankanshuStationBookModelImpl extends BaseModelImpl implements IStationBookModel {
+public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "http://www.lingdiankanshu.co";
 
-    public static LingdiankanshuStationBookModelImpl getInstance() {
-        return new LingdiankanshuStationBookModelImpl();
+    public static LingdiankanshuModelImpl getInstance() {
+        return new LingdiankanshuModelImpl();
     }
 
     @Override
