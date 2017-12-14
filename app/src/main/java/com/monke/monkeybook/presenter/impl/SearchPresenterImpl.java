@@ -79,6 +79,14 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
 
+        Map xbqg = new HashMap();
+        xbqg.put(TAG_KEY, ContentXBQGModelImpl.TAG);
+        xbqg.put(HASMORE_KEY, true);
+        xbqg.put(HASLOAD_KEY, false);
+        xbqg.put(DURREQUESTTIME, 1);
+        xbqg.put(MAXREQUESTTIME, 3);
+        searchEngine.add(xbqg);
+
         Map gxwztvMap = new HashMap();
         gxwztvMap.put(TAG_KEY, GxwztvBookModelImpl.TAG);
         gxwztvMap.put(HASMORE_KEY, true);
@@ -95,13 +103,6 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         lingdiankanshu.put(MAXREQUESTTIME, 3);
         searchEngine.add(lingdiankanshu);
 
-        Map xbqg = new HashMap();
-        xbqg.put(TAG_KEY, ContentXBQGModelImpl.TAG);
-        xbqg.put(HASMORE_KEY, true);
-        xbqg.put(HASLOAD_KEY, false);
-        xbqg.put(DURREQUESTTIME, 1);
-        xbqg.put(MAXREQUESTTIME, 3);
-        searchEngine.add(xbqg);
     }
 
     @Override
