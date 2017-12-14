@@ -230,6 +230,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).
                                             getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(bookContentBean -> {
                                         if (bookContentBean.getRight()) {
+                                            bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex)
+                                                    .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
                                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                                             bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setHasCache(true);
                                             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
