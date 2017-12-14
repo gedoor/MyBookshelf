@@ -125,7 +125,8 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             intent.putExtra(start_share_ele,true);
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, view, transitionName).toBundle());
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this, view, transitionName);
+            startActivity(intent, options.toBundle());
         } else {
             startActivityByAnim(intent, animIn, animExit);
         }
