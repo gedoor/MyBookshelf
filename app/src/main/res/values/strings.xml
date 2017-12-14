@@ -31,4 +31,6 @@
     <string name="is_loading">加载中...</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
+    <string name="download_offline">离线下载</string>
+    <string name="exchange_source">换源</string>
 </resources>
