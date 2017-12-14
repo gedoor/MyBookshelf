@@ -31,6 +31,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     private boolean hasUpdate;  //是否有更新
 
+    private int newChapters;  //更新章节数
+
     private String tag;
 
     @Transient
@@ -49,14 +51,15 @@ public class BookShelfBean implements Parcelable,Cloneable{
         bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
     }
 
-    @Generated(hash = 1561902583)
+    @Generated(hash = 189691701)
     public BookShelfBean(String noteUrl, int durChapter, int durChapterPage, long finalDate,
-            boolean hasUpdate, String tag) {
+            boolean hasUpdate, int newChapters, String tag) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
         this.finalDate = finalDate;
         this.hasUpdate = hasUpdate;
+        this.newChapters = newChapters;
         this.tag = tag;
     }
 
@@ -145,13 +148,20 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.bookInfoBean = bookInfoBean;
     }
 
-
     public void setHasUpdate(boolean hasUpdate) {
         this.hasUpdate = hasUpdate;
     }
 
     public boolean getHasUpdate() {
         return hasUpdate;
+    }
+
+    public int getNewChapters() {
+        return newChapters;
+    }
+
+    public void setNewChapters(int newChapters) {
+        this.newChapters = newChapters;
     }
 
     @Override

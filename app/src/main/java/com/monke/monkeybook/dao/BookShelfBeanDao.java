@@ -29,7 +29,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         public final static Property DurChapterPage = new Property(2, int.class, "durChapterPage", false, "DUR_CHAPTER_PAGE");
         public final static Property FinalDate = new Property(3, long.class, "finalDate", false, "FINAL_DATE");
         public final static Property HasUpdate = new Property(4, boolean.class, "hasUpdate", false, "HAS_UPDATE");
-        public final static Property Tag = new Property(5, String.class, "tag", false, "TAG");
+        public final static Property NewChapters = new Property(5, int.class, "newChapters", false, "NEW_CHAPTERS");
+        public final static Property Tag = new Property(6, String.class, "tag", false, "TAG");
     }
 
 
@@ -50,7 +51,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
                 "\"DUR_CHAPTER_PAGE\" INTEGER NOT NULL ," + // 2: durChapterPage
                 "\"FINAL_DATE\" INTEGER NOT NULL ," + // 3: finalDate
                 "\"HAS_UPDATE\" INTEGER NOT NULL ," + // 4: hasUpdate
-                "\"TAG\" TEXT);"); // 5: tag
+                "\"NEW_CHAPTERS\" INTEGER NOT NULL ," + // 5: newChapters
+                "\"TAG\" TEXT);"); // 6: tag
     }
 
     /** Drops the underlying database table. */
@@ -71,10 +73,11 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         stmt.bindLong(3, entity.getDurChapterPage());
         stmt.bindLong(4, entity.getFinalDate());
         stmt.bindLong(5, entity.getHasUpdate() ? 1L: 0L);
+        stmt.bindLong(6, entity.getNewChapters());
  
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(6, tag);
+            stmt.bindString(7, tag);
         }
     }
 
@@ -90,10 +93,11 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         stmt.bindLong(3, entity.getDurChapterPage());
         stmt.bindLong(4, entity.getFinalDate());
         stmt.bindLong(5, entity.getHasUpdate() ? 1L: 0L);
+        stmt.bindLong(6, entity.getNewChapters());
  
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(6, tag);
+            stmt.bindString(7, tag);
         }
     }
 
@@ -110,7 +114,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
             cursor.getInt(offset + 2), // durChapterPage
             cursor.getLong(offset + 3), // finalDate
             cursor.getShort(offset + 4) != 0, // hasUpdate
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // tag
+            cursor.getInt(offset + 5), // newChapters
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // tag
         );
         return entity;
     }
@@ -122,7 +127,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         entity.setDurChapterPage(cursor.getInt(offset + 2));
         entity.setFinalDate(cursor.getLong(offset + 3));
         entity.setHasUpdate(cursor.getShort(offset + 4) != 0);
-        entity.setTag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setNewChapters(cursor.getInt(offset + 5));
+        entity.setTag(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

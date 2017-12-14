@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.monke.monkeybook.MApplication;
 
+import org.greenrobot.greendao.database.Database;
+
 public class DbHelper {
     private DaoOpenHelper mHelper;
     private SQLiteDatabase db;
@@ -19,8 +21,20 @@ public class DbHelper {
         }
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            MigrationHelper.migrate(db, BookContentBeanDao.class, BookInfoBeanDao.class, BookShelfBeanDao.class,
-                    ChapterListBeanDao.class, DownloadChapterBeanDao.class, SearchHistoryBeanDao.class);
+            MigrationHelper.migrate(db,
+                    new MigrationHelper.ReCreateAllTableListener() {
+                        @Override
+                        public void onCreateAllTables(Database db, boolean ifNotExists) {
+                            DaoMaster.createAllTables(db, ifNotExists);
+                        }
+                        @Override
+                        public void onDropAllTables(Database db, boolean ifExists) {
+                            DaoMaster.dropAllTables(db, ifExists);
+                        }
+                    },
+                    BookContentBeanDao.class, BookInfoBeanDao.class, BookShelfBeanDao.class,
+                    ChapterListBeanDao.class, DownloadChapterBeanDao.class,
+                    SearchHistoryBeanDao.class, BookSourceBeanDao.class);
         }
     }
 
