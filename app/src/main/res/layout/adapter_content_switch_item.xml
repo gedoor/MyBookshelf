@@ -35,24 +35,6 @@
                 android:orientation="vertical"
                 android:visibility="invisible">
 
-                <com.monke.monkeybook.widget.MTextView
-                    android:id="@+id/tv_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:includeFontPadding="false"
-                    android:lineSpacingExtra="5dp"
-                    android:lineSpacingMultiplier="1"
-                    android:textSize="19sp" />
-
-                <View
-                    android:id="@+id/v_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#ffffff" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -65,19 +47,35 @@
                         android:singleLine="true"
                         android:textSize="14sp"
                         app:minTextSize="14sp"
-                        android:textColor="#ffffff"
-                        android:gravity="center|left"/>
+                        android:textColor="#ffffff"/>
 
                     <TextView
                         android:id="@+id/tv_page"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
                         android:lines="1"
-                        android:text="6/18"
+                        android:text=""
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
                 </LinearLayout>
+
+                <View
+                    android:id="@+id/v_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#ffffff" />
+
+                <com.monke.monkeybook.widget.MTextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="5dp"
+                    android:lineSpacingMultiplier="1"
+                    android:textSize="19sp" />
 
             </LinearLayout>
 
@@ -104,7 +102,7 @@
                     android:id="@+id/tv_error_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="获取数据失败！"
+                    android:text="@string/get_data_error"
                     android:textColor="#ffffff"
                     android:textSize="20sp" />
 
@@ -121,7 +119,7 @@
                     android:paddingLeft="18dp"
                     android:paddingRight="18dp"
                     android:paddingTop="7dp"
-                    android:text="重试"
+                    android:text="@string/retry"
                     android:textColor="@drawable/selector_tv_addshelf_text"
                     android:textSize="16sp" />
             </LinearLayout>

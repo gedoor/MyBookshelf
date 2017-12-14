@@ -145,6 +145,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     public void setChapterlist(List<ChapterListBean> chapterlist) {
         this.chapterlist = chapterlist;
     }
+
     public void addChapterlist(List<ChapterListBean> chapterlist){
         this.chapterlist.addAll(chapterlist);
     }

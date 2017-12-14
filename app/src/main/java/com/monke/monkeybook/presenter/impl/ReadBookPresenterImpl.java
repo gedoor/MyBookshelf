@@ -184,7 +184,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     }
                 } else {
                     //有元数据  重新分行
-                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().setLineSize(mView.getPaint().getTextSize());
+                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
+                            .setLineSize(mView.getPaint().getTextSize());
                     final int finalPageIndex = pageIndex;
                     SeparateParagraphtoLines(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent())
                             .observeOn(AndroidSchedulers.mainThread())

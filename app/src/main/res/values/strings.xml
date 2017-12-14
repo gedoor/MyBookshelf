@@ -29,4 +29,6 @@
     <string name="tv_pop_checkaddshelf">是否将《%s》放入书架？</string>
     <string name="tv_importbook_count">共%s个Text文件</string>
     <string name="is_loading">加载中...</string>
+    <string name="get_data_error">获取数据失败！</string>
+    <string name="retry">重试</string>
 </resources>

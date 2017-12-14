@@ -169,7 +169,8 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
+        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, ""))
+                .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
@@ -184,12 +185,13 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
-                    temp = temp.replaceAll(" ", "").replaceAll(" ", "");
+                    temp = temp.replaceAll(" ", "").replaceAll(" ", "")
+                            .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
                     if (temp.length() > 0) {
-                        content.append("\u3000\u3000" + temp);
-                        if (i < contentEs.size() - 1) {
+                        if (i != 0) {
                             content.append("\r\n");
                         }
+                        content.append("\u3000\u3000" + temp);
                     }
                 }
                 bookContentBean.setDurCapterContent(content.toString());
