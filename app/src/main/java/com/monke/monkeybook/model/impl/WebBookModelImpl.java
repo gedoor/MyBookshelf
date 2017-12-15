@@ -8,13 +8,10 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IStationBookModel;
 import com.monke.monkeybook.model.IWebBookModel;
-import com.monke.monkeybook.model.content.XBQGModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
-import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 
