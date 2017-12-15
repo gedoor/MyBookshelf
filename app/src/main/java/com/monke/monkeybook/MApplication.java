@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import com.monke.monkeybook.service.DownloadService;
 
 public class MApplication extends Application {
-
     private static MApplication instance;
+    private static String versionName;
 
     @Override
     public void onCreate() {
@@ -21,7 +21,9 @@ public class MApplication extends Application {
                         .getApplicationInfo(getPackageName(),
                                 PackageManager.GET_META_DATA);
                 channel = appInfo.metaData.getString("UMENG_CHANNEL_VALUE");
+                versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             } catch (PackageManager.NameNotFoundException e) {
+                versionName = "0.0.0";
                 e.printStackTrace();
             }
         }
@@ -31,6 +33,10 @@ public class MApplication extends Application {
 
     public static MApplication getInstance() {
         return instance;
+    }
+
+    public static String getVersionName() {
+        return versionName;
     }
 
 }

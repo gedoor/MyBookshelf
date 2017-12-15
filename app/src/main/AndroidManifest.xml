@@ -51,15 +51,16 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
-                <data android:mimeType="text/plain"></data>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
         <activity
             android:name=".view.impl.ImportBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
+        <activity android:name=".view.impl.AboutActivity"/>
 
         <meta-data
             android:name="BDAPPID"
