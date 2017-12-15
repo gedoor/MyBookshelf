@@ -50,7 +50,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    implementation(name: 'autoupdatesdk-release', ext: 'aar')
+//    implementation(name: 'autoupdatesdk-release', ext: 'aar')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
@@ -78,14 +78,13 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:1.4.4'
-    implementation 'com.victor:lib:1.0.4'
-    implementation files('libs/commons-codec-1.10-sources.jar')
-    implementation files('libs/juniversalchardet-1.0.3.jar')
-    implementation files('libs/umeng-analytics-v6.1.1.jar')
-    implementation files('libs/utdid4all-1.0.4.jar')
-
+    //bind view
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    implementation 'com.victor:lib:1.0.4'
+    implementation 'com.github.medyo:android-about-page:1.2.2'
+
 }
 
 greendao {

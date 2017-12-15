@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import com.monke.monkeybook.service.DownloadService;
-import com.umeng.analytics.MobclickAgent;
-
-import java.util.Map;
 
 public class MApplication extends Application {
 
@@ -27,7 +24,6 @@ public class MApplication extends Application {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-            MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this, getString(R.string.umeng_key), channel, MobclickAgent.EScenarioType.E_UM_NORMAL, true));
         }
         instance = this;
         startService(new Intent(this, DownloadService.class));

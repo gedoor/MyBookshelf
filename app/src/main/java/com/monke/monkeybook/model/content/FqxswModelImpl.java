@@ -27,16 +27,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
-    public static final String TAG = "http://www.xxbiquge.com";
+public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
+    public static final String TAG = "http://www.fqxsw.com/";
 
-    public static XBQGModelImpl getInstance() {
-        return new XBQGModelImpl();
+    public static FqxswModelImpl getInstance() {
+        return new FqxswModelImpl();
     }
 
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com").create(ILingdiankanshuApi.class).searchBook(content, page - 1, "5199337987683747968").flatMap(s -> analySearchBook(s));
+        return getRetrofitObject("http://zhannei.baidu.com").
+                create(ILingdiankanshuApi.class)
+                .searchBook(content, page - 1, "1681641916749657229")
+                .flatMap(s -> analySearchBook(s));
     }
 
     public Observable<List<SearchBookBean>> analySearchBook(final String s) {
@@ -52,15 +55,17 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                         item.setAuthor(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
                                 .getElementsByClass("result-game-item-info-tag").get(0)
                                 .getElementsByTag("span").get(1).text());
-                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
-                                .getElementsByClass("result-game-item-info-tag").get(1)
-                                .getElementsByTag("span").get(1).text());
-                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
-                                .getElementsByClass("result-game-item-info-tag").get(3)
+//                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+//                                .getElementsByClass("result-game-item-info-tag").get(1)
+//                                .getElementsByTag("span").get(1).text());
+//                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+//                                .getElementsByClass("result-game-item-info-tag").get(3)
+//                                .getElementsByTag("a").get(0).text());
+                        item.setOrigin("fqxsw.com");
+                        item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0)
                                 .getElementsByTag("a").get(0).text());
-                        item.setOrigin("xxbiquge.com");
-                        item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).text());
-                        item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).attr("href"));
+                        item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0)
+                                .getElementsByTag("a").get(0).attr("href"));
                         item.setCoverUrl(booksE.get(i).getElementsByTag("img").get(0).attr("src"));
                         books.add(item);
                     }
@@ -119,7 +124,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
 
         bookInfoBean.setIntroduce(content.toString());
         bookInfoBean.setChapterUrl(novelUrl);
-        bookInfoBean.setOrigin("xxbiquge.com");
+        bookInfoBean.setOrigin("fqxsw.com");
         return bookInfoBean;
     }
 

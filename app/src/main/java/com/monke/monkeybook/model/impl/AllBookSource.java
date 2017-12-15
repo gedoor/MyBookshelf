@@ -1,12 +1,14 @@
 package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.model.IStationBookModel;
+import com.monke.monkeybook.model.content.FqxswModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
 
 /**
  * Created by GKF on 2017/12/15.
+ * 所有书源
  */
 
 public class AllBookSource {
@@ -16,7 +18,12 @@ public class AllBookSource {
 
     //所有书源TAG
     public static String[] getAllBookSourceTag() {
-        return new String[]{XBQGModelImpl.TAG, LingdiankanshuModelImpl.TAG, GxwztvBookModelImpl.TAG};
+        return new String[]{
+                XBQGModelImpl.TAG,
+//                FqxswModelImpl.TAG,
+                LingdiankanshuModelImpl.TAG,
+                GxwztvBookModelImpl.TAG
+        };
     }
 
     //获取book source class
@@ -27,6 +34,8 @@ public class AllBookSource {
             return LingdiankanshuModelImpl.getInstance();
         } else if (tag.equals(XBQGModelImpl.TAG)) {
             return XBQGModelImpl.getInstance();
+        } else if (tag.equals(FqxswModelImpl.TAG)) {
+            return FqxswModelImpl.getInstance();
         }
         return null;
     }

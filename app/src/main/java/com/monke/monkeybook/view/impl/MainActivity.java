@@ -24,8 +24,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
-import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -258,22 +256,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void firstRequest() {
-        //通过百度API 判断是否有更新
-        try {
-            BDAutoUpdateSDK.uiUpdateAction(this, new UICheckUpdateCallback() {
-                @Override
-                public void onNoUpdateFound() {
-
-                }
-
-                @Override
-                public void onCheckComplete() {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         mPresenter.queryBookShelf(false);
     }
 

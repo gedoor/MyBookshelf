@@ -33,7 +33,10 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
 
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com").create(ILingdiankanshuApi.class).searchBook(content, page - 1, "16865089933227718744").flatMap(s -> analySearchBook(s));
+        return getRetrofitObject("http://zhannei.baidu.com")
+                .create(ILingdiankanshuApi.class)
+                .searchBook(content, page - 1, "16865089933227718744")
+                .flatMap(s -> analySearchBook(s));
     }
 
     public Observable<List<SearchBookBean>> analySearchBook(final String s) {
@@ -46,10 +49,15 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
-                        item.setAuthor(booksE.get(i).getElementsByClass("result-game-item-info").get(0).getElementsByClass("result-game-item-info-tag").get(0).getElementsByTag("span").get(1).text());
-                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0).getElementsByClass("result-game-item-info-tag").get(1).getElementsByTag("span").get(1).text());
-//                            item.setState();
-                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0).getElementsByClass("result-game-item-info-tag").get(3).getElementsByTag("a").get(0).text());
+                        item.setAuthor(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+                                .getElementsByClass("result-game-item-info-tag").get(0)
+                                .getElementsByTag("span").get(1).text());
+                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+                                .getElementsByClass("result-game-item-info-tag").get(1)
+                                .getElementsByTag("span").get(1).text());
+                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+                                .getElementsByClass("result-game-item-info-tag").get(3)
+                                .getElementsByTag("a").get(0).text());
                         item.setOrigin("lingdiankanshu.co");
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).text());
                         item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).attr("href"));
