@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import com.monke.monkeybook.service.DownloadService;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.Map;
+
 public class MApplication extends Application {
 
     private static MApplication instance;
@@ -34,4 +36,5 @@ public class MApplication extends Application {
     public static MApplication getInstance() {
         return instance;
     }
+
 }

@@ -17,9 +17,10 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.impl.ContentXBQGModelImpl;
-import com.monke.monkeybook.model.impl.GxwztvBookModelImpl;
-import com.monke.monkeybook.model.impl.LingdiankanshuModelImpl;
+import com.monke.monkeybook.model.content.XBQGModelImpl;
+import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
+import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
+import com.monke.monkeybook.model.impl.AllBookSource;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -79,29 +80,15 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
 
-        Map xbqg = new HashMap();
-        xbqg.put(TAG_KEY, ContentXBQGModelImpl.TAG);
-        xbqg.put(HASMORE_KEY, true);
-        xbqg.put(HASLOAD_KEY, false);
-        xbqg.put(DURREQUESTTIME, 1);
-        xbqg.put(MAXREQUESTTIME, 3);
-        searchEngine.add(xbqg);
-
-        Map gxwztvMap = new HashMap();
-        gxwztvMap.put(TAG_KEY, GxwztvBookModelImpl.TAG);
-        gxwztvMap.put(HASMORE_KEY, true);
-        gxwztvMap.put(HASLOAD_KEY, false);
-        gxwztvMap.put(DURREQUESTTIME, 1);
-        gxwztvMap.put(MAXREQUESTTIME, 3);
-        searchEngine.add(gxwztvMap);
-
-        Map lingdiankanshu = new HashMap();
-        lingdiankanshu.put(TAG_KEY, LingdiankanshuModelImpl.TAG);
-        lingdiankanshu.put(HASMORE_KEY, true);
-        lingdiankanshu.put(HASLOAD_KEY, false);
-        lingdiankanshu.put(DURREQUESTTIME, 1);
-        lingdiankanshu.put(MAXREQUESTTIME, 3);
-        searchEngine.add(lingdiankanshu);
+        for (String tag : AllBookSource.getAllBookSourceTag()) {
+            Map se = new HashMap();
+            se.put(TAG_KEY, tag);
+            se.put(HASMORE_KEY, true);
+            se.put(HASLOAD_KEY, false);
+            se.put(DURREQUESTTIME, 1);
+            se.put(MAXREQUESTTIME, 3);
+            searchEngine.add(se);
+        }
 
     }
 

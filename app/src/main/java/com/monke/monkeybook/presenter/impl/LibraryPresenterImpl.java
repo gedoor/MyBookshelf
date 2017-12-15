@@ -7,16 +7,13 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LibraryBean;
 import com.monke.monkeybook.cache.ACache;
-import com.monke.monkeybook.model.impl.GxwztvBookModelImpl;
+import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.presenter.ILibraryPresenter;
 import com.monke.monkeybook.view.ILibraryView;
 import java.util.LinkedHashMap;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implements ILibraryPresenter {
