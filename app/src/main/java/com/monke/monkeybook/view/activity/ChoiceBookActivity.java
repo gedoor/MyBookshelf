@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view.impl;
+package com.monke.monkeybook.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,6 @@ import com.monke.monkeybook.presenter.impl.ChoiceBookPresenterImpl;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.view.IChoiceBookView;
-import com.monke.monkeybook.widget.refreshview.BaseRefreshListener;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import java.util.List;

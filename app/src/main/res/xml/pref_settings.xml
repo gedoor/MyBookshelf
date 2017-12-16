@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="auto_refresh"
+        android:title="@string/pt_auto_refresh"
+        android:summary="@string/ps_auto_refresh"/>
+</PreferenceScreen>

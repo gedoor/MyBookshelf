@@ -28,11 +28,13 @@
     <string name="tv_searchbook_lastest">最新章节:%s</string>
     <string name="tv_pop_checkaddshelf">是否将《%s》放入书架？</string>
     <string name="tv_importbook_count">共%s个Text文件</string>
-    <string name="is_loading">加载中...</string>
+    <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
     <string name="download_offline">离线下载</string>
     <string name="exchange_source">换源</string>
     <string name="about_description">这是一款开源的阅读软件，你可以fork我们的代码自己编译APK。欢迎提交代码帮助改善应用。</string>
     <string name="version_name">Version %s</string>
+    <string name="pt_auto_refresh">自动刷新</string>
+    <string name="ps_auto_refresh">打开软件时自动更新书籍</string>
 </resources>

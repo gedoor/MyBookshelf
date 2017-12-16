@@ -1,9 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view.impl;
+package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -12,15 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.LibraryBean;
-import com.monke.monkeybook.bean.LibraryNewBookBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.ILibraryPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
@@ -29,7 +24,6 @@ import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.view.ILibraryView;
 import com.monke.monkeybook.widget.libraryview.LibraryNewBooksView;
 import com.monke.monkeybook.widget.libraryview.LibraryKindBookListView;
-import com.monke.monkeybook.widget.refreshview.BaseRefreshListener;
 import com.monke.monkeybook.widget.refreshview.RefreshProgressBar;
 import com.monke.monkeybook.widget.refreshview.RefreshScrollView;
 import java.util.Iterator;

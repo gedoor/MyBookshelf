@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view.impl;
+package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.os.Build;

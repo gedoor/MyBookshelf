@@ -1,11 +1,10 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view.impl;
+package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,9 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
@@ -229,6 +225,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 case R.id.action_add_local:
                     startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
                     break;
+                case R.id.action_setting:
+                    startActivityByAnim(new Intent(MainActivity.this, SettingActivity.class), 0, 0);
+                    break;
                 case R.id.action_about:
                     startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
                     break;
@@ -259,7 +258,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void firstRequest() {
-        mPresenter.queryBookShelf(false);
+        mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
     }
 
     @Override

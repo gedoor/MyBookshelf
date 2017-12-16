@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view.impl;
+package com.monke.monkeybook.view.activity;
 
 import android.animation.Animator;
 import android.content.Context;

@@ -13,7 +13,7 @@
         android:theme="@style/CAppTheme"
         tools:replace="android:theme">
         <activity
-            android:name=".view.impl.WelcomeActivity"
+            android:name=".view.activity.WelcomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,11 +23,11 @@
         </activity>
 
         <activity
-            android:name=".view.impl.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:launchMode="singleTask"/>
 
         <activity
-            android:name=".view.impl.SearchActivity"
+            android:name=".view.activity.SearchActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme"
@@ -36,18 +36,18 @@
         <service android:name=".service.DownloadService" />
 
         <activity
-            android:name=".view.impl.LibraryActivity"
+            android:name=".view.activity.LibraryActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
         <activity
-            android:name=".view.impl.ChoiceBookActivity"
+            android:name=".view.activity.ChoiceBookActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.impl.BookDetailActivity"
+            android:name=".view.activity.BookDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
         <activity
-            android:name=".view.impl.ReadBookActivity"
+            android:name=".view.activity.ReadBookActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter tools:ignore="AppLinkUrlError">
@@ -57,11 +57,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.impl.ImportBookActivity"
+            android:name=".view.activity.ImportBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
         <activity
-            android:name=".view.impl.AboutActivity"/>
+            android:name=".view.activity.SettingActivity"/>
+        <activity
+            android:name=".view.activity.AboutActivity"/>
 
         <meta-data
             android:name="BDAPPID"
