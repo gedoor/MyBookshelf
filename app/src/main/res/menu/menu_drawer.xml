@@ -32,5 +32,16 @@
             android:title="@string/about" />
     </group>
 
+    <group android:id="@+id/drawer_menu_backup_and_restore">
+        <item
+            android:id="@+id/action_backup"
+            android:icon="@drawable/ic_settings_backup_restore_black_24dp"
+            android:title="@string/backup" />
+
+        <item
+            android:id="action_restore"
+            android:icon="@drawable/ic_restore_black_24dp"
+            android:title="@string/restore"/>
+    </group>
 
 </menu>

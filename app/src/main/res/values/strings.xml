@@ -37,4 +37,6 @@
     <string name="version_name">Version %s</string>
     <string name="pt_auto_refresh">自动刷新</string>
     <string name="ps_auto_refresh">打开软件时自动更新书籍</string>
+    <string name="backup">备份</string>
+    <string name="restore">恢复</string>
 </resources>
