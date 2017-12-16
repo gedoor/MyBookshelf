@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "http://www.fqxsw.com/";
+    public static final String Name = "";
 
     public static FqxswModelImpl getInstance() {
         return new FqxswModelImpl();

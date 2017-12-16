@@ -61,6 +61,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
         <activity
+            android:name=".view.activity.BookSourceManageActivity"/>
+        <activity
             android:name=".view.activity.SettingActivity"/>
         <activity
             android:name=".view.activity.AboutActivity"/>

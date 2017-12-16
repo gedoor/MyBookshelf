@@ -31,6 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookModel {
     public static final String TAG = "http://www.gxwztv.com";
+    public static final String name = "梧州中文台";
 
     public static GxwztvBookModelImpl getInstance() {
         return new GxwztvBookModelImpl();
@@ -80,7 +81,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 List<SearchBookBean> books = new ArrayList<SearchBookBean>();
                 for (int j = 0; j < bookEs.size(); j++) {
                     SearchBookBean searchBookBean = new SearchBookBean();
-                    searchBookBean.setOrigin("gxwztv.com");
+                    searchBookBean.setOrigin(name);
                     searchBookBean.setTag(TAG);
                     searchBookBean.setName(bookEs.get(j).getElementsByTag("span").get(0).text());
                     searchBookBean.setNoteUrl(TAG + bookEs.get(j).getElementsByTag("a").get(0).attr("href"));
@@ -199,7 +200,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         }
         bookInfoBean.setIntroduce("\u3000\u3000" + introduce);
         bookInfoBean.setChapterUrl(TAG + resultE.getElementsByClass("list-group-item tac").get(0).getElementsByTag("a").get(0).attr("href"));
-        bookInfoBean.setOrigin("gxwztv.com");
+        bookInfoBean.setOrigin(name);
         return bookInfoBean;
     }
 

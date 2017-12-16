@@ -26,6 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "http://www.lingdiankanshu.co";
+    public static final String name = "零点看书";
 
     public static LingdiankanshuModelImpl getInstance() {
         return new LingdiankanshuModelImpl();
@@ -58,7 +59,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                         item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
                                 .getElementsByClass("result-game-item-info-tag").get(3)
                                 .getElementsByTag("a").get(0).text());
-                        item.setOrigin("lingdiankanshu.co");
+                        item.setOrigin(name);
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).text());
                         item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).attr("href"));
                         item.setCoverUrl(booksE.get(i).getElementsByTag("img").get(0).attr("src"));
@@ -109,16 +110,16 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
             String temp = contentEs.get(i).text().trim();
             temp = temp.replaceAll(" ", "").replaceAll(" ", "");
             if (temp.length() > 0) {
-                content.append("\u3000\u3000" + temp);
-                if (i < contentEs.size() - 1) {
+                if (i != 0) {
                     content.append("\r\n");
                 }
+                content.append("\u3000\u3000" + temp);
             }
         }
 
         bookInfoBean.setIntroduce(content.toString());
         bookInfoBean.setChapterUrl(novelUrl);
-        bookInfoBean.setOrigin("gxwztv.com");
+        bookInfoBean.setOrigin(name);
         return bookInfoBean;
     }
 

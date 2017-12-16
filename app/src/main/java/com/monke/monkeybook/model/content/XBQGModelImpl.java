@@ -29,6 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "http://www.xxbiquge.com";
+    public static final String name = "新笔趣阁";
 
     public static XBQGModelImpl getInstance() {
         return new XBQGModelImpl();
@@ -58,7 +59,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                         item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
                                 .getElementsByClass("result-game-item-info-tag").get(3)
                                 .getElementsByTag("a").get(0).text());
-                        item.setOrigin("xxbiquge.com");
+                        item.setOrigin(name);
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).text());
                         item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0).getElementsByTag("a").get(0).attr("href"));
                         item.setCoverUrl(booksE.get(i).getElementsByTag("img").get(0).attr("src"));
@@ -103,7 +104,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         author = author.replace(" ", "").replace("  ", "").replace("作者：", "");
         bookInfoBean.setAuthor(author);
 
-        List<TextNode> contentEs = resultE.getElementById("intro").textNodes();
+        Elements contentEs = resultE.getElementById("intro").getElementsByTag("p");
         StringBuilder content = new StringBuilder();
         for (int i = 0; i < contentEs.size(); i++) {
             String temp = contentEs.get(i).text().trim();
@@ -119,7 +120,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
 
         bookInfoBean.setIntroduce(content.toString());
         bookInfoBean.setChapterUrl(novelUrl);
-        bookInfoBean.setOrigin("xxbiquge.com");
+        bookInfoBean.setOrigin(name);
         return bookInfoBean;
     }
 
@@ -193,12 +194,13 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
-                    temp = temp.replaceAll(" ", "").replaceAll(" ", "");
+                    temp = temp.replaceAll(" ", "").replaceAll(" ", "")
+                            .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
                     if (temp.length() > 0) {
-                        content.append("\u3000\u3000" + temp);
-                        if (i < contentEs.size() - 1) {
+                        if (i != 0) {
                             content.append("\r\n");
                         }
+                        content.append("\u3000\u3000" + temp);
                     }
                 }
                 bookContentBean.setDurCapterContent(content.toString());

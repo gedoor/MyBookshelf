@@ -20,9 +20,17 @@ public class AllBookSource {
     public static String[] getAllBookSourceTag() {
         return new String[]{
                 XBQGModelImpl.TAG,
-//                FqxswModelImpl.TAG,
                 LingdiankanshuModelImpl.TAG,
                 GxwztvBookModelImpl.TAG
+        };
+    }
+
+    //所有书源Name
+    public static String[] getAllBookSourceName() {
+        return new String[]{
+                "新笔趣阁",
+                "零点看书",
+                "梧州中文台"
         };
     }
 
