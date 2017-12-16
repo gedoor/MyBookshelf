@@ -1,5 +1,4 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/drawer_menu_library">
         <item
@@ -32,16 +31,16 @@
             android:title="@string/about" />
     </group>
 
-    <group android:id="@+id/drawer_menu_backup_and_restore">
+    <group android:id="@+id/drawer_menu_backup">
         <item
-            android:id="@+id/action_bookshelf_backup"
+            android:id="@+id/action_backup"
             android:icon="@drawable/ic_settings_backup_restore_black_24dp"
             android:title="@string/backup" />
 
         <item
-            android:id="action_bookshelf_restore"
+            android:id="@+id/action_restore"
             android:icon="@drawable/ic_restore_black_24dp"
-            android:title="@string/restore"/>
+            android:title="@string/restore" />
     </group>
 
 </menu>
