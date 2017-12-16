@@ -1,37 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/bdp_white"
-            android:orientation="vertical"
-            android:padding="6dp">
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:contentDescription="@string/app_name"
-                app:srcCompat="@drawable/icon_monkovel_black" />
-            <TextView
-                android:id="@+id/google_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/bdp_white"/>
-        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/bdp_white"
+        android:orientation="vertical"
+        android:padding="6dp">
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_view"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/icon_monkovel_black" />
+
+        <TextView
+            android:id="@+id/google_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/bdp_white" />
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="start"
+        android:layout_weight="1"
+        app:menu="@menu/menu_drawer" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/btn_bg_press" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/bt_backup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="备份" />
+
+        <View
+            android:layout_width="0.5dp"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/menu_drawer" />
+            android:background="@color/btn_bg_press" />
+
+        <TextView
+            android:id="@+id/bt_restore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="恢复" />
+
+    </LinearLayout>
 
 </LinearLayout>
 

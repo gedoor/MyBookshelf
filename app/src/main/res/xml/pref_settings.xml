@@ -6,4 +6,6 @@
         android:key="auto_refresh"
         android:title="@string/pt_auto_refresh"
         android:summary="@string/ps_auto_refresh"/>
+
+
 </PreferenceScreen>
