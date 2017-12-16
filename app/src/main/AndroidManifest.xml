@@ -60,7 +60,8 @@
             android:name=".view.impl.ImportBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CAppTransparentTheme" />
-        <activity android:name=".view.impl.AboutActivity"/>
+        <activity
+            android:name=".view.impl.AboutActivity"/>
 
         <meta-data
             android:name="BDAPPID"

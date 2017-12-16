@@ -52,7 +52,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
     private LibraryNewBooksView lavHotauthor;
     private LibraryKindBookListView lkbvKindbooklist;
 
-    @BindView(R.id.main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override

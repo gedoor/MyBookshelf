@@ -61,7 +61,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
     NavigationView navigationView;
-    @BindView(R.id.main_toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override

@@ -1,7 +1,14 @@
 package com.monke.monkeybook.view.impl;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.basemvplib.impl.BaseActivity;
@@ -11,6 +18,8 @@ import com.monke.monkeybook.base.MBaseActivity;
 
 import java.text.Format;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 
@@ -20,6 +29,11 @@ import mehdi.sakout.aboutpage.Element;
  */
 
 public class AboutActivity extends MBaseActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.vw_about)
+    ViewGroup vwAbout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +46,10 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
+        setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.icon_monkovel_big_black)
@@ -41,7 +59,7 @@ public class AboutActivity extends MBaseActivity {
                 .addGitHub("gedoor")
                 .addItem(versionElement())
                 .create();
-        setContentView(aboutPage);
+        vwAbout.addView(aboutPage);
     }
 
     @Override
@@ -57,4 +75,23 @@ public class AboutActivity extends MBaseActivity {
         return versionElement;
     }
 
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
