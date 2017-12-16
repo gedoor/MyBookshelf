@@ -52,6 +52,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             BitIntentDataManager.getInstance().cleanData(key);
             inBookShelf = true;
+            searchBook = new SearchBookBean();
+            searchBook.setNoteUrl(bookShelf.getNoteUrl());
+            searchBook.setTag(bookShelf.getTag());
         } else {
             searchBook = intent.getParcelableExtra("data");
             inBookShelf = searchBook.getAdd();
@@ -99,6 +102,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         }).map(bookShelfBean -> {
             for(int i=0;i<bookShelfs.size();i++){
                 if(bookShelfs.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())){
+                    if (openfrom == FROM_BOOKSHELF) {
+                        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+                    }
                     inBookShelf = true;
                     break;
                 }
@@ -113,7 +119,13 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
                             @Override
                             public void success(BookShelfBean bookShelfBean) {
-                                bookShelf = bookShelfBean;
+                                if (openfrom == FROM_BOOKSHELF) {
+                                    int durChapter = bookShelf.getDurChapter();
+                                    bookShelf = bookShelfBean;
+                                    bookShelf.setDurChapter(durChapter);
+                                } else {
+                                    bookShelf = bookShelfBean;
+                                }
                                 mView.updateView();
                             }
 

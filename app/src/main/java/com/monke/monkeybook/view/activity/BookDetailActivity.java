@@ -6,7 +6,9 @@ import android.os.Build;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,21 +23,37 @@ import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.utils.BlurTransformation;
 import com.monke.monkeybook.view.IBookDetailView;
 
-public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
-    private FrameLayout iflContent;
-    private ImageView ivBlurCover;
-    private ImageView ivCover;
-    private TextView tvName;
-    private TextView tvAuthor;
-    private TextView tvOrigin;
-    private TextView tvChapter;
-    private TextView tvIntro;
-    private TextView tvShelf;
-    private TextView tvRead;
-    private TextView tvLoading;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
     private Animation animHideLoading;
     private Animation animShowInfo;
+
+    @BindView(R.id.ifl_content)
+    FrameLayout iflContent;
+    @BindView(R.id.iv_blur_cover)
+    ImageView ivBlurCover;
+    @BindView(R.id.iv_cover)
+    ImageView ivCover;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_author)
+    TextView tvAuthor;
+    @BindView(R.id.tv_origin)
+    TextView tvOrigin;
+    @BindView(R.id.tv_chapter)
+    TextView tvChapter;
+    @BindView(R.id.tv_intro)
+    TextView tvIntro;
+    @BindView(R.id.tv_shelf)
+    TextView tvShelf;
+    @BindView(R.id.tv_read)
+    TextView tvRead;
+    @BindView(R.id.tv_loading)
+    TextView tvLoading;
+    @BindView(R.id.iv_refresh)
+    ImageView ivRefresh;
 
     @Override
     protected IBookDetailPresenter initInjector() {
@@ -72,17 +90,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
 
     @Override
     protected void bindView() {
-        iflContent = (FrameLayout) findViewById(R.id.ifl_content);
-        ivBlurCover = (ImageView) findViewById(R.id.iv_blur_cover);
-        ivCover = (ImageView) findViewById(R.id.iv_cover);
-        tvName = (TextView) findViewById(R.id.tv_name);
-        tvAuthor = (TextView) findViewById(R.id.tv_author);
-        tvOrigin = (TextView) findViewById(R.id.tv_origin);
-        tvChapter = (TextView) findViewById(R.id.tv_chapter);
-        tvIntro = (TextView) findViewById(R.id.tv_intro);
-        tvShelf = (TextView) findViewById(R.id.tv_shelf);
-        tvRead = (TextView) findViewById(R.id.tv_read);
-        tvLoading = (TextView) findViewById(R.id.tv_loading);
+        ButterKnife.bind(this);
 
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
         initView();
@@ -238,6 +246,17 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 finish();
                 overridePendingTransition(0,android.R.anim.fade_out);
             }
+        });
+
+        ivRefresh.setOnClickListener(view -> {
+            AnimationSet animationSet = new AnimationSet(true);
+            RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
+                    Animation.RELATIVE_TO_SELF,0.5f,
+                    Animation.RELATIVE_TO_SELF,0.5f);
+            rotateAnimation.setDuration(1000);
+            animationSet.addAnimation(rotateAnimation);
+            ivRefresh.startAnimation(animationSet);
+            mPresenter.getBookShelfInfo();
         });
     }
 }
