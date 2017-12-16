@@ -9,6 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.basemvplib.impl.BaseActivity;
@@ -33,6 +36,11 @@ public class AboutActivity extends MBaseActivity {
     Toolbar toolbar;
     @BindView(R.id.vw_about)
     ViewGroup vwAbout;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+
+    private Animation animIn;
+    private Animation animOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,13 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
+        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
+        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+    }
 
+    @Override
+    protected void firstRequest() {
+        llContent.startAnimation(animIn);
     }
 
     private Element versionElement() {
