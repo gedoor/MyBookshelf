@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter.impl;
 
+import com.google.gson.Gson;
 import android.support.annotation.NonNull;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -51,6 +52,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         return bookShelfList;
     }
 
+    @Override
     public void queryBookShelf(final Boolean needRefresh) {
         if (needRefresh) {
             mView.activityRefreshView();
@@ -78,6 +80,32 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
+                    }
+                });
+    }
+
+    @Override
+    public void backupBookShelf() {
+        Observable.create((ObservableOnSubscribe<String>) e -> {
+            List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                    .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+            Gson gson = new Gson();
+            String bookshelf = gson.toJson(bookShelfList);
+            e.onNext(bookshelf);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<String>() {
+                    @Override
+                    public void onNext(String value) {
+                        if (null != value) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
                     }
                 });
     }

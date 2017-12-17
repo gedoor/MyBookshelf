@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.android.support:support-compat:26.1.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
     api project(':basemvplib')
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
