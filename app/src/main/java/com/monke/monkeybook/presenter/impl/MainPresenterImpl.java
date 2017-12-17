@@ -31,26 +31,33 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
 
+    public List<BookShelfBean> getAllBookShelf() {
+        List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+        for (int i = 0; i < bookShelfList.size(); i++) {
+            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().list();
+            if (temp != null && temp.size() > 0) {
+                BookInfoBean bookInfoBean = temp.get(0);
+                bookInfoBean.setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
+                bookShelfList.get(i).setBookInfoBean(bookInfoBean);
+            } else {
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
+                bookShelfList.remove(i);
+                i--;
+            }
+        }
+        return bookShelfList;
+    }
+
     public void queryBookShelf(final Boolean needRefresh) {
         if (needRefresh) {
             mView.activityRefreshView();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> bookShelfes = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                    .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-            for (int i = 0; i < bookShelfes.size(); i++) {
-                List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfes.get(i).getNoteUrl())).limit(1).build().list();
-                if (temp != null && temp.size() > 0) {
-                    BookInfoBean bookInfoBean = temp.get(0);
-                    bookInfoBean.setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder().where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfes.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
-                    bookShelfes.get(i).setBookInfoBean(bookInfoBean);
-                } else {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfes.get(i));
-                    bookShelfes.remove(i);
-                    i--;
-                }
-            }
-            e.onNext(bookShelfes == null ? new ArrayList<BookShelfBean>() : bookShelfes);
+            List<BookShelfBean> bookShelfList = getAllBookShelf();
+            e.onNext(bookShelfList == null ? new ArrayList<BookShelfBean>() : bookShelfList);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
