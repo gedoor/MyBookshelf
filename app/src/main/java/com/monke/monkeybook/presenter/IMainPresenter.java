@@ -7,4 +7,6 @@ public interface IMainPresenter extends IPresenter{
     void queryBookShelf(Boolean needRefresh);
 
     void backupBookShelf();
+
+    void restoreBookShelf();
 }

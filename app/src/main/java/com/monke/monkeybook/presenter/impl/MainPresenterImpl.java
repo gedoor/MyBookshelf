@@ -110,6 +110,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 });
     }
 
+    @Override
+    public void restoreBookShelf() {
+
+    }
+
     private void startRefreshBook(List<BookShelfBean> value){
         if (value != null && value.size() > 0){
             mView.setRecyclerMaxProgress(value.size());
