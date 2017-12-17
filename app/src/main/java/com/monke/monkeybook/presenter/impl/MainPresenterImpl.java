@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
 
-    public List<BookShelfBean> getAllBookShelf() {
+    private List<BookShelfBean> getAllBookShelf() {
         List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                 .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
         for (int i = 0; i < bookShelfList.size(); i++) {
@@ -82,7 +82,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 });
     }
 
-    public void startRefreshBook(List<BookShelfBean> value){
+    private void startRefreshBook(List<BookShelfBean> value){
         if (value != null && value.size() > 0){
             mView.setRecyclerMaxProgress(value.size());
             refreshBookShelf(value,0);
