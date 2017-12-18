@@ -255,7 +255,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     if (EasyPermissions.hasPermissions(this, perms)) {
                         new AlertDialog.Builder(this)
                                 .setTitle(R.string.backup_confirmation)
-                                .setMessage(R.string.new_backup)
+                                .setMessage(R.string.backup_message)
                                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                                     mPresenter.backupBookShelf();
                                 })
@@ -269,7 +269,15 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     break;
                 case R.id.action_restore:
                     if (EasyPermissions.hasPermissions(this, perms)) {
-                        mPresenter.restoreBookShelf();
+                        new AlertDialog.Builder(this)
+                                .setTitle(R.string.restore_confirmation)
+                                .setMessage(R.string.restore_message)
+                                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                                    mPresenter.restoreBookShelf();
+                                })
+                                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                                })
+                                .show();
                     } else {
                         EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
                                 RESTORE_RESULT, perms);
