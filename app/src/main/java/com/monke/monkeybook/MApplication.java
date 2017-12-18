@@ -8,9 +8,9 @@ import android.content.pm.PackageManager;
 import com.monke.monkeybook.service.DownloadService;
 
 public class MApplication extends Application {
+    public final static boolean DEBUG = BuildConfig.DEBUG;
     private static MApplication instance;
     private static String versionName;
-    public final static boolean DEBUG = BuildConfig.DEBUG;
 
     @Override
     public void onCreate() {
@@ -19,8 +19,7 @@ public class MApplication extends Application {
             String channel = "debug";
             try {
                 ApplicationInfo appInfo = getPackageManager()
-                        .getApplicationInfo(getPackageName(),
-                                PackageManager.GET_META_DATA);
+                        .getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
                 channel = appInfo.metaData.getString("UMENG_CHANNEL_VALUE");
                 versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             } catch (PackageManager.NameNotFoundException e) {

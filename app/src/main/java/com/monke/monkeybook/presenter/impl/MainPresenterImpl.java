@@ -3,8 +3,12 @@ package com.monke.monkeybook.presenter.impl;
 
 import com.google.gson.Gson;
 
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.provider.DocumentFile;
+import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -19,12 +23,15 @@ import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IMainPresenter;
+import com.monke.monkeybook.utils.DocumentUtil;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.IMainView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,33 +97,70 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void backupBookShelf() {
-        Observable.create((ObservableOnSubscribe<String>) e -> {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                     .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+            for (BookShelfBean bookshelf : bookShelfList) {
+                bookshelf.getBookInfoBean().setChapterlist(null);
+            }
             Gson gson = new Gson();
             String bookshelf = gson.toJson(bookShelfList);
-            e.onNext(bookshelf);
+            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
+            FileHelper.writeString(bookshelf, docFile);
+            e.onNext(true);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<String>() {
+                .subscribe(new SimpleObserver<Boolean>() {
                     @Override
-                    public void onNext(String value) {
-                        if (null != value) {
-
-                        }
+                    public void onNext(Boolean value) {
+                        Toast.makeText(mView.getContext(), "备份成功", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        Toast.makeText(mView.getContext(), "备份失败", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
     @Override
     public void restoreBookShelf() {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            String json = FileHelper.readString("myBookShelf.xml", file.getPath());
+            if (json == null) {
+                e.onNext(false);
+            } else {
+                List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {}.getType());
+                for (BookShelfBean bookshelf : bookShelfList) {
+                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                }
+                e.onNext(true);
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean value) {
+                        if (value) {
+                            Toast.makeText(mView.getContext(), "恢复成功", Toast.LENGTH_LONG).show();
+                            queryBookShelf(true);
+                        } else {
+                            Toast.makeText(mView.getContext(), "恢复失败", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Toast.makeText(mView.getContext(), "恢复失败", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void startRefreshBook(List<BookShelfBean> value) {

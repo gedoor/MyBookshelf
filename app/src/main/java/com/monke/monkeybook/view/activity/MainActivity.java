@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -42,8 +43,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
+    private static final int BACKUP_RESULT = 11;
+    private static final int RESTORE_RESULT = 12;
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
@@ -52,6 +57,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     private DownloadListPop downloadListPop;
     private SharedPreferences preferences;
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -239,10 +245,20 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     Donate.aliDonate(this);
                     break;
                 case R.id.action_backup:
-                    mPresenter.backupBookShelf();
+                    if (EasyPermissions.hasPermissions(this, perms)) {
+                        mPresenter.backupBookShelf();
+                    } else {
+                        EasyPermissions.requestPermissions(this, getString(R.string.backup_permisson),
+                                BACKUP_RESULT, perms);
+                    }
                     break;
                 case R.id.action_restore:
-                    mPresenter.restoreBookShelf();
+                    if (EasyPermissions.hasPermissions(this, perms)) {
+                        mPresenter.restoreBookShelf();
+                    } else {
+                        EasyPermissions.requestPermissions(this, getString(R.string.restore_permisson),
+                                RESTORE_RESULT, perms);
+                    }
                     break;
             }
             return true;
@@ -308,6 +324,32 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void setRecyclerMaxProgress(int x) {
         rfRvShelf.getRpb().setMaxProgress(x);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @AfterPermissionGranted(BACKUP_RESULT)
+    private void backupResult() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            mPresenter.backupBookShelf();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.backup_permisson),
+                    BACKUP_RESULT, perms);
+        }
+    }
+    @AfterPermissionGranted(RESTORE_RESULT)
+    private void restoreResult() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            mPresenter.backupBookShelf();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.restore_permisson),
+                    RESTORE_RESULT, perms);
+        }
     }
 
     @Override
