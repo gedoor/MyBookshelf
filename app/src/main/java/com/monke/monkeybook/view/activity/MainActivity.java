@@ -252,42 +252,49 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     Donate.aliDonate(this);
                     break;
                 case R.id.action_backup:
-                    if (EasyPermissions.hasPermissions(this, perms)) {
-                        new AlertDialog.Builder(this)
-                                .setTitle(R.string.backup_confirmation)
-                                .setMessage(R.string.backup_message)
-                                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                                    mPresenter.backupBookShelf();
-                                })
-                                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                                })
-                                .show();
-                    } else {
-                        EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
-                                BACKUP_RESULT, perms);
-                    }
+                    backup();
                     break;
                 case R.id.action_restore:
-                    if (EasyPermissions.hasPermissions(this, perms)) {
-                        new AlertDialog.Builder(this)
-                                .setTitle(R.string.restore_confirmation)
-                                .setMessage(R.string.restore_message)
-                                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                                    mPresenter.restoreBookShelf();
-                                })
-                                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                                })
-                                .show();
-                    } else {
-                        EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
-                                RESTORE_RESULT, perms);
-                    }
+                    restore();
                     break;
             }
             return true;
         });
     }
-
+    //备份
+    private void backup() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.backup_confirmation)
+                    .setMessage(R.string.backup_message)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        mPresenter.backupBookShelf();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
+                    .show();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
+                    BACKUP_RESULT, perms);
+        }
+    }
+    //恢复
+    private void restore() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.restore_confirmation)
+                    .setMessage(R.string.restore_message)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        mPresenter.restoreBookShelf();
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
+                    .show();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
+                    RESTORE_RESULT, perms);
+        }
+    }
 
     private void bindRvShelfEvent() {
         //下拉刷新
@@ -358,22 +365,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @AfterPermissionGranted(BACKUP_RESULT)
     private void backupResult() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            mPresenter.backupBookShelf();
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
-                    BACKUP_RESULT, perms);
-        }
+        backup();
     }
 
     @AfterPermissionGranted(RESTORE_RESULT)
     private void restoreResult() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            mPresenter.backupBookShelf();
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
-                    RESTORE_RESULT, perms);
-        }
+        restore();
     }
 
     @Override
