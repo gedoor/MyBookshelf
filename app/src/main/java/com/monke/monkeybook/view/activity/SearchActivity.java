@@ -47,23 +47,32 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchActivity extends MBaseActivity<ISearchPresenter> implements ISearchView {
-    private FrameLayout flSearchContent;
-    private EditText edtContent;
-    private TextView tvTosearch;
-
-    private LinearLayout llSearchHistory;
-    private TextView tvSearchHistoryClean;
-    private TagFlowLayout tflSearchHistory;
     private SearchHistoryAdapter searchHistoryAdapter;
     private Animation animHistory;
     private Animator animHistory5;
     private ExplosionField explosionField;
 
-    private RefreshRecyclerView rfRvSearchBooks;
     private SearchBookAdapter searchBookAdapter;
+
+    @BindView(R.id.fl_search_content)
+    FrameLayout flSearchContent;
+    @BindView(R.id.edt_content)
+    EditText edtContent;
+    @BindView(R.id.tv_tosearch)
+    TextView tvTosearch;
+    @BindView(R.id.ll_search_history)
+    LinearLayout llSearchHistory;
+    @BindView(R.id.tv_search_history_clean)
+    TextView tvSearchHistoryClean;
+    @BindView(R.id.tfl_search_history)
+    TagFlowLayout tflSearchHistory;
+    @BindView(R.id.rfRv_search_books)
+    RefreshRecyclerView rfRvSearchBooks;
 
     @Override
     protected ISearchPresenter initInjector() {
@@ -86,16 +95,10 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     protected void bindView() {
-        flSearchContent = (FrameLayout) findViewById(R.id.fl_search_content);
-        edtContent = (EditText) findViewById(R.id.edt_content);
-        tvTosearch = (TextView) findViewById(R.id.tv_tosearch);
+        ButterKnife.bind(this);
 
-        llSearchHistory = (LinearLayout) findViewById(R.id.ll_search_history);
-        tvSearchHistoryClean = (TextView) findViewById(R.id.tv_search_history_clean);
-        tflSearchHistory = (TagFlowLayout) findViewById(R.id.tfl_search_history);
         tflSearchHistory.setAdapter(searchHistoryAdapter);
 
-        rfRvSearchBooks = (RefreshRecyclerView) findViewById(R.id.rfRv_search_books);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresherror, null);

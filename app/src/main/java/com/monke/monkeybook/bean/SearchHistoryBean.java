@@ -13,6 +13,7 @@ public class SearchHistoryBean {
     private int type;
     private String content;
     private long date;
+
     public long getDate() {
         return this.date;
     }
