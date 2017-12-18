@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.monke.monkeybook"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 27
         versionCode 10000 + gitCommits
         versionName version

@@ -100,22 +100,30 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                     .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-            for (BookShelfBean bookshelf : bookShelfList) {
-                bookshelf.getBookInfoBean().setChapterlist(null);
+            if (bookShelfList == null || bookShelfList.size() == 0) {
+                e.onNext(false);
+            } else {
+                for (BookShelfBean bookshelf : bookShelfList) {
+                    bookshelf.getBookInfoBean().setChapterlist(null);
+                }
+                Gson gson = new Gson();
+                String bookshelf = gson.toJson(bookShelfList);
+                File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
+                FileHelper.writeString(bookshelf, docFile);
+                e.onNext(true);
             }
-            Gson gson = new Gson();
-            String bookshelf = gson.toJson(bookShelfList);
-            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
-            FileHelper.writeString(bookshelf, docFile);
-            e.onNext(true);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
-                        Toast.makeText(mView.getContext(), "备份成功", Toast.LENGTH_LONG).show();
+                        if (value) {
+                            Toast.makeText(mView.getContext(), "备份成功", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(mView.getContext(), "书架里没有书", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @Override

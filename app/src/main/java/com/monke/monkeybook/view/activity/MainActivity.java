@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -170,6 +172,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         getMenuInflater().inflate(R.menu.menu_main_activity, menu);
         return true;
     }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -201,6 +204,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
         return super.onOptionsItemSelected(item);
     }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -208,6 +212,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
     //初始化侧边栏
     private void initDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -216,11 +221,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
         setUpNavigationView();
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
     //侧边栏按钮
     private void setUpNavigationView() {
         navigationView.setNavigationItemSelectedListener(menuItem -> {
@@ -246,9 +253,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     break;
                 case R.id.action_backup:
                     if (EasyPermissions.hasPermissions(this, perms)) {
-                        mPresenter.backupBookShelf();
+                        new AlertDialog.Builder(this)
+                                .setTitle(R.string.backup_confirmation)
+                                .setMessage(R.string.new_backup)
+                                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                                    mPresenter.backupBookShelf();
+                                })
+                                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                                })
+                                .show();
                     } else {
-                        EasyPermissions.requestPermissions(this, getString(R.string.backup_permisson),
+                        EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
                                 BACKUP_RESULT, perms);
                     }
                     break;
@@ -256,7 +271,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     if (EasyPermissions.hasPermissions(this, perms)) {
                         mPresenter.restoreBookShelf();
                     } else {
-                        EasyPermissions.requestPermissions(this, getString(R.string.restore_permisson),
+                        EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
                                 RESTORE_RESULT, perms);
                     }
                     break;
@@ -338,16 +353,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (EasyPermissions.hasPermissions(this, perms)) {
             mPresenter.backupBookShelf();
         } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.backup_permisson),
+            EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
                     BACKUP_RESULT, perms);
         }
     }
+
     @AfterPermissionGranted(RESTORE_RESULT)
     private void restoreResult() {
         if (EasyPermissions.hasPermissions(this, perms)) {
             mPresenter.backupBookShelf();
         } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.restore_permisson),
+            EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
                     RESTORE_RESULT, perms);
         }
     }

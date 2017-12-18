@@ -40,6 +40,10 @@
     <string name="ps_auto_refresh">打开软件时自动更新书籍</string>
     <string name="backup">备份</string>
     <string name="restore">恢复</string>
-    <string name="backup_permisson">备份请给与存储权限</string>
-    <string name="restore_permisson">恢复请给与存储权限</string>
+    <string name="backup_permission">备份请给与存储权限</string>
+    <string name="restore_permission">恢复请给与存储权限</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
+    <string name="backup_confirmation">确认备份吗？</string>
+    <string name="new_backup">新备份会替换原有备份。</string>
 </resources>
