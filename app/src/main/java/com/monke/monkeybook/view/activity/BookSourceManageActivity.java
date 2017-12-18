@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import com.monke.basemvplib.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.presenter.IBookSourceManagePresenter;
+import com.monke.monkeybook.presenter.impl.BookSourceManagePresenterImpl;
+import com.monke.monkeybook.view.IBookSourceManageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +23,7 @@ import butterknife.ButterKnife;
  * 书源管理
  */
 
-public class BookSourceManageActivity extends MBaseActivity {
+public class BookSourceManageActivity extends MBaseActivity<IBookSourceManagePresenter> implements IBookSourceManageView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -29,10 +32,7 @@ public class BookSourceManageActivity extends MBaseActivity {
     private Animation animIn;
     private Animation animOut;
 
-    @Override
-    protected IPresenter initInjector() {
-        return null;
-    }
+
 
     @Override
     protected void onCreateActivity() {
@@ -51,6 +51,11 @@ public class BookSourceManageActivity extends MBaseActivity {
     @Override
     protected void firstRequest() {
         llContent.startAnimation(animIn);
+    }
+
+    @Override
+    protected IBookSourceManagePresenter initInjector() {
+        return new BookSourceManagePresenterImpl();
     }
 
     //设置ToolBar
