@@ -25,6 +25,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.Donate;
 import com.monke.monkeybook.presenter.IMainPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
@@ -43,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
-    private RefreshRecyclerView rfRvShelf;
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
@@ -59,6 +59,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.rf_rv_shelf)
+    RefreshRecyclerView rfRvShelf;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -95,7 +97,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
         downloadListPop = new DownloadListPop(MainActivity.this);
 
-        rfRvShelf = (RefreshRecyclerView) findViewById(R.id.rf_rv_shelf);
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
         } else {
@@ -233,6 +234,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     break;
                 case R.id.action_about:
                     startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
+                    break;
+                case R.id.action_donate:
+                    Donate.aliDonate(this);
                     break;
                 case R.id.action_backup:
                     mPresenter.backupBookShelf();

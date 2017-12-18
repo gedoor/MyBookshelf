@@ -29,6 +29,11 @@
             android:id="@+id/action_about"
             android:icon="@drawable/ic_beach_access_black_24dp"
             android:title="@string/about" />
+
+        <item
+            android:id="@+id/action_donate"
+            android:icon="@drawable/ic_launch_black_24dp"
+            android:title="@string/donate" />
     </group>
 
     <group android:id="@+id/drawer_menu_backup">

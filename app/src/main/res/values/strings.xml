@@ -11,6 +11,7 @@
     <string name="book_source_manage">书源管理</string>
     <string name="setting">设置</string>
     <string name="about">关于</string>
+    <string name="donate">捐赠</string>
 
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>

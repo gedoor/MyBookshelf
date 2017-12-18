@@ -2,7 +2,9 @@
 package com.monke.monkeybook.presenter.impl;
 
 import com.google.gson.Gson;
+
 import android.support.annotation.NonNull;
+
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -22,8 +24,10 @@ import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.IMainView;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -115,17 +119,17 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     }
 
-    private void startRefreshBook(List<BookShelfBean> value){
-        if (value != null && value.size() > 0){
+    private void startRefreshBook(List<BookShelfBean> value) {
+        if (value != null && value.size() > 0) {
             mView.setRecyclerMaxProgress(value.size());
-            refreshBookShelf(value,0);
-        }else{
+            refreshBookShelf(value, 0);
+        } else {
             mView.refreshFinish();
         }
     }
 
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
-        if (index<=value.size()-1) {
+        if (index <= value.size() - 1) {
             int chapterSize = value.get(index).getBookInfoBean().getChapterlist().size();
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override

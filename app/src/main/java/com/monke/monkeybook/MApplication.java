@@ -10,6 +10,7 @@ import com.monke.monkeybook.service.DownloadService;
 public class MApplication extends Application {
     private static MApplication instance;
     private static String versionName;
+    public final static boolean DEBUG = BuildConfig.DEBUG;
 
     @Override
     public void onCreate() {
