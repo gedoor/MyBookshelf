@@ -15,6 +15,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.IView;
 import com.monke.basemvplib.impl.BasePresenterImpl;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -120,16 +121,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            Toast.makeText(mView.getContext(), "备份成功", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mView.getContext(), R.string.backup_success, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(mView.getContext(), "书架里没有书", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mView.getContext(), R.string.bookshelf_empty, Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(mView.getContext(), "备份失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mView.getContext(), R.string.backup_fail, Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -156,17 +157,17 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            Toast.makeText(mView.getContext(), "恢复成功", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mView.getContext(), R.string.restore_success, Toast.LENGTH_LONG).show();
                             queryBookShelf(true);
                         } else {
-                            Toast.makeText(mView.getContext(), "恢复失败", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(mView.getContext(), "恢复失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
                     }
                 });
     }
