@@ -157,8 +157,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            Toast.makeText(mView.getContext(), R.string.restore_success, Toast.LENGTH_LONG).show();
                             queryBookShelf(true);
+                            Toast.makeText(mView.getContext(), R.string.restore_success, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
                         }

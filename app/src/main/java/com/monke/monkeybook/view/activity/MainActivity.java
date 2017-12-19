@@ -58,7 +58,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DownloadListPop downloadListPop;
-    private SharedPreferences preferences;
+
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @BindView(R.id.drawer)
@@ -82,7 +82,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void initData() {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         if (viewIsList) {
             bookShelfListAdapter = new BookShelfListAdapter();

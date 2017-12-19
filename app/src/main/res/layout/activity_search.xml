@@ -30,7 +30,7 @@
                 android:textColorHint="#6f6f6f"
                 android:textSize="13sp"
                 android:singleLine="true"
-                android:imeOptions="actionSearch"
+                android:imeOptions="actionSearch|flagNoExtractUi"
                 android:textColor="#767676"
                 android:cursorVisible="false"
                 android:textCursorDrawable="@drawable/shape_text_cursor"/>

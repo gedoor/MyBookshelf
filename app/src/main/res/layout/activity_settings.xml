@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bdp_white"
     android:id="@+id/ll_content">
 
     <android.support.design.widget.AppBarLayout

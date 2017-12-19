@@ -29,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "http://www.fqxsw.com/";
-    public static final String Name = "";
+    public static final String Name = "番茄小说";
 
     public static FqxswModelImpl getInstance() {
         return new FqxswModelImpl();
@@ -56,12 +56,12 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
                         item.setAuthor(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
                                 .getElementsByClass("result-game-item-info-tag").get(0)
                                 .getElementsByTag("span").get(1).text());
-//                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
-//                                .getElementsByClass("result-game-item-info-tag").get(1)
-//                                .getElementsByTag("span").get(1).text());
-//                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
-//                                .getElementsByClass("result-game-item-info-tag").get(3)
-//                                .getElementsByTag("a").get(0).text());
+                        item.setKind(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+                                .getElementsByClass("result-game-item-info-tag").get(1)
+                                .getElementsByTag("span").get(1).text());
+                        item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
+                                .getElementsByClass("result-game-item-info-tag").get(3)
+                                .getElementsByTag("a").get(0).text());
                         item.setOrigin("fqxsw.com");
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0)
                                 .getElementsByTag("a").get(0).text());
