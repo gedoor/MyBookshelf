@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'io.fabric'
 
 def version = "1.3.3"
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
@@ -52,6 +53,10 @@ ext {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
     //support
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
@@ -96,3 +101,5 @@ greendao {
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }
+
+apply plugin: 'com.google.gms.google-services'
