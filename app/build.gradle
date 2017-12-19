@@ -9,7 +9,7 @@ android {
     buildToolsVersion '26.0.2'
 
     defaultConfig {
-        applicationId "com.monke.monkeybook"
+        applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 10000 + gitCommits
