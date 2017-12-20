@@ -3,7 +3,7 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
 static def increasedVersionCode(){
-    return (int)(System.currentTimeMillis()/1000/60/60/24-17141)
+    return (int)(System.currentTimeMillis()/1000/60/60-17141)
 }
 def name = "MONKOVEL"
 def version = "1.4." + increasedVersionCode()
