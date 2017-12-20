@@ -34,6 +34,7 @@ import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
+import com.monke.monkeybook.view.activity.MainActivity;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -69,12 +70,18 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         open_from = intent.getIntExtra("from", OPEN_FROM_OTHER);
         if (open_from == OPEN_FROM_APP) {
             String key = intent.getStringExtra("data_key");
-            bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-            if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                mView.showDownloadMenu();
+            if (BitIntentDataManager.getInstance() == null) {
+                activity.finish();
+                intent = new Intent(activity, MainActivity.class);
+                activity.startActivityForResult(intent, 0);
+            } else {
+                bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
+                if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                    mView.showDownloadMenu();
+                }
+                BitIntentDataManager.getInstance().cleanData(key);
+                checkInShelf();
             }
-            BitIntentDataManager.getInstance().cleanData(key);
-            checkInShelf();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(activity,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

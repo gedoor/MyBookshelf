@@ -12,24 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/CAppTheme"
         tools:replace="android:theme">
-        <activity
-            android:name=".view.activity.WelcomeActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".view.activity.MainActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
 
         <activity
             android:name=".view.activity.SearchActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
@@ -37,19 +34,19 @@
 
         <activity
             android:name=".view.activity.LibraryActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ChoiceBookActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.BookDetailActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ReadBookActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
@@ -59,19 +56,19 @@
         </activity>
         <activity
             android:name=".view.activity.ImportBookActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.BookSourceManageActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.SettingActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.AboutActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
 
         <meta-data

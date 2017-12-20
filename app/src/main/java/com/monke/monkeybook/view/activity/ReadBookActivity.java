@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.AppActivityManager;
+import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.DownloadChapterBean;
@@ -31,6 +33,7 @@ import com.monke.monkeybook.bean.DownloadChapterListBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
+import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
@@ -50,31 +53,53 @@ import com.monke.mprogressbar.OnProgressListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
+import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+
 public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView {
-
-    private FrameLayout flContent;
-
-    private ContentSwitchView csvBook;
+    @BindView(R.id.fl_content)
+    FrameLayout flContent;
+    @BindView(R.id.csv_book)
+    ContentSwitchView csvBook;
 
     //主菜单
-    private FrameLayout flMenu;
-    private View vMenuBg;
-    private LinearLayout llMenuTop;
-    private LinearLayout llMenuBottom;
-    private ImageButton ivReturn;
-    private ImageButton ivRefresh;
-    private ImageView ivMenuMore;
-    private AutofitTextView atvTitle;
-    private AutofitTextView atvUrl;
-    private TextView tvPre;
-    private TextView tvNext;
-    private MHorProgressBar hpbReadProgress;
-    private LinearLayout llCatalog;
-    private LinearLayout llLight;
-    private LinearLayout llFont;
-    private LinearLayout llSetting;
+    @BindView(R.id.fl_menu)
+    FrameLayout flMenu;
+    @BindView(R.id.v_menu_bg)
+    View vMenuBg;
+    @BindView(R.id.ll_menu_top)
+    LinearLayout llMenuTop;
+    @BindView(R.id.ll_menu_bottom)
+    LinearLayout llMenuBottom;
+    @BindView(R.id.iv_return)
+    ImageButton ivReturn;
+    @BindView(R.id.iv_refresh)
+    ImageButton ivRefresh;
+    @BindView(R.id.iv_more)
+    ImageView ivMenuMore;
+    @BindView(R.id.atv_title)
+    AutofitTextView atvTitle;
+    @BindView(R.id.atv_url)
+    AutofitTextView atvUrl;
+    @BindView(R.id.tv_pre)
+    TextView tvPre;
+    @BindView(R.id.tv_next)
+    TextView tvNext;
+    @BindView(R.id.hpb_read_progress)
+    MHorProgressBar hpbReadProgress;
+    @BindView(R.id.ll_catalog)
+    LinearLayout llCatalog;
+    @BindView(R.id.ll_light)
+    LinearLayout llLight;
+    @BindView(R.id.ll_font)
+    LinearLayout llFont;
+    @BindView(R.id.ll_setting)
+    LinearLayout llSetting;
+    @BindView(R.id.clp_chapterlist)
+    ChapterListView chapterListView;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -82,7 +107,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private Animation menuBottomOut;
 
     private CheckAddShelfPop checkAddShelfPop;
-    private ChapterListView chapterListView;
     private WindowLightPop windowLightPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
     private FontPop fontPop;
@@ -148,30 +172,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void bindView() {
         moProgressHUD = new MoProgressHUD(this);
+        ButterKnife.bind(this);
 
-        flContent = (FrameLayout) findViewById(R.id.fl_content);
-        csvBook = (ContentSwitchView) findViewById(R.id.csv_book);
         initCsvBook();
-
-        flMenu = (FrameLayout) findViewById(R.id.fl_menu);
-        vMenuBg = findViewById(R.id.v_menu_bg);
-        llMenuTop = (LinearLayout) findViewById(R.id.ll_menu_top);
-        llMenuBottom = (LinearLayout) findViewById(R.id.ll_menu_bottom);
-        ivReturn = (ImageButton) findViewById(R.id.iv_return);
-        ivRefresh = (ImageButton) findViewById(R.id.iv_refresh);
-        ivMenuMore = (ImageView) findViewById(R.id.iv_more);
-        atvTitle = (AutofitTextView) findViewById(R.id.atv_title);
-        atvUrl = (AutofitTextView) findViewById(R.id.atv_url);
-
-        tvPre = (TextView) findViewById(R.id.tv_pre);
-        tvNext = (TextView) findViewById(R.id.tv_next);
-        hpbReadProgress = (MHorProgressBar) findViewById(R.id.hpb_read_progress);
-        llCatalog = (LinearLayout) findViewById(R.id.ll_catalog);
-        llLight = (LinearLayout) findViewById(R.id.ll_light);
-        llFont = (LinearLayout) findViewById(R.id.ll_font);
-        llSetting = (LinearLayout) findViewById(R.id.ll_setting);
-
-        chapterListView = (ChapterListView) findViewById(R.id.clp_chapterlist);
     }
 
     @Override
@@ -516,7 +519,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void onResume() {
         super.onResume();
-        if (showCheckPremission && mPresenter.getOpen_from() == ReadBookPresenterImpl.OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
+        if (showCheckPremission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             showCheckPremission = true;
             mPresenter.openBookFromOther(this);

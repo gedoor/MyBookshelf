@@ -4,7 +4,6 @@
     <string-array name="screen_direction_list_title">
         <item>@string/screen_unspecified</item>
         <item>@string/screen_portrait</item>
-        <item>@string/screen_landscape</item>
         <item>@string/screen_sensor</item>
     </string-array>
 
@@ -12,6 +11,5 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
-        <item>3</item>
     </string-array>
 </resources>

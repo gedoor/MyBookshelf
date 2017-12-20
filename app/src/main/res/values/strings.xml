@@ -53,7 +53,7 @@
     <string name="restore_success">恢复成功</string>
     <string name="restore_fail">恢复失败</string>
     <string name="screen_direction">屏幕方向</string>
-    <string name="screen_sensor">自适应</string>
+    <string name="screen_sensor">跟随传感器</string>
     <string name="screen_landscape">横向</string>
     <string name="screen_portrait">竖向</string>
     <string name="screen_unspecified">跟随系统</string>
