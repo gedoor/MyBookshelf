@@ -57,4 +57,5 @@
     <string name="screen_landscape">横向</string>
     <string name="screen_portrait">竖向</string>
     <string name="screen_unspecified">跟随系统</string>
+    <string name="disclaimer">免责声明</string>
 </resources>

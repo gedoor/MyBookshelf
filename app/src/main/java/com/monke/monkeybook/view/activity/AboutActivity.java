@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
@@ -57,10 +58,11 @@ public class AboutActivity extends MBaseActivity {
                 .isRTL(false)
                 .setImage(R.drawable.icon_monkovel_big_black)
                 .setDescription(getString(R.string.about_description))
+                .addItem(versionElement())
                 .addEmail("kunfei.ge@gmail.com")
                 .addWebsite("https://github.com/gedoor/MONKOVEL")
                 .addGitHub("gedoor")
-                .addItem(versionElement())
+                .addItem(disclaimerElement())
                 .create();
         vwAbout.addView(aboutPage);
     }
@@ -82,6 +84,19 @@ public class AboutActivity extends MBaseActivity {
         versionElement.setTitle(String.format(getString(R.string.version_name), version));
         versionElement.setIconDrawable(R.drawable.ic_turned_in_not_black_24dp);
         return versionElement;
+    }
+
+    private Element disclaimerElement() {
+        Element disclaimerElement = new Element();
+        disclaimerElement.setTitle(getString(R.string.disclaimer));
+        disclaimerElement.setIconDrawable(R.drawable.ic_launch_black_24dp);
+        disclaimerElement.setOnClickListener(view -> {
+            String url = "https://github.com/gedoor/MONKOVEL/wiki/Disclaimer";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent .setData(Uri.parse(url));
+            startActivityForResult(intent, 0);
+        });
+        return disclaimerElement;
     }
 
     //设置ToolBar
