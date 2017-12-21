@@ -1,10 +1,15 @@
 package com.monke.monkeybook.model.impl;
 
+import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.IStationBookModel;
 import com.monke.monkeybook.model.content.FqxswModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -12,6 +17,7 @@ import com.monke.monkeybook.model.content.XBQGModelImpl;
  */
 
 public class AllBookSource {
+
     public static AllBookSource getInstance() {
         return new AllBookSource();
     }
@@ -25,25 +31,31 @@ public class AllBookSource {
         };
     }
 
-    //所有书源Name
-    public static String[] getAllBookSourceName() {
-        return new String[]{
-                "新笔趣阁",
-                "零点看书",
-                "梧州中文台"
-        };
+    private static List<BookSourceBean> getBookSourceList() {
+        List<BookSourceBean> bookSourceList = new ArrayList<>();
+        bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true));
+        bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true));
+        bookSourceList.add(new BookSourceBean(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3, true));
+        return bookSourceList;
+    }
+
+    public static void saveBookSourceToDb() {
+        for (BookSourceBean bookSourceBean : getBookSourceList()) {
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+        }
     }
 
     //获取book source class
-    public static IStationBookModel getBookSourceModel(String tag) {
-        if (tag.equals(GxwztvBookModelImpl.TAG)) {
-            return GxwztvBookModelImpl.getInstance();
-        } else if (tag.equals(LingdiankanshuModelImpl.TAG)) {
-            return LingdiankanshuModelImpl.getInstance();
-        } else if (tag.equals(XBQGModelImpl.TAG)) {
-            return XBQGModelImpl.getInstance();
-        } else if (tag.equals(FqxswModelImpl.TAG)) {
-            return FqxswModelImpl.getInstance();
+    static IStationBookModel getBookSourceModel(String tag) {
+        switch (tag) {
+            case GxwztvBookModelImpl.TAG:
+                return GxwztvBookModelImpl.getInstance();
+            case LingdiankanshuModelImpl.TAG:
+                return LingdiankanshuModelImpl.getInstance();
+            case XBQGModelImpl.TAG:
+                return XBQGModelImpl.getInstance();
+            case FqxswModelImpl.TAG:
+                return FqxswModelImpl.getInstance();
         }
         return null;
     }

@@ -28,7 +28,6 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         public final static Property BookSourceName = new Property(1, String.class, "bookSourceName", false, "BOOK_SOURCE_NAME");
         public final static Property SerialNumber = new Property(2, int.class, "serialNumber", false, "SERIAL_NUMBER");
         public final static Property Enable = new Property(3, boolean.class, "enable", false, "ENABLE");
-        public final static Property BookSourceSearchUrl = new Property(4, String.class, "bookSourceSearchUrl", false, "BOOK_SOURCE_SEARCH_URL");
     }
 
 
@@ -47,8 +46,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
                 "\"BOOK_SOURCE_URL\" TEXT PRIMARY KEY NOT NULL ," + // 0: bookSourceUrl
                 "\"BOOK_SOURCE_NAME\" TEXT," + // 1: bookSourceName
                 "\"SERIAL_NUMBER\" INTEGER NOT NULL ," + // 2: serialNumber
-                "\"ENABLE\" INTEGER NOT NULL ," + // 3: enable
-                "\"BOOK_SOURCE_SEARCH_URL\" TEXT);"); // 4: bookSourceSearchUrl
+                "\"ENABLE\" INTEGER NOT NULL );"); // 3: enable
     }
 
     /** Drops the underlying database table. */
@@ -72,11 +70,6 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         }
         stmt.bindLong(3, entity.getSerialNumber());
         stmt.bindLong(4, entity.getEnable() ? 1L: 0L);
- 
-        String bookSourceSearchUrl = entity.getBookSourceSearchUrl();
-        if (bookSourceSearchUrl != null) {
-            stmt.bindString(5, bookSourceSearchUrl);
-        }
     }
 
     @Override
@@ -94,11 +87,6 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         }
         stmt.bindLong(3, entity.getSerialNumber());
         stmt.bindLong(4, entity.getEnable() ? 1L: 0L);
- 
-        String bookSourceSearchUrl = entity.getBookSourceSearchUrl();
-        if (bookSourceSearchUrl != null) {
-            stmt.bindString(5, bookSourceSearchUrl);
-        }
     }
 
     @Override
@@ -112,8 +100,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // bookSourceUrl
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // bookSourceName
             cursor.getInt(offset + 2), // serialNumber
-            cursor.getShort(offset + 3) != 0, // enable
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // bookSourceSearchUrl
+            cursor.getShort(offset + 3) != 0 // enable
         );
         return entity;
     }
@@ -124,7 +111,6 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         entity.setBookSourceName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setSerialNumber(cursor.getInt(offset + 2));
         entity.setEnable(cursor.getShort(offset + 3) != 0);
-        entity.setBookSourceSearchUrl(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override

@@ -27,7 +27,6 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         bookSourceName = in.readString();
         serialNumber = in.readInt();
         enable = in.readByte() != 0;
-        bookSourceSearchUrl = in.readString();
     }
 
     public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
@@ -42,14 +41,6 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         }
     };
 
-    public String getBookSourceSearchUrl() {
-        return bookSourceSearchUrl;
-    }
-
-    public void setBookSourceSearchUrl(String bookSourceSearchUrl) {
-        this.bookSourceSearchUrl = bookSourceSearchUrl;
-    }
-
     public String getBookSourceName() {
 
         return bookSourceName;
@@ -59,8 +50,6 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.bookSourceName = bookSourceName;
     }
 
-    private String bookSourceSearchUrl;
-
     public String getBookSourceUrl() {
         return bookSourceUrl;
     }
@@ -69,18 +58,17 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.bookSourceUrl = bookSourceUrl;
     }
 
-    public BookSourceBean() {
-
-    }
-
-    @Generated(hash = 681452226)
+    @Generated(hash = 1359279952)
     public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber,
-            boolean enable, String bookSourceSearchUrl) {
+            boolean enable) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.serialNumber = serialNumber;
         this.enable = enable;
-        this.bookSourceSearchUrl = bookSourceSearchUrl;
+    }
+
+    @Generated(hash = 1512565980)
+    public BookSourceBean() {
     }
 
     @Override
@@ -94,7 +82,6 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         parcel.writeString(bookSourceName);
         parcel.writeInt(serialNumber);
         parcel.writeByte((byte) (enable ? 1 : 0));
-        parcel.writeString(bookSourceSearchUrl);
     }
 
     public int getSerialNumber() {
