@@ -91,7 +91,7 @@ public class AboutActivity extends MBaseActivity {
         disclaimerElement.setTitle(getString(R.string.disclaimer));
         disclaimerElement.setIconDrawable(R.drawable.ic_launch_black_24dp);
         disclaimerElement.setOnClickListener(view -> {
-            String url = "https://github.com/gedoor/MONKOVEL/wiki/Disclaimer";
+            String url = "https://gedoor.github.io/MONKOVEL/disclaimer.html";
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent .setData(Uri.parse(url));
             startActivityForResult(intent, 0);
