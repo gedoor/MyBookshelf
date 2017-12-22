@@ -68,7 +68,7 @@ public class BookSourceManageActivity extends MBaseActivity<IBookSourceManagePre
 
     private void initReayclerView() {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
-        bookSourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+        bookSourceBeanList = AllBookSource.getAllBookSource();
         bookSourceAdapter = new BookSourceAdapter(bookSourceBeanList);
         recyclerViewBookSource.setAdapter(bookSourceAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
