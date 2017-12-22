@@ -180,7 +180,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             mView.refreshFinish();
         }
     }
-
+    //更新
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
         if (index <= value.size() - 1) {
             int chapterSize = value.get(index).getBookInfoBean().getChapterlist().size();
@@ -200,12 +200,14 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             queryBookShelf(false);
         }
     }
-
+    //保存更新
     private void saveBookToShelf(final List<BookShelfBean> datas, final int index, final boolean hasUpdate) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(datas.get(index).getBookInfoBean().getChapterlist());
             if (hasUpdate) {
                 datas.get(index).setHasUpdate(true);
+                datas.get(index).getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(datas.get(index).getBookInfoBean());
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(datas.get(index));
             }
             e.onNext(datas.get(index));
