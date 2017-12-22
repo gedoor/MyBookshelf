@@ -35,6 +35,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
+import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
@@ -219,6 +220,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         readBookMenuMorePop = new ReadBookMenuMorePop(this);
+        //离线下载
         readBookMenuMorePop.setOnClickDownload(v -> {
             readBookMenuMorePop.dismiss();
             if (flMenu.getVisibility() == View.VISIBLE) {
@@ -245,10 +247,23 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                         item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
                         result.add(item);
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(new Intent(this, DownloadService.class));
+                    } else {
+                        startService(new Intent(this, DownloadService.class));
+                    }
                     RxBus.get().post(RxBusTag.ADD_DOWNLOAD_TASK, new DownloadChapterListBean(result));
                 });
 
             });
+        });
+
+        readBookMenuMorePop.setOnClickChangeSource(view ->{
+            readBookMenuMorePop.dismiss();
+            if (flMenu.getVisibility() == View.VISIBLE) {
+                llMenuTop.startAnimation(menuTopOut);
+                llMenuBottom.startAnimation(menuBottomOut);
+            }
         });
 
         moreSettingPop = new MoreSettingPop(this);

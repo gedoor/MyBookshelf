@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import com.monke.monkeybook.service.DownloadService;
 
@@ -23,7 +24,6 @@ public class MApplication extends Application {
             e.printStackTrace();
         }
         instance = this;
-        startService(new Intent(this, DownloadService.class));
     }
 
     public static MApplication getInstance() {

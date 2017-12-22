@@ -14,6 +14,7 @@ public class ReadBookMenuMorePop extends PopupWindow{
     private View view;
 
     private LinearLayout llDownload;
+    private LinearLayout llChangeSource;
 
     public ReadBookMenuMorePop(Context context){
         super(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -30,10 +31,15 @@ public class ReadBookMenuMorePop extends PopupWindow{
     }
 
     private void initView() {
-        llDownload = (LinearLayout) view.findViewById(R.id.ll_download);
+        llDownload = view.findViewById(R.id.ll_download);
+        llChangeSource = view.findViewById(R.id.ll_exchange_source);
     }
 
     public void setOnClickDownload(View.OnClickListener clickDownload){
         llDownload.setOnClickListener(clickDownload);
+    }
+
+    public void setOnClickChangeSource(View.OnClickListener clickChangeSource) {
+        llChangeSource.setOnClickListener(clickChangeSource);
     }
 }
