@@ -73,7 +73,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         addView(durPageView);
     }
 
-
     public void bookReadInit(OnBookReadInitListener bookReadInitListener){
         this.bookReadInitListener = bookReadInitListener;
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutInitListener);
@@ -388,7 +387,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND);
         }
     }
-
 
     @Override
     public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex) {

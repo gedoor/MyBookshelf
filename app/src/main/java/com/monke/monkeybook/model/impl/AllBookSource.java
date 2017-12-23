@@ -22,7 +22,6 @@ public class AllBookSource {
         return new AllBookSource();
     }
 
-
     //所有书源TAG
     public static String[] getAllBookSourceTag() {
         return new String[]{

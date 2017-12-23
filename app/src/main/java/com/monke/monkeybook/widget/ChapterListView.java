@@ -33,6 +33,8 @@ public class ChapterListView extends FrameLayout{
     private LinearLayout llContent;
 
     private ChapterListAdapter chapterListAdapter;
+    private OnItemClickListener itemClickListener;
+    private BookShelfBean bookShelfBean;
 
     private Animation animIn;
     private Animation animOut;
@@ -116,8 +118,6 @@ public class ChapterListView extends FrameLayout{
     public interface OnItemClickListener{
         public void itemClick(int index);
     }
-    private OnItemClickListener itemClickListener;
-    private BookShelfBean bookShelfBean;
 
     private void initView() {
         flBg = (FrameLayout) findViewById(R.id.fl_bg);
@@ -135,7 +135,7 @@ public class ChapterListView extends FrameLayout{
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
         tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
-                Integer.toString(bookShelfBean.getBookInfoBean().getChapterlist().size())));
+                bookShelfBean.getBookInfoBean().getChapterlist().size()));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if(itemClickListener!=null){
                 itemClickListener.itemClick(index);

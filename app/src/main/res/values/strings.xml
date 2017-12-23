@@ -58,5 +58,10 @@
     <string name="screen_portrait">竖向</string>
     <string name="screen_unspecified">跟随系统</string>
     <string name="disclaimer">免责声明</string>
-    <string name="all_chapter_num">共%s章</string>
+    <string name="all_chapter_num">共%d章</string>
+    <string name="interface_setting">界面</string>
+    <string name="brightness">亮度</string>
+    <string name="table_of_contents">目录</string>
+    <string name="next_chapter">下一章</string>
+    <string name="previous_chapter">上一章</string>
 </resources>

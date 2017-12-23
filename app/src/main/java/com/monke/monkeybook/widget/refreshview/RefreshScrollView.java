@@ -14,7 +14,6 @@ public class RefreshScrollView extends ScrollView{
     private float durTouchY = -1000000;
     private BaseRefreshListener baseRefreshListener;
     private Boolean isRefreshing = false;
-    private OnTouchListener touchListener;
 
     public RefreshScrollView(Context context) {
         this(context,null);
@@ -39,7 +38,7 @@ public class RefreshScrollView extends ScrollView{
     }
 
     private void init() {
-        touchListener = (v, event) -> {
+        this.setOnTouchListener((View v, MotionEvent event) -> {
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
@@ -50,7 +49,7 @@ public class RefreshScrollView extends ScrollView{
                         durTouchY = event.getY();
                     float dY = event.getY() - durTouchY;  //>0下拉
                     durTouchY = event.getY();
-                    if (baseRefreshListener != null && !isRefreshing && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress() && getScrollY()<=0) {
+                    if (baseRefreshListener != null && !isRefreshing && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress() && getScrollY() <= 0) {
                         if (rpb.getVisibility() != View.VISIBLE) {
                             rpb.setVisibility(View.VISIBLE);
                         }
@@ -74,8 +73,7 @@ public class RefreshScrollView extends ScrollView{
                     break;
             }
             return false;
-        };
-        this.setOnTouchListener(touchListener);
+        });
     }
 
     public void setBaseRefreshListener(BaseRefreshListener baseRefreshListener) {

@@ -134,7 +134,7 @@
                         android:id="@+id/tv_pre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="上一章"
+                        android:text="@string/previous_chapter"
                         android:textSize="14sp"
                         android:padding="10dp"
                         android:textColor="@drawable/selector_tv_black"
@@ -158,7 +158,7 @@
                         android:id="@+id/tv_next"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="下一章"
+                        android:text="@string/next_chapter"
                         android:textSize="14sp"
                         android:padding="10dp"
                         android:textColor="@drawable/selector_tv_black"
@@ -188,7 +188,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="目录"
+                            android:text="@string/table_of_contents"
                             android:layout_gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="#767676"
@@ -212,7 +212,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="亮度"
+                            android:text="@string/brightness"
                             android:layout_gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="#767676"
@@ -236,7 +236,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="字体"
+                            android:text="@string/interface_setting"
                             android:layout_gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="#767676"
@@ -260,7 +260,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="设置"
+                            android:text="@string/setting"
                             android:layout_gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="#767676"

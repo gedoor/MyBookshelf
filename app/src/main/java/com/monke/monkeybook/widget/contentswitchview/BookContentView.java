@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.contentswitchview;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
@@ -109,11 +110,10 @@ public class BookContentView extends FrameLayout {
         tvLoading.setVisibility(GONE);
     }
 
+    @SuppressLint("DefaultLocale")
     public void setNoData(String contentLines) {
         this.content = contentLines;
-
-        tvPage.setText((this.durPageIndex + 1) + "/" + this.pageAll);
-
+        tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
         finishLoading();
     }
 
@@ -139,7 +139,7 @@ public class BookContentView extends FrameLayout {
 
             tvTitle.setText(this.title);
             tvContent.setText(this.content);
-            tvPage.setText((this.durPageIndex + 1) + "/" + this.pageAll);
+            tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
             finishLoading();
         }
@@ -227,11 +227,13 @@ public class BookContentView extends FrameLayout {
         return tvContent;
     }
 
+    //显示行数
     public int getLineCount(int height) {
         float ascent = tvContent.getPaint().ascent();
         float descent = tvContent.getPaint().descent();
         float textHeight = descent - ascent;
-        return (int) ((height * 1.0f - tvContent.getLineSpacingExtra()) / (textHeight + tvContent.getLineSpacingExtra())) + 1;
+
+        return (int) ((height * 1.0f) / (textHeight + tvContent.getLineSpacingExtra()));
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
