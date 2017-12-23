@@ -15,10 +15,11 @@ import java.util.List;
 
 /**
  * Created by GKF on 2017/12/22.
+ * 书源Adapter
  */
 
 public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.MyViewHolder> {
-    List<BookSourceBean> bookSourceBeanList;
+    private List<BookSourceBean> bookSourceBeanList;
 
     public BookSourceAdapter(List<BookSourceBean> bookSourceBeanList) {
         this.bookSourceBeanList = bookSourceBeanList;
@@ -27,7 +28,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder {
         CheckBox bookSource;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             bookSource = itemView.findViewById(R.id.book_source);
         }
@@ -42,6 +43,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.bookSource.setText(bookSourceBeanList.get(position).getBookSourceName());
+        holder.bookSource.setChecked(bookSourceBeanList.get(position).getEnable());
     }
 
     @Override

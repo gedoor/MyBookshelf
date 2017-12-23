@@ -17,6 +17,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
@@ -132,7 +134,8 @@ public class ChapterListView extends FrameLayout{
         this.itemClickListener = clickListener;
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
-        tvListCount.setText("共"+bookShelfBean.getBookInfoBean().getChapterlist().size()+"章");
+        tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
+                Integer.toString(bookShelfBean.getBookInfoBean().getChapterlist().size())));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if(itemClickListener!=null){
                 itemClickListener.itemClick(index);
