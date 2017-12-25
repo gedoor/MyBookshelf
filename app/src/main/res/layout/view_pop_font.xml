@@ -68,13 +68,18 @@
             </FrameLayout>
             <TextView
                 android:id="@+id/tv_textsize_default"
-                android:layout_width="70dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"
                 android:textColor="@drawable/selector_pop_font_color"
                 android:gravity="center"
                 android:text="默认"
                 android:layout_gravity="center_vertical"/>
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="行数减1"
+                android:textColor="@drawable/selector_pop_font_color"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

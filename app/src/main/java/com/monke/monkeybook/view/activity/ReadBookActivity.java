@@ -208,7 +208,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
-
+        //
         fontPop = new FontPop(this, new FontPop.OnChangeProListener() {
             @Override
             public void textChange(int index) {
@@ -256,13 +256,14 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
             });
         });
-
+        //换源
         readBookMenuMorePop.setOnClickChangeSource(view ->{
             readBookMenuMorePop.dismiss();
             if (flMenu.getVisibility() == View.VISIBLE) {
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
             }
+
         });
 
         moreSettingPop = new MoreSettingPop(this);
