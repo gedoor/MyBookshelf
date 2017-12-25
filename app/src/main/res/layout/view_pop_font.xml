@@ -78,7 +78,7 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="行数减1"
+                android:text="减1行"
                 android:textColor="@drawable/selector_pop_font_color"/>
         </LinearLayout>
         <LinearLayout
