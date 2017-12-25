@@ -29,9 +29,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <service android:name=".service.DownloadService" />
-
         <activity
             android:name=".view.activity.LibraryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -70,6 +67,8 @@
             android:name=".view.activity.AboutActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
+
+        <service android:name=".service.DownloadService" />
 
         <meta-data
             android:name="BDAPPID"
