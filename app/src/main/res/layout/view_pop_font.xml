@@ -75,11 +75,6 @@
                 android:gravity="center"
                 android:text="默认"
                 android:layout_gravity="center_vertical"/>
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="减1行"
-                android:textColor="@drawable/selector_pop_font_color"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

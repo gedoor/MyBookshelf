@@ -64,4 +64,6 @@
     <string name="table_of_contents">目录</string>
     <string name="next_chapter">下一章</string>
     <string name="previous_chapter">上一章</string>
+    <string name="full_screen_t">全屏阅读</string>
+    <string name="full_screen_s">阅读界面隐藏状态栏和导航栏</string>
 </resources>
