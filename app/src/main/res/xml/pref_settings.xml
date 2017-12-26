@@ -14,10 +14,4 @@
         android:entryValues="@array/screen_direction_list_value"
         android:title="@string/screen_direction" />
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="full_screen"
-        android:title="@string/full_screen_t"
-        android:summary="@string/full_screen_s"/>
-
 </PreferenceScreen>

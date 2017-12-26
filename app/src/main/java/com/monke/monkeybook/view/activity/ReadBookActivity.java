@@ -125,9 +125,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     @Override
     protected void onCreateActivity() {
-        if (preferences.getBoolean(getString(R.string.pk_full_screen), false)){
-            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
         setContentView(R.layout.activity_bookread);
     }
 
