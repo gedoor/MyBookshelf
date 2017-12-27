@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="auto_refresh"
-        android:title="@string/pt_auto_refresh"
-        android:summary="@string/ps_auto_refresh"/>
-
     <ListPreference
-        android:key="list_screen_direction"
         android:defaultValue="0"
         android:entries="@array/screen_direction_list_title"
         android:entryValues="@array/screen_direction_list_value"
+        android:key="list_screen_direction"
         android:title="@string/screen_direction" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="auto_refresh"
+        android:summary="@string/ps_auto_refresh"
+        android:title="@string/pt_auto_refresh" />
 
 </PreferenceScreen>
