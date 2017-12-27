@@ -285,6 +285,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         }
     }
 
+    private void LoadNextChapter(int durChapterIndex) {
+        new Thread(()->{
+            if (bookShelf.getBookInfoBean().getChapterlist().size() > durChapterIndex) {
+
+            }
+        }).start();
+    }
+
     @Override
     public void updateProgress(int chapterIndex, int pageIndex) {
         bookShelf.setDurChapter(chapterIndex);
