@@ -158,6 +158,7 @@ public class BookContentView extends FrameLayout {
         tvPage.setText("");
 
         loading();
+
     }
 
     public ContentSwitchView.LoadDataListener getLoadDataListener() {
