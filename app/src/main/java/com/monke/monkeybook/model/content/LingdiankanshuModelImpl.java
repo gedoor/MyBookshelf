@@ -197,7 +197,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                     String temp = contentEs.get(i).text().trim();
                     temp = FormatWebText.getContent(temp);
                     if (temp.length() > 0) {
-                        if (i != 0) {
+                        if (content.length() > 0) {
                             content.append("\r\n");
                         }
                         content.append("\u3000\u3000" + temp);
