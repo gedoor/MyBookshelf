@@ -178,7 +178,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                             pageIndex = tempCount;
                         }
                     }
-
                     int start = pageIndex * pageLineCount;
                     int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getqTag()) {
@@ -219,6 +218,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
                                     .getChapterlist().get(chapterIndex).getDurChapterUrl())).build().list();
+                    LoadNextChapter(chapterIndex);
                     e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<BookContentBean>() : tempList, finalPageIndex1));
                     e.onComplete();
                 }).observeOn(AndroidSchedulers.mainThread())
