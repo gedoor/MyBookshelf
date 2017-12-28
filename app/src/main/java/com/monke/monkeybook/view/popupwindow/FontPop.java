@@ -40,7 +40,7 @@ public class FontPop extends PopupWindow{
         this.mContext = context;
         this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_font, null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_interface, null);
         this.setContentView(view);
         initData();
         bindView();

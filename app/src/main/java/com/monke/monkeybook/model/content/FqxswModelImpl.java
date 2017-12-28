@@ -28,7 +28,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
-    public static final String TAG = "http://www.fqxsw.com/";
+    public static final String TAG = "http://www.fqxsw.com";
     public static final String Name = "番茄小说";
 
     public static FqxswModelImpl getInstance() {

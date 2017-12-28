@@ -21,32 +21,29 @@
 
         <activity
             android:name=".view.activity.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask" />
 
         <activity
             android:name=".view.activity.SearchActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-        <service android:name=".service.DownloadService" />
-
         <activity
             android:name=".view.activity.LibraryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ChoiceBookActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.BookDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ReadBookActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
@@ -56,20 +53,22 @@
         </activity>
         <activity
             android:name=".view.activity.ImportBookActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.BookSourceManageActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.SettingActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.AboutActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
+
+        <service android:name=".service.DownloadService" />
 
         <meta-data
             android:name="BDAPPID"

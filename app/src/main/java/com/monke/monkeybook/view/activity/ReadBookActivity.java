@@ -10,10 +10,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -51,6 +53,7 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,7 +209,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
-
+        //
         fontPop = new FontPop(this, new FontPop.OnChangeProListener() {
             @Override
             public void textChange(int index) {
@@ -247,23 +250,21 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                         item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
                         result.add(item);
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        startForegroundService(new Intent(this, DownloadService.class));
-                    } else {
-                        startService(new Intent(this, DownloadService.class));
-                    }
-                    RxBus.get().post(RxBusTag.ADD_DOWNLOAD_TASK, new DownloadChapterListBean(result));
+                    Intent intent = new Intent(this, DownloadService.class);
+                    intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
+                    startService(intent);
                 });
 
             });
         });
-
+        //换源
         readBookMenuMorePop.setOnClickChangeSource(view ->{
             readBookMenuMorePop.dismiss();
             if (flMenu.getVisibility() == View.VISIBLE) {
                 llMenuTop.startAnimation(menuTopOut);
                 llMenuBottom.startAnimation(menuBottomOut);
             }
+
         });
 
         moreSettingPop = new MoreSettingPop(this);

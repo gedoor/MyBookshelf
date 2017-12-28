@@ -15,19 +15,24 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.cache.ACache;
 import com.monke.monkeybook.common.api.IGxwztvApi;
+import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IGxwztvBookModel;
 import com.monke.monkeybook.presenter.impl.LibraryPresenterImpl;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
 
 public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookModel {
     public static final String TAG = "http://www.gxwztv.com";
@@ -115,7 +120,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                     item.setTag(TAG);
                     item.setOrigin("gxwztv.com");
                     item.setKind(kindItem.getKindName());
-                    item.setNoteUrl(TAG+otherBookEs.get(j).getElementsByTag("a").get(0).attr("href"));
+                    item.setNoteUrl(TAG + otherBookEs.get(j).getElementsByTag("a").get(0).attr("href"));
                     item.setName(otherBookEs.get(j).getElementsByTag("a").get(0).text());
                     books.add(item);
                 }
@@ -277,10 +282,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
-                    temp = temp.replaceAll(" ", "").replaceAll(" ", "")
-                    .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
+                    temp = FormatWebText.getContent(temp);
                     if (temp.length() > 0) {
-                        if (i != 0) {
+                        if (content.length() > 0) {
                             content.append("\r\n");
                         }
                         content.append("\u3000\u3000" + temp);

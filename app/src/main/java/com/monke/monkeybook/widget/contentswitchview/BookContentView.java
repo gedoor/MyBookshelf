@@ -3,8 +3,10 @@ package com.monke.monkeybook.widget.contentswitchview;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
+    private SharedPreferences preferences;
 
     public static final int DURPAGEINDEXBEGIN = -1;
     public static final int DURPAGEINDEXEND = -2;
@@ -63,6 +66,7 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         init();
     }
 
@@ -154,6 +158,7 @@ public class BookContentView extends FrameLayout {
         tvPage.setText("");
 
         loading();
+
     }
 
     public ContentSwitchView.LoadDataListener getLoadDataListener() {
@@ -232,7 +237,6 @@ public class BookContentView extends FrameLayout {
         float ascent = tvContent.getPaint().ascent();
         float descent = tvContent.getPaint().descent();
         float textHeight = descent - ascent;
-
         return (int) ((height * 1.0f) / (textHeight + tvContent.getLineSpacingExtra()));
     }
 

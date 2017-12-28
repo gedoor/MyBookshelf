@@ -178,7 +178,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                             pageIndex = tempCount;
                         }
                     }
-
                     int start = pageIndex * pageLineCount;
                     int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getqTag()) {
@@ -219,6 +218,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
                                     .getChapterlist().get(chapterIndex).getDurChapterUrl())).build().list();
+                    LoadNextChapter(chapterIndex);
                     e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<BookContentBean>() : tempList, finalPageIndex1));
                     e.onComplete();
                 }).observeOn(AndroidSchedulers.mainThread())
@@ -283,6 +283,35 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             if (bookContentView != null && bookTag == bookContentView.getqTag())
                 bookContentView.loadError();
         }
+    }
+
+    private void LoadNextChapter(int durChapterIndex) {
+        new Thread(()->{
+            int nextIndex = durChapterIndex + 1;
+            if (bookShelf.getBookInfoBean().getChapterlist().size() > durChapterIndex) {
+                if (bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).getBookContentBean() == null) {
+                    List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
+                            .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
+                                    .getChapterlist().get(durChapterIndex + 1).getDurChapterUrl())).build().list();
+                    if (tempList == null) {
+                        WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).
+                                getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
+                            if (bookContentBean.getRight()) {
+                                //添加章节名称
+                                bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex)
+                                        .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
+                                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
+                                bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).setHasCache(true);
+                                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
+                                        .update(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex));
+                            }
+                            return bookContentBean;
+                        })
+                                .subscribe();
+                    }
+                }
+            }
+        }).start();
     }
 
     @Override

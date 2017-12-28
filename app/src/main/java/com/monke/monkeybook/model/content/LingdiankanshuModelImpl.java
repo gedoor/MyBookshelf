@@ -11,6 +11,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.common.api.ILingdiankanshuApi;
+import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IStationBookModel;
 import org.jsoup.Jsoup;
@@ -101,7 +102,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());
         String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().toString().trim();
-        author = author.replace(" ", "").replace("  ", "").replace("作者：", "");
+        author = FormatWebText.getAuthor(author);
         bookInfoBean.setAuthor(author);
 
         List<TextNode> contentEs = resultE.getElementById("intro").textNodes();
@@ -194,10 +195,9 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
-                    temp = temp.replaceAll(" ", "").replaceAll(" ", "")
-                            .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
+                    temp = FormatWebText.getContent(temp);
                     if (temp.length() > 0) {
-                        if (i != 0) {
+                        if (content.length() > 0) {
                             content.append("\r\n");
                         }
                         content.append("\u3000\u3000" + temp);

@@ -52,6 +52,7 @@ import butterknife.ButterKnife;
 import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchActivity extends MBaseActivity<ISearchPresenter> implements ISearchView {
+    public final static int CHANGE_SOURCE = 1;
     private SearchHistoryAdapter searchHistoryAdapter;
     private Animation animHistory;
     private Animator animHistory5;

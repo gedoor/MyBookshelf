@@ -1,21 +1,26 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
@@ -30,6 +35,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
+
+import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -47,11 +54,20 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        //创建 Notification.Builder 对象
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
+                .setSmallIcon(R.drawable.ic_download_black_24dp)
+                .setOngoing(false)
+                .setContentTitle(getString(R.string.download_offline))
+                .setContentText(getString(R.string.download_offline));
+        //发送通知
+        Notification notification = builder.build();
+        startForeground(notifiId, notification);
     }
 
     @Override
     public void onDestroy() {
+        stopForeground(true);
         super.onDestroy();
         RxBus.get().unregister(this);
         isInit = true;
@@ -64,6 +80,8 @@ public class DownloadService extends Service {
             notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             RxBus.get().register(this);
         }
+        List<DownloadChapterBean> downList = intent.getParcelableArrayListExtra("downloadTask");
+        addNewTask(downList);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -293,7 +311,7 @@ public class DownloadService extends Service {
 
                     @Override
                     public void onComplete() {
-
+                        stopSelf();
                     }
                 });
     }
@@ -345,8 +363,8 @@ public class DownloadService extends Service {
         Intent mainIntent = new Intent(this, MainActivity.class);
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
+                .setSmallIcon(R.drawable.ic_download_black_24dp)
                 //点击通知后自动清除
                 .setAutoCancel(true)
                 .setContentTitle("正在下载："+downloadChapterBean.getBookName())
@@ -359,45 +377,26 @@ public class DownloadService extends Service {
     private void finishDownload() {
         RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
         notifyManager.cancelAll();
+        stopSelf();
         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "全部离线章节下载完成", Toast.LENGTH_SHORT).show());
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.PAUSE_DOWNLOAD)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PAUSE_DOWNLOAD)})
     public void pauseTask(Object o) {
         pauseDownload();
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.START_DOWNLOAD)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.START_DOWNLOAD)})
     public void startTask(Object o) {
         startDownload();
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.CANCEL_DOWNLOAD)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CANCEL_DOWNLOAD)})
     public void cancelTask(Object o) {
         cancelDownload();
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.ADD_DOWNLOAD_TASK)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ADD_DOWNLOAD_TASK)})
     public void addTask(DownloadChapterListBean newData) {
         addNewTask(newData.getData());
     }
