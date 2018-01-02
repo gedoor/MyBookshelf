@@ -411,7 +411,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             new Handler().postDelayed(() -> windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
-        //字体
+        //界面
         llFont.setOnClickListener(v -> {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);

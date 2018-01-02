@@ -288,7 +288,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     private void LoadNextChapter(int durChapterIndex) {
         new Thread(()->{
             int nextIndex = durChapterIndex + 1;
-            if (bookShelf.getBookInfoBean().getChapterlist().size() > durChapterIndex) {
+            if (bookShelf.getBookInfoBean().getChapterlist().size() > nextIndex) {
                 if (bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).getBookContentBean() == null) {
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
