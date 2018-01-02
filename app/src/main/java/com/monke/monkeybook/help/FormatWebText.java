@@ -13,7 +13,8 @@ public class FormatWebText {
                 .replaceAll("　", "")
                 .replaceAll("\r","")
                 .replaceAll("\n", "")
-                .replaceAll("\t", "");
+                .replaceAll("\t", "")
+                .replaceAll("nbsp;", "");
     }
 
     public static String getAuthor(String str) {
