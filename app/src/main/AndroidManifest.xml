@@ -69,6 +69,7 @@
             android:theme="@style/CAppTransparentTheme" />
 
         <service android:name=".service.DownloadService" />
+        <service android:name=".service.ReadAloudService" />
 
         <meta-data
             android:name="BDAPPID"
