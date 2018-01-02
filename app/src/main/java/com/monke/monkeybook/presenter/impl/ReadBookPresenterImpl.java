@@ -218,6 +218,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
                                     .getChapterlist().get(chapterIndex).getDurChapterUrl())).build().list();
+                    //加载下一章节
                     LoadNextChapter(chapterIndex);
                     e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<BookContentBean>() : tempList, finalPageIndex1));
                     e.onComplete();
