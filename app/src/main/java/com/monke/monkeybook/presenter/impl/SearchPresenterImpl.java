@@ -11,6 +11,7 @@ import com.monke.basemvplib.IView;
 import com.monke.basemvplib.impl.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.common.RxBusTag;
@@ -77,16 +78,15 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
 
-        for (String tag : AllBookSource.getAllBookSourceTag()) {
+        for (BookSourceBean bookSourceBean: AllBookSource.getAllBookSource()) {
             Map se = new HashMap();
-            se.put(TAG_KEY, tag);
+            se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
             se.put(HASMORE_KEY, true);
             se.put(HASLOAD_KEY, false);
             se.put(DURREQUESTTIME, 1);
             se.put(MAXREQUESTTIME, 3);
             searchEngine.add(se);
         }
-
     }
 
     @Override
