@@ -22,16 +22,6 @@ public class AllBookSource {
         return new AllBookSource();
     }
 
-    //所有书源TAG
-    public static String[] getAllBookSourceTag() {
-        return new String[]{
-                ZwduModelImpl.TAG,
-                XBQGModelImpl.TAG,
-                LingdiankanshuModelImpl.TAG,
-                GxwztvBookModelImpl.TAG
-        };
-    }
-
     public static List<BookSourceBean> getAllBookSource() {
         return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
     }
