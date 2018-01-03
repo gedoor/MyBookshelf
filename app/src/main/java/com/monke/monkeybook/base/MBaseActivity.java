@@ -19,7 +19,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setOrientation();
         super.onCreate(savedInstanceState);
     }
 
@@ -49,7 +48,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return super.onMenuOpened(featureId, menu);
     }
 
-    private void setOrientation() {
+    public void setOrientation() {
         switch (preferences.getString(getString(R.string.pk_screen_direction), "0")) {
             case "0":
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);

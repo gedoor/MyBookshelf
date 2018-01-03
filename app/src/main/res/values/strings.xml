@@ -68,4 +68,5 @@
     <string name="full_screen_s">阅读界面隐藏状态栏和导航栏</string>
     <string name="pt_read_line_adjust">阅读行数调整</string>
     <string name="ps_read_line_adjust">阅读行数减一行,如阅读界面显示不全可启用</string>
+    <string name="read_aloud">朗读</string>
 </resources>

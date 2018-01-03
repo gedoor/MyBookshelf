@@ -10,13 +10,13 @@ def version = "1.4." + increasedVersionCode()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 10000 + gitCommits
         versionName version
         manifestPlaceholders = [UMENG_CHANNEL_VALUE: "debug"]
@@ -57,7 +57,7 @@ repositories {
     }
 }
 ext {
-    support_library_version = '26.1.0'
+    support_library_version = '27.0.2'
 }
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

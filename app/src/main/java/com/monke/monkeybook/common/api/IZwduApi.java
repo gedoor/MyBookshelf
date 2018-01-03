@@ -7,17 +7,18 @@ import retrofit2.http.Headers;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
-public interface ILingdiankanshuApi {
+public interface IZwduApi {
 
     @GET
     Observable<String> getBookInfo(@Url String url);
 
-    @GET("/cse/search")
-    Observable<String> searchBook(@Query("q") String content, @Query("p") int page, @Query("s") String time);
+    @GET("/search.php")
+    Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);
 
     @GET
     Observable<String> getBookContent(@Url String url);
 
     @GET
     Observable<String> getChapterList(@Url String url);
+
 }

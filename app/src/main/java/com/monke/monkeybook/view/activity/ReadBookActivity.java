@@ -125,6 +125,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     @Override
     protected void onCreateActivity() {
+        setOrientation();
         setContentView(R.layout.activity_bookread);
     }
 

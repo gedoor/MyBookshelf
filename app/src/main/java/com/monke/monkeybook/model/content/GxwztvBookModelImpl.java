@@ -107,7 +107,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 Element firstBookE = kindEs.get(i).getElementsByTag("dl").get(0);
                 SearchBookBean firstBook = new SearchBookBean();
                 firstBook.setTag(TAG);
-                firstBook.setOrigin("gxwztv.com");
+                firstBook.setOrigin(name);
                 firstBook.setName(firstBookE.getElementsByTag("a").get(1).text());
                 firstBook.setNoteUrl(TAG + firstBookE.getElementsByTag("a").get(0).attr("href"));
                 firstBook.setCoverUrl(firstBookE.getElementsByTag("a").get(0).getElementsByTag("img").get(0).attr("src"));
@@ -118,7 +118,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 for (int j = 0; j < otherBookEs.size(); j++) {
                     SearchBookBean item = new SearchBookBean();
                     item.setTag(TAG);
-                    item.setOrigin("gxwztv.com");
+                    item.setOrigin(name);
                     item.setKind(kindItem.getKindName());
                     item.setNoteUrl(TAG + otherBookEs.get(j).getElementsByTag("a").get(0).attr("href"));
                     item.setName(otherBookEs.get(j).getElementsByTag("a").get(0).text());
@@ -154,7 +154,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                         item.setAuthor(booksE.get(i).getElementsByClass("col-xs-2").get(0).text());
                         item.setKind(booksE.get(i).getElementsByClass("col-xs-1").get(0).text());
                         item.setLastChapter(booksE.get(i).getElementsByClass("col-xs-4").get(0).getElementsByTag("a").get(0).text());
-                        item.setOrigin("gxwztv.com");
+                        item.setOrigin(name);
                         item.setName(booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).text());
                         item.setNoteUrl(TAG + booksE.get(i).getElementsByClass("col-xs-3").get(0).getElementsByTag("a").get(0).attr("href"));
                         item.setCoverUrl("noimage");

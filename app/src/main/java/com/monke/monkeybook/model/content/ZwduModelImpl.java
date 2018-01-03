@@ -10,7 +10,8 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
-import com.monke.monkeybook.common.api.ILingdiankanshuApi;
+import com.monke.monkeybook.common.api.IZwduApi;
+import com.monke.monkeybook.help.UnicodeToUtf8;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IStationBookModel;
 
@@ -27,19 +28,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
-    public static final String TAG = "http://www.fqxsw.com";
-    public static final String Name = "番茄小说";
+public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
+    public static final String TAG = "https://www.zwdu.com";
+    public static final String name = "八一中文";
 
-    public static FqxswModelImpl getInstance() {
-        return new FqxswModelImpl();
+    public static ZwduModelImpl getInstance() {
+        return new ZwduModelImpl();
     }
 
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com").
-                create(ILingdiankanshuApi.class)
-                .searchBook(content, page - 1, "1681641916749657229")
+        return getRetrofitObject(TAG)
+                .create(IZwduApi.class)
+                .searchBook(content, page)
                 .flatMap(s -> analySearchBook(s));
     }
 
@@ -48,7 +49,7 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
             try {
                 Document doc = Jsoup.parse(s);
                 Elements booksE = doc.getElementsByClass("result-list").get(0).getElementsByClass("result-item result-game-item");
-                if (null != booksE && booksE.size() > 1) {
+                if (null != booksE && booksE.size() > 0) {
                     List<SearchBookBean> books = new ArrayList<SearchBookBean>();
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
@@ -62,7 +63,7 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
                         item.setLastChapter(booksE.get(i).getElementsByClass("result-game-item-info").get(0)
                                 .getElementsByClass("result-game-item-info-tag").get(3)
                                 .getElementsByTag("a").get(0).text());
-                        item.setOrigin("fqxsw.com");
+                        item.setOrigin(name);
                         item.setName(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0)
                                 .getElementsByTag("a").get(0).text());
                         item.setNoteUrl(booksE.get(i).getElementsByClass("result-item-title result-game-item-title").get(0)
@@ -85,10 +86,13 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
+        return getRetrofitObject(TAG)
+                .create(IZwduApi.class)
+                .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
+                .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> analyBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
@@ -125,14 +129,14 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
 
         bookInfoBean.setIntroduce(content.toString());
         bookInfoBean.setChapterUrl(novelUrl);
-        bookInfoBean.setOrigin("fqxsw.com");
+        bookInfoBean.setOrigin(name);
         return bookInfoBean;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
+        getRetrofitObject(TAG).create(IZwduApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -184,7 +188,7 @@ public class FqxswModelImpl extends BaseModelImpl implements IStationBookModel {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
+        return getRetrofitObject(TAG).create(IZwduApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
