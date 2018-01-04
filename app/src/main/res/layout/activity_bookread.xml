@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,7 +12,8 @@
         android:id="@+id/csv_book"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
     <FrameLayout
         android:id="@+id/fl_menu"
@@ -24,7 +26,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000"
-            android:clickable="true" />
+            android:clickable="true"
+            android:focusable="true" />
 
         <LinearLayout
             android:id="@+id/ll_menu_top"
@@ -49,7 +52,10 @@
                         android:src="@drawable/selector_icon_return"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        android:focusable="true"
+                        android:contentDescription="@string/text_return" />
+
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/atv_title"
                         android:layout_width="0dp"
@@ -62,6 +68,7 @@
                         app:minTextSize="14sp"
                         android:textColor="#343434"
                         android:gravity="center|left"/>
+
                     <ImageButton
                         android:id="@+id/iv_refresh"
                         android:layout_width="48dp"
@@ -69,7 +76,10 @@
                         android:src="@drawable/ic_refresh_black_24dp"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
-                        android:layout_gravity="center_vertical"/>
+                        android:layout_gravity="center_vertical"
+                        android:focusable="true"
+                        android:contentDescription="@string/refresh" />
+
                     <ImageView
                         android:id="@+id/iv_more"
                         android:layout_width="48dp"
@@ -80,7 +90,9 @@
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
-                        android:visibility="invisible"/>
+                        android:visibility="invisible"
+                        android:focusable="true"
+                        android:contentDescription="more" />
                 </LinearLayout>
             </com.monke.immerselayout.ImmerseFrameLayout>
 
@@ -110,13 +122,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="vertical"
-            android:clickable="true">
+            android:clickable="true"
+            android:focusable="true">
 
-            <ImageButton
-                android:id="@+id/ib_read_aloud"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_volume_up_black_24dp"/>
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <ImageButton
+                    android:id="@+id/ib_read_aloud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_volume_up_black_24dp"
+                    android:contentDescription="@string/read_aloud" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -146,7 +169,8 @@
                         android:textColor="@drawable/selector_tv_black"
                         android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:focusable="true" />
                     <com.monke.mprogressbar.MHorProgressBar
                         android:id="@+id/hpb_read_progress"
                         android:layout_width="0dp"
@@ -170,12 +194,14 @@
                         android:textColor="@drawable/selector_tv_black"
                         android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:focusable="true" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
                     <LinearLayout
                         android:id="@+id/ll_catalog"
                         android:layout_width="0dp"
@@ -184,13 +210,15 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp"
                         android:clickable="true"
-                        android:background="@drawable/bg_ib_pre">
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="3dp"
-                            android:src="@drawable/selector_icon_catalog"/>
+                            android:src="@drawable/selector_icon_catalog"
+                            tools:ignore="NestedWeights" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -208,13 +236,15 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp"
                         android:clickable="true"
-                        android:background="@drawable/bg_ib_pre">
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="3dp"
-                            android:src="@drawable/selector_icon_light"/>
+                            android:src="@drawable/selector_icon_light"
+                            tools:ignore="NestedWeights" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -232,13 +262,15 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp"
                         android:clickable="true"
-                        android:background="@drawable/bg_ib_pre">
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="3dp"
-                            android:src="@drawable/selector_icon_font"/>
+                            android:src="@drawable/selector_icon_font"
+                            tools:ignore="NestedWeights" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -256,13 +288,15 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp"
                         android:clickable="true"
-                        android:background="@drawable/bg_ib_pre">
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:padding="3dp"
-                            android:src="@drawable/selector_icon_setting"/>
+                            android:src="@drawable/selector_icon_setting"
+                            tools:ignore="NestedWeights" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
