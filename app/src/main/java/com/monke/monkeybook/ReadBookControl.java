@@ -100,7 +100,7 @@ public class ReadBookControl {
         this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
 
         this.canClickTurn = preference.getBoolean("canClickTurn",true);
-        this.canKeyTurn = preference.getBoolean("canClickTurn",true);
+        this.canKeyTurn = preference.getBoolean("canKeyTurn",true);
     }
 
     public int getTextSize() {
@@ -127,7 +127,7 @@ public class ReadBookControl {
         this.textKindIndex = textKindIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textKindIndex",textKindIndex);
-        editor.commit();
+        editor.apply();
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
     }
@@ -140,7 +140,7 @@ public class ReadBookControl {
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex",textDrawableIndex);
-        editor.commit();
+        editor.apply();
         this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
         this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
     }
@@ -161,7 +161,7 @@ public class ReadBookControl {
         this.canKeyTurn = canKeyTurn;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("canKeyTurn",canKeyTurn);
-        editor.commit();
+        editor.apply();
     }
 
     public Boolean getCanClickTurn() {
@@ -172,6 +172,6 @@ public class ReadBookControl {
         this.canClickTurn = canClickTurn;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("canClickTurn",canClickTurn);
-        editor.commit();
+        editor.apply();
     }
 }
