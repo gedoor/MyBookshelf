@@ -59,6 +59,7 @@ public class ReadAloudService extends Service {
             return super.onStartCommand(intent, flags, startId);
         }
         content = intent.getStringExtra("content");
+        speak = false;
         playTTS();
         return super.onStartCommand(intent, flags, startId);
     }
