@@ -580,6 +580,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             showCheckPremission = true;
             mPresenter.openBookFromOther(this);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         stopService(readAloudIntent);
     }
 

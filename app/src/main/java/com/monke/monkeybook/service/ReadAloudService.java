@@ -26,12 +26,12 @@ import static com.monke.monkeybook.view.activity.ReadBookActivity.OPEN_FROM_ALOU
 
 public class ReadAloudService extends Service {
     private static final int DONESERVICE = 22;
-    int notifiId = 154;
-    TextToSpeech textToSpeech;
+    private int notifiId = 154;
+    private TextToSpeech textToSpeech;
     ReadBookActivity readBookActivity;
-    Boolean ttsInitSuccess = false;
-    Boolean speak = false;
-    String content;
+    private Boolean ttsInitSuccess = false;
+    private Boolean speak = false;
+    private String content;
 
     @Override
     public void onCreate() {
