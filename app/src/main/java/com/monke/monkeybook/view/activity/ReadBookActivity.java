@@ -422,6 +422,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
             csvBook.readAloudStart();
         });
 
