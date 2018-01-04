@@ -10,7 +10,9 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
+import com.monke.monkeybook.common.api.Body;
 import com.monke.monkeybook.common.api.IZwduApi;
+import com.monke.monkeybook.common.api.Result;
 import com.monke.monkeybook.help.UnicodeToUtf8;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IStationBookModel;
@@ -27,6 +29,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "https://www.zwdu.com";
@@ -86,13 +89,13 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG)
+        return getRetrofitGson(TAG)
                 .create(IZwduApi.class)
                 .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyBookInfo(String s, final BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> analyBookInfo(Result<Body> s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
@@ -101,11 +104,11 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         });
     }
 
-    private BookInfoBean analyBookinfo(String s, String novelUrl) {
+    private BookInfoBean analyBookinfo(Result<Body> s, String novelUrl) {
         BookInfoBean bookInfoBean = new BookInfoBean();
         bookInfoBean.setNoteUrl(novelUrl);   //id
         bookInfoBean.setTag(TAG);
-        Document doc = Jsoup.parse(s);
+        Document doc = Jsoup.parse(s.toString());
         Element resultE = doc.getElementsByClass("box_con").get(0);
         bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());

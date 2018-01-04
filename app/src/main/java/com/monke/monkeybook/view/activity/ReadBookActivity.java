@@ -3,15 +3,21 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Parcelable;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -38,6 +44,7 @@ import com.monke.monkeybook.presenter.IBookReadPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.service.DownloadService;
+import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
@@ -56,6 +63,7 @@ import com.monke.mprogressbar.OnProgressListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +71,8 @@ import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 
-public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView {
+public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView{
+    public final static int OPEN_FROM_ALOUD = 3;
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.csv_book)
@@ -104,6 +113,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     LinearLayout llSetting;
     @BindView(R.id.clp_chapterlist)
     ChapterListView chapterListView;
+    @BindView(R.id.ib_read_aloud)
+    ImageButton ibReadAloud;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -115,8 +126,22 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private ReadBookMenuMorePop readBookMenuMorePop;
     private FontPop fontPop;
     private MoreSettingPop moreSettingPop;
-
     private MoProgressHUD moProgressHUD;
+
+    private Intent readAloudIntent;
+    private ReadAloudService readAloudService;
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            //返回一个MsgService对象
+            readAloudService = ((ReadAloudService.MyBinder)service).getService();
+        }
+    };
 
     @Override
     protected IBookReadPresenter initInjector() {
@@ -127,6 +152,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_bookread);
+        readAloudIntent = new Intent(this, ReadAloudService.class);
     }
 
     //初始化正文
@@ -360,6 +386,12 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 llMenuTop.startAnimation(menuTopIn);
                 llMenuBottom.startAnimation(menuBottomIn);
             }
+
+            @Override
+            public void readAloud(String content) {
+                readAloudIntent.putExtra("content", content);
+                startService(readAloudIntent);
+            }
         });
 
         //返回按钮
@@ -386,6 +418,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
             startActivity(intent);
+        });
+
+        //朗读
+        ibReadAloud.setOnClickListener(view -> {
+            csvBook.readAloudStart();
         });
 
         //上一章
@@ -541,6 +578,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             showCheckPremission = true;
             mPresenter.openBookFromOther(this);
         }
+        stopService(readAloudIntent);
     }
 
     @Override

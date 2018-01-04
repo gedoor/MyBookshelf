@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.common.api;
 
+import com.google.gson.Gson;
+
 import io.reactivex.Observable;
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -11,7 +13,7 @@ import retrofit2.http.Url;
 public interface IZwduApi {
 
     @GET
-    Observable<String> getBookInfo(@Url String url);
+    Observable<Result<Body>> getBookInfo(@Url String url);
 
     @GET("/search.php")
     Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);

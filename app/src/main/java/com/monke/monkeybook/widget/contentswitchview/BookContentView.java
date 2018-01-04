@@ -54,6 +54,8 @@ public class BookContentView extends FrameLayout {
 
     public interface SetDataListener {
         public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
+
+        public void readAloud(String string);
     }
 
     public BookContentView(Context context) {
@@ -230,6 +232,10 @@ public class BookContentView extends FrameLayout {
 
     public TextView getTvContent() {
         return tvContent;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     //显示行数

@@ -50,7 +50,6 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> implements IBookReadPresenter {
-
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 

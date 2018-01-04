@@ -112,6 +112,12 @@
             android:orientation="vertical"
             android:clickable="true">
 
+            <ImageButton
+                android:id="@+id/ib_read_aloud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_volume_up_black_24dp"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"

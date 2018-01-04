@@ -395,6 +395,15 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    @Override
+    public void readAloud(String string) {
+
+    }
+
+    public void readAloudStart() {
+        loadDataListener.readAloud(durPageView.getContent());
+    }
+
     public interface LoadDataListener {
         public void loadData(BookContentView bookContentView, long tag, int chapterIndex, int pageIndex);
 
@@ -405,6 +414,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         public void initData(int lineCount);
 
         public void showMenu();
+
+        public void readAloud(String content);
     }
 
     private LoadDataListener loadDataListener;
