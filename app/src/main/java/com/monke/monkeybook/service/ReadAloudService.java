@@ -5,8 +5,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
@@ -66,7 +68,9 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak) {
             speak = !speak;
-            textToSpeech.speak(content, TextToSpeech.QUEUE_FLUSH, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                textToSpeech.speak(content, TextToSpeech.QUEUE_FLUSH, null, "content");
+            }
         }
     }
 
@@ -94,9 +98,28 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
+                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                 ttsInitSuccess = true;
                 playTTS();
             }
+        }
+    }
+
+    private class ttsUtteranceListener extends UtteranceProgressListener {
+
+        @Override
+        public void onStart(String s) {
+
+        }
+
+        @Override
+        public void onDone(String s) {
+
+        }
+
+        @Override
+        public void onError(String s) {
+
         }
     }
 }
