@@ -12,12 +12,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.view.activity.MainActivity;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
-
-import java.util.Locale;
-
-import static com.monke.monkeybook.view.activity.ReadBookActivity.OPEN_FROM_ALOUD;
 
 /**
  * Created by GKF on 2018/1/2.
@@ -25,10 +20,8 @@ import static com.monke.monkeybook.view.activity.ReadBookActivity.OPEN_FROM_ALOU
  */
 
 public class ReadAloudService extends Service {
-    private static final int DONESERVICE = 22;
-    private int notifiId = 154;
+    private static final int doneService = 22;
     private TextToSpeech textToSpeech;
-    ReadBookActivity readBookActivity;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = false;
     private String content;
@@ -38,7 +31,7 @@ public class ReadAloudService extends Service {
         textToSpeech = new TextToSpeech(this, new TTSListener());
         //创建 Notification.Builder 对象
         Intent doneIntent = new Intent(this, this.getClass());
-        doneIntent.putExtra("from", DONESERVICE);
+        doneIntent.putExtra("from", doneService);
         PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
@@ -48,13 +41,13 @@ public class ReadAloudService extends Service {
                 .setContentIntent(donePendingIntent);
         //发送通知
         Notification notification = builder.build();
-        startForeground(notifiId, notification);
+        startForeground(3222, notification);
         super.onCreate();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getIntExtra("from", 0)==DONESERVICE) {
+        if (intent.getIntExtra("from", 0)== doneService) {
             stopSelf();
             return super.onStartCommand(intent, flags, startId);
         }
