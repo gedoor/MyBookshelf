@@ -404,6 +404,27 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         loadDataListener.readAloud(durPageView.getContent());
     }
 
+    public void readAloudNext() {
+        //翻向后一页
+        if (state == ONLYNEXT) {
+            durPageView = viewContents.get(1);
+        } else {
+            durPageView = viewContents.get(2);
+            ContentSwitchView.this.removeView(viewContents.get(0));
+            viewContents.remove(0);
+        }
+        state = ONLYPRE;
+        if(durPageView.getDurChapterIndex()+1 <=durPageView.getChapterAll()-1 || durPageView.getDurPageIndex()+1 <= durPageView.getPageAll()-1){
+            addNextPage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
+            if (state == NONE)
+                state = ONLYNEXT;
+            else state = PREANDNEXT;
+        }
+
+        if (loadDataListener != null)
+            loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
+    }
+
     public interface LoadDataListener {
         public void loadData(BookContentView bookContentView, long tag, int chapterIndex, int pageIndex);
 
