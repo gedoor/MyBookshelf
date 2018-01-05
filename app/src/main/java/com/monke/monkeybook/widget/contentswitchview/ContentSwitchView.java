@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
+import android.support.annotation.UiThread;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private int scrollX;
     private Boolean isMoving = false;
+    private Boolean readAloud = false;
 
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
@@ -259,6 +261,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     }
                     if (loadDataListener != null)
                         loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
+                    if (readAloud) {
+                        loadDataListener.readAloud(durPageView.getContent());
+                    }
                 }
 
                 @Override
@@ -401,28 +406,21 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     }
 
     public void readAloudStart() {
+        readAloud = true;
         loadDataListener.readAloud(durPageView.getContent());
     }
 
     public void readAloudNext() {
-        //翻向后一页
-        if (state == ONLYNEXT) {
-            durPageView = viewContents.get(1);
+        if (state == PREANDNEXT || state == ONLYNEXT) {
+            int tempIndex = (state == PREANDNEXT ? 1 : 0);
+            initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
         } else {
-            durPageView = viewContents.get(2);
-            ContentSwitchView.this.removeView(viewContents.get(0));
-            viewContents.remove(0);
+            noNext();
         }
-        state = ONLYPRE;
-        if(durPageView.getDurChapterIndex()+1 <=durPageView.getChapterAll()-1 || durPageView.getDurPageIndex()+1 <= durPageView.getPageAll()-1){
-            addNextPage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
-            if (state == NONE)
-                state = ONLYNEXT;
-            else state = PREANDNEXT;
-        }
+    }
 
-        if (loadDataListener != null)
-            loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
+    public void readAloudStop() {
+        readAloud = false;
     }
 
     public interface LoadDataListener {

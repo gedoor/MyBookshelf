@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
+import com.monke.mprogressbar.OnProgressListener;
 
 /**
  * Created by GKF on 2018/1/2.
@@ -27,6 +28,7 @@ public class ReadAloudService extends Service {
     private Boolean ttsInitSuccess = false;
     private Boolean speak = false;
     private String content;
+    private OnProgressListener progressListener;
 
     @Override
     public void onCreate() {
@@ -51,6 +53,7 @@ public class ReadAloudService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getIntExtra("from", 0)== doneService) {
             stopSelf();
+            progressListener.moveStopProgress(1);
             return super.onStartCommand(intent, flags, startId);
         }
         content = intent.getStringExtra("content");
@@ -66,6 +69,10 @@ public class ReadAloudService extends Service {
                 textToSpeech.speak(content, TextToSpeech.QUEUE_FLUSH, null, "content");
             }
         }
+    }
+
+    public void setOnProgressListener(OnProgressListener onProgressListener){
+        progressListener = onProgressListener;
     }
 
     @Nullable
@@ -108,7 +115,7 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onDone(String s) {
-
+            progressListener.setDurProgress(1);
         }
 
         @Override

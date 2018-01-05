@@ -140,6 +140,29 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         public void onServiceConnected(ComponentName name, IBinder service) {
             //返回一个MsgService对象
             readAloudService = ((ReadAloudService.MyBinder)service).getService();
+            readAloudService.setOnProgressListener(new OnProgressListener() {
+
+                @Override
+                public void moveStartProgress(float dur) {
+
+                }
+
+                @Override
+                public void durProgressChange(float dur) {
+
+                }
+
+                @Override
+                public void moveStopProgress(float dur) {
+                    unbindService(conn);
+                    csvBook.readAloudStop();
+                }
+
+                @Override
+                public void setDurProgress(float dur) {
+                    runOnUiThread(() -> csvBook.readAloudNext());
+                }
+            });
         }
     };
 
@@ -425,6 +448,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
             csvBook.readAloudStart();
+            bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
         });
 
         //上一章
@@ -586,6 +610,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     protected void onDestroy() {
         super.onDestroy();
         stopService(readAloudIntent);
+        unbindService(conn);
     }
 
     @Override
