@@ -2,7 +2,6 @@
 package com.monke.monkeybook.presenter;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -27,7 +26,7 @@ public interface IBookReadPresenter extends IPresenter{
 
     void setPageLineCount(int pageLineCount);
 
-    void addToShelf(final ReadBookPresenterImpl.OnAddListner addListner);
+    void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 
     Boolean getAdd();
 

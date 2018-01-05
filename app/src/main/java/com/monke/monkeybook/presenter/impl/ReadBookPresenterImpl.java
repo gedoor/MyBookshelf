@@ -193,7 +193,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     SeparateParagraphToLines(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
-                            .compose(((BaseActivity) mView.getContext()).<List<String>>bindUntilEvent(ActivityEvent.DESTROY))
+                            .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                             .subscribe(new SimpleObserver<List<String>>() {
                                 @Override
                                 public void onNext(List<String> value) {
@@ -221,7 +221,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     e.onComplete();
                 }).observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
-                        .compose(((BaseActivity) mView.getContext()).<ReadBookContentBean>bindUntilEvent(ActivityEvent.DESTROY))
+                        .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new SimpleObserver<ReadBookContentBean>() {
                             @Override
                             public void onNext(ReadBookContentBean tempList) {
@@ -247,7 +247,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                     })
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribeOn(Schedulers.newThread())
-                                            .compose(((BaseActivity) mView.getContext()).<BookContentBean>bindUntilEvent(ActivityEvent.DESTROY))
+                                            .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                                             .subscribe(new SimpleObserver<BookContentBean>() {
                                                 @Override
                                                 public void onNext(BookContentBean value) {
@@ -354,7 +354,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
             Layout tempLayout = new StaticLayout(paragraphStr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-            List<String> linesData = new ArrayList<String>();
+            List<String> linesData = new ArrayList<>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
                 linesData.add(paragraphStr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
@@ -392,12 +392,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 });
     }
 
-    public interface OnAddListner {
-        public void addSuccess();
+    public interface OnAddListener {
+        void addSuccess();
     }
 
     @Override
-    public void addToShelf(final OnAddListner addListner) {
+    public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
@@ -413,8 +413,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     .subscribe(new SimpleObserver<Object>() {
                         @Override
                         public void onNext(Object value) {
-                            if (addListner != null)
-                                addListner.addSuccess();
+                            if (addListener != null)
+                                addListener.addSuccess();
                         }
 
                         @Override
@@ -429,7 +429,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         return isAdd;
     }
 
-    public Observable<String> getRealFilePath(final Context context, final Uri uri) {
+    private Observable<String> getRealFilePath(final Context context, final Uri uri) {
         return Observable.create(e -> {
             String data = "";
             if (null != uri) {
