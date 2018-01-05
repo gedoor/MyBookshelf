@@ -190,7 +190,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
                             .setLineSize(mView.getPaint().getTextSize());
                     final int finalPageIndex = pageIndex;
-                    SeparateParagraphtoLines(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent())
+                    SeparateParagraphToLines(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .compose(((BaseActivity) mView.getContext()).<List<String>>bindUntilEvent(ActivityEvent.DESTROY))
@@ -349,16 +349,16 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             return bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName();
     }
 
-    public Observable<List<String>> SeparateParagraphtoLines(final String paragraphstr) {
+    private Observable<List<String>> SeparateParagraphToLines(final String paragraphStr) {
         return Observable.create(e -> {
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
-            Layout tempLayout = new StaticLayout(paragraphstr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-            List<String> linesdata = new ArrayList<String>();
+            Layout tempLayout = new StaticLayout(paragraphStr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            List<String> linesData = new ArrayList<String>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
-                linesdata.add(paragraphstr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
+                linesData.add(paragraphStr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
-            e.onNext(linesdata);
+            e.onNext(linesData);
             e.onComplete();
         });
     }
