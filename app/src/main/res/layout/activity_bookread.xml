@@ -132,11 +132,12 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
-                <ImageButton
+                <at.markushi.ui.CircleButton
                     android:id="@+id/ib_read_aloud"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_volume_up_black_24dp"
+                    app:cb_color="@color/bdp_white"
                     android:contentDescription="@string/read_aloud" />
 
             </LinearLayout>

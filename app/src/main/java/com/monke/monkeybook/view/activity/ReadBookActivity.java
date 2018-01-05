@@ -114,7 +114,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @BindView(R.id.clp_chapterlist)
     ChapterListView chapterListView;
     @BindView(R.id.ib_read_aloud)
-    ImageButton ibReadAloud;
+    ImageView ibReadAloud;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
