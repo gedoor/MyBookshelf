@@ -349,6 +349,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             return bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName();
     }
 
+    //内容分行
     private Observable<List<String>> SeparateParagraphToLines(final String paragraphStr) {
         return Observable.create(e -> {
             TextPaint mPaint = (TextPaint) mView.getPaint();
@@ -375,7 +376,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             e.onNext(isAdd);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
-                .compose(((BaseActivity) mView.getContext()).<Boolean>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
