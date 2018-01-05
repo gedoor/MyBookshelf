@@ -43,10 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> implements IBookReadPresenter {
@@ -113,14 +111,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
-                                        mView.dimissLoadBook();
+                                        mView.dismissLoadBook();
                                         checkInShelf();
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         e.printStackTrace();
-                                        mView.dimissLoadBook();
+                                        mView.dismissLoadBook();
                                         mView.loadLocationBookError();
                                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                                     }
@@ -130,7 +128,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.dimissLoadBook();
+                        mView.dismissLoadBook();
                         mView.loadLocationBookError();
                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                     }

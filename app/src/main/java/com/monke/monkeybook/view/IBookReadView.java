@@ -7,22 +7,20 @@ import com.monke.basemvplib.IView;
 public interface IBookReadView extends IView{
 
     /**
-     * 获取当前阅读界面UI画笔
-     * @return
+     * @return 获取当前阅读界面UI画笔
      */
     Paint getPaint();
 
     /**
-     * 获取当前小说内容可绘制宽度
-     * @return
+     * @return 获取当前小说内容可绘制宽度
      */
     int getContentWidth();
 
     /**
      * 小说数据初始化成功
-     * @param durChapterIndex
-     * @param chapterAll
-     * @param durPageIndex
+     * @param durChapterIndex 当前章节
+     * @param chapterAll 所有章节数
+     * @param durPageIndex 当前页数
      */
     void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex);
 
@@ -37,7 +35,7 @@ public interface IBookReadView extends IView{
 
     void showLoadBook();
 
-    void dimissLoadBook();
+    void dismissLoadBook();
 
     void loadLocationBookError();
 

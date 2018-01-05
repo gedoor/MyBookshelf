@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -75,7 +74,7 @@ public class ChapterListView extends FrameLayout{
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                flBg.setOnClickListener(v -> dimissChapterList());
+                flBg.setOnClickListener(v -> dismissChapterList());
             }
 
             @Override
@@ -140,14 +139,14 @@ public class ChapterListView extends FrameLayout{
             if(itemClickListener!=null){
                 itemClickListener.itemClick(index);
                 rvbSlider.scrollToPositionWithOffset(index);
-                dimissChapterList();
+                dismissChapterList();
             }
         });
         rvList.setAdapter(chapterListAdapter);
         rvbSlider.setRecyclerView(rvList);
     }
 
-    public Boolean dimissChapterList(){
+    public Boolean dismissChapterList(){
         if(getVisibility()!=VISIBLE){
             return false;
         }else{

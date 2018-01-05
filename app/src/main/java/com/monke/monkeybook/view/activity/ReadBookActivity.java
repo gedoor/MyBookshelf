@@ -534,7 +534,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
                     return true;
                 } else {
-                    Boolean temp2 = chapterListView.dimissChapterList();
+                    Boolean temp2 = chapterListView.dismissChapterList();
                     if (temp2)
                         return true;
                     else {
@@ -565,7 +565,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     @Override
-    public void dimissLoadBook() {
+    public void dismissLoadBook() {
         moProgressHUD.dismiss();
     }
 
