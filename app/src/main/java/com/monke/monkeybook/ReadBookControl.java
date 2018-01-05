@@ -58,7 +58,7 @@ public class ReadBookControl {
         this.canKeyTurn = preference.getBoolean("canKeyTurn",true);
         this.hideStatusBar = preference.getBoolean("hideStatusBar", false);
     }
-
+    //字体大小
     private void initTextKind() {
         if(null == textKind){
             textKind = new ArrayList<>();
@@ -93,7 +93,7 @@ public class ReadBookControl {
             textKind.add(temp6);
         }
     }
-
+    //阅读背景
     private void initTextDrawable() {
         if(null == textDrawable){
             textDrawable = new ArrayList<>();
