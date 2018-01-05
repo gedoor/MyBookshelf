@@ -16,9 +16,9 @@ import com.monke.monkeybook.service.DownloadService;
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
     public final static String channelIdDownload = "channel_download";
+    public final static String channelIReadAloud = "channel_read_aloud";
     private static MApplication instance;
     private static String versionName;
-
 
     @Override
     public void onCreate() {
@@ -32,6 +32,7 @@ public class MApplication extends Application {
         instance = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannelIdDownload();
+            createChannelIdReadAloud();
         }
     }
 
@@ -58,4 +59,18 @@ public class MApplication extends Application {
         notificationManager.createNotificationChannel(firstChannel);
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createChannelIdReadAloud() {
+        //用唯一的ID创建渠道对象
+        NotificationChannel firstChannel = new NotificationChannel(channelIReadAloud,
+                getString(R.string.read_aloud),
+                NotificationManager.IMPORTANCE_LOW);
+        //初始化channel
+        firstChannel.enableLights(false);
+        firstChannel.enableVibration(false);
+        firstChannel.setSound(null, null);
+        //向notification manager 提交channel
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(firstChannel);
+    }
 }

@@ -37,7 +37,7 @@ public class ReadAloudService extends Service {
         Intent doneIntent = new Intent(this, this.getClass());
         doneIntent.putExtra("from", doneService);
         PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(false)
                 .setContentTitle(getString(R.string.read_aloud_t))
