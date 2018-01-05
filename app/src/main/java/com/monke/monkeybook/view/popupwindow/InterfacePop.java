@@ -14,7 +14,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.ReadBookControl;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FontPop extends PopupWindow{
+public class InterfacePop extends PopupWindow{
     private Context mContext;
     private View view;
     private FrameLayout flSmaller;
@@ -29,13 +29,12 @@ public class FontPop extends PopupWindow{
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener{
-        public void textChange(int index);
-
-        public void bgChange(int index);
+        void textChange(int index);
+        void bgChange(int index);
     }
     private OnChangeProListener changeProListener;
 
-    public FontPop(Context context,@NonNull OnChangeProListener changeProListener){
+    public InterfacePop(Context context, @NonNull OnChangeProListener changeProListener){
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
         this.changeProListener = changeProListener;
@@ -85,16 +84,16 @@ public class FontPop extends PopupWindow{
     }
 
     private void bindView() {
-        flSmaller = (FrameLayout) view.findViewById(R.id.fl_smaller);
-        flBigger = (FrameLayout) view.findViewById(R.id.fl_bigger);
-        tvTextSizedDefault = (TextView) view.findViewById(R.id.tv_textsize_default);
-        tvTextSize = (TextView) view.findViewById(R.id.tv_dur_textsize);
+        flSmaller = view.findViewById(R.id.fl_smaller);
+        flBigger = view.findViewById(R.id.fl_bigger);
+        tvTextSizedDefault = view.findViewById(R.id.tv_textsize_default);
+        tvTextSize = view.findViewById(R.id.tv_dur_textsize);
         updateText(readBookControl.getTextKindIndex());
 
-        civBgWhite = (CircleImageView) view.findViewById(R.id.civ_bg_white);
-        civBgYellow = (CircleImageView) view.findViewById(R.id.civ_bg_yellow);
-        civBgGreen = (CircleImageView) view.findViewById(R.id.civ_bg_green);
-        civBgBlack = (CircleImageView) view.findViewById(R.id.civ_bg_black);
+        civBgWhite = view.findViewById(R.id.civ_bg_white);
+        civBgYellow = view.findViewById(R.id.civ_bg_yellow);
+        civBgGreen = view.findViewById(R.id.civ_bg_green);
+        civBgBlack = view.findViewById(R.id.civ_bg_black);
         updateBg(readBookControl.getTextDrawableIndex());
     }
 

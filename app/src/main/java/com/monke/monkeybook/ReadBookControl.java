@@ -26,6 +26,7 @@ public class ReadBookControl {
 
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
+    private Boolean hideStatusBar = false;
 
     private SharedPreferences preference;
 
@@ -101,6 +102,7 @@ public class ReadBookControl {
 
         this.canClickTurn = preference.getBoolean("canClickTurn",true);
         this.canKeyTurn = preference.getBoolean("canKeyTurn",true);
+        this.hideStatusBar = preference.getBoolean("hideStatusBar", false);
     }
 
     public int getTextSize() {
@@ -172,6 +174,17 @@ public class ReadBookControl {
         this.canClickTurn = canClickTurn;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("canClickTurn",canClickTurn);
+        editor.apply();
+    }
+
+    public Boolean getHideStatusBar() {
+        return hideStatusBar;
+    }
+
+    public void setHideStatusBar(Boolean hideStatusBar) {
+        this.hideStatusBar = hideStatusBar;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("hideStatusBar",hideStatusBar);
         editor.apply();
     }
 }

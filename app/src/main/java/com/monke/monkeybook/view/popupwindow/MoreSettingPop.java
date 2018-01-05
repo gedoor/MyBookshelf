@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,19 @@ public class MoreSettingPop extends PopupWindow{
 
     private SwitchButton sbKey;
     private SwitchButton sbClick;
+    private SwitchButton sbHideStatusBar;
 
     private ReadBookControl readBookControl;
 
-    public MoreSettingPop(Context context){
+    public interface OnChangeProListener{
+        public void statusBarChange(Boolean hideStatusBar);
+    }
+    private MoreSettingPop.OnChangeProListener changeProListener;
+
+    public MoreSettingPop(Context context, @NonNull MoreSettingPop.OnChangeProListener changeProListener){
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
+        this.changeProListener = changeProListener;
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_moresetting,null);
         this.setContentView(view);
@@ -39,18 +47,20 @@ public class MoreSettingPop extends PopupWindow{
     private void bindEvent() {
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
+        sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setHideStatusBar(isChecked);
+            changeProListener.statusBarChange(isChecked);
+        });
     }
 
     private void bindView() {
-        sbKey = (SwitchButton) view.findViewById(R.id.sb_key);
-        sbClick = (SwitchButton) view.findViewById(R.id.sb_click);
+        sbKey = view.findViewById(R.id.sb_key);
+        sbClick = view.findViewById(R.id.sb_click);
+        sbHideStatusBar = view.findViewById(R.id.sb_hide_status_bar);
 
-        if(readBookControl.getCanKeyTurn())
-            sbKey.setCheckedImmediatelyNoEvent(true);
-        else sbKey.setCheckedImmediatelyNoEvent(false);
-        if(readBookControl.getCanClickTurn())
-            sbClick.setCheckedImmediatelyNoEvent(true);
-        else sbClick.setCheckedImmediatelyNoEvent(false);
+        sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
+        sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
+        sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
     }
 
     private void initData() {

@@ -11,13 +11,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Parcelable;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,17 +27,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.AppActivityManager;
-import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.bean.DownloadChapterListBean;
-import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
-import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.service.ReadAloudService;
@@ -51,7 +43,7 @@ import com.monke.monkeybook.view.IBookReadView;
 import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
-import com.monke.monkeybook.view.popupwindow.FontPop;
+import com.monke.monkeybook.view.popupwindow.InterfacePop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.WindowLightPop;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
@@ -60,10 +52,8 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -124,10 +114,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
-    private FontPop fontPop;
+    private InterfacePop interfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
-
+    private ReadBookControl readBookControl;
     private Intent readAloudIntent;
     private ReadAloudService readAloudService;
     private ServiceConnection conn = new ServiceConnection() {
@@ -176,6 +166,24 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         setOrientation();
         setContentView(R.layout.activity_bookread);
         readAloudIntent = new Intent(this, ReadAloudService.class);
+        readBookControl = ReadBookControl.getInstance();
+        setStatusBar();
+    }
+
+    private void setStatusBar() {
+        if (readBookControl.getHideStatusBar()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    private void popMenuOut() {
+        setStatusBar();
+        if (flMenu.getVisibility() == View.VISIBLE) {
+            llMenuTop.startAnimation(menuTopOut);
+            llMenuBottom.startAnimation(menuBottomOut);
+        }
     }
 
     //初始化正文
@@ -191,8 +199,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 vMenuBg.setOnClickListener(v -> {
-                    llMenuTop.startAnimation(menuTopOut);
-                    llMenuBottom.startAnimation(menuBottomOut);
+                    popMenuOut();
                 });
             }
 
@@ -259,8 +266,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
-        //
-        fontPop = new FontPop(this, new FontPop.OnChangeProListener() {
+        //界面设置
+        interfacePop = new InterfacePop(this, new InterfacePop.OnChangeProListener() {
             @Override
             public void textChange(int index) {
                 csvBook.changeTextSize();
@@ -276,10 +283,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //离线下载
         readBookMenuMorePop.setOnClickDownload(v -> {
             readBookMenuMorePop.dismiss();
-            if (flMenu.getVisibility() == View.VISIBLE) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-            }
+            popMenuOut();
             //弹出离线下载界面
             int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
             if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
@@ -310,14 +314,17 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //换源
         readBookMenuMorePop.setOnClickChangeSource(view ->{
             readBookMenuMorePop.dismiss();
-            if (flMenu.getVisibility() == View.VISIBLE) {
-                llMenuTop.startAnimation(menuTopOut);
-                llMenuBottom.startAnimation(menuBottomOut);
-            }
+            popMenuOut();
 
         });
-
-        moreSettingPop = new MoreSettingPop(this);
+        //其它设置
+        moreSettingPop = new MoreSettingPop(this, hideStatusBar -> {
+            if (hideStatusBar) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+        });
     }
 
     @Override
@@ -408,6 +415,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 flMenu.setVisibility(View.VISIBLE);
                 llMenuTop.startAnimation(menuTopIn);
                 llMenuBottom.startAnimation(menuBottomIn);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
 
             @Override
@@ -422,8 +430,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //刷新按钮
         ivRefresh.setOnClickListener(v -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+            popMenuOut();
             mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                     .getBookContentBean().setDurCapterContent(null);
             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
@@ -445,8 +452,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+            popMenuOut();
             csvBook.readAloudStart();
             bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
         });
@@ -463,29 +469,25 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //目录
         llCatalog.setOnClickListener(v -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+            popMenuOut();
             new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
         });
 
         //亮度
         llLight.setOnClickListener(v -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+            popMenuOut();
             new Handler().postDelayed(() -> windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //界面
         llFont.setOnClickListener(v -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
-            new Handler().postDelayed(() -> fontPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            popMenuOut();
+            new Handler().postDelayed(() -> interfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置
         llSetting.setOnClickListener(v -> {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+            popMenuOut();
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
     }
@@ -524,6 +526,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
+                    setStatusBar();
                     llMenuTop.startAnimation(menuTopOut);
                     llMenuBottom.startAnimation(menuBottomOut);
                     return true;
