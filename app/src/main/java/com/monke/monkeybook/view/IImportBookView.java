@@ -7,8 +7,7 @@ import java.io.File;
 public interface IImportBookView extends IView{
 
     /**
-     * 新增书籍
-     * @param newFile
+     * @param newFile 新增书籍
      */
     void addNewBook(File newFile);
 

@@ -10,7 +10,7 @@ public interface IMainView extends IView{
 
     /**
      * 刷新书架书籍小说信息 更新UI
-     * @param bookShelfBeanList
+     * @param bookShelfBeanList 书架
      */
     void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
 
@@ -26,7 +26,7 @@ public interface IMainView extends IView{
 
     /**
      * 刷新错误
-     * @param error
+     * @param error 错误
      */
     void refreshError(String error);
 

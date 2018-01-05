@@ -8,7 +8,7 @@ public interface ILibraryView extends IView{
 
     /**
      * 书城书籍获取成功  更新UI
-     * @param library
+     * @param library 书城
      */
     void updateUI(LibraryBean library);
 
