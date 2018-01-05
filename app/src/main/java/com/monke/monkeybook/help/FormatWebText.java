@@ -2,6 +2,7 @@ package com.monke.monkeybook.help;
 
 /**
  * Created by GKF on 2017/12/27.
+ * 去除空格等
  */
 
 public class FormatWebText {
