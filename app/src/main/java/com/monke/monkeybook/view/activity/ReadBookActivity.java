@@ -610,7 +610,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     protected void onDestroy() {
         super.onDestroy();
         stopService(readAloudIntent);
-        unbindService(conn);
     }
 
     @Override
