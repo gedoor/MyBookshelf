@@ -23,7 +23,6 @@ import java.util.List;
 
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
-    private SharedPreferences preferences;
 
     public static final int DURPAGEINDEXBEGIN = -1;
     public static final int DURPAGEINDEXEND = -2;
@@ -68,7 +67,6 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         init();
     }
 
@@ -81,17 +79,17 @@ public class BookContentView extends FrameLayout {
     private void init() {
         view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_switch_item, this, false);
         addView(view);
-        ivBg = (ImageView) view.findViewById(R.id.iv_bg);
-        tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        llContent = (LinearLayout) view.findViewById(R.id.ll_content);
-        tvContent = (com.monke.monkeybook.widget.MTextView) view.findViewById(R.id.tv_content);
+        ivBg = view.findViewById(R.id.iv_bg);
+        tvTitle = view.findViewById(R.id.tv_title);
+        llContent = view.findViewById(R.id.ll_content);
+        tvContent = view.findViewById(R.id.tv_content);
         vBottom = view.findViewById(R.id.v_bottom);
-        tvPage = (TextView) view.findViewById(R.id.tv_page);
+        tvPage = view.findViewById(R.id.tv_page);
 
-        tvLoading = (TextView) view.findViewById(R.id.tv_loading);
-        llError = (LinearLayout) view.findViewById(R.id.ll_error);
-        tvErrorInfo = (TextView) view.findViewById(R.id.tv_error_info);
-        tvLoadAgain = (TextView) view.findViewById(R.id.tv_load_again);
+        tvLoading = view.findViewById(R.id.tv_loading);
+        llError = view.findViewById(R.id.ll_error);
+        tvErrorInfo = view.findViewById(R.id.tv_error_info);
+        tvLoadAgain = view.findViewById(R.id.tv_load_again);
 
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)

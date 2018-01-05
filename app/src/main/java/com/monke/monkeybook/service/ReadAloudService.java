@@ -40,7 +40,7 @@ public class ReadAloudService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(false)
-                .setContentTitle(getString(R.string.read_aloud))
+                .setContentTitle(getString(R.string.read_aloud_t))
                 .setContentText(getString(R.string.read_aloud_s))
                 .setContentIntent(donePendingIntent);
         //发送通知
