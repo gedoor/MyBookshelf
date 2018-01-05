@@ -24,8 +24,8 @@ import java.util.List;
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
 
-    public static final int DURPAGEINDEXBEGIN = -1;
-    public static final int DURPAGEINDEXEND = -2;
+    public static final int DurPageIndexBegin = -1;
+    public static final int DurPageIndexEnd = -2;
 
     private View view;
     private ImageView ivBg;
@@ -220,11 +220,11 @@ public class BookContentView extends FrameLayout {
         this.setDataListener = setDataListener;
     }
 
-    public long getqTag() {
+    public long getQTag() {
         return qTag;
     }
 
-    public void setqTag(long qTag) {
+    public void setQTag(long qTag) {
         this.qTag = qTag;
     }
 

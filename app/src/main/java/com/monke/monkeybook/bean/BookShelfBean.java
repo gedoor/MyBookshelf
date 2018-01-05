@@ -25,7 +25,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     private int durChapter;   //当前章节 （包括番外）
 
-    private int durChapterPage = BookContentView.DURPAGEINDEXBEGIN;  // 当前章节位置   用页码
+    private int durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
 
     private long finalDate;  //最后阅读时间
 

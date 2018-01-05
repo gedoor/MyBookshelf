@@ -262,7 +262,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DURPAGEINDEXBEGIN));
+                BookContentView.DurPageIndexBegin));
 
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
@@ -349,7 +349,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 if ((realDur - 1) != mPresenter.getBookShelf().getDurChapter()) {
                     csvBook.setInitData(realDur - 1,
                             mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                            BookContentView.DURPAGEINDEXBEGIN);
+                            BookContentView.DurPageIndexBegin);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
@@ -439,7 +439,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     .setBookContentBean(null);
             csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                     mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                    BookContentView.DURPAGEINDEXBEGIN);
+                    BookContentView.DurPageIndexBegin);
         });
 
         //打开URL
@@ -460,12 +460,12 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //上一章
         tvPre.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DURPAGEINDEXBEGIN));
+                BookContentView.DurPageIndexBegin));
 
         //下一章
         tvNext.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DURPAGEINDEXBEGIN));
+                BookContentView.DurPageIndexBegin));
 
         //目录
         llCatalog.setOnClickListener(v -> {

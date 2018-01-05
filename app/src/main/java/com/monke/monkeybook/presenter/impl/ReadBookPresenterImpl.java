@@ -166,9 +166,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().
                             get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
 
-                    if (pageIndex == BookContentView.DURPAGEINDEXBEGIN) {
+                    if (pageIndex == BookContentView.DurPageIndexBegin) {
                         pageIndex = 0;
-                    } else if (pageIndex == BookContentView.DURPAGEINDEXEND) {
+                    } else if (pageIndex == BookContentView.DurPageIndexEnd) {
                         pageIndex = tempCount;
                     } else {
                         if (pageIndex >= tempCount) {
@@ -177,7 +177,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                     }
                     int start = pageIndex * pageLineCount;
                     int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
-                    if (bookContentView != null && bookTag == bookContentView.getqTag()) {
+                    if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag, bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName()
                                 , bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().subList(start, end)
                                 , chapterIndex
@@ -204,7 +204,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    if (bookContentView != null && bookTag == bookContentView.getqTag())
+                                    if (bookContentView != null && bookTag == bookContentView.getQTag())
                                         bookContentView.loadError();
                                 }
                             });
@@ -253,10 +253,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                                 public void onNext(BookContentBean value) {
                                                     if (value.getDurChapterUrl() != null && value.getDurChapterUrl().length() > 0) {
                                                         bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(value);
-                                                        if (bookTag == bookContentView.getqTag())
+                                                        if (bookTag == bookContentView.getQTag())
                                                             loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex1);
                                                     } else {
-                                                        if (bookContentView != null && bookTag == bookContentView.getqTag())
+                                                        if (bookContentView != null && bookTag == bookContentView.getQTag())
                                                             bookContentView.loadError();
                                                     }
                                                 }
@@ -264,7 +264,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                                 @Override
                                                 public void onError(Throwable e) {
                                                     e.printStackTrace();
-                                                    if (bookContentView != null && bookTag == bookContentView.getqTag())
+                                                    if (bookContentView != null && bookTag == bookContentView.getQTag())
                                                         bookContentView.loadError();
                                                 }
                                             });
@@ -278,7 +278,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                         });
             }
         } else {
-            if (bookContentView != null && bookTag == bookContentView.getqTag())
+            if (bookContentView != null && bookTag == bookContentView.getQTag())
                 bookContentView.loadError();
         }
     }

@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.annotation.UiThread;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -354,7 +353,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         durChapterIndex, chapterAll, durPageIndex + 1);
             else
                 viewContents.get(temp).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "",
-                        durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN);
+                        durChapterIndex + 1, chapterAll, BookContentView.DurPageIndexBegin);
         } else if (state == ONLYPRE || state == NONE) {
             BookContentView next = new BookContentView(getContext());
             next.setReadBookControl(readBookControl);
@@ -364,7 +363,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         durChapterIndex, chapterAll, durPageIndex + 1);
             else
                 next.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex + 1) : "",
-                        durChapterIndex + 1, chapterAll, BookContentView.DURPAGEINDEXBEGIN);
+                        durChapterIndex + 1, chapterAll, BookContentView.DurPageIndexBegin);
             viewContents.add(next);
             this.addView(next, 0);
         }
@@ -380,7 +379,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         durChapterIndex, chapterAll, durPageIndex - 1);
             else
                 pre.loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "",
-                        durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND);
+                        durChapterIndex - 1, chapterAll, BookContentView.DurPageIndexEnd);
             viewContents.add(0, pre);
             this.addView(pre);
         } else if (state == ONLYPRE || state == PREANDNEXT) {
@@ -389,7 +388,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         durChapterIndex, chapterAll, durPageIndex - 1);
             else
                 viewContents.get(0).loadData(null != loadDataListener ? loadDataListener.getChapterTitle(durChapterIndex - 1) : "",
-                        durChapterIndex - 1, chapterAll, BookContentView.DURPAGEINDEXEND);
+                        durChapterIndex - 1, chapterAll, BookContentView.DurPageIndexEnd);
         }
     }
 
