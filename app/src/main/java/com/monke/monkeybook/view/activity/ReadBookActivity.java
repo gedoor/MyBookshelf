@@ -43,7 +43,7 @@ import com.monke.monkeybook.view.IBookReadView;
 import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
-import com.monke.monkeybook.view.popupwindow.InterfacePop;
+import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.WindowLightPop;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
@@ -114,7 +114,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
-    private InterfacePop interfacePop;
+    private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
     private ReadBookControl readBookControl;
@@ -267,7 +267,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         windowLightPop = new WindowLightPop(this);
         windowLightPop.initLight();
         //界面设置
-        interfacePop = new InterfacePop(this, new InterfacePop.OnChangeProListener() {
+        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
             @Override
             public void textChange(int index) {
                 csvBook.changeTextSize();
@@ -482,7 +482,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //界面
         llFont.setOnClickListener(v -> {
             popMenuOut();
-            new Handler().postDelayed(() -> interfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置

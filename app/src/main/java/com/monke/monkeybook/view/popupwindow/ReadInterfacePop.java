@@ -14,7 +14,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.ReadBookControl;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class InterfacePop extends PopupWindow{
+public class ReadInterfacePop extends PopupWindow{
     private Context mContext;
     private View view;
     private FrameLayout flSmaller;
@@ -34,7 +34,7 @@ public class InterfacePop extends PopupWindow{
     }
     private OnChangeProListener changeProListener;
 
-    public InterfacePop(Context context, @NonNull OnChangeProListener changeProListener){
+    public ReadInterfacePop(Context context, @NonNull OnChangeProListener changeProListener){
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
         this.changeProListener = changeProListener;
@@ -106,7 +106,6 @@ public class InterfacePop extends PopupWindow{
             flBigger.setEnabled(false);
         }else{flSmaller.setEnabled(true);
             flBigger.setEnabled(true);
-
         }
         if(textKindIndex == ReadBookControl.DEFAULT_TEXT){
             tvTextSizedDefault.setEnabled(false);
