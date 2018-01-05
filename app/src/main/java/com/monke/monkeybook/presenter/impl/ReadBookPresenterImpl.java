@@ -371,10 +371,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     private void checkInShelf() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-            if (temp == null || temp.size() == 0) {
-                isAdd = false;
-            } else
-                isAdd = true;
+            isAdd = !(temp == null || temp.size() == 0);
             e.onNext(isAdd);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
