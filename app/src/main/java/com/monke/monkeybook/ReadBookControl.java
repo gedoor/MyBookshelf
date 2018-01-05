@@ -42,7 +42,24 @@ public class ReadBookControl {
         }
         return readBookControl;
     }
+
     private ReadBookControl(){
+        initTextKind();
+        initTextDrawable();
+        preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
+        this.textKindIndex = preference.getInt("textKindIndex",DEFAULT_TEXT);
+        this.textSize = textKind.get(textKindIndex).get("textSize");
+        this.textExtra = textKind.get(textKindIndex).get("textExtra");
+        this.textDrawableIndex = preference.getInt("textDrawableIndex",DEFAULT_BG);
+        this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
+        this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
+
+        this.canClickTurn = preference.getBoolean("canClickTurn",true);
+        this.canKeyTurn = preference.getBoolean("canKeyTurn",true);
+        this.hideStatusBar = preference.getBoolean("hideStatusBar", false);
+    }
+
+    private void initTextKind() {
         if(null == textKind){
             textKind = new ArrayList<>();
             Map<String,Integer> temp1 = new HashMap<>();
@@ -75,6 +92,9 @@ public class ReadBookControl {
             temp6.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(),15));
             textKind.add(temp6);
         }
+    }
+
+    private void initTextDrawable() {
         if(null == textDrawable){
             textDrawable = new ArrayList<>();
             Map<String,Integer> temp1 = new HashMap<>();
@@ -97,17 +117,6 @@ public class ReadBookControl {
             temp4.put("textBackground",R.drawable.bg_readbook_black);
             textDrawable.add(temp4);
         }
-        preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
-        this.textKindIndex = preference.getInt("textKindIndex",DEFAULT_TEXT);
-        this.textSize = textKind.get(textKindIndex).get("textSize");
-        this.textExtra = textKind.get(textKindIndex).get("textExtra");
-        this.textDrawableIndex = preference.getInt("textDrawableIndex",DEFAULT_BG);
-        this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
-        this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
-
-        this.canClickTurn = preference.getBoolean("canClickTurn",true);
-        this.canKeyTurn = preference.getBoolean("canKeyTurn",true);
-        this.hideStatusBar = preference.getBoolean("hideStatusBar", false);
     }
 
     public int getTextSize() {
