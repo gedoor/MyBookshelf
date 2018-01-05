@@ -404,12 +404,12 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     public void readAloud(String string) {
 
     }
-
+    //开始朗读
     public void readAloudStart() {
         readAloud = true;
         loadDataListener.readAloud(durPageView.getContent());
     }
-
+    //朗读下一页
     public void readAloudNext() {
         if (state == PREANDNEXT || state == ONLYNEXT) {
             int tempIndex = (state == PREANDNEXT ? 1 : 0);
@@ -418,7 +418,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             noNext();
         }
     }
-
+    //停止朗读
     public void readAloudStop() {
         readAloud = false;
     }
