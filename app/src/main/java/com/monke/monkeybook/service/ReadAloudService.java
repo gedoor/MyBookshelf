@@ -4,8 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -17,6 +19,7 @@ import android.view.KeyEvent;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.MediaButtonReceiver;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.mprogressbar.OnProgressListener;
 
@@ -45,11 +48,16 @@ public class ReadAloudService extends Service {
     private PendingIntent pausePendingIntent;
     private PendingIntent resumePendingIntent;
 
+    private AudioManager mAudioManager;
+    private ComponentName mComponentName;
+
     @Override
     public void onCreate() {
         textToSpeech = new TextToSpeech(this, new TTSListener());
         notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         initIntent();
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mComponentName = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
