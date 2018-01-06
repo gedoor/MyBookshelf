@@ -13,7 +13,6 @@ import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.common.api.Body;
 import com.monke.monkeybook.common.api.IZwduApi;
 import com.monke.monkeybook.common.api.Result;
-import com.monke.monkeybook.help.UnicodeToUtf8;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.IStationBookModel;
 
@@ -208,10 +207,10 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
                     String temp = contentEs.get(i).text().trim();
                     temp = temp.replaceAll(" ", "").replaceAll(" ", "");
                     if (temp.length() > 0) {
-                        content.append("\u3000\u3000" + temp);
-                        if (i < contentEs.size() - 1) {
+                        if (content.length() > 0) {
                             content.append("\r\n");
                         }
+                        content.append("\u3000\u3000" + temp);
                     }
                 }
                 bookContentBean.setDurCapterContent(content.toString());
