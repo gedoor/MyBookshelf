@@ -114,7 +114,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                 if (i != 0) {
                     content.append("\r\n");
                 }
-                content.append("\u3000\u3000" + temp);
+                content.append("\u3000\u3000").append(temp);
             }
         }
 

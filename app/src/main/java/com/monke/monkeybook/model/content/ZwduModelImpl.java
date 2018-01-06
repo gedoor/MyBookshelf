@@ -210,7 +210,7 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
                         if (content.length() > 0) {
                             content.append("\r\n");
                         }
-                        content.append("\u3000\u3000" + temp);
+                        content.append("\u3000\u3000").append(temp);
                     }
                 }
                 bookContentBean.setDurCapterContent(content.toString());

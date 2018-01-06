@@ -92,7 +92,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak) {
             speak = !speak;
-            String[] splitSpeech = content.split("。");
+            String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
                 if (i == 0) {
