@@ -123,23 +123,18 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
         }
-
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //返回一个MsgService对象
             readAloudService = ((ReadAloudService.MyBinder)service).getService();
             readAloudService.setOnProgressListener(new OnProgressListener() {
-
                 @Override
                 public void moveStartProgress(float dur) {
 
                 }
-
                 @Override
                 public void durProgressChange(float dur) {
-
                 }
 
                 @Override
@@ -147,7 +142,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     unbindService(conn);
                     csvBook.readAloudStop();
                 }
-
                 @Override
                 public void setDurProgress(float dur) {
                     runOnUiThread(() -> csvBook.readAloudNext());
