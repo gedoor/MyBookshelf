@@ -71,6 +71,12 @@
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
 
+        <receiver android:name="help.MediaButtonReceiver">
+            <intent-filter >
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="BDAPPID"
             android:value="@string/baidu_app_id" />
