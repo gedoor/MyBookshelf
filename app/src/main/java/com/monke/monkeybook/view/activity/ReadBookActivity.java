@@ -166,6 +166,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         setOrientation();
         setContentView(R.layout.activity_bookread);
         readAloudIntent = new Intent(this, ReadAloudService.class);
+        readAloudIntent.setAction("newReadAloud");
         readBookControl = ReadBookControl.getInstance();
         setStatusBar();
     }

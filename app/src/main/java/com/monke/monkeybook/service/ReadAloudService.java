@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.mprogressbar.OnProgressListener;
 
 /**
@@ -25,9 +26,10 @@ import com.monke.mprogressbar.OnProgressListener;
 
 public class ReadAloudService extends Service {
     private static final int notificationId = 3222;
-    private static final int doneService = 22;
-    private static final int pauseService = 23;
-    private static final int resumeService = 24;
+    private static final String doneServiceAction = "doneService";
+    private static final String pauseServiceAction = "pauseService";
+    private static final String resumeServiceAction = "resumeService";
+    private static final String readActivityAction = "readActivity";
     private TextToSpeech textToSpeech;
     private NotificationManager notifyManager;
     private Boolean ttsInitSuccess = false;
@@ -37,6 +39,7 @@ public class ReadAloudService extends Service {
     private int nowSpeak;
     private int allSpeak;
 
+    private PendingIntent readPendingIntent;
     private PendingIntent donePendingIntent;
     private PendingIntent pausePendingIntent;
     private PendingIntent resumePendingIntent;
@@ -52,9 +55,9 @@ public class ReadAloudService extends Service {
                 .setOngoing(true)
                 .setContentTitle(getString(R.string.read_aloud_t))
                 .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(donePendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, "停止", donePendingIntent)
-                .addAction(R.drawable.ic_pause_black_24dp, "暂停", pausePendingIntent);
+                .setContentIntent(readPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
+                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
         //发送通知
         Notification notification = builder.build();
         startForeground(notificationId, notification);
@@ -63,15 +66,16 @@ public class ReadAloudService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int formIntent = intent.getIntExtra("from", 0);
-        switch (formIntent) {
-            case doneService:
+        String action = intent.getAction();
+        assert action != null;
+        switch (action) {
+            case doneServiceAction:
                 doneService();
                 break;
-            case pauseService:
+            case pauseServiceAction:
                 pauseReadAloud();
                 break;
-            case resumeService:
+            case resumeServiceAction:
                 resumeReadAloud();
                 break;
             default:
@@ -119,9 +123,9 @@ public class ReadAloudService extends Service {
                 .setOngoing(false)
                 .setContentTitle(getString(R.string.read_aloud_t))
                 .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(donePendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, "停止", donePendingIntent)
-                .addAction(R.drawable.ic_play_arrow_black_24dp, "继续", resumePendingIntent);
+                .setContentIntent(readPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
+                .addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
         //发送通知
         Notification notification = builder.build();
         notifyManager.notify(notificationId, notification);
@@ -136,9 +140,9 @@ public class ReadAloudService extends Service {
                 .setOngoing(false)
                 .setContentTitle(getString(R.string.read_aloud_t))
                 .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(donePendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, "停止", donePendingIntent)
-                .addAction(R.drawable.ic_pause_black_24dp, "暂停", pausePendingIntent);
+                .setContentIntent(readPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
+                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
         //发送通知
         Notification notification = builder.build();
         notifyManager.notify(notificationId, notification);
@@ -146,14 +150,17 @@ public class ReadAloudService extends Service {
     }
 
     private void initIntent() {
+        Intent readIntent = new Intent(this, ReadBookActivity.class);
+        readIntent.setAction(readActivityAction);
+        readPendingIntent = PendingIntent.getActivity(this, 0, readIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent doneIntent = new Intent(this, this.getClass());
-        doneIntent.putExtra("from", doneService);
+        doneIntent.setAction(doneServiceAction);
         donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent pauseIntent = new Intent(this, this.getClass());
-        pauseIntent.putExtra("from", pauseService);
+        pauseIntent.setAction(pauseServiceAction);
         pausePendingIntent = PendingIntent.getService(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent resumeIntent = new Intent(this, this.getClass());
-        resumeIntent.putExtra("from", resumeService);
+        resumeIntent.setAction(resumeServiceAction);
         resumePendingIntent = PendingIntent.getService(this, 0, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

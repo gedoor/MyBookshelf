@@ -70,7 +70,10 @@
     <string name="ps_read_line_adjust">阅读行数减一行,如阅读界面显示不全可启用</string>
     <string name="read_aloud">朗读</string>
     <string name="read_aloud_t">正在朗读</string>
-    <string name="read_aloud_s">点击停止朗读</string>
+    <string name="read_aloud_s">点击打开阅读界面</string>
     <string name="text_return">返回</string>
     <string name="refresh">刷新</string>
+    <string name="stop">停止</string>
+    <string name="pause">暂停</string>
+    <string name="resume">继续</string>
 </resources>
