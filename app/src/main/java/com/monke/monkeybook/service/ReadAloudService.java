@@ -53,23 +53,15 @@ public class ReadAloudService extends Service {
 
     @Override
     public void onCreate() {
+        initIntent();
+        pauseNotification();
+
         textToSpeech = new TextToSpeech(this, new TTSListener());
         notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        initIntent();
+
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mComponentName = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
-                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
-                .setOngoing(true)
-                .setContentTitle(getString(R.string.read_aloud_t))
-                .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
-                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
-        //发送通知
-        Notification notification = builder.build();
-        startForeground(notificationId, notification);
+
         super.onCreate();
     }
 
@@ -126,35 +118,13 @@ public class ReadAloudService extends Service {
     }
 
     private void pauseReadAloud() {
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
-                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
-                .setOngoing(false)
-                .setContentTitle(getString(R.string.read_aloud_t))
-                .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
-                .addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
-        //发送通知
-        Notification notification = builder.build();
-        notifyManager.notify(notificationId, notification);
+        resumeNotification();
         speak = false;
         textToSpeech.stop();
     }
 
     private void resumeReadAloud() {
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
-                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
-                .setOngoing(false)
-                .setContentTitle(getString(R.string.read_aloud_t))
-                .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
-                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
-        //发送通知
-        Notification notification = builder.build();
-        notifyManager.notify(notificationId, notification);
+        pauseNotification();
         playTTS();
     }
 
@@ -171,6 +141,36 @@ public class ReadAloudService extends Service {
         Intent resumeIntent = new Intent(this, this.getClass());
         resumeIntent.setAction(resumeServiceAction);
         resumePendingIntent = PendingIntent.getService(this, 0, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void pauseNotification() {
+        //创建 Notification.Builder 对象
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
+                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
+                .setOngoing(true)
+                .setContentTitle(getString(R.string.read_aloud_t))
+                .setContentText(getString(R.string.read_aloud_s))
+                .setContentIntent(readPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
+                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
+        //发送通知
+        Notification notification = builder.build();
+        startForeground(notificationId, notification);
+    }
+
+    private void resumeNotification() {
+        //创建 Notification.Builder 对象
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
+                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
+                .setOngoing(false)
+                .setContentTitle(getString(R.string.read_aloud_t))
+                .setContentText(getString(R.string.read_aloud_s))
+                .setContentIntent(readPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
+                .addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
+        //发送通知
+        Notification notification = builder.build();
+        startForeground(notificationId, notification);
     }
 
     public void setOnProgressListener(OnProgressListener onProgressListener){
