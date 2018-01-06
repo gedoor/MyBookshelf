@@ -62,7 +62,7 @@ ext {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-    //firebase
+    //fireBase
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
@@ -77,7 +77,7 @@ dependencies {
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
-    //JSOUP
+    //J_SOUP
     implementation 'org.jsoup:jsoup:1.10.2'
     //沉浸式状态栏
     implementation 'com.zhangmonke:ImmerseLayout:1.1.1'
@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.zhangmonke:MProgressBar:1.0.1'
     //Glide
     implementation 'com.github.bumptech.glide:glide:3.8.0'
-    //AutofitTextView
+    //AutoFitTextView
     implementation 'me.grantland:autofittextview:0.2.1'
     //删除粒子效果
     implementation 'tyrantgit:explosionfield:1.0.1'
@@ -99,7 +99,7 @@ dependencies {
     //bind view
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
+    //动画
     implementation 'com.victor:lib:1.0.4'
     //关于页面
     implementation 'com.github.medyo:android-about-page:1.2.2'

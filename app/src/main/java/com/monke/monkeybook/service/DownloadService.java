@@ -2,18 +2,15 @@
 package com.monke.monkeybook.service;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
@@ -36,7 +33,6 @@ import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -47,13 +43,14 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DownloadService extends Service {
     private NotificationManager notifyManager;
-    private int notifiId = 19931118;
+    private int notificationId = 19931118;
     private Boolean isStartDownload = false;
     private Boolean isInit = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
@@ -62,7 +59,7 @@ public class DownloadService extends Service {
                 .setContentText(getString(R.string.download_offline));
         //发送通知
         Notification notification = builder.build();
-        startForeground(notifiId, notification);
+        startForeground(notificationId, notification);
     }
 
     @Override
@@ -77,7 +74,6 @@ public class DownloadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!isInit) {
             isInit = true;
-            notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             RxBus.get().register(this);
         }
         List<DownloadChapterBean> downList = intent.getParcelableArrayListExtra("downloadTask");
@@ -371,7 +367,7 @@ public class DownloadService extends Service {
                 .setContentText(downloadChapterBean.getDurChapterName()==null?"  ":downloadChapterBean.getDurChapterName())
                 .setContentIntent(mainPendingIntent);
         //发送通知
-        notifyManager.notify(notifiId, builder.build());
+        notifyManager.notify(notificationId, builder.build());
     }
 
     private void finishDownload() {
