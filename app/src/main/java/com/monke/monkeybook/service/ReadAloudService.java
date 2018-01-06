@@ -13,6 +13,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.view.KeyEvent;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -219,4 +220,5 @@ public class ReadAloudService extends Service {
 
         }
     }
+
 }
