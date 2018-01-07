@@ -1,5 +1,6 @@
 package com.monke.monkeybook.service;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -8,14 +9,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.view.KeyEvent;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -28,6 +32,7 @@ import com.monke.mprogressbar.OnProgressListener;
  */
 
 public class ReadAloudService extends Service {
+    private static final String TAG = "readAloudService";
     public static final String mediaButtonAction = "mediaButton";
     public static final String newReadAloudAction = "newReadAloud";
     private static final String doneServiceAction = "doneService";
@@ -48,8 +53,10 @@ public class ReadAloudService extends Service {
     private PendingIntent pausePendingIntent;
     private PendingIntent resumePendingIntent;
 
-    private AudioManager mAudioManager;
-    private ComponentName  mComponent;
+    private AudioManager audioManager;
+    private ComponentName mComponent;
+    private MediaSessionCompat sessionCompat;
+    private MyOnAudioFocusChangeListener myOnAudioFocusChangeListener;
 
     @Override
     public void onCreate() {
@@ -59,9 +66,20 @@ public class ReadAloudService extends Service {
 
         textToSpeech = new TextToSpeech(this, new TTSListener());
 
-        mAudioManager =(AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        myOnAudioFocusChangeListener = new MyOnAudioFocusChangeListener();
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 
+        registerMediaButton();
+    }
+
+    private void registerMediaButton() {
+        int result = audioManager.requestAudioFocus(myOnAudioFocusChangeListener,
+                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == result) {
+            //到这一步，焦点已经请求成功了
+            setMediaButtonEvent();
+        }
     }
 
     @Override
@@ -189,7 +207,7 @@ public class ReadAloudService extends Service {
         startForeground(notificationId, notification);
     }
 
-    public void setOnProgressListener(OnProgressListener onProgressListener){
+    public void setOnProgressListener(OnProgressListener onProgressListener) {
         progressListener = onProgressListener;
     }
 
@@ -207,11 +225,12 @@ public class ReadAloudService extends Service {
 
     @Override
     public void onDestroy() {
-        stopForeground(true);
         super.onDestroy();
+        stopForeground(true);
         textToSpeech.stop();
         textToSpeech.shutdown();
         textToSpeech = null;
+        unRegisterMediaButton();
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
@@ -245,4 +264,79 @@ public class ReadAloudService extends Service {
         }
     }
 
+    class MyOnAudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            switch (focusChange) {
+
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    // 重新获得焦点,  可做恢复播放，恢复后台音量的操作
+                    resumeReadAloud();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS:
+                    // 永久丢失焦点除非重新主动获取，这种情况是被其他播放器抢去了焦点，  为避免与其他播放器混音，可将音乐暂停
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                    // 暂时丢失焦点，这种情况是被其他应用申请了短暂的焦点，可压低后台音量
+                    pauseReadAloud();
+                    break;
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    // 短暂丢失焦点，这种情况是被其他应用申请了短暂的焦点希望其他声音能压低音量（或者关闭声音）凸显这个声音（比如短信提示音），
+                    break;
+            }
+        }
+    }
+
+    private void setMediaButtonEvent() {
+        if (sessionCompat != null) return;
+        sessionCompat = new MediaSessionCompat(this, TAG, mComponent, null);
+        sessionCompat.setCallback(new MediaSessionCallback());
+        sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        sessionCompat.setActive(true);
+    }
+
+    private void unRegisterMediaButton() {
+        if (sessionCompat != null) {
+            sessionCompat.setCallback(null);
+            sessionCompat.setActive(false);
+            sessionCompat.release();
+        }
+    }
+
+    private class MediaSessionCallback extends MediaSessionCompat.Callback {
+
+        @Override
+        public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+
+            String action = mediaButtonEvent.getAction();
+
+            // 获得KeyEvent对象
+            KeyEvent event = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+
+            if (Intent.ACTION_MEDIA_BUTTON.equals(action)) {
+
+                // 获得按键码
+                int keycode = event.getKeyCode();
+
+                switch (keycode) {
+                    case KeyEvent.KEYCODE_MEDIA_NEXT:
+                        //播放下一首
+                        break;
+                    case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                        //播放上一首
+                        break;
+                    case KeyEvent.KEYCODE_HEADSETHOOK:
+                        //中间按钮,暂停or播放
+                        aloudControl();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return true;
+        }
+
+    }
 }

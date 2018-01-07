@@ -45,7 +45,9 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                     break;
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                     //中间按钮,暂停or播放
-                    //可以通过发送一个新的广播通知正在播放的视频页面,暂停或者播放视频
+                    Intent buttonIntent = new Intent(context, ReadAloudService.class);
+                    buttonIntent.setAction(mediaButtonAction);
+                    context.startService(buttonIntent);
                     break;
                 default:
                     break;
