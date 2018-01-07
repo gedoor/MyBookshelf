@@ -136,6 +136,12 @@
 
             </LinearLayout>
 
+            <ImageButton
+                android:id="@+id/ib_content_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
         </FrameLayout>
 
         <View
@@ -191,12 +197,6 @@
 
             <ImageButton
                 android:id="@+id/ib_content_3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_ib_pre2" />
-
-            <ImageButton
-                android:id="@+id/ib_content_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_ib_pre2" />

@@ -30,7 +30,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     public static final int VIEW_TYPE_ITEM = 1;
     public static final int VIEW_TYPE_EMPTY = 0;
 
-    private final long DURANIMITEM = 30;   //item动画启动间隔
+    private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 
     private List<BookShelfBean> books;
 
@@ -100,7 +100,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             new Handler().postDelayed(() -> {
                 if (null != holder)
                     holder.flContent.startAnimation(animation);
-            }, index * DURANIMITEM);
+            }, index * DUR_ANIM_ITEM);
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }

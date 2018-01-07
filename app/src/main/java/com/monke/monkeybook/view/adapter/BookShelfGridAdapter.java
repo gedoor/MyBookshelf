@@ -26,10 +26,10 @@ import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
-    private final int TYPE_LASTEST = 1;
+    private final int TYPE_LAST_EST = 1;
     private final int TYPE_OTHER = 2;
 
-    private final long DURANIMITEM = 30;   //item动画启动间隔
+    private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 
     private List<BookShelfBean> books;
 
@@ -62,7 +62,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public int getItemViewtype(int position) {
         if (position == 0) {
-            return TYPE_LASTEST;
+            return TYPE_LAST_EST;
         } else {
             return TYPE_OTHER;
         }
@@ -70,7 +70,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_LASTEST) {
+        if (viewType == TYPE_LAST_EST) {
             return new LastestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_lastest, parent, false));
         } else {
             return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_other, parent, false));
@@ -79,7 +79,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_LASTEST) {
+        if (holder.getItemViewType() == TYPE_LAST_EST) {
             bindLastestViewHolder((LastestViewHolder) holder, position);
         } else {
             bindOtherViewHolder((OtherViewHolder) holder, position - 1);
@@ -101,11 +101,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             new Handler().postDelayed(() -> {
                 if (null != holder)
                     holder.flContent_1.startAnimation(animation);
-            }, index_1 * DURANIMITEM);
+            }, index_1 * DUR_ANIM_ITEM);
         } else {
             holder.flContent_1.setVisibility(View.VISIBLE);
         }
-        Glide.with(holder.ivCover_1.getContext()).load(books.get(index_1).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
+        Glide.with(holder.ivCover_1.getContext())
+                .load(books.get(index_1).getBookInfoBean().getCoverUrl())
+                .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
         holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
         if (books.get(index_1).getHasUpdate()) {
             holder.ivHasNew_1.setVisibility(View.VISIBLE);
@@ -139,11 +141,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 new Handler().postDelayed(() -> {
                     if (null != holder)
                         holder.flContent_2.startAnimation(animation);
-                }, index_2 * DURANIMITEM);
+                }, index_2 * DUR_ANIM_ITEM);
             } else {
                 holder.flContent_2.setVisibility(View.VISIBLE);
             }
-            Glide.with(holder.ivCover_2.getContext()).load(books.get(index_2).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
+            Glide.with(holder.ivCover_2.getContext())
+                    .load(books.get(index_2).getBookInfoBean().getCoverUrl())
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
             holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
             if (books.get(index_2).getHasUpdate()) {
                 holder.ivHasNew_2.setVisibility(View.VISIBLE);
@@ -177,11 +181,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                     new Handler().postDelayed(() -> {
                         if (null != holder)
                             holder.flContent_3.startAnimation(animation);
-                    }, index_3 * DURANIMITEM);
+                    }, index_3 * DUR_ANIM_ITEM);
                 } else {
                     holder.flContent_3.setVisibility(View.VISIBLE);
                 }
-                Glide.with(holder.ivCover_3.getContext()).load(books.get(index_3).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
+                Glide.with(holder.ivCover_3.getContext())
+                        .load(books.get(index_3).getBookInfoBean().getCoverUrl())
+                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
                 holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
                 if (books.get(index_3).getHasUpdate()) {
                     holder.ivHasNew_3.setVisibility(View.VISIBLE);
@@ -225,7 +231,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             holder.mpbDurprogress.setProgressListener(null);
             holder.tvWatch.setText("去选书");
         } else {
-            Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+            Glide.with(holder.ivCover.getContext())
+                    .load(books.get(index).getBookInfoBean().getCoverUrl())
+                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
 
             holder.flLastestTip.setVisibility(View.VISIBLE);
 
