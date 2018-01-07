@@ -1,13 +1,13 @@
 package com.monke.monkeybook.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -15,11 +15,10 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.view.KeyEvent;
+import android.support.v4.media.session.MediaSessionCompat;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.MediaButtonReceiver;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.mprogressbar.OnProgressListener;
 
@@ -29,13 +28,14 @@ import com.monke.mprogressbar.OnProgressListener;
  */
 
 public class ReadAloudService extends Service {
-    private static final int notificationId = 3222;
+    public static final String mediaButtonAction = "mediaButton";
+    public static final String newReadAloudAction = "newReadAloud";
     private static final String doneServiceAction = "doneService";
     private static final String pauseServiceAction = "pauseService";
     private static final String resumeServiceAction = "resumeService";
     private static final String readActivityAction = "readActivity";
+    private static final int notificationId = 3222;
     private TextToSpeech textToSpeech;
-    private NotificationManager notifyManager;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = false;
     private String content;
@@ -49,20 +49,19 @@ public class ReadAloudService extends Service {
     private PendingIntent resumePendingIntent;
 
     private AudioManager mAudioManager;
-    private ComponentName mComponentName;
+    private ComponentName  mComponent;
 
     @Override
     public void onCreate() {
+        super.onCreate();
         initIntent();
         pauseNotification();
 
         textToSpeech = new TextToSpeech(this, new TTSListener());
-        notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mComponentName = new ComponentName(getPackageName(), MediaButtonReceiver.class.getName());
+        mAudioManager =(AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 
-        super.onCreate();
     }
 
     @Override
@@ -79,14 +78,23 @@ public class ReadAloudService extends Service {
             case resumeServiceAction:
                 resumeReadAloud();
                 break;
+            case mediaButtonAction:
+                aloudControl();
+                break;
+            case newReadAloudAction:
+                newReadAloud(intent.getStringExtra("content"));
+                break;
             default:
-                content = intent.getStringExtra("content");
-                speak = false;
-                nowSpeak = 0;
-                playTTS();
                 break;
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void newReadAloud(String content) {
+        this.content = content;
+        speak = false;
+        nowSpeak = 0;
+        playTTS();
     }
 
     public void playTTS() {
@@ -126,6 +134,14 @@ public class ReadAloudService extends Service {
     private void resumeReadAloud() {
         pauseNotification();
         playTTS();
+    }
+
+    private void aloudControl() {
+        if (speak) {
+            pauseReadAloud();
+        } else {
+            resumeReadAloud();
+        }
     }
 
     private void initIntent() {

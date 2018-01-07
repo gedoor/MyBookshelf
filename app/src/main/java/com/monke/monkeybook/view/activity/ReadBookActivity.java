@@ -60,6 +60,7 @@ import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
 
 public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView{
     public final static int OPEN_FROM_ALOUD = 3;
@@ -160,7 +161,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         setOrientation();
         setContentView(R.layout.activity_bookread);
         readAloudIntent = new Intent(this, ReadAloudService.class);
-        readAloudIntent.setAction("newReadAloud");
+        readAloudIntent.setAction(newReadAloudAction);
         readBookControl = ReadBookControl.getInstance();
         setStatusBar();
     }
