@@ -3,7 +3,6 @@ package com.monke.monkeybook.widget.refreshview;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 
 public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
-    private final int LOADMORETYPE = 2001;
+    private final int LOAD_MORE_TYPE = 2001;
 
     private Handler handler;
     private int isRequesting = 0;   //0是未执行网络请求  1是正在下拉刷新  2是正在加载更多
@@ -61,7 +60,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == LOADMORETYPE) {
+        if (viewType == LOAD_MORE_TYPE) {
             return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_refresh_loadmore, parent, false));
         } else
             return onCreateViewholder(parent, viewType);
@@ -71,7 +70,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == LOADMORETYPE) {
+        if (holder.getItemViewType() == LOAD_MORE_TYPE) {
             if (!loadMoreError) {
                 ((LoadMoreViewHolder) holder).tvLoadMore.setText("正在加载...");
             } else {
@@ -93,7 +92,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if (needLoadMore && isRequesting != 1 && !isAll && position == getItemCount() - 1 && getItemcount() > 0) {
-            return LOADMORETYPE;
+            return LOAD_MORE_TYPE;
         } else {
             return getItemViewtype(position);
         }

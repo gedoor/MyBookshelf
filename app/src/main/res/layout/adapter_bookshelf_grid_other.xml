@@ -48,12 +48,12 @@
 
             <ImageView
                 android:id="@+id/iv_has_new_1"
-                android:visibility="invisible"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="right"
                 android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp" />
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,12 +106,12 @@
 
             <ImageView
                 android:id="@+id/iv_has_new_2"
-                android:visibility="invisible"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="right"
                 android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp" />
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,12 +165,12 @@
 
             <ImageView
                 android:id="@+id/iv_has_new_3"
-                android:visibility="invisible"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:layout_gravity="right"
                 android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp" />
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
