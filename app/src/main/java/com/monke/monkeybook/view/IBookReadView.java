@@ -12,11 +12,6 @@ public interface IBookReadView extends IView{
     Paint getPaint();
 
     /**
-     * @return 获取当前小说内容可绘制宽度
-     */
-    int getContentWidth();
-
-    /**
      * 小说数据初始化成功
      * @param durChapterIndex 当前章节
      * @param chapterAll 所有章节数

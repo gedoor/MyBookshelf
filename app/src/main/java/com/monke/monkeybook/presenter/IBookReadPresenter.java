@@ -26,6 +26,8 @@ public interface IBookReadPresenter extends IPresenter{
 
     void setPageLineCount(int pageLineCount);
 
+    void setPageWidth(int pageWidth);
+
     void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 
     Boolean getAdd();

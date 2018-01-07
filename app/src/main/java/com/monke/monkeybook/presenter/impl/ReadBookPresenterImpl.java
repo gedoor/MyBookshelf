@@ -56,6 +56,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     private BookShelfBean bookShelf;
 
     private int pageLineCount = 5;   //假设5行一页
+    private int pageWidth;
 
     public ReadBookPresenterImpl() {
 
@@ -354,7 +355,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         return Observable.create(e -> {
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
-            Layout tempLayout = new StaticLayout(paragraphStr, mPaint, mView.getContentWidth(), Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            Layout tempLayout = new StaticLayout(paragraphStr, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
             List<String> linesData = new ArrayList<>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
                 linesData.add(paragraphStr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
@@ -368,6 +369,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     public void setPageLineCount(int pageLineCount) {
         this.pageLineCount = pageLineCount;
     }
+
+    @Override
+    public void setPageWidth(int pageWidth) {
+        this.pageWidth = pageWidth;
+    }
+
 
     private void checkInShelf() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {

@@ -403,6 +403,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             @Override
             public void initData(int lineCount) {
                 mPresenter.setPageLineCount(lineCount);
+                mPresenter.setPageWidth(csvBook.getContentWidth());
                 mPresenter.initContent();
             }
 
@@ -491,11 +492,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     public Paint getPaint() {
         return csvBook.getTextPaint();
-    }
-
-    @Override
-    public int getContentWidth() {
-        return csvBook.getContentWidth();
     }
 
     @Override
