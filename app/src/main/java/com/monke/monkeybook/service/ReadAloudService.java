@@ -54,9 +54,8 @@ public class ReadAloudService extends Service {
     private PendingIntent resumePendingIntent;
 
     private AudioManager audioManager;
-    private ComponentName mComponent;
     private MediaSessionCompat sessionCompat;
-    private MyOnAudioFocusChangeListener myOnAudioFocusChangeListener;
+    private AudioFocusChangeListener audioFocusChangeListener;
 
     @Override
     public void onCreate() {
@@ -66,20 +65,10 @@ public class ReadAloudService extends Service {
 
         textToSpeech = new TextToSpeech(this, new TTSListener());
 
-        myOnAudioFocusChangeListener = new MyOnAudioFocusChangeListener();
+        audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 
-        registerMediaButton();
-    }
-
-    private void registerMediaButton() {
-        int result = audioManager.requestAudioFocus(myOnAudioFocusChangeListener,
-                AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        if (AudioManager.AUDIOFOCUS_REQUEST_GRANTED == result) {
-            //到这一步，焦点已经请求成功了
-            setMediaButtonEvent();
-        }
+        setMediaButtonEvent();
     }
 
     @Override
@@ -116,7 +105,7 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (ttsInitSuccess && !speak) {
+        if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
@@ -264,7 +253,18 @@ public class ReadAloudService extends Service {
         }
     }
 
-    class MyOnAudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
+    private AudioManager getAudioManager() {
+        if (audioManager == null) {
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        }
+        return audioManager;
+    }
+
+    private boolean requestFocus() {
+        return (getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    }
+
+    class AudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
         @Override
         public void onAudioFocusChange(int focusChange) {
             switch (focusChange) {
@@ -289,9 +289,16 @@ public class ReadAloudService extends Service {
 
     private void setMediaButtonEvent() {
         if (sessionCompat != null) return;
-        sessionCompat = new MediaSessionCompat(this, TAG, mComponent, null);
+        ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
+
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setComponent(mComponent);
+        PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+
+        sessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
         sessionCompat.setCallback(new MediaSessionCallback());
         sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
+        sessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
         sessionCompat.setActive(true);
     }
 
@@ -301,40 +308,13 @@ public class ReadAloudService extends Service {
             sessionCompat.setActive(false);
             sessionCompat.release();
         }
+        getAudioManager().abandonAudioFocus(audioFocusChangeListener);
     }
 
     private class MediaSessionCallback extends MediaSessionCompat.Callback {
-
         @Override
         public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-
-            String action = mediaButtonEvent.getAction();
-
-            // 获得KeyEvent对象
-            KeyEvent event = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-
-            if (Intent.ACTION_MEDIA_BUTTON.equals(action)) {
-
-                // 获得按键码
-                int keycode = event.getKeyCode();
-
-                switch (keycode) {
-                    case KeyEvent.KEYCODE_MEDIA_NEXT:
-                        //播放下一首
-                        break;
-                    case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                        //播放上一首
-                        break;
-                    case KeyEvent.KEYCODE_HEADSETHOOK:
-                        //中间按钮,暂停or播放
-                        aloudControl();
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            return true;
+            return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
         }
 
     }
