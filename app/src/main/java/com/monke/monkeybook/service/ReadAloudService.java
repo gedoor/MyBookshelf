@@ -291,8 +291,7 @@ public class ReadAloudService extends Service {
         if (sessionCompat != null) return;
         sessionCompat = new MediaSessionCompat(this, TAG, mComponent, null);
         sessionCompat.setCallback(new MediaSessionCallback());
-        sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
         sessionCompat.setActive(true);
     }
 
