@@ -41,6 +41,7 @@ public class ReadAloudService extends Service {
     private static final String pauseServiceAction = "pauseService";
     private static final String resumeServiceAction = "resumeService";
     private static final String readActivityAction = "readActivity";
+    private static final String setTimerAction = "setTimer";
     private static final int notificationId = 3222;
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
@@ -49,11 +50,7 @@ public class ReadAloudService extends Service {
     private OnProgressListener progressListener;
     private int nowSpeak;
     private int allSpeak;
-
-    private PendingIntent readPendingIntent;
-    private PendingIntent donePendingIntent;
-    private PendingIntent pausePendingIntent;
-    private PendingIntent resumePendingIntent;
+    private int timer = -1;
 
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
@@ -63,8 +60,6 @@ public class ReadAloudService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        initIntent();
-
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -75,7 +70,7 @@ public class ReadAloudService extends Service {
         setupMediaSession();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
-        updateNotification();
+        updateNotification(null);
     }
 
     @Override
@@ -94,6 +89,9 @@ public class ReadAloudService extends Service {
                 break;
             case mediaButtonAction:
                 aloudControl();
+                break;
+            case setTimerAction:
+                setTimer();
                 break;
             case newReadAloudAction:
                 newReadAloud(intent.getStringExtra("content"));
@@ -114,7 +112,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
-            updateNotification();
+            updateNotification(null);
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
@@ -142,7 +140,7 @@ public class ReadAloudService extends Service {
 
     private void pauseReadAloud() {
         speak = false;
-        updateNotification();
+        updateNotification(null);
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
     }
@@ -159,38 +157,46 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private void initIntent() {
-        Intent readIntent = new Intent(this, ReadBookActivity.class);
-        readIntent.setAction(readActivityAction);
-        readPendingIntent = PendingIntent.getActivity(this, 0, readIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent doneIntent = new Intent(this, this.getClass());
-        doneIntent.setAction(doneServiceAction);
-        donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent pauseIntent = new Intent(this, this.getClass());
-        pauseIntent.setAction(pauseServiceAction);
-        pausePendingIntent = PendingIntent.getService(this, 0, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent resumeIntent = new Intent(this, this.getClass());
-        resumeIntent.setAction(resumeServiceAction);
-        resumePendingIntent = PendingIntent.getService(this, 0, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private void setTimer() {
+        if (timer < 60) {
+            timer = timer + 10;
+        } else {
+            timer = -1;
+        }
     }
 
-    private void updateNotification() {
+    private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
+        Intent intent = new Intent(this, ReadBookActivity.class);
+        intent.setAction(actionStr);
+        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private  PendingIntent getThisServicePendingIntent(String actionStr) {
+        Intent intent = new Intent(this, this.getClass());
+        intent.setAction(actionStr);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void updateNotification(String title) {
+        if (title == null || title.isEmpty()) {
+            title = getString(R.string.read_aloud_t);
+        }
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
-                .setContentTitle(getString(R.string.read_aloud_t))
+                .setContentTitle(title)
                 .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent);
-
+                .setContentIntent(getReadBookActivityPendingIntent(readActivityAction));
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(doneServiceAction));
         if (speak) {
-            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
+            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(pauseServiceAction));
         } else {
-            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
+            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(resumeServiceAction));
         }
+        builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(setTimerAction));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
-                .setMediaSession(mediaSessionCompat.getSessionToken()).setShowActionsInCompactView(0, 1));
+                .setMediaSession(mediaSessionCompat.getSessionToken()).setShowActionsInCompactView(0, 1, 2));
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         //发送通知
         Notification notification = builder.build();
