@@ -79,7 +79,7 @@ public class ReadAloudService extends Service {
         setupMediaSession();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
-        updateNotification(null);
+        updateNotification();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
-            updateNotification(null);
+            updateNotification();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
@@ -160,7 +160,7 @@ public class ReadAloudService extends Service {
         }
         this.pause = pause;
         speak = false;
-        updateNotification(null);
+        updateNotification();
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
     }
@@ -187,12 +187,12 @@ public class ReadAloudService extends Service {
         if (timeMinute > 60) {
             mTimer.cancel();
             timeMinute = 0;
-            updateNotification(null);
-        } else if (timeMinute < 0) {
+            updateNotification();
+        } else if (timeMinute <= 0) {
             mTimer.cancel();
             doneService();
         } else {
-            updateNotification(String.format("正在朗读(还乘%d分钟)", timeMinute));
+            updateNotification();
             if (mTimer == null) {
                 setTimer();
             }
@@ -222,8 +222,13 @@ public class ReadAloudService extends Service {
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void updateNotification(String title) {
-        if (TextUtils.isEmpty(title)) {
+    private void updateNotification() {
+        String title;
+        if (pause) {
+            title = "朗读暂停";
+        } else if (timeMinute > 0 && timeMinute <= 60) {
+            title = String.format("正在朗读(还乘%d分钟)", timeMinute);
+        } else {
             title = getString(R.string.read_aloud_t);
         }
         //创建 Notification.Builder 对象
