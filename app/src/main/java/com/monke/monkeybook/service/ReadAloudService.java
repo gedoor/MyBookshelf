@@ -100,7 +100,7 @@ public class ReadAloudService extends Service {
                 aloudControl();
                 break;
             case setTimerAction:
-                updateTimer(10);
+                updateTimer(intent.getIntExtra("minute", 10));
                 break;
             case newReadAloudAction:
                 newReadAloud(intent.getStringExtra("content"));
@@ -204,7 +204,10 @@ public class ReadAloudService extends Service {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                updateTimer(-1);
+                Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+                setTimerIntent.setAction(setTimerAction);
+                setTimerIntent.putExtra("minute", -1);
+                startService(setTimerIntent);
             }
         };
         mTimer.schedule(timerTask, 60000, 6000);
