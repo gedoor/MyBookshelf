@@ -1,30 +1,32 @@
 package com.monke.monkeybook.service;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.view.KeyEvent;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Log;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.mprogressbar.OnProgressListener;
+
+import static com.monke.monkeybook.MApplication.DEBUG;
 
 /**
  * Created by GKF on 2018/1/2.
@@ -32,7 +34,7 @@ import com.monke.mprogressbar.OnProgressListener;
  */
 
 public class ReadAloudService extends Service {
-    private static final String TAG = "readAloudService";
+    private static final String TAG = ReadAloudService.class.getSimpleName();
     public static final String mediaButtonAction = "mediaButton";
     public static final String newReadAloudAction = "newReadAloud";
     private static final String doneServiceAction = "doneService";
@@ -56,6 +58,7 @@ public class ReadAloudService extends Service {
     private AudioManager audioManager;
     private MediaSessionCompat sessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
+    private AudioFocusRequest mFocusRequest;
 
     @Override
     public void onCreate() {
@@ -68,7 +71,11 @@ public class ReadAloudService extends Service {
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            initFocusRequest();
+        }
         setMediaButtonEvent();
+        sessionCompat.setActive(true);
     }
 
     @Override
@@ -107,6 +114,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
+            updateMediaSessionPlaybackState();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
@@ -135,6 +143,7 @@ public class ReadAloudService extends Service {
     private void pauseReadAloud() {
         resumeNotification();
         speak = false;
+        updateMediaSessionPlaybackState();
         textToSpeech.stop();
     }
 
@@ -261,15 +270,33 @@ public class ReadAloudService extends Service {
     }
 
     private boolean requestFocus() {
-        return (getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-                == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        int request;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            request = getAudioManager().requestAudioFocus(mFocusRequest);
+        } else {
+            request = getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
+        return ( request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void initFocusRequest() {
+        AudioAttributes mPlaybackAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build();
+        mFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(mPlaybackAttributes)
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(audioFocusChangeListener)
+                .build();
     }
 
     class AudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
         @Override
         public void onAudioFocusChange(int focusChange) {
+            if (DEBUG) Log.v(TAG, "focusChange: " + focusChange);
             switch (focusChange) {
-
                 case AudioManager.AUDIOFOCUS_GAIN:
                     // 重新获得焦点,  可做恢复播放，恢复后台音量的操作
                     resumeReadAloud();
@@ -297,10 +324,14 @@ public class ReadAloudService extends Service {
         PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
 
         sessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
-        sessionCompat.setCallback(new MediaSessionCallback());
+        sessionCompat.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+                return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
+            }
+        });
         sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
         sessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
-        sessionCompat.setActive(true);
     }
 
     private void unRegisterMediaButton() {
@@ -312,11 +343,20 @@ public class ReadAloudService extends Service {
         getAudioManager().abandonAudioFocus(audioFocusChangeListener);
     }
 
-    private class MediaSessionCallback extends MediaSessionCompat.Callback {
-        @Override
-        public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-            return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
-        }
+    private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
+            | PlaybackStateCompat.ACTION_PAUSE
+            | PlaybackStateCompat.ACTION_PLAY_PAUSE
+            | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+            | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+            | PlaybackStateCompat.ACTION_STOP
+            | PlaybackStateCompat.ACTION_SEEK_TO;
 
+    private void updateMediaSessionPlaybackState() {
+        sessionCompat.setPlaybackState(
+                new PlaybackStateCompat.Builder()
+                        .setActions(MEDIA_SESSION_ACTIONS)
+                        .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
+                                nowSpeak, 1)
+                        .build());
     }
 }

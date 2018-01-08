@@ -20,13 +20,13 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (DEBUG) Log.v(TAG, "Received intent: " + intent);
         if (handleIntent(context, intent) && isOrderedBroadcast()) {
             abortBroadcast();
         }
     }
 
     public static boolean handleIntent(final Context context, final Intent intent) {
+        if (DEBUG) Log.v(TAG, "Received intent: " + intent);
         final String intentAction = intent.getAction();
         if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             final KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
