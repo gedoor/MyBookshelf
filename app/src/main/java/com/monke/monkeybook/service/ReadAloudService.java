@@ -44,7 +44,7 @@ public class ReadAloudService extends Service {
     private static final int notificationId = 3222;
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
-    private Boolean speak = false;
+    private Boolean speak = true;
     private String content;
     private OnProgressListener progressListener;
     private int nowSpeak;
@@ -56,7 +56,7 @@ public class ReadAloudService extends Service {
     private PendingIntent resumePendingIntent;
 
     private AudioManager audioManager;
-    private MediaSessionCompat sessionCompat;
+    private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
     private AudioFocusRequest mFocusRequest;
 
@@ -64,10 +64,8 @@ public class ReadAloudService extends Service {
     public void onCreate() {
         super.onCreate();
         initIntent();
-        pauseNotification();
 
         textToSpeech = new TextToSpeech(this, new TTSListener());
-
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -75,7 +73,9 @@ public class ReadAloudService extends Service {
             initFocusRequest();
         }
         setupMediaSession();
-        sessionCompat.setActive(true);
+        mediaSessionCompat.setActive(true);
+        updateMediaSessionPlaybackState();
+        updateNotification();
     }
 
     @Override
@@ -114,6 +114,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
+            updateNotification();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
@@ -140,14 +141,13 @@ public class ReadAloudService extends Service {
     }
 
     private void pauseReadAloud() {
-        resumeNotification();
         speak = false;
+        updateNotification();
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
     }
 
     private void resumeReadAloud() {
-        pauseNotification();
         playTTS();
     }
 
@@ -174,7 +174,7 @@ public class ReadAloudService extends Service {
         resumePendingIntent = PendingIntent.getService(this, 0, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void pauseNotification() {
+    private void updateNotification() {
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
@@ -182,23 +182,16 @@ public class ReadAloudService extends Service {
                 .setContentTitle(getString(R.string.read_aloud_t))
                 .setContentText(getString(R.string.read_aloud_s))
                 .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
-                .addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
-        //发送通知
-        Notification notification = builder.build();
-        startForeground(notificationId, notification);
-    }
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent);
 
-    private void resumeNotification() {
-        //创建 Notification.Builder 对象
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
-                .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
-                .setOngoing(false)
-                .setContentTitle(getString(R.string.read_aloud_t))
-                .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(readPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), donePendingIntent)
-                .addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
+        if (speak) {
+            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), pausePendingIntent);
+        } else {
+            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), resumePendingIntent);
+        }
+        builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(mediaSessionCompat.getSessionToken()).setShowActionsInCompactView(0, 1));
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         //发送通知
         Notification notification = builder.build();
         startForeground(notificationId, notification);
@@ -315,10 +308,6 @@ public class ReadAloudService extends Service {
         }
     }
 
-    public MediaSessionCompat getMediaSession() {
-        return sessionCompat;
-    }
-
     private void setupMediaSession() {
         ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 
@@ -326,23 +315,23 @@ public class ReadAloudService extends Service {
         mediaButtonIntent.setComponent(mComponent);
         PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
 
-        sessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
-        sessionCompat.setCallback(new MediaSessionCompat.Callback() {
+        mediaSessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
+        mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
+        mediaSessionCompat.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
                 return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
             }
         });
-        sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
-        sessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
+        mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
     }
 
     private void unRegisterMediaButton() {
-        if (sessionCompat != null) {
-            sessionCompat.setCallback(null);
-            sessionCompat.setActive(false);
-            sessionCompat.release();
+        if (mediaSessionCompat != null) {
+            mediaSessionCompat.setCallback(null);
+            mediaSessionCompat.setActive(false);
+            mediaSessionCompat.release();
         }
         getAudioManager().abandonAudioFocus(audioFocusChangeListener);
     }
@@ -356,7 +345,7 @@ public class ReadAloudService extends Service {
             | PlaybackStateCompat.ACTION_SEEK_TO;
 
     private void updateMediaSessionPlaybackState() {
-        sessionCompat.setPlaybackState(
+        mediaSessionCompat.setPlaybackState(
                 new PlaybackStateCompat.Builder()
                         .setActions(MEDIA_SESSION_ACTIONS)
                         .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
