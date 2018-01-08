@@ -261,7 +261,8 @@ public class ReadAloudService extends Service {
     }
 
     private boolean requestFocus() {
-        return (getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        return (getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
     class AudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
