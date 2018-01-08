@@ -331,8 +331,8 @@ public class ReadAloudService extends Service {
                 return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
             }
         });
-        sessionCompat.setFlags(MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS
-                | MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
+        sessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
         sessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
     }
 
