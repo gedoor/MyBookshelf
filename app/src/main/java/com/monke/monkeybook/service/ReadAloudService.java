@@ -19,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.monke.monkeybook.MApplication;
@@ -178,7 +179,7 @@ public class ReadAloudService extends Service {
     }
 
     private void updateNotification(String title) {
-        if (title == null || title.isEmpty()) {
+        if (TextUtils.isEmpty(title)) {
             title = getString(R.string.read_aloud_t);
         }
         //创建 Notification.Builder 对象
