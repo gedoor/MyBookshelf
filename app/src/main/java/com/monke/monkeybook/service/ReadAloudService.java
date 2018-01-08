@@ -21,11 +21,16 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.mprogressbar.OnProgressListener;
+
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.monke.monkeybook.MApplication.DEBUG;
 
@@ -42,7 +47,7 @@ public class ReadAloudService extends Service {
     private static final String pauseServiceAction = "pauseService";
     private static final String resumeServiceAction = "resumeService";
     private static final String readActivityAction = "readActivity";
-    private static final String setTimerAction = "setTimer";
+    private static final String setTimerAction = "updateTimer";
     private static final int notificationId = 3222;
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
@@ -52,7 +57,9 @@ public class ReadAloudService extends Service {
     private OnProgressListener progressListener;
     private int nowSpeak;
     private int allSpeak;
-    private int timer = 600;
+    private int timeMinute = 0;
+    private Timer mTimer;
+    private TimerTask timerTask;
 
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
@@ -93,7 +100,7 @@ public class ReadAloudService extends Service {
                 aloudControl();
                 break;
             case setTimerAction:
-                setTimer();
+                updateTimer(10);
                 break;
             case newReadAloudAction:
                 newReadAloud(intent.getStringExtra("content"));
@@ -137,6 +144,9 @@ public class ReadAloudService extends Service {
     }
 
     private void doneService() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         stopSelf();
         progressListener.moveStopProgress(1);
     }
@@ -145,6 +155,9 @@ public class ReadAloudService extends Service {
      * @param pause true 暂停, false 失去焦点
      */
     private void pauseReadAloud(Boolean pause) {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         this.pause = pause;
         speak = false;
         updateNotification(null);
@@ -156,6 +169,7 @@ public class ReadAloudService extends Service {
      * 恢复朗读
      */
     private void resumeReadAloud() {
+        updateTimer(0);
         pause = false;
         playTTS();
     }
@@ -168,12 +182,32 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private void setTimer() {
-        if (timer < 60) {
-            timer = timer + 10;
+    private void updateTimer(int minute) {
+        timeMinute = timeMinute + minute;
+        if (timeMinute > 60) {
+            mTimer.cancel();
+            timeMinute = 0;
+            updateNotification(null);
+        } else if (timeMinute < 0) {
+            mTimer.cancel();
+            doneService();
         } else {
-            timer = 600;
+            updateNotification(String.format("正在朗读(还乘%d分钟)", timeMinute));
+            if (mTimer == null) {
+                setTimer();
+            }
         }
+    }
+
+    private void setTimer() {
+        mTimer = new Timer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                updateTimer(-1);
+            }
+        };
+        mTimer.schedule(timerTask, 60000, 6000);
     }
 
     private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
@@ -200,10 +234,10 @@ public class ReadAloudService extends Service {
                 .setContentText(getString(R.string.read_aloud_s))
                 .setContentIntent(getReadBookActivityPendingIntent(readActivityAction));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(doneServiceAction));
-        if (speak) {
-            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(pauseServiceAction));
-        } else {
+        if (pause) {
             builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(resumeServiceAction));
+        } else {
+            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(pauseServiceAction));
         }
         builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(setTimerAction));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
@@ -244,9 +278,17 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                ttsInitSuccess = true;
-                playTTS();
+                int result = textToSpeech.setLanguage(Locale.US);
+                if (result == TextToSpeech.LANG_MISSING_DATA ||
+                        result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    toast("TTS没有中文广语言");
+                } else {
+                    textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                    ttsInitSuccess = true;
+                    playTTS();
+                }
+            } else {
+                toast("TTS初始化失败");
             }
         }
     }
@@ -272,19 +314,13 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private AudioManager getAudioManager() {
-        if (audioManager == null) {
-            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        }
-        return audioManager;
-    }
 
     private boolean requestFocus() {
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            request = getAudioManager().requestAudioFocus(mFocusRequest);
+            request = audioManager.requestAudioFocus(mFocusRequest);
         } else {
-            request = getAudioManager().requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            request = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
         return ( request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
@@ -352,7 +388,7 @@ public class ReadAloudService extends Service {
             mediaSessionCompat.setActive(false);
             mediaSessionCompat.release();
         }
-        getAudioManager().abandonAudioFocus(audioFocusChangeListener);
+        audioManager.abandonAudioFocus(audioFocusChangeListener);
     }
 
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
@@ -370,5 +406,9 @@ public class ReadAloudService extends Service {
                         .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
                                 nowSpeak, 1)
                         .build());
+    }
+
+    private void toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
