@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
-import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -75,7 +74,7 @@ public class ReadAloudService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initFocusRequest();
         }
-        setMediaButtonEvent();
+        setupMediaSession();
         sessionCompat.setActive(true);
     }
 
@@ -316,8 +315,11 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private void setMediaButtonEvent() {
-        if (sessionCompat != null) return;
+    public MediaSessionCompat getMediaSession() {
+        return sessionCompat;
+    }
+
+    private void setupMediaSession() {
         ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
 
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);

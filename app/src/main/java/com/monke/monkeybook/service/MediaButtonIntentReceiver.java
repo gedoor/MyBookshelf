@@ -58,5 +58,4 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
         intent.setAction(command);
         context.startService(intent);
     }
-
 }
