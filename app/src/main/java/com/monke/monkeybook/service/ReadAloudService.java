@@ -47,11 +47,12 @@ public class ReadAloudService extends Service {
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
+    private Boolean pause = false;
     private String content;
     private OnProgressListener progressListener;
     private int nowSpeak;
     private int allSpeak;
-    private int timer = -1;
+    private int timer = 600;
 
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
@@ -83,7 +84,7 @@ public class ReadAloudService extends Service {
                 doneService();
                 break;
             case pauseServiceAction:
-                pauseReadAloud();
+                pauseReadAloud(true);
                 break;
             case resumeServiceAction:
                 resumeReadAloud();
@@ -106,6 +107,7 @@ public class ReadAloudService extends Service {
     private void newReadAloud(String content) {
         this.content = content;
         speak = false;
+        pause = false;
         nowSpeak = 0;
         playTTS();
     }
@@ -139,20 +141,28 @@ public class ReadAloudService extends Service {
         progressListener.moveStopProgress(1);
     }
 
-    private void pauseReadAloud() {
+    /**
+     * @param pause true 暂停, false 失去焦点
+     */
+    private void pauseReadAloud(Boolean pause) {
+        this.pause = pause;
         speak = false;
         updateNotification(null);
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
     }
 
+    /**
+     * 恢复朗读
+     */
     private void resumeReadAloud() {
+        pause = false;
         playTTS();
     }
 
     private void aloudControl() {
         if (speak) {
-            pauseReadAloud();
+            pauseReadAloud(true);
         } else {
             resumeReadAloud();
         }
@@ -162,7 +172,7 @@ public class ReadAloudService extends Service {
         if (timer < 60) {
             timer = timer + 10;
         } else {
-            timer = -1;
+            timer = 600;
         }
     }
 
@@ -299,14 +309,16 @@ public class ReadAloudService extends Service {
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN:
                     // 重新获得焦点,  可做恢复播放，恢复后台音量的操作
-                    resumeReadAloud();
+                    if (!pause) {
+                        resumeReadAloud();
+                    }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     // 永久丢失焦点除非重新主动获取，这种情况是被其他播放器抢去了焦点，  为避免与其他播放器混音，可将音乐暂停
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     // 暂时丢失焦点，这种情况是被其他应用申请了短暂的焦点，可压低后台音量
-                    pauseReadAloud();
+                    pauseReadAloud(false);
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     // 短暂丢失焦点，这种情况是被其他应用申请了短暂的焦点希望其他声音能压低音量（或者关闭声音）凸显这个声音（比如短信提示音），
