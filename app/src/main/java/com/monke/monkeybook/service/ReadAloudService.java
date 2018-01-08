@@ -210,7 +210,7 @@ public class ReadAloudService extends Service {
                 startService(setTimerIntent);
             }
         };
-        mTimer.schedule(timerTask, 60000, 6000);
+        mTimer.schedule(timerTask, 60000, 60000);
     }
 
     private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
