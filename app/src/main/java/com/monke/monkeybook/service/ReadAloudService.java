@@ -115,7 +115,6 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
-            updateMediaSessionPlaybackState();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             for (int i = nowSpeak; i < allSpeak; i++) {
@@ -247,6 +246,7 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onStart(String s) {
+            updateMediaSessionPlaybackState();
         }
 
         @Override
@@ -283,7 +283,7 @@ public class ReadAloudService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initFocusRequest() {
         AudioAttributes mPlaybackAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build();
         mFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
