@@ -232,6 +232,9 @@ public class ReadAloudService extends Service {
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * 更新通知
+     */
     private void updateNotification() {
         String title;
         if (pause) {
@@ -241,7 +244,7 @@ public class ReadAloudService extends Service {
         } else {
             title = getString(R.string.read_aloud_t);
         }
-        //创建 Notification.Builder 对象
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
@@ -258,7 +261,6 @@ public class ReadAloudService extends Service {
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                 .setMediaSession(mediaSessionCompat.getSessionToken()).setShowActionsInCompactView(0, 1, 2));
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        //发送通知
         Notification notification = builder.build();
         startForeground(notificationId, notification);
     }
@@ -341,7 +343,9 @@ public class ReadAloudService extends Service {
         }
     }
 
-
+    /**
+     * @return 音频焦点
+     */
     private boolean requestFocus() {
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
