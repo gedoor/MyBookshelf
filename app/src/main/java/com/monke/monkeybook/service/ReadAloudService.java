@@ -410,7 +410,6 @@ public class ReadAloudService extends Service {
                 return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
             }
         });
-        mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
     }
 
     private void unRegisterMediaButton() {
