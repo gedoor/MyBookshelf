@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/fl_content"
-    android:keepScreenOn="true">
+    android:id="@+id/fl_content">
 
     <com.monke.monkeybook.widget.contentswitchview.ContentSwitchView
         android:id="@+id/csv_book"
