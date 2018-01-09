@@ -160,6 +160,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         readAloudIntent.setAction(newReadAloudAction);
         readBookControl = ReadBookControl.getInstance();
         setStatusBar();
+        if (readBookControl.getKeepScreenOn()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     private void setStatusBar() {
@@ -314,11 +317,23 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         });
         //其它设置
-        moreSettingPop = new MoreSettingPop(this, hideStatusBar -> {
-            if (hideStatusBar) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
+            @Override
+            public void statusBarChange(Boolean hideStatusBar) {
+                if (hideStatusBar) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            }
+
+            @Override
+            public void keepScreenOnChange(Boolean keepScreenOn) {
+                if (keepScreenOn) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
             }
         });
     }

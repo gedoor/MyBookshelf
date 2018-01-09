@@ -19,11 +19,14 @@ public class MoreSettingPop extends PopupWindow{
     private SwitchButton sbKey;
     private SwitchButton sbClick;
     private SwitchButton sbHideStatusBar;
+    private SwitchButton sbKeepScreenOn;
 
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener{
-        public void statusBarChange(Boolean hideStatusBar);
+        void statusBarChange(Boolean hideStatusBar);
+
+        void keepScreenOnChange(Boolean keepScreenOn);
     }
     private MoreSettingPop.OnChangeProListener changeProListener;
 
@@ -51,16 +54,22 @@ public class MoreSettingPop extends PopupWindow{
             readBookControl.setHideStatusBar(isChecked);
             changeProListener.statusBarChange(isChecked);
         });
+        sbKeepScreenOn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setKeepScreenOn(isChecked);
+            changeProListener.keepScreenOnChange(isChecked);
+        });
     }
 
     private void bindView() {
         sbKey = view.findViewById(R.id.sb_key);
         sbClick = view.findViewById(R.id.sb_click);
         sbHideStatusBar = view.findViewById(R.id.sb_hide_status_bar);
+        sbKeepScreenOn = view.findViewById(R.id.sb_keep_screen_on);
 
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
+        sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
     }
 
     private void initData() {
