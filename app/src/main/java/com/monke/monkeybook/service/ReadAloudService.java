@@ -19,7 +19,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -54,10 +53,11 @@ public class ReadAloudService extends Service {
     private Boolean speak = true;
     private Boolean pause = false;
     private String content;
-    private OnProgressListener progressListener;
     private int nowSpeak;
     private int allSpeak;
     private int timeMinute = 0;
+    private int maxTimeMinute = 60;
+    private boolean timerEnable = false;
     private Timer mTimer;
 
     private AudioManager audioManager;
@@ -145,7 +145,7 @@ public class ReadAloudService extends Service {
     private void doneService() {
         cancelTimer();
         stopSelf();
-        progressListener.moveStopProgress(1);
+        aloudServiceListener.stopService();
     }
 
     /**
@@ -179,14 +179,18 @@ public class ReadAloudService extends Service {
 
     private void updateTimer(int minute) {
         timeMinute = timeMinute + minute;
-        if (timeMinute > 60) {
+        if (timeMinute > maxTimeMinute) {
+            timerEnable = false;
             cancelTimer();
             timeMinute = 0;
             updateNotification();
         } else if (timeMinute <= 0) {
-            cancelTimer();
-            doneService();
+            if (timerEnable) {
+                cancelTimer();
+                doneService();
+            }
         } else {
+            timerEnable = true;
             updateNotification();
             if (mTimer == null) {
                 setTimer();
@@ -232,7 +236,7 @@ public class ReadAloudService extends Service {
         if (pause) {
             title = "朗读暂停";
         } else if (timeMinute > 0 && timeMinute <= 60) {
-            title = String.format("正在朗读(还乘%d分钟)", timeMinute);
+            title = String.format("正在朗读(还剩%d分钟)", timeMinute);
         } else {
             title = getString(R.string.read_aloud_t);
         }
@@ -258,8 +262,18 @@ public class ReadAloudService extends Service {
         startForeground(notificationId, notification);
     }
 
-    public void setOnProgressListener(OnProgressListener onProgressListener) {
-        progressListener = onProgressListener;
+    public interface AloudServiceListener {
+        void stopService();
+
+        void readAloudNext();
+
+        void showMassage(String msg);
+    }
+
+    private AloudServiceListener aloudServiceListener;
+
+    public void setAloudServiceListener(AloudServiceListener aloudServiceListener) {
+        this.aloudServiceListener = aloudServiceListener;
     }
 
     @Nullable
@@ -291,14 +305,16 @@ public class ReadAloudService extends Service {
                 int result = textToSpeech.setLanguage(Locale.US);
                 if (result == TextToSpeech.LANG_MISSING_DATA ||
                         result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    toast("TTS没有中文广语言");
+                    aloudServiceListener.showMassage("TTS没有中文语言");
+                    doneService();
                 } else {
                     textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     ttsInitSuccess = true;
                     playTTS();
                 }
             } else {
-                toast("TTS初始化失败");
+                aloudServiceListener.showMassage("TTS初始化失败");
+                doneService();
             }
         }
     }
@@ -314,7 +330,7 @@ public class ReadAloudService extends Service {
         public void onDone(String s) {
             nowSpeak = nowSpeak + 1;
             if (nowSpeak == allSpeak) {
-                progressListener.setDurProgress(1);
+                aloudServiceListener.readAloudNext();
             }
         }
 
@@ -418,7 +434,4 @@ public class ReadAloudService extends Service {
                         .build());
     }
 
-    private void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
 }
