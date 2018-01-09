@@ -111,12 +111,12 @@ public class ReadAloudService extends Service {
     }
 
     private void newReadAloud(String content, Boolean aloudButton) {
+        nowSpeak = 0;
         this.content = content.replaceAll("……", "");
         running = true;
         if (aloudButton || speak) {
             speak = false;
             pause = false;
-            nowSpeak = 0;
             playTTS();
         }
     }
