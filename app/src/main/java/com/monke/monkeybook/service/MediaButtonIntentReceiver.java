@@ -26,7 +26,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     }
 
     public static boolean handleIntent(final Context context, final Intent intent) {
-        if (DEBUG) Log.v(TAG, "Received intent: " + intent);
+        if (DEBUG) Log.d(TAG, "Received intent: " + intent);
         final String intentAction = intent.getAction();
         if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
             final KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);

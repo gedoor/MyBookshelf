@@ -20,12 +20,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
-import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.Locale;
 import java.util.Timer;
@@ -75,7 +73,7 @@ public class ReadAloudService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initFocusRequest();
         }
-        setupMediaSession();
+        initMediaSession();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
@@ -394,12 +392,15 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private void setupMediaSession() {
+    /**
+     * 初始化MediaSession
+     */
+    private void initMediaSession() {
         ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
-
         Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         mediaButtonIntent.setComponent(mComponent);
-        PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, mediaButtonIntent, 0);
+        PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(this, 0,
+                mediaButtonIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         mediaSessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
         mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
