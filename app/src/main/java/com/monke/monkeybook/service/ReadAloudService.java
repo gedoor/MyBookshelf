@@ -235,9 +235,9 @@ public class ReadAloudService extends Service {
     private void updateNotification() {
         String title;
         if (pause) {
-            title = "朗读暂停";
+            title = getString(R.string.read_aloud_pause);
         } else if (timeMinute > 0 && timeMinute <= 60) {
-            title = String.format("正在朗读(还剩%d分钟)", timeMinute);
+            title = String.format(getString(R.string.read_aloud_timer), timeMinute);
         } else {
             title = getString(R.string.read_aloud_t);
         }

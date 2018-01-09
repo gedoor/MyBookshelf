@@ -77,4 +77,6 @@
     <string name="pause">暂停</string>
     <string name="resume">继续</string>
     <string name="set_timer">定时</string>
+    <string name="read_aloud_pause">朗读暂停</string>
+    <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
 </resources>
