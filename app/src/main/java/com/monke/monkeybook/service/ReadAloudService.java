@@ -389,7 +389,9 @@ public class ReadAloudService extends Service {
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                     // 暂时丢失焦点，这种情况是被其他应用申请了短暂的焦点，可压低后台音量
-                    pauseReadAloud(false);
+                    if (!pause) {
+                        pauseReadAloud(false);
+                    }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                     // 短暂丢失焦点，这种情况是被其他应用申请了短暂的焦点希望其他声音能压低音量（或者关闭声音）凸显这个声音（比如短信提示音），
