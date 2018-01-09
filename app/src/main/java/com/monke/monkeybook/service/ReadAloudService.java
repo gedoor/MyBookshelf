@@ -111,6 +111,7 @@ public class ReadAloudService extends Service {
     }
 
     private void newReadAloud(String content, Boolean aloudButton) {
+        if (content == null) stopSelf();
         nowSpeak = 0;
         this.content = content.replaceAll("……", "");
         running = true;
