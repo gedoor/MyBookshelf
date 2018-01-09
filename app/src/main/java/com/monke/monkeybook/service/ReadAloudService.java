@@ -111,7 +111,7 @@ public class ReadAloudService extends Service {
     }
 
     private void newReadAloud(String content) {
-        this.content = content;
+        this.content = content.replaceAll("……", "");
         speak = false;
         pause = false;
         nowSpeak = 0;
