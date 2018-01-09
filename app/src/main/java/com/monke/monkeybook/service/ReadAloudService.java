@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -171,10 +172,10 @@ public class ReadAloudService extends Service {
     }
 
     private void aloudControl() {
-        if (speak) {
-            pauseReadAloud(true);
-        } else {
+        if (pause) {
             resumeReadAloud();
+        } else {
+            pauseReadAloud(true);
         }
     }
 
@@ -411,6 +412,7 @@ public class ReadAloudService extends Service {
                 return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
             }
         });
+        mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
     }
 
     private void unRegisterMediaButton() {

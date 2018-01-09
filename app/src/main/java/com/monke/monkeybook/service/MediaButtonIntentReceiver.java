@@ -35,9 +35,12 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             }
 
             final int keycode = event.getKeyCode();
+            final int action = event.getAction();
 
             String command = null;
             switch (keycode) {
+                case KeyEvent.KEYCODE_MEDIA_PAUSE:
+                case KeyEvent.KEYCODE_MEDIA_PLAY:
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                     command = ReadAloudService.mediaButtonAction;
@@ -46,10 +49,12 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                     break;
             }
             if (command != null) {
-                startService(context, command);
-                return true;
+                if (action == KeyEvent.ACTION_DOWN) {
+                    startService(context, command);
+                    return true;
                 }
             }
+        }
         return false;
     }
 

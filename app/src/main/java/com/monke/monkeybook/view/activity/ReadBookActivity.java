@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -183,6 +184,14 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void runMediaPlayer() {
+        // Stupid Android 8 "Oreo" hack to make media buttons work
+        final MediaPlayer mMediaPlayer;
+        mMediaPlayer = MediaPlayer.create(this, R.raw.silent_sound);
+        mMediaPlayer.setOnCompletionListener(mediaPlayer -> mMediaPlayer.release());
+        mMediaPlayer.start();
     }
 
     //初始化正文
@@ -465,6 +474,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //朗读
         ibReadAloud.setOnClickListener(view -> {
             popMenuOut();
+            runMediaPlayer();
             csvBook.readAloudStart();
             bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
         });
