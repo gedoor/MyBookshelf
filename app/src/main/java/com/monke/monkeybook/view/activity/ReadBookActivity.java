@@ -135,9 +135,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     csvBook.readAloudStop();
                 }
                 @Override
-                public void pauseAloud() {
-
-                }
                 public void readAloudNext() {
                     runOnUiThread(() -> csvBook.readAloudNext());
                 }
@@ -434,6 +431,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
             @Override
             public void readAloud(String content) {
+                readAloudIntent.putExtra("aloudButton", aloudButton);
                 readAloudIntent.putExtra("content", content);
                 startService(readAloudIntent);
                 aloudButton = false;

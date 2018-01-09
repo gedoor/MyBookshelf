@@ -102,7 +102,7 @@ public class ReadAloudService extends Service {
                 updateTimer(intent.getIntExtra("minute", 10));
                 break;
             case newReadAloudAction:
-                newReadAloud(intent.getStringExtra("content"));
+                newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
                 break;
             default:
                 break;
@@ -110,13 +110,15 @@ public class ReadAloudService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void newReadAloud(String content) {
+    private void newReadAloud(String content, Boolean aloudButton) {
         this.content = content.replaceAll("……", "");
         running = true;
-        speak = false;
-        pause = false;
-        nowSpeak = 0;
-        playTTS();
+        if (aloudButton || speak) {
+            speak = false;
+            pause = false;
+            nowSpeak = 0;
+            playTTS();
+        }
     }
 
     public void playTTS() {
@@ -272,8 +274,6 @@ public class ReadAloudService extends Service {
 
     public interface AloudServiceListener {
         void stopService();
-
-        void pauseAloud();
         void readAloudNext();
         void showMassage(String msg);
     }
