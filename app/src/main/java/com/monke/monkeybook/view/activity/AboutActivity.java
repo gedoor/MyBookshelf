@@ -19,6 +19,7 @@ import com.monke.basemvplib.impl.BaseActivity;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.help.Donate;
 
 import java.text.Format;
 
@@ -58,11 +59,13 @@ public class AboutActivity extends MBaseActivity {
                 .isRTL(false)
                 .setImage(R.drawable.icon_monkovel_big_black)
                 .setDescription(getString(R.string.about_description))
-                .addItem(versionElement())
+                .addItem(getVersionElement())
+                .addItem(getDonateElement())
+                .addItem(getScoringElement())
                 .addEmail("kunfei.ge@gmail.com")
                 .addWebsite("https://github.com/gedoor/MONKOVEL")
                 .addGitHub("gedoor")
-                .addItem(disclaimerElement())
+                .addItem(getDisclaimerElement())
                 .create();
         vwAbout.addView(aboutPage);
     }
@@ -78,25 +81,48 @@ public class AboutActivity extends MBaseActivity {
         llContent.startAnimation(animIn);
     }
 
-    private Element versionElement() {
-        Element versionElement = new Element();
+    private Element getVersionElement() {
+        Element element = new Element();
         String version = MApplication.getVersionName();
-        versionElement.setTitle(String.format(getString(R.string.version_name), version));
-        versionElement.setIconDrawable(R.drawable.ic_turned_in_not_black_24dp);
-        return versionElement;
+        element.setTitle(String.format(getString(R.string.version_name), version));
+        element.setIconDrawable(R.drawable.ic_turned_in_not_black_24dp);
+        return element;
     }
 
-    private Element disclaimerElement() {
-        Element disclaimerElement = new Element();
-        disclaimerElement.setTitle(getString(R.string.disclaimer));
-        disclaimerElement.setIconDrawable(R.drawable.ic_launch_black_24dp);
-        disclaimerElement.setOnClickListener(view -> {
+    private Element getDisclaimerElement() {
+        Element element = new Element();
+        element.setTitle(getString(R.string.disclaimer));
+        element.setIconDrawable(R.drawable.ic_launch_black_24dp);
+        element.setOnClickListener(view -> {
             String url = "https://gedoor.github.io/MONKOVEL/disclaimer.html";
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent .setData(Uri.parse(url));
             startActivityForResult(intent, 0);
         });
-        return disclaimerElement;
+        return element;
+    }
+
+    private Element getDonateElement() {
+        Element element = new Element();
+        element.setTitle(getString(R.string.donate));
+        element.setIconDrawable(R.drawable.ic_local_cafe_black_24dp);
+        element.setOnClickListener(view -> {
+            Donate.aliDonate(this);
+        });
+        return element;
+    }
+
+    private Element getScoringElement() {
+        Element element = new Element();
+        element.setTitle("评分");
+        element.setIconDrawable(R.drawable.ic_local_florist_black_24dp);
+        element.setOnClickListener(view -> {
+            String mAddress = "market://details?id=" + getPackageName();
+            Intent marketIntent = new Intent("android.intent.action.VIEW");
+            marketIntent.setData(Uri.parse(mAddress ));
+            startActivity(marketIntent);
+        });
+        return element;
     }
 
     //设置ToolBar
