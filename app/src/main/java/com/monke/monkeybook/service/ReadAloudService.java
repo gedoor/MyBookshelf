@@ -142,6 +142,9 @@ public class ReadAloudService extends Service {
         }
     }
 
+    /**
+     * 关闭服务
+     */
     private void doneService() {
         cancelTimer();
         stopSelf();
@@ -192,9 +195,7 @@ public class ReadAloudService extends Service {
         } else {
             timerEnable = true;
             updateNotification();
-            if (mTimer == null) {
-                setTimer();
-            }
+            setTimer();
         }
     }
 
