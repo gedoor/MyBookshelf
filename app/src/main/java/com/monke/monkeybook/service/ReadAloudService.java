@@ -59,7 +59,6 @@ public class ReadAloudService extends Service {
     private int allSpeak;
     private int timeMinute = 0;
     private Timer mTimer;
-    private TimerTask timerTask;
 
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
@@ -144,9 +143,7 @@ public class ReadAloudService extends Service {
     }
 
     private void doneService() {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+        cancelTimer();
         stopSelf();
         progressListener.moveStopProgress(1);
     }
@@ -155,9 +152,7 @@ public class ReadAloudService extends Service {
      * @param pause true 暂停, false 失去焦点
      */
     private void pauseReadAloud(Boolean pause) {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+        cancelTimer();
         this.pause = pause;
         speak = false;
         updateNotification();
@@ -185,11 +180,11 @@ public class ReadAloudService extends Service {
     private void updateTimer(int minute) {
         timeMinute = timeMinute + minute;
         if (timeMinute > 60) {
-            mTimer.cancel();
+            cancelTimer();
             timeMinute = 0;
             updateNotification();
         } else if (timeMinute <= 0) {
-            mTimer.cancel();
+            cancelTimer();
             doneService();
         } else {
             updateNotification();
@@ -200,17 +195,24 @@ public class ReadAloudService extends Service {
     }
 
     private void setTimer() {
-        mTimer = new Timer();
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                setTimerIntent.setAction(setTimerAction);
-                setTimerIntent.putExtra("minute", -1);
-                startService(setTimerIntent);
-            }
-        };
-        mTimer.schedule(timerTask, 60000, 60000);
+        if (mTimer == null) {
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+                    setTimerIntent.setAction(setTimerAction);
+                    setTimerIntent.putExtra("minute", -1);
+                    startService(setTimerIntent);
+                }
+            }, 60000, 60000);
+        }
+    }
+
+    private void cancelTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
     }
 
     private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
