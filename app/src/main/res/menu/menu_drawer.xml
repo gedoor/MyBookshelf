@@ -32,7 +32,7 @@
 
         <item
             android:id="@+id/action_donate"
-            android:icon="@drawable/ic_launch_black_24dp"
+            android:icon="@drawable/ic_local_cafe_black_24dp"
             android:title="@string/donate" />
     </group>
 
