@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -41,12 +40,12 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
-import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
-import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
-import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
+import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
+import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.view.popupwindow.WindowLightPop;
+import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -64,12 +63,10 @@ import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FRO
 import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
 
 public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView{
-    public final static int OPEN_FROM_ALOUD = 3;
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.csv_book)
     ContentSwitchView csvBook;
-
     //主菜单
     @BindView(R.id.fl_menu)
     FrameLayout flMenu;
@@ -113,6 +110,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private Animation menuBottomIn;
     private Animation menuBottomOut;
 
+    private boolean aloudButton;
+
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
@@ -121,7 +120,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private MoProgressHUD moProgressHUD;
     private ReadBookControl readBookControl;
     private Intent readAloudIntent;
-    private ReadAloudService readAloudService;
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -129,7 +127,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //返回一个MsgService对象
-            readAloudService = ((ReadAloudService.MyBinder)service).getService();
+            ReadAloudService readAloudService = ((ReadAloudService.MyBinder) service).getService();
             readAloudService.setAloudServiceListener(new ReadAloudService.AloudServiceListener() {
                 @Override
                 public void stopService() {
@@ -137,6 +135,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                     csvBook.readAloudStop();
                 }
                 @Override
+                public void pauseAloud() {
+
+                }
                 public void readAloudNext() {
                     runOnUiThread(() -> csvBook.readAloudNext());
                 }
@@ -184,14 +185,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
-    private void runMediaPlayer() {
-        // Stupid Android 8 "Oreo" hack to make media buttons work
-        final MediaPlayer mMediaPlayer;
-        mMediaPlayer = MediaPlayer.create(this, R.raw.silent_sound);
-        mMediaPlayer.setOnCompletionListener(mediaPlayer -> mMediaPlayer.release());
-        mMediaPlayer.start();
     }
 
     //初始化正文
@@ -443,6 +436,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             public void readAloud(String content) {
                 readAloudIntent.putExtra("content", content);
                 startService(readAloudIntent);
+                aloudButton = false;
             }
         });
 
@@ -473,8 +467,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
+            aloudButton = true;
             popMenuOut();
-            runMediaPlayer();
             csvBook.readAloudStart();
             bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
         });

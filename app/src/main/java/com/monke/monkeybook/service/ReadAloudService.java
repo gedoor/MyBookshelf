@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.RunMediaPlayer;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import java.util.Locale;
@@ -272,8 +273,8 @@ public class ReadAloudService extends Service {
     public interface AloudServiceListener {
         void stopService();
 
+        void pauseAloud();
         void readAloudNext();
-
         void showMassage(String msg);
     }
 
@@ -351,6 +352,7 @@ public class ReadAloudService extends Service {
      * @return 音频焦点
      */
     private boolean requestFocus() {
+        RunMediaPlayer.playSilentSound(this);
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             request = audioManager.requestAudioFocus(mFocusRequest);
