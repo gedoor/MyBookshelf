@@ -39,6 +39,7 @@ import static com.monke.monkeybook.MApplication.DEBUG;
 
 public class ReadAloudService extends Service {
     private static final String TAG = ReadAloudService.class.getSimpleName();
+    public static Boolean running = false;
     public static final String mediaButtonAction = "mediaButton";
     public static final String newReadAloudAction = "newReadAloud";
     private static final String doneServiceAction = "doneService";
@@ -77,7 +78,6 @@ public class ReadAloudService extends Service {
         initMediaSession();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
-        updateNotification();
     }
 
     @Override
@@ -111,6 +111,7 @@ public class ReadAloudService extends Service {
 
     private void newReadAloud(String content) {
         this.content = content.replaceAll("……", "");
+        running = true;
         speak = false;
         pause = false;
         nowSpeak = 0;
@@ -118,6 +119,10 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
+        if (content == null){
+            stopSelf();
+            return;
+        }
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
             updateNotification();
@@ -293,11 +298,11 @@ public class ReadAloudService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stopForeground(true);
         textToSpeech.stop();
         textToSpeech.shutdown();
         textToSpeech = null;
         unRegisterMediaButton();
+        running = false;
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {

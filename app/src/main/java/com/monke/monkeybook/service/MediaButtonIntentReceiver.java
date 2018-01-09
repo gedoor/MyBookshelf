@@ -1,13 +1,18 @@
 package com.monke.monkeybook.service;
 
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import com.monke.monkeybook.BuildConfig;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by GKF on 2018/1/6.
@@ -59,8 +64,10 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     }
 
     private static void startService(Context context, String command) {
-        final Intent intent = new Intent(context, ReadAloudService.class);
-        intent.setAction(command);
-        context.startService(intent);
+        if (ReadAloudService.running) {
+            final Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(command);
+            context.startService(intent);
+        }
     }
 }
