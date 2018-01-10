@@ -335,9 +335,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             });
         });
         //换源
-        readBookMenuMorePop.setOnClickChangeSource(view ->{
+        readBookMenuMorePop.setOnClickChangeSource(view -> {
             readBookMenuMorePop.dismiss();
-            popMenuOut();
+            ReadBookActivity.this.popMenuOut();
 
         });
         //其它设置
