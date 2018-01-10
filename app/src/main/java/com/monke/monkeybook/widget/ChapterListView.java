@@ -115,18 +115,18 @@ public class ChapterListView extends FrameLayout{
     }
 
     public interface OnItemClickListener{
-        public void itemClick(int index);
+        void itemClick(int index);
     }
 
     private void initView() {
-        flBg = (FrameLayout) findViewById(R.id.fl_bg);
-        llContent = (LinearLayout) findViewById(R.id.ll_content);
-        tvName = (TextView) findViewById(R.id.tv_name);
-        tvListCount = (TextView) findViewById(R.id.tv_listcount);
-        rvList = (RecyclerView) findViewById(R.id.rv_list);
+        flBg = findViewById(R.id.fl_bg);
+        llContent = findViewById(R.id.ll_content);
+        tvName = findViewById(R.id.tv_name);
+        tvListCount = findViewById(R.id.tv_listcount);
+        rvList = findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setItemAnimator(null);
-        rvbSlider = (RecyclerViewBar) findViewById(R.id.rvb_slider);
+        rvbSlider = findViewById(R.id.rvb_slider);
     }
 
     public void setData(BookShelfBean bookShelfBean,OnItemClickListener clickListener) {
