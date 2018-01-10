@@ -78,6 +78,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         this.bookReadInitListener = bookReadInitListener;
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutInitListener);
     }
+
     public void startLoading(){
         int height = durPageView.getTvContent().getHeight();
         if (height > 0) {
@@ -96,6 +97,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private float startX = -1;
 
+    /**
+     * 操作事件
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -208,6 +212,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    /**
+     * 翻页动画
+     */
     private void initMoveSuccessAnim(final View view, final int orderX) {
         if (null != view) {
             long temp = Math.abs(view.getLeft() - orderX) / (getWidth() / animDuration);
@@ -403,12 +410,18 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     public void readAloud(String string) {
 
     }
-    //开始朗读
+
+    /**
+     * 开始朗读
+     */
     public void readAloudStart() {
         readAloud = true;
         loadDataListener.readAloud(durPageView.getContent());
     }
-    //朗读下一页
+
+    /**
+     * 朗读下一页
+     */
     public void readAloudNext() {
         if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
             int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
@@ -417,7 +430,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             noNext();
         }
     }
-    //停止朗读
+
+    /**
+     * 停止朗读
+     */
     public void readAloudStop() {
         readAloud = false;
     }

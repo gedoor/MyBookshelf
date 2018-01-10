@@ -64,15 +64,15 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             return bookShelfBean.getBookInfoBean().getChapterlist().size();
     }
 
-    public class Viewholder extends RecyclerView.ViewHolder {
+    class Viewholder extends RecyclerView.ViewHolder {
         private FrameLayout flContent;
         private TextView tvName;
         private View vLine;
 
-        public Viewholder(View itemView) {
+        Viewholder(View itemView) {
             super(itemView);
-            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
-            tvName = (TextView) itemView.findViewById(R.id.tv_name);
+            flContent = itemView.findViewById(R.id.fl_content);
+            tvName = itemView.findViewById(R.id.tv_name);
             vLine = itemView.findViewById(R.id.v_line);
         }
     }
