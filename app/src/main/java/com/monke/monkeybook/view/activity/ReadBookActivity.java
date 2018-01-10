@@ -315,7 +315,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
                 moProgressHUD.dismiss();
                 mPresenter.addToShelf(() -> {
-                    List<DownloadChapterBean> result = new ArrayList<DownloadChapterBean>();
+                    List<DownloadChapterBean> result = new ArrayList<>();
                     for (int i = start; i <= end; i++) {
                         DownloadChapterBean item = new DownloadChapterBean();
                         item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
