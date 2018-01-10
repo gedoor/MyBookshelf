@@ -15,6 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import com.monke.monkeybook.ReadBookControl;
 import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.utils.KeyUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,19 +165,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         //点击事件
                         if (readBookControl.getCanClickTurn() && event.getX() <= getWidth() / 3) {
                             //点击向前翻页
-                            if (state == PRE_AND_NEXT || state == ONLY_PRE) {
-                                initMoveSuccessAnim(viewContents.get(0), 0);
-                            } else {
-                                noPre();
-                            }
+                            gotoPrePage();
                         } else if (readBookControl.getCanClickTurn() && event.getX() >= getWidth() / 3 * 2) {
                             //点击向后翻页
-                            if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-                                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-                                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
-                            } else {
-                                noNext();
-                            }
+                            gotoNextPage();
                         } else {
                             //点击中间部位
                             if (loadDataListener != null)
@@ -399,6 +392,29 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    /**
+     * 翻下页
+     */
+    private void gotoNextPage() {
+        if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
+            int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
+            initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
+        } else {
+            noNext();
+        }
+    }
+
+    /**
+     * 翻上页
+     */
+    private void gotoPrePage() {
+        if (state == PRE_AND_NEXT || state == ONLY_PRE) {
+            initMoveSuccessAnim(viewContents.get(0), 0);
+        } else {
+            noPre();
+        }
+    }
+
     @Override
     public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex) {
         if (null != getDurContentView() && bookContentView == getDurContentView() && chapterAll > 0 && pageAll > 0) {
@@ -423,12 +439,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 朗读下一页
      */
     public void readAloudNext() {
-        if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-            int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-            initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
-        } else {
-            noNext();
-        }
+        gotoNextPage();
     }
 
     /**
@@ -519,21 +530,38 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         loadDataListener.initData(durPageView.getLineCount(durHeight));
     }
 
+    /**
+     * 音量键翻页
+     */
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-            if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
-            } else {
-                noNext();
-            }
+            KeyUtil keyUtil = KeyUtil.getInstance();
+            keyUtil.setOnKeyDownListener(new KeyUtil.OnKeyDownListener() {
+                @Override
+                public void longPress(int keycode) {
+
+                }
+
+                @Override
+                public void singleClick(int keycode) {
+                    gotoNextPage();
+
+                }
+
+                @Override
+                public void doublePress(int keycode) {
+
+                }
+
+                @Override
+                public void twoKeyDown() {
+
+                }
+            });
+            keyUtil.dispatchKeyEvent(event);
             return true;
         }else if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-            if (state == PRE_AND_NEXT || state == ONLY_PRE) {
-                initMoveSuccessAnim(viewContents.get(0), 0);
-            } else {
-                noPre();
-            }
+            gotoPrePage();
             return true;
         }
         return false;
