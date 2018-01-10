@@ -411,7 +411,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //菜单
-        ivMenuMore.setOnClickListener(v -> readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
+        ivMenuMore.setOnClickListener(v -> {
+            readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f));
+        });
 
         //正文
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
@@ -468,7 +470,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //刷新按钮
         ivRefresh.setOnClickListener(v -> {
-            popMenuOut();
+            ReadBookActivity.this.popMenuOut();
             mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                     .getBookContentBean().setDurCapterContent(null);
             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
