@@ -77,7 +77,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
-        for (BookSourceBean bookSourceBean: AllBookSource.getAllBookSource()) {
+        for (BookSourceBean bookSourceBean: AllBookSource.getSelectedBookSource()) {
             Map se = new HashMap();
             se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
             se.put(HASMORE_KEY, true);
