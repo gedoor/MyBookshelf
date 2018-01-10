@@ -466,10 +466,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //返回按钮
-        ivReturn.setOnClickListener(v -> finish());
+        ivReturn.setOnClickListener(view -> finish());
 
         //刷新按钮
-        ivRefresh.setOnClickListener(v -> {
+        ivRefresh.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
             mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                     .getBookContentBean().setDurCapterContent(null);
@@ -483,7 +483,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //打开URL
-        atvUrl.setOnClickListener(v -> {
+        atvUrl.setOnClickListener(view -> {
             String url = atvUrl.getText().toString();
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(url));
@@ -493,42 +493,42 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //朗读
         ibReadAloud.setOnClickListener(view -> {
             aloudButton = true;
-            popMenuOut();
+            ReadBookActivity.this.popMenuOut();
             csvBook.readAloudStart();
-            bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+            ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
         });
 
         //上一章
-        tvPre.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
+        tvPre.setOnClickListener(view -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                 BookContentView.DurPageIndexBegin));
 
         //下一章
-        tvNext.setOnClickListener(v -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
+        tvNext.setOnClickListener(view -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                 BookContentView.DurPageIndexBegin));
 
         //目录
-        llCatalog.setOnClickListener(v -> {
-            popMenuOut();
+        llCatalog.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
             new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
         });
 
         //亮度
-        llLight.setOnClickListener(v -> {
-            popMenuOut();
+        llLight.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
             new Handler().postDelayed(() -> windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //界面
-        llFont.setOnClickListener(v -> {
-            popMenuOut();
+        llFont.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
             new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置
-        llSetting.setOnClickListener(v -> {
-            popMenuOut();
+        llSetting.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
     }
