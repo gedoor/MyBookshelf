@@ -22,11 +22,25 @@ public class AllBookSource {
         return new AllBookSource();
     }
 
-    public static List<BookSourceBean> getAllBookSource() {
-        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+    public static List<BookSourceBean> getSelectedBookSource() {
+        List<BookSourceBean> selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+        if (selectedBookSource.size() == 0) {
+            return getAllBookSource();
+        } else {
+            return selectedBookSource;
+        }
     }
 
-    public static void saveBookSourceToDb() {
+    public static List<BookSourceBean> getAllBookSource() {
+        List<BookSourceBean> allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+        if (allBookSource.size() == 0) {
+            return saveBookSourceToDb();
+        } else {
+            return allBookSource;
+        }
+    }
+
+    public static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceList = new ArrayList<>();
         bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true));
         bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true));
@@ -36,6 +50,7 @@ public class AllBookSource {
         for (BookSourceBean bookSourceBean : bookSourceList) {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
         }
+        return bookSourceList;
     }
 
     //获取book source class

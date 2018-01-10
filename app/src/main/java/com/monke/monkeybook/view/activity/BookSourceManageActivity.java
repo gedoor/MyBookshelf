@@ -56,7 +56,6 @@ public class BookSourceManageActivity extends MBaseActivity<IBookSourceManagePre
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        AllBookSource.saveBookSourceToDb();
         initReayclerView();
     }
 
