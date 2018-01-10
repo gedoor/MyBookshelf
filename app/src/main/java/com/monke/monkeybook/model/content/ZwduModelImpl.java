@@ -85,16 +85,18 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         });
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取书籍信息
+     */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitGson(TAG)
+        return getRetrofitString(TAG, "gb2312")
                 .create(IZwduApi.class)
                 .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyBookInfo(Result<Body> s, final BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> analyBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
@@ -103,11 +105,11 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         });
     }
 
-    private BookInfoBean analyBookinfo(Result<Body> s, String novelUrl) {
+    private BookInfoBean analyBookinfo(String s, String novelUrl) {
         BookInfoBean bookInfoBean = new BookInfoBean();
         bookInfoBean.setNoteUrl(novelUrl);   //id
         bookInfoBean.setTag(TAG);
-        Document doc = Jsoup.parse(s.toString());
+        Document doc = Jsoup.parse(s);
         Element resultE = doc.getElementsByClass("box_con").get(0);
         bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());
@@ -115,14 +117,14 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         author = author.replace(" ", "").replace("  ", "").replace("作者：", "");
         bookInfoBean.setAuthor(author);
 
-        List<TextNode> contentEs = resultE.getElementById("intro").textNodes();
+        Elements contentEs = resultE.getElementById("intro").getElementsByTag("p");
         StringBuilder content = new StringBuilder();
         for (int i = 0; i < contentEs.size(); i++) {
             String temp = contentEs.get(i).text().trim();
             temp = temp.replaceAll(" ", "").replaceAll(" ", "")
                     .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
             if (temp.length() > 0) {
-                if (i != 0) {
+                if (content.length() > 0) {
                     content.append("\r\n");
                 }
                 content.append("\u3000\u3000" + temp);
@@ -135,10 +137,15 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         return bookInfoBean;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取目录
+     */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(IZwduApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
+        getRetrofitString(TAG, "gb2312")
+                .create(IZwduApi.class)
+                .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
+                .flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -187,10 +194,15 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取正文
+     */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(IZwduApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
+        return getRetrofitString(TAG, "gb2312")
+                .create(IZwduApi.class)
+                .getBookContent(durChapterUrl.replace(TAG, ""))
+                .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
