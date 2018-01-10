@@ -34,7 +34,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private List<BookContentView> viewContents;
 
     public interface OnBookReadInitListener{
-        public void success();
+        void success();
     }
     private OnBookReadInitListener bookReadInitListener;
 

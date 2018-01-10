@@ -306,7 +306,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //离线下载
         readBookMenuMorePop.setOnClickDownload(v -> {
             readBookMenuMorePop.dismiss();
-            popMenuOut();
+            ReadBookActivity.this.popMenuOut();
             //弹出离线下载界面
             int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
             if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
@@ -327,9 +327,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                         item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
                         result.add(item);
                     }
-                    Intent intent = new Intent(this, DownloadService.class);
+                    Intent intent = new Intent(ReadBookActivity.this, DownloadService.class);
                     intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
-                    startService(intent);
+                    ReadBookActivity.this.startService(intent);
                 });
 
             });
