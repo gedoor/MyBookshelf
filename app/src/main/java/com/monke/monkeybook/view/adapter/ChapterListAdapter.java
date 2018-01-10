@@ -13,7 +13,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.widget.ChapterListView;
 
-public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.Viewholder> {
+public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
     private int index = 0;
@@ -25,12 +25,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     @Override
-    public Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new Viewholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_adapter_chapterlist, parent, false));
+    public ThisViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_adapter_chapterlist, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Viewholder holder, final int posiTion) {
+    public void onBindViewHolder(ThisViewHolder holder, final int posiTion) {
         if (posiTion == getItemCount() - 1) {
             holder.vLine.setVisibility(View.INVISIBLE);
         } else
@@ -64,12 +64,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             return bookShelfBean.getBookInfoBean().getChapterlist().size();
     }
 
-    class Viewholder extends RecyclerView.ViewHolder {
+    class ThisViewHolder extends RecyclerView.ViewHolder {
         private FrameLayout flContent;
         private TextView tvName;
         private View vLine;
 
-        Viewholder(View itemView) {
+        ThisViewHolder(View itemView) {
             super(itemView);
             flContent = itemView.findViewById(R.id.fl_content);
             tvName = itemView.findViewById(R.id.tv_name);
