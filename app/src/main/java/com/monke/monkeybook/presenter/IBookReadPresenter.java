@@ -14,6 +14,8 @@ public interface IBookReadPresenter extends IPresenter{
 
     BookShelfBean getBookShelf();
 
+    void setBookshelf(BookShelfBean bookshelf);
+
     void initContent();
 
     void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);

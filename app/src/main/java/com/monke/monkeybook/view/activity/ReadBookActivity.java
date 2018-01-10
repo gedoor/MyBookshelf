@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
@@ -52,6 +54,7 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +114,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private Animation menuBottomOut;
 
     private boolean aloudButton;
+    BookShelfBean bookshelf;
 
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
@@ -152,6 +156,14 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            bookshelf = savedInstanceState.getParcelable("bookshelf");
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_bookread);
@@ -164,12 +176,25 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("bookshelf", mPresenter.getBookShelf());
+    }
+
     private void setStatusBar() {
         if (readBookControl.getHideStatusBar()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
     private void popMenuOut() {
@@ -586,6 +611,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     public void showDownloadMenu() {
         ivMenuMore.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public BookShelfBean getBookShelf() {
+        return bookshelf;
     }
 
     private Boolean showCheckPremission = false;

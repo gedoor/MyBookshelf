@@ -34,7 +34,6 @@ import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
-import com.monke.monkeybook.view.activity.MainActivity;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -68,15 +67,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         open_from = intent.getIntExtra("from", OPEN_FROM_OTHER);
         if (open_from == OPEN_FROM_APP) {
             String key = intent.getStringExtra("data_key");
-            if (BitIntentDataManager.getInstance() == null) {
-                activity.finish();
-                intent = new Intent(activity, MainActivity.class);
-                activity.startActivityForResult(intent, 0);
-            } else {
+            bookShelf = mView.getBookShelf();
+            if (bookShelf == null) {
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
-                if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                    mView.showDownloadMenu();
-                }
+            }
+            if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                mView.showDownloadMenu();
                 BitIntentDataManager.getInstance().cleanData(key);
                 checkInShelf();
             }
@@ -148,6 +144,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     @Override
     public BookShelfBean getBookShelf() {
         return bookShelf;
+    }
+
+    @Override
+    public void setBookshelf(BookShelfBean bookshelf) {
+        this.bookShelf = bookshelf;
     }
 
     @Override
@@ -285,7 +286,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     private void LoadNextChapter(int durChapterIndex) {
-        new Thread(()->{
+        new Thread(() -> {
             int nextIndex = durChapterIndex + 1;
             if (bookShelf.getBookInfoBean().getChapterlist().size() > nextIndex) {
                 if (bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).getBookContentBean() == null) {

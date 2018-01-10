@@ -3,6 +3,7 @@ package com.monke.monkeybook.view;
 
 import android.graphics.Paint;
 import com.monke.basemvplib.IView;
+import com.monke.monkeybook.bean.BookShelfBean;
 
 public interface IBookReadView extends IView{
 
@@ -35,4 +36,6 @@ public interface IBookReadView extends IView{
     void loadLocationBookError();
 
     void showDownloadMenu();
+
+    BookShelfBean getBookShelf();
 }
