@@ -76,6 +76,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
                 });
 
         //搜索引擎初始化
+        AllBookSource.saveBookSourceToDb();
         searchEngine = new ArrayList<>();
 
         for (BookSourceBean bookSourceBean: AllBookSource.getAllBookSource()) {

@@ -172,7 +172,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         });
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取书籍信息
+     */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
@@ -209,8 +211,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return bookInfoBean;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //获取目录
+    /**
+     * 获取目录
+     */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitObject(TAG).create(IGxwztvApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl()
@@ -263,7 +266,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取正文
+     */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookContent(durChapterUrl.replace(TAG, ""))

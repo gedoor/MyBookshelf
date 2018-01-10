@@ -13,7 +13,7 @@ import retrofit2.http.Url;
 public interface IZwduApi {
 
     @GET
-    Observable<Result<Body>> getBookInfo(@Url String url);
+    Observable<String> getBookInfo(@Url String url);
 
     @GET("/search.php")
     Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);

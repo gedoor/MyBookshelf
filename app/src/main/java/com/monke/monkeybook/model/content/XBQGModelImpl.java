@@ -79,10 +79,15 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         });
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取书籍信息
+     */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
+        return getRetrofitObject(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
+                .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
@@ -126,7 +131,9 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return bookInfoBean;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取目录
+     */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
@@ -178,7 +185,9 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取正文
+     */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));

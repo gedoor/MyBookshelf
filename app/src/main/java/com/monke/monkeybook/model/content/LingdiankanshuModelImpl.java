@@ -78,7 +78,9 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         });
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取书籍信息
+     */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
@@ -124,7 +126,9 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         return bookInfoBean;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取目录
+     */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
@@ -176,7 +180,9 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * 获取正文
+     */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, ""))

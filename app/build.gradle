@@ -6,7 +6,7 @@ static def increasedVersionCode(){
     return (int)(System.currentTimeMillis()/1000/60/60-17141)
 }
 def name = "MONKOVEL"
-def version = "1.4." + increasedVersionCode()
+def version = "1.5." + increasedVersionCode()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
