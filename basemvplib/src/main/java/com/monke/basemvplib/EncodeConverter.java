@@ -1,5 +1,12 @@
 package com.monke.basemvplib;
 
+import android.support.annotation.NonNull;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -35,9 +42,10 @@ public class EncodeConverter extends Converter.Factory {
                                                             Retrofit retrofit) {
         return new Converter<ResponseBody, String>() {
             @Override
-            public String convert(ResponseBody value) throws IOException {
+            public String convert(@NonNull ResponseBody value) throws IOException {
                 BufferedSource bufferedSource = Okio.buffer(value.source());
                 String responseData = bufferedSource.readString(Charset.forName(encode));
+                bufferedSource.close();
                 return responseData;
             }
         };

@@ -77,8 +77,6 @@ dependencies {
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
-    //J_SOUP
-    implementation 'org.jsoup:jsoup:1.10.2'
     //沉浸式状态栏
     implementation 'com.zhangmonke:ImmerseLayout:1.1.1'
     //ProgressBar
