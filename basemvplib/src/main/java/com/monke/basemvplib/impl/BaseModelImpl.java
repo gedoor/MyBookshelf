@@ -1,6 +1,6 @@
 package com.monke.basemvplib.impl;
 
-import com.monke.basemvplib.EncodoConverter;
+import com.monke.basemvplib.EncodeConverter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +31,7 @@ public class BaseModelImpl {
     protected Retrofit getRetrofitString(String url, String encode) {
         return new Retrofit.Builder().baseUrl(url)
                 //增加返回值为字符串的支持(以实体类返回)
-                .addConverterFactory(EncodoConverter.create(encode))
+                .addConverterFactory(EncodeConverter.create(encode))
                 //增加返回值为Oservable<T>的支持
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(clientBuilder.build())

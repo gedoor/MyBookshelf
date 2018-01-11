@@ -1,4 +1,3 @@
-//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.impl.BaseModelImpl;
@@ -27,12 +26,20 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
-    public static final String TAG = "https://www.zwdu.com";
-    public static final String name = "八一中文";
+/**
+ * 默认检索规则
+ */
+public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel {
+    private String TAG;
+    private String name;
 
-    public static ZwduModelImpl getInstance() {
-        return new ZwduModelImpl();
+    public static DefaultModelImpl getInstance(String tag) {
+        return new DefaultModelImpl(tag);
+    }
+
+    private DefaultModelImpl(String tag) {
+        TAG = tag;
+        name = tag;
     }
 
     /**

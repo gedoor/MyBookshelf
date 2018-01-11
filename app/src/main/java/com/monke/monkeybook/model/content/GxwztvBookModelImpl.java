@@ -67,7 +67,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
             Element contentE = doc.getElementsByClass("container").get(0);
             //解析最新书籍
             Elements newBookEs = contentE.getElementsByClass("list-group-item text-nowrap modal-open");
-            List<LibraryNewBookBean> libraryNewBooks = new ArrayList<LibraryNewBookBean>();
+            List<LibraryNewBookBean> libraryNewBooks = new ArrayList<>();
             for (int i = 0; i < newBookEs.size(); i++) {
                 Element itemE = newBookEs.get(i).getElementsByTag("a").get(0);
                 LibraryNewBookBean item = new LibraryNewBookBean(itemE.text(), TAG + itemE.attr("href"), TAG, "gxwztv.com");
@@ -75,7 +75,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
             }
             result.setLibraryNewBooks(libraryNewBooks);
             //////////////////////////////////////////////////////////////////////
-            List<LibraryKindBookListBean> kindBooks = new ArrayList<LibraryKindBookListBean>();
+            List<LibraryKindBookListBean> kindBooks = new ArrayList<>();
             //解析男频女频
             Elements hotEs = contentE.getElementsByClass("col-xs-12");
             for (int i = 1; i < hotEs.size(); i++) {
@@ -83,7 +83,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 kindItem.setKindName(hotEs.get(i).getElementsByClass("panel-title").get(0).text());
                 Elements bookEs = hotEs.get(i).getElementsByClass("panel-body").get(0).getElementsByTag("li");
 
-                List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                List<SearchBookBean> books = new ArrayList<>();
                 for (int j = 0; j < bookEs.size(); j++) {
                     SearchBookBean searchBookBean = new SearchBookBean();
                     searchBookBean.setOrigin(name);
@@ -103,7 +103,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 kindItem.setKindName(kindEs.get(i).getElementsByClass("panel-title").get(0).text());
                 kindItem.setKindUrl(TAG + kindEs.get(i).getElementsByClass("listMore").get(0).getElementsByTag("a").get(0).attr("href"));
 
-                List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                List<SearchBookBean> books = new ArrayList<>();
                 Element firstBookE = kindEs.get(i).getElementsByTag("dl").get(0);
                 SearchBookBean firstBook = new SearchBookBean();
                 firstBook.setTag(TAG);
@@ -138,16 +138,19 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     //搜索
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).searchBook(content, page).flatMap(s -> analySearchBook(s));
+        return getRetrofitObject(TAG)
+                .create(IGxwztvApi.class)
+                .searchBook(content, page)
+                .flatMap(this::analySearchBook);
     }
 
-    public Observable<List<SearchBookBean>> analySearchBook(final String s) {
+    private Observable<List<SearchBookBean>> analySearchBook(final String s) {
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
                 Elements booksE = doc.getElementById("novel-list").getElementsByClass("list-group-item clearfix");
                 if (null != booksE && booksE.size() >= 2) {
-                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                    List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 1; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
@@ -162,11 +165,11 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                     }
                     e.onNext(books);
                 } else {
-                    e.onNext(new ArrayList<SearchBookBean>());
+                    e.onNext(new ArrayList<>());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                e.onNext(new ArrayList<SearchBookBean>());
+                e.onNext(new ArrayList<>());
             }
             e.onComplete();
         });
@@ -199,7 +202,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         bookInfoBean.setName(resultE.getElementsByClass("active").get(0).text());
         bookInfoBean.setAuthor(resultE.getElementsByClass("col-xs-12 list-group-item no-border").get(0).getElementsByTag("small").get(0).text());
         Element introduceE = resultE.getElementsByClass("panel panel-default mt20").get(0);
-        String introduce = "";
+        String introduce;
         if (introduceE.getElementById("all") != null) {
             introduce = introduceE.getElementById("all").text().replace("[收起]", "");
         } else {
@@ -243,7 +246,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
             bookShelfBean.setTag(TAG);
             WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
             bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
-            e.onNext(new WebChapterBean<BookShelfBean>(bookShelfBean, temp.getNext()));
+            e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
     }
@@ -251,7 +254,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     private WebChapterBean<List<ChapterListBean>> analyChapterlist(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
         Elements chapterlist = doc.getElementById("chapters-list").getElementsByTag("a");
-        List<ChapterListBean> chapterBeans = new ArrayList<ChapterListBean>();
+        List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterlist.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterUrl(TAG + chapterlist.get(i).attr("href"));   //id
@@ -262,8 +265,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
 
             chapterBeans.add(temp);
         }
-        Boolean next = false;
-        return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
+        return new WebChapterBean<>(chapterBeans, false);
     }
 
     /**
@@ -271,7 +273,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookContent(durChapterUrl.replace(TAG, ""))
+        return getRetrofitObject(TAG)
+                .create(IGxwztvApi.class)
+                .getBookContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
@@ -316,6 +320,9 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
-        return getRetrofitObject(GxwztvBookModelImpl.TAG).create(IGxwztvApi.class).getKindBooks(url.replace(GxwztvBookModelImpl.TAG, "")).flatMap(s -> analySearchBook(s));
+        return getRetrofitObject(GxwztvBookModelImpl.TAG)
+                .create(IGxwztvApi.class)
+                .getKindBooks(url.replace(GxwztvBookModelImpl.TAG, ""))
+                .flatMap(this::analySearchBook);
     }
 }

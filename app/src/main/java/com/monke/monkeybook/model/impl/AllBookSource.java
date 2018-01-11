@@ -3,6 +3,7 @@ package com.monke.monkeybook.model.impl;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.IStationBookModel;
+import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.ZwduModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
@@ -64,7 +65,8 @@ public class AllBookSource {
                 return XBQGModelImpl.getInstance();
             case ZwduModelImpl.TAG:
                 return ZwduModelImpl.getInstance();
+            default:
+                return DefaultModelImpl.getInstance(tag);
         }
-        return null;
     }
 }

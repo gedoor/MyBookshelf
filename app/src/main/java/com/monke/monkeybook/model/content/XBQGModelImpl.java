@@ -37,18 +37,24 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return new XBQGModelImpl();
     }
 
+    /**
+     * 搜索
+     */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com").create(ILingdiankanshuApi.class).searchBook(content, page - 1, "5199337987683747968").flatMap(s -> analySearchBook(s));
+        return getRetrofitObject("http://zhannei.baidu.com")
+                .create(ILingdiankanshuApi.class)
+                .searchBook(content, page - 1, "5199337987683747968")
+                .flatMap(this::analySearchBook);
     }
 
-    public Observable<List<SearchBookBean>> analySearchBook(final String s) {
+    private Observable<List<SearchBookBean>> analySearchBook(final String s) {
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
                 Elements booksE = doc.getElementsByClass("result-list").get(0).getElementsByClass("result-item result-game-item");
                 if (null != booksE && booksE.size() > 1) {
-                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                    List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
@@ -69,11 +75,11 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                     }
                     e.onNext(books);
                 } else {
-                    e.onNext(new ArrayList<SearchBookBean>());
+                    e.onNext(new ArrayList<>());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                e.onNext(new ArrayList<SearchBookBean>());
+                e.onNext(new ArrayList<>());
             }
             e.onComplete();
         });
@@ -107,7 +113,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         Element resultE = doc.getElementsByClass("box_con").get(0);
         bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());
-        String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().toString().trim();
+        String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().trim();
         author = FormatWebText.getAuthor(author);
         bookInfoBean.setAuthor(author);
 
@@ -121,7 +127,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                 if (content.length() > 0) {
                     content.append("\r\n");
                 }
-                content.append("\u3000\u3000" + temp);
+                content.append("\u3000\u3000").append(temp);
             }
         }
 
@@ -162,7 +168,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
             bookShelfBean.setTag(TAG);
             WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
             bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
-            e.onNext(new WebChapterBean<BookShelfBean>(bookShelfBean, temp.getNext()));
+            e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
     }
@@ -170,7 +176,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
     private WebChapterBean<List<ChapterListBean>> analyChapterlist(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
         Elements chapterlist = doc.getElementById("list").getElementsByTag("dd");
-        List<ChapterListBean> chapterBeans = new ArrayList<ChapterListBean>();
+        List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterlist.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterUrl(TAG + chapterlist.get(i).getElementsByTag("a").get(0).attr("href"));   //id
@@ -181,8 +187,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
 
             chapterBeans.add(temp);
         }
-        Boolean next = false;
-        return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
+        return new WebChapterBean<>(chapterBeans, false);
     }
 
     /**

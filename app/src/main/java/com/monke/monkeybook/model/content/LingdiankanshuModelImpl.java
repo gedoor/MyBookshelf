@@ -33,21 +33,24 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         return new LingdiankanshuModelImpl();
     }
 
+    /**
+     * 搜索
+     */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         return getRetrofitObject("http://zhannei.baidu.com")
                 .create(ILingdiankanshuApi.class)
                 .searchBook(content, page - 1, "16865089933227718744")
-                .flatMap(s -> analySearchBook(s));
+                .flatMap(this::analySearchBook);
     }
 
-    public Observable<List<SearchBookBean>> analySearchBook(final String s) {
+    private Observable<List<SearchBookBean>> analySearchBook(final String s) {
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
                 Elements booksE = doc.getElementsByClass("result-list").get(0).getElementsByClass("result-item result-game-item");
                 if (null != booksE && booksE.size() > 1) {
-                    List<SearchBookBean> books = new ArrayList<SearchBookBean>();
+                    List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
@@ -68,11 +71,11 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                     }
                     e.onNext(books);
                 } else {
-                    e.onNext(new ArrayList<SearchBookBean>());
+                    e.onNext(new ArrayList<>());
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                e.onNext(new ArrayList<SearchBookBean>());
+                e.onNext(new ArrayList<>());
             }
             e.onComplete();
         });
@@ -83,7 +86,10 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
+        return getRetrofitObject(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
+                .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
@@ -103,7 +109,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         Element resultE = doc.getElementsByClass("box_con").get(0);
         bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());
-        String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().toString().trim();
+        String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().trim();
         author = FormatWebText.getAuthor(author);
         bookInfoBean.setAuthor(author);
 
@@ -131,7 +137,10 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
+        getRetrofitObject(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
+                .flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -157,7 +166,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
             bookShelfBean.setTag(TAG);
             WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
             bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
-            e.onNext(new WebChapterBean<BookShelfBean>(bookShelfBean, temp.getNext()));
+            e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
     }
@@ -165,7 +174,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
     private WebChapterBean<List<ChapterListBean>> analyChapterlist(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
         Elements chapterlist = doc.getElementById("list").getElementsByTag("dd");
-        List<ChapterListBean> chapterBeans = new ArrayList<ChapterListBean>();
+        List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterlist.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterUrl(novelUrl + chapterlist.get(i).getElementsByTag("a").get(0).attr("href"));   //id
@@ -176,8 +185,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
 
             chapterBeans.add(temp);
         }
-        Boolean next = false;
-        return new WebChapterBean<List<ChapterListBean>>(chapterBeans, next);
+        return new WebChapterBean<>(chapterBeans, false);
     }
 
     /**
@@ -185,7 +193,9 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, ""))
+        return getRetrofitObject(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getBookContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
@@ -206,7 +216,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                         if (content.length() > 0) {
                             content.append("\r\n");
                         }
-                        content.append("\u3000\u3000" + temp);
+                        content.append("\u3000\u3000").append(temp);
                     }
                 }
                 bookContentBean.setDurCapterContent(content.toString());
