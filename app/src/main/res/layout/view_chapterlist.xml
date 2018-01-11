@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/fl_bg"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
     <com.monke.immerselayout.ImmerseLinearLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"

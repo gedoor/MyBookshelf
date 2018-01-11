@@ -79,4 +79,6 @@
     <string name="set_timer">定时</string>
     <string name="read_aloud_pause">朗读暂停</string>
     <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
+    <string name="ps_hide_navigation_bar">阅读界面隐藏虚拟按键</string>
+    <string name="pt_hide_navigation_bar">隐藏虚拟按键</string>
 </resources>

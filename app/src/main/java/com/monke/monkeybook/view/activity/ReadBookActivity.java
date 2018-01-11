@@ -170,7 +170,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(newReadAloudAction);
         readBookControl = ReadBookControl.getInstance();
-        setStatusBar();
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -182,19 +181,28 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         outState.putParcelable("bookshelf", mPresenter.getBookShelf());
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            setStatusBar();
+        }
+    }
+
     private void setStatusBar() {
         if (readBookControl.getHideStatusBar()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        if (preferences.getBoolean("hide_navigation_bar", false)) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }
     }
 
     private void popMenuOut() {
@@ -221,9 +229,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                vMenuBg.setOnClickListener(v -> {
-                    popMenuOut();
-                });
+                vMenuBg.setOnClickListener(v -> popMenuOut());
             }
 
             @Override
@@ -344,11 +350,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
             public void statusBarChange(Boolean hideStatusBar) {
-                if (hideStatusBar) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                } else {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                }
+                setStatusBar();
             }
 
             @Override
@@ -411,9 +413,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //菜单
-        ivMenuMore.setOnClickListener(v -> {
-            readBookMenuMorePop.showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f));
-        });
+        ivMenuMore.setOnClickListener(v -> readBookMenuMorePop
+                .showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
 
         //正文
         csvBook.setLoadDataListener(new ContentSwitchView.LoadDataListener() {
@@ -557,9 +558,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
-        if (mo)
-            return mo;
-        else {
+        if (mo) {
+            return true;
+        } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
                     setStatusBar();
@@ -590,9 +591,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         Boolean temp = csvBook.onKeyUp(keyCode, event);
-        if (temp)
-            return true;
-        return super.onKeyUp(keyCode, event);
+        return temp || super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -626,7 +625,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 0x11) {
-            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 mPresenter.openBookFromOther(ReadBookActivity.this);
             } else {
                 if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
