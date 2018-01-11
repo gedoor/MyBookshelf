@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
+            <com.monke.immerselayout.ImmerseFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="#767676">
@@ -93,7 +93,7 @@
                         android:focusable="true"
                         android:contentDescription="more" />
                 </LinearLayout>
-            </FrameLayout>
+            </com.monke.immerselayout.ImmerseFrameLayout>
 
             <View
                 android:layout_width="match_parent"
