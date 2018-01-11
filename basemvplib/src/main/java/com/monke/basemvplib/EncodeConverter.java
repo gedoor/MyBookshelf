@@ -44,9 +44,7 @@ public class EncodeConverter extends Converter.Factory {
             @Override
             public String convert(@NonNull ResponseBody value) throws IOException {
                 BufferedSource bufferedSource = Okio.buffer(value.source());
-                String responseData = bufferedSource.readString(Charset.forName(encode));
-                bufferedSource.close();
-                return responseData;
+                return bufferedSource.readString(Charset.forName(encode));
             }
         };
     }
