@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import com.monke.monkeybook.ReadBookControl;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.utils.KeyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -535,30 +534,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-            KeyUtil keyUtil = KeyUtil.getInstance();
-            keyUtil.setOnKeyDownListener(new KeyUtil.OnKeyDownListener() {
-                @Override
-                public void longPress(int keycode) {
-
-                }
-
-                @Override
-                public void singleClick(int keycode) {
-                    gotoNextPage();
-
-                }
-
-                @Override
-                public void doublePress(int keycode) {
-
-                }
-
-                @Override
-                public void twoKeyDown() {
-
-                }
-            });
-            keyUtil.dispatchKeyEvent(event);
+            gotoNextPage();
             return true;
         }else if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP){
             gotoPrePage();
