@@ -122,7 +122,7 @@ public class ChapterListView extends FrameLayout{
         flBg = findViewById(R.id.fl_bg);
         llContent = findViewById(R.id.ll_content);
         tvName = findViewById(R.id.tv_name);
-        tvListCount = findViewById(R.id.tv_listcount);
+        tvListCount = findViewById(R.id.tv_list_count);
         rvList = findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setItemAnimator(null);
