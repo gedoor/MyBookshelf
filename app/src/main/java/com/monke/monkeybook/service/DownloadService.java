@@ -53,8 +53,8 @@ public class DownloadService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
                 .setOngoing(false)
-                .setContentTitle(getString(R.string.download_offline))
-                .setContentText(getString(R.string.download_offline));
+                .setContentTitle(getString(R.string.download_offline_t))
+                .setContentText(getString(R.string.download_offline_s));
         //发送通知
         Notification notification = builder.build();
         startForeground(notificationId, notification);

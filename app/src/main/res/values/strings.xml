@@ -32,7 +32,8 @@
     <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
-    <string name="download_offline">离线下载</string>
+    <string name="download_offline_t">离线下载</string>
+    <string name="download_offline_s">下载选择的章节到本地</string>
     <string name="exchange_source">换源</string>
     <string name="about_description">这是一款开源的阅读软件，你可以fork我们的代码自己编译APK。欢迎提交代码帮助改善应用。</string>
     <string name="version_name">Version %s</string>
