@@ -17,7 +17,7 @@ import com.monke.monkeybook.R;
 import com.victor.loading.rotate.RotateLoading;
 
 /**
- * 离线章节选择
+ * 对话框
  */
 public class MoProgressView extends LinearLayout {
     private Context context;
