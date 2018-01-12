@@ -398,7 +398,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             exitTime = System.currentTimeMillis();
         } else {
             finish();
-            System.exit(0);
         }
     }
 }
