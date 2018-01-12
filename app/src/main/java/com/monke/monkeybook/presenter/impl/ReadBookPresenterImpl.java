@@ -376,6 +376,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 result.add(item);
             }
             Intent intent = new Intent(mView.getContext(), DownloadService.class);
+            intent.setAction("addDownload");
             intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
             mView.getContext().startService(intent);
         });

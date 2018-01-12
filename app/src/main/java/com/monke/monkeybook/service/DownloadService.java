@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -34,6 +35,7 @@ import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
 
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
@@ -74,8 +76,16 @@ public class DownloadService extends Service {
             isInit = true;
             RxBus.get().register(this);
         }
-        List<DownloadChapterBean> downList = intent.getParcelableArrayListExtra("downloadTask");
-        addNewTask(downList);
+        String action = intent.getAction();
+        assert action != null;
+        switch (action) {
+            case "addDownload":
+                List<DownloadChapterBean> downList = intent.getParcelableArrayListExtra("downloadTask");
+                addNewTask(downList);
+                break;
+            default:
+                break;
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -212,15 +222,15 @@ public class DownloadService extends Service {
                     .subscribe(new SimpleObserver<BookContentBean>() {
                         @Override
                         public void onNext(BookContentBean value) {
-                            if(isStartDownload){
+                            if (isStartDownload) {
                                 new Handler().postDelayed(() -> {
-                                    if(isStartDownload){
+                                    if (isStartDownload) {
                                         toDownload();
-                                    }else{
+                                    } else {
                                         isPause();
                                     }
-                                },800);
-                            }else{
+                                }, 800);
+                            } else {
                                 isPause();
                             }
                         }
@@ -244,15 +254,15 @@ public class DownloadService extends Service {
                         .subscribe(new SimpleObserver<Boolean>() {
                             @Override
                             public void onNext(Boolean value) {
-                                if(isStartDownload){
+                                if (isStartDownload) {
                                     new Handler().postDelayed(() -> {
-                                        if(isStartDownload){
+                                        if (isStartDownload) {
                                             toDownload();
-                                        }else{
+                                        } else {
                                             isPause();
                                         }
-                                    },800);
-                                }else{
+                                    }, 800);
+                                } else {
                                     isPause();
                                 }
                             }
@@ -260,7 +270,7 @@ public class DownloadService extends Service {
                             @Override
                             public void onError(Throwable e) {
                                 e.printStackTrace();
-                                if(!isStartDownload)
+                                if (!isStartDownload)
                                     isPause();
                             }
                         });
@@ -336,9 +346,9 @@ public class DownloadService extends Service {
                 .subscribe(new SimpleObserver<DownloadChapterBean>() {
                     @Override
                     public void onNext(DownloadChapterBean value) {
-                        if (value.getNoteUrl() != null && value.getNoteUrl().length() > 0){
+                        if (value.getNoteUrl() != null && value.getNoteUrl().length() > 0) {
                             RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD_LISTENER, new Object());
-                        }else{
+                        } else {
                             RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
                         }
                     }
@@ -360,8 +370,8 @@ public class DownloadService extends Service {
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
                 //点击通知后自动清除
                 .setAutoCancel(true)
-                .setContentTitle("正在下载："+downloadChapterBean.getBookName())
-                .setContentText(downloadChapterBean.getDurChapterName()==null?"  ":downloadChapterBean.getDurChapterName())
+                .setContentTitle("正在下载：" + downloadChapterBean.getBookName())
+                .setContentText(downloadChapterBean.getDurChapterName() == null ? "  " : downloadChapterBean.getDurChapterName())
                 .setContentIntent(mainPendingIntent);
         //发送通知
         startForeground(notificationId, builder.build());
