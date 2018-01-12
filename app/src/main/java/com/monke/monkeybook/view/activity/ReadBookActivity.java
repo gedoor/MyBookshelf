@@ -185,16 +185,20 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            setStatusBar();
+            hideStatusBar(readBookControl.getHideStatusBar());
+            hideNavigationBar();
         }
     }
 
-    private void setStatusBar() {
-        if (readBookControl.getHideStatusBar()) {
+    private void hideStatusBar(Boolean hide) {
+        if (hide) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+    }
+
+    private void hideNavigationBar() {
         if (preferences.getBoolean("hide_navigation_bar", false)) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -206,7 +210,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     private void popMenuOut() {
-        setStatusBar();
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
@@ -221,10 +224,12 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void initData() {
         mPresenter.saveProgress();
+        //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
         menuTopIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                hideStatusBar(false);
             }
 
             @Override
@@ -238,12 +243,13 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
         });
         menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
-
+        //隐藏菜单
         menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
         menuTopOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 vMenuBg.setOnClickListener(null);
+                hideStatusBar(readBookControl.getHideStatusBar());
             }
 
             @Override
@@ -290,7 +296,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 checkAddShelfPop.dismiss();
             }
         });
-        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook.setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
+                .setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                 BookContentView.DurPageIndexBegin));
 
         windowLightPop = new WindowLightPop(this);
@@ -350,7 +357,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
             public void statusBarChange(Boolean hideStatusBar) {
-                setStatusBar();
+                hideStatusBar(hideStatusBar);
             }
 
             @Override
@@ -563,7 +570,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
-                    setStatusBar();
                     llMenuTop.startAnimation(menuTopOut);
                     llMenuBottom.startAnimation(menuBottomOut);
                     return true;
