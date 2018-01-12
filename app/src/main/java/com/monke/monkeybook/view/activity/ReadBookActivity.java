@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
@@ -54,7 +54,6 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +113,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     private Animation menuBottomOut;
 
     private boolean aloudButton;
+    private boolean hideStatusBar;
     BookShelfBean bookshelf;
 
     private CheckAddShelfPop checkAddShelfPop;
@@ -161,6 +161,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             bookshelf = savedInstanceState.getParcelable("bookshelf");
         }
         super.onCreate(savedInstanceState);
+        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
     }
 
     @Override
@@ -185,11 +186,14 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            hideStatusBar(readBookControl.getHideStatusBar());
+            hideStatusBar(hideStatusBar);
             hideNavigationBar();
         }
     }
 
+    /**
+     * 隐藏状态栏
+     */
     private void hideStatusBar(Boolean hide) {
         if (hide) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -198,6 +202,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         }
     }
 
+    /**
+     * 隐藏虚拟按键
+     */
     private void hideNavigationBar() {
         if (preferences.getBoolean("hide_navigation_bar", false)) {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -220,7 +227,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    //初始化正文
     @Override
     protected void initData() {
         mPresenter.saveProgress();
@@ -249,7 +255,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             @Override
             public void onAnimationStart(Animation animation) {
                 vMenuBg.setOnClickListener(null);
-                hideStatusBar(readBookControl.getHideStatusBar());
+                hideStatusBar(hideStatusBar);
             }
 
             @Override
@@ -271,6 +277,17 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         ButterKnife.bind(this);
 
         initCsvBook();
+        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
+            @Override
+            public void animIn() {
+                hideStatusBar(false);
+            }
+
+            @Override
+            public void animOut() {
+                hideStatusBar(hideStatusBar);
+            }
+        });
     }
 
     @Override
@@ -354,19 +371,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         });
         //其它设置
-        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
-            @Override
-            public void statusBarChange(Boolean hideStatusBar) {
-                hideStatusBar(hideStatusBar);
-            }
-
-            @Override
-            public void keepScreenOnChange(Boolean keepScreenOn) {
-                if (keepScreenOn) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                } else {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
+        moreSettingPop = new MoreSettingPop(this, keepScreenOn -> {
+            if (keepScreenOn) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
     }

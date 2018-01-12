@@ -1,16 +1,16 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.PopupWindow;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 
 public class MoreSettingPop extends PopupWindow{
     private Context mContext;
@@ -18,18 +18,16 @@ public class MoreSettingPop extends PopupWindow{
 
     private SwitchButton sbKey;
     private SwitchButton sbClick;
-    private SwitchButton sbHideStatusBar;
     private SwitchButton sbKeepScreenOn;
 
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener{
-        void statusBarChange(Boolean hideStatusBar);
-
         void keepScreenOnChange(Boolean keepScreenOn);
     }
     private MoreSettingPop.OnChangeProListener changeProListener;
 
+    @SuppressLint("InflateParams")
     public MoreSettingPop(Context context, @NonNull MoreSettingPop.OnChangeProListener changeProListener){
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
@@ -50,10 +48,6 @@ public class MoreSettingPop extends PopupWindow{
     private void bindEvent() {
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
-        sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setHideStatusBar(isChecked);
-            changeProListener.statusBarChange(isChecked);
-        });
         sbKeepScreenOn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setKeepScreenOn(isChecked);
             changeProListener.keepScreenOnChange(isChecked);
@@ -63,12 +57,10 @@ public class MoreSettingPop extends PopupWindow{
     private void bindView() {
         sbKey = view.findViewById(R.id.sb_key);
         sbClick = view.findViewById(R.id.sb_click);
-        sbHideStatusBar = view.findViewById(R.id.sb_hide_status_bar);
         sbKeepScreenOn = view.findViewById(R.id.sb_keep_screen_on);
 
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
-        sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
     }
 

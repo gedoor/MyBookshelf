@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReadInterfacePop extends PopupWindow{

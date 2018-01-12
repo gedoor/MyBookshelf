@@ -16,6 +16,12 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:key="hide_status_bar"
+        android:summary="@string/ps_hide_status_bar"
+        android:title="@string/pt_hide_status_bar" />
+
+    <SwitchPreference
+        android:defaultValue="false"
         android:key="hide_navigation_bar"
         android:summary="@string/ps_hide_navigation_bar"
         android:title="@string/pt_hide_navigation_bar" />

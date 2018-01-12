@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -16,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.MTextView;
 
 import java.util.List;
@@ -26,6 +25,8 @@ public class BookContentView extends FrameLayout {
 
     public static final int DurPageIndexBegin = -1;
     public static final int DurPageIndexEnd = -2;
+
+    private SharedPreferences preferences;
 
     private View view;
     private ImageView ivBg;
@@ -67,6 +68,7 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         init();
     }
 
@@ -77,7 +79,11 @@ public class BookContentView extends FrameLayout {
     }
 
     private void init() {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_switch_item, this, false);
+        if (preferences.getBoolean("hide_status_bar", false)) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_hide_status_bar, this, false);
+        } else {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_show_status_bar, this, false);
+        }
         addView(view);
         ivBg = view.findViewById(R.id.iv_bg);
         tvTitle = view.findViewById(R.id.tv_title);

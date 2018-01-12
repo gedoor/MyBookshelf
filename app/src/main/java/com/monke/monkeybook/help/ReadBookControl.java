@@ -1,9 +1,11 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook;
+package com.monke.monkeybook.help;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.DensityUtil;
 
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ public class ReadBookControl {
 
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
-    private Boolean hideStatusBar = false;
     private Boolean keepScreenOn = false;
 
     private SharedPreferences preference;
@@ -59,7 +60,6 @@ public class ReadBookControl {
 
         this.canClickTurn = preference.getBoolean("canClickTurn", true);
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
-        this.hideStatusBar = preference.getBoolean("hideStatusBar", false);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
     }
 
@@ -194,17 +194,6 @@ public class ReadBookControl {
         this.canClickTurn = canClickTurn;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("canClickTurn", canClickTurn);
-        editor.apply();
-    }
-
-    public Boolean getHideStatusBar() {
-        return hideStatusBar;
-    }
-
-    public void setHideStatusBar(Boolean hideStatusBar) {
-        this.hideStatusBar = hideStatusBar;
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putBoolean("hideStatusBar", hideStatusBar);
         editor.apply();
     }
 

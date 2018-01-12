@@ -37,6 +37,16 @@ public class ChapterListView extends FrameLayout{
 
     private Animation animIn;
     private Animation animOut;
+    private OnChangeListener changeListener;
+
+    public interface OnChangeListener {
+        void animIn();
+        void animOut();
+    }
+
+    public void setOnChangeListener(OnChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
 
     public ChapterListView(@NonNull Context context) {
         this(context,null);
@@ -70,6 +80,7 @@ public class ChapterListView extends FrameLayout{
             @Override
             public void onAnimationStart(Animation animation) {
                 flBg.setOnClickListener(null);
+                changeListener.animIn();
             }
 
             @Override
@@ -93,6 +104,7 @@ public class ChapterListView extends FrameLayout{
             public void onAnimationEnd(Animation animation) {
                 llContent.setVisibility(INVISIBLE);
                 setVisibility(INVISIBLE);
+                changeListener.animOut();
             }
 
             @Override
