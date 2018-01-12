@@ -42,7 +42,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class DownloadService extends Service {
-    private NotificationManager notifyManager;
     private int notificationId = 19931118;
     private Boolean isStartDownload = false;
     private Boolean isInit = false;
@@ -50,7 +49,6 @@ public class DownloadService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        notifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
@@ -278,7 +276,6 @@ public class DownloadService extends Service {
 
     public void pauseDownload() {
         isStartDownload = false;
-        notifyManager.cancelAll();
     }
 
     public void cancelDownload() {
@@ -367,12 +364,11 @@ public class DownloadService extends Service {
                 .setContentText(downloadChapterBean.getDurChapterName()==null?"  ":downloadChapterBean.getDurChapterName())
                 .setContentIntent(mainPendingIntent);
         //发送通知
-        notifyManager.notify(notificationId, builder.build());
+        startForeground(notificationId, builder.build());
     }
 
     private void finishDownload() {
         RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
-        notifyManager.cancelAll();
         stopSelf();
         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "全部离线章节下载完成", Toast.LENGTH_SHORT).show());
     }
