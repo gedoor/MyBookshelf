@@ -57,7 +57,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="4dp"
-                android:numeric="integer"
                 android:inputType="number"
                 android:textSize="14sp"
                 android:textColor="@color/tv_btn_black" />
@@ -85,7 +84,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="4dp"
-                android:numeric="integer"
                 android:inputType="number"
                 android:textSize="14sp"
                 android:textColor="@color/tv_btn_black" />

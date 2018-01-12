@@ -45,6 +45,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     private Animation animOut;
 
     private MoProgressHUD moProgressHUD;
+
     @Override
     protected IImportBookPresenter initInjector() {
         return new ImportBookPresenterImpl();
@@ -67,16 +68,16 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     protected void bindView() {
         moProgressHUD = new MoProgressHUD(this);
 
-        llContent = (LinearLayout) findViewById(R.id.ll_content);
-        ivReturn = (ImageButton) findViewById(R.id.iv_return);
-        tvScan = (TextView) findViewById(R.id.tv_scan);
+        llContent = findViewById(R.id.ll_content);
+        ivReturn = findViewById(R.id.iv_return);
+        tvScan = findViewById(R.id.tv_scan);
 
-        rlLoading = (RotateLoading) findViewById(R.id.rl_loading);
-        tvCount = (TextView) findViewById(R.id.tv_count);
+        rlLoading = findViewById(R.id.rl_loading);
+        tvCount = findViewById(R.id.tv_count);
 
-        tvAddshelf = (TextView) findViewById(R.id.tv_addshelf);
+        tvAddshelf = findViewById(R.id.tv_addshelf);
 
-        rcvBooks = (RecyclerView) findViewById(R.id.rcv_books);
+        rcvBooks = findViewById(R.id.rcv_books);
         rcvBooks.setAdapter(importBookAdapter);
         rcvBooks.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -169,7 +170,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == 0x11){
-            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 mPresenter.searchLocationBook();
                 tvScan.setVisibility(View.INVISIBLE);
                 rlLoading.start();
@@ -189,9 +190,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean a = moProgressHUD.onKeyDown(keyCode,event);
-        if(a)
-            return a;
-        return super.onKeyDown(keyCode, event);
+        Boolean a = moProgressHUD.onKeyDown(keyCode, event);
+        return a || super.onKeyDown(keyCode, event);
     }
 }

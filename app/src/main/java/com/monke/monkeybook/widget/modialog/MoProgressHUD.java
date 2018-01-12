@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by ZQH on 2016/7/24.
+ * 对话框
  */
 public class MoProgressHUD {
     private Boolean isFinishing = false;
@@ -98,8 +98,8 @@ public class MoProgressHUD {
         }
     }
 
-    private void initViews() {
-        decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+    public void initViews() {
+        decorView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
         rootView = new FrameLayout(context);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
@@ -145,11 +145,10 @@ public class MoProgressHUD {
     }
 
     public Boolean isShow() {
-        if (mSharedView != null && mSharedView.getParent() != null) return true;
-        return false;
+        return (mSharedView != null && mSharedView.getParent() != null);
     }
 
-    Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
+    private Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
         @Override
         public void onAnimationStart(Animation animation) {
             isFinishing = true;
@@ -166,7 +165,7 @@ public class MoProgressHUD {
         }
     };
 
-    public void dismissImmediately() {
+    private void dismissImmediately() {
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
             new Handler().post(() -> {
                 rootView.removeView(mSharedView);
@@ -236,9 +235,10 @@ public class MoProgressHUD {
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
+
     ////////////////////离线章节选择////////////////////////////
     public interface OnClickDownload{
-        public void download(int start,int end);
+        void download(int start, int end);
     }
     public void showDownloadList(int startIndex, int endIndex,int all, OnClickDownload clickDownload){
         initCenter();

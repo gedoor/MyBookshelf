@@ -17,7 +17,7 @@ import com.monke.monkeybook.R;
 import com.victor.loading.rotate.RotateLoading;
 
 /**
- * Created by ZQH on 2016/7/24.
+ * 离线章节选择
  */
 public class MoProgressView extends LinearLayout {
     private Context context;
@@ -40,12 +40,12 @@ public class MoProgressView extends LinearLayout {
     public void showLoading(String text) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_loading, this, true);
-        TextView msgTv = (TextView) findViewById(R.id.msg_tv);
+        TextView msgTv = findViewById(R.id.msg_tv);
         if (text != null && text.length() > 0) {
             msgTv.setText(text);
         }
 
-        RotateLoading rlLoading = (RotateLoading) findViewById(R.id.rl_loading);
+        RotateLoading rlLoading = findViewById(R.id.rl_loading);
         rlLoading.start();
     }
 
@@ -53,29 +53,30 @@ public class MoProgressView extends LinearLayout {
     public void showInfo(String msg, final OnClickListener listener) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
-        TextView msgTv = (TextView) findViewById(R.id.msg_tv);
+        TextView msgTv = findViewById(R.id.msg_tv);
         msgTv.setText(msg);
-        TextView tvClose = (TextView) findViewById(R.id.tv_close);
-        tvClose.setOnClickListener(v -> listener.onClick(v));
+        TextView tvClose = findViewById(R.id.tv_close);
+        tvClose.setOnClickListener(listener);
     }
 
     //单个按钮的信息提示框
     public void showInfo(String msg, String btnText, final OnClickListener listener) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
-        TextView msgTv = (TextView) findViewById(R.id.msg_tv);
+        TextView msgTv = findViewById(R.id.msg_tv);
         msgTv.setText(msg);
-        TextView tvClose = (TextView) findViewById(R.id.tv_close);
+        TextView tvClose = findViewById(R.id.tv_close);
         tvClose.setText(btnText);
         tvClose.setOnClickListener(listener);
     }
+
     //////////////////////两个不同等级的按钮//////////////////////
     public void showTwoButton(String msg, String b_f, OnClickListener c_f, String b_s, OnClickListener c_s) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_two, this, true);
-        TextView tvMsg = (TextView) findViewById(R.id.tv_msg);
-        TextView tvCancel = (TextView) findViewById(R.id.tv_cancel);
-        TextView tvDone = (TextView) findViewById(R.id.tv_done);
+        TextView tvMsg = findViewById(R.id.tv_msg);
+        TextView tvCancel = findViewById(R.id.tv_cancel);
+        TextView tvDone = findViewById(R.id.tv_done);
         tvMsg.setText(msg);
         tvCancel.setText(b_f);
         tvCancel.setOnClickListener(c_f);
@@ -87,11 +88,11 @@ public class MoProgressView extends LinearLayout {
     public void showDownloadList(int startIndex, int endIndex, final int all, final MoProgressHUD.OnClickDownload clickDownload, OnClickListener cancel){
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_downloadchoice, this, true);
-        final EditText edtStart = (EditText) findViewById(R.id.edt_start);
-        final EditText edtEnd = (EditText) findViewById(R.id.edt_end);
-        TextView tvCancel = (TextView) findViewById(R.id.tv_cancel);
+        final EditText edtStart = findViewById(R.id.edt_start);
+        final EditText edtEnd = findViewById(R.id.edt_end);
+        TextView tvCancel = findViewById(R.id.tv_cancel);
         tvCancel.setOnClickListener(cancel);
-        TextView tvDownload = (TextView) findViewById(R.id.tv_download);
+        TextView tvDownload = findViewById(R.id.tv_download);
         edtStart.setText(String.valueOf(startIndex+1));
         edtEnd.setText(String.valueOf(endIndex+1));
         edtStart.addTextChangedListener(new TextWatcher() {
