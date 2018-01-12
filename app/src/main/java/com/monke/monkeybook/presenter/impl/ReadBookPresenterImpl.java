@@ -23,6 +23,7 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
 import com.monke.monkeybook.common.RxBusTag;
@@ -32,8 +33,10 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.impl.ImportBookModelImpl;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IBookReadPresenter;
+import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.IBookReadView;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -130,6 +133,27 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void addDownload(int start, int end) {
+        addToShelf(() -> {
+            List<DownloadChapterBean> result = new ArrayList<>();
+            for (int i = start; i <= end; i++) {
+                DownloadChapterBean item = new DownloadChapterBean();
+                item.setNoteUrl(bookShelf.getNoteUrl());
+                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                item.setTag(bookShelf.getTag());
+                item.setBookName(bookShelf.getBookInfoBean().getName());
+                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+                result.add(item);
+            }
+            Intent intent = new Intent(mView.getContext(), DownloadService.class);
+            intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
+            mView.getContext().startService(intent);
+        });
     }
 
     @Override

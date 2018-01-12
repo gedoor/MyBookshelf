@@ -37,4 +37,6 @@ public interface IBookReadPresenter extends IPresenter{
     void initData(Activity activity);
 
     void openBookFromOther(Activity activity);
+
+    void addDownload(int start, int end);
 }

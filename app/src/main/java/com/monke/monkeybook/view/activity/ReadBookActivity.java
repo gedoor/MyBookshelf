@@ -460,24 +460,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             }
             moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
                 moProgressHUD.dismiss();
-                mPresenter.addToShelf(() -> {
-                    List<DownloadChapterBean> result = new ArrayList<>();
-                    for (int i = start; i <= end; i++) {
-                        DownloadChapterBean item = new DownloadChapterBean();
-                        item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
-                        item.setDurChapterIndex(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                        item.setDurChapterName(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                        item.setDurChapterUrl(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                        item.setTag(mPresenter.getBookShelf().getTag());
-                        item.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
-                        item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
-                        result.add(item);
-                    }
-                    Intent intent = new Intent(ReadBookActivity.this, DownloadService.class);
-                    intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
-                    ReadBookActivity.this.startService(intent);
-                });
-
+                mPresenter.addDownload(start, end);
             });
         });
 
