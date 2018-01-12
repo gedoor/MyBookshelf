@@ -126,6 +126,10 @@ public class ChapterListView extends FrameLayout{
         }
     }
 
+    public Boolean hasData() {
+        return (changeListener != null);
+    }
+
     public interface OnItemClickListener{
         void itemClick(int index);
     }

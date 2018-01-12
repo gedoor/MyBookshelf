@@ -455,7 +455,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         ivReturn.setOnClickListener(view -> finish());
 
         //离线下载
-        readBookMenuMorePop.setOnClickDownload(v -> {
+        readBookMenuMorePop.setOnClickDownload((View v) -> {
             readBookMenuMorePop.dismiss();
             ReadBookActivity.this.popMenuOut();
             //弹出离线下载界面
@@ -463,10 +463,12 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
                 endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1;
             }
-            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
-                moProgressHUD.dismiss();
-                mPresenter.addDownload(start, end);
-            });
+            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
+                    mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                    (start, end) -> {
+                        moProgressHUD.dismiss();
+                        mPresenter.addDownload(start, end);
+                    });
         });
 
         //换源
@@ -531,7 +533,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //目录
         llCatalog.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
+            if (chapterListView.hasData()) {
                 new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
             }
         });
