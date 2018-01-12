@@ -29,7 +29,7 @@ public class CheckAddShelfPop extends PopupWindow{
         mContext = context;
         this.bookName = bookName;
         this.itemClick = itemClick;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_checkaddshelf,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_check_add_shelf,null);
         this.setContentView(view);
 
         initView();

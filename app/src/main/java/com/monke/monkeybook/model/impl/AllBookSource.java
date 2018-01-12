@@ -66,7 +66,7 @@ public class AllBookSource {
             case ZwduModelImpl.TAG:
                 return ZwduModelImpl.getInstance();
             default:
-                return DefaultModelImpl.getInstance(tag);
+                return null;
         }
     }
 }

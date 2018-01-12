@@ -25,7 +25,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import java.util.List;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -46,7 +45,7 @@ public class DownloadListPop extends PopupWindow {
     public DownloadListPop(Context context) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_downloadlist, null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_download_list, null);
         this.setContentView(view);
         bindView();
         bindEvent();

@@ -19,7 +19,7 @@ public class ReadBookMenuMorePop extends PopupWindow{
     public ReadBookMenuMorePop(Context context){
         super(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_menumore,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_menu_more,null);
         this.setContentView(view);
 
         initView();

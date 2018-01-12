@@ -43,7 +43,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_bookchoice);
+        setContentView(R.layout.activity_book_choice);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
         rfRvSearchBooks = (RefreshRecyclerView) findViewById(R.id.rfRv_search_books);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
-        View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresherror, null);
+        View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             searchBookAdapter.replaceAll(null);
             //刷新失败 ，重试
@@ -67,7 +67,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
             mPresenter.toSearchBooks(null);
             startRefreshAnim();
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_nodata, null),
+        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
     }
 

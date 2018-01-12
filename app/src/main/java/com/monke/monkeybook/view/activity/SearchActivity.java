@@ -102,14 +102,14 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
-        View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresherror, null);
+        View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             mPresenter.initPage();
             mPresenter.toSearchBooks(null,true);
             rfRvSearchBooks.startRefresh();
         });
-        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_nodata, null),
+        rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
 
         searchBookAdapter.setItemClickListener(new SearchBookAdapter.OnItemClickListener() {

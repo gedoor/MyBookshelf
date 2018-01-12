@@ -52,7 +52,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_importbook);
+        setContentView(R.layout.activity_book_import);
     }
 
     @Override

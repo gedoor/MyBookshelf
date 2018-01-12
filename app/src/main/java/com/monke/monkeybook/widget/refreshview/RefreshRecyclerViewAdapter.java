@@ -61,7 +61,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == LOAD_MORE_TYPE) {
-            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_refresh_loadmore, parent, false));
+            return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_refresh_load_more, parent, false));
         } else
             return onCreateViewholder(parent, viewType);
     }

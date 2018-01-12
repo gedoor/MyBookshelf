@@ -2,12 +2,10 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -239,7 +237,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
                     break;
                 case R.id.action_book_source_manage:
-                    startActivityByAnim(new Intent(MainActivity.this, BookSourceManageActivity.class), 0, 0);
+                    startActivityByAnim(new Intent(MainActivity.this, BookSourceActivity.class), 0, 0);
                     break;
                 case R.id.action_setting:
                     startActivityByAnim(new Intent(MainActivity.this, SettingActivity.class), 0, 0);

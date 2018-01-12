@@ -33,7 +33,7 @@ public class MoreSettingPop extends PopupWindow{
         mContext = context;
         this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_moresetting,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting,null);
         this.setContentView(view);
         initData();
         bindView();

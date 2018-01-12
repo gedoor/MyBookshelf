@@ -31,7 +31,7 @@ public class RefreshRecyclerView extends FrameLayout {
     public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recyclerview, this, false);
+        view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recycler_view, this, false);
         rpb = (RefreshProgressBar) view.findViewById(R.id.rpb);
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 

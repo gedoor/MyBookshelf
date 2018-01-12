@@ -62,7 +62,7 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
-            android:name=".view.activity.BookSourceManageActivity"
+            android:name=".view.activity.BookSourceActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
