@@ -482,8 +482,6 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         ivRefresh.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
-                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
-                        .getBookContentBean().setDurCapterContent(null);
                 DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
                         .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
