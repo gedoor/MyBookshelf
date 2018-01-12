@@ -14,8 +14,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.model.impl.AllBookSource;
-import com.monke.monkeybook.presenter.IBookSourceManagePresenter;
-import com.monke.monkeybook.presenter.impl.BookSourceManagePresenterImpl;
+import com.monke.monkeybook.presenter.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.impl.BookSourcePresenterImpl;
 import com.monke.monkeybook.view.IBookSourceManageView;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * 书源管理
  */
 
-public class BookSourceActivity extends MBaseActivity<IBookSourceManagePresenter> implements IBookSourceManageView {
+public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceManageView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -77,8 +77,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourceManagePresenter
     }
 
     @Override
-    protected IBookSourceManagePresenter initInjector() {
-        return new BookSourceManagePresenterImpl();
+    protected IBookSourcePresenter initInjector() {
+        return new BookSourcePresenterImpl();
     }
 
     ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {

@@ -10,7 +10,7 @@ import java.util.List;
  * 书源管理
  */
 
-public interface IBookSourceManagePresenter extends IPresenter {
+public interface IBookSourcePresenter extends IPresenter {
 
     public void saveDate(List<BookSourceBean> bookSourceBeans);
 

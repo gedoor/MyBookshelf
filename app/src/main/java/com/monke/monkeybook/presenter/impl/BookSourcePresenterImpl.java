@@ -3,7 +3,7 @@ package com.monke.monkeybook.presenter.impl;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.BasePresenterImpl;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.presenter.IBookSourceManagePresenter;
+import com.monke.monkeybook.presenter.IBookSourcePresenter;
 import com.monke.monkeybook.view.IBookSourceManageView;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * 书源管理
  */
 
-public class BookSourceManagePresenterImpl extends BasePresenterImpl<IBookSourceManageView> implements IBookSourceManagePresenter {
+public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceManageView> implements IBookSourcePresenter {
 
     @Override
     public void detachView() {

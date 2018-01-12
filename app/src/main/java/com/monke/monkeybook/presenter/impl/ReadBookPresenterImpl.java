@@ -92,90 +92,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     }
 
     @Override
-    public void openBookFromOther(Activity activity) {
-        //APP外部打开
-        Uri uri = activity.getIntent().getData();
-        mView.showLoadBook();
-        getRealFilePath(activity, uri)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(new SimpleObserver<String>() {
-                    @Override
-                    public void onNext(String value) {
-                        ImportBookModelImpl.getInstance().importBook(new File(value))
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.newThread())
-                                .subscribe(new SimpleObserver<LocBookShelfBean>() {
-                                    @Override
-                                    public void onNext(LocBookShelfBean value) {
-                                        if (value.getNew())
-                                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
-                                        bookShelf = value.getBookShelfBean();
-                                        mView.dismissLoadBook();
-                                        checkInShelf();
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        e.printStackTrace();
-                                        mView.dismissLoadBook();
-                                        mView.loadLocationBookError();
-                                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mView.dismissLoadBook();
-                        mView.loadLocationBookError();
-                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    @Override
-    public void addDownload(int start, int end) {
-        addToShelf(() -> {
-            List<DownloadChapterBean> result = new ArrayList<>();
-            for (int i = start; i <= end; i++) {
-                DownloadChapterBean item = new DownloadChapterBean();
-                item.setNoteUrl(bookShelf.getNoteUrl());
-                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                item.setTag(bookShelf.getTag());
-                item.setBookName(bookShelf.getBookInfoBean().getName());
-                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
-                result.add(item);
-            }
-            Intent intent = new Intent(mView.getContext(), DownloadService.class);
-            intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
-            mView.getContext().startService(intent);
-        });
-    }
-
-    @Override
-    public void detachView() {
-    }
-
-    @Override
-    public int getOpen_from() {
-        return open_from;
-    }
-
-    @Override
-    public BookShelfBean getBookShelf() {
-        return bookShelf;
-    }
-
-    @Override
-    public void setBookshelf(BookShelfBean bookshelf) {
-        this.bookShelf = bookshelf;
-    }
-
-    @Override
     public void initContent() {
         mView.initContentSuccess(bookShelf.getDurChapter(), bookShelf.getBookInfoBean().getChapterlist().size(), bookShelf.getDurChapterPage());
     }
@@ -243,7 +159,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                                     .getChapterlist().get(chapterIndex).getDurChapterUrl())).build().list();
                     //加载下一章节
                     LoadNextChapter(chapterIndex);
-                    e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<BookContentBean>() : tempList, finalPageIndex1));
+                    e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<>() : tempList, finalPageIndex1));
                     e.onComplete();
                 }).observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
@@ -400,6 +316,94 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         this.pageWidth = pageWidth;
     }
 
+    @Override
+    public void openBookFromOther(Activity activity) {
+        //APP外部打开
+        Uri uri = activity.getIntent().getData();
+        mView.showLoadBook();
+        getRealFilePath(activity, uri)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new SimpleObserver<String>() {
+                    @Override
+                    public void onNext(String value) {
+                        ImportBookModelImpl.getInstance().importBook(new File(value))
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.newThread())
+                                .subscribe(new SimpleObserver<LocBookShelfBean>() {
+                                    @Override
+                                    public void onNext(LocBookShelfBean value) {
+                                        if (value.getNew())
+                                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
+                                        bookShelf = value.getBookShelfBean();
+                                        mView.dismissLoadBook();
+                                        checkInShelf();
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        e.printStackTrace();
+                                        mView.dismissLoadBook();
+                                        mView.loadLocationBookError();
+                                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        mView.dismissLoadBook();
+                        mView.loadLocationBookError();
+                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    public void addDownload(int start, int end) {
+        addToShelf(() -> {
+            List<DownloadChapterBean> result = new ArrayList<>();
+            for (int i = start; i <= end; i++) {
+                DownloadChapterBean item = new DownloadChapterBean();
+                item.setNoteUrl(bookShelf.getNoteUrl());
+                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                item.setTag(bookShelf.getTag());
+                item.setBookName(bookShelf.getBookInfoBean().getName());
+                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+                result.add(item);
+            }
+            Intent intent = new Intent(mView.getContext(), DownloadService.class);
+            intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
+            mView.getContext().startService(intent);
+        });
+    }
+
+    @Override
+    public void changeBookSource() {
+
+    }
+
+    @Override
+    public void detachView() {
+    }
+
+    @Override
+    public int getOpen_from() {
+        return open_from;
+    }
+
+    @Override
+    public BookShelfBean getBookShelf() {
+        return bookShelf;
+    }
+
+    @Override
+    public void setBookshelf(BookShelfBean bookshelf) {
+        this.bookShelf = bookshelf;
+    }
 
     private void checkInShelf() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
