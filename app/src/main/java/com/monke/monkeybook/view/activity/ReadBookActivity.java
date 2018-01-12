@@ -273,10 +273,23 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     @Override
     protected void bindView() {
-        moProgressHUD = new MoProgressHUD(this);
         ButterKnife.bind(this);
-
         initCsvBook();
+        //弹窗
+        moProgressHUD = new MoProgressHUD(this);
+        //界面设置
+        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
+            @Override
+            public void textChange(int index) {
+                csvBook.changeTextSize();
+            }
+
+            @Override
+            public void bgChange(int index) {
+                csvBook.changeBg();
+            }
+        });
+        //目录
         chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
             @Override
             public void animIn() {
@@ -288,6 +301,18 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 hideStatusBar(hideStatusBar);
             }
         });
+        //其它设置
+        moreSettingPop = new MoreSettingPop(this, keepScreenOn -> {
+            if (keepScreenOn) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            } else {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        });
+        //亮度设置
+        windowLightPop = new WindowLightPop(this);
+        windowLightPop.initLight();
+        readBookMenuMorePop = new ReadBookMenuMorePop(this);
     }
 
     @Override
@@ -316,72 +341,11 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
                 .setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
                 BookContentView.DurPageIndexBegin));
-
-        windowLightPop = new WindowLightPop(this);
-        windowLightPop.initLight();
-        //界面设置
-        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
-            @Override
-            public void textChange(int index) {
-                csvBook.changeTextSize();
-            }
-
-            @Override
-            public void bgChange(int index) {
-                csvBook.changeBg();
-            }
-        });
-
-        readBookMenuMorePop = new ReadBookMenuMorePop(this);
-        //离线下载
-        readBookMenuMorePop.setOnClickDownload(v -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-            //弹出离线下载界面
-            int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
-            if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
-                endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1;
-            }
-            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
-                moProgressHUD.dismiss();
-                mPresenter.addToShelf(() -> {
-                    List<DownloadChapterBean> result = new ArrayList<>();
-                    for (int i = start; i <= end; i++) {
-                        DownloadChapterBean item = new DownloadChapterBean();
-                        item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
-                        item.setDurChapterIndex(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                        item.setDurChapterName(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                        item.setDurChapterUrl(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                        item.setTag(mPresenter.getBookShelf().getTag());
-                        item.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
-                        item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
-                        result.add(item);
-                    }
-                    Intent intent = new Intent(ReadBookActivity.this, DownloadService.class);
-                    intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
-                    ReadBookActivity.this.startService(intent);
-                });
-
-            });
-        });
-        //换源
-        readBookMenuMorePop.setOnClickChangeSource(view -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-
-        });
-        //其它设置
-        moreSettingPop = new MoreSettingPop(this, keepScreenOn -> {
-            if (keepScreenOn) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            }
-        });
     }
 
     @Override
     protected void bindEvent() {
+        //阅读进度
         hpbReadProgress.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -485,18 +449,59 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         //返回按钮
         ivReturn.setOnClickListener(view -> finish());
 
+        //离线下载
+        readBookMenuMorePop.setOnClickDownload(v -> {
+            readBookMenuMorePop.dismiss();
+            ReadBookActivity.this.popMenuOut();
+            //弹出离线下载界面
+            int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
+            if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size()) {
+                endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1;
+            }
+            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(), (start, end) -> {
+                moProgressHUD.dismiss();
+                mPresenter.addToShelf(() -> {
+                    List<DownloadChapterBean> result = new ArrayList<>();
+                    for (int i = start; i <= end; i++) {
+                        DownloadChapterBean item = new DownloadChapterBean();
+                        item.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
+                        item.setDurChapterIndex(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                        item.setDurChapterName(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                        item.setDurChapterUrl(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                        item.setTag(mPresenter.getBookShelf().getTag());
+                        item.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
+                        item.setCoverUrl(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl());
+                        result.add(item);
+                    }
+                    Intent intent = new Intent(ReadBookActivity.this, DownloadService.class);
+                    intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
+                    ReadBookActivity.this.startService(intent);
+                });
+
+            });
+        });
+
+        //换源
+        readBookMenuMorePop.setOnClickChangeSource(view -> {
+            readBookMenuMorePop.dismiss();
+            ReadBookActivity.this.popMenuOut();
+
+        });
+
         //刷新按钮
         ivRefresh.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
-                    .getBookContentBean().setDurCapterContent(null);
-            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                    .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
-            mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
-                    .setBookContentBean(null);
-            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                    mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                    BookContentView.DurPageIndexBegin);
+            if (mPresenter.getBookShelf() != null) {
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                        .getBookContentBean().setDurCapterContent(null);
+                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
+                        .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
+                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
+                        .setBookContentBean(null);
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DurPageIndexBegin);
+            }
         });
 
         //打开URL
@@ -509,26 +514,38 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
-            aloudButton = true;
             ReadBookActivity.this.popMenuOut();
-            csvBook.readAloudStart();
-            ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+            if (mPresenter.getBookShelf() != null) {
+                aloudButton = true;
+                csvBook.readAloudStart();
+                ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+            }
         });
 
         //上一章
-        tvPre.setOnClickListener(view -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
-                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DurPageIndexBegin));
+        tvPre.setOnClickListener(view -> {
+            if (mPresenter.getBookShelf() != null) {
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DurPageIndexBegin);
+            }
+        });
 
         //下一章
-        tvNext.setOnClickListener(view -> csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
-                mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DurPageIndexBegin));
+        tvNext.setOnClickListener(view -> {
+            if (mPresenter.getBookShelf() != null) {
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
+                        mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
+                        BookContentView.DurPageIndexBegin);
+            }
+        });
 
         //目录
         llCatalog.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+            if (mPresenter.getBookShelf() != null) {
+                new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+            }
         });
 
         //亮度
@@ -548,6 +565,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             ReadBookActivity.this.popMenuOut();
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
+
     }
 
     @Override
