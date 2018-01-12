@@ -445,7 +445,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         });
 
         //菜单
-        ivMenuMore.setOnClickListener(v -> readBookMenuMorePop
+        ivMenuMore.setOnClickListener(view -> readBookMenuMorePop
                 .showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
 
         //正文
@@ -455,7 +455,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         ivReturn.setOnClickListener(view -> finish());
 
         //离线下载
-        readBookMenuMorePop.setOnClickDownload((View v) -> {
+        readBookMenuMorePop.setOnClickDownload(view -> {
             readBookMenuMorePop.dismiss();
             ReadBookActivity.this.popMenuOut();
             //弹出离线下载界面
