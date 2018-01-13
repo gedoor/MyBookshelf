@@ -78,15 +78,16 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
                 if (!(temp == null || temp.size() == 0)) {
                     bookShelf = temp.get(0);
-                } else {
-                    mView.finish();
-                    return;
                 }
             }
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
                 BitIntentDataManager.getInstance().cleanData(key);
+            }
+            if (bookShelf == null) {
+                mView.finish();
+                return;
             }
             if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 mView.showDownloadMenu();
