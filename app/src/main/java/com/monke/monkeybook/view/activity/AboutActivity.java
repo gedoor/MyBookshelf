@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.basemvplib.impl.BaseActivity;
@@ -117,10 +118,16 @@ public class AboutActivity extends MBaseActivity {
         element.setTitle("评分");
         element.setIconDrawable(R.drawable.ic_local_florist_black_24dp);
         element.setOnClickListener(view -> {
-            String mAddress = "market://details?id=" + getPackageName();
-            Intent marketIntent = new Intent("android.intent.action.VIEW");
-            marketIntent.setData(Uri.parse(mAddress ));
-            startActivity(marketIntent);
+            try {
+                String mAddress = "market://details?id=" + getPackageName();
+                Intent marketIntent = new Intent("android.intent.action.VIEW");
+                marketIntent.setData(Uri.parse(mAddress));
+                startActivity(marketIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "无法打开", Toast.LENGTH_SHORT).show();
+            }
+
         });
         return element;
     }
