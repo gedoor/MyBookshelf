@@ -263,7 +263,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
             flMenu.setVisibility(View.VISIBLE);
             llMenuTop.startAnimation(menuTopIn);
             llMenuBottom.startAnimation(menuBottomIn);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            hideStatusBar(false);
+            hideNavigationBar();
         }
 
         @Override
