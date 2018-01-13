@@ -87,15 +87,16 @@
                 android:textColor="@color/tv_text_addshelf_pre"
                 android:textSize="16sp"/>
         </FrameLayout>
+
         <TextView
             android:id="@+id/tv_scan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/selector_importbook_btn_bg"
             android:clickable="true"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:gravity="center"
             android:text="智能扫描"
-            android:gravity="center"/>
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
     </FrameLayout>
 </LinearLayout>

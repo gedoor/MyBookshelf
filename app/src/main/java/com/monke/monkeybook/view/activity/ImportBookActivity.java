@@ -35,7 +35,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     private RotateLoading rlLoading;
     private TextView tvCount;
 
-    private TextView tvAddshelf;
+    private TextView tvAddShelf;
 
     private RecyclerView rcvBooks;
 
@@ -61,7 +61,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
         animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
 
-        importBookAdapter = new ImportBookAdapter(count -> tvAddshelf.setVisibility(count == 0 ? View.INVISIBLE : View.VISIBLE));
+        importBookAdapter = new ImportBookAdapter(count -> tvAddShelf.setVisibility(count == 0 ? View.INVISIBLE : View.VISIBLE));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         rlLoading = findViewById(R.id.rl_loading);
         tvCount = findViewById(R.id.tv_count);
 
-        tvAddshelf = findViewById(R.id.tv_addshelf);
+        tvAddShelf = findViewById(R.id.tv_addshelf);
 
         rcvBooks = findViewById(R.id.rcv_books);
         rcvBooks.setAdapter(importBookAdapter);
@@ -117,7 +117,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         });
         ivReturn.setOnClickListener(v -> finish());
 
-        tvAddshelf.setOnClickListener(v -> {
+        tvAddShelf.setOnClickListener(v -> {
             //添加书籍
             moProgressHUD.showLoading("放入书架中...");
             mPresenter.importBooks(importBookAdapter.getSelectDatas());
