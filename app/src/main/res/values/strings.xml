@@ -83,4 +83,7 @@
     <string name="read_aloud_timer">正在朗读(还剩%d分钟)</string>
     <string name="ps_hide_navigation_bar">阅读界面隐藏虚拟按键</string>
     <string name="pt_hide_navigation_bar">隐藏虚拟按键</string>
+    <string name="git_hub">GitHub</string>
+    <string name="scoring">评分</string>
+    <string name="send_mail">发送邮件</string>
 </resources>

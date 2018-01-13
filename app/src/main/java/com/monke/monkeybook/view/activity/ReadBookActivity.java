@@ -179,7 +179,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
+        if (mPresenter.getBookShelf() != null) {
+            outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
+        }
     }
 
     @Override

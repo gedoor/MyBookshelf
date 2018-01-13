@@ -99,8 +99,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //动画
     implementation 'com.victor:lib:1.0.4'
-    //关于页面
-    implementation 'com.github.medyo:android-about-page:1.2.2'
     //简易权限获取
     implementation 'pub.devrel:easypermissions:1.1.1'
     //圆形按钮
