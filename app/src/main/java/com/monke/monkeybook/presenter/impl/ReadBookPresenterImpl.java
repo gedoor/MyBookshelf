@@ -76,9 +76,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
             }
             if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 mView.showDownloadMenu();
-                BitIntentDataManager.getInstance().cleanData(key);
-                checkInShelf();
             }
+            BitIntentDataManager.getInstance().cleanData(key);
+            checkInShelf();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(activity,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
