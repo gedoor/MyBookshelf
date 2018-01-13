@@ -80,10 +80,10 @@ public class DownloadService extends Service {
         assert action != null;
         switch (action) {
             case "addDownload":
-                BookShelfBean bookShelf = intent.getParcelableExtra("bookShelf");
+                String noteUrl = intent.getStringExtra("noteUrl");
                 int start = intent.getIntExtra("start", 0);
                 int end = intent.getIntExtra("end", 0);
-                addNewTask(bookShelf, start, end);
+                addNewTask(noteUrl, start, end);
                 break;
             default:
                 break;
@@ -97,21 +97,25 @@ public class DownloadService extends Service {
         return null;
     }
 
-    private void addNewTask(final BookShelfBean bookShelf, final int start, final int end) {
+    private void addNewTask(final String noteUrl, final int start, final int end) {
         isStartDownload = true;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            for (int i = start; i <= end; i++) {
-                DownloadChapterBean item = new DownloadChapterBean();
-                item.setNoteUrl(bookShelf.getNoteUrl());
-                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                item.setTag(bookShelf.getTag());
-                item.setBookName(bookShelf.getBookInfoBean().getName());
-                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
-                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
+            if (!(temp == null || temp.size() == 0)) {
+                BookShelfBean bookShelf = temp.get(0);
+                for (int i = start; i <= end; i++) {
+                    DownloadChapterBean item = new DownloadChapterBean();
+                    item.setNoteUrl(bookShelf.getNoteUrl());
+                    item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                    item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                    item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                    item.setTag(bookShelf.getTag());
+                    item.setBookName(bookShelf.getBookInfoBean().getName());
+                    item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
+                }
+                e.onNext(true);
             }
-            e.onNext(true);
             e.onComplete();
         })
                 .observeOn(AndroidSchedulers.mainThread())

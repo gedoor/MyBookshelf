@@ -35,6 +35,7 @@ import com.monke.monkeybook.view.IMainView;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.popupwindow.DownloadListPop;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
@@ -56,6 +57,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DownloadListPop downloadListPop;
+    private MoProgressHUD moProgressHUD;
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
@@ -99,7 +101,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         setSupportActionBar(toolbar);
         setupActionBar();
         initDrawer();
-
+        moProgressHUD = new MoProgressHUD(this);
         downloadListPop = new DownloadListPop(MainActivity.this);
 
         if (viewIsList) {
@@ -335,6 +337,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshFinish() {
         rfRvShelf.finishRefresh(false, true);
+        moProgressHUD.dismiss();
     }
 
     @Override
@@ -351,6 +354,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void setRecyclerMaxProgress(int x) {
         rfRvShelf.getRpb().setMaxProgress(x);
+    }
+
+    @Override
+    public void showLoading(String msg) {
+        moProgressHUD.showLoading(msg);
     }
 
     @Override

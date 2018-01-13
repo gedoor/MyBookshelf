@@ -40,4 +40,9 @@ public interface IMainView extends IView{
      * @param x
      */
     void setRecyclerMaxProgress(int x);
+
+    /**
+     * 显示等待框
+     */
+    void showLoading(String msg);
 }

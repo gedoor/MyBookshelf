@@ -365,7 +365,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         addToShelf(() -> {
             Intent intent = new Intent(mView.getContext(), DownloadService.class);
             intent.setAction("addDownload");
-            intent.putExtra("bookShelf", bookShelf);
+            intent.putExtra("noteUrl", bookShelf.getNoteUrl());
             intent.putExtra("start", start);
             intent.putExtra("end", end);
             mView.getContext().startService(intent);
