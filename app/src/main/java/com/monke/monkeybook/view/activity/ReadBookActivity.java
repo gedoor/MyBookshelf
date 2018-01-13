@@ -216,6 +216,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         }
     }
 
+    /**
+     * 隐藏菜单
+     */
     private void popMenuOut() {
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
