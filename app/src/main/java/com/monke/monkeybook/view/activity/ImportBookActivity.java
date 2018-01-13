@@ -27,17 +27,24 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.victor.loading.rotate.RotateLoading;
 import java.io.File;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> implements IImportBookView {
-    private LinearLayout llContent;
-    private ImageButton ivReturn;
-    private TextView tvScan;
-
-    private RotateLoading rlLoading;
-    private TextView tvCount;
-
-    private TextView tvAddShelf;
-
-    private RecyclerView rcvBooks;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.iv_return)
+    ImageButton ivReturn;
+    @BindView(R.id.tv_scan)
+    TextView tvScan;
+    @BindView(R.id.rl_loading)
+    RotateLoading rlLoading;
+    @BindView(R.id.tv_count)
+    TextView tvCount;
+    @BindView(R.id.tv_addshelf)
+    TextView tvAddShelf;
+    @BindView(R.id.rcv_books)
+    RecyclerView rcvBooks;
 
     private ImportBookAdapter importBookAdapter;
 
@@ -66,18 +73,9 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     protected void bindView() {
+        ButterKnife.bind(this);
         moProgressHUD = new MoProgressHUD(this);
 
-        llContent = findViewById(R.id.ll_content);
-        ivReturn = findViewById(R.id.iv_return);
-        tvScan = findViewById(R.id.tv_scan);
-
-        rlLoading = findViewById(R.id.rl_loading);
-        tvCount = findViewById(R.id.tv_count);
-
-        tvAddShelf = findViewById(R.id.tv_addshelf);
-
-        rcvBooks = findViewById(R.id.rcv_books);
         rcvBooks.setAdapter(importBookAdapter);
         rcvBooks.setLayoutManager(new LinearLayoutManager(this));
     }
