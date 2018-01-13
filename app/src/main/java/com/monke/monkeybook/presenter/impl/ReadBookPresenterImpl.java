@@ -40,10 +40,14 @@ import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import org.jsoup.select.Evaluator;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import io.fabric.sdk.android.InitializationCallback;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -69,15 +73,24 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
         Intent intent = activity.getIntent();
         open_from = intent.getIntExtra("from", OPEN_FROM_OTHER);
         if (open_from == OPEN_FROM_APP) {
-            String key = intent.getStringExtra("data_key");
-            bookShelf = mView.getBookShelf();
+            String noteUrl = mView.getNoteUrl();
+            if (noteUrl != null && !noteUrl.isEmpty()) {
+                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
+                if (!(temp == null || temp.size() == 0)) {
+                    bookShelf = temp.get(0);
+                } else {
+                    mView.finish();
+                    return;
+                }
+            }
             if (bookShelf == null) {
+                String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
+                BitIntentDataManager.getInstance().cleanData(key);
             }
             if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 mView.showDownloadMenu();
             }
-            BitIntentDataManager.getInstance().cleanData(key);
             checkInShelf();
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(activity,

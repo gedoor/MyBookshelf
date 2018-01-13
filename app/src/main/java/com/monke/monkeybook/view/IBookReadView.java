@@ -37,5 +37,7 @@ public interface IBookReadView extends IView{
 
     void showDownloadMenu();
 
-    BookShelfBean getBookShelf();
+    void finish();
+
+    String getNoteUrl();
 }

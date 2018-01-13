@@ -114,6 +114,7 @@ public class DownloadService extends Service {
                     item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
                     DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
                 }
+                temp = null;
                 e.onNext(true);
             }
             e.onComplete();

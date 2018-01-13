@@ -114,7 +114,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
 
     private boolean aloudButton;
     private boolean hideStatusBar;
-    BookShelfBean bookshelf;
+    private String noteUrl;
 
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
@@ -158,7 +158,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            bookshelf = savedInstanceState.getParcelable("bookshelf");
+            noteUrl = savedInstanceState.getString("noteUrl");
         }
         super.onCreate(savedInstanceState);
         hideStatusBar = preferences.getBoolean("hide_status_bar", false);
@@ -179,7 +179,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable("bookshelf", mPresenter.getBookShelf());
+        outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
     }
 
     @Override
@@ -644,8 +644,8 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     @Override
-    public BookShelfBean getBookShelf() {
-        return bookshelf;
+    public String getNoteUrl() {
+        return noteUrl;
     }
 
     private Boolean showCheckPremission = false;

@@ -86,11 +86,11 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
 
         public Viewholder(View itemView) {
             super(itemView);
-            llContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
-            tvNmae = (TextView) itemView.findViewById(R.id.tv_name);
-            tvSize = (TextView) itemView.findViewById(R.id.tv_size);
-            scbSelect = (SmoothCheckBox) itemView.findViewById(R.id.scb_select);
-            tvLoc = (TextView) itemView.findViewById(R.id.tv_loc);
+            llContent = itemView.findViewById(R.id.ll_content);
+            tvNmae = itemView.findViewById(R.id.tv_name);
+            tvSize = itemView.findViewById(R.id.tv_size);
+            scbSelect = itemView.findViewById(R.id.scb_select);
+            tvLoc = itemView.findViewById(R.id.tv_loc);
         }
     }
 
@@ -101,13 +101,13 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
             f = size / 1.0f;
             return (df.format(new Float(f).doubleValue()) + "B");
         } else if (size < 1024 * 1024) {
-            f = (float) ((float) size / (float) 1024);
+            f = (float) size / (float) 1024;
             return (df.format(new Float(f).doubleValue()) + "KB");
         } else if (size < 1024 * 1024 * 1024) {
-            f = (float) ((float) size / (float) (1024 * 1024));
+            f = (float) size / (float) (1024 * 1024);
             return (df.format(new Float(f).doubleValue()) + "MB");
         } else {
-            f = (float) ((float) size / (float) (1024 * 1024 * 1024));
+            f = (float) size / (float) (1024 * 1024 * 1024);
             return (df.format(new Float(f).doubleValue()) + "GB");
         }
     }
