@@ -260,6 +260,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     if (loadDataListener != null) {
                         loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
                     }
+                    if (readAloud && durPageView.getContent() != null) {
+                        loadDataListener.readAloud(durPageView.getContent());
+                    }
                 }
 
                 @Override
@@ -420,9 +423,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     }
 
     @Override
-    public void setReadAloud(String content) {
-        if (readAloud) {
-            loadDataListener.readAloud(durPageView.getContent());
+    public void setReadAloud(BookContentView bookContentView, String content) {
+        if (readAloud && null != getDurContentView() && bookContentView == getDurContentView()) {
+            loadDataListener.readAloud(content);
         }
     }
 
