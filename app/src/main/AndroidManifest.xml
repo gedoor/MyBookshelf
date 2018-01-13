@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".MApplication"
@@ -66,13 +67,13 @@
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.SettingActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.AboutActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
-        <activity android:name=".view.activity.DonateActivity" />
+        <activity
+            android:name=".view.activity.DonateActivity"
+            android:theme="@style/CAppTransparentTheme" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
@@ -96,6 +97,4 @@
 
     </application>
 
-    <uses-sdk android:minSdkVersion="8" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 </manifest>

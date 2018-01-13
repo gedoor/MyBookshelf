@@ -7,7 +7,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface IBookDetailPresenter extends IPresenter{
 
-    int getOpenfrom();
+    int getOpenFrom();
 
     SearchBookBean getSearchBook();
 

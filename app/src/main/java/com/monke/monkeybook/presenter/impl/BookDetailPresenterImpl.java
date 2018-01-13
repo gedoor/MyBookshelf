@@ -27,27 +27,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> implements IBookDetailPresenter {
     public final static int FROM_BOOKSHELF = 1;
     public final static int FROM_SEARCH = 2;
 
-    private int openfrom;
+    private int openFrom;
     private SearchBookBean searchBook;
     private BookShelfBean bookShelf;
     private Boolean inBookShelf = false;
 
-    private List<BookShelfBean> bookShelfs = Collections.synchronizedList(new ArrayList<BookShelfBean>());   //用来比对搜索的书籍是否已经添加进书架
+    private List<BookShelfBean> bookShelfS = Collections.synchronizedList(new ArrayList<BookShelfBean>());   //用来比对搜索的书籍是否已经添加进书架
 
     public BookDetailPresenterImpl(Intent intent) {
-        openfrom = intent.getIntExtra("from", FROM_BOOKSHELF);
-        if (openfrom == FROM_BOOKSHELF) {
+        openFrom = intent.getIntExtra("from", FROM_BOOKSHELF);
+        if (openFrom == FROM_BOOKSHELF) {
             String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             BitIntentDataManager.getInstance().cleanData(key);
@@ -69,8 +66,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         this.inBookShelf = inBookShelf;
     }
 
-    public int getOpenfrom() {
-        return openfrom;
+    public int getOpenFrom() {
+        return openFrom;
     }
 
     public SearchBookBean getSearchBook() {
@@ -90,7 +87,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             e.onNext(temp);
             e.onComplete();
         }).flatMap(bookShelfBeen -> {
-            bookShelfs.addAll(bookShelfBeen);
+            bookShelfS.addAll(bookShelfBeen);
 
             final BookShelfBean bookShelfResult = new BookShelfBean();
             bookShelfResult.setNoteUrl(searchBook.getNoteUrl());
@@ -100,9 +97,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             bookShelfResult.setTag(searchBook.getTag());
             return WebBookModelImpl.getInstance().getBookInfo(bookShelfResult);
         }).map(bookShelfBean -> {
-            for(int i=0;i<bookShelfs.size();i++){
-                if(bookShelfs.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())){
-                    if (openfrom == FROM_BOOKSHELF) {
+            for (int i = 0; i < bookShelfS.size(); i++) {
+                if (bookShelfS.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
+                    if (openFrom == FROM_BOOKSHELF) {
                         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
                     }
                     inBookShelf = true;
@@ -119,7 +116,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
                             @Override
                             public void success(BookShelfBean bookShelfBean) {
-                                if (openfrom == FROM_BOOKSHELF) {
+                                if (openFrom == FROM_BOOKSHELF) {
                                     int durChapter = bookShelf.getDurChapter();
                                     bookShelf = bookShelfBean;
                                     bookShelf.setDurChapter(durChapter);
@@ -249,10 +246,10 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             }
     )
     public void hadRemoveBook(BookShelfBean value) {
-        if(bookShelfs!=null){
-            for(int i=0;i<bookShelfs.size();i++){
-                if(bookShelfs.get(i).getNoteUrl().equals(value.getNoteUrl())){
-                    bookShelfs.remove(i);
+        if (bookShelfS != null) {
+            for (int i = 0; i < bookShelfS.size(); i++) {
+                if (bookShelfS.get(i).getNoteUrl().equals(value.getNoteUrl())) {
+                    bookShelfS.remove(i);
                     break;
                 }
             }
@@ -274,7 +271,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             }
     )
     public void hadBook(BookShelfBean value) {
-        bookShelfs.add(value);
+        bookShelfS.add(value);
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = true;
             if (null != searchBook) {

@@ -167,7 +167,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        if (mPresenter.getOpenfrom() == BookDetailPresenterImpl.FROM_SEARCH && mPresenter.getBookShelf() == null) {
+        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_SEARCH && mPresenter.getBookShelf() == null) {
             //网络请求
             mPresenter.getBookShelfInfo();
         }
@@ -177,7 +177,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
         String coverUrl;
         String name;
         String author;
-        if (mPresenter.getOpenfrom() == BookDetailPresenterImpl.FROM_BOOKSHELF) {
+        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_BOOKSHELF) {
             coverUrl = mPresenter.getBookShelf().getBookInfoBean().getCoverUrl();
             name = mPresenter.getBookShelf().getBookInfoBean().getName();
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
