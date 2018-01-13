@@ -363,21 +363,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
     @Override
     public void addDownload(int start, int end) {
         addToShelf(() -> {
-            List<DownloadChapterBean> result = new ArrayList<>();
-            for (int i = start; i <= end; i++) {
-                DownloadChapterBean item = new DownloadChapterBean();
-                item.setNoteUrl(bookShelf.getNoteUrl());
-                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
-                item.setTag(bookShelf.getTag());
-                item.setBookName(bookShelf.getBookInfoBean().getName());
-                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
-                result.add(item);
-            }
             Intent intent = new Intent(mView.getContext(), DownloadService.class);
             intent.setAction("addDownload");
-            intent.putParcelableArrayListExtra("downloadTask", (ArrayList<DownloadChapterBean>) result);
+            intent.putExtra("bookShelf", bookShelf);
+            intent.putExtra("start", start);
+            intent.putExtra("end", end);
             mView.getContext().startService(intent);
         });
     }

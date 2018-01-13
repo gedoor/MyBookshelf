@@ -80,8 +80,10 @@ public class DownloadService extends Service {
         assert action != null;
         switch (action) {
             case "addDownload":
-                List<DownloadChapterBean> downList = intent.getParcelableArrayListExtra("downloadTask");
-                addNewTask(downList);
+                BookShelfBean bookShelf = intent.getParcelableExtra("bookShelf");
+                int start = intent.getIntExtra("start", 0);
+                int end = intent.getIntExtra("end", 0);
+                addNewTask(bookShelf, start, end);
                 break;
             default:
                 break;
@@ -95,10 +97,20 @@ public class DownloadService extends Service {
         return null;
     }
 
-    private void addNewTask(final List<DownloadChapterBean> newData) {
+    private void addNewTask(final BookShelfBean bookShelf, final int start, final int end) {
         isStartDownload = true;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplaceInTx(newData);
+            for (int i = start; i <= end; i++) {
+                DownloadChapterBean item = new DownloadChapterBean();
+                item.setNoteUrl(bookShelf.getNoteUrl());
+                item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
+                item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
+                item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                item.setTag(bookShelf.getTag());
+                item.setBookName(bookShelf.getBookInfoBean().getName());
+                item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
+            }
             e.onNext(true);
             e.onComplete();
         })
@@ -398,8 +410,4 @@ public class DownloadService extends Service {
         cancelDownload();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ADD_DOWNLOAD_TASK)})
-    public void addTask(DownloadChapterListBean newData) {
-        addNewTask(newData.getData());
-    }
 }
