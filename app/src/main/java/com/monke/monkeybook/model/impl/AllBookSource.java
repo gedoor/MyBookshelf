@@ -42,7 +42,7 @@ public class AllBookSource {
         }
     }
 
-    public static List<BookSourceBean> saveBookSourceToDb() {
+    private static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceList = new ArrayList<>();
         bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true));
         bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true));
