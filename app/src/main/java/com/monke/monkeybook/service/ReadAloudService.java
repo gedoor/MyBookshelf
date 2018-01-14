@@ -159,7 +159,9 @@ public class ReadAloudService extends Service {
     private void doneService() {
         cancelTimer();
         stopSelf();
-        aloudServiceListener.stopService();
+        if (aloudServiceListener != null) {
+            aloudServiceListener.stopService();
+        }
     }
 
     /**
@@ -303,11 +305,15 @@ public class ReadAloudService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        running = false;
+        clearTTS();
+        unRegisterMediaButton();
+    }
+
+    private void clearTTS() {
         textToSpeech.stop();
         textToSpeech.shutdown();
         textToSpeech = null;
-        unRegisterMediaButton();
-        running = false;
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
