@@ -84,31 +84,28 @@ public class ReadAloudService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
-        if (action == null) {
-            stopSelf();
-        } else {
-            switch (action) {
-                case doneServiceAction:
-                    stopSelf();
-                    break;
-                case pauseServiceAction:
-                    pauseReadAloud(true);
-                    break;
-                case resumeServiceAction:
-                    resumeReadAloud();
-                    break;
-                case mediaButtonAction:
-                    aloudControl();
-                    break;
-                case setTimerAction:
-                    updateTimer(intent.getIntExtra("minute", 10));
-                    break;
-                case newReadAloudAction:
-                    newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
-                    break;
-                default:
-                    break;
-            }
+        assert action != null;
+        switch (action) {
+            case doneServiceAction:
+                doneService();
+                break;
+            case pauseServiceAction:
+                pauseReadAloud(true);
+                break;
+            case resumeServiceAction:
+                resumeReadAloud();
+                break;
+            case mediaButtonAction:
+                aloudControl();
+                break;
+            case setTimerAction:
+                updateTimer(intent.getIntExtra("minute", 10));
+                break;
+            case newReadAloudAction:
+                newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
+                break;
+            default:
+                break;
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -157,6 +154,15 @@ public class ReadAloudService extends Service {
     }
 
     /**
+     * 关闭服务
+     */
+    private void doneService() {
+        cancelTimer();
+        stopSelf();
+        aloudServiceListener.stopService();
+    }
+
+    /**
      * @param pause true 暂停, false 失去焦点
      */
     private void pauseReadAloud(Boolean pause) {
@@ -195,7 +201,7 @@ public class ReadAloudService extends Service {
         } else if (timeMinute <= 0) {
             if (timerEnable) {
                 cancelTimer();
-                stopSelf();
+                doneService();
             }
         } else {
             timerEnable = true;
@@ -297,13 +303,11 @@ public class ReadAloudService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        running = false;
-        cancelTimer();
-        clearTTS();
+        textToSpeech.stop();
+        textToSpeech.shutdown();
+        textToSpeech = null;
         unRegisterMediaButton();
-        if (aloudServiceListener != null) {
-            aloudServiceListener.stopService();
-        }
+        running = false;
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
@@ -314,7 +318,7 @@ public class ReadAloudService extends Service {
                 if (result == TextToSpeech.LANG_MISSING_DATA ||
                         result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     aloudServiceListener.showMassage("TTS没有中文语言");
-                    stopSelf();
+                    doneService();
                 } else {
                     textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     ttsInitSuccess = true;
@@ -322,7 +326,7 @@ public class ReadAloudService extends Service {
                 }
             } else {
                 aloudServiceListener.showMassage("TTS初始化失败");
-                stopSelf();
+                doneService();
             }
         }
     }
@@ -431,12 +435,6 @@ public class ReadAloudService extends Service {
             mediaSessionCompat.release();
         }
         audioManager.abandonAudioFocus(audioFocusChangeListener);
-    }
-
-    private void clearTTS() {
-        textToSpeech.stop();
-        textToSpeech.shutdown();
-        textToSpeech = null;
     }
 
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
