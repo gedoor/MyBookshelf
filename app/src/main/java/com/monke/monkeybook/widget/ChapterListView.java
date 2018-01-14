@@ -17,19 +17,28 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
-public class ChapterListView extends FrameLayout{
-    private TextView tvName;
-    private TextView tvListCount;
-    private RecyclerView rvList;
-    private RecyclerViewBar rvbSlider;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private FrameLayout flBg;
-    private LinearLayout llContent;
+public class ChapterListView extends FrameLayout {
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_list_count)
+    TextView tvListCount;
+    @BindView(R.id.rv_list)
+    RecyclerView rvList;
+    @BindView(R.id.rvb_slider)
+    RecyclerViewBar rvbSlider;
+    @BindView(R.id.ll_content)
+    ImmerseLinearLayout llContent;
+    @BindView(R.id.fl_bg)
+    FrameLayout flBg;
 
     private ChapterListAdapter chapterListAdapter;
     private OnItemClickListener itemClickListener;
@@ -41,6 +50,7 @@ public class ChapterListView extends FrameLayout{
 
     public interface OnChangeListener {
         void animIn();
+
         void animOut();
     }
 
@@ -49,11 +59,11 @@ public class ChapterListView extends FrameLayout{
     }
 
     public ChapterListView(@NonNull Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public ChapterListView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public ChapterListView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
@@ -69,13 +79,13 @@ public class ChapterListView extends FrameLayout{
 
     private void init() {
         setVisibility(INVISIBLE);
-        LayoutInflater.from(getContext()).inflate(R.layout.view_chapterlist,this,true);
+        LayoutInflater.from(getContext()).inflate(R.layout.view_chapterlist, this, true);
         initData();
         initView();
     }
 
     private void initData() {
-        animIn = AnimationUtils.loadAnimation(getContext(),R.anim.anim_pop_chapterlist_in);
+        animIn = AnimationUtils.loadAnimation(getContext(), R.anim.anim_pop_chapterlist_in);
         animIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -93,7 +103,7 @@ public class ChapterListView extends FrameLayout{
 
             }
         });
-        animOut = AnimationUtils.loadAnimation(getContext(),R.anim.anim_pop_chapterlist_out);
+        animOut = AnimationUtils.loadAnimation(getContext(), R.anim.anim_pop_chapterlist_out);
         animOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -116,8 +126,8 @@ public class ChapterListView extends FrameLayout{
 
     public void show(int durChapter) {
         chapterListAdapter.setIndex(durChapter);
-        ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter,0);
-        if(getVisibility()!=VISIBLE){
+        ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
+        if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
             animOut.cancel();
             animIn.cancel();
@@ -130,29 +140,24 @@ public class ChapterListView extends FrameLayout{
         return (changeListener != null);
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void itemClick(int index);
     }
 
     private void initView() {
-        flBg = findViewById(R.id.fl_bg);
-        llContent = findViewById(R.id.ll_content);
-        tvName = findViewById(R.id.tv_name);
-        tvListCount = findViewById(R.id.tv_list_count);
-        rvList = findViewById(R.id.rv_list);
+        ButterKnife.bind(this);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setItemAnimator(null);
-        rvbSlider = findViewById(R.id.rvb_slider);
     }
 
-    public void setData(BookShelfBean bookShelfBean,OnItemClickListener clickListener) {
+    public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
         this.itemClickListener = clickListener;
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
         tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
                 bookShelfBean.getBookInfoBean().getChapterlist().size()));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
-            if(itemClickListener!=null){
+            if (itemClickListener != null) {
                 itemClickListener.itemClick(index);
                 rvbSlider.scrollToPositionWithOffset(index);
                 dismissChapterList();
@@ -162,10 +167,10 @@ public class ChapterListView extends FrameLayout{
         rvbSlider.setRecyclerView(rvList);
     }
 
-    public Boolean dismissChapterList(){
-        if(getVisibility()!=VISIBLE){
+    public Boolean dismissChapterList() {
+        if (getVisibility() != VISIBLE) {
             return false;
-        }else{
+        } else {
             animOut.cancel();
             animIn.cancel();
             llContent.startAnimation(animOut);

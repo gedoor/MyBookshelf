@@ -135,7 +135,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             }
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText("来源:" + mPresenter.getBookShelf().getBookInfoBean().getOrigin());
+                tvOrigin.setText(String.format("来源:%s", mPresenter.getBookShelf().getBookInfoBean().getOrigin()));
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -183,7 +183,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText("来源:" + mPresenter.getBookShelf().getBookInfoBean().getOrigin());
+                tvOrigin.setText(String.format("来源:%s", mPresenter.getBookShelf().getBookInfoBean().getOrigin()));
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -193,7 +193,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             author = mPresenter.getSearchBook().getAuthor();
             if (mPresenter.getSearchBook().getOrigin() != null && mPresenter.getSearchBook().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText("来源:" + mPresenter.getSearchBook().getOrigin());
+                tvOrigin.setText(String.format("来源:%s", mPresenter.getSearchBook().getOrigin()));
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
