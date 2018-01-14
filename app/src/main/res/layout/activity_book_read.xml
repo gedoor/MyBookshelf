@@ -76,6 +76,7 @@
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
                         android:focusable="true"
                         android:contentDescription="@string/refresh" />
 
@@ -107,6 +108,7 @@
                 android:singleLine="true"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:visibility="gone"
                 android:background="@color/bdp_white"/>
 
             <View

@@ -32,16 +32,13 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.presenter.IBookReadPresenter;
+import com.monke.monkeybook.presenter.IReadBookPresenter;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
-import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.view.IBookReadView;
+import com.monke.monkeybook.view.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
@@ -54,9 +51,6 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -64,7 +58,7 @@ import me.grantland.widget.AutofitTextView;
 import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
 
-public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implements IBookReadView{
+public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.csv_book)
@@ -151,7 +145,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     };
 
     @Override
-    protected IBookReadPresenter initInjector() {
+    protected IReadBookPresenter initInjector() {
         return new ReadBookPresenterImpl();
     }
 
@@ -641,8 +635,10 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     }
 
     @Override
-    public void showDownloadMenu() {
+    public void showOnLineView() {
         ivMenuMore.setVisibility(View.VISIBLE);
+        ivRefresh.setVisibility(View.VISIBLE);
+        atvUrl.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -650,7 +646,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
         return noteUrl;
     }
 
-    private Boolean showCheckPremission = false;
+    private Boolean showCheckPermission = false;
 
     @SuppressLint("NewApi")
     @Override
@@ -660,7 +656,7 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
                 mPresenter.openBookFromOther(ReadBookActivity.this);
             } else {
                 if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    showCheckPremission = true;
+                    showCheckPermission = true;
                     moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> finish(), "设置", v -> PremissionCheck.requestPermissionSetting(ReadBookActivity.this));
                 } else {
                     Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();
@@ -673,9 +669,9 @@ public class ReadBookActivity extends MBaseActivity<IBookReadPresenter> implemen
     @Override
     protected void onResume() {
         super.onResume();
-        if (showCheckPremission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
+        if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
-            showCheckPremission = true;
+            showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
     }

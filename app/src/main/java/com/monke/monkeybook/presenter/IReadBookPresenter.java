@@ -8,7 +8,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 
-public interface IBookReadPresenter extends IPresenter{
+public interface IReadBookPresenter extends IPresenter {
 
     int getOpen_from();
 

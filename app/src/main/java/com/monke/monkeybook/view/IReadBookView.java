@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import com.monke.basemvplib.IView;
 import com.monke.monkeybook.bean.BookShelfBean;
 
-public interface IBookReadView extends IView{
+public interface IReadBookView extends IView {
 
     /**
      * @return 获取当前阅读界面UI画笔
@@ -35,7 +35,7 @@ public interface IBookReadView extends IView{
 
     void loadLocationBookError();
 
-    void showDownloadMenu();
+    void showOnLineView();
 
     void finish();
 

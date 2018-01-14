@@ -23,7 +23,6 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
 import com.monke.monkeybook.common.RxBusTag;
@@ -32,28 +31,23 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.impl.ImportBookModelImpl;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
-import com.monke.monkeybook.presenter.IBookReadPresenter;
+import com.monke.monkeybook.presenter.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.view.IBookReadView;
-import com.monke.monkeybook.view.activity.ReadBookActivity;
+import com.monke.monkeybook.view.IReadBookView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-
-import org.jsoup.select.Evaluator;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import io.fabric.sdk.android.InitializationCallback;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> implements IBookReadPresenter {
+public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
@@ -90,7 +84,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IBookReadView> impl
                 return;
             }
             if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                mView.showDownloadMenu();
+                mView.showOnLineView();
             }
             checkInShelf();
         } else {
