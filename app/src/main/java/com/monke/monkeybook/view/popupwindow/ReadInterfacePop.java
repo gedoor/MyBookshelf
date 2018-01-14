@@ -10,39 +10,54 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ReadInterfacePop extends PopupWindow{
-    private Context mContext;
+public class ReadInterfacePop extends PopupWindow {
+
     private View view;
-    private FrameLayout flSmaller;
-    private FrameLayout flBigger;
-    private TextView tvTextSizedDefault;
-    private TextView tvTextSize;
-    private CircleImageView civBgWhite;
-    private CircleImageView civBgYellow;
-    private CircleImageView civBgGreen;
-    private CircleImageView civBgBlack;
+    @BindView(R.id.fl_smaller)
+    FrameLayout flSmaller;
+    @BindView(R.id.tv_dur_text_size)
+    TextView tvDurTextSize;
+    @BindView(R.id.fl_bigger)
+    FrameLayout flBigger;
+    @BindView(R.id.tv_text_size_default)
+    TextView tvTextSizeDefault;
+    @BindView(R.id.civ_bg_white)
+    CircleImageView civBgWhite;
+    @BindView(R.id.civ_bg_yellow)
+    CircleImageView civBgYellow;
+    @BindView(R.id.civ_bg_green)
+    CircleImageView civBgGreen;
+    @BindView(R.id.civ_bg_black)
+    CircleImageView civBgBlack;
+    private Context mContext;
 
     private ReadBookControl readBookControl;
 
-    public interface OnChangeProListener{
+    public interface OnChangeProListener {
         void textChange(int index);
+
         void bgChange(int index);
     }
+
     private OnChangeProListener changeProListener;
 
-    public ReadInterfacePop(Context context, @NonNull OnChangeProListener changeProListener){
+    public ReadInterfacePop(Context context, @NonNull OnChangeProListener changeProListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
         this.changeProListener = changeProListener;
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_interface, null);
         this.setContentView(view);
+        ButterKnife.bind(this, view);
         initData();
-        bindView();
         bindEvent();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -51,16 +66,22 @@ public class ReadInterfacePop extends PopupWindow{
         setAnimationStyle(R.style.anim_pop_windowlight);
     }
 
+    private void initData() {
+        readBookControl = ReadBookControl.getInstance();
+        updateText(readBookControl.getTextKindIndex());
+        updateBg(readBookControl.getTextDrawableIndex());
+    }
+
     private void bindEvent() {
         flSmaller.setOnClickListener(v -> {
-            updateText(readBookControl.getTextKindIndex()-1);
+            updateText(readBookControl.getTextKindIndex() - 1);
             changeProListener.textChange(readBookControl.getTextKindIndex());
         });
         flBigger.setOnClickListener(v -> {
-            updateText(readBookControl.getTextKindIndex()+1);
+            updateText(readBookControl.getTextKindIndex() + 1);
             changeProListener.textChange(readBookControl.getTextKindIndex());
         });
-        tvTextSizedDefault.setOnClickListener(v -> {
+        tvTextSizeDefault.setOnClickListener(v -> {
             updateText(ReadBookControl.DEFAULT_TEXT);
             changeProListener.textChange(readBookControl.getTextKindIndex());
         });
@@ -83,36 +104,23 @@ public class ReadInterfacePop extends PopupWindow{
         });
     }
 
-    private void bindView() {
-        flSmaller = view.findViewById(R.id.fl_smaller);
-        flBigger = view.findViewById(R.id.fl_bigger);
-        tvTextSizedDefault = view.findViewById(R.id.tv_textsize_default);
-        tvTextSize = view.findViewById(R.id.tv_dur_textsize);
-        updateText(readBookControl.getTextKindIndex());
-
-        civBgWhite = view.findViewById(R.id.civ_bg_white);
-        civBgYellow = view.findViewById(R.id.civ_bg_yellow);
-        civBgGreen = view.findViewById(R.id.civ_bg_green);
-        civBgBlack = view.findViewById(R.id.civ_bg_black);
-        updateBg(readBookControl.getTextDrawableIndex());
-    }
-
     private void updateText(int textKindIndex) {
-        if(textKindIndex==0){
+        if (textKindIndex == 0) {
             flSmaller.setEnabled(false);
             flBigger.setEnabled(true);
-        }else if(textKindIndex == readBookControl.getTextKind().size()-1){
+        } else if (textKindIndex == readBookControl.getTextKind().size() - 1) {
             flSmaller.setEnabled(true);
             flBigger.setEnabled(false);
-        }else{flSmaller.setEnabled(true);
+        } else {
+            flSmaller.setEnabled(true);
             flBigger.setEnabled(true);
         }
-        if(textKindIndex == ReadBookControl.DEFAULT_TEXT){
-            tvTextSizedDefault.setEnabled(false);
-        }else{
-            tvTextSizedDefault.setEnabled(true);
+        if (textKindIndex == ReadBookControl.DEFAULT_TEXT) {
+            tvTextSizeDefault.setEnabled(false);
+        } else {
+            tvTextSizeDefault.setEnabled(true);
         }
-        tvTextSize.setText(String.valueOf(readBookControl.getTextKind().get(textKindIndex).get("textSize")));
+        tvDurTextSize.setText(String.valueOf(readBookControl.getTextKind().get(textKindIndex).get("textSize")));
         readBookControl.setTextKindIndex(textKindIndex);
     }
 
@@ -121,7 +129,7 @@ public class ReadInterfacePop extends PopupWindow{
         civBgYellow.setBorderColor(Color.parseColor("#00000000"));
         civBgGreen.setBorderColor(Color.parseColor("#00000000"));
         civBgBlack.setBorderColor(Color.parseColor("#00000000"));
-        switch (index){
+        switch (index) {
             case 0:
                 civBgWhite.setBorderColor(Color.parseColor("#F3B63F"));
                 break;
@@ -138,7 +146,4 @@ public class ReadInterfacePop extends PopupWindow{
         readBookControl.setTextDrawableIndex(index);
     }
 
-    private void initData() {
-        readBookControl = ReadBookControl.getInstance();
-    }
 }

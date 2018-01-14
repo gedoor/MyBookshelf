@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ public class ReadBookMenuMorePop extends PopupWindow{
     private LinearLayout llDownload;
     private LinearLayout llChangeSource;
 
+    @SuppressLint("InflateParams")
     public ReadBookMenuMorePop(Context context){
         super(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;

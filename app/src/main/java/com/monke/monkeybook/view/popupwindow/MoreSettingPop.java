@@ -8,35 +8,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 
-public class MoreSettingPop extends PopupWindow{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MoreSettingPop extends PopupWindow {
+
     private Context mContext;
     private View view;
 
-    private SwitchButton sbKey;
-    private SwitchButton sbClick;
-    private SwitchButton sbKeepScreenOn;
+    @BindView(R.id.sb_key)
+    SwitchButton sbKey;
+    @BindView(R.id.sb_click)
+    SwitchButton sbClick;
+    @BindView(R.id.sb_keep_screen_on)
+    SwitchButton sbKeepScreenOn;
 
     private ReadBookControl readBookControl;
 
-    public interface OnChangeProListener{
+    public interface OnChangeProListener {
         void keepScreenOnChange(Boolean keepScreenOn);
     }
-    private MoreSettingPop.OnChangeProListener changeProListener;
+
+    private OnChangeProListener changeProListener;
 
     @SuppressLint("InflateParams")
-    public MoreSettingPop(Context context, @NonNull MoreSettingPop.OnChangeProListener changeProListener){
+    public MoreSettingPop(Context context, @NonNull OnChangeProListener changeProListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
         this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
         this.setContentView(view);
+        ButterKnife.bind(this, view);
         initData();
-        bindView();
         bindEvent();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -54,17 +63,11 @@ public class MoreSettingPop extends PopupWindow{
         });
     }
 
-    private void bindView() {
-        sbKey = view.findViewById(R.id.sb_key);
-        sbClick = view.findViewById(R.id.sb_click);
-        sbKeepScreenOn = view.findViewById(R.id.sb_keep_screen_on);
+    private void initData() {
+        readBookControl = ReadBookControl.getInstance();
 
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
-    }
-
-    private void initData() {
-        readBookControl = ReadBookControl.getInstance();
     }
 }

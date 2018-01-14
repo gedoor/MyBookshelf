@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hwangjr.rxbus.RxBus;
@@ -23,31 +24,42 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class DownloadListPop extends PopupWindow {
+
     private Context mContext;
     private View view;
 
-    private TextView tvNone;
-    private LinearLayout llDownload;
-
-    private ImageView ivCover;
-    private TextView tvName;
-    private TextView tvChapterName;
-    private TextView tvCancel;
-    private TextView tvDownload;
+    @BindView(R.id.iv_cover)
+    ImageView ivCover;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_chapter_name)
+    TextView tvChapterName;
+    @BindView(R.id.ll_download)
+    LinearLayout llDownload;
+    @BindView(R.id.tv_download)
+    TextView tvDownload;
+    @BindView(R.id.tv_cancel)
+    TextView tvCancel;
+    @BindView(R.id.tv_none)
+    TextView tvNone;
 
     public DownloadListPop(Context context) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_download_list, null);
         this.setContentView(view);
-        bindView();
+        ButterKnife.bind(this, view);
         bindEvent();
         initWait();
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -69,16 +81,6 @@ public class DownloadListPop extends PopupWindow {
                 RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, new Object());
             }
         });
-    }
-
-    private void bindView() {
-        tvNone = (TextView) view.findViewById(R.id.tv_none);
-        llDownload = (LinearLayout) view.findViewById(R.id.ll_download);
-        ivCover = (ImageView) view.findViewById(R.id.iv_cover);
-        tvName = (TextView) view.findViewById(R.id.tv_name);
-        tvChapterName = (TextView) view.findViewById(R.id.tv_chapter_name);
-        tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
-        tvDownload = (TextView) view.findViewById(R.id.tv_download);
     }
 
     private void initWait() {

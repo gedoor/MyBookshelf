@@ -43,7 +43,7 @@
                     android:textSize="22sp"/>
             </FrameLayout>
             <TextView
-                android:id="@+id/tv_dur_textsize"
+                android:id="@+id/tv_dur_text_size"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"
@@ -67,7 +67,7 @@
                     android:textSize="22sp"/>
             </FrameLayout>
             <TextView
-                android:id="@+id/tv_textsize_default"
+                android:id="@+id/tv_text_size_default"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"

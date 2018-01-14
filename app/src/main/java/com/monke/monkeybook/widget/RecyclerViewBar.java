@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -55,7 +56,7 @@ public class RecyclerViewBar extends LinearLayout {
 
     private void init(AttributeSet attrs) {
         setOrientation(VERTICAL);
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RecyclerViewBar);
+        @SuppressLint("Recycle") TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RecyclerViewBar);
         sliderHeight = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_height, sliderHeight);
         int paddingLeft = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_paddingLeft, 0);
         int paddingRight = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_paddingRight, 0);

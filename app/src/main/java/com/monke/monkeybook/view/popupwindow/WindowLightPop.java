@@ -12,18 +12,25 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WindowLightPop extends PopupWindow {
     private Context mContext;
     private View view;
 
-    private MHorProgressBar hpbLight;
-    private LinearLayout llFollowSys;
-    private SmoothCheckBox scbFollowSys;
+    @BindView(R.id.hpb_light)
+    MHorProgressBar hpbLight;
+    @BindView(R.id.scb_follow_sys)
+    SmoothCheckBox scbFollowSys;
+    @BindView(R.id.ll_follow_sys)
+    LinearLayout llFollowSys;
 
     private Boolean isFollowSys;
     private int light;
@@ -34,8 +41,8 @@ public class WindowLightPop extends PopupWindow {
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_window_light, null);
         this.setContentView(view);
+        ButterKnife.bind(this, view);
         initData();
-        initView();
         bindEvent();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -47,12 +54,6 @@ public class WindowLightPop extends PopupWindow {
     private void initData() {
         isFollowSys = getIsFollowSys();
         light = getLight();
-    }
-
-    private void initView() {
-        hpbLight = (MHorProgressBar) view.findViewById(R.id.hpb_light);
-        llFollowSys = (LinearLayout) view.findViewById(R.id.ll_follow_sys);
-        scbFollowSys = (SmoothCheckBox) view.findViewById(R.id.scb_follow_sys);
     }
 
     private void bindEvent() {
@@ -106,6 +107,7 @@ public class WindowLightPop extends PopupWindow {
         params.screenBrightness = value * 1.0f / 255f;
         ((Activity) mContext).getWindow().setAttributes(params);
     }
+
     public void setScreenBrightness() {
         WindowManager.LayoutParams params = ((Activity) mContext).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
@@ -155,8 +157,8 @@ public class WindowLightPop extends PopupWindow {
         scbFollowSys.setChecked(isFollowSys);
     }
 
-    public void initLight(){
-        if(!isFollowSys){
+    public void initLight() {
+        if (!isFollowSys) {
             setScreenBrightness(light);
         }
     }
