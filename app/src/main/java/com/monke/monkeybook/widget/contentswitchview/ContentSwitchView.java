@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.contentswitchview;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
@@ -101,6 +102,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 操作事件
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -212,10 +214,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             long temp = Math.abs(view.getLeft() - orderX) / (getWidth() / animDuration);
             ValueAnimator tempAnim = ValueAnimator.ofInt(view.getLeft(), orderX).setDuration(temp);
             tempAnim.addUpdateListener(animation -> {
-                if (null != view) {
-                    int value = (int) animation.getAnimatedValue();
-                    view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
-                }
+                int value = (int) animation.getAnimatedValue();
+                view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
             });
             tempAnim.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -284,10 +284,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             long temp = Math.abs(view.getLeft() - orderX) / (getWidth() / animDuration);
             ValueAnimator tempAnim = ValueAnimator.ofInt(view.getLeft(), orderX).setDuration(temp);
             tempAnim.addUpdateListener(animation -> {
-                if (null != view) {
-                    int value = (int) animation.getAnimatedValue();
-                    view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
-                }
+                int value = (int) animation.getAnimatedValue();
+                view.layout(value, view.getTop(), value + getWidth(), view.getBottom());
             });
             tempAnim.start();
         }
@@ -305,7 +303,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private void updateOtherPage(int durChapterIndex, int chapterAll, int durPageIndex, int pageAll) {
         if (chapterAll > 1 || pageAll > 1) {
-            if ((durChapterIndex == 0 && pageAll == -1) || (durChapterIndex == 0 && durPageIndex == 0 && pageAll != -1)) {
+            if (((durChapterIndex == 0) && (pageAll == -1)) || ((durChapterIndex == 0) && (durPageIndex == 0))) {
                 //ONLY_NEXT
                 addNextPage(durChapterIndex, chapterAll, durPageIndex, pageAll);
                 if (state == ONLY_PRE || state == PRE_AND_NEXT) {
@@ -467,10 +465,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private LoadDataListener loadDataListener;
 
-    public LoadDataListener getLoadDataListener() {
-        return loadDataListener;
-    }
-
     public void setLoadDataListener(LoadDataListener loadDataListener) {
         this.loadDataListener = loadDataListener;
     }
@@ -553,14 +547,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             return true;
         }
         return false;
-    }
-
-    public OnBookReadInitListener getBookReadInitListener() {
-        return bookReadInitListener;
-    }
-
-    public void setBookReadInitListener(OnBookReadInitListener bookReadInitListener) {
-        this.bookReadInitListener = bookReadInitListener;
     }
 
     public void loadError(){

@@ -20,26 +20,38 @@ import com.monke.monkeybook.widget.MTextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import me.grantland.widget.AutofitTextView;
+
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
 
     public static final int DurPageIndexBegin = -1;
     public static final int DurPageIndexEnd = -2;
 
+    @BindView(R.id.iv_bg)
+    ImageView ivBg;
+    @BindView(R.id.tv_title)
+    AutofitTextView tvTitle;
+    @BindView(R.id.tv_page)
+    TextView tvPage;
+    @BindView(R.id.v_bottom)
+    View vBottom;
+    @BindView(R.id.tv_content)
+    MTextView tvContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.tv_loading)
+    TextView tvLoading;
+    @BindView(R.id.tv_error_info)
+    TextView tvErrorInfo;
+    @BindView(R.id.tv_load_again)
+    TextView tvLoadAgain;
+    @BindView(R.id.ll_error)
+    LinearLayout llError;
+
     private SharedPreferences preferences;
-
-    private View view;
-    private ImageView ivBg;
-    private TextView tvTitle;
-    private LinearLayout llContent;
-    private MTextView tvContent;
-    private View vBottom;
-    private TextView tvPage;
-
-    private TextView tvLoading;
-    private LinearLayout llError;
-    private TextView tvErrorInfo;
-    private TextView tvLoadAgain;
 
     private String title;
     private String content;
@@ -78,24 +90,15 @@ public class BookContentView extends FrameLayout {
         init();
     }
 
-    private void init() {
+    public void init() {
+        View view;
         if (preferences.getBoolean("hide_status_bar", false)) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_hide_status_bar, this, false);
         } else {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_show_status_bar, this, false);
         }
         addView(view);
-        ivBg = view.findViewById(R.id.iv_bg);
-        tvTitle = view.findViewById(R.id.tv_title);
-        llContent = view.findViewById(R.id.ll_content);
-        tvContent = view.findViewById(R.id.tv_content);
-        vBottom = view.findViewById(R.id.v_bottom);
-        tvPage = view.findViewById(R.id.tv_page);
-
-        tvLoading = view.findViewById(R.id.tv_loading);
-        llError = view.findViewById(R.id.ll_error);
-        tvErrorInfo = view.findViewById(R.id.tv_error_info);
-        tvLoadAgain = view.findViewById(R.id.tv_load_again);
+        ButterKnife.bind(this, view);
 
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)

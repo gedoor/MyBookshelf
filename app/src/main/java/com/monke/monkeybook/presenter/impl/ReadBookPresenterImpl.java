@@ -20,6 +20,7 @@ import com.monke.basemvplib.impl.BaseActivity;
 import com.monke.basemvplib.impl.BasePresenterImpl;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -294,7 +295,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Override
     public String getChapterTitle(int chapterIndex) {
         if (bookShelf.getBookInfoBean().getChapterlist().size() == 0) {
-            return "无章节";
+            return mView.getContext().getString(R.string.no_chapter);
         } else
             return bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName();
     }
