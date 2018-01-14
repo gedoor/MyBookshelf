@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
         searchBookAdapter = new ChoiceBookAdapter();
     }
 
+    @SuppressLint("InflateParams")
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
@@ -167,10 +169,9 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     @Override
     public void updateSearchItem(int index) {
-        int tempIndex = index;
-        if (tempIndex < searchBookAdapter.getItemcount()) {
+        if (index < searchBookAdapter.getItemcount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
-            TextView tvAddShelf = (TextView) ((ViewGroup) rfRvSearchBooks.getRecyclerView()).getChildAt(tempIndex - startIndex).findViewById(R.id.tv_addshelf);
+            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_addshelf);
             if (tvAddShelf != null) {
                 if (searchBookAdapter.getSearchBooks().get(index).getAdd()) {
                     tvAddShelf.setText("已添加");
