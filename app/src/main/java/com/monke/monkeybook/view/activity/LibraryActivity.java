@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -13,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.LibraryBean;
@@ -22,10 +24,11 @@ import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.LibraryPresenterImpl;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.view.ILibraryView;
-import com.monke.monkeybook.widget.libraryview.LibraryNewBooksView;
 import com.monke.monkeybook.widget.libraryview.LibraryKindBookListView;
+import com.monke.monkeybook.widget.libraryview.LibraryNewBooksView;
 import com.monke.monkeybook.widget.refreshview.RefreshProgressBar;
 import com.monke.monkeybook.widget.refreshview.RefreshScrollView;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,21 +36,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements ILibraryView {
-    private RefreshScrollView rscvContent;
-    private RefreshProgressBar rpbProgress;
-
-    private LinearLayout llContent;
 
     private Animation animIn;
     private Animation animOut;
 
-    private LinearLayout kindLl;
-
-    private LibraryNewBooksView lavHotauthor;
-    private LibraryKindBookListView lkbvKindbooklist;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.kind_ll)
+    LinearLayout kindLl;
+    @BindView(R.id.lkbv_kindbooklist)
+    LibraryKindBookListView lkbvKindbooklist;
+    @BindView(R.id.lav_hotauthor)
+    LibraryNewBooksView lavHotauthor;
+    @BindView(R.id.rscv_content)
+    RefreshScrollView rscvContent;
+    @BindView(R.id.rpb_progress)
+    RefreshProgressBar rpbProgress;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
     @Override
     protected ILibraryPresenter initInjector() {
@@ -76,21 +82,14 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
         setSupportActionBar(toolbar);
         setupActionBar();
 
-        rscvContent = (RefreshScrollView) findViewById(R.id.rscv_content);
-        rpbProgress = (RefreshProgressBar) findViewById(R.id.rpb_progress);
         rscvContent.setRpb(rpbProgress);
 
-        llContent = (LinearLayout) findViewById(R.id.ll_content);
-
-        kindLl = (LinearLayout) findViewById(R.id.kind_ll);
         initKind();
 
-        lavHotauthor = (LibraryNewBooksView) findViewById(R.id.lav_hotauthor);
-        lkbvKindbooklist = (LibraryKindBookListView) findViewById(R.id.lkbv_kindbooklist);
     }
 
     private void initKind() {
-        int columnCout = 4;
+        int columnCount = 4;
         Iterator iterator = mPresenter.getKinds().entrySet().iterator();
         int temp = 0;
         LinearLayout.LayoutParams l = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -99,7 +98,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
         tvLp.weight = 1;
         while (iterator.hasNext()) {
             final Map.Entry<String, String> resultTemp = (Map.Entry<String, String>) iterator.next();
-            if (temp % columnCout == 0) {
+            if (temp % columnCount == 0) {
                 linearLayout = new LinearLayout(this);
                 linearLayout.setLayoutParams(l);
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -113,14 +112,16 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             textView.setPadding(0, DensityUtil.dp2px(this, 5), 0, DensityUtil.dp2px(this, 5));
             textView.setLines(1);
             textView.setTextColor(getResources().getColorStateList(R.color.selector_kind_tv_color));
-            textView.setOnClickListener(v -> ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this, resultTemp.getKey(),resultTemp.getValue()));
+            textView.setOnClickListener(v -> ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this, resultTemp.getKey(), resultTemp.getValue()));
+            assert linearLayout != null;
             linearLayout.addView(textView);
             temp++;
         }
-        int viewCount = mPresenter.getKinds().size() % columnCout == 0?0:(columnCout-mPresenter.getKinds().size() % columnCout);
-        for(int i=0;i<viewCount;i++){
+        int viewCount = mPresenter.getKinds().size() % columnCount == 0 ? 0 : (columnCount - mPresenter.getKinds().size() % columnCount);
+        for (int i = 0; i < viewCount; i++) {
             View v = new View(this);
             v.setLayoutParams(tvLp);
+            assert linearLayout != null;
             linearLayout.addView(v);
         }
     }
@@ -133,12 +134,14 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
             actionBar.setTitle(R.string.book_library);
         }
     }
+
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_library_activity, menu);
         return true;
     }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -223,7 +226,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
         lkbvKindbooklist.updateData(library.getKindBooks(), new LibraryKindBookListView.OnItemListener() {
             @Override
             public void onClickMore(String title, String url) {
-                ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this,title,url);
+                ChoiceBookActivity.startChoiceBookActivity(LibraryActivity.this, title, url);
             }
 
             @Override
@@ -240,4 +243,5 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
     public void finishRefresh() {
         rscvContent.finishRefresh();
     }
+
 }

@@ -4,17 +4,27 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.monke.basemvplib.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WelcomeActivity extends MBaseActivity {
 
-    private ImageView ivBg;
-    private ImageView ivIcon;
-    private TextView tvIntro;
+    @BindView(R.id.iv_bg)
+    ImageView ivBg;
+    @BindView(R.id.iv_transfer_logo)
+    ImageView ivTransferLogo;
+    @BindView(R.id.iv_icon)
+    ImageView ivIcon;
+    @BindView(R.id.tv_intro)
+    TextView tvIntro;
 
     private ValueAnimator welAnimator;
 
@@ -36,9 +46,7 @@ public class WelcomeActivity extends MBaseActivity {
 
     @Override
     protected void bindView() {
-        ivBg = (ImageView) findViewById(R.id.iv_bg);
-        ivIcon = (ImageView) findViewById(R.id.iv_icon);
-        tvIntro = (TextView) findViewById(R.id.tv_intro);
+        ButterKnife.bind(this);
     }
 
     @Override

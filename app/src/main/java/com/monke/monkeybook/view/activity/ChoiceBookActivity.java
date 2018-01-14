@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -17,22 +19,30 @@ import com.monke.monkeybook.presenter.IChoiceBookPresenter;
 import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ChoiceBookPresenterImpl;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.view.IChoiceBookView;
+import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
+
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> implements IChoiceBookView {
-    private ImageButton ivReturn;
-    private TextView tvTitle;
-    private RefreshRecyclerView rfRvSearchBooks;
+    @BindView(R.id.iv_return)
+    ImageButton ivReturn;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.rfRv_search_books)
+    RefreshRecyclerView rfRvSearchBooks;
+
     private ChoiceBookAdapter searchBookAdapter;
 
-    public static void startChoiceBookActivity(Context context,String title,String url){
-        Intent intent = new Intent(context,ChoiceBookActivity.class);
-        intent.putExtra("url",url);
-        intent.putExtra("title",title);
+    public static void startChoiceBookActivity(Context context, String title, String url) {
+        Intent intent = new Intent(context, ChoiceBookActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("title", title);
         context.startActivity(intent);
     }
 
@@ -53,10 +63,8 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     @Override
     protected void bindView() {
-        ivReturn = (ImageButton) findViewById(R.id.iv_return);
-        tvTitle = (TextView) findViewById(R.id.tv_title);
+        ButterKnife.bind(this);
         tvTitle.setText(mPresenter.getTitle());
-        rfRvSearchBooks = (RefreshRecyclerView) findViewById(R.id.rfRv_search_books);
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
@@ -96,7 +104,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
         });
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void startLoadmore() {
+            public void startLoadMore() {
                 mPresenter.toSearchBooks(null);
             }
 
@@ -184,4 +192,5 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     protected void firstRequest() {
         super.firstRequest();
     }
+
 }

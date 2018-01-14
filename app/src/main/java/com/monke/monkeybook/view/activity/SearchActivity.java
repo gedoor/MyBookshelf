@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -14,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -65,7 +65,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @BindView(R.id.edt_content)
     EditText edtContent;
     @BindView(R.id.tv_tosearch)
-    TextView tvTosearch;
+    TextView tvToSearch;
     @BindView(R.id.ll_search_history)
     LinearLayout llSearchHistory;
     @BindView(R.id.tv_search_history_clean)
@@ -94,6 +94,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         searchBookAdapter = new SearchBookAdapter();
     }
 
+    @SuppressLint("InflateParams")
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
@@ -162,7 +163,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             } else
                 return false;
         });
-        tvTosearch.setOnClickListener(v -> {
+        tvToSearch.setOnClickListener(v -> {
             if (!mPresenter.getInput()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     finishAfterTransition();
@@ -184,7 +185,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void startLoadmore() {
+            public void startLoadMore() {
                 mPresenter.toSearchBooks(null, false);
             }
 
@@ -258,20 +259,17 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             @Override
             public void onGlobalLayout() {
                 new Handler().postDelayed(() -> openKeyBoard(), 100);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else
-                    getWindow().getDecorView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
 
     private void checkTvToSearch() {
         if (llSearchHistory.getVisibility() == View.VISIBLE) {
-            tvTosearch.setText("搜索");
+            tvToSearch.setText("搜索");
             mPresenter.setInput(true);
         } else {
-            tvTosearch.setText("返回");
+            tvToSearch.setText("返回");
             mPresenter.setInput(false);
         }
     }
@@ -401,13 +399,17 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     private void closeKeyBoard() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(edtContent.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(edtContent.getWindowToken(), 0);
+        }
     }
 
     private void openKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         edtContent.requestFocus();
-        imm.showSoftInput(edtContent, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        if (imm != null) {
+            imm.showSoftInput(edtContent, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        }
     }
 
     @Override
@@ -481,7 +483,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     public void updateSearchItem(int index) {
         if (index < searchBookAdapter.getItemcount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
-            TextView tvAddShelf = (TextView) ((ViewGroup) rfRvSearchBooks.getRecyclerView()).getChildAt(index - startIndex).findViewById(R.id.tv_addshelf);
+            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_addshelf);
             if (tvAddShelf != null) {
                 if (searchBookAdapter.getSearchBooks().get(index).getAdd()) {
                     tvAddShelf.setText("已添加");
