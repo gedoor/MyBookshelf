@@ -120,7 +120,7 @@ public class AboutActivity extends MBaseActivity {
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "无法打开", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
         }
     }
 

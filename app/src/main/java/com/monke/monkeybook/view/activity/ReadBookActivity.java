@@ -122,6 +122,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         @Override
         public void onServiceDisconnected(ComponentName name) {
         }
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             //返回一个MsgService对象
@@ -132,10 +133,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     unbindService(conn);
                     csvBook.readAloudStop();
                 }
+
                 @Override
                 public void readAloudNext() {
                     runOnUiThread(() -> csvBook.readAloudNext());
                 }
+
                 @Override
                 public void showMassage(String msg) {
                     runOnUiThread(() -> toast(msg));
@@ -392,7 +395,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
                 .setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size(),
-                BookContentView.DurPageIndexBegin));
+                        BookContentView.DurPageIndexBegin));
     }
 
     @Override
@@ -498,10 +501,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         //打开URL
         atvUrl.setOnClickListener(view -> {
-            String url = atvUrl.getText().toString();
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
+            try {
+                String url = atvUrl.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+            }
         });
 
         //朗读

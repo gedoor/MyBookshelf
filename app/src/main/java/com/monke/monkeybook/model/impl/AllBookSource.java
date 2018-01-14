@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model.impl;
 
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.IStationBookModel;
@@ -57,6 +58,8 @@ public class AllBookSource {
     //获取book source class
     static IStationBookModel getBookSourceModel(String tag) {
         switch (tag) {
+            case BookShelfBean.LOCAL_TAG:
+                return null;
             case GxwztvBookModelImpl.TAG:
                 return GxwztvBookModelImpl.getInstance();
             case LingdiankanshuModelImpl.TAG:
@@ -66,7 +69,7 @@ public class AllBookSource {
             case ZwduModelImpl.TAG:
                 return ZwduModelImpl.getInstance();
             default:
-                return null;
+                return DefaultModelImpl.getInstance(tag);
         }
     }
 }
