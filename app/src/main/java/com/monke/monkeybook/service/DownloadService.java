@@ -2,10 +2,8 @@
 package com.monke.monkeybook.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,7 +23,6 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.bean.DownloadChapterListBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -47,6 +44,9 @@ public class DownloadService extends Service {
     private int notificationId = 19931118;
     private Boolean isStartDownload = false;
     private Boolean isInit = false;
+
+    public static final String doneAction = "doneAction";
+    public static final String addDownloadAction = "addDownload";
 
     @Override
     public void onCreate() {
@@ -77,16 +77,22 @@ public class DownloadService extends Service {
             RxBus.get().register(this);
         }
         String action = intent.getAction();
-        assert action != null;
-        switch (action) {
-            case "addDownload":
-                String noteUrl = intent.getStringExtra("noteUrl");
-                int start = intent.getIntExtra("start", 0);
-                int end = intent.getIntExtra("end", 0);
-                addNewTask(noteUrl, start, end);
-                break;
-            default:
-                break;
+        if (action == null) {
+            stopSelf();
+        } else {
+            switch (action) {
+                case addDownloadAction:
+                    String noteUrl = intent.getStringExtra("noteUrl");
+                    int start = intent.getIntExtra("start", 0);
+                    int end = intent.getIntExtra("end", 0);
+                    addNewTask(noteUrl, start, end);
+                    break;
+                case doneAction:
+                    cancelDownload();
+                    break;
+                default:
+                    break;
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -114,7 +120,6 @@ public class DownloadService extends Service {
                     item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
                     DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
                 }
-                temp = null;
                 e.onNext(true);
             }
             e.onComplete();
@@ -382,6 +387,9 @@ public class DownloadService extends Service {
 
         Intent mainIntent = new Intent(this, MainActivity.class);
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent doneIntent = new Intent(this, this.getClass());
+        doneIntent.setAction(doneAction);
+        PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
@@ -389,7 +397,8 @@ public class DownloadService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle("正在下载：" + downloadChapterBean.getBookName())
                 .setContentText(downloadChapterBean.getDurChapterName() == null ? "  " : downloadChapterBean.getDurChapterName())
-                .setContentIntent(mainPendingIntent);
+                .setContentIntent(mainPendingIntent)
+                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), donePendingIntent);
         //发送通知
         startForeground(notificationId, builder.build());
     }
