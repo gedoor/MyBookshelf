@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.DensityUtil;
 
@@ -26,6 +27,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     public final static int PRE_AND_NEXT = 0;
     public final static int ONLY_PRE = 1;
     public final static int ONLY_NEXT = 2;
+
     private int state = NONE;    //0是有上一页   也有下一页 ;  2是只有下一页  ；1是只有上一页;-1是没有上一页 也没有下一页；
 
     private int scrollX;
@@ -36,9 +38,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private List<BookContentView> viewContents;
     private ReadBookControl readBookControl;
 
-    public interface OnBookReadInitListener{
+    public interface OnBookReadInitListener {
         void success();
     }
+
     private OnBookReadInitListener bookReadInitListener;
 
     public ContentSwitchView(Context context) {
@@ -72,17 +75,15 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         viewContents = new ArrayList<>();
         viewContents.add(durPageView);
 
-        addView(durPageView);
-
-
+        this.addView(durPageView);
     }
 
-    public void bookReadInit(OnBookReadInitListener bookReadInitListener){
+    public void bookReadInit(OnBookReadInitListener bookReadInitListener) {
         this.bookReadInitListener = bookReadInitListener;
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutInitListener);
     }
 
-    public void startLoading(){
+    public void startLoading() {
         int height = durPageView.getTvContent().getHeight();
         if (height > 0) {
             if (loadDataListener != null && durHeight != height) {
@@ -103,6 +104,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 操作事件
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -112,7 +114,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     startX = event.getX();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if(viewContents.size() > 1){
+                    if (viewContents.size() > 1) {
                         if (startX == -1)
                             startX = event.getX();
                         int durX = (int) (event.getX() - startX);
@@ -135,7 +137,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if(startX == -1)
+                    if (startX == -1)
                         startX = event.getX();
                     if (event.getX() - startX > 0) {
                         if (state == PRE_AND_NEXT || state == ONLY_PRE) {
@@ -164,10 +166,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         }
                     } else {
                         //点击事件
-                        if (readBookControl.getCanClickTurn() && event.getX() <= getWidth() / 3) {
+                        if (readBookControl.getCanClickTurn()
+                                && ((event.getX() <= getWidth() / 3)
+                                || (event.getY() <= getHeight() / 3 && event.getX() <= getWidth() / 3 * 2))) {
                             //点击向前翻页
                             gotoPrePage();
-                        } else if (readBookControl.getCanClickTurn() && event.getX() >= getWidth() / 3 * 2) {
+                        } else if (readBookControl.getCanClickTurn()
+                                && ((event.getX() >= getWidth() / 3 * 2)
+                                || (event.getY() >= getHeight() / 3*2 && event.getX() >= getWidth() / 3))) {
                             //点击向后翻页
                             gotoNextPage();
                         } else {
@@ -234,7 +240,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             viewContents.remove(viewContents.size() - 1);
                         }
                         state = ONLY_NEXT;
-                        if(durPageView.getDurChapterIndex()-1>=0 || durPageView.getDurPageIndex()-1>=0){
+                        if (durPageView.getDurChapterIndex() - 1 >= 0 || durPageView.getDurPageIndex() - 1 >= 0) {
                             addPrePage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
                             if (state == NONE)
                                 state = ONLY_PRE;
@@ -250,7 +256,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             viewContents.remove(0);
                         }
                         state = ONLY_PRE;
-                        if(durPageView.getDurChapterIndex()+1 <=durPageView.getChapterAll()-1 || durPageView.getDurPageIndex()+1 <= durPageView.getPageAll()-1){
+                        if (durPageView.getDurChapterIndex() + 1 <= durPageView.getChapterAll() - 1 || durPageView.getDurPageIndex() + 1 <= durPageView.getPageAll() - 1) {
                             addNextPage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
                             if (state == NONE)
                                 state = ONLY_NEXT;
@@ -484,7 +490,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private ViewTreeObserver.OnGlobalLayoutListener layoutInitListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-            if(bookReadInitListener !=null){
+            if (bookReadInitListener != null) {
                 bookReadInitListener.success();
             }
             durPageView.getTvContent().getViewTreeObserver().removeOnGlobalLayoutListener(layoutInitListener);
@@ -509,18 +515,18 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         return durPageView.getTvContent().getPaint();
     }
 
-    public int getContentWidth(){
+    public int getContentWidth() {
         return durPageView.getTvContent().getWidth();
     }
 
-    public void changeBg(){
-        for(BookContentView item : viewContents){
+    public void changeBg() {
+        for (BookContentView item : viewContents) {
             item.setBg(readBookControl);
         }
     }
 
-    public void changeTextSize(){
-        for(BookContentView item : viewContents){
+    public void changeTextSize() {
+        for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
         loadDataListener.initData(durPageView.getLineCount(durHeight));
@@ -529,28 +535,28 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 音量键翻页
      */
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             gotoNextPage();
             return true;
-        }else if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+        } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             gotoPrePage();
             return true;
         }
         return false;
     }
 
-    public boolean onKeyUp(int keyCode, KeyEvent event){
-        if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             return true;
-        }else if(readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+        } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             return true;
         }
         return false;
     }
 
-    public void loadError(){
-        if(durPageView != null){
+    public void loadError() {
+        if (durPageView != null) {
             durPageView.loadError();
         }
     }
