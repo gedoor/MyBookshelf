@@ -60,8 +60,12 @@ ext {
     support_library_version = '27.0.2'
 }
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':basemvplib')
     testImplementation 'junit:junit:4.12'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/commons-codec-1.10-sources.jar')
+    implementation files('libs/juniversalchardet-1.0.3.jar')
+    implementation files('libs/utdid4all-1.0.4.jar')
     //fireBase
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
@@ -73,7 +77,6 @@ dependencies {
     implementation "com.android.support:cardview-v7:$support_library_version"
     implementation "com.android.support:support-compat:$support_library_version"
     implementation 'com.google.code.gson:gson:2.8.0'
-    api project(':basemvplib')
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
