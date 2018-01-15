@@ -40,7 +40,7 @@ public class WelcomeActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(500);
+        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
     }
 
@@ -60,13 +60,13 @@ public class WelcomeActivity extends MBaseActivity {
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-
+                startActivityByAnim(new Intent(WelcomeActivity.this, MainActivity.class), android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                startActivityByAnim(new Intent(WelcomeActivity.this, MainActivity.class), android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+
             }
 
             @Override
