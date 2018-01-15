@@ -65,7 +65,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/commons-codec-1.10-sources.jar')
     implementation files('libs/juniversalchardet-1.0.3.jar')
-    implementation files('libs/utdid4all-1.0.4.jar')
     //fireBase
     implementation 'com.google.firebase:firebase-core:11.8.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
