@@ -34,8 +34,7 @@ public class EncodeConverter extends Converter.Factory {
     }
 
     @Override
-    public Converter<ResponseBody, String> responseBodyConverter(Type type, Annotation[] annotations,
-                                                            Retrofit retrofit) {
+    public Converter<ResponseBody, String> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         return new Converter<ResponseBody, String>() {
             @Override
             public String convert(@NonNull ResponseBody value) throws IOException {
