@@ -490,7 +490,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
                 DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                        .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getBookContentBean().getDurChapterUrl());
+                        .getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterUrl());
                 mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter())
                         .setBookContentBean(null);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
