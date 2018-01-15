@@ -40,7 +40,7 @@ public class WelcomeActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
+        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(500);
         welAnimator.setStartDelay(500);
     }
 
