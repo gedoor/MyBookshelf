@@ -21,6 +21,7 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     testApi 'junit:junit:4.12'
+    api files('libs/juniversalchardet-1.0.3.jar')
     api 'com.android.support:appcompat-v7:26.1.0'
 
     //RxAndroid

@@ -42,7 +42,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com")
+        return getRetrofitString("http://zhannei.baidu.com")
                 .create(ILingdiankanshuApi.class)
                 .searchBook(content, page - 1, "5199337987683747968")
                 .flatMap(this::analySearchBook);
@@ -90,7 +90,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(TAG)
                 .create(ILingdiankanshuApi.class)
                 .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
@@ -142,7 +142,10 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
+        getRetrofitString(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
+                .flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -195,7 +198,10 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG).create(ILingdiankanshuApi.class).getBookContent(durChapterUrl.replace(TAG, "")).flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
+        return getRetrofitString(TAG)
+                .create(ILingdiankanshuApi.class)
+                .getBookContent(durChapterUrl.replace(TAG, ""))
+                .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {

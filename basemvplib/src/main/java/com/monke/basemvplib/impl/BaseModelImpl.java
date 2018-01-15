@@ -27,10 +27,10 @@ public class BaseModelImpl {
                 .build();
     }
 
-    protected Retrofit getRetrofitString(String url, String encode) {
+    protected Retrofit getRetrofitString(String url) {
         return new Retrofit.Builder().baseUrl(url)
                 //增加返回值为字符串的支持(以实体类返回)
-                .addConverterFactory(EncodeConverter.create(encode))
+                .addConverterFactory(EncodeConverter.create())
                 //增加返回值为Oservable<T>的支持
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(clientBuilder.build())

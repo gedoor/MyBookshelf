@@ -47,7 +47,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(TAG)
                 .create(IZwduApi.class)
                 .searchBook(content, page)
                 .flatMap(this::analySearchBook);
@@ -97,7 +97,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitString(TAG, "gb2312")
+        return getRetrofitString(TAG)
                 .create(IZwduApi.class)
                 .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
@@ -149,7 +149,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitString(TAG, "gb2312")
+        getRetrofitString(TAG)
                 .create(IZwduApi.class)
                 .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyChapterList(s, bookShelfBean))
@@ -205,7 +205,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitString(TAG, "gb2312")
+        return getRetrofitString(TAG)
                 .create(IZwduApi.class)
                 .getBookContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));

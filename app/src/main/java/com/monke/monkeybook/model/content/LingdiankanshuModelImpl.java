@@ -38,7 +38,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject("http://zhannei.baidu.com")
+        return getRetrofitString("http://zhannei.baidu.com")
                 .create(ILingdiankanshuApi.class)
                 .searchBook(content, page - 1, "16865089933227718744")
                 .flatMap(this::analySearchBook);
@@ -86,7 +86,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(TAG)
                 .create(ILingdiankanshuApi.class)
                 .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
@@ -137,7 +137,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG)
+        getRetrofitString(TAG)
                 .create(ILingdiankanshuApi.class)
                 .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyChapterList(s, bookShelfBean))
@@ -193,7 +193,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(TAG)
                 .create(ILingdiankanshuApi.class)
                 .getBookContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
