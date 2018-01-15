@@ -2,35 +2,24 @@ package com.monke.basemvplib;
 
 import android.support.annotation.NonNull;
 
+import org.mozilla.universalchardet.UniversalDetector;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.nio.charset.Charset;
 
 import okhttp3.ResponseBody;
-import okio.BufferedSource;
-import okio.Okio;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
 public class EncodeConverter extends Converter.Factory {
 
-    private String encode = "utf-8";
-
     private EncodeConverter(){
 
     }
 
-    private EncodeConverter(String encode){
-        this.encode = encode;
-    }
-
     public static EncodeConverter create(){
         return new EncodeConverter();
-    }
-
-    public static EncodeConverter create(String en){
-        return new EncodeConverter(en);
     }
 
     @Override
@@ -38,8 +27,11 @@ public class EncodeConverter extends Converter.Factory {
         return new Converter<ResponseBody, String>() {
             @Override
             public String convert(@NonNull ResponseBody value) throws IOException {
-                BufferedSource bufferedSource = Okio.buffer(value.source());
-                return bufferedSource.readString(Charset.forName(encode));
+                byte[] responseBytes = value.bytes();
+                UniversalDetector detector = new UniversalDetector(null);
+                detector.handleData(responseBytes, 0, responseBytes.length);
+                detector.dataEnd();
+                return new String(responseBytes, detector.getDetectedCharset());
             }
         };
     }
