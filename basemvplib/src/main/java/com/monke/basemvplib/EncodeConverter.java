@@ -2,15 +2,11 @@ package com.monke.basemvplib;
 
 import android.support.annotation.NonNull;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
+
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
 import okio.Okio;
