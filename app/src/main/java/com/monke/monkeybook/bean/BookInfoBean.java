@@ -142,12 +142,8 @@ public class BookInfoBean implements Parcelable,Cloneable{
         return chapterlist;
     }
 
-    public void setChapterlist(List<ChapterListBean> chapterlist) {
+    public void setChapterList(List<ChapterListBean> chapterlist) {
         this.chapterlist = chapterlist;
-    }
-
-    public void addChapterlist(List<ChapterListBean> chapterlist){
-        this.chapterlist.addAll(chapterlist);
     }
 
     public long getFinalRefreshData() {
@@ -207,7 +203,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
             while(iterator.hasNext()){
                 newList.add((ChapterListBean) iterator.next().clone());
             }
-            bookInfoBean.setChapterlist(newList);
+            bookInfoBean.setChapterList(newList);
         }
         return bookInfoBean;
     }

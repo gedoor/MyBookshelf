@@ -28,7 +28,6 @@ import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.IMainPresenter;
-import com.monke.monkeybook.utils.DocumentUtil;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.IMainView;
 
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -52,7 +50,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().list();
             if (temp != null && temp.size() > 0) {
                 BookInfoBean bookInfoBean = temp.get(0);
-                bookInfoBean.setChapterlist(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
@@ -105,7 +103,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 e.onNext(false);
             } else {
                 for (BookShelfBean bookshelf : bookShelfList) {
-                    bookshelf.getBookInfoBean().setChapterlist(null);
+                    bookshelf.getBookInfoBean().setChapterList(null);
                 }
                 Gson gson = new Gson();
                 String bookshelf = gson.toJson(bookShelfList);

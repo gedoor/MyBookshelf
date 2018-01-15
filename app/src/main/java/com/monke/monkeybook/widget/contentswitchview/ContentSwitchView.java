@@ -34,6 +34,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
+    private ReadBookControl readBookControl;
 
     public interface OnBookReadInitListener{
         void success();
@@ -61,8 +62,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         init();
     }
 
-    private ReadBookControl readBookControl;
-
     private void init() {
         readBookControl = ReadBookControl.getInstance();
 
@@ -74,6 +73,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         viewContents.add(durPageView);
 
         addView(durPageView);
+
+
     }
 
     public void bookReadInit(OnBookReadInitListener bookReadInitListener){
@@ -102,7 +103,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 操作事件
      */
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();

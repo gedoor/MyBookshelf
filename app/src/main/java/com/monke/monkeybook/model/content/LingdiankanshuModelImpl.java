@@ -165,7 +165,7 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
-            bookShelfBean.getBookInfoBean().setChapterlist(temp.getData());
+            bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
             e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
