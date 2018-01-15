@@ -35,13 +35,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implements ISearchPresenter {
-    public static final String TAG_KEY = "tag";
-    public static final String HAS_MORE_KEY = "hasMore";
-    public static final String HAS_LOAD_KEY = "hasLoad";
-    public static final String DUR_REQUEST_TIME = "durRequestTime";    //当前搜索引擎失败次数  成功一次会重新开始计数
-    public static final String MAX_REQUEST_TIME = "maxRequestTime";   //最大连续请求失败次数
+    private static final String TAG_KEY = "tag";
+    private static final String HAS_MORE_KEY = "hasMore";
+    private static final String HAS_LOAD_KEY = "hasLoad";
+    private static final String DUR_REQUEST_TIME = "durRequestTime";    //当前搜索引擎失败次数  成功一次会重新开始计数
+    private static final String MAX_REQUEST_TIME = "maxRequestTime";   //最大连续请求失败次数
 
-    public static final int BOOK = 2;
+    private static final int BOOK = 2;
 
     private Boolean hasSearch = false;   //判断是否搜索过
 
