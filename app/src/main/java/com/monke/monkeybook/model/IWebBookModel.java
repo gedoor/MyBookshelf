@@ -28,6 +28,7 @@ public interface IWebBookModel {
      * 获取分类书籍
      */
     Observable<List<SearchBookBean>> getKindBook(String url,int page);
+
     /**
      * 其他站点资源整合搜索
      */
