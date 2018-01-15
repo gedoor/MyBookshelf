@@ -311,9 +311,20 @@ public class ReadAloudService extends Service {
     }
 
     private void clearTTS() {
-        textToSpeech.stop();
-        textToSpeech.shutdown();
-        textToSpeech = null;
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+            textToSpeech = null;
+        }
+    }
+
+    private void unRegisterMediaButton() {
+        if (mediaSessionCompat != null) {
+            mediaSessionCompat.setCallback(null);
+            mediaSessionCompat.setActive(false);
+            mediaSessionCompat.release();
+        }
+        audioManager.abandonAudioFocus(audioFocusChangeListener);
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
@@ -432,15 +443,6 @@ public class ReadAloudService extends Service {
             }
         });
         mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
-    }
-
-    private void unRegisterMediaButton() {
-        if (mediaSessionCompat != null) {
-            mediaSessionCompat.setCallback(null);
-            mediaSessionCompat.setActive(false);
-            mediaSessionCompat.release();
-        }
-        audioManager.abandonAudioFocus(audioFocusChangeListener);
     }
 
     private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
