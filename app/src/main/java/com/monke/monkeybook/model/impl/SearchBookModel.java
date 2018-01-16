@@ -1,7 +1,5 @@
 package com.monke.monkeybook.model.impl;
 
-import android.view.View;
-
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -61,7 +59,7 @@ public class SearchBookModel {
 
         void searchBookError(Boolean value);
 
-        int getItemcount();
+        int getItemCount();
     }
 
     //搜索书集
@@ -138,7 +136,7 @@ public class SearchBookModel {
                                     if (searchTime == startThisSearchTime) {
                                         searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, false);
                                         searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, ((int) searchEngine.get(finalSearchEngineIndex).get(DUR_REQUEST_TIME)) + 1);
-                                        searchListener.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && searchListener.getItemcount() == 0)));
+                                        searchListener.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && searchListener.getItemCount() == 0)));
                                     }
                                 }
                             });
