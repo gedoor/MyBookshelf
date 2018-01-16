@@ -114,7 +114,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="@drawable/bg_shadow" />
+                android:background="@drawable/bg_shadow_top" />
         </LinearLayout>
 
         <LinearLayout
@@ -146,7 +146,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="@drawable/bg_shadow2" />
+                android:background="@drawable/bg_shadow_bottom" />
 
             <LinearLayout
                 android:layout_width="match_parent"

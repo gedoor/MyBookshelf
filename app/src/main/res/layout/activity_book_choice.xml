@@ -45,7 +45,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@drawable/bg_shadow"
+            android:background="@drawable/bg_shadow_top"
             android:layout_gravity="top"/>
     </FrameLayout>
 </LinearLayout>

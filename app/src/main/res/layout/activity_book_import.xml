@@ -56,12 +56,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@drawable/bg_shadow"
+            android:background="@drawable/bg_shadow_top"
             android:layout_gravity="top"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@drawable/bg_shadow2"
+            android:background="@drawable/bg_shadow_bottom"
             android:layout_gravity="bottom"/>
     </FrameLayout>
     <FrameLayout
