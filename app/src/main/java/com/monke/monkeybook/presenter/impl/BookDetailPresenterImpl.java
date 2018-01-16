@@ -83,7 +83,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
-                temp = new ArrayList<BookShelfBean>();
+                temp = new ArrayList<>();
             e.onNext(temp);
             e.onComplete();
         }).flatMap(bookShelfBeen -> {

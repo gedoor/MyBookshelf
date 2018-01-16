@@ -101,11 +101,14 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     public void updateView() {
         if (null != mPresenter.getBookShelf()) {
+            tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
+            tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0)
+                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0) {
                     tvChapter.setText(String.format(getString(R.string.tv_read_durprogress), mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName()));
-                else
+                } else {
                     tvChapter.setText("无章节");
+                }
                 tvShelf.setText("移出书架");
                 tvRead.setText("继续阅读");
                 tvShelf.setOnClickListener(v -> {
