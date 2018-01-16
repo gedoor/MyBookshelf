@@ -33,9 +33,10 @@ public class SearchBook {
 
     public SearchBook(OnSearchListener searchListener) {
         this.searchListener = searchListener;
+
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
-        for (BookSourceBean bookSourceBean: BookSourceManage.getSelectedBookSource()) {
+        for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
             Map se = new HashMap();
             se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
             se.put(HAS_MORE_KEY, true);
@@ -45,6 +46,11 @@ public class SearchBook {
             searchEngine.add(se);
         }
     }
+
+    public void setSearchTime(long searchTime) {
+        this.startThisSearchTime = searchTime;
+    }
+
 
     public interface OnSearchListener {
         void refreshSearchBook(List<SearchBookBean> value);
@@ -63,7 +69,7 @@ public class SearchBook {
     }
 
     //搜索书集
-    private void searchBook(final String content, final long searchTime, Boolean fromError) {
+    public void search(final String content, final long searchTime, Boolean fromError) {
         if (searchTime == startThisSearchTime) {
             Boolean canLoad = false;
             for (Map temp : searchEngine) {
@@ -92,7 +98,7 @@ public class SearchBook {
                             searchListener.loadMoreFinish(false);
                         }
                     } else {
-                        searchBook(content, searchTime, false);
+                        search(content, searchTime, false);
                     }
                 } else {
                     final int finalSearchEngineIndex = searchEngineIndex;
@@ -126,7 +132,7 @@ public class SearchBook {
                                                 searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
                                             }
                                         }
-                                        searchBook(content, searchTime, false);
+                                        search(content, searchTime, false);
                                     }
                                 }
 

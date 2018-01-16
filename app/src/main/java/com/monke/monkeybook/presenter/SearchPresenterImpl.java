@@ -19,6 +19,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -53,6 +54,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
 
     private Boolean isInput = false;
+    private SearchBook searchBook;
 
     public SearchPresenterImpl() {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
@@ -76,16 +78,52 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
                 });
 
         //搜索引擎初始化
-        searchEngine = new ArrayList<>();
-        for (BookSourceBean bookSourceBean: BookSourceManage.getSelectedBookSource()) {
-            Map se = new HashMap();
-            se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
-            se.put(HAS_MORE_KEY, true);
-            se.put(HAS_LOAD_KEY, false);
-            se.put(DUR_REQUEST_TIME, 1);
-            se.put(MAX_REQUEST_TIME, 3);
-            searchEngine.add(se);
-        }
+        searchBook = new SearchBook(new SearchBook.OnSearchListener() {
+            @Override
+            public void refreshSearchBook(List<SearchBookBean> value) {
+                mView.refreshSearchBook(value);
+            }
+
+            @Override
+            public void refreshFinish(Boolean value) {
+                mView.refreshFinish(value);
+            }
+
+            @Override
+            public void loadMoreFinish(Boolean value) {
+                mView.loadMoreFinish(value);
+            }
+
+            @Override
+            public Boolean checkIsExist(SearchBookBean value) {
+                return mView.checkIsExist(value);
+            }
+
+            @Override
+            public void loadMoreSearchBook(List<SearchBookBean> value) {
+                mView.loadMoreSearchBook(value);
+            }
+
+            @Override
+            public void searchBookError(Boolean value) {
+                mView.searchBookError(value);
+            }
+
+            @Override
+            public int getItemCount() {
+                return mView.getSearchBookAdapter().getItemcount();
+            }
+        });
+//        searchEngine = new ArrayList<>();
+//        for (BookSourceBean bookSourceBean: BookSourceManage.getSelectedBookSource()) {
+//            Map se = new HashMap();
+//            se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
+//            se.put(HAS_MORE_KEY, true);
+//            se.put(HAS_LOAD_KEY, false);
+//            se.put(DUR_REQUEST_TIME, 1);
+//            se.put(MAX_REQUEST_TIME, 3);
+//            searchEngine.add(se);
+//        }
     }
 
     @Override
@@ -199,107 +237,107 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
             durSearchKey = key;
-            this.startThisSearchTime = System.currentTimeMillis();
+            searchBook.setSearchTime(System.currentTimeMillis());
             for (int i = 0; i < searchEngine.size(); i++) {
                 searchEngine.get(i).put(HAS_MORE_KEY, true);
                 searchEngine.get(i).put(HAS_LOAD_KEY, false);
                 searchEngine.get(i).put(DUR_REQUEST_TIME, 1);
             }
         }
-        searchBook(durSearchKey, startThisSearchTime, fromError);
+        searchBook.search(durSearchKey, startThisSearchTime, fromError);
     }
-    //搜索书集
-    private void searchBook(final String content, final long searchTime, Boolean fromError) {
-        if (searchTime == startThisSearchTime) {
-            Boolean canLoad = false;
-            for (Map temp : searchEngine) {
-                if ((Boolean) temp.get(HAS_MORE_KEY) && (int) temp.get(DUR_REQUEST_TIME) <= (int) temp.get(MAX_REQUEST_TIME)) {
-                    canLoad = true;
-                    break;
-                }
-            }
-            if (canLoad) {
-                int searchEngineIndex = -1;
-                for (int i = 0; i < searchEngine.size(); i++) {
-                    if (!(Boolean) searchEngine.get(i).get(HAS_LOAD_KEY) && (int) searchEngine.get(i).get(DUR_REQUEST_TIME) <= (int) searchEngine.get(i).get(MAX_REQUEST_TIME)) {
-                        searchEngineIndex = i;
-                        break;
-                    }
-                }
-                if (searchEngineIndex == -1) {
-                    this.page++;
-                    for (Map item : searchEngine) {
-                        item.put(HAS_LOAD_KEY, false);
-                    }
-                    if (!fromError) {
-                        if (page - 1 == 1) {
-                            mView.refreshFinish(false);
-                        } else {
-                            mView.loadMoreFinish(false);
-                        }
-                    } else {
-                        searchBook(content, searchTime, false);
-                    }
-                } else {
-                    final int finalSearchEngineIndex = searchEngineIndex;
-                    WebBookModelImpl.getInstance().searchOtherBook(content, page, (String) searchEngine.get(searchEngineIndex).get(TAG_KEY))
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.newThread())
-                            .subscribe(new SimpleObserver<List<SearchBookBean>>() {
-                                @Override
-                                public void onNext(List<SearchBookBean> value) {
-                                    if (searchTime == startThisSearchTime) {
-                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, true);
-                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, 1);
-                                        if (value.size() == 0) {
-                                            searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
-                                        } else {
-                                            for (SearchBookBean temp : value) {
-                                                for (BookShelfBean bookShelfBean : bookShelfS) {
-                                                    if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                                                        temp.setAdd(true);
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (page == 1 && finalSearchEngineIndex == 0) {
-                                            mView.refreshSearchBook(value);
-                                        } else {
-                                            if (value.size() > 0 && !mView.checkIsExist(value.get(0)))
-                                                mView.loadMoreSearchBook(value);
-                                            else {
-                                                searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
-                                            }
-                                        }
-                                        searchBook(content, searchTime, false);
-                                    }
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    e.printStackTrace();
-                                    if (searchTime == startThisSearchTime) {
-                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, false);
-                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, ((int) searchEngine.get(finalSearchEngineIndex).get(DUR_REQUEST_TIME)) + 1);
-                                        mView.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && mView.getSearchBookAdapter().getItemcount() == 0)));
-                                    }
-                                }
-                            });
-                }
-            } else {
-                if (page == 1) {
-                    mView.refreshFinish(true);
-                } else {
-                    mView.loadMoreFinish(true);
-                }
-                this.page++;
-                for (Map item : searchEngine) {
-                    item.put(HAS_LOAD_KEY, false);
-                }
-            }
-        }
-    }
+//    //搜索书集
+//    private void searchBook(final String content, final long searchTime, Boolean fromError) {
+//        if (searchTime == startThisSearchTime) {
+//            Boolean canLoad = false;
+//            for (Map temp : searchEngine) {
+//                if ((Boolean) temp.get(HAS_MORE_KEY) && (int) temp.get(DUR_REQUEST_TIME) <= (int) temp.get(MAX_REQUEST_TIME)) {
+//                    canLoad = true;
+//                    break;
+//                }
+//            }
+//            if (canLoad) {
+//                int searchEngineIndex = -1;
+//                for (int i = 0; i < searchEngine.size(); i++) {
+//                    if (!(Boolean) searchEngine.get(i).get(HAS_LOAD_KEY) && (int) searchEngine.get(i).get(DUR_REQUEST_TIME) <= (int) searchEngine.get(i).get(MAX_REQUEST_TIME)) {
+//                        searchEngineIndex = i;
+//                        break;
+//                    }
+//                }
+//                if (searchEngineIndex == -1) {
+//                    this.page++;
+//                    for (Map item : searchEngine) {
+//                        item.put(HAS_LOAD_KEY, false);
+//                    }
+//                    if (!fromError) {
+//                        if (page - 1 == 1) {
+//                            mView.refreshFinish(false);
+//                        } else {
+//                            mView.loadMoreFinish(false);
+//                        }
+//                    } else {
+//                        searchBook(content, searchTime, false);
+//                    }
+//                } else {
+//                    final int finalSearchEngineIndex = searchEngineIndex;
+//                    WebBookModelImpl.getInstance().searchOtherBook(content, page, (String) searchEngine.get(searchEngineIndex).get(TAG_KEY))
+//                            .observeOn(AndroidSchedulers.mainThread())
+//                            .subscribeOn(Schedulers.newThread())
+//                            .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+//                                @Override
+//                                public void onNext(List<SearchBookBean> value) {
+//                                    if (searchTime == startThisSearchTime) {
+//                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, true);
+//                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, 1);
+//                                        if (value.size() == 0) {
+//                                            searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
+//                                        } else {
+//                                            for (SearchBookBean temp : value) {
+//                                                for (BookShelfBean bookShelfBean : bookShelfS) {
+//                                                    if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
+//                                                        temp.setAdd(true);
+//                                                        break;
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                        if (page == 1 && finalSearchEngineIndex == 0) {
+//                                            mView.refreshSearchBook(value);
+//                                        } else {
+//                                            if (value.size() > 0 && !mView.checkIsExist(value.get(0)))
+//                                                mView.loadMoreSearchBook(value);
+//                                            else {
+//                                                searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
+//                                            }
+//                                        }
+//                                        searchBook(content, searchTime, false);
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onError(Throwable e) {
+//                                    e.printStackTrace();
+//                                    if (searchTime == startThisSearchTime) {
+//                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, false);
+//                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, ((int) searchEngine.get(finalSearchEngineIndex).get(DUR_REQUEST_TIME)) + 1);
+//                                        mView.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && mView.getSearchBookAdapter().getItemcount() == 0)));
+//                                    }
+//                                }
+//                            });
+//                }
+//            } else {
+//                if (page == 1) {
+//                    mView.refreshFinish(true);
+//                } else {
+//                    mView.loadMoreFinish(true);
+//                }
+//                this.page++;
+//                for (Map item : searchEngine) {
+//                    item.put(HAS_LOAD_KEY, false);
+//                }
+//            }
+//        }
+//    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //添加书集
