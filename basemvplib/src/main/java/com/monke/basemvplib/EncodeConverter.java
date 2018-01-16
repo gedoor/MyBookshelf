@@ -29,7 +29,7 @@ public class EncodeConverter extends Converter.Factory {
             public String convert(@NonNull ResponseBody value) throws IOException {
                 byte[] responseBytes = value.bytes();
                 UniversalDetector detector = new UniversalDetector(null);
-                detector.handleData(responseBytes, 0, responseBytes.length / 3);
+                detector.handleData(responseBytes, 0, responseBytes.length);
                 detector.dataEnd();
                 return new String(responseBytes, detector.getDetectedCharset());
             }

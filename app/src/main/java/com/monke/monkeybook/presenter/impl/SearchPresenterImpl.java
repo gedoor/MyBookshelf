@@ -18,7 +18,7 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.impl.AllBookSource;
+import com.monke.monkeybook.model.impl.BookSourceManage;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -77,7 +77,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
-        for (BookSourceBean bookSourceBean: AllBookSource.getSelectedBookSource()) {
+        for (BookSourceBean bookSourceBean: BookSourceManage.getSelectedBookSource()) {
             Map se = new HashMap();
             se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
             se.put(HAS_MORE_KEY, true);

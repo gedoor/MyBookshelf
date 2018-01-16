@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -28,7 +27,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
-        IStationBookModel bookModel = AllBookSource.getBookSourceModel(bookShelfBean.getTag());
+        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             return bookModel.getBookInfo(bookShelfBean);
         } else {
@@ -44,7 +43,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, OnGetChapterListListener getChapterListListener) {
-        IStationBookModel bookModel = AllBookSource.getBookSourceModel(bookShelfBean.getTag());
+        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             bookModel.getChapterList(bookShelfBean, getChapterListListener);
         } else {
@@ -60,7 +59,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex, String tag) {
-        IStationBookModel bookModel = AllBookSource.getBookSourceModel(tag);
+        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(durChapterUrl, durChapterIndex);
         } else
@@ -76,7 +75,7 @@ public class WebBookModelImpl implements IWebBookModel {
     @Override
     public Observable<List<SearchBookBean>> searchOtherBook(String content, int page, String tag) {
         //获取所有书源类
-        IStationBookModel bookModel = AllBookSource.getBookSourceModel(tag);
+        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.searchBook(content, page);
         } else {

@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.model.impl.AllBookSource;
+import com.monke.monkeybook.model.impl.BookSourceManage;
 import com.monke.monkeybook.presenter.IBookSourcePresenter;
 import com.monke.monkeybook.presenter.impl.BookSourcePresenterImpl;
 import com.monke.monkeybook.view.IBookSourceManageView;
@@ -64,7 +64,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     private void initReayclerView() {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
-        bookSourceBeanList = AllBookSource.getAllBookSource();
+        bookSourceBeanList = BookSourceManage.getAllBookSource();
         bookSourceAdapter = new BookSourceAdapter(bookSourceBeanList);
         recyclerViewBookSource.setAdapter(bookSourceAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);

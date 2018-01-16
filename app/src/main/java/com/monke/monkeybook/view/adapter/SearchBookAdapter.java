@@ -83,7 +83,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             ((Viewholder) holder).tvLastest.setText("");
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             ((Viewholder) holder).tvOrigin.setVisibility(View.VISIBLE);
-            ((Viewholder) holder).tvOrigin.setText("来源:" + searchBooks.get(position).getOrigin());
+            ((Viewholder) holder).tvOrigin.setText(String.format("来源:%s", searchBooks.get(position).getOrigin()));
         } else {
             ((Viewholder) holder).tvOrigin.setVisibility(View.GONE);
         }
@@ -127,18 +127,18 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         TextView tvAddShelf;
         TextView tvOrigin;
 
-        public Viewholder(View itemView) {
+        Viewholder(View itemView) {
             super(itemView);
-            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
-            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
-            tvName = (TextView) itemView.findViewById(R.id.tv_name);
-            tvAuthor = (TextView) itemView.findViewById(R.id.tv_author);
-            tvState = (TextView) itemView.findViewById(R.id.tv_state);
-            tvWords = (TextView) itemView.findViewById(R.id.tv_words);
-            tvLastest = (TextView) itemView.findViewById(R.id.tv_lastest);
-            tvAddShelf = (TextView) itemView.findViewById(R.id.tv_addshelf);
-            tvKind = (TextView) itemView.findViewById(R.id.tv_kind);
-            tvOrigin = (TextView) itemView.findViewById(R.id.tv_origin);
+            flContent = itemView.findViewById(R.id.fl_content);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvAuthor = itemView.findViewById(R.id.tv_author);
+            tvState = itemView.findViewById(R.id.tv_state);
+            tvWords = itemView.findViewById(R.id.tv_words);
+            tvLastest = itemView.findViewById(R.id.tv_lastest);
+            tvAddShelf = itemView.findViewById(R.id.tv_addshelf);
+            tvKind = itemView.findViewById(R.id.tv_kind);
+            tvOrigin = itemView.findViewById(R.id.tv_origin);
         }
     }
 

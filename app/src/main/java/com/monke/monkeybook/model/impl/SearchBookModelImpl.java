@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GKF on 2018/1/16.
  */
 
-public class SearchBookModel {
+public class SearchBookModelImpl {
     private static final String TAG_KEY = "tag";
     private static final String HAS_MORE_KEY = "hasMore";
     private static final String HAS_LOAD_KEY = "hasLoad";
@@ -31,11 +31,11 @@ public class SearchBookModel {
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
     private OnSearchListener searchListener;
 
-    public SearchBookModel(OnSearchListener searchListener) {
+    public SearchBookModelImpl(OnSearchListener searchListener) {
         this.searchListener = searchListener;
         //搜索引擎初始化
         searchEngine = new ArrayList<>();
-        for (BookSourceBean bookSourceBean: AllBookSource.getSelectedBookSource()) {
+        for (BookSourceBean bookSourceBean: BookSourceManage.getSelectedBookSource()) {
             Map se = new HashMap();
             se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
             se.put(HAS_MORE_KEY, true);

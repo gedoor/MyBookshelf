@@ -18,10 +18,10 @@ import java.util.List;
  * 所有书源
  */
 
-public class AllBookSource {
+public class BookSourceManage {
 
-    public static AllBookSource getInstance() {
-        return new AllBookSource();
+    public static BookSourceManage getInstance() {
+        return new BookSourceManage();
     }
 
     public static List<BookSourceBean> getSelectedBookSource() {
