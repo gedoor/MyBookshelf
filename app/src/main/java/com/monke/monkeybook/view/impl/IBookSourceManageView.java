@@ -1,4 +1,4 @@
-package com.monke.monkeybook.view;
+package com.monke.monkeybook.view.impl;
 
 import com.monke.basemvplib.IView;
 

@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -19,11 +18,11 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.LibraryBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.presenter.ILibraryPresenter;
-import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.impl.LibraryPresenterImpl;
+import com.monke.monkeybook.presenter.impl.ILibraryPresenter;
+import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
+import com.monke.monkeybook.presenter.LibraryPresenterImpl;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.view.ILibraryView;
+import com.monke.monkeybook.view.impl.ILibraryView;
 import com.monke.monkeybook.widget.libraryview.LibraryKindBookListView;
 import com.monke.monkeybook.widget.libraryview.LibraryNewBooksView;
 import com.monke.monkeybook.widget.refreshview.RefreshProgressBar;

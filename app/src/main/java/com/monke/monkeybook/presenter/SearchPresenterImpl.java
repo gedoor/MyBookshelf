@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import android.support.annotation.NonNull;
 
@@ -19,10 +19,10 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
-import com.monke.monkeybook.presenter.ISearchPresenter;
+import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.presenter.impl.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.ISearchView;
+import com.monke.monkeybook.view.impl.ISearchView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

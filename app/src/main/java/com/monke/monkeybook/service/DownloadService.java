@@ -28,7 +28,7 @@ import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
 
 import java.util.List;

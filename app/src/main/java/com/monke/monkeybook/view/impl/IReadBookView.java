@@ -1,9 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view;
+package com.monke.monkeybook.view.impl;
 
 import android.graphics.Paint;
 import com.monke.basemvplib.IView;
-import com.monke.monkeybook.bean.BookShelfBean;
 
 public interface IReadBookView extends IView {
 

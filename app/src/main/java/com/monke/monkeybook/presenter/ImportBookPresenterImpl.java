@@ -1,24 +1,21 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import android.os.Environment;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.common.RxBusTag;
-import com.monke.monkeybook.model.impl.ImportBookModelImpl;
-import com.monke.monkeybook.presenter.IImportBookPresenter;
-import com.monke.monkeybook.view.IImportBookView;
+import com.monke.monkeybook.model.ImportBookModelImpl;
+import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.view.impl.IImportBookView;
 import java.io.File;
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> implements IImportBookPresenter {

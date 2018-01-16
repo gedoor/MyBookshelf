@@ -4,8 +4,6 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,13 +1,12 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.model.impl;
+package com.monke.monkeybook.model;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.i.IStationBookModel;
-import com.monke.monkeybook.model.i.IWebBookModel;
+import com.monke.monkeybook.model.impl.IStationBookModel;
+import com.monke.monkeybook.model.impl.IWebBookModel;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 
 import java.util.ArrayList;

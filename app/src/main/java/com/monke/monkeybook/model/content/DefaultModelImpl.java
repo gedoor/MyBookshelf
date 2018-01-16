@@ -11,7 +11,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.common.api.IZwduApi;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.i.IStationBookModel;
+import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

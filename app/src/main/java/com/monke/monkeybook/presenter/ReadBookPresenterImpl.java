@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,12 +30,12 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.impl.ImportBookModelImpl;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
-import com.monke.monkeybook.presenter.IReadBookPresenter;
+import com.monke.monkeybook.model.ImportBookModelImpl;
+import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.view.IReadBookView;
+import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 

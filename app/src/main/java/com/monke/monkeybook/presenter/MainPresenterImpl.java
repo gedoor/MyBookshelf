@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import com.google.gson.Gson;
 
@@ -26,10 +26,10 @@ import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
-import com.monke.monkeybook.presenter.IMainPresenter;
+import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.IMainView;
+import com.monke.monkeybook.view.impl.IMainView;
 
 import java.io.File;
 import java.util.ArrayList;

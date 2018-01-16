@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -16,15 +16,14 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.impl.WebBookModelImpl;
-import com.monke.monkeybook.presenter.IChoiceBookPresenter;
+import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.IChoiceBookView;
+import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

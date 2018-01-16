@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter;
 
 import android.os.Handler;
 import com.monke.basemvplib.impl.BasePresenterImpl;
@@ -8,8 +8,8 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LibraryBean;
 import com.monke.monkeybook.cache.ACache;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
-import com.monke.monkeybook.presenter.ILibraryPresenter;
-import com.monke.monkeybook.view.ILibraryView;
+import com.monke.monkeybook.presenter.impl.ILibraryPresenter;
+import com.monke.monkeybook.view.impl.ILibraryView;
 import java.util.LinkedHashMap;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;

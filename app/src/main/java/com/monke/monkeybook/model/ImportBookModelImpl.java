@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.model.impl;
+package com.monke.monkeybook.model;
 
 import com.monke.basemvplib.impl.BaseModelImpl;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -10,7 +10,7 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.i.IImportBookModel;
+import com.monke.monkeybook.model.impl.IImportBookModel;
 
 import org.mozilla.universalchardet.UniversalDetector;
 

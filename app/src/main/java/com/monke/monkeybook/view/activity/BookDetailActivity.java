@@ -17,11 +17,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.presenter.IBookDetailPresenter;
-import com.monke.monkeybook.presenter.impl.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
+import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.utils.BlurTransformation;
-import com.monke.monkeybook.view.IBookDetailView;
+import com.monke.monkeybook.view.impl.IBookDetailView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

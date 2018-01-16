@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.view;
+package com.monke.monkeybook.view.impl;
 
 import android.widget.EditText;
 import com.monke.basemvplib.IView;

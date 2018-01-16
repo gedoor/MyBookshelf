@@ -33,12 +33,12 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.presenter.IReadBookPresenter;
-import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
+import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.view.IReadBookView;
+import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
@@ -55,7 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
-import static com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {

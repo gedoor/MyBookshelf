@@ -8,7 +8,7 @@ import com.monke.monkeybook.model.content.ZwduModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
-import com.monke.monkeybook.model.i.IStationBookModel;
+import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.util.ArrayList;
 import java.util.List;

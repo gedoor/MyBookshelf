@@ -1,11 +1,11 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter;
+package com.monke.monkeybook.presenter.impl;
 
 import android.app.Activity;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.presenter.impl.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 
 public interface IReadBookPresenter extends IPresenter {

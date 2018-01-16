@@ -13,7 +13,7 @@ import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.common.api.ILingdiankanshuApi;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.i.IStationBookModel;
+import com.monke.monkeybook.model.impl.IStationBookModel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
