@@ -10,7 +10,7 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.IImportBookModel;
+import com.monke.monkeybook.model.i.IImportBookModel;
 
 import org.mozilla.universalchardet.UniversalDetector;
 

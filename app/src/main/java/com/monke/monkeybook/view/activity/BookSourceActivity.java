@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.model.impl.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.IBookSourcePresenter;
 import com.monke.monkeybook.presenter.impl.BookSourcePresenterImpl;
 import com.monke.monkeybook.view.IBookSourceManageView;

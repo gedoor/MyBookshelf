@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.model;
+package com.monke.monkeybook.model.i;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;

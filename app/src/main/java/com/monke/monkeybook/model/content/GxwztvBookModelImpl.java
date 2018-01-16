@@ -17,7 +17,7 @@ import com.monke.monkeybook.cache.ACache;
 import com.monke.monkeybook.common.api.IGxwztvApi;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.IGxwztvBookModel;
+import com.monke.monkeybook.model.i.IGxwztvBookModel;
 import com.monke.monkeybook.presenter.impl.LibraryPresenterImpl;
 
 import org.jsoup.Jsoup;

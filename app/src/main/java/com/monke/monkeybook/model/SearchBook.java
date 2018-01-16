@@ -1,9 +1,11 @@
-package com.monke.monkeybook.model.impl;
+package com.monke.monkeybook.model;
 
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.impl.WebBookModelImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by GKF on 2018/1/16.
  */
 
-public class SearchBookModelImpl {
+public class SearchBook {
     private static final String TAG_KEY = "tag";
     private static final String HAS_MORE_KEY = "hasMore";
     private static final String HAS_LOAD_KEY = "hasLoad";
@@ -31,7 +33,7 @@ public class SearchBookModelImpl {
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
     private OnSearchListener searchListener;
 
-    public SearchBookModelImpl(OnSearchListener searchListener) {
+    public SearchBook(OnSearchListener searchListener) {
         this.searchListener = searchListener;
         //搜索引擎初始化
         searchEngine = new ArrayList<>();

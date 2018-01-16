@@ -18,7 +18,7 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.impl.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.impl.WebBookModelImpl;
 import com.monke.monkeybook.presenter.ISearchPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;

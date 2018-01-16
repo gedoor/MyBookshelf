@@ -1,14 +1,14 @@
-package com.monke.monkeybook.model.impl;
+package com.monke.monkeybook.model;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.IStationBookModel;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.ZwduModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
+import com.monke.monkeybook.model.i.IStationBookModel;
 
 import java.util.ArrayList;
 import java.util.List;

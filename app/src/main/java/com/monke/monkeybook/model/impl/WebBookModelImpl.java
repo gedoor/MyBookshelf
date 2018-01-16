@@ -5,8 +5,9 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
-import com.monke.monkeybook.model.IStationBookModel;
-import com.monke.monkeybook.model.IWebBookModel;
+import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.i.IStationBookModel;
+import com.monke.monkeybook.model.i.IWebBookModel;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 
 import java.util.ArrayList;
