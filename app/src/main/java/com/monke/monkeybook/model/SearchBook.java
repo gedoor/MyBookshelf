@@ -15,35 +15,37 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2018/1/16.
+ * 搜索
  */
 
 public class SearchBook {
-    private static final String TAG_KEY = "tag";
-    private static final String HAS_MORE_KEY = "hasMore";
-    private static final String HAS_LOAD_KEY = "hasLoad";
-    private static final String DUR_REQUEST_TIME = "durRequestTime";    //当前搜索引擎失败次数  成功一次会重新开始计数
-    private static final String MAX_REQUEST_TIME = "maxRequestTime";   //最大连续请求失败次数
-
     private long startThisSearchTime;
-    private List<Map> searchEngine;
+    private List<SearchEngine> searchEngineS;
     private int page = 1;
 
-    private List<BookShelfBean> bookShelfS = new ArrayList<>();
     private OnSearchListener searchListener;
 
     public SearchBook(OnSearchListener searchListener) {
         this.searchListener = searchListener;
 
         //搜索引擎初始化
-        searchEngine = new ArrayList<>();
+        searchEngineS = new ArrayList<>();
         for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
-            Map se = new HashMap();
-            se.put(TAG_KEY, bookSourceBean.getBookSourceUrl());
-            se.put(HAS_MORE_KEY, true);
-            se.put(HAS_LOAD_KEY, false);
-            se.put(DUR_REQUEST_TIME, 1);
-            se.put(MAX_REQUEST_TIME, 3);
-            searchEngine.add(se);
+            SearchEngine se = new SearchEngine();
+            se.setTag(bookSourceBean.getBookSourceUrl());
+            se.setHasMore(true);
+            se.setHasLoad(false);
+            se.setDurRequestTime(1);
+            se.setMaxRequestTime(3);
+            searchEngineS.add(se);
+        }
+    }
+
+    public void searchReNew() {
+        for (SearchEngine searchEngine : searchEngineS) {
+            searchEngine.setHasMore(true);
+            searchEngine.setHasLoad(false);
+            searchEngine.setDurRequestTime(1);
         }
     }
 
@@ -69,27 +71,27 @@ public class SearchBook {
     }
 
     //搜索书集
-    public void search(final String content, final long searchTime, Boolean fromError) {
+    public void search(final String content, final long searchTime, List<BookShelfBean> bookShelfS, Boolean fromError) {
         if (searchTime == startThisSearchTime) {
             Boolean canLoad = false;
-            for (Map temp : searchEngine) {
-                if ((Boolean) temp.get(HAS_MORE_KEY) && (int) temp.get(DUR_REQUEST_TIME) <= (int) temp.get(MAX_REQUEST_TIME)) {
+            for (SearchEngine temp : searchEngineS) {
+                if (temp.getHasMore() && temp.getDurRequestTime() <= temp.getMaxRequestTime()) {
                     canLoad = true;
                     break;
                 }
             }
             if (canLoad) {
                 int searchEngineIndex = -1;
-                for (int i = 0; i < searchEngine.size(); i++) {
-                    if (!(Boolean) searchEngine.get(i).get(HAS_LOAD_KEY) && (int) searchEngine.get(i).get(DUR_REQUEST_TIME) <= (int) searchEngine.get(i).get(MAX_REQUEST_TIME)) {
+                for (int i = 0; i < searchEngineS.size(); i++) {
+                    if (!searchEngineS.get(i).getHasLoad() && searchEngineS.get(i).getDurRequestTime() <= searchEngineS.get(i).getMaxRequestTime()) {
                         searchEngineIndex = i;
                         break;
                     }
                 }
                 if (searchEngineIndex == -1) {
                     this.page++;
-                    for (Map item : searchEngine) {
-                        item.put(HAS_LOAD_KEY, false);
+                    for (SearchEngine item : searchEngineS) {
+                        item.setHasLoad(false);
                     }
                     if (!fromError) {
                         if (page - 1 == 1) {
@@ -98,21 +100,21 @@ public class SearchBook {
                             searchListener.loadMoreFinish(false);
                         }
                     } else {
-                        search(content, searchTime, false);
+                        search(content, searchTime, bookShelfS, false);
                     }
                 } else {
                     final int finalSearchEngineIndex = searchEngineIndex;
-                    WebBookModelImpl.getInstance().searchOtherBook(content, page, (String) searchEngine.get(searchEngineIndex).get(TAG_KEY))
+                    WebBookModelImpl.getInstance().searchOtherBook(content, page, searchEngineS.get(searchEngineIndex).getTag())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.newThread())
                             .subscribe(new SimpleObserver<List<SearchBookBean>>() {
                                 @Override
                                 public void onNext(List<SearchBookBean> value) {
                                     if (searchTime == startThisSearchTime) {
-                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, true);
-                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, 1);
+                                        searchEngineS.get(finalSearchEngineIndex).setHasLoad(true);
+                                        searchEngineS.get(finalSearchEngineIndex).setDurRequestTime(1);
                                         if (value.size() == 0) {
-                                            searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
+                                            searchEngineS.get(finalSearchEngineIndex).setHasMore(false);
                                         } else {
                                             for (SearchBookBean temp : value) {
                                                 for (BookShelfBean bookShelfBean : bookShelfS) {
@@ -129,10 +131,10 @@ public class SearchBook {
                                             if (value.size() > 0 && !searchListener.checkIsExist(value.get(0)))
                                                 searchListener.loadMoreSearchBook(value);
                                             else {
-                                                searchEngine.get(finalSearchEngineIndex).put(HAS_MORE_KEY, false);
+                                                searchEngineS.get(finalSearchEngineIndex).setHasMore(false);
                                             }
                                         }
-                                        search(content, searchTime, false);
+                                        search(content, searchTime, bookShelfS, false);
                                     }
                                 }
 
@@ -140,8 +142,8 @@ public class SearchBook {
                                 public void onError(Throwable e) {
                                     e.printStackTrace();
                                     if (searchTime == startThisSearchTime) {
-                                        searchEngine.get(finalSearchEngineIndex).put(HAS_LOAD_KEY, false);
-                                        searchEngine.get(finalSearchEngineIndex).put(DUR_REQUEST_TIME, ((int) searchEngine.get(finalSearchEngineIndex).get(DUR_REQUEST_TIME)) + 1);
+                                        searchEngineS.get(finalSearchEngineIndex).setHasLoad(false);
+                                        searchEngineS.get(finalSearchEngineIndex).setDurRequestTime(searchEngineS.get(finalSearchEngineIndex).getDurRequestTime() + 1);
                                         searchListener.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && searchListener.getItemCount() == 0)));
                                     }
                                 }
@@ -154,10 +156,61 @@ public class SearchBook {
                     searchListener.loadMoreFinish(true);
                 }
                 this.page++;
-                for (Map item : searchEngine) {
-                    item.put(HAS_LOAD_KEY, false);
+                for (SearchEngine item : searchEngineS) {
+                    item.setHasLoad(false);
                 }
             }
         }
+    }
+
+    private class SearchEngine {
+        private String tag;
+        private Boolean hasMore;
+        private Boolean hasLoad;
+        //当前搜索引擎失败次数  成功一次会重新开始计数
+        private int durRequestTime;
+        //最大连续请求失败次数
+        private int maxRequestTime;
+
+        public String getTag() {
+            return tag;
+        }
+
+        public void setTag(String tag) {
+            this.tag = tag;
+        }
+
+        Boolean getHasMore() {
+            return hasMore;
+        }
+
+        void setHasMore(Boolean hasMore) {
+            this.hasMore = hasMore;
+        }
+
+        Boolean getHasLoad() {
+            return hasLoad;
+        }
+
+        void setHasLoad(Boolean hasLoad) {
+            this.hasLoad = hasLoad;
+        }
+
+        int getDurRequestTime() {
+            return durRequestTime;
+        }
+
+        void setDurRequestTime(int durRequestTime) {
+            this.durRequestTime = durRequestTime;
+        }
+
+        int getMaxRequestTime() {
+            return maxRequestTime;
+        }
+
+        void setMaxRequestTime(int maxRequestTime) {
+            this.maxRequestTime = maxRequestTime;
+        }
+
     }
 }
