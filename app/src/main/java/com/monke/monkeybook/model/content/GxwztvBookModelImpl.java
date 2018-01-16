@@ -200,7 +200,8 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         Element resultE = doc.getElementsByClass("panel panel-warning").get(0);
         bookInfoBean.setCoverUrl(resultE.getElementsByClass("panel-body").get(0).getElementsByClass("img-thumbnail").get(0).attr("src"));
         bookInfoBean.setName(resultE.getElementsByClass("active").get(0).text());
-        bookInfoBean.setAuthor(resultE.getElementsByClass("col-xs-12 list-group-item no-border").get(0).getElementsByTag("small").get(0).text());
+        String author = resultE.getElementsByClass("col-xs-12 list-group-item no-border").get(0).getElementsByTag("small").get(0).text();
+        bookInfoBean.setAuthor(FormatWebText.getAuthor(author));
         Element introduceE = resultE.getElementsByClass("panel panel-default mt20").get(0);
         String introduce;
         if (introduceE.getElementById("all") != null) {
