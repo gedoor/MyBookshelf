@@ -331,7 +331,7 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                int result = textToSpeech.setLanguage(Locale.US);
+                int result = textToSpeech.setLanguage(Locale.CHINESE);
                 if (result == TextToSpeech.LANG_MISSING_DATA ||
                         result == TextToSpeech.LANG_NOT_SUPPORTED) {
                     aloudServiceListener.showMassage("TTS没有中文语言");
