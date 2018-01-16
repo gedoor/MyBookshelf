@@ -254,6 +254,24 @@ public class MoProgressHUD {
     }
     //////////////////////////////////////////////////////////
 
+    ////////////////////换源////////////////////////////
+    public interface OnClickSource{
+        void changeSource(String noteUrlChanged);
+    }
+    public void showChangeSource(String bookName, String bookAuthor, OnClickSource clickSource){
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setBackgroundColor(Color.parseColor("#00000000"));
+        rootView.setOnClickListener(v -> dismiss());
+        mSharedView.showChangeSource(bookName, bookAuthor, clickSource, v -> dismiss());
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+    //////////////////////////////////////////////////////////
+
     public Boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isShowing() && canBack) {

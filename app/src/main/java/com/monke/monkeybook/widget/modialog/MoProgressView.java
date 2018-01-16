@@ -1,15 +1,14 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +86,7 @@ public class MoProgressView extends LinearLayout {
     ////////////////////离线章节选择////////////////////////////
     public void showDownloadList(int startIndex, int endIndex, final int all, final MoProgressHUD.OnClickDownload clickDownload, OnClickListener cancel){
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_downloadchoice, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_download_choice, this, true);
         final EditText edtStart = findViewById(R.id.edt_start);
         final EditText edtEnd = findViewById(R.id.edt_end);
         TextView tvCancel = findViewById(R.id.tv_cancel);
@@ -168,5 +167,18 @@ public class MoProgressView extends LinearLayout {
                 Toast.makeText(context,"请输入要离线的章节",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    ////////////////////换源////////////////////////////
+    public void showChangeSource(String bookName, String bookAuthor, final MoProgressHUD.OnClickSource clickSource, OnClickListener cancel){
+        removeAllViews();
+        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_change_source, this, true);
+        TextView atvTitle = findViewById(R.id.atv_title);
+        atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
+        ImageButton ibRefrish = findViewById(R.id.iv_refresh);
+        ibRefrish.setOnClickListener(view -> {});
+        ListView lvSource = findViewById(R.id.lv_source);
+
+
     }
 }
