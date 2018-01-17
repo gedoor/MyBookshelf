@@ -1,16 +1,11 @@
 package com.monke.monkeybook.widget.modialog;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +20,11 @@ class DownLoadView {
     private MoProgressView moProgressView;
     private Context context;
 
+    private EditText edtStart;
+    private EditText edtEnd;
+    private TextView tvCancel;
+    private TextView tvDownload;
+
     public static DownLoadView getInstance(MoProgressView moProgressView) {
         return new DownLoadView(moProgressView);
     }
@@ -32,16 +32,11 @@ class DownLoadView {
     private DownLoadView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
+        bindView();
     }
 
     void showDownloadList(int startIndex, int endIndex, final int all, final MoProgressHUD.OnClickDownload clickDownload, View.OnClickListener cancel){
-        moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_download_choice, moProgressView, true);
-        final EditText edtStart = moProgressView.findViewById(R.id.edt_start);
-        final EditText edtEnd = moProgressView.findViewById(R.id.edt_end);
-        TextView tvCancel = moProgressView.findViewById(R.id.tv_cancel);
         tvCancel.setOnClickListener(cancel);
-        TextView tvDownload = moProgressView.findViewById(R.id.tv_download);
         edtStart.setText(String.valueOf(startIndex+1));
         edtEnd.setText(String.valueOf(endIndex+1));
         edtStart.addTextChangedListener(new TextWatcher() {
@@ -117,5 +112,15 @@ class DownLoadView {
                 Toast.makeText(context,"请输入要离线的章节",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void bindView() {
+        moProgressView.removeAllViews();
+        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_download_choice, moProgressView, true);
+
+        edtStart = moProgressView.findViewById(R.id.edt_start);
+        edtEnd = moProgressView.findViewById(R.id.edt_end);
+        tvCancel = moProgressView.findViewById(R.id.tv_cancel);
+        tvDownload = moProgressView.findViewById(R.id.tv_download);
     }
 }
