@@ -455,7 +455,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     public void loadMoreSearchBook(final List<SearchBookBean> books) {
-        searchBookAdapter.addAll(books);
+        searchBookAdapter.addAll(books, edtContent.getText().toString().trim());
     }
 
     @Override
