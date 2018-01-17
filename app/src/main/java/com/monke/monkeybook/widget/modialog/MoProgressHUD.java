@@ -246,7 +246,8 @@ public class MoProgressHUD {
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(v -> dismiss());
-        mSharedView.showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
+        DownLoadView.getInstance(mSharedView)
+                .showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }
@@ -264,7 +265,8 @@ public class MoProgressHUD {
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(v -> dismiss());
-        mSharedView.showChangeSource(bookName, bookAuthor, clickSource, v -> dismiss());
+        ChangeSourceView.getInstance(mSharedView)
+                .showChangeSource(bookName, bookAuthor, clickSource, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }
