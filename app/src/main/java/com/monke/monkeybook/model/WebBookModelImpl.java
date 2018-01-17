@@ -80,7 +80,7 @@ public class WebBookModelImpl implements IWebBookModel {
             return bookModel.searchBook(content, page);
         } else {
             return Observable.create(e -> {
-                e.onNext(new ArrayList<SearchBookBean>());
+                e.onNext(new ArrayList<>());
                 e.onComplete();
             });
         }
