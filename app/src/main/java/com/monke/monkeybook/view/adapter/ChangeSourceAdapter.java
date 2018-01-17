@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -29,11 +31,13 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        CheckBox bookSource;
+        TextView tvBookSource;
+        ImageView ivChecked;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            bookSource = itemView.findViewById(R.id.book_source);
+            tvBookSource = itemView.findViewById(R.id.tv_book_name);
+            ivChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
 
@@ -45,8 +49,10 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bookSource.setText(searchBookBeans.get(position).getTag());
-        holder.bookSource.setChecked(searchBookBeans.get(position).getAdd());
+        holder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
+        if (searchBookBeans.get(position).getAdd()) {
+            holder.ivChecked.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
