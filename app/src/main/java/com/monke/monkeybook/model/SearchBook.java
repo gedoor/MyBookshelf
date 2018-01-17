@@ -6,9 +6,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -143,8 +141,11 @@ public class SearchBook {
                                     e.printStackTrace();
                                     if (searchTime == startThisSearchTime) {
                                         searchEngineS.get(finalSearchEngineIndex).setHasLoad(false);
-                                        searchEngineS.get(finalSearchEngineIndex).setDurRequestTime(searchEngineS.get(finalSearchEngineIndex).getDurRequestTime() + 1);
-                                        searchListener.searchBookError(page == 1 && (finalSearchEngineIndex == 0 || (finalSearchEngineIndex > 0 && searchListener.getItemCount() == 0)));
+                                        searchEngineS.get(finalSearchEngineIndex)
+                                                .setDurRequestTime(searchEngineS.get(finalSearchEngineIndex).getDurRequestTime() + 1);
+                                        searchListener.searchBookError(page == 1
+                                                && (finalSearchEngineIndex == 0
+                                                || (finalSearchEngineIndex > 0 && searchListener.getItemCount() == 0)));
                                     }
                                 }
                             });
