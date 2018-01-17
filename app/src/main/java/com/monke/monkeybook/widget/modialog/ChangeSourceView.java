@@ -8,13 +8,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.model.SearchBook;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import me.grantland.widget.AutofitTextView;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -27,8 +26,10 @@ public class ChangeSourceView {
     private ListView lvSource;
 
     private MoProgressView moProgressView;
-    private SearchBook searchBook;
     private Context context;
+
+    private SearchBook searchBook;
+    private List<BookShelfBean> bookShelfS = new ArrayList<>();
 
     public static ChangeSourceView getInstance(MoProgressView moProgressView) {
         return new ChangeSourceView(moProgressView);
@@ -77,16 +78,16 @@ public class ChangeSourceView {
         });
     }
 
-    void showChangeSource(String bookName, String bookAuthor, final MoProgressHUD.OnClickSource clickSource, View.OnClickListener cancel) {
-
-
-        atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
-
+    void showChangeSource(BookShelfBean bookShelf, final MoProgressHUD.OnClickSource clickSource, View.OnClickListener cancel) {
+        bookShelfS.add(bookShelf);
+        atvTitle.setText(String.format("%s(%s)", bookShelf.getBookInfoBean().getName(), bookShelf.getBookInfoBean().getAuthor()));
         ibRefrish.setOnClickListener(view -> {
         });
 
-
-
+        long startThisSearchTime = System.currentTimeMillis();
+        searchBook.setSearchTime(startThisSearchTime);
+        searchBook.searchReNew();
+        searchBook.search(bookShelf.getBookInfoBean().getName(), startThisSearchTime, bookShelfS, false);
     }
 
     private void bindView() {

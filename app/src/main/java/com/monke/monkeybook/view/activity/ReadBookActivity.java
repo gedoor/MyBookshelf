@@ -481,8 +481,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             readBookMenuMorePop.dismiss();
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
-                moProgressHUD.showChangeSource(mPresenter.getBookShelf().getBookInfoBean().getName(),
-                        mPresenter.getBookShelf().getBookInfoBean().getAuthor(),
+                moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
                         noteUrlChanged -> {
 
                 });

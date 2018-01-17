@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookShelfBean;
 
 import java.io.File;
 import java.util.HashMap;
@@ -259,14 +260,14 @@ public class MoProgressHUD {
     public interface OnClickSource{
         void changeSource(String noteUrlChanged);
     }
-    public void showChangeSource(String bookName, String bookAuthor, OnClickSource clickSource){
+    public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource){
         initCenter();
         initAnimation();
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(v -> dismiss());
         ChangeSourceView.getInstance(mSharedView)
-                .showChangeSource(bookName, bookAuthor, clickSource, v -> dismiss());
+                .showChangeSource(bookShelf, clickSource, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }
