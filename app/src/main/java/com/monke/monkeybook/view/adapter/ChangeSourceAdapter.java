@@ -36,7 +36,7 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
 
         MyViewHolder(View itemView) {
             super(itemView);
-            tvBookSource = itemView.findViewById(R.id.tv_book_name);
+            tvBookSource = itemView.findViewById(R.id.tv_source_name);
             ivChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
