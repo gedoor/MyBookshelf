@@ -23,6 +23,7 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
@@ -31,6 +32,7 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -387,7 +389,25 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
+        BookShelfBean changedShelfBean = new BookShelfBean();
+        changedShelfBean.setTag(searchBookBean.getTag());
+        changedShelfBean.setNoteUrl(searchBookBean.getNoteUrl());
+        changedShelfBean.setDurChapter(bookShelf.getDurChapter());
+        changedShelfBean.setBookInfoBean(bookShelf.getBookInfoBean());
+        changedShelfBean.getBookInfoBean().setTag(searchBookBean.getTag());
+        changedShelfBean.getBookInfoBean().setChapterUrl(searchBookBean.getNoteUrl());
+        changedShelfBean.getBookInfoBean().setOrigin(searchBookBean.getOrigin());
+        WebBookModelImpl.getInstance().getChapterList(changedShelfBean, new OnGetChapterListListener() {
+            @Override
+            public void success(BookShelfBean bookShelfBean) {
 
+            }
+
+            @Override
+            public void error() {
+
+            }
+        });
     }
 
     @Override

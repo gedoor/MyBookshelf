@@ -18,6 +18,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
@@ -178,16 +179,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     public void removeFromBookShelf() {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelf.getNoteUrl());
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelf.getBookInfoBean().getNoteUrl());
-                List<String> keys = new ArrayList<String>();
-                if(bookShelf.getBookInfoBean().getChapterList().size()>0){
-                    for(int i = 0; i<bookShelf.getBookInfoBean().getChapterList().size(); i++){
-                        keys.add(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterUrl());
-                    }
-                }
-                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelf.getBookInfoBean().getChapterList());
+                BookShelf.removeFromBookShelf(bookShelf);
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.newThread())
