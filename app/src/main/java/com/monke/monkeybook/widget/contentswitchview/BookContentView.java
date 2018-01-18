@@ -106,6 +106,12 @@ public class BookContentView extends FrameLayout {
         });
     }
 
+    public void showLoading() {
+        llError.setVisibility(GONE);
+        tvLoading.setVisibility(VISIBLE);
+        llContent.setVisibility(INVISIBLE);
+    }
+
     public void loading() {
         llError.setVisibility(GONE);
         tvLoading.setVisibility(VISIBLE);

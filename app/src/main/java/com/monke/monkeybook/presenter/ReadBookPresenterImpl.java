@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -333,7 +334,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void openBookFromOther(Activity activity) {
         //APP外部打开
         Uri uri = activity.getIntent().getData();
-        mView.showLoadBook();
+        mView.showLoading("文本导入中...");
         getRealFilePath(activity, uri)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -349,14 +350,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
-                                        mView.dismissLoadBook();
+                                        mView.dismissLoading();
                                         checkInShelf();
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         e.printStackTrace();
-                                        mView.dismissLoadBook();
+                                        mView.dismissLoading();
                                         mView.loadLocationBookError();
                                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                                     }
@@ -366,7 +367,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.dismissLoadBook();
+                        mView.dismissLoading();
                         mView.loadLocationBookError();
                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                     }
@@ -390,39 +391,50 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
-        BookShelfBean changedShelfBean = new BookShelfBean();
+        BookShelfBean changedShelfBean = bookShelf;
         changedShelfBean.setTag(searchBookBean.getTag());
         changedShelfBean.setNoteUrl(searchBookBean.getNoteUrl());
-        changedShelfBean.setDurChapter(bookShelf.getDurChapter());
-        changedShelfBean.setBookInfoBean(bookShelf.getBookInfoBean());
         changedShelfBean.getBookInfoBean().setTag(searchBookBean.getTag());
+        changedShelfBean.getBookInfoBean().setNoteUrl(searchBookBean.getNoteUrl());
         changedShelfBean.getBookInfoBean().setChapterUrl(searchBookBean.getNoteUrl());
         changedShelfBean.getBookInfoBean().setOrigin(searchBookBean.getOrigin());
         WebBookModelImpl.getInstance().getChapterList(changedShelfBean, new OnGetChapterListListener() {
             @Override
-            public void success(BookShelfBean bookShelfBean) {
-
+            public void success(BookShelfBean changedShelfBean) {
+                saveChangedBook(changedShelfBean);
             }
 
             @Override
             public void error() {
-
+                mView.getCsvBook().loadError();
             }
         });
     }
 
     private void saveChangedBook(BookShelfBean bookShelfBean) {
-        WebBookModelImpl.getInstance().getChapterList(bookShelfBean, new OnGetChapterListListener() {
-            @Override
-            public void success(BookShelfBean bookShelfBean) {
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            BookShelf.saveBookToShelf(bookShelfBean);
+            e.onNext(bookShelfBean);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onNext(BookShelfBean value) {
+                        bookShelf = value;
+                        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
+                        mView.getCsvBook().setInitData(value.getDurChapter(),
+                                value.getBookInfoBean().getChapterList().size(),
+                                BookContentView.DurPageIndexBegin);
+                    }
 
-            }
-
-            @Override
-            public void error() {
-
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        mView.getCsvBook().loadError();
+                    }
+                });
     }
 
     @Override

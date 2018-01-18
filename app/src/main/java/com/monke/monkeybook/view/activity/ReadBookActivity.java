@@ -481,9 +481,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             readBookMenuMorePop.dismiss();
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
-                moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
-                        searchBookBean -> {
+                moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
                     mPresenter.changeBookSource(searchBookBean);
+                    csvBook.showLoading();
                 });
             }
         });
@@ -631,16 +631,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public void showLoadBook() {
-        moProgressHUD.showLoading("文本导入中...");
-    }
-
-    @Override
-    public void dismissLoadBook() {
-        moProgressHUD.dismiss();
-    }
-
-    @Override
     public void loadLocationBookError() {
         csvBook.loadError();
     }
@@ -655,6 +645,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public String getNoteUrl() {
         return noteUrl;
+    }
+
+    @Override
+    public ContentSwitchView getCsvBook() {
+        return csvBook;
+    }
+
+    @Override
+    public void showLoading(String msg) {
+        moProgressHUD.showLoading(msg);
+    }
+
+    @Override
+    public void dismissLoading() {
+        moProgressHUD.dismiss();
     }
 
     private Boolean showCheckPermission = false;
