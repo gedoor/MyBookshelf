@@ -260,7 +260,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterlist());
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterList());
             DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
             //网络数据获取成功  存入BookShelf表数据库
             DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);

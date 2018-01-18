@@ -112,9 +112,9 @@ public class DownloadService extends Service {
                 for (int i = start; i <= end; i++) {
                     DownloadChapterBean item = new DownloadChapterBean();
                     item.setNoteUrl(bookShelf.getNoteUrl());
-                    item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterIndex());
-                    item.setDurChapterName(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterName());
-                    item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterlist().get(i).getDurChapterUrl());
+                    item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterIndex());
+                    item.setDurChapterName(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterName());
+                    item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterUrl());
                     item.setTag(bookShelf.getTag());
                     item.setBookName(bookShelf.getBookInfoBean().getName());
                     item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());

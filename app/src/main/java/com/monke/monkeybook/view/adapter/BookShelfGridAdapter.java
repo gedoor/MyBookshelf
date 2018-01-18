@@ -239,15 +239,15 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
             holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
 
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist()
-                    && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
+            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterList()
+                    && books.get(index).getBookInfoBean().getChapterList().size() > books.get(index).getDurChapter()) {
                 holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.tv_read_durprogress),
                         books.get(index).getDurChapterListBean().getDurChapterName()));
             }
             holder.llDurCursor.setVisibility(View.VISIBLE);
             holder.mpbDurProgress.setVisibility(View.VISIBLE);
-            holder.mpbDurProgress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-            float speed = books.get(index).getBookInfoBean().getChapterlist().size()*1.0f/100;
+            holder.mpbDurProgress.setMaxProgress(books.get(index).getBookInfoBean().getChapterList().size());
+            float speed = books.get(index).getBookInfoBean().getChapterList().size()*1.0f/100;
 
             holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
             holder.mpbDurProgress.setProgressListener(new OnProgressListener() {

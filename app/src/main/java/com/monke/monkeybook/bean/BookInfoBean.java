@@ -30,7 +30,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     private String chapterUrl;  //章节目录地址
 
     @Transient
-    private List<ChapterListBean> chapterlist = new ArrayList<>();    //章节列表
+    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
 
     private long finalRefreshData;  //章节最后更新时间
 
@@ -51,7 +51,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         tag = in.readString();
         noteUrl = in.readString();
         chapterUrl = in.readString();
-        chapterlist = in.createTypedArrayList(ChapterListBean.CREATOR);
+        chapterList = in.createTypedArrayList(ChapterListBean.CREATOR);
         finalRefreshData = in.readLong();
         coverUrl = in.readString();
         author = in.readString();
@@ -80,7 +80,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         dest.writeString(tag);
         dest.writeString(noteUrl);
         dest.writeString(chapterUrl);
-        dest.writeTypedList(chapterlist);
+        dest.writeTypedList(chapterList);
         dest.writeLong(finalRefreshData);
         dest.writeString(coverUrl);
         dest.writeString(author);
@@ -138,12 +138,23 @@ public class BookInfoBean implements Parcelable,Cloneable{
         this.chapterUrl = chapterUrl;
     }
 
-    public List<ChapterListBean> getChapterlist() {
-        return chapterlist;
+    public List<ChapterListBean> getChapterList() {
+        return chapterList;
+    }
+
+    public ChapterListBean getChapterList(int index) {
+        if (index >= chapterList.size()) {
+            ChapterListBean chapterListBean = new ChapterListBean();
+            chapterListBean.setDurChapterName("暂无");
+            chapterListBean.setDurChapterUrl("暂无");
+            return chapterListBean;
+        } else {
+            return chapterList.get(index);
+        }
     }
 
     public void setChapterList(List<ChapterListBean> chapterlist) {
-        this.chapterlist = chapterlist;
+        this.chapterList = chapterlist;
     }
 
     public long getFinalRefreshData() {
@@ -197,9 +208,9 @@ public class BookInfoBean implements Parcelable,Cloneable{
         bookInfoBean.author = author;
         bookInfoBean.introduce = introduce;
         bookInfoBean.origin = origin;
-        if(chapterlist!=null){
+        if(chapterList !=null){
             List<ChapterListBean> newList = new ArrayList<>();
-            Iterator<ChapterListBean> iterator = chapterlist.iterator();
+            Iterator<ChapterListBean> iterator = chapterList.iterator();
             while(iterator.hasNext()){
                 newList.add((ChapterListBean) iterator.next().clone());
             }

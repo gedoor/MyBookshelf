@@ -104,8 +104,9 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() > 0) {
-                    tvChapter.setText(String.format(getString(R.string.tv_read_durprogress), mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getDurChapter()).getDurChapterName()));
+                if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() > 0) {
+                    tvChapter.setText(String.format(getString(R.string.tv_read_durprogress),
+                            mPresenter.getBookShelf().getDurChapterListBean().getDurChapterName()));
                 } else {
                     tvChapter.setText("无章节");
                 }
@@ -116,10 +117,11 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                     mPresenter.removeFromBookShelf();
                 });
             } else {
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() == 0) {
+                if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() == 0) {
                     tvChapter.setText("无章节");
                 } else {
-                    tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest), mPresenter.getBookShelf().getBookInfoBean().getChapterlist().get(mPresenter.getBookShelf().getBookInfoBean().getChapterlist().size() - 1).getDurChapterName()));
+                    tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest),
+                            mPresenter.getBookShelf().getLastChapterListBean().getDurChapterName()));
                 }
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");

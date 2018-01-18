@@ -102,19 +102,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     @Override
     public void initContent() {
-        mView.initContentSuccess(bookShelf.getDurChapter(), bookShelf.getBookInfoBean().getChapterlist().size(), bookShelf.getDurChapterPage());
+        mView.initContentSuccess(bookShelf.getDurChapter(), bookShelf.getBookInfoBean().getChapterList().size(), bookShelf.getDurChapterPage());
     }
 
     @Override
     public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex) {
         //载入正文
-        if (null != bookShelf && bookShelf.getBookInfoBean().getChapterlist().size() > 0) {
-            if (null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
-                    && null != bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent()) {
-                if (bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
-                        && bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
+        if (null != bookShelf && bookShelf.getBookInfoBean().getChapterList().size() > 0) {
+            if (null != bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean()
+                    && null != bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getDurCapterContent()) {
+                if (bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
+                        && bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
-                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterlist().
+                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterList().
                             get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
 
                     if (pageIndex == BookContentView.DurPageIndexBegin) {
@@ -127,29 +127,29 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     }
                     int start = pageIndex * pageLineCount;
-                    int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
+                    int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
-                        bookContentView.updateData(bookTag, bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName()
-                                , bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().subList(start, end)
+                        bookContentView.updateData(bookTag, bookShelf.getBookInfoBean().getChapterList(chapterIndex).getDurChapterName()
+                                , bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end)
                                 , chapterIndex
-                                , bookShelf.getBookInfoBean().getChapterlist().size()
+                                , bookShelf.getBookInfoBean().getChapterList().size()
                                 , pageIndex
                                 , tempCount + 1);
                     }
                 } else {
                     //有元数据  重新分行
-                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean()
+                    bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean()
                             .setLineSize(mView.getPaint().getTextSize());
                     final int finalPageIndex = pageIndex;
-                    SeparateParagraphToLines(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getDurCapterContent())
+                    SeparateParagraphToLines(bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getDurCapterContent())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                             .subscribe(new SimpleObserver<List<String>>() {
                                 @Override
                                 public void onNext(List<String> value) {
-                                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().clear();
-                                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getBookContentBean().getLineContent().addAll(value);
+                                    bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().clear();
+                                    bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().addAll(value);
                                     loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
                                 }
 
@@ -165,7 +165,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 Observable.create((ObservableOnSubscribe<ReadBookContentBean>) e -> {
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
-                                    .getChapterlist().get(chapterIndex).getDurChapterUrl())).build().list();
+                                    .getChapterList(chapterIndex).getDurChapterUrl())).build().list();
                     //加载下一章节
                     LoadNextChapter(chapterIndex);
                     e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<>() : tempList, finalPageIndex1));
@@ -178,21 +178,21 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             public void onNext(ReadBookContentBean tempList) {
                                 if (tempList.getBookContentList() != null && tempList.getBookContentList().size() > 0
                                         && tempList.getBookContentList().get(0).getDurCapterContent() != null) {
-                                    bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(tempList.getBookContentList().get(0));
+                                    bookShelf.getBookInfoBean().getChapterList(chapterIndex).setBookContentBean(tempList.getBookContentList().get(0));
                                     loadContent(bookContentView, bookTag, chapterIndex, tempList.getPageIndex());
                                 } else {
                                     final int finalPageIndex1 = tempList.getPageIndex();
                                     //网络获取正文
-                                    WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).
+                                    WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterList(chapterIndex).
                                             getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(bookContentBean -> {
                                         if (bookContentBean.getRight()) {
                                             //添加章节名称
-                                            bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex)
+                                            bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterList(chapterIndex)
                                                     .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
                                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
-                                            bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setHasCache(true);
+                                            bookShelf.getBookInfoBean().getChapterList(chapterIndex).setHasCache(true);
                                             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
-                                                    .update(bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex));
+                                                    .update(bookShelf.getBookInfoBean().getChapterList(chapterIndex));
                                         }
                                         return bookContentBean;
                                     })
@@ -203,7 +203,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                 @Override
                                                 public void onNext(BookContentBean value) {
                                                     if (value.getDurChapterUrl() != null && value.getDurChapterUrl().length() > 0) {
-                                                        bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).setBookContentBean(value);
+                                                        bookShelf.getBookInfoBean().getChapterList(chapterIndex).setBookContentBean(value);
                                                         if (bookTag == bookContentView.getQTag())
                                                             loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex1);
                                                     } else {
@@ -237,22 +237,22 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private void LoadNextChapter(int durChapterIndex) {
         new Thread(() -> {
             int nextIndex = durChapterIndex + 1;
-            if (bookShelf.getBookInfoBean().getChapterlist().size() > nextIndex) {
-                if (bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).getBookContentBean() == null) {
+            if (bookShelf.getBookInfoBean().getChapterList().size() > nextIndex) {
+                if (bookShelf.getBookInfoBean().getChapterList(nextIndex).getBookContentBean() == null) {
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getBookInfoBean()
-                                    .getChapterlist().get(durChapterIndex + 1).getDurChapterUrl())).build().list();
+                                    .getChapterList(nextIndex).getDurChapterUrl())).build().list();
                     if (tempList == null) {
-                        WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).
+                        WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getChapterList(nextIndex).
                                 getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
                             if (bookContentBean.getRight()) {
                                 //添加章节名称
-                                bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex)
+                                bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterList(nextIndex)
                                         .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
                                 DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
-                                bookShelf.getBookInfoBean().getChapterlist().get(nextIndex).setHasCache(true);
+                                bookShelf.getBookInfoBean().getChapterList(nextIndex).setHasCache(true);
                                 DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
-                                        .update(bookShelf.getBookInfoBean().getChapterlist().get(nextIndex));
+                                        .update(bookShelf.getBookInfoBean().getChapterList(nextIndex));
                             }
                             return bookContentBean;
                         })
@@ -294,10 +294,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     @Override
     public String getChapterTitle(int chapterIndex) {
-        if (bookShelf.getBookInfoBean().getChapterlist().size() == 0) {
+        if (bookShelf.getBookInfoBean().getChapterList().size() == 0) {
             return mView.getContext().getString(R.string.no_chapter);
         } else
-            return bookShelf.getBookInfoBean().getChapterlist().get(chapterIndex).getDurChapterName();
+            return bookShelf.getBookInfoBean().getChapterList(chapterIndex).getDurChapterName();
     }
 
     //内容分行
@@ -418,7 +418,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     @Override
                     public void onNext(Boolean value) {
                         mView.initPop();
-                        mView.setHpbReadProgressMax(bookShelf.getBookInfoBean().getChapterlist().size());
+                        mView.setHpbReadProgressMax(bookShelf.getBookInfoBean().getChapterList().size());
                         mView.startLoadingBook();
                     }
 
@@ -437,7 +437,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterlist());
+                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterList());
                 DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
                 //网络数据获取成功  存入BookShelf表数据库
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);

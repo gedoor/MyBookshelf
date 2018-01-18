@@ -107,8 +107,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
-        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterlist()
-                && books.get(index).getBookInfoBean().getChapterlist().size() > books.get(index).getDurChapter()) {
+        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterList()
+                && books.get(index).getBookInfoBean().getChapterList().size() > books.get(index).getDurChapter()) {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.tv_read_durprogress),
                     books.get(index).getDurChapterListBean().getDurChapterName()));
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
@@ -122,8 +122,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         //进度条
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
-        holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterlist().size());
-        float speed = books.get(index).getBookInfoBean().getChapterlist().size() * 1.0f / 60;
+        holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterList().size());
+        float speed = books.get(index).getBookInfoBean().getChapterList().size() * 1.0f / 60;
 
         holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
         holder.mpbDurprogress.setProgressListener(new OnProgressListener() {

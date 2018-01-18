@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.immerselayout.ImmerseLinearLayout;
@@ -155,7 +154,7 @@ public class ChapterListView extends FrameLayout {
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
         tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
-                bookShelfBean.getBookInfoBean().getChapterlist().size()));
+                bookShelfBean.getBookInfoBean().getChapterList().size()));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(index);
