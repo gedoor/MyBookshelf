@@ -154,11 +154,6 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 .create(IZwduApi.class)
                 .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyChapterList(s, bookShelfBean))
-                .doOnNext(bookShelfBeanWebChapterBean -> {
-                    if (getChapterListListener != null) {
-                        getChapterListListener.doOnNext(bookShelfBeanWebChapterBean.getData());
-                    }
-                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
