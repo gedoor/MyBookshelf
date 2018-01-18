@@ -8,20 +8,28 @@ import java.util.List;
 
 /**
  * Created by GKF on 2018/1/18.
+ * 添加删除Book
  */
 
 public class BookShelf {
 
-    public static void removeFromBookShelf(BookShelfBean bookShelf) {
-        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelf.getNoteUrl());
-        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelf.getBookInfoBean().getNoteUrl());
-        List<String> keys = new ArrayList<String>();
-        if(bookShelf.getBookInfoBean().getChapterList().size()>0){
-            for(int i = 0; i<bookShelf.getBookInfoBean().getChapterList().size(); i++){
-                keys.add(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterUrl());
+    public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
+        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
+        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
+        List<String> keys = new ArrayList<>();
+        if (bookShelfBean.getBookInfoBean().getChapterList().size() > 0) {
+            for (int i = 0; i < bookShelfBean.getBookInfoBean().getChapterList().size(); i++) {
+                keys.add(bookShelfBean.getBookInfoBean().getChapterList(i).getDurChapterUrl());
             }
         }
         DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
-        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelf.getBookInfoBean().getChapterList());
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getBookInfoBean().getChapterList());
+    }
+
+    public static void saveBookToShelf(BookShelfBean bookShelfBean) {
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterList());
+        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+        //网络数据获取成功  存入BookShelf表数据库
+        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
     }
 }

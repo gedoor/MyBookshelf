@@ -15,6 +15,7 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
+import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.model.WebBookModelImpl;
@@ -265,10 +266,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterList());
-            DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-            //网络数据获取成功  存入BookShelf表数据库
-            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+            BookShelf.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
