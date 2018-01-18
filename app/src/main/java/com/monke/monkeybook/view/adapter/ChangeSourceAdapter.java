@@ -46,16 +46,20 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     public void onClick(View view) {
         if (mOnItemClickListener != null) {
             //注意这里使用getTag方法获取position
-            mOnItemClickListener.onItemClick(view,(String)view.getTag());
+            mOnItemClickListener.onItemClick(view,(int)view.getTag());
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view , String noteUrl);
+        void onItemClick(View view , int index);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
+    }
+
+    public List<SearchBookBean> getSearchBookBeans() {
+        return searchBookBeans;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.itemView.setTag(searchBookBeans.get(position).getNoteUrl());
+        holder.itemView.setTag(position);
         holder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
         if (searchBookBeans.get(position).getAdd()) {
             holder.ivChecked.setVisibility(View.VISIBLE);

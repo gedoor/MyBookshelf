@@ -48,9 +48,9 @@ public class ChangeSourceView {
         adapter = new ChangeSourceAdapter();
         rvSource.setLayoutManager(new LinearLayoutManager(context));
         rvSource.setAdapter(adapter);
-        adapter.setOnItemClickListener((view, noteUrl) -> {
+        adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();
-            onClickSource.changeSource(noteUrl);
+            onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
         });
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override

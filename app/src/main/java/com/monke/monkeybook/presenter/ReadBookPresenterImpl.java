@@ -26,6 +26,7 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
+import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -385,7 +386,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      * 换源
      */
     @Override
-    public void changeBookSource(String noteUrl) {
+    public void changeBookSource(SearchBookBean searchBookBean) {
 
     }
 

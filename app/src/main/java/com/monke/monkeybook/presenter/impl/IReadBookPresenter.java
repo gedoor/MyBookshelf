@@ -5,6 +5,7 @@ import android.app.Activity;
 
 import com.monke.basemvplib.IPresenter;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 
@@ -40,5 +41,5 @@ public interface IReadBookPresenter extends IPresenter {
 
     void addDownload(int start, int end);
 
-    void changeBookSource(String noteUrl);
+    void changeBookSource(SearchBookBean searchBookBean);
 }

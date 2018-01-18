@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.SearchBookBean;
 
 import java.io.File;
 import java.util.HashMap;
@@ -258,7 +259,7 @@ public class MoProgressHUD {
 
     ////////////////////换源////////////////////////////
     public interface OnClickSource{
-        void changeSource(String noteUrlChanged);
+        void changeSource(SearchBookBean searchBookBean);
     }
     public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource){
         initCenter();
