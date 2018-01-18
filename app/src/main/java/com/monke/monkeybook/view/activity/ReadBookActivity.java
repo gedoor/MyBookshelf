@@ -483,7 +483,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if (mPresenter.getBookShelf() != null) {
                 moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
                         noteUrlChanged -> {
-                    Toast.makeText(this, noteUrlChanged, Toast.LENGTH_LONG).show();
+                    mPresenter.changeBookSource(noteUrlChanged);
                 });
             }
         });

@@ -40,5 +40,5 @@ public interface IReadBookPresenter extends IPresenter {
 
     void addDownload(int start, int end);
 
-    void changeBookSource();
+    void changeBookSource(String noteUrl);
 }

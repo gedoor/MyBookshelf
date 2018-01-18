@@ -381,8 +381,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         });
     }
 
+    /**
+     * 换源
+     */
     @Override
-    public void changeBookSource() {
+    public void changeBookSource(String noteUrl) {
 
     }
 
