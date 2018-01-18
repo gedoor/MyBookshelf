@@ -32,6 +32,7 @@ import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
@@ -399,10 +400,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         changedShelfBean.getBookInfoBean().setOrigin(searchBookBean.getOrigin());
         WebBookModelImpl.getInstance().getChapterList(changedShelfBean, new OnGetChapterListListener() {
             @Override
-            public void doOnNext(BookShelfBean bookShelfBean) {
+            public void success(BookShelfBean bookShelfBean) {
 
             }
 
+            @Override
+            public void error() {
+
+            }
+        });
+    }
+
+    private void saveChangedBook(BookShelfBean bookShelfBean) {
+        WebBookModelImpl.getInstance().getChapterList(bookShelfBean, new OnGetChapterListListener() {
             @Override
             public void success(BookShelfBean bookShelfBean) {
 
