@@ -27,7 +27,9 @@ public class ChangeSourceView {
     private ImageButton ibRefresh;
     private RecyclerView rvSource;
 
+    private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
+    private MoProgressHUD.OnClickSource onClickSource;
     private Context context;
     private ChangeSourceAdapter adapter;
     private SearchBook searchBook;
@@ -46,6 +48,10 @@ public class ChangeSourceView {
         adapter = new ChangeSourceAdapter();
         rvSource.setLayoutManager(new LinearLayoutManager(context));
         rvSource.setAdapter(adapter);
+        adapter.setOnItemClickListener((view, noteUrl) -> {
+            moProgressHUD.dismiss();
+            onClickSource.changeSource(noteUrl);
+        });
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook(List<SearchBookBean> value) {
@@ -84,7 +90,9 @@ public class ChangeSourceView {
         });
     }
 
-    void showChangeSource(BookShelfBean bookShelf, final MoProgressHUD.OnClickSource clickSource, View.OnClickListener cancel) {
+    void showChangeSource(BookShelfBean bookShelf, final MoProgressHUD.OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
+        this.moProgressHUD = moProgressHUD;
+        this.onClickSource = onClickSource;
         bookShelfS.add(bookShelf);
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();

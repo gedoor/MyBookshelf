@@ -20,8 +20,9 @@ import java.util.List;
  * 书源Adapter
  */
 
-public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapter.MyViewHolder> {
+public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapter.MyViewHolder> implements View.OnClickListener{
     private List<SearchBookBean> searchBookBeans = new ArrayList<>();
+    private OnItemClickListener mOnItemClickListener;
 
     public void addSourceAdapter(List<SearchBookBean> value, String bookName) {
         if (value.get(0).getName().equals(bookName)) {
@@ -42,13 +43,31 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     }
 
     @Override
+    public void onClick(View view) {
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取position
+            mOnItemClickListener.onItemClick(view,(String)view.getTag());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view , String noteUrl);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false);
+        view.setOnClickListener(this);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        holder.itemView.setTag(searchBookBeans.get(position).getNoteUrl());
         holder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
         if (searchBookBeans.get(position).getAdd()) {
             holder.ivChecked.setVisibility(View.VISIBLE);

@@ -265,9 +265,9 @@ public class MoProgressHUD {
         initAnimation();
         canBack = true;
         rootView.setBackgroundColor(Color.parseColor("#00000000"));
-        rootView.setOnClickListener(v -> dismiss());
+            rootView.setOnClickListener(v -> dismiss());
         ChangeSourceView.getInstance(mSharedView)
-                .showChangeSource(bookShelf, clickSource, v -> dismiss());
+                .showChangeSource(bookShelf, clickSource, this);
         if (!isShowing()) {
             onAttached();
         }
