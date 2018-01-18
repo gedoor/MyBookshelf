@@ -240,6 +240,11 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
                     public void onNext(BookShelfBean value) {
                         WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
                             @Override
+                            public void doOnNext(BookShelfBean bookShelfBean) {
+
+                            }
+
+                            @Override
                             public void success(BookShelfBean bookShelfBean) {
                                 saveBookToShelf(bookShelfBean);
                             }

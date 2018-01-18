@@ -116,6 +116,11 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                     public void onNext(BookShelfBean value) {
                         WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
                             @Override
+                            public void doOnNext(BookShelfBean bookShelfBean) {
+
+                            }
+
+                            @Override
                             public void success(BookShelfBean bookShelfBean) {
                                 if (openFrom == FROM_BOOKSHELF) {
                                     int durChapter = bookShelf.getDurChapter();

@@ -184,6 +184,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             int chapterSize = value.get(index).getBookInfoBean().getChapterList().size();
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override
+                public void doOnNext(BookShelfBean bookShelfBean) {
+
+                }
+
+                @Override
                 public void success(BookShelfBean bookShelfBean) {
                     boolean hasUpdate = chapterSize < value.get(index).getBookInfoBean().getChapterList().size();
                     saveBookToShelf(value, index, hasUpdate);

@@ -399,6 +399,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         changedShelfBean.getBookInfoBean().setOrigin(searchBookBean.getOrigin());
         WebBookModelImpl.getInstance().getChapterList(changedShelfBean, new OnGetChapterListListener() {
             @Override
+            public void doOnNext(BookShelfBean bookShelfBean) {
+
+            }
+
+            @Override
             public void success(BookShelfBean bookShelfBean) {
 
             }
