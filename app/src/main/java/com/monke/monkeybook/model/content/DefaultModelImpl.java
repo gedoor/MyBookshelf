@@ -24,6 +24,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -153,6 +154,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 .create(IZwduApi.class)
                 .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyChapterList(s, bookShelfBean))
+                .doOnNext(bookShelfBeanWebChapterBean -> {
+                    if (getChapterListListener != null) {
+                        getChapterListListener.doOnNext(bookShelfBeanWebChapterBean.getData());
+                    }
+                })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
