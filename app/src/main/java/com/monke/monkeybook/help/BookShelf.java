@@ -1,6 +1,7 @@
 package com.monke.monkeybook.help;
 
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 
 import java.util.ArrayList;
@@ -12,6 +13,16 @@ import java.util.List;
  */
 
 public class BookShelf {
+
+    public static BookShelfBean getBook(String bookUrl) {
+        List<BookShelfBean> bookShelfBeanS = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl)).build().list();
+        if (!(bookShelfBeanS == null || bookShelfBeanS.size() == 0)) {
+            return bookShelfBeanS.get(0);
+        } else {
+            return null;
+        }
+    }
 
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());

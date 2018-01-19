@@ -63,6 +63,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
+    private String oldBookUrl;
 
     public ReadBookPresenterImpl() {
 
@@ -75,10 +76,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (open_from == OPEN_FROM_APP) {
             String noteUrl = mView.getNoteUrl();
             if (noteUrl != null && !noteUrl.isEmpty()) {
-                List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
-                if (!(temp == null || temp.size() == 0)) {
-                    bookShelf = temp.get(0);
-                }
+                bookShelf = BookShelf.getBook(noteUrl);
             }
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
@@ -395,6 +393,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
+        oldBookUrl = bookShelf.getNoteUrl();
         BookShelfBean changedShelfBean = bookShelf;
         changedShelfBean.setTag(searchBookBean.getTag());
         changedShelfBean.setNoteUrl(searchBookBean.getNoteUrl());
@@ -431,6 +430,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         mView.getCsvBook().setInitData(value.getDurChapter(),
                                 value.getBookInfoBean().getChapterList().size(),
                                 BookContentView.DurPageIndexBegin);
+                        delBook(oldBookUrl);
                     }
 
                     @Override
@@ -439,6 +439,29 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         mView.getCsvBook().loadError();
                     }
                 });
+    }
+
+    private void delBook(String bookUrl) {
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            BookShelfBean bookShelfBean = BookShelf.getBook(bookUrl);
+            if (bookShelfBean != null) {
+                BookShelf.removeFromBookShelf(bookShelfBean);
+                e.onNext(bookShelf);
+            }
+            e.onComplete();
+        }).subscribeOn(Schedulers.newThread())
+                .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onNext(BookShelfBean value) {
+                        RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+
     }
 
     @Override
