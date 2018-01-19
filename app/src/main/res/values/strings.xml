@@ -88,4 +88,5 @@
     <string name="send_mail">发送邮件</string>
     <string name="can_not_open">无法打开</string>
     <string name="no_chapter">无章节</string>
+    <string name="add_book_url">添加网址</string>
 </resources>

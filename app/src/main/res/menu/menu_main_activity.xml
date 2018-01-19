@@ -7,7 +7,13 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/action_search"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_add_url"
+        android:title="@string/add_book_url"
+        android:icon="@drawable/ic_add_black_24dp"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_download"
