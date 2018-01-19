@@ -16,8 +16,10 @@ import java.util.List;
  */
 @Entity
 public class BookContentBean implements Parcelable{
+    private String noteUrl; //对应BookInfoBean noteUrl;
+
     @Id
-    private String durChapterUrl; //对应BookInfoBean noteUrl;
+    private String durChapterUrl;
 
     private int durChapterIndex;   //当前章节  （包括番外）
 
@@ -53,11 +55,13 @@ public class BookContentBean implements Parcelable{
         tag = in.readString();
         lineContent = in.createStringArrayList();
         isRight = in.readByte()!=0;
+        noteUrl = in.readString();
     }
 
-    @Generated(hash = 1355824386)
-    public BookContentBean(String durChapterUrl, int durChapterIndex,
+    @Generated(hash = 1068921697)
+    public BookContentBean(String noteUrl, String durChapterUrl, int durChapterIndex,
             String durCapterContent, String tag) {
+        this.noteUrl = noteUrl;
         this.durChapterUrl = durChapterUrl;
         this.durChapterIndex = durChapterIndex;
         this.durCapterContent = durCapterContent;
@@ -72,6 +76,7 @@ public class BookContentBean implements Parcelable{
         dest.writeString(tag);
         dest.writeStringList(lineContent);
         dest.writeByte((byte) (isRight ? 1 : 0));
+        dest.writeString(noteUrl);
     }
 
     @Override
@@ -140,5 +145,13 @@ public class BookContentBean implements Parcelable{
 
     public void setRight(Boolean right) {
         isRight = right;
+    }
+
+    public String getNoteUrl() {
+        return this.noteUrl;
+    }
+
+    public void setNoteUrl(String noteUrl) {
+        this.noteUrl = noteUrl;
     }
 }

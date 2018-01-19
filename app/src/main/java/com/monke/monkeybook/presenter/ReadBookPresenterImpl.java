@@ -192,8 +192,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                             getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(bookContentBean -> {
                                         if (bookContentBean.getRight()) {
                                             //添加章节名称
-                                            bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterList(chapterIndex)
-                                                    .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
+                                            bookContentBean.setDurCapterContent(String.format("%s\r\n%s",
+                                                    bookShelf.getBookInfoBean().getChapterList(chapterIndex).getDurChapterName(),
+                                                    bookContentBean.getDurCapterContent()));
+                                            bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
                                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                                             bookShelf.getBookInfoBean().getChapterList(chapterIndex).setHasCache(true);
                                             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
@@ -252,8 +254,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
                             if (bookContentBean.getRight()) {
                                 //添加章节名称
-                                bookContentBean.setDurCapterContent(bookShelf.getBookInfoBean().getChapterList(nextIndex)
-                                        .getDurChapterName() + "\r\n" + bookContentBean.getDurCapterContent());
+                                bookContentBean.setDurCapterContent(String.format("%s\r\n%s",
+                                        bookShelf.getBookInfoBean().getChapterList(nextIndex).getDurChapterName(),
+                                        bookContentBean.getDurCapterContent()));
+                                bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
                                 DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                                 bookShelf.getBookInfoBean().getChapterList(nextIndex).setHasCache(true);
                                 DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
