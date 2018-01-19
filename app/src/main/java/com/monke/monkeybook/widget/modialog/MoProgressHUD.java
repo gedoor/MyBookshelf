@@ -276,6 +276,26 @@ public class MoProgressHUD {
     }
     //////////////////////////////////////////////////////////
 
+    ////////////////////添加书籍地址////////////////////////////
+    public interface OnPutBookUrl {
+        void addBookUrl(String bookUrl);
+    }
+
+    public void showPutBookUrl(BookShelfBean bookShelf, OnClickSource clickSource) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setBackgroundColor(Color.parseColor("#00000000"));
+        rootView.setOnClickListener(v -> dismiss());
+        ChangeSourceView.getInstance(mSharedView)
+                .showChangeSource(bookShelf, clickSource, this);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+    //////////////////////////////////////////////////////////
+
     public Boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isShowing() && canBack) {
