@@ -109,7 +109,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
             Matcher m = p.matcher(line);
             if (m.find()) {
                 String temp = line.trim().substring(0, line.trim().indexOf("第"));
-                if (temp != null && temp.trim().length() > 0) {
+                if (temp.trim().length() > 0) {
                     contentBuilder.append(temp);
                 }
                 if (contentBuilder.toString().length() > 0) {
