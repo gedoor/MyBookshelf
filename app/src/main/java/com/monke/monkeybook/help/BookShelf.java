@@ -29,7 +29,6 @@ public class BookShelf {
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterList());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-        //网络数据获取成功  存入BookShelf表数据库
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
     }
 }
