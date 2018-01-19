@@ -9,6 +9,7 @@ import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.impl.IImportBookModel;
 
@@ -44,15 +45,13 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 md.update(buffer, 0, len);
             }
             in.close();
-            in = null;
 
             String md5 = new BigInteger(1, md.digest()).toString(16);
             BookShelfBean bookShelfBean;
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(md5)).build().list();
+            bookShelfBean = BookShelf.getBook(md5);
             Boolean isNew = true;
-            if (temp != null && temp.size() > 0) {
+            if (bookShelfBean != null) {
                 isNew = false;
-                bookShelfBean = temp.get(0);
                 bookShelfBean.setBookInfoBean(DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder().where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).build().list().get(0));
             } else {
                 bookShelfBean = new BookShelfBean();
@@ -79,25 +78,6 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         });
     }
 
-    private Boolean isAdded(BookShelfBean temp, List<BookShelfBean> shelfs) {
-        if (shelfs == null || shelfs.size() == 0) {
-            return false;
-        } else {
-            int a = 0;
-            for (int i = 0; i < shelfs.size(); i++) {
-                if (temp.getNoteUrl().equals(shelfs.get(i).getNoteUrl())) {
-                    break;
-                } else {
-                    a++;
-                }
-            }
-            if (a == shelfs.size()) {
-                return false;
-            } else
-                return true;
-        }
-    }
-
     private void saveChapter(File book, String md5) throws IOException {
         String regex = "第.{1,7}章.{0,}";
 
@@ -115,7 +95,6 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         if (encoding == null || encoding.length() == 0)
             encoding = "utf-8";
         fis.close();
-        fis = null;
 
         int chapterPageIndex = 0;
         String title = null;
@@ -155,12 +134,10 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         if (contentBuilder.length() > 0) {
             saveDurChapterContent(md5, chapterPageIndex, title, contentBuilder.toString());
             contentBuilder.delete(0, contentBuilder.length());
-            title = null;
         }
         buffreader.close();
         inputreader.close();
         fis.close();
-        fis = null;
     }
 
     private void saveDurChapterContent(String md5, int chapterPageIndex, String name, String content) {
