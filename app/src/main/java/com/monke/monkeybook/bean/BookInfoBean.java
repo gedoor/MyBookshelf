@@ -139,7 +139,11 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public List<ChapterListBean> getChapterList() {
-        return chapterList;
+        if (chapterList == null) {
+            return new ArrayList<>();
+        } else {
+            return chapterList;
+        }
     }
 
     public ChapterListBean getChapterList(int index) {

@@ -5,7 +5,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -24,8 +28,9 @@ import java.util.List;
 
 public class ChangeSourceView {
     private TextView atvTitle;
-    private ImageButton ibRefresh;
+    private ImageView ivRefresh;
     private RecyclerView rvSource;
+    private RotateAnimation rotateAnimation;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -62,7 +67,7 @@ public class ChangeSourceView {
 
             @Override
             public void refreshFinish(Boolean value) {
-
+                rotateAnimation.cancel();
             }
 
             @Override
@@ -101,7 +106,7 @@ public class ChangeSourceView {
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
         atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
-        ibRefresh.setOnClickListener(view -> {
+        ivRefresh.setOnClickListener(view -> {
         });
         long startThisSearchTime = System.currentTimeMillis();
         searchBook.setSearchTime(startThisSearchTime);
@@ -114,7 +119,19 @@ public class ChangeSourceView {
         LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_change_source, moProgressView, true);
 
         atvTitle = moProgressView.findViewById(R.id.atv_title);
-        ibRefresh = moProgressView.findViewById(R.id.iv_refresh);
+        ivRefresh = moProgressView.findViewById(R.id.iv_refresh);
         rvSource = moProgressView.findViewById(R.id.rv_book_source_list);
+
+        setRefreshAnimation();
+        rotateAnimation.startNow();
+    }
+
+    private void setRefreshAnimation() {
+        rotateAnimation = new RotateAnimation(0, 359,
+                Animation.RELATIVE_TO_SELF,0.5f,
+                Animation.RELATIVE_TO_SELF,0.5f);
+        rotateAnimation.setDuration(500);
+        rotateAnimation.setRepeatCount(Animation.INFINITE);
+        ivRefresh.setAnimation(rotateAnimation);
     }
 }

@@ -21,7 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/atv_title"
@@ -36,7 +37,7 @@
                 android:textColor="#343434"
                 android:gravity="center|start"/>
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/iv_refresh"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
