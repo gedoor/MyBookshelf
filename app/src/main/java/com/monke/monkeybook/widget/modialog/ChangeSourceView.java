@@ -55,7 +55,9 @@ public class ChangeSourceView {
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook(List<SearchBookBean> value) {
-                adapter.addSourceAdapter(value, bookName);
+                if (value.size() > 0) {
+                    adapter.addSourceAdapter(value, bookName);
+                }
             }
 
             @Override
@@ -75,7 +77,9 @@ public class ChangeSourceView {
 
             @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
-                adapter.addSourceAdapter(value, bookName);
+                if (value.size() > 0) {
+                    adapter.addSourceAdapter(value, bookName);
+                }
             }
 
             @Override
