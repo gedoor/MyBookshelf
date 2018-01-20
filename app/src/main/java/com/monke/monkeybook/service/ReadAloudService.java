@@ -126,7 +126,7 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (content == null){
+        if (content == null) {
             stopSelf();
             return;
         }
@@ -239,7 +239,7 @@ public class ReadAloudService extends Service {
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private  PendingIntent getThisServicePendingIntent(String actionStr) {
+    private PendingIntent getThisServicePendingIntent(String actionStr) {
         Intent intent = new Intent(this, this.getClass());
         intent.setAction(actionStr);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -280,7 +280,9 @@ public class ReadAloudService extends Service {
 
     public interface AloudServiceListener {
         void stopService();
+
         void readAloudNext();
+
         void showMassage(String msg);
     }
 
@@ -331,16 +333,9 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                int result = textToSpeech.setLanguage(Locale.CHINESE);
-                if (result == TextToSpeech.LANG_MISSING_DATA ||
-                        result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    aloudServiceListener.showMassage("TTS没有中文语言");
-                    doneService();
-                } else {
-                    textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                    ttsInitSuccess = true;
-                    playTTS();
-                }
+                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                ttsInitSuccess = true;
+                playTTS();
             } else {
                 aloudServiceListener.showMassage("TTS初始化失败");
                 doneService();
@@ -380,7 +375,7 @@ public class ReadAloudService extends Service {
         } else {
             request = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
-        return ( request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        return (request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
