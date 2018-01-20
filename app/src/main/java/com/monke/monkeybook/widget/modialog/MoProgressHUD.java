@@ -50,13 +50,15 @@ public class MoProgressHUD {
         inAnim = getInAnimation();
         outAnim = getOutAnimation();
     }
-    private void initFromTopRight(){
-        inAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_in_top_right);
-        outAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_out_top_right);
+
+    private void initFromTopRight() {
+        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_in_top_right);
+        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_out_top_right);
     }
-    private void initFromBottomRight(){
-        inAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_in_bottom_right);
-        outAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_out_bottom_right);
+
+    private void initFromBottomRight() {
+        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_in_bottom_right);
+        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_out_bottom_right);
     }
 
     private void initFromBottomAnimation() {
@@ -66,33 +68,33 @@ public class MoProgressHUD {
 
     private void initCenter() {
         mSharedView.setGravity(Gravity.CENTER);
-        if(mSharedView != null){
+        if (mSharedView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
+            if (layoutParams != null) {
                 layoutParams.setMargins(0, 0, 0, 0);
                 mSharedView.setLayoutParams(layoutParams);
             }
-            mSharedView.setPadding(0,0,0,0);
+            mSharedView.setPadding(0, 0, 0, 0);
         }
     }
 
     private void initBottom() {
         mSharedView.setGravity(Gravity.BOTTOM);
-        if(mSharedView != null){
+        if (mSharedView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
+            if (layoutParams != null) {
                 layoutParams.setMargins(0, 0, 0, 0);
                 mSharedView.setLayoutParams(layoutParams);
             }
-            mSharedView.setPadding(0,0,0,0);
+            mSharedView.setPadding(0, 0, 0, 0);
         }
     }
 
     private void initMarRightTop() {
         mSharedView.setGravity(Gravity.RIGHT | Gravity.TOP);
-        if(mSharedView != null){
+        if (mSharedView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
+            if (layoutParams != null) {
                 layoutParams.setMargins(0, 0, 0, 0);
                 mSharedView.setLayoutParams(layoutParams);
             }
@@ -108,6 +110,7 @@ public class MoProgressHUD {
         );
         rootView.setLayoutParams(layoutParams);
         rootView.setClickable(true);
+        rootView.setBackgroundColor(context.getResources().getColor(R.color.btn_bg_press_tp));
 
         mSharedView = new MoProgressView(context);
 
@@ -239,14 +242,14 @@ public class MoProgressHUD {
     }
 
     ////////////////////离线章节选择////////////////////////////
-    public interface OnClickDownload{
+    public interface OnClickDownload {
         void download(int start, int end);
     }
-    public void showDownloadList(int startIndex, int endIndex,int all, OnClickDownload clickDownload){
+
+    public void showDownloadList(int startIndex, int endIndex, int all, OnClickDownload clickDownload) {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(v -> dismiss());
         DownLoadView.getInstance(mSharedView)
                 .showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
@@ -258,15 +261,15 @@ public class MoProgressHUD {
     //////////////////////////////////////////////////////////
 
     ////////////////////换源////////////////////////////
-    public interface OnClickSource{
+    public interface OnClickSource {
         void changeSource(SearchBookBean searchBookBean);
     }
-    public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource){
+
+    public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource) {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
-            rootView.setOnClickListener(v -> dismiss());
+        rootView.setOnClickListener(v -> dismiss());
         ChangeSourceView.getInstance(mSharedView)
                 .showChangeSource(bookShelf, clickSource, this);
         if (!isShowing()) {
@@ -281,14 +284,13 @@ public class MoProgressHUD {
         void addBookUrl(String bookUrl);
     }
 
-    public void showPutBookUrl(BookShelfBean bookShelf, OnClickSource clickSource) {
+    public void showPutBookUrl(OnPutBookUrl onPutBookUrl) {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(v -> dismiss());
-        ChangeSourceView.getInstance(mSharedView)
-                .showChangeSource(bookShelf, clickSource, this);
+        EditBookUrlView.getInstance(mSharedView)
+                .showEditBookUrl(onPutBookUrl, this);
         if (!isShowing()) {
             onAttached();
         }

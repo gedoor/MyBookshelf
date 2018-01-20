@@ -184,6 +184,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 startActivityByAnim(new Intent(this, SearchActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
+            case R.id.action_add_url:
+                moProgressHUD.showPutBookUrl(bookUrl -> {
+                    Toast.makeText(this, bookUrl, Toast.LENGTH_LONG).show();
+                });
+                break;
             case R.id.action_download:
                 downloadListPop.showAsDropDown(toolbar);
                 break;
@@ -261,6 +266,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             return true;
         });
     }
+
     //备份
     private void backup() {
         if (EasyPermissions.hasPermissions(this, perms)) {
@@ -278,6 +284,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     BACKUP_RESULT, perms);
         }
     }
+
     //恢复
     private void restore() {
         if (EasyPermissions.hasPermissions(this, perms)) {
@@ -381,15 +388,20 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawers();
+        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        if (mo) {
+            return true;
+        } else {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawers();
+                    return true;
+                }
+                exit();
                 return true;
             }
-            exit();
-            return true;
+            return super.onKeyDown(keyCode, event);
         }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
