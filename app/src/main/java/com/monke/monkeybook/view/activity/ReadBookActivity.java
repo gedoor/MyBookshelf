@@ -158,19 +158,20 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             noteUrl = savedInstanceState.getString("noteUrl");
         }
         super.onCreate(savedInstanceState);
-        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
     }
 
     @Override
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
+        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(newReadAloudAction);
         readBookControl = ReadBookControl.getInstance();
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+        hideStatusBar(hideStatusBar);
     }
 
     @Override
@@ -185,7 +186,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            hideStatusBar(hideStatusBar);
             hideNavigationBar();
         }
     }
