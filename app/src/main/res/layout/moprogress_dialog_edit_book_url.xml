@@ -22,7 +22,7 @@
             android:layout_margin="5dp" />
 
         <TextView
-            android:id="@+id/tv_done"
+            android:id="@+id/tv_ok"
             android:text="@string/ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

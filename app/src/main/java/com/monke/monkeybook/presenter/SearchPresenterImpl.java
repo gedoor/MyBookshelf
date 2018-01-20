@@ -36,7 +36,6 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
     private Boolean hasSearch = false;   //判断是否搜索过
 
-    private int page = 1;
     private long startThisSearchTime;
     private String durSearchKey;
 
@@ -204,12 +203,12 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
     @Override
     public int getPage() {
-        return page;
+        return searchBook.getPage();
     }
 
     @Override
     public void initPage() {
-        this.page = 1;
+        searchBook.setPage(1);
     }
 
     @Override

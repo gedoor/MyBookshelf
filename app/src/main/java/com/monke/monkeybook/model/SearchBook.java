@@ -19,6 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBook {
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS;
+
     private int page = 1;
 
     private OnSearchListener searchListener;
@@ -162,6 +163,14 @@ public class SearchBook {
                 }
             }
         }
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     private class SearchEngine {

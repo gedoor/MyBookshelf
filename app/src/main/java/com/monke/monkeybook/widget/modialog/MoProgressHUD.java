@@ -140,6 +140,7 @@ public class MoProgressHUD {
     public void dismiss() {
         //消失动画
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
+            hideIMM(rootView);
             if (!isFinishing) {
                 new Handler().post(() -> {
                     outAnim.setAnimationListener(outAnimListener);
@@ -178,6 +179,12 @@ public class MoProgressHUD {
             });
         }
         isFinishing = false;
+    }
+
+    //隐藏输入法
+    private void hideIMM(View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     //转圈的载入
