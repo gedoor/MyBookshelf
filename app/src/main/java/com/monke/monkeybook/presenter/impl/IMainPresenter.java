@@ -9,4 +9,6 @@ public interface IMainPresenter extends IPresenter{
     void backupBookShelf();
 
     void restoreBookShelf();
+
+    void addBookUrl(String bookUrl);
 }

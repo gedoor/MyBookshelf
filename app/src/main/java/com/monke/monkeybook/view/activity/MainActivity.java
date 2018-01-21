@@ -186,7 +186,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 break;
             case R.id.action_add_url:
                 moProgressHUD.showPutBookUrl(bookUrl -> {
-                    Toast.makeText(this, bookUrl, Toast.LENGTH_LONG).show();
+                    mPresenter.addBookUrl(bookUrl);
                 });
                 break;
             case R.id.action_download:
