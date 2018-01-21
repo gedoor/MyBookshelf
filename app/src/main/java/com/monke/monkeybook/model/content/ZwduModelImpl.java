@@ -42,7 +42,6 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);
     }
 
-
     /**
      * 搜索
      */
