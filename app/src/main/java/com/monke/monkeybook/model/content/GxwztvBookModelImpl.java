@@ -2,7 +2,6 @@
 package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.impl.BaseModelImpl;
-import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -14,9 +13,10 @@ import com.monke.monkeybook.bean.LibraryNewBookBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.cache.ACache;
-import com.monke.monkeybook.common.api.IGxwztvApi;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
+import com.monke.monkeybook.model.ErrorAnalyContentManager;
+import com.monke.monkeybook.model.impl.IGetWebApi;
 import com.monke.monkeybook.model.impl.IGxwztvBookModel;
 import com.monke.monkeybook.presenter.LibraryPresenterImpl;
 
@@ -32,7 +32,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookModel {
     public static final String TAG = "http://www.gxwztv.com";
@@ -42,13 +43,20 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return new GxwztvBookModelImpl();
     }
 
+    private interface Get {
+        @GET("/search.htm")
+        Observable<String> searchBook(@Query("keyword") String content, @Query("pn") int page);
+    }
 
     /**
      * 获取主页信息
      */
     @Override
     public Observable<LibraryBean> getLibraryData(final ACache aCache) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getLibraryData("").flatMap(s -> {
+        return getRetrofitObject(TAG)
+                .create(IGetWebApi.class)
+                .getWebContent("")
+                .flatMap(s -> {
             if (s != null && s.length() > 0 && aCache != null) {
                 aCache.put(LibraryPresenterImpl.LIBRARY_CACHE_KEY, s);
             }
@@ -139,7 +147,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         return getRetrofitObject(TAG)
-                .create(IGxwztvApi.class)
+                .create(Get.class)
                 .searchBook(content, page)
                 .flatMap(this::analySearchBook);
     }
@@ -180,7 +188,10 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG).create(IGxwztvApi.class).getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, "")).flatMap(s -> analyBookInfo(s, bookShelfBean));
+        return getRetrofitObject(TAG)
+                .create(IGetWebApi.class)
+                .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
+                .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
@@ -220,8 +231,10 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        getRetrofitObject(TAG).create(IGxwztvApi.class).getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl()
-                .replace(TAG, "")).flatMap(s -> analyChapterList(s, bookShelfBean))
+        getRetrofitObject(TAG)
+                .create(IGetWebApi.class)
+                .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
+                .flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -275,8 +288,8 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitObject(TAG)
-                .create(IGxwztvApi.class)
-                .getBookContent(durChapterUrl.replace(TAG, ""))
+                .create(IGetWebApi.class)
+                .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
@@ -322,8 +335,8 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
         return getRetrofitObject(GxwztvBookModelImpl.TAG)
-                .create(IGxwztvApi.class)
-                .getKindBooks(url.replace(GxwztvBookModelImpl.TAG, ""))
+                .create(IGetWebApi.class)
+                .getWebContent(url.replace(GxwztvBookModelImpl.TAG, ""))
                 .flatMap(this::analySearchBook);
     }
 }

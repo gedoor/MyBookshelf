@@ -2,7 +2,6 @@
 package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.impl.BaseModelImpl;
-import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -10,8 +9,9 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
-import com.monke.monkeybook.common.api.IZwduApi;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
+import com.monke.monkeybook.model.ErrorAnalyContentManager;
+import com.monke.monkeybook.model.impl.IGetWebApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import org.jsoup.Jsoup;
@@ -26,6 +26,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "https://www.zwdu.com";
@@ -35,13 +37,19 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         return new ZwduModelImpl();
     }
 
+    private interface Get {
+        @GET("/search.php")
+        Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);
+    }
+
+
     /**
      * 搜索
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         return getRetrofitString(TAG)
-                .create(IZwduApi.class)
+                .create(Get.class)
                 .searchBook(content, page)
                 .flatMap(this::analySearchBook);
     }
@@ -91,8 +99,8 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         return getRetrofitString(TAG)
-                .create(IZwduApi.class)
-                .getBookInfo(bookShelfBean.getNoteUrl().replace(TAG, ""))
+                .create(IGetWebApi.class)
+                .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyBookInfo(s, bookShelfBean));
     }
 
@@ -143,8 +151,8 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitString(TAG)
-                .create(IZwduApi.class)
-                .getChapterList(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
+                .create(IGetWebApi.class)
+                .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -199,8 +207,8 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitString(TAG)
-                .create(IZwduApi.class)
-                .getBookContent(durChapterUrl.replace(TAG, ""))
+                .create(IGetWebApi.class)
+                .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
     }
 
