@@ -136,7 +136,7 @@ public class ChapterListView extends FrameLayout {
     }
 
     public Boolean hasData() {
-        return (changeListener != null);
+        return (changeListener != null && bookShelfBean != null);
     }
 
     public interface OnItemClickListener {
