@@ -1,7 +1,7 @@
 package com.monke.monkeybook.presenter;
 
 import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.impl.BasePresenterImpl;
+import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceManageView;

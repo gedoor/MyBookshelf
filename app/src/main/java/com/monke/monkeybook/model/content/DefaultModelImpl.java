@@ -1,6 +1,6 @@
 package com.monke.monkeybook.model.content;
 
-import com.monke.basemvplib.impl.BaseModelImpl;
+import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;

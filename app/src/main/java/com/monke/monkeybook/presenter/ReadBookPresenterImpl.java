@@ -16,14 +16,13 @@ import android.text.TextPaint;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.impl.BaseActivity;
-import com.monke.basemvplib.impl.BasePresenterImpl;
+import com.monke.basemvplib.BaseActivity;
+import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
@@ -48,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

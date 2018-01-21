@@ -4,11 +4,10 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.monke.basemvplib.IPresenter;
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 

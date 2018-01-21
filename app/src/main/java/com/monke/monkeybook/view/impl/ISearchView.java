@@ -2,7 +2,8 @@
 package com.monke.monkeybook.view.impl;
 
 import android.widget.EditText;
-import com.monke.basemvplib.IView;
+
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;

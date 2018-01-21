@@ -2,7 +2,6 @@ package com.monke.basemvplib;
 
 import android.app.Activity;
 
-import com.monke.basemvplib.impl.BaseActivity;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;

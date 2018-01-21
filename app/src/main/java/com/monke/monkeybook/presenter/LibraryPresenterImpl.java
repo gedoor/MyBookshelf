@@ -2,7 +2,8 @@
 package com.monke.monkeybook.presenter;
 
 import android.os.Handler;
-import com.monke.basemvplib.impl.BasePresenterImpl;
+
+import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LibraryBean;

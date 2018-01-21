@@ -1,6 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
-import com.monke.basemvplib.IPresenter;
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.base.MBaseActivity;
 
 /**

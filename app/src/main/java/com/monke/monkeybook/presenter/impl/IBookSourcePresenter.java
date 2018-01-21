@@ -1,6 +1,6 @@
 package com.monke.monkeybook.presenter.impl;
 
-import com.monke.basemvplib.IPresenter;
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.BookSourceBean;
 
 import java.util.List;

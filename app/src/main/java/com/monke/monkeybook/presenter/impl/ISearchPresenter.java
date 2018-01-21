@@ -1,7 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter.impl;
 
-import com.monke.basemvplib.IPresenter;
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface ISearchPresenter extends IPresenter{

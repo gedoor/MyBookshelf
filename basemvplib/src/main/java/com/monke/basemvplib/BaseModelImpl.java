@@ -1,6 +1,4 @@
-package com.monke.basemvplib.impl;
-
-import com.monke.basemvplib.EncodeConverter;
+package com.monke.basemvplib;
 
 import java.util.concurrent.TimeUnit;
 

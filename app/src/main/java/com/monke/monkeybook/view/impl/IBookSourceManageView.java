@@ -1,6 +1,6 @@
 package com.monke.monkeybook.view.impl;
 
-import com.monke.basemvplib.IView;
+import com.monke.basemvplib.impl.IView;
 
 /**
  * Created by GKF on 2017/12/18.

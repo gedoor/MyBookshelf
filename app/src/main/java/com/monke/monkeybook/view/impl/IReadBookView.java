@@ -2,7 +2,8 @@
 package com.monke.monkeybook.view.impl;
 
 import android.graphics.Paint;
-import com.monke.basemvplib.IView;
+
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 
 public interface IReadBookView extends IView {

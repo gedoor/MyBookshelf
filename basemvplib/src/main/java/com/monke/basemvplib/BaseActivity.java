@@ -1,4 +1,4 @@
-package com.monke.basemvplib.impl;
+package com.monke.basemvplib;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import com.monke.basemvplib.AppActivityManager;
-import com.monke.basemvplib.IPresenter;
-import com.monke.basemvplib.IView;
+import com.monke.basemvplib.impl.IPresenter;
+import com.monke.basemvplib.impl.IView;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActivity implements IView {

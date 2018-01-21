@@ -3,7 +3,7 @@ package com.monke.monkeybook.presenter;
 
 import android.os.Environment;
 import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.impl.BasePresenterImpl;
+import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.common.RxBusTag;
