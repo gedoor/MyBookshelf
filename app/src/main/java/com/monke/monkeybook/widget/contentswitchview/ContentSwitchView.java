@@ -263,7 +263,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             else state = PRE_AND_NEXT;
                         }
                     }
-                    afterOepnPage();
+                    afterOpenPage();
                 }
 
                 @Override
@@ -280,13 +280,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    private void afterOepnPage() {
+    private void afterOpenPage() {
         if (loadDataListener != null) {
             loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
-            if (readAloud && durPageView.getContent() != null) {
-                loadDataListener.readAloud(durPageView.getContent());
-            }
+            readAloud();
         }
     }
 
@@ -427,15 +425,15 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     @Override
     public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex) {
         if (null != getDurContentView() && bookContentView == getDurContentView() && chapterAll > 0 && pageAll > 0) {
+            readAloud();
+            loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
             updateOtherPage(durChapterIndex, chapterAll, durPageIndex, pageAll);
         }
     }
 
-    @Override
-    public void setReadAloud(BookContentView bookContentView, String content) {
-        loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
-        if (readAloud && null != getDurContentView() && bookContentView == getDurContentView()) {
-            loadDataListener.readAloud(content);
+    private void readAloud() {
+        if (readAloud && durPageView.getContent() != null) {
+            loadDataListener.readAloud(durPageView.getContent());
         }
     }
 

@@ -116,7 +116,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
-    private ReadBookControl readBookControl;
     private Intent readAloudIntent;
     private ServiceConnection conn = new ServiceConnection() {
         @Override
@@ -167,7 +166,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(newReadAloudAction);
-        readBookControl = ReadBookControl.getInstance();
+        ReadBookControl readBookControl = ReadBookControl.getInstance();
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -244,6 +243,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             } else {
                 atvTitle.setText("无章节");
             }
+            if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() == 1) {
+                tvPre.setEnabled(false);
+                tvNext.setEnabled(false);
+            } else {
+                if (chapterIndex == 1) {
+                    tvPre.setEnabled(false);
+                    tvNext.setEnabled(true);
+                } else if (chapterIndex == mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() - 1) {
+                    tvPre.setEnabled(true);
+                    tvNext.setEnabled(false);
+                } else {
+                    tvPre.setEnabled(true);
+                    tvNext.setEnabled(true);
+                }
+            }
         }
 
         @Override
@@ -269,9 +283,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         @Override
         public void setHpbReadProgress(int pageIndex, int pageAll) {
-            hpbReadProgress.setMaxProgress(pageAll);
-            if (hpbReadProgress.getDurProgress() != pageIndex + 1)
-                hpbReadProgress.setDurProgress(pageIndex + 1);
+            hpbReadProgress.setMaxProgress(pageAll - 1);
+            if (hpbReadProgress.getDurProgress() != pageIndex)
+                hpbReadProgress.setDurProgress(pageIndex);
         }
 
         @Override
@@ -425,13 +439,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void moveStopProgress(float dur) {
                 int realDur = (int) Math.ceil(dur);
-                if (realDur < 1) {
-                    realDur = 1;
-                }
-                if ((realDur - 1) != csvBook.getDurContentView().getDurPageIndex()) {
+                if ((realDur) != csvBook.getDurContentView().getDurPageIndex()) {
                     csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                             mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
-                            realDur - 1);
+                            realDur);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
@@ -439,21 +450,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setDurProgress(float dur) {
-                if (hpbReadProgress.getMaxProgress() == 1) {
-                    tvPre.setEnabled(false);
-                    tvNext.setEnabled(false);
-                } else {
-                    if (dur == 1) {
-                        tvPre.setEnabled(false);
-                        tvNext.setEnabled(true);
-                    } else if (dur == hpbReadProgress.getMaxProgress()) {
-                        tvPre.setEnabled(true);
-                        tvNext.setEnabled(false);
-                    } else {
-                        tvPre.setEnabled(true);
-                        tvNext.setEnabled(true);
-                    }
-                }
+
             }
         });
 

@@ -66,8 +66,6 @@ public class BookContentView extends FrameLayout {
 
     public interface SetDataListener {
         void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
-
-        void setReadAloud(BookContentView bookContentView, String content);
     }
 
     public BookContentView(Context context) {
@@ -162,7 +160,6 @@ public class BookContentView extends FrameLayout {
                 setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
             }
             finishLoading();
-            setDataListener.setReadAloud(this, content);
         }
     }
 
