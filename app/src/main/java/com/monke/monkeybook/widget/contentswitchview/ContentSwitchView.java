@@ -263,12 +263,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             else state = PRE_AND_NEXT;
                         }
                     }
-                    if (loadDataListener != null) {
-                        loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
-                    }
-                    if (readAloud && durPageView.getContent() != null) {
-                        loadDataListener.readAloud(durPageView.getContent());
-                    }
+                    afterOepnPage();
                 }
 
                 @Override
@@ -282,6 +277,16 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 }
             });
             tempAnim.start();
+        }
+    }
+
+    private void afterOepnPage() {
+        if (loadDataListener != null) {
+            loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
+            loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
+            if (readAloud && durPageView.getContent() != null) {
+                loadDataListener.readAloud(durPageView.getContent());
+            }
         }
     }
 
@@ -428,6 +433,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     @Override
     public void setReadAloud(BookContentView bookContentView, String content) {
+        loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
         if (readAloud && null != getDurContentView() && bookContentView == getDurContentView()) {
             loadDataListener.readAloud(content);
         }
@@ -465,6 +471,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         void initData(int lineCount);
 
         void showMenu();
+
+        void setHpbReadProgress(int pageIndex, int pageAll);
 
         void readAloud(String content);
     }

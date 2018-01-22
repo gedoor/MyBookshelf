@@ -244,8 +244,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             } else {
                 atvTitle.setText("无章节");
             }
-            if (hpbReadProgress.getDurProgress() != chapterIndex + 1)
-                hpbReadProgress.setDurProgress(chapterIndex + 1);
         }
 
         @Override
@@ -267,6 +265,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuBottom.startAnimation(menuBottomIn);
             hideStatusBar(false);
             hideNavigationBar();
+        }
+
+        @Override
+        public void setHpbReadProgress(int pageIndex, int pageAll) {
+            hpbReadProgress.setMaxProgress(pageAll);
+            if (hpbReadProgress.getDurProgress() != pageIndex + 1)
+                hpbReadProgress.setDurProgress(pageIndex + 1);
         }
 
         @Override
@@ -423,10 +428,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 if (realDur < 1) {
                     realDur = 1;
                 }
-                if ((realDur - 1) != mPresenter.getBookShelf().getDurChapter()) {
-                    csvBook.setInitData(realDur - 1,
+                if ((realDur - 1) != csvBook.getDurContentView().getDurPageIndex()) {
+                    csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                             mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
-                            BookContentView.DurPageIndexBegin);
+                            realDur - 1);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);

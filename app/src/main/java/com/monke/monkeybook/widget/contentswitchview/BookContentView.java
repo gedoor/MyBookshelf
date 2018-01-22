@@ -138,9 +138,7 @@ public class BookContentView extends FrameLayout {
 
     public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
-            if (setDataListener != null) {
-                setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
-            }
+
             if (contentLines == null) {
                 this.content = "";
             } else {
@@ -160,6 +158,9 @@ public class BookContentView extends FrameLayout {
             tvContent.setText(this.content);
             tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
+            if (setDataListener != null) {
+                setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
+            }
             finishLoading();
             setDataListener.setReadAloud(this, content);
         }

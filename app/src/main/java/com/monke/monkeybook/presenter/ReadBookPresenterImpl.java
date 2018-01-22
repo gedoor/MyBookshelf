@@ -494,7 +494,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     @Override
                     public void onNext(Boolean value) {
                         mView.initPop();
-                        mView.setHpbReadProgressMax(bookShelf.getBookInfoBean().getChapterList().size());
+                        mView.setHpbReadProgressMax(0);
                         mView.startLoadingBook();
                     }
 
