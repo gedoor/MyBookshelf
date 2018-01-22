@@ -74,6 +74,7 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl = ReadBookControl.getInstance();
         updateText(readBookControl.getTextKindIndex());
         updateBg(readBookControl.getTextDrawableIndex());
+        updateLineSize(readBookControl.getLineMultiplier());
     }
 
     private void bindEvent() {
