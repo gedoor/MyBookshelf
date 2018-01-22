@@ -20,15 +20,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ReadInterfacePop extends PopupWindow {
 
+    @BindView(R.id.fl_line_smaller)
+    FrameLayout flLineSmaller;
+    @BindView(R.id.tv_dur_line_size)
+    TextView tvDurLineSize;
+    @BindView(R.id.fl_line_bigger)
+    FrameLayout flLineBigger;
     private View view;
-    @BindView(R.id.fl_smaller)
-    FrameLayout flSmaller;
+    @BindView(R.id.fl_text_smaller)
+    FrameLayout flTextSmaller;
     @BindView(R.id.tv_dur_text_size)
     TextView tvDurTextSize;
-    @BindView(R.id.fl_bigger)
-    FrameLayout flBigger;
-    @BindView(R.id.tv_text_size_default)
-    TextView tvTextSizeDefault;
+    @BindView(R.id.fl_text_bigger)
+    FrameLayout flTextBigger;
     @BindView(R.id.civ_bg_white)
     CircleImageView civBgWhite;
     @BindView(R.id.civ_bg_yellow)
@@ -42,8 +46,8 @@ public class ReadInterfacePop extends PopupWindow {
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener {
-        void textChange(int index);
-
+        void textSizeChange(int index);
+        void lineSizeChange(float lineMultiplier);
         void bgChange(int index);
     }
 
@@ -73,18 +77,23 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void bindEvent() {
-        flSmaller.setOnClickListener(v -> {
+        flTextSmaller.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() - 1);
-            changeProListener.textChange(readBookControl.getTextKindIndex());
+            changeProListener.textSizeChange(readBookControl.getTextKindIndex());
         });
-        flBigger.setOnClickListener(v -> {
+        flTextBigger.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() + 1);
-            changeProListener.textChange(readBookControl.getTextKindIndex());
+            changeProListener.textSizeChange(readBookControl.getTextKindIndex());
         });
-        tvTextSizeDefault.setOnClickListener(v -> {
-            updateText(ReadBookControl.DEFAULT_TEXT);
-            changeProListener.textChange(readBookControl.getTextKindIndex());
+        flLineSmaller.setOnClickListener(v -> {
+            updateLineSize((float) (readBookControl.getLineMultiplier()-0.1));
+            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
         });
+        flLineBigger.setOnClickListener(v -> {
+            updateLineSize((float) (readBookControl.getLineMultiplier()+0.1));
+            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
+        });
+
 
         civBgWhite.setOnClickListener(v -> {
             updateBg(0);
@@ -106,22 +115,29 @@ public class ReadInterfacePop extends PopupWindow {
 
     private void updateText(int textKindIndex) {
         if (textKindIndex == 0) {
-            flSmaller.setEnabled(false);
-            flBigger.setEnabled(true);
+            flTextSmaller.setEnabled(false);
+            flTextBigger.setEnabled(true);
         } else if (textKindIndex == readBookControl.getTextKind().size() - 1) {
-            flSmaller.setEnabled(true);
-            flBigger.setEnabled(false);
+            flTextSmaller.setEnabled(true);
+            flTextBigger.setEnabled(false);
         } else {
-            flSmaller.setEnabled(true);
-            flBigger.setEnabled(true);
+            flTextSmaller.setEnabled(true);
+            flTextBigger.setEnabled(true);
         }
-        if (textKindIndex == ReadBookControl.DEFAULT_TEXT) {
-            tvTextSizeDefault.setEnabled(false);
-        } else {
-            tvTextSizeDefault.setEnabled(true);
-        }
+
         tvDurTextSize.setText(String.valueOf(readBookControl.getTextKind().get(textKindIndex).get("textSize")));
         readBookControl.setTextKindIndex(textKindIndex);
+    }
+
+    private void updateLineSize(float lineSize) {
+        if (lineSize > 2) {
+            lineSize = 2;
+        }
+        if (lineSize < 1) {
+            lineSize = 1;
+        }
+        tvDurLineSize.setText(String.format("%.1f", lineSize));
+        readBookControl.setLineMultiplier(lineSize);
     }
 
     private void updateBg(int index) {

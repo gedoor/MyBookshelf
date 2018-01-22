@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,29 +19,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="35dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:textColor="#adadad"
-                android:gravity="center"
-                android:text="字号"
-                android:layout_gravity="center_vertical"/>
+
             <FrameLayout
-                android:id="@+id/fl_smaller"
+                android:id="@+id/fl_text_smaller"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/selector_pop_font_bg">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-"
+                <LinearLayout
                     android:layout_gravity="center"
-                    android:textColor="#767676"
-                    android:textSize="22sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_format_size_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textColor="#767676"
+                        android:textSize="22sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
             </FrameLayout>
             <TextView
                 android:id="@+id/tv_dur_text_size"
@@ -51,30 +59,101 @@
                 android:text="18"
                 android:gravity="center"
                 android:singleLine="true"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                tools:ignore="HardcodedText" />
             <FrameLayout
-                android:id="@+id/fl_bigger"
+                android:id="@+id/fl_text_bigger"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/selector_pop_font_bg">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+"
+                <LinearLayout
                     android:layout_gravity="center"
-                    android:textColor="#767676"
-                    android:textSize="22sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_format_size_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="+"
+                        android:layout_gravity="center"
+                        android:textColor="#767676"
+                        android:textSize="22sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+            </FrameLayout>
+            <View
+                android:layout_width="10dp"
+                android:layout_height="match_parent"/>
+            <FrameLayout
+                android:id="@+id/fl_line_smaller"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_pop_font_bg">
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_format_line_spacing_black_24dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="-"
+                        android:layout_gravity="center"
+                        android:textColor="#767676"
+                        android:textSize="22sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
             </FrameLayout>
             <TextView
-                android:id="@+id/tv_text_size_default"
-                android:layout_width="60dp"
+                android:id="@+id/tv_dur_line_size"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"
-                android:textColor="@drawable/selector_pop_font_color"
+                android:textColor="#767676"
+                android:text="1.5"
                 android:gravity="center"
-                android:text="默认"
-                android:layout_gravity="center_vertical"/>
+                android:singleLine="true"
+                android:layout_gravity="center"
+                tools:ignore="HardcodedText" />
+            <FrameLayout
+                android:id="@+id/fl_line_bigger"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_pop_font_bg">
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_format_line_spacing_black_24dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="+"
+                        android:layout_gravity="center"
+                        android:textColor="#767676"
+                        android:textSize="22sp"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+            </FrameLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,7 +167,7 @@
                 android:textSize="14sp"
                 android:textColor="#adadad"
                 android:gravity="center"
-                android:text="背景"
+                android:text="@string/background"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"/>

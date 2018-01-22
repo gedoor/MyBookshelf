@@ -532,6 +532,13 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         loadDataListener.initData(durPageView.getLineCount(durHeight));
     }
 
+    public void changeLineSize() {
+        for (BookContentView item : viewContents) {
+            item.setTextKind(readBookControl);
+        }
+        loadDataListener.initData(durPageView.getLineCount(durHeight));
+    }
+
     /**
      * 音量键翻页
      */

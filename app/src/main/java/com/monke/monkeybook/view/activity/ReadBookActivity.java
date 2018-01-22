@@ -335,8 +335,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //界面设置
         readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
             @Override
-            public void textChange(int index) {
+            public void textSizeChange(int index) {
                 csvBook.changeTextSize();
+            }
+
+            @Override
+            public void lineSizeChange(float lineMultiplier) {
+                csvBook.changeLineSize();
             }
 
             @Override
