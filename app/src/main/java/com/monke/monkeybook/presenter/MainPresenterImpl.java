@@ -193,7 +193,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 bookShelfBean.setNoteUrl(url.toString());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(0);
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
                 e.onNext(bookShelfBean);
             }
             e.onComplete();
@@ -255,6 +255,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     public void onNext(BookShelfBean bookShelfBean) {
                         //成功   //发送RxBus
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
+                        Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
