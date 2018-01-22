@@ -228,7 +228,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     public void addBookToShelf(final SearchBookBean searchBookBean) {
         final BookShelfBean bookShelfResult = new BookShelfBean();
         bookShelfResult.setNoteUrl(searchBookBean.getNoteUrl());
-        bookShelfResult.setFinalDate(0);
+        bookShelfResult.setFinalDate(System.currentTimeMillis());
         bookShelfResult.setDurChapter(0);
         bookShelfResult.setDurChapterPage(0);
         bookShelfResult.setTag(searchBookBean.getTag());
