@@ -215,12 +215,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_ADD_BOOK)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
     public void hadAddBook(BookShelfBean value) {
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = true;
@@ -231,12 +227,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         }
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_REMOVE_BOOK)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_REMOVE_BOOK)})
     public void hadRemoveBook(BookShelfBean value) {
         if (bookShelfS != null) {
             for (int i = 0; i < bookShelfS.size(); i++) {
@@ -256,12 +248,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         }
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_ADD_BOOK),
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK),})
     public void hadBook(BookShelfBean value) {
         bookShelfS.add(value);
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
