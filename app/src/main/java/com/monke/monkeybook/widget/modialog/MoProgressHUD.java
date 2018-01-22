@@ -307,8 +307,10 @@ public class MoProgressHUD {
 
     public Boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isShowing() && canBack) {
-                dismiss();
+            if (isShowing()) {
+                if (canBack) {
+                    dismiss();
+                }
                 return true;
             }
         }
