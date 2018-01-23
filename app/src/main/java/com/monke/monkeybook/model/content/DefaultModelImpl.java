@@ -21,6 +21,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +45,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private DefaultModelImpl(String tag) {
         TAG = tag;
-        name = tag;
+        try {
+            URL url = new URL(tag);
+            name = url.getHost();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            name = tag;
+        }
     }
 
     /**
