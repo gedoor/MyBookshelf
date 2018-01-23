@@ -2,6 +2,8 @@
 package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.BaseModelImpl;
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -51,10 +53,10 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return getRetrofitString("http://zhannei.baidu.com")
                 .create(IGetWebApi.class)
                 .searchBook("/cse/search", queryMap)
-                .flatMap(this::analySearchBook);
+                .flatMap(this::analyzeSearchBook);
     }
 
-    private Observable<List<SearchBookBean>> analySearchBook(final String s) {
+    private Observable<List<SearchBookBean>> analyzeSearchBook(final String s) {
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
@@ -99,19 +101,19 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
-                .flatMap(s -> analyBookInfo(s, bookShelfBean));
+                .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyBookInfo(final String s, final BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> analyzeBookInfo(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            bookShelfBean.setBookInfoBean(analyBookinfo(s, bookShelfBean.getNoteUrl()));
+            bookShelfBean.setBookInfoBean(analyzeBookinfo(s, bookShelfBean.getNoteUrl()));
             e.onNext(bookShelfBean);
             e.onComplete();
         });
     }
 
-    private BookInfoBean analyBookinfo(String s, String novelUrl) {
+    private BookInfoBean analyzeBookinfo(String s, String novelUrl) {
         BookInfoBean bookInfoBean = new BookInfoBean();
         bookInfoBean.setNoteUrl(novelUrl);   //id
         bookInfoBean.setTag(TAG);
@@ -151,7 +153,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
-                .flatMap(s -> analyChapterList(s, bookShelfBean))
+                .flatMap(s -> analyzeChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
@@ -172,17 +174,17 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
                 });
     }
 
-    private Observable<WebChapterBean<BookShelfBean>> analyChapterList(final String s, final BookShelfBean bookShelfBean) {
+    private Observable<WebChapterBean<BookShelfBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            WebChapterBean<List<ChapterListBean>> temp = analyChapterlist(s, bookShelfBean.getNoteUrl());
+            WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl());
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
             e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyChapterlist(String s, String novelUrl) {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
         Elements chapterlist = doc.getElementById("list").getElementsByTag("dd");
         List<ChapterListBean> chapterBeans = new ArrayList<>();
@@ -207,10 +209,10 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
-                .flatMap(s -> analyBookContent(s, durChapterUrl, durChapterIndex));
+                .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
     }
 
-    private Observable<BookContentBean> analyBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
+    private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
         return Observable.create(e -> {
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(durChapterIndex);
@@ -235,7 +237,7 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurCapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + "站点暂时不支持解析，请反馈给Monke QQ:1105075896,半小时内解决，超级效率的程序员");
+                bookContentBean.setDurCapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
                 bookContentBean.setRight(false);
             }
             e.onNext(bookContentBean);

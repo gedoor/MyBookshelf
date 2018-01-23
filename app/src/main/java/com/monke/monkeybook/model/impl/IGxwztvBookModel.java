@@ -19,5 +19,5 @@ public interface IGxwztvBookModel extends IStationBookModel {
     /**
      * 解析主页数据
      */
-    Observable<LibraryBean> analyLibraryData(String data);
+    Observable<LibraryBean> analyzeLibraryData(String data);
 }

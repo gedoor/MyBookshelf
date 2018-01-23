@@ -60,7 +60,7 @@ public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implem
                 String cache = mCache.getAsString(LIBRARY_CACHE_KEY);
                 e.onNext(cache);
                 e.onComplete();
-            }).flatMap(s -> GxwztvBookModelImpl.getInstance().analyLibraryData(s))
+            }).flatMap(s -> GxwztvBookModelImpl.getInstance().analyzeLibraryData(s))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new SimpleObserver<LibraryBean>() {
