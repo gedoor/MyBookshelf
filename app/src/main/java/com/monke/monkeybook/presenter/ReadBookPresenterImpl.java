@@ -130,12 +130,13 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     int start = pageIndex * pageLineCount;
                     int end = pageIndex == tempCount ? bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
-                        bookContentView.updateData(bookTag, bookShelf.getBookInfoBean().getChapterList(chapterIndex).getDurChapterName()
-                                , bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end)
-                                , chapterIndex
-                                , bookShelf.getBookInfoBean().getChapterList().size()
-                                , pageIndex
-                                , tempCount + 1);
+                        bookContentView.updateData(bookTag,
+                                bookShelf.getBookInfoBean().getChapterList(chapterIndex).getDurChapterName(),
+                                bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end),
+                                chapterIndex,
+                                bookShelf.getBookInfoBean().getChapterList().size(),
+                                pageIndex,
+                                tempCount + 1);
                     }
                 } else {
                     //有元数据  重新分行

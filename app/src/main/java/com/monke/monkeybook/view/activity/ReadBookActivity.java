@@ -51,6 +51,8 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -489,8 +491,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
                 moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
-                    mPresenter.changeBookSource(searchBookBean);
-                    csvBook.showLoading();
+                    if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                        mPresenter.changeBookSource(searchBookBean);
+                        csvBook.showLoading();
+                    }
                 });
             }
         });
