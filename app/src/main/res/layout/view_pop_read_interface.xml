@@ -52,7 +52,7 @@
             </FrameLayout>
             <TextView
                 android:id="@+id/tv_dur_text_size"
-                android:layout_width="50dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"
                 android:textColor="#767676"
@@ -119,7 +119,7 @@
             </FrameLayout>
             <TextView
                 android:id="@+id/tv_dur_line_size"
-                android:layout_width="50dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:textSize="14sp"
                 android:textColor="#767676"
@@ -151,6 +151,36 @@
                         android:textColor="#767676"
                         android:textSize="22sp"
                         tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+            </FrameLayout>
+            <TextView
+                android:id="@+id/tv_dur_line_num"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:textColor="#767676"
+                android:text="0"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_gravity="center"
+                tools:ignore="HardcodedText" />
+            <FrameLayout
+                android:id="@+id/fl_line_num"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_pop_font_bg">
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_format_list_numbered_black_24dp"/>
+
                 </LinearLayout>
 
             </FrameLayout>

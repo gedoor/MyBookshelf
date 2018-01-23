@@ -26,6 +26,10 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tvDurLineSize;
     @BindView(R.id.fl_line_bigger)
     FrameLayout flLineBigger;
+    @BindView(R.id.tv_dur_line_num)
+    TextView tvDurLineNum;
+    @BindView(R.id.fl_line_num)
+    FrameLayout flLineNum;
     private View view;
     @BindView(R.id.fl_text_smaller)
     FrameLayout flTextSmaller;
@@ -47,7 +51,9 @@ public class ReadInterfacePop extends PopupWindow {
 
     public interface OnChangeProListener {
         void textSizeChange(int index);
+
         void lineSizeChange(float lineMultiplier);
+
         void bgChange(int index);
     }
 
@@ -75,6 +81,7 @@ public class ReadInterfacePop extends PopupWindow {
         updateText(readBookControl.getTextKindIndex());
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
+        updateLineNum(readBookControl.getLineNum());
     }
 
     private void bindEvent() {
@@ -87,11 +94,15 @@ public class ReadInterfacePop extends PopupWindow {
             changeProListener.textSizeChange(readBookControl.getTextKindIndex());
         });
         flLineSmaller.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier()-0.1));
+            updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1));
             changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
         });
         flLineBigger.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier()+0.1));
+            updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
+            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
+        });
+        flLineNum.setOnClickListener(view1 -> {
+            updateLineNum(readBookControl.getLineNum() + 1);
             changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
         });
 
@@ -134,11 +145,16 @@ public class ReadInterfacePop extends PopupWindow {
         if (lineSize > 2) {
             lineSize = 2;
         }
-        if (lineSize < 1) {
-            lineSize = 1;
-        }
         tvDurLineSize.setText(String.format("%.1f", lineSize));
         readBookControl.setLineMultiplier(lineSize);
+    }
+
+    private void updateLineNum(int linenum) {
+        if (linenum > 2) {
+            linenum = -1;
+        }
+        tvDurLineNum.setText(String.format("%d", linenum));
+        readBookControl.setLineNum(linenum);
     }
 
     private void updateBg(int index) {

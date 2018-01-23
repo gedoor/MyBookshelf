@@ -251,8 +251,8 @@ public class BookContentView extends FrameLayout {
     }
 
     //显示行数
-    public int getLineCount(int height) {
-        return (int) (height * 1.0f / tvContent.getLineHeight());
+    public int getLineCount(int height, int lineNum) {
+        return (int) (height * 1.0f / tvContent.getLineHeight() + lineNum);
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {

@@ -25,6 +25,7 @@ public class ReadBookControl {
     private int textColor;
     private int textBackground;
     private float lineMultiplier;
+    private int lineNum;
 
     private int textKindIndex = DEFAULT_TEXT;
     private int textDrawableIndex = DEFAULT_BG;
@@ -63,6 +64,7 @@ public class ReadBookControl {
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
+        this.lineNum = preference.getInt("lineNum", 0);
     }
 
     //字体大小
@@ -98,6 +100,11 @@ public class ReadBookControl {
             temp6.put("textSize", 24);
             temp6.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 15));
             textKind.add(temp6);
+
+            Map<String, Integer> temp7 = new HashMap<>();
+            temp7.put("textSize", 26);
+            temp7.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 17));
+            textKind.add(temp7);
         }
     }
 
@@ -218,6 +225,17 @@ public class ReadBookControl {
         this.lineMultiplier = lineMultiplier;
         SharedPreferences.Editor editor = preference.edit();
         editor.putFloat("lineMultiplier", lineMultiplier);
+        editor.apply();
+    }
+
+    public int getLineNum() {
+        return lineNum;
+    }
+
+    public void setLineNum(int lineNum) {
+        this.lineNum = lineNum;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("lineNum", lineNum);
         editor.apply();
     }
 }

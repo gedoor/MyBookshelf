@@ -88,7 +88,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (height > 0) {
             if (loadDataListener != null && durHeight != height) {
                 durHeight = height;
-                loadDataListener.initData(durPageView.getLineCount(height));
+                loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum()));
             }
         }
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
@@ -509,7 +509,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
-                    loadDataListener.initData(durPageView.getLineCount(height));
+                    loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum()));
                 }
             }
         }
@@ -535,14 +535,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight));
+        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum()));
     }
 
     public void changeLineSize() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight));
+        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum()));
     }
 
     /**
