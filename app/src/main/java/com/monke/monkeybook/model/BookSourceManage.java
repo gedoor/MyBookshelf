@@ -24,7 +24,7 @@ public class BookSourceManage {
         return new BookSourceManage();
     }
 
-    public static List<BookSourceBean> getSelectedBookSource() {
+    static List<BookSourceBean> getSelectedBookSource() {
         List<BookSourceBean> selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
         if (selectedBookSource.size() == 0) {
             return getAllBookSource();
