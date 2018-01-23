@@ -21,13 +21,13 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
     public static final String TAG = "https://www.zwdu.com";
@@ -37,19 +37,17 @@ public class ZwduModelImpl extends BaseModelImpl implements IStationBookModel {
         return new ZwduModelImpl();
     }
 
-    private interface Get {
-        @GET("/search.php")
-        Observable<String> searchBook(@Query("keyword") String content, @Query("page") int page);
-    }
-
     /**
      * 搜索
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put("keyword", content);
+        queryMap.put("page", String.valueOf(page - 1));
         return getRetrofitString(TAG)
-                .create(Get.class)
-                .searchBook(content, page)
+                .create(IGetWebApi.class)
+                .searchBook("/search.php", queryMap)
                 .flatMap(this::analySearchBook);
     }
 

@@ -22,13 +22,13 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 
 public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
@@ -39,19 +39,18 @@ public class XBQGModelImpl extends BaseModelImpl implements IStationBookModel {
         return new XBQGModelImpl();
     }
 
-    private interface Get {
-        @GET("/cse/search")
-        Observable<String> searchBook(@Query("q") String content, @Query("p") int page, @Query("s") String time);
-    }
-
     /**
      * 搜索
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put("q", content);
+        queryMap.put("p", String.valueOf(page - 1));
+        queryMap.put("s", "5199337987683747968");
         return getRetrofitString("http://zhannei.baidu.com")
-                .create(Get.class)
-                .searchBook(content, page - 1, "5199337987683747968")
+                .create(IGetWebApi.class)
+                .searchBook("/cse/search", queryMap)
                 .flatMap(this::analySearchBook);
     }
 

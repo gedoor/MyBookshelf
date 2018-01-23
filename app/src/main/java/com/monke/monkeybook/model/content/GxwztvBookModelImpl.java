@@ -27,13 +27,13 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookModel {
     public static final String TAG = "http://www.gxwztv.com";
@@ -41,11 +41,6 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
 
     public static GxwztvBookModelImpl getInstance() {
         return new GxwztvBookModelImpl();
-    }
-
-    private interface Get {
-        @GET("/search.htm")
-        Observable<String> searchBook(@Query("keyword") String content, @Query("pn") int page);
     }
 
     /**
@@ -146,9 +141,12 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     //搜索
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        return getRetrofitObject(TAG)
-                .create(Get.class)
-                .searchBook(content, page)
+        Map<String, String> queryMap = new HashMap<>();
+        queryMap.put("keyword", content);
+        queryMap.put("pn", String.valueOf(page - 1));
+        return getRetrofitString(TAG)
+                .create(IGetWebApi.class)
+                .searchBook("/search.htm", queryMap)
                 .flatMap(this::analySearchBook);
     }
 
