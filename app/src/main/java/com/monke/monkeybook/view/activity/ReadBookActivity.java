@@ -238,7 +238,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         @Override
         public void updateProgress(int chapterIndex, int pageIndex) {
             mPresenter.updateProgress(chapterIndex, pageIndex);
-
             if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() > 0) {
                 atvTitle.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
                 atvUrl.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterUrl());
@@ -296,6 +295,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             readAloudIntent.putExtra("content", content);
             startService(readAloudIntent);
             aloudButton = false;
+        }
+
+        @Override
+        public void stopAloud() {
+            stopAloudService();
         }
     };
 
@@ -603,6 +607,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mPresenter.saveProgress();
     }
 
+    private void stopAloudService() {
+        stopService(readAloudIntent);
+        unbindService(conn);
+        csvBook.setReadAloud(false);
+        Toast.makeText(this, R.string.aloud_stop, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
@@ -618,10 +629,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
                     return true;
                 } else if (csvBook.getReadAloud()) {
-                    stopService(readAloudIntent);
-                    unbindService(conn);
-                    csvBook.setReadAloud(false);
-                    Toast.makeText(this, R.string.aloud_stop, Toast.LENGTH_SHORT).show();
+                    stopAloudService();
                     return true;
                 } else {
                     Boolean temp2 = chapterListView.dismissChapterList();

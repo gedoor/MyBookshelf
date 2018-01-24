@@ -461,18 +461,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     public interface LoadDataListener {
         void loadData(BookContentView bookContentView, long tag, int chapterIndex, int pageIndex);
-
         void updateProgress(int chapterIndex, int pageIndex);
-
         String getChapterTitle(int chapterIndex);
-
         void initData(int lineCount);
-
         void showMenu();
-
         void setHpbReadProgress(int pageIndex, int pageAll);
-
         void readAloud(String content);
+
+        void stopAloud();
     }
 
     public Boolean getReadAloud() {
@@ -499,6 +495,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private void noNext() {
         Toast.makeText(getContext(), "没有下一页", Toast.LENGTH_SHORT).show();
+        if (readAloud) {
+            loadDataListener.stopAloud();
+        }
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener layoutInitListener = new ViewTreeObserver.OnGlobalLayoutListener() {
