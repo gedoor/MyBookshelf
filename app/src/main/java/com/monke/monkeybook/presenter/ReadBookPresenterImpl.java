@@ -207,6 +207,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                             .subscribe(new SimpleObserver<BookContentBean>() {
                                                 @Override
                                                 public void onNext(BookContentBean value) {
+                                                    numberOfRetries = 0;
                                                     if (value.getDurChapterUrl() != null && value.getDurChapterUrl().length() > 0) {
                                                         bookShelf.getBookInfoBean().getChapterList(chapterIndex).setBookContentBean(value);
                                                         if (bookTag == bookContentView.getQTag())
