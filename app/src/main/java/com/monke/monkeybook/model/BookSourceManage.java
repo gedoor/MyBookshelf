@@ -19,8 +19,8 @@ import java.util.List;
  */
 
 public class BookSourceManage {
-    public static List<BookSourceBean> selectedBookSource;
-    public static List<BookSourceBean> allBookSource;
+    private static List<BookSourceBean> selectedBookSource;
+    private static List<BookSourceBean> allBookSource;
 
     public static BookSourceManage getInstance() {
         return new BookSourceManage();
