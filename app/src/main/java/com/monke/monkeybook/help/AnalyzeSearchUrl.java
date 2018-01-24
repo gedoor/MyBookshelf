@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * Created by GKF on 2018/1/24.
+ * 搜索URL规则解析
  */
 
 public class AnalyzeSearchUrl {
@@ -17,7 +18,10 @@ public class AnalyzeSearchUrl {
     public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws MalformedURLException {
         String[] temp = ruleUrl.split("\\?");
         URL url = new URL(temp[0]);
+        searchUrl = String.format("%s://%s", url.getProtocol(), url.getHost());
+        searchPath = url.getPath();
         String[] queryS = temp[1].split("&");
+        queryMap = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
             switch (queryM[1]) {
