@@ -63,6 +63,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private int pageWidth;
     private String oldBookUrl;
 
+    private int numberOfRetries = 0;
+
     public ReadBookPresenterImpl() {
 
     }
@@ -219,7 +221,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                 public void onError(Throwable e) {
                                                     e.printStackTrace();
                                                     if (bookContentView != null && bookTag == bookContentView.getQTag())
-                                                        bookContentView.loadError();
+                                                        //重试3次
+                                                        if (numberOfRetries < 3) {
+                                                            numberOfRetries = numberOfRetries + 1;
+                                                            loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex1);
+                                                        } else {
+                                                            numberOfRetries = 0;
+                                                            bookContentView.loadError();
+                                                        }
                                                 }
                                             });
                                 }
