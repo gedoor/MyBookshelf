@@ -7,9 +7,12 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IGetWebApi;
@@ -38,6 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel {
     private String TAG;
     private String name;
+    private BookSourceBean bookSourceBean;
 
     public static DefaultModelImpl getInstance(String tag) {
         return new DefaultModelImpl(tag);
@@ -54,19 +58,51 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         }
     }
 
+    private void initBookSourceBean() {
+        if (bookSourceBean == null) {
+            List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
+            if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
+                bookSourceBean = bookSourceBeans.get(0);
+            }
+        }
+    }
+
     /**
      * 搜索
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        Map<String, String> queryMap = new HashMap<>();
-        queryMap.put("q", content);
-        queryMap.put("p", String.valueOf(page - 1));
-        queryMap.put("s", "5199337987683747968");
-        return getRetrofitString("http://zhannei.baidu.com")
-                .create(IGetWebApi.class)
-                .searchBook("/cse/search", queryMap)
-                .flatMap(this::analyzeSearchBook);
+        initBookSourceBean();
+        if (bookSourceBean == null) {
+            return null;
+        }
+        String[] temp = bookSourceBean.getRuleSearchUrl().split("\\?");
+        try {
+            URL url = new URL(temp[0]);
+            Map<String, String> queryMap = new HashMap<>();
+            String[] queryS = temp[1].split("&");
+            for (String query : queryS) {
+                String[] queryM = query.split("=");
+                switch (queryM[1]) {
+                    case "searchKey":
+                        queryMap.put(queryM[0], content);
+                        break;
+                    case "searchPage":
+                        queryMap.put(queryM[0], String.valueOf(page));
+                        break;
+                    default:
+                        queryMap.put(queryM[0], queryM[1]);
+                        break;
+                }
+            }
+            return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+                    .create(IGetWebApi.class)
+                    .searchBook(url.getPath(), queryMap)
+                    .flatMap(this::analyzeSearchBook);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private Observable<List<SearchBookBean>> analyzeSearchBook(final String s) {
