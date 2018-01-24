@@ -92,7 +92,8 @@ public class AboutActivity extends MBaseActivity {
     @Override
     protected void bindEvent() {
         vwDonate.setOnClickListener(view -> {
-            Donate.aliDonate(this);
+            Intent intent = new Intent(this, DonateActivity.class);
+            startActivity(intent);
         });
         vwScoring.setOnClickListener(view -> {
             openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName());
