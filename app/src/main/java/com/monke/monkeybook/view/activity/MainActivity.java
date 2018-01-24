@@ -254,7 +254,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
                     break;
                 case R.id.action_donate:
-                    Donate.aliDonate(this);
+                    startActivityByAnim(new Intent(MainActivity.this, DonateActivity.class), 0, 0);
                     break;
                 case R.id.action_backup:
                     backup();
