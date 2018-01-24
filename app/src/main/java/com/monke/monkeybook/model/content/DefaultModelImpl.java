@@ -13,6 +13,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.AnalyzeSearchUrl;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IGetWebApi;
@@ -76,28 +77,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         if (bookSourceBean == null) {
             return null;
         }
-        String[] temp = bookSourceBean.getRuleSearchUrl().split("\\?");
         try {
-            URL url = new URL(temp[0]);
-            Map<String, String> queryMap = new HashMap<>();
-            String[] queryS = temp[1].split("&");
-            for (String query : queryS) {
-                String[] queryM = query.split("=");
-                switch (queryM[1]) {
-                    case "searchKey":
-                        queryMap.put(queryM[0], content);
-                        break;
-                    case "searchPage":
-                        queryMap.put(queryM[0], String.valueOf(page));
-                        break;
-                    default:
-                        queryMap.put(queryM[0], queryM[1]);
-                        break;
-                }
-            }
-            return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+            AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
+            return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                     .create(IGetWebApi.class)
-                    .searchBook(url.getPath(), queryMap)
+                    .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
                     .flatMap(this::analyzeSearchBook);
         } catch (MalformedURLException e) {
             e.printStackTrace();
