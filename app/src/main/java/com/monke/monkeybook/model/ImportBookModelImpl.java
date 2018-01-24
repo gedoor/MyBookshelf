@@ -149,7 +149,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         chapterListBean.getBookContentBean().setTag(BookShelfBean.LOCAL_TAG);
         chapterListBean.getBookContentBean().setNoteUrl(md5);
         chapterListBean.getBookContentBean().setDurChapterIndex(chapterListBean.getDurChapterIndex());
-        chapterListBean.getBookContentBean().setDurCapterContent(String.format("%s\r\n%s", name, content));
+        chapterListBean.getBookContentBean().setDurChapterContent(String.format("%s\r\n%s", name, content));
 
         DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(chapterListBean.getBookContentBean());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplace(chapterListBean);

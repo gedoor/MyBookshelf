@@ -27,7 +27,7 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
         public final static Property DurChapterUrl = new Property(1, String.class, "durChapterUrl", true, "DUR_CHAPTER_URL");
         public final static Property DurChapterIndex = new Property(2, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
-        public final static Property DurCapterContent = new Property(3, String.class, "durCapterContent", false, "DUR_CAPTER_CONTENT");
+        public final static Property DurChapterContent = new Property(3, String.class, "durChapterContent", false, "DUR_CHAPTER_CONTENT");
         public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
     }
 
@@ -47,7 +47,7 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
                 "\"NOTE_URL\" TEXT," + // 0: noteUrl
                 "\"DUR_CHAPTER_URL\" TEXT PRIMARY KEY NOT NULL ," + // 1: durChapterUrl
                 "\"DUR_CHAPTER_INDEX\" INTEGER NOT NULL ," + // 2: durChapterIndex
-                "\"DUR_CAPTER_CONTENT\" TEXT," + // 3: durCapterContent
+                "\"DUR_CHAPTER_CONTENT\" TEXT," + // 3: durChapterContent
                 "\"TAG\" TEXT);"); // 4: tag
     }
 
@@ -72,9 +72,9 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         }
         stmt.bindLong(3, entity.getDurChapterIndex());
  
-        String durCapterContent = entity.getDurCapterContent();
-        if (durCapterContent != null) {
-            stmt.bindString(4, durCapterContent);
+        String durChapterContent = entity.getDurChapterContent();
+        if (durChapterContent != null) {
+            stmt.bindString(4, durChapterContent);
         }
  
         String tag = entity.getTag();
@@ -98,9 +98,9 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         }
         stmt.bindLong(3, entity.getDurChapterIndex());
  
-        String durCapterContent = entity.getDurCapterContent();
-        if (durCapterContent != null) {
-            stmt.bindString(4, durCapterContent);
+        String durChapterContent = entity.getDurChapterContent();
+        if (durChapterContent != null) {
+            stmt.bindString(4, durChapterContent);
         }
  
         String tag = entity.getTag();
@@ -120,7 +120,7 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // noteUrl
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // durChapterUrl
             cursor.getInt(offset + 2), // durChapterIndex
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // durCapterContent
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // durChapterContent
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // tag
         );
         return entity;
@@ -131,7 +131,7 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         entity.setNoteUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setDurChapterUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setDurChapterIndex(cursor.getInt(offset + 2));
-        entity.setDurCapterContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setDurChapterContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setTag(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     

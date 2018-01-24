@@ -30,6 +30,12 @@ public class BookSourceBean  implements Parcelable,Cloneable{
     private String ruleContentUrl;
     private String ruleBookContent;
     private String ruleSearchUrl;
+    private String ruleSearchName;
+    private String ruleSearchAuthor;
+    private String ruleSearchKind;
+    private String ruleSearchLastChapter;
+    private String ruleSearchCoverUrl;
+    private String ruleSearchNoteUrl;
 
     protected BookSourceBean(Parcel in) {
         bookSourceUrl = in.readString();
@@ -45,6 +51,12 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         ruleContentUrl = in.readString();
         ruleBookContent = in.readString();
         ruleSearchUrl = in.readString();
+        ruleSearchName = in.readString();
+        ruleSearchAuthor = in.readString();
+        ruleSearchKind = in.readString();
+        ruleSearchLastChapter = in.readString();
+        ruleSearchCoverUrl = in.readString();
+        ruleSearchNoteUrl = in.readString();
     }
 
     public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
@@ -76,11 +88,13 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.bookSourceUrl = bookSourceUrl;
     }
 
-    @Generated(hash = 892064787)
+    @Generated(hash = 12202666)
     public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber,
             boolean enable, String ruleBookName, String ruleBookAuthor, String ruleChapterUrl,
             String ruleCoverUrl, String ruleIntroduce, String ruleContentUrl,
-            String ruleBookContent, String ruleSearchUrl) {
+            String ruleBookContent, String ruleSearchUrl, String ruleSearchName,
+            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
+            String ruleSearchCoverUrl, String ruleSearchNoteUrl) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.serialNumber = serialNumber;
@@ -93,6 +107,12 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.ruleContentUrl = ruleContentUrl;
         this.ruleBookContent = ruleBookContent;
         this.ruleSearchUrl = ruleSearchUrl;
+        this.ruleSearchName = ruleSearchName;
+        this.ruleSearchAuthor = ruleSearchAuthor;
+        this.ruleSearchKind = ruleSearchKind;
+        this.ruleSearchLastChapter = ruleSearchLastChapter;
+        this.ruleSearchCoverUrl = ruleSearchCoverUrl;
+        this.ruleSearchNoteUrl = ruleSearchNoteUrl;
     }
 
     @Generated(hash = 1512565980)
@@ -119,6 +139,12 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         parcel.writeString(ruleContentUrl);
         parcel.writeString(ruleBookContent);
         parcel.writeString(ruleSearchUrl);
+        parcel.writeString(ruleSearchName);
+        parcel.writeString(ruleSearchAuthor);
+        parcel.writeString(ruleSearchKind);
+        parcel.writeString(ruleSearchLastChapter);
+        parcel.writeString(ruleSearchCoverUrl);
+        parcel.writeString(ruleSearchNoteUrl);
     }
 
     public int getSerialNumber() {
@@ -199,5 +225,53 @@ public class BookSourceBean  implements Parcelable,Cloneable{
 
     public void setRuleContentUrl(String ruleContentUrl) {
         this.ruleContentUrl = ruleContentUrl;
+    }
+
+    public String getRuleSearchName() {
+        return this.ruleSearchName;
+    }
+
+    public void setRuleSearchName(String ruleSearchName) {
+        this.ruleSearchName = ruleSearchName;
+    }
+
+    public String getRuleSearchAuthor() {
+        return this.ruleSearchAuthor;
+    }
+
+    public void setRuleSearchAuthor(String ruleSearchAuthor) {
+        this.ruleSearchAuthor = ruleSearchAuthor;
+    }
+
+    public String getRuleSearchKind() {
+        return this.ruleSearchKind;
+    }
+
+    public void setRuleSearchKind(String ruleSearchKind) {
+        this.ruleSearchKind = ruleSearchKind;
+    }
+
+    public String getRuleSearchLastChapter() {
+        return this.ruleSearchLastChapter;
+    }
+
+    public void setRuleSearchLastChapter(String ruleSearchLastChapter) {
+        this.ruleSearchLastChapter = ruleSearchLastChapter;
+    }
+
+    public String getRuleSearchCoverUrl() {
+        return this.ruleSearchCoverUrl;
+    }
+
+    public void setRuleSearchCoverUrl(String ruleSearchCoverUrl) {
+        this.ruleSearchCoverUrl = ruleSearchCoverUrl;
+    }
+
+    public String getRuleSearchNoteUrl() {
+        return this.ruleSearchNoteUrl;
+    }
+
+    public void setRuleSearchNoteUrl(String ruleSearchNoteUrl) {
+        this.ruleSearchNoteUrl = ruleSearchNoteUrl;
     }
 }

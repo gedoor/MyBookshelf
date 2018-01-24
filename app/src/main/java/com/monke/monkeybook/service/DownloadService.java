@@ -228,7 +228,7 @@ public class DownloadService extends Service {
                         DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
                         if (bookContentBean1.getRight()) {
                             bookContentBean1.setNoteUrl(data.getNoteUrl());
-                            bookContentBean1.setDurCapterContent(String.format("%s\r\n%s", data.getDurChapterName(), bookContentBean1.getDurCapterContent()));
+                            bookContentBean1.setDurChapterContent(String.format("%s\r\n%s", data.getDurChapterName(), bookContentBean1.getDurChapterContent()));
                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean1);
                             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(new ChapterListBean(data.getNoteUrl(), data.getDurChapterIndex(), data.getDurChapterUrl(), data.getDurChapterName(), data.getTag(), true));
                         }

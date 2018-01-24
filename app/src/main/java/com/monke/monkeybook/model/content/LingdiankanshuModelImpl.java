@@ -230,12 +230,12 @@ public class LingdiankanshuModelImpl extends BaseModelImpl implements IStationBo
                         content.append("\u3000\u3000").append(temp);
                     }
                 }
-                bookContentBean.setDurCapterContent(content.toString());
+                bookContentBean.setDurChapterContent(content.toString());
                 bookContentBean.setRight(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurCapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
+                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
                 bookContentBean.setRight(false);
             }
             e.onNext(bookContentBean);
