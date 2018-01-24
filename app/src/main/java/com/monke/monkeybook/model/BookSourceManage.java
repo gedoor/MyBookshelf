@@ -44,10 +44,10 @@ public class BookSourceManage {
 
     private static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceList = new ArrayList<>();
-        bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true));
-        bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true));
-        bookSourceList.add(new BookSourceBean(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3, true));
-        bookSourceList.add(new BookSourceBean(ZwduModelImpl.TAG, ZwduModelImpl.name, 4, true));
+        bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true, null, null, null, null, null, null, null,null));
+        bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true,null, null, null, null, null, null, null,null));
+        bookSourceList.add(new BookSourceBean(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3, true,null, null, null, null, null, null, null,null));
+        bookSourceList.add(new BookSourceBean(ZwduModelImpl.TAG, ZwduModelImpl.name, 4, true,null, null, null, null, null, null, null,null));
 
         for (BookSourceBean bookSourceBean : bookSourceList) {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);

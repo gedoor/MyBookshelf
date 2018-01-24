@@ -475,6 +475,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         void readAloud(String content);
     }
 
+    public Boolean getReadAloud() {
+        return readAloud;
+    }
+
+    public void setReadAloud(Boolean readAloud) {
+        this.readAloud = readAloud;
+    }
+
     private LoadDataListener loadDataListener;
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {

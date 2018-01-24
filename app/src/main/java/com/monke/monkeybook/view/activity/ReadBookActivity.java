@@ -617,6 +617,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
                     return true;
+                } else if (csvBook.getReadAloud()) {
+                    stopService(readAloudIntent);
+                    unbindService(conn);
+                    csvBook.setReadAloud(false);
+                    Toast.makeText(this, R.string.aloud_stop, Toast.LENGTH_SHORT).show();
+                    return true;
                 } else {
                     Boolean temp2 = chapterListView.dismissChapterList();
                     if (temp2)
