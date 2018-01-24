@@ -19,40 +19,63 @@ import java.util.List;
  */
 
 public class BookSourceManage {
+    public static List<BookSourceBean> selectedBookSource;
+    public static List<BookSourceBean> allBookSource;
 
     public static BookSourceManage getInstance() {
         return new BookSourceManage();
     }
 
     static List<BookSourceBean> getSelectedBookSource() {
-        List<BookSourceBean> selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
-        if (selectedBookSource.size() == 0) {
-            return getAllBookSource();
-        } else {
-            return selectedBookSource;
+        if (selectedBookSource == null) {
+            selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
         }
+        if (selectedBookSource.size() == 0) {
+            selectedBookSource = getAllBookSource();
+        }
+        return selectedBookSource;
     }
 
     public static List<BookSourceBean> getAllBookSource() {
-        List<BookSourceBean> allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
-        if (allBookSource.size() == 0) {
-            return saveBookSourceToDb();
-        } else {
-            return allBookSource;
+        if (allBookSource == null) {
+            allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
         }
+        if (allBookSource.size() == 0) {
+            allBookSource = saveBookSourceToDb();
+        }
+        return allBookSource;
     }
 
     private static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceList = new ArrayList<>();
-        bookSourceList.add(new BookSourceBean(XBQGModelImpl.TAG, XBQGModelImpl.name, 1, true, null, null, null, null, null, null, null,null,null,null,null,null,null,null));
-        bookSourceList.add(new BookSourceBean(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2, true,null, null, null, null, null, null, null,null,null,null,null,null,null,null));
-        bookSourceList.add(new BookSourceBean(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3, true,null, null, null, null, null, null, null,null,null,null,null,null,null,null));
-        bookSourceList.add(new BookSourceBean(ZwduModelImpl.TAG, ZwduModelImpl.name, 4, true,null, null, null, null, null, null, null,null,null,null,null,null,null,null));
+        bookSourceList.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 1));
+        bookSourceList.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2));
+        bookSourceList.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3));
+        bookSourceList.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
 
         for (BookSourceBean bookSourceBean : bookSourceList) {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
         }
         return bookSourceList;
+    }
+
+    static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName, int serialNumber) {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl(bookSourceUrl);
+        bookSourceBean.setBookSourceName(bookSourceName);
+        bookSourceBean.setSerialNumber(serialNumber);
+        bookSourceBean.setEnable(true);
+        return bookSourceBean;
+    }
+
+    static BookSourceBean getBookSource5() {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl("http://www.23us.so/");
+        bookSourceBean.setBookSourceName("顶点小说");
+        bookSourceBean.setSerialNumber(5);
+        bookSourceBean.setEnable(true);
+        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=key&p=page");
+        return bookSourceBean;
     }
 
     //获取book source class
