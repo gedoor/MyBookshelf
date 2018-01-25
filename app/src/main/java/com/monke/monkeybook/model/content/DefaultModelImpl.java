@@ -29,9 +29,7 @@ import org.jsoup.select.Elements;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -103,13 +101,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
                         item.setOrigin(name);
-                        AnalyzeSearchRule analyzeSearchRule = new AnalyzeSearchRule(booksE.get(i));
-                        item.setAuthor(FormatWebText.getAuthor(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchKind()));
-                        item.setLastChapter(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setName(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchName()));
-                        item.setNoteUrl(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchNoteUrl()));
-                        item.setCoverUrl(analyzeSearchRule.getResult(bookSourceBean.getRuleSearchCoverUrl()));
+                        AnalyzeRule analyzeRule = new AnalyzeRule(booksE.get(i));
+                        item.setAuthor(FormatWebText.getAuthor(analyzeRule.getResult(bookSourceBean.getRuleSearchAuthor())));
+                        item.setKind(analyzeRule.getResult(bookSourceBean.getRuleSearchKind()));
+                        item.setLastChapter(analyzeRule.getResult(bookSourceBean.getRuleSearchLastChapter()));
+                        item.setName(analyzeRule.getResult(bookSourceBean.getRuleSearchName()));
+                        item.setNoteUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchNoteUrl()));
+                        item.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchCoverUrl()));
                         books.add(item);
                     }
                     e.onNext(books);
@@ -146,31 +144,23 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(TAG);
             Document doc = Jsoup.parse(s);
-            Element resultE = doc.getElementsByClass("box_con").get(0);
-            if ((isEmpty(bookInfoBean.getCoverUrl()))) {
-                bookInfoBean.setCoverUrl(resultE.getElementById("fmimg").getElementsByTag("img").get(0).attr("src"));
+            AnalyzeRule analyzeRule = new AnalyzeRule(doc);
+            if (!isEmpty(bookInfoBean.getCoverUrl())) {
+                bookInfoBean.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleCoverUrl()));
             }
-            bookInfoBean.setName(resultE.getElementById("info").getElementsByTag("h1").get(0).text());
-            String author = resultE.getElementById("info").getElementsByTag("p").get(0).text().trim();
-            author = author.replace(" ", "").replace("  ", "").replace("作者：", "");
-            bookInfoBean.setAuthor(author);
-
-            Elements contentEs = resultE.getElementById("intro").getElementsByTag("p");
-            StringBuilder content = new StringBuilder();
-            for (int i = 0; i < contentEs.size(); i++) {
-                String temp = contentEs.get(i).text().trim();
-                temp = temp.replaceAll(" ", "").replaceAll(" ", "")
-                        .replaceAll("\r","").replaceAll("\n", "").replaceAll("\t", "");
-                if (temp.length() > 0) {
-                    if (content.length() > 0) {
-                        content.append("\r\n");
-                    }
-                    content.append("\u3000\u3000").append(temp);
-                }
+            if (!isEmpty(bookInfoBean.getName())) {
+                bookInfoBean.setName(analyzeRule.getResult(bookSourceBean.getRuleBookName()));
             }
-
-            bookInfoBean.setIntroduce(content.toString());
-            bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
+            if (!isEmpty(bookInfoBean.getAuthor())) {
+                bookInfoBean.setAuthor(analyzeRule.getResult(bookSourceBean.getRuleBookAuthor()));
+            }
+            bookInfoBean.setIntroduce(analyzeRule.getResult(bookSourceBean.getRuleIntroduce()));
+            String chapterUrl = analyzeRule.getResult(bookSourceBean.getRuleChapterUrl());
+            if (isEmpty(chapterUrl)) {
+                bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
+            } else {
+                bookInfoBean.setChapterUrl(chapterUrl);
+            }
             bookInfoBean.setOrigin(name);
             bookShelfBean.setBookInfoBean(bookInfoBean);
             e.onNext(bookShelfBean);
@@ -219,13 +209,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
-        Elements chapterlist = doc.getElementById("list").getElementsByTag("dd");
+        Elements chapterList = doc.getElementById("list").getElementsByTag("dd");
         List<ChapterListBean> chapterBeans = new ArrayList<>();
-        for (int i = 0; i < chapterlist.size(); i++) {
+        for (int i = 0; i < chapterList.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(TAG + chapterlist.get(i).getElementsByTag("a").get(0).attr("href"));   //id
+            temp.setDurChapterUrl(TAG + chapterList.get(i).getElementsByTag("a").get(0).attr("href"));   //id
             temp.setDurChapterIndex(i);
-            temp.setDurChapterName(chapterlist.get(i).getElementsByTag("a").get(0).text());
+            temp.setDurChapterName(chapterList.get(i).getElementsByTag("a").get(0).text());
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
 

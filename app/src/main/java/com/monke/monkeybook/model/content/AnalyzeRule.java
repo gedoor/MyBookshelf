@@ -9,10 +9,10 @@ import static android.text.TextUtils.isEmpty;
  * Created by GKF on 2018/1/25.
  */
 
-public class AnalyzeSearchRule {
+public class AnalyzeRule {
     private Element element;
 
-    public AnalyzeSearchRule(Element element) {
+    public AnalyzeRule(Element element) {
         this.element = element;
     }
 
