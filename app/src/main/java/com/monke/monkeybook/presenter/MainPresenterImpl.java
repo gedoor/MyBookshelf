@@ -179,6 +179,28 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     @Override
+    public void clearAllContent() {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
+            e.onNext(true);
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        Toast.makeText(mView.getContext(), "删除成功", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    @Override
     public void addBookUrl(String bookUrl) {
         if (TextUtils.isEmpty(bookUrl.trim())) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {

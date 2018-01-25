@@ -220,7 +220,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 },
                 getString(R.string.ok), view -> {
                     moProgressHUD.dismiss();
-                    DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
+                    mPresenter.clearAllContent();
                 }
         );
     }
