@@ -335,14 +335,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_ADD_BOOK),
-                    @Tag(RxBusTag.HAD_REMOVE_BOOK),
-                    @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false);
     }

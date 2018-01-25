@@ -93,4 +93,5 @@
     <string name="author">作者</string>
     <string name="analyze_error">站点暂时不支持解析，请反馈</string>
     <string name="aloud_stop">朗读停止</string>
+    <string name="clear_content">清除缓存</string>
 </resources>

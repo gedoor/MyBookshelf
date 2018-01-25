@@ -198,6 +198,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 finish();
                 startActivity(getIntent());
                 break;
+            case R.id.action_clear_content:
+                clearContent();
+                break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
                         ) {
@@ -208,6 +211,18 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearContent() {
+        moProgressHUD.showTwoButton("清除缓存会删除所有已保存章节,是否确认删除?",
+                getString(R.string.cancel), view -> {
+                    moProgressHUD.dismiss();
+                },
+                getString(R.string.ok), view -> {
+                    moProgressHUD.dismiss();
+                    DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
+                }
+        );
     }
 
     //设置ToolBar
