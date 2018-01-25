@@ -167,13 +167,13 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     } else {
                         //点击事件
                         if (readBookControl.getCanClickTurn()
-                                && ((event.getX() <= getWidth() / 3)
-                                || (event.getY() <= getHeight() / 3 && event.getX() <= getWidth() / 3 * 2))) {
+                                && ((event.getX() <= getWidth() / 3 && event.getY() <= getHeight() / 3*2)
+                                || (event.getY() <= getHeight() / 3))) {
                             //点击向前翻页
                             gotoPrePage();
                         } else if (readBookControl.getCanClickTurn()
-                                && ((event.getX() >= getWidth() / 3 * 2)
-                                || (event.getY() >= getHeight() / 3*2 && event.getX() >= getWidth() / 3))) {
+                                && ((event.getX() >= getWidth() / 3 * 2 && event.getY() >= getHeight() / 3*1)
+                                || (event.getY() >= getHeight() / 3*2))) {
                             //点击向后翻页
                             gotoNextPage();
                         } else {
