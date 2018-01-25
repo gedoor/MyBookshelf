@@ -204,8 +204,13 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             }
         }
 
-        Glide.with(this).load(coverUrl).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(ivCover);
-        Glide.with(this).load(coverUrl).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().bitmapTransform(new BlurTransformation(this, 6)).into(ivBlurCover);
+        Glide.with(this).load(coverUrl).dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
+                .placeholder(R.drawable.img_cover_default).into(ivCover);
+        Glide.with(this).load(coverUrl).dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
+                .placeholder(R.drawable.img_cover_default)
+                .bitmapTransform(new BlurTransformation(this, 6)).into(ivBlurCover);
         tvName.setText(name);
         tvAuthor.setText(author);
     }
