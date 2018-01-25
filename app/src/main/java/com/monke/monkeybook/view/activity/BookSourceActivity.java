@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -53,7 +54,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        initReayclerView();
+        initRecyclerView();
     }
 
     @Override
@@ -62,13 +63,18 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
     }
 
-    private void initReayclerView() {
+    private void initRecyclerView() {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
         bookSourceBeanList = BookSourceManage.getAllBookSource();
         bookSourceAdapter = new BookSourceAdapter(bookSourceBeanList);
         recyclerViewBookSource.setAdapter(bookSourceAdapter);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
+    }
+
+    private void resetBookSource() {
+        bookSourceBeanList = BookSourceManage.saveBookSourceToDb();
+        bookSourceAdapter.resetBookSource(bookSourceBeanList);
     }
 
     @Override
@@ -128,11 +134,21 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         }
     }
 
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_source_activity, menu);
+        return true;
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_reset_book_source:
+                resetBookSource();
+                break;
             case android.R.id.home:
                 finish();
                 break;
