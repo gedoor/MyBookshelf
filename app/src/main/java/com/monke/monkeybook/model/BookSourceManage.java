@@ -55,6 +55,7 @@ public class BookSourceManage {
         allBookSource.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
 
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
+        selectedBookSource = allBookSource;
 
         return allBookSource;
     }
@@ -75,13 +76,14 @@ public class BookSourceManage {
         bookSourceBean.setSerialNumber(5);
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage");
-        bookSourceBean.setRuleSearchList("result-item result-game-item");
-        bookSourceBean.setRuleSearchAuthor("result-game-item-info-tag span@0");
-        bookSourceBean.setRuleSearchKind("result-game-item-info-tag span@1");
-        bookSourceBean.setRuleSearchLastChapter("result-game-item-info-tag a@3");
-        bookSourceBean.setRuleSearchName("result-item-title a@0");
-        bookSourceBean.setRuleSearchNoteUrl("result-item-title a@0@href");
-        bookSourceBean.setRuleSearchCoverUrl("result-game-item-pic img@0@src");
+        bookSourceBean.setRuleSearchList("class.result-item");
+        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
+        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
+        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
+        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
+        bookSourceBean.setRuleSearchCoverUrl("class.result-game-item-pic.0@tag.img.0@src");
+
         return bookSourceBean;
     }
 

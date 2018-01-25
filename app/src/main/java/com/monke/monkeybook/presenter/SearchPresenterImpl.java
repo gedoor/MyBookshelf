@@ -9,6 +9,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.impl.IView;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
@@ -232,6 +233,13 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         bookShelfResult.setDurChapter(0);
         bookShelfResult.setDurChapterPage(0);
         bookShelfResult.setTag(searchBookBean.getTag());
+        BookInfoBean bookInfoBean = new BookInfoBean();
+        bookInfoBean.setNoteUrl(searchBookBean.getNoteUrl());
+        bookInfoBean.setAuthor(searchBookBean.getAuthor());
+        bookInfoBean.setCoverUrl(searchBookBean.getCoverUrl());
+        bookInfoBean.setName(searchBookBean.getName());
+        bookInfoBean.setTag(searchBookBean.getTag());
+        bookShelfResult.setBookInfoBean(bookInfoBean);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -94,7 +94,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
-                Elements booksE = doc.getElementsByClass(bookSourceBean.getRuleSearchList());
+                Elements booksE = AnalyzeRule.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 0; i < booksE.size(); i++) {
@@ -145,13 +145,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookInfoBean.setTag(TAG);
             Document doc = Jsoup.parse(s);
             AnalyzeRule analyzeRule = new AnalyzeRule(doc);
-            if (!isEmpty(bookInfoBean.getCoverUrl())) {
+            if (isEmpty(bookInfoBean.getCoverUrl())) {
                 bookInfoBean.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleCoverUrl()));
             }
-            if (!isEmpty(bookInfoBean.getName())) {
+            if (isEmpty(bookInfoBean.getName())) {
                 bookInfoBean.setName(analyzeRule.getResult(bookSourceBean.getRuleBookName()));
             }
-            if (!isEmpty(bookInfoBean.getAuthor())) {
+            if (isEmpty(bookInfoBean.getAuthor())) {
                 bookInfoBean.setAuthor(analyzeRule.getResult(bookSourceBean.getRuleBookAuthor()));
             }
             bookInfoBean.setIntroduce(analyzeRule.getResult(bookSourceBean.getRuleIntroduce()));
@@ -209,7 +209,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
-        Elements chapterList = doc.getElementById("bdsub").getElementsByTag("td");
+        Elements chapterList = doc.getElementById("at").getElementsByTag("td");
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
