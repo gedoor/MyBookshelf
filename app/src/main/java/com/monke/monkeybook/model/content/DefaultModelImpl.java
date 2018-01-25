@@ -209,11 +209,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
-        Elements chapterList = doc.getElementById("list").getElementsByTag("dd");
+        Elements chapterList = doc.getElementById("bdsub").getElementsByTag("td");
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(TAG + chapterList.get(i).getElementsByTag("a").get(0).attr("href"));   //id
+            temp.setDurChapterUrl(chapterList.get(i).getElementsByTag("a").get(0).attr("href"));   //id
             temp.setDurChapterIndex(i);
             temp.setDurChapterName(chapterList.get(i).getElementsByTag("a").get(0).text());
             temp.setNoteUrl(novelUrl);
@@ -243,7 +243,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookContentBean.setTag(TAG);
             try {
                 Document doc = Jsoup.parse(s);
-                List<TextNode> contentEs = doc.getElementById("content").textNodes();
+                List<TextNode> contentEs = doc.getElementById("contents").textNodes();
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
