@@ -25,6 +25,11 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         this.bookSourceBeanList = bookSourceBeanList;
     }
 
+    public void resetBookSource(List<BookSourceBean> bookSourceBeanList) {
+        this.bookSourceBeanList = bookSourceBeanList;
+        notifyDataSetChanged();
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         CheckBox bookSource;
 

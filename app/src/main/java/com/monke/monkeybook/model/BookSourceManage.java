@@ -46,17 +46,17 @@ public class BookSourceManage {
         return allBookSource;
     }
 
-    private static List<BookSourceBean> saveBookSourceToDb() {
-        List<BookSourceBean> bookSourceList = new ArrayList<>();
-        bookSourceList.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 1));
-        bookSourceList.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2));
-        bookSourceList.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3));
-        bookSourceList.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
+    public static List<BookSourceBean> saveBookSourceToDb() {
+        allBookSource.clear();
+        allBookSource.add(getBookSource5());
+        allBookSource.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 1));
+        allBookSource.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2));
+        allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3));
+        allBookSource.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
 
-        for (BookSourceBean bookSourceBean : bookSourceList) {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
-        }
-        return bookSourceList;
+        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
+
+        return allBookSource;
     }
 
     static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName, int serialNumber) {
@@ -74,7 +74,14 @@ public class BookSourceManage {
         bookSourceBean.setBookSourceName("顶点小说");
         bookSourceBean.setSerialNumber(5);
         bookSourceBean.setEnable(true);
-        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=key&p=page");
+        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage");
+        bookSourceBean.setRuleSearchList("result-item result-game-item");
+        bookSourceBean.setRuleSearchAuthor("result-game-item-info-tag span@0");
+        bookSourceBean.setRuleSearchKind("result-game-item-info-tag span@1");
+        bookSourceBean.setRuleSearchLastChapter("result-game-item-info-tag a@3");
+        bookSourceBean.setRuleSearchName("result-item-title a@0");
+        bookSourceBean.setRuleSearchNoteUrl("result-item-title a@0@href");
+        bookSourceBean.setRuleSearchCoverUrl("result-game-item-pic img@0@src");
         return bookSourceBean;
     }
 
