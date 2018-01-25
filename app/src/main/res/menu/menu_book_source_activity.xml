@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.BookSourceActivity">
+
+    <item
+        android:id="@+id/action_reset_book_source"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:title="@string/action_search"
+        app:showAsAction="ifRoom" />
+
+
+</menu>
