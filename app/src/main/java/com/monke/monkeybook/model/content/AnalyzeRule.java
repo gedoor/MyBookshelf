@@ -93,12 +93,12 @@ public class AnalyzeRule {
     }
 
     public static Elements getElements(Element temp, String rule) {
-        if (temp == null) {
-            return new Elements();
+        Elements elements = new Elements();
+        if (temp == null || isEmpty(rule)) {
+            return elements;
         }
         String[] rs = rule.split("@");
         if (rs.length > 1) {
-            Elements elements = new Elements();
             elements.add(temp);
             for (String rl : rs) {
                 Elements es = new Elements();
@@ -108,9 +108,7 @@ public class AnalyzeRule {
                 elements.clear();
                 elements.addAll(es);
             }
-            return elements;
         } else {
-            Elements elements = new Elements();
             String[] rules = rule.split("\\.");
             switch (rules[0]) {
                 case "class":
@@ -131,7 +129,7 @@ public class AnalyzeRule {
                     elements.add(temp.getElementById(rules[1]));
                     break;
             }
-            return elements;
         }
+        return elements;
     }
 }
