@@ -57,15 +57,25 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         } else {
             searchBook = intent.getParcelableExtra("data");
             inBookShelf = searchBook.getAdd();
+            bookShelf = new BookShelfBean();
+            bookShelf.setNoteUrl(searchBook.getNoteUrl());
+            bookShelf.setFinalDate(System.currentTimeMillis());
+            bookShelf.setDurChapter(0);
+            bookShelf.setDurChapterPage(0);
+            bookShelf.setTag(searchBook.getTag());
+            BookInfoBean bookInfo = new BookInfoBean();
+            bookInfo.setNoteUrl(searchBook.getNoteUrl());
+            bookInfo.setAuthor(searchBook.getAuthor());
+            bookInfo.setCoverUrl(searchBook.getCoverUrl());
+            bookInfo.setName(searchBook.getName());
+            bookInfo.setTag(searchBook.getTag());
+            bookInfo.setOrigin(searchBook.getOrigin());
+            bookShelf.setBookInfoBean(bookInfo);
         }
     }
 
     public Boolean getInBookShelf() {
         return inBookShelf;
-    }
-
-    public void setInBookShelf(Boolean inBookShelf) {
-        this.inBookShelf = inBookShelf;
     }
 
     public int getOpenFrom() {
@@ -90,21 +100,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             e.onComplete();
         }).flatMap(bookShelfBeen -> {
             bookShelfS.addAll(bookShelfBeen);
-
-            final BookShelfBean bookShelfResult = new BookShelfBean();
-            bookShelfResult.setNoteUrl(searchBook.getNoteUrl());
-            bookShelfResult.setFinalDate(System.currentTimeMillis());
-            bookShelfResult.setDurChapter(0);
-            bookShelfResult.setDurChapterPage(0);
-            bookShelfResult.setTag(searchBook.getTag());
-            BookInfoBean bookInfoBean = new BookInfoBean();
-            bookInfoBean.setNoteUrl(searchBook.getNoteUrl());
-            bookInfoBean.setAuthor(searchBook.getAuthor());
-            bookInfoBean.setCoverUrl(searchBook.getCoverUrl());
-            bookInfoBean.setName(searchBook.getName());
-            bookInfoBean.setTag(searchBook.getTag());
-            bookShelfResult.setBookInfoBean(bookInfoBean);
-            return WebBookModelImpl.getInstance().getBookInfo(bookShelfResult);
+            return WebBookModelImpl.getInstance().getBookInfo(bookShelf);
         }).map(bookShelfBean -> {
             for (int i = 0; i < bookShelfS.size(); i++) {
                 if (bookShelfS.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {

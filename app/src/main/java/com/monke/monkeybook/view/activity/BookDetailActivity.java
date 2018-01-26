@@ -94,8 +94,6 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
 
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
         initView();
-
-        updateView();
     }
 
     @Override
@@ -144,16 +142,6 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
-        } else {
-            tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest), mPresenter.getSearchBook().getLastChapter()));
-            tvShelf.setText("放入书架");
-            tvRead.setText("开始阅读");
-            tvRead.setOnClickListener(v -> {
-                //放入书架
-            });
-            tvIntro.setVisibility(View.INVISIBLE);
-            tvLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText("加载中...");
         }
         tvLoading.setOnClickListener(null);
     }
@@ -172,7 +160,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_SEARCH && mPresenter.getBookShelf() == null) {
+        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_SEARCH) {
             //网络请求
             mPresenter.getBookShelfInfo();
         }
@@ -192,6 +180,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
+            updateView();
         } else {
             coverUrl = mPresenter.getSearchBook().getCoverUrl();
             name = mPresenter.getSearchBook().getName();
@@ -202,6 +191,16 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
+            tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest), mPresenter.getSearchBook().getLastChapter()));
+            tvShelf.setText("放入书架");
+            tvRead.setText("开始阅读");
+            tvRead.setOnClickListener(v -> {
+                //放入书架
+            });
+            tvIntro.setVisibility(View.INVISIBLE);
+            tvLoading.setVisibility(View.VISIBLE);
+            tvLoading.setText("加载中...");
+            tvLoading.setOnClickListener(null);
         }
 
         Glide.with(this).load(coverUrl).dontAnimate()
