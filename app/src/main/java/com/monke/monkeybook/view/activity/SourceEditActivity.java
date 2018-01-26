@@ -55,7 +55,7 @@ public class SourceEditActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("编辑书源");
+            actionBar.setTitle(R.string.edit_book_source);
         }
     }
 
