@@ -4,7 +4,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
-import com.monke.monkeybook.model.content.ZwduModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
@@ -48,10 +47,10 @@ public class BookSourceManage {
     public static List<BookSourceBean> saveBookSourceToDb() {
         allBookSource.clear();
         allBookSource.add(getBookSourceDd());
-        allBookSource.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 1));
-        allBookSource.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2));
-        allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3));
-        allBookSource.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
+        allBookSource.add(getBookSourceBy());
+        allBookSource.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 3));
+        allBookSource.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 4));
+        allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 5));
 
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
         selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
@@ -68,11 +67,37 @@ public class BookSourceManage {
         return bookSourceBean;
     }
 
+    static BookSourceBean getBookSourceBy() {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl("https://www.zwdu.com");
+        bookSourceBean.setBookSourceName("八一中文");
+        bookSourceBean.setSerialNumber(1);
+        bookSourceBean.setEnable(true);
+        bookSourceBean.setRuleSearchUrl("https://www.zwdu.com/search.php?keyword=searchKey&page=searchPage");
+        bookSourceBean.setRuleSearchList("class.result-item");
+        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
+        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
+        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
+        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
+        bookSourceBean.setRuleSearchCoverUrl("tag.img.0@src");
+        bookSourceBean.setRuleBookName("class.box_con.0@id.info@tag.h1.0@text");
+        bookSourceBean.setRuleBookAuthor("class.box_con.0@id.info@tag.p.0@text");
+        bookSourceBean.setRuleIntroduce("id.intro@tag.p@text");
+        bookSourceBean.setRuleCoverUrl("id.fmimg@tag.img.0@src");
+        bookSourceBean.setRuleChapterList("id.list@tag.dd");
+        bookSourceBean.setRuleChapterName("tag.a.0@text");
+        bookSourceBean.setRuleContentUrl("tag.a.0@href");
+        bookSourceBean.setRuleBookContent("id.content@textNodes");
+
+        return bookSourceBean;
+    }
+
     static BookSourceBean getBookSourceDd() {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl("http://www.23us.so/");
         bookSourceBean.setBookSourceName("顶点小说");
-        bookSourceBean.setSerialNumber(5);
+        bookSourceBean.setSerialNumber(2);
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage");
         bookSourceBean.setRuleSearchList("class.result-item");
@@ -103,8 +128,6 @@ public class BookSourceManage {
                 return LingdiankanshuModelImpl.getInstance();
             case XBQGModelImpl.TAG:
                 return XBQGModelImpl.getInstance();
-            case ZwduModelImpl.TAG:
-                return ZwduModelImpl.getInstance();
             default:
                 return DefaultModelImpl.getInstance(tag);
         }
