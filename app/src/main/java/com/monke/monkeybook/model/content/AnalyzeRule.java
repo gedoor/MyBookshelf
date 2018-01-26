@@ -1,8 +1,15 @@
 package com.monke.monkeybook.model.content;
 
-import org.jsoup.nodes.Document;
+import android.widget.ListView;
+
+import com.monke.monkeybook.help.FormatWebText;
+
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -19,43 +26,102 @@ public class AnalyzeRule {
 
     public String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
-            return "";
+            return null;
+        }
+        List<String> textS = getResultList(ruleStr);
+        StringBuilder content = new StringBuilder();
+        for (String text : textS) {
+            text = FormatWebText.getContent(text);
+            if (textS.size() > 1) {
+                if (text.length() > 0) {
+                    if (content.length() > 0) {
+                        content.append("\r\n");
+                    }
+                    content.append("\u3000\u3000").append(text);
+                }
+            } else {
+                content.append(text);
+            }
+        }
+        return content.toString();
+    }
+
+    public List<String> getResultList(String ruleStr) {
+        if (isEmpty(ruleStr)) {
+            return null;
         }
         Elements elements = new Elements();
         elements.add(element);
         String[] rules = ruleStr.split("@");
         for (int i = 0; i < rules.length - 1; i++) {
-            Elements es = getElements(elements.get(0), rules[i]);
+            Elements es = new Elements();
+            for (Element elt : elements) {
+                es.addAll(getElements(elt, rules[i]));
+            }
             elements.clear();
             elements = es;
         }
-        if (rules[rules.length - 1].equals("text")) {
-            return elements.get(0).text();
-        } else {
-            return elements.attr(rules[rules.length - 1]);
+        List<String> textS = new ArrayList<>();
+        String lastRule = rules[rules.length - 1];
+        switch (lastRule) {
+            case "text":
+                for (Element element : elements) {
+                    textS.add(element.text());
+                }
+                break;
+            case "textNodes":
+                List<TextNode> contentEs = elements.get(0).textNodes();
+                for (int i = 0; i < contentEs.size(); i++) {
+                    String temp = contentEs.get(i).text().trim();
+                    temp = FormatWebText.getContent(temp);
+                    if (temp.length() > 0) {
+                        textS.add(temp);
+                    }
+                }
+                break;
+            default:
+                textS.add(elements.get(0).attr(lastRule));
         }
+        return textS;
     }
 
     public static Elements getElements(Element temp, String rule) {
-        Elements elements = new Elements();
-        String[] rules = rule.split("\\.");
-        switch (rules[0]) {
-            case "class":
-                if (rules.length == 3) {
-                    elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
-                } else {
-                    elements.addAll(temp.getElementsByClass(rules[1]));
+        String[] rs = rule.split("@");
+        if (rs.length > 1) {
+            Elements elements = new Elements();
+            elements.add(temp);
+            for (String rl : rs) {
+                Elements es = new Elements();
+                for (Element et : elements) {
+                    es.addAll(getElements(et, rl));
                 }
-                break;
-            case "tag":
-                if (rules.length == 3) {
-                    elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
-                } else {
-                    elements.addAll(temp.getElementsByTag(rules[1]));
-                }
-            case "id":
-                elements.add(temp.getElementById(rules[1]));
+                elements.clear();
+                elements.addAll(es);
+            }
+            return elements;
+        } else {
+            Elements elements = new Elements();
+            String[] rules = rule.split("\\.");
+            switch (rules[0]) {
+                case "class":
+                    if (rules.length == 3) {
+                        elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
+                    } else {
+                        elements.addAll(temp.getElementsByClass(rules[1]));
+                    }
+                    break;
+                case "tag":
+                    if (rules.length == 3) {
+                        elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
+                    } else {
+                        elements.addAll(temp.getElementsByTag(rules[1]));
+                    }
+                    break;
+                case "id":
+                    elements.add(temp.getElementById(rules[1]));
+                    break;
+            }
+            return elements;
         }
-        return elements;
     }
 }

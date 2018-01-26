@@ -83,6 +83,10 @@ public class BookSourceManage {
         bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
         bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
         bookSourceBean.setRuleSearchCoverUrl("class.result-game-item-pic.0@tag.img.0@src");
+        bookSourceBean.setRuleChapterList("id.at@tag.td");
+        bookSourceBean.setRuleChapterName("tag.a.0@text");
+        bookSourceBean.setRuleContentUrl("tag.a.0@href");
+        bookSourceBean.setRuleBookContent("id.contents@textNodes");
 
         return bookSourceBean;
     }

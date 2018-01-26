@@ -66,6 +66,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
             }
+            name = bookSourceBean.getBookSourceName();
         }
     }
 
@@ -128,6 +129,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         initBookSourceBean();
+        if (bookSourceBean == null) {
+            return null;
+        }
         return getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
@@ -173,6 +177,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
+        initBookSourceBean();
+        if (bookSourceBean == null) {
+            getChapterListListener.error();
+            return;
+        }
         getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
@@ -209,13 +218,14 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
-        Elements chapterList = doc.getElementById("at").getElementsByTag("td");
+        Elements chapterList = AnalyzeRule.getElements(doc, bookSourceBean.getRuleChapterList());
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
+            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i));
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(chapterList.get(i).getElementsByTag("a").get(0).attr("href"));   //id
             temp.setDurChapterIndex(i);
-            temp.setDurChapterName(chapterList.get(i).getElementsByTag("a").get(0).text());
+            temp.setDurChapterUrl(analyzeRule.getResult(bookSourceBean.getRuleContentUrl()));   //id
+            temp.setDurChapterName(analyzeRule.getResult(bookSourceBean.getRuleChapterName()));
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
 
@@ -229,6 +239,10 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
+        initBookSourceBean();
+        if (bookSourceBean == null) {
+            return null;
+        }
         return getRetrofitString(TAG)
                 .create(IGetWebApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
@@ -243,19 +257,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookContentBean.setTag(TAG);
             try {
                 Document doc = Jsoup.parse(s);
-                List<TextNode> contentEs = doc.getElementById("contents").textNodes();
-                StringBuilder content = new StringBuilder();
-                for (int i = 0; i < contentEs.size(); i++) {
-                    String temp = contentEs.get(i).text().trim();
-                    temp = temp.replaceAll(" ", "").replaceAll(" ", "");
-                    if (temp.length() > 0) {
-                        if (content.length() > 0) {
-                            content.append("\r\n");
-                        }
-                        content.append("\u3000\u3000").append(temp);
-                    }
-                }
-                bookContentBean.setDurChapterContent(content.toString());
+                AnalyzeRule analyzeRule = new AnalyzeRule(doc);
+                bookContentBean.setDurChapterContent(analyzeRule.getResult(bookSourceBean.getRuleBookContent()));
                 bookContentBean.setRight(true);
             } catch (Exception ex) {
                 ex.printStackTrace();

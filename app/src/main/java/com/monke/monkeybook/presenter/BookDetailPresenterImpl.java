@@ -14,6 +14,7 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.common.RxBusTag;
@@ -96,6 +97,13 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             bookShelfResult.setDurChapter(0);
             bookShelfResult.setDurChapterPage(0);
             bookShelfResult.setTag(searchBook.getTag());
+            BookInfoBean bookInfoBean = new BookInfoBean();
+            bookInfoBean.setNoteUrl(searchBook.getNoteUrl());
+            bookInfoBean.setAuthor(searchBook.getAuthor());
+            bookInfoBean.setCoverUrl(searchBook.getCoverUrl());
+            bookInfoBean.setName(searchBook.getName());
+            bookInfoBean.setTag(searchBook.getTag());
+            bookShelfResult.setBookInfoBean(bookInfoBean);
             return WebBookModelImpl.getInstance().getBookInfo(bookShelfResult);
         }).map(bookShelfBean -> {
             for (int i = 0; i < bookShelfS.size(); i++) {

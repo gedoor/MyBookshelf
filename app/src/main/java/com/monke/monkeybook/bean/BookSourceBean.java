@@ -27,6 +27,8 @@ public class BookSourceBean  implements Parcelable,Cloneable{
     private String ruleChapterUrl;
     private String ruleCoverUrl;
     private String ruleIntroduce;
+    private String ruleChapterList;
+    private String ruleChapterName;
     private String ruleContentUrl;
     private String ruleBookContent;
     private String ruleSearchUrl;
@@ -49,6 +51,8 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         ruleChapterUrl = in.readString();
         ruleCoverUrl = in.readString();
         ruleIntroduce = in.readString();
+        ruleChapterList = in.readString();
+        ruleChapterName = in.readString();
         ruleContentUrl = in.readString();
         ruleBookContent = in.readString();
         ruleSearchUrl = in.readString();
@@ -90,14 +94,14 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.bookSourceUrl = bookSourceUrl;
     }
 
-    @Generated(hash = 351828062)
+    @Generated(hash = 260114574)
     public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber,
             boolean enable, String ruleBookName, String ruleBookAuthor, String ruleChapterUrl,
-            String ruleCoverUrl, String ruleIntroduce, String ruleContentUrl,
-            String ruleBookContent, String ruleSearchUrl, String ruleSearchList,
-            String ruleSearchName, String ruleSearchAuthor, String ruleSearchKind,
-            String ruleSearchLastChapter, String ruleSearchCoverUrl,
-            String ruleSearchNoteUrl) {
+            String ruleCoverUrl, String ruleIntroduce, String ruleChapterList,
+            String ruleChapterName, String ruleContentUrl, String ruleBookContent,
+            String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
+            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
+            String ruleSearchCoverUrl, String ruleSearchNoteUrl) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.serialNumber = serialNumber;
@@ -107,6 +111,8 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         this.ruleChapterUrl = ruleChapterUrl;
         this.ruleCoverUrl = ruleCoverUrl;
         this.ruleIntroduce = ruleIntroduce;
+        this.ruleChapterList = ruleChapterList;
+        this.ruleChapterName = ruleChapterName;
         this.ruleContentUrl = ruleContentUrl;
         this.ruleBookContent = ruleBookContent;
         this.ruleSearchUrl = ruleSearchUrl;
@@ -139,6 +145,8 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         parcel.writeString(ruleChapterUrl);
         parcel.writeString(ruleCoverUrl);
         parcel.writeString(ruleIntroduce);
+        parcel.writeString(ruleChapterList);
+        parcel.writeString(ruleChapterName);
         parcel.writeString(ruleContentUrl);
         parcel.writeString(ruleBookContent);
         parcel.writeString(ruleSearchUrl);
@@ -285,5 +293,21 @@ public class BookSourceBean  implements Parcelable,Cloneable{
 
     public void setRuleSearchList(String ruleSearchList) {
         this.ruleSearchList = ruleSearchList;
+    }
+
+    public String getRuleChapterList() {
+        return this.ruleChapterList;
+    }
+
+    public void setRuleChapterList(String ruleChapterList) {
+        this.ruleChapterList = ruleChapterList;
+    }
+
+    public String getRuleChapterName() {
+        return this.ruleChapterName;
+    }
+
+    public void setRuleChapterName(String ruleChapterName) {
+        this.ruleChapterName = ruleChapterName;
     }
 }
