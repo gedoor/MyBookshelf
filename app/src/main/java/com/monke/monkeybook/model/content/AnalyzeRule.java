@@ -30,6 +30,9 @@ public class AnalyzeRule {
             return null;
         }
         List<String> textS = getResultList(ruleStr);
+        if (textS == null) {
+            return null;
+        }
         StringBuilder content = new StringBuilder();
         for (String text : textS) {
             text = FormatWebText.getContent(text);
@@ -62,6 +65,9 @@ public class AnalyzeRule {
             elements.clear();
             elements = es;
         }
+        if (elements.isEmpty()) {
+            return null;
+        }
         List<String> textS = new ArrayList<>();
         String lastRule = rules[rules.length - 1];
         switch (lastRule) {
@@ -87,6 +93,9 @@ public class AnalyzeRule {
     }
 
     public static Elements getElements(Element temp, String rule) {
+        if (temp == null) {
+            return new Elements();
+        }
         String[] rs = rule.split("@");
         if (rs.length > 1) {
             Elements elements = new Elements();
