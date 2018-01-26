@@ -15,6 +15,7 @@ import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by GKF on 2018/1/25.
+ * 书源规则解析
  */
 
 public class AnalyzeRule {

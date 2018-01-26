@@ -10,7 +10,6 @@ import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
 import com.monke.monkeybook.model.content.XBQGModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,14 +47,14 @@ public class BookSourceManage {
 
     public static List<BookSourceBean> saveBookSourceToDb() {
         allBookSource.clear();
-        allBookSource.add(getBookSource5());
+        allBookSource.add(getBookSourceDd());
         allBookSource.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 1));
         allBookSource.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 2));
         allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 3));
         allBookSource.add(getBookSource(ZwduModelImpl.TAG, ZwduModelImpl.name, 4));
 
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
-        selectedBookSource = allBookSource;
+        selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
 
         return allBookSource;
     }
@@ -69,7 +68,7 @@ public class BookSourceManage {
         return bookSourceBean;
     }
 
-    static BookSourceBean getBookSource5() {
+    static BookSourceBean getBookSourceDd() {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl("http://www.23us.so/");
         bookSourceBean.setBookSourceName("顶点小说");

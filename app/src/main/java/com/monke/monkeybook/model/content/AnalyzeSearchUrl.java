@@ -1,4 +1,4 @@
-package com.monke.monkeybook.help;
+package com.monke.monkeybook.model.content;
 
 import java.net.MalformedURLException;
 import java.net.URL;
