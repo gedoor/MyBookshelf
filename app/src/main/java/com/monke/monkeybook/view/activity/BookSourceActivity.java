@@ -92,11 +92,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             //也就是说返回值是组合式的
             //makeMovementFlags (int dragFlags, int swipeFlags)，看下面的解释说明
-            int swipFlag=0;
-            //如果也监控左右方向的话，swipFlag=ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
-            int dragflag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlag = 0;
+            //如果也监控左右方向的话，swipeFlag=ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+            int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
             //等价于：0001&0010;多点触控标记触屏手指的顺序和个数也是这样标记哦
-            return  makeMovementFlags(dragflag,swipFlag);
+            return makeMovementFlags(dragFlag, swipeFlag);
         }
 
         @Override
