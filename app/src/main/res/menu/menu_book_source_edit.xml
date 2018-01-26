@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_reset_book_source"
+        android:id="@+id/action_save"
         android:icon="@drawable/ic_save_black_24dp"
         android:title="@string/action_save"
         app:showAsAction="ifRoom" />
