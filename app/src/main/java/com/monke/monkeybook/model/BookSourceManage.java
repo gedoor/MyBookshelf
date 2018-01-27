@@ -86,6 +86,7 @@ public class BookSourceManage {
     }
 
     public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
+        refreshBookSource();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
             if (bookSourceBean.getSerialNumber() == 0) {
                 bookSourceBean.setSerialNumber(allBookSource.size() + 1);
