@@ -1,9 +1,14 @@
 package com.monke.monkeybook.model;
 
+import android.widget.Toast;
+
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
@@ -11,6 +16,11 @@ import com.monke.monkeybook.model.content.XBQGModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -27,7 +37,10 @@ public class BookSourceManage {
 
     static List<BookSourceBean> getSelectedBookSource() {
         if (selectedBookSource == null) {
-            selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+            selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                    .list();
         }
         if (selectedBookSource.size() == 0) {
             selectedBookSource = getAllBookSource();
@@ -37,7 +50,9 @@ public class BookSourceManage {
 
     public static List<BookSourceBean> getAllBookSource() {
         if (allBookSource == null) {
-            allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+            allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                    .list();
         }
         if (allBookSource.size() == 0) {
             allBookSource = saveBookSourceToDb();
@@ -54,10 +69,19 @@ public class BookSourceManage {
         allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 5));
 
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
-        allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().orderAsc(BookSourceBeanDao.Properties.SerialNumber).list();
-        selectedBookSource = allBookSource;
 
+        refreshBookSource();
         return allBookSource;
+    }
+
+    public static void refreshBookSource() {
+        allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
+        selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
     }
 
     static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName, int serialNumber) {
@@ -67,6 +91,35 @@ public class BookSourceManage {
         bookSourceBean.setSerialNumber(serialNumber);
         bookSourceBean.setEnable(true);
         return bookSourceBean;
+    }
+
+    public static void addBookSource(BookSourceBean oldBookSource, BookSourceBean newBookSource, OnObservableListener observableListener) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            if (oldBookSource != null) {
+                newBookSource.setSerialNumber(oldBookSource.getSerialNumber());
+                newBookSource.setEnable(oldBookSource.getEnable());
+                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(oldBookSource);
+            }
+            if (newBookSource.getSerialNumber() == 0) {
+                newBookSource.setSerialNumber(allBookSource.size() + 1);
+            }
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(newBookSource);
+            BookSourceManage.refreshBookSource();
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        observableListener.success();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        observableListener.error();
+                    }
+                });
+
     }
 
     static BookSourceBean getBookSourceBy() {

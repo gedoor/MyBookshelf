@@ -12,6 +12,8 @@
     <string name="setting">设置</string>
     <string name="about">关于</string>
     <string name="donate">捐赠</string>
+    <string name="exit">退出</string>
+    <string name="exit_no_save">还未保存,是否继续编辑</string>
 
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>

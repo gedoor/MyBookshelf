@@ -162,4 +162,13 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EDIT_SOURCE) {
+            bookSourceBeanList = BookSourceManage.getAllBookSource();
+            bookSourceAdapter.resetBookSource(bookSourceBeanList);
+        }
+    }
 }

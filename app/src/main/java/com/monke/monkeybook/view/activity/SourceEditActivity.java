@@ -1,24 +1,38 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.listener.OnObservableListener;
+import com.monke.monkeybook.model.BookSourceManage;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -110,6 +124,8 @@ public class SourceEditActivity extends MBaseActivity {
     TextInputLayout tilRuleBookContent;
 
     private BookSourceBean bookSourceBean;
+    private int serialNumber;
+    private boolean enable;
     private String title;
 
     @Override
@@ -130,6 +146,8 @@ public class SourceEditActivity extends MBaseActivity {
         } else {
             title = getString(R.string.edit_book_source);
             bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
+            serialNumber = bookSourceBean.getSerialNumber();
+            enable = bookSourceBean.getEnable();
             BitIntentDataManager.getInstance().cleanData(key);
         }
     }
@@ -142,6 +160,53 @@ public class SourceEditActivity extends MBaseActivity {
 
         setHint();
         setText();
+    }
+
+    private void saveBookSource() {
+        if (isEmpty(tieBookSourceName.getText().toString().trim()) || isEmpty(tieBookSourceUrl.getText().toString().trim())) {
+            Toast.makeText(MApplication.getInstance(), "书源名称和URL不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        BookSourceManage.addBookSource(bookSourceBean, getBookSource(), new OnObservableListener() {
+            @Override
+            public void success() {
+                bookSourceBean = getBookSource();
+                bookSourceBean.setSerialNumber(serialNumber);
+                bookSourceBean.setEnable(enable);
+                Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void error() {
+                Toast.makeText(MApplication.getInstance(), "保存失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private BookSourceBean getBookSource() {
+        BookSourceBean bookSourceBeanN = new BookSourceBean();
+        bookSourceBeanN.setBookSourceName(tieBookSourceName.getText().toString());
+        bookSourceBeanN.setBookSourceUrl(tieBookSourceUrl.getText().toString());
+        bookSourceBeanN.setRuleBookAuthor(tieRuleBookAuthor.getText().toString());
+        bookSourceBeanN.setRuleBookContent(tieRuleBookContent.getText().toString());
+        bookSourceBeanN.setRuleBookName(tieRuleBookName.getText().toString());
+        bookSourceBeanN.setRuleChapterList(tieRuleChapterList.getText().toString());
+        bookSourceBeanN.setRuleChapterName(tieRuleChapterName.getText().toString());
+        bookSourceBeanN.setRuleChapterUrl(tieRuleChapterUrl.getText().toString());
+        bookSourceBeanN.setRuleContentUrl(tieRuleContentUrl.getText().toString());
+        bookSourceBeanN.setRuleCoverUrl(tieRuleCoverUrl.getText().toString());
+        bookSourceBeanN.setRuleIntroduce(tieRuleIntroduce.getText().toString());
+        bookSourceBeanN.setRuleSearchAuthor(tieRuleSearchAuthor.getText().toString());
+        bookSourceBeanN.setRuleSearchCoverUrl(tieRuleSearchCoverUrl.getText().toString());
+        bookSourceBeanN.setRuleSearchKind(tieRuleSearchKind.getText().toString());
+        bookSourceBeanN.setRuleSearchLastChapter(tieRuleSearchLastChapter.getText().toString());
+        bookSourceBeanN.setRuleSearchList(tieRuleSearchList.getText().toString());
+        bookSourceBeanN.setRuleSearchName(tieRuleSearchName.getText().toString());
+        bookSourceBeanN.setRuleSearchNoteUrl(tieRuleSearchNoteUrl.getText().toString());
+        bookSourceBeanN.setRuleSearchUrl(tieRuleSearchUrl.getText().toString());
+        return bookSourceBeanN;
     }
 
     private void setText() {
@@ -213,6 +278,7 @@ public class SourceEditActivity extends MBaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_save:
+                saveBookSource();
                 break;
             case android.R.id.home:
                 finish();
@@ -221,4 +287,18 @@ public class SourceEditActivity extends MBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.exit))
+                    .setMessage(getString(R.string.exit_no_save))
+                    .setPositiveButton("是", (DialogInterface dialogInterface, int which) -> {
+                    })
+                    .setNegativeButton("否", (DialogInterface dialogInterface, int which) -> finish())
+                    .show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, keyEvent);
+    }
 }
