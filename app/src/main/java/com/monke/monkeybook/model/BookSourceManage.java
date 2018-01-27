@@ -2,6 +2,7 @@ package com.monke.monkeybook.model;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
@@ -53,7 +54,8 @@ public class BookSourceManage {
         allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 5));
 
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
-        selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().list();
+        allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().orderAsc(BookSourceBeanDao.Properties.SerialNumber).list();
+        selectedBookSource = allBookSource;
 
         return allBookSource;
     }
