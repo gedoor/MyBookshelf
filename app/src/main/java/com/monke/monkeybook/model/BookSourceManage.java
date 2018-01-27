@@ -124,13 +124,13 @@ public class BookSourceManage {
                 });
     }
 
-    static BookSourceBean getBookSourceWZ() {
+    private static BookSourceBean getBookSourceWZ() {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl("http://www.gxwztv.com");
         bookSourceBean.setBookSourceName("梧州中文台");
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1");
-        bookSourceBean.setRuleSearchList("class.list-group-item");
+        bookSourceBean.setRuleSearchList("class.list-group-item!0:%");
         bookSourceBean.setRuleSearchAuthor("class.col-xs-2.0@text");
         bookSourceBean.setRuleSearchKind("class.col-xs-1.0@text");
         bookSourceBean.setRuleSearchLastChapter("class.col-xs-4.0@tag.a.0@text");
@@ -253,8 +253,6 @@ public class BookSourceManage {
         switch (tag) {
             case BookShelfBean.LOCAL_TAG:
                 return null;
-            case GxwztvBookModelImpl.TAG:
-                return GxwztvBookModelImpl.getInstance();
             default:
                 return DefaultModelImpl.getInstance(tag);
         }

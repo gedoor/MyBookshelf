@@ -25,6 +25,58 @@ public class AnalyzeRule {
         this.element = element;
     }
 
+    public static Elements getElements(Element temp, String rule) {
+        Elements elements = new Elements();
+        if (temp == null || isEmpty(rule)) {
+            return elements;
+        }
+        String[] rs = rule.split("@");
+        if (rs.length > 1) {
+            elements.add(temp);
+            for (String rl : rs) {
+                Elements es = new Elements();
+                for (Element et : elements) {
+                    es.addAll(getElements(et, rl));
+                }
+                elements.clear();
+                elements.addAll(es);
+            }
+        } else {
+            String[] rulePc = rule.split("!");
+            String[] rules = rulePc[0].split("\\.");
+            switch (rules[0]) {
+                case "class":
+                    if (rules.length == 3) {
+                        elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
+                    } else {
+                        elements.addAll(temp.getElementsByClass(rules[1]));
+                    }
+                    break;
+                case "tag":
+                    if (rules.length == 3) {
+                        elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
+                    } else {
+                        elements.addAll(temp.getElementsByTag(rules[1]));
+                    }
+                    break;
+                case "id":
+                    elements.add(temp.getElementById(rules[1]));
+                    break;
+            }
+            if (rulePc.length > 1) {
+                String[] rulePcs = rulePc[1].split(":");
+                for (String pc : rulePcs) {
+                    if (pc.equals("%")) {
+                        elements.remove(elements.last());
+                    } else {
+                        elements.remove(elements.get(Integer.parseInt(pc)));
+                    }
+                }
+            }
+        }
+        return elements;
+    }
+
     public String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
@@ -90,46 +142,5 @@ public class AnalyzeRule {
                 textS.add(elements.get(0).attr(lastRule));
         }
         return textS;
-    }
-
-    public static Elements getElements(Element temp, String rule) {
-        Elements elements = new Elements();
-        if (temp == null || isEmpty(rule)) {
-            return elements;
-        }
-        String[] rs = rule.split("@");
-        if (rs.length > 1) {
-            elements.add(temp);
-            for (String rl : rs) {
-                Elements es = new Elements();
-                for (Element et : elements) {
-                    es.addAll(getElements(et, rl));
-                }
-                elements.clear();
-                elements.addAll(es);
-            }
-        } else {
-            String[] rules = rule.split("\\.");
-            switch (rules[0]) {
-                case "class":
-                    if (rules.length == 3) {
-                        elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
-                    } else {
-                        elements.addAll(temp.getElementsByClass(rules[1]));
-                    }
-                    break;
-                case "tag":
-                    if (rules.length == 3) {
-                        elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
-                    } else {
-                        elements.addAll(temp.getElementsByTag(rules[1]));
-                    }
-                    break;
-                case "id":
-                    elements.add(temp.getElementById(rules[1]));
-                    break;
-            }
-        }
-        return elements;
     }
 }
