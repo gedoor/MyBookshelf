@@ -28,6 +28,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.Donate;
+import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
@@ -51,17 +52,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
-    private BookShelfGridAdapter bookShelfGridAdapter;
-    private BookShelfListAdapter bookShelfListAdapter;
-    private boolean viewIsList;
-
-    private ActionBarDrawerToggle mDrawerToggle;
-
-    private DownloadListPop downloadListPop;
-    private MoProgressHUD moProgressHUD;
-
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-
     @BindView(R.id.drawer)
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
@@ -70,6 +60,14 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     Toolbar toolbar;
     @BindView(R.id.rf_rv_shelf)
     RefreshRecyclerView rfRvShelf;
+    private BookShelfGridAdapter bookShelfGridAdapter;
+    private BookShelfListAdapter bookShelfListAdapter;
+    private boolean viewIsList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DownloadListPop downloadListPop;
+    private MoProgressHUD moProgressHUD;
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private long exitTime = 0;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -339,6 +337,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void firstRequest() {
+        BookSourceManage.saveBookSourceToDb();
         mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
     }
 
@@ -424,8 +423,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         super.onDestroy();
         downloadListPop.onDestroy();
     }
-
-    private long exitTime = 0;
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
