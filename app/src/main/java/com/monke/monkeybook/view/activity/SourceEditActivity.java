@@ -28,6 +28,8 @@ public class SourceEditActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
+    private String bookSource;
+
     @Override
     protected IPresenter initInjector() {
         return null;
@@ -40,7 +42,7 @@ public class SourceEditActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-
+        bookSource = this.getIntent().getStringExtra("bookSource");
     }
 
     @Override
@@ -48,6 +50,8 @@ public class SourceEditActivity extends MBaseActivity {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
+
+        etBookSource.setText(bookSource);
     }
 
     //设置ToolBar

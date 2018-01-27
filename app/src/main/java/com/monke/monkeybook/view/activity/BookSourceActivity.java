@@ -32,6 +32,8 @@ import butterknife.ButterKnife;
  */
 
 public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceManageView {
+    public static final int EDIT_SOURCE = 101;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -43,50 +45,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private Animation animOut;
     private BookSourceAdapter bookSourceAdapter;
     private List<BookSourceBean> bookSourceBeanList;
-
-    @Override
-    protected void onCreateActivity() {
-        setContentView(R.layout.activity_book_source);
-    }
-
-    @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
-        setupActionBar();
-        initRecyclerView();
-    }
-
-    @Override
-    protected void initData() {
-        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
-    }
-
-    private void initRecyclerView() {
-        recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
-        bookSourceBeanList = BookSourceManage.getAllBookSource();
-        bookSourceAdapter = new BookSourceAdapter(bookSourceBeanList);
-        recyclerViewBookSource.setAdapter(bookSourceAdapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
-    }
-
-    private void resetBookSource() {
-        bookSourceBeanList = BookSourceManage.saveBookSourceToDb();
-        bookSourceAdapter.resetBookSource(bookSourceBeanList);
-    }
-
-    @Override
-    protected void firstRequest() {
-        llContent.startAnimation(animIn);
-    }
-
-    @Override
-    protected IBookSourcePresenter initInjector() {
-        return new BookSourcePresenterImpl();
-    }
-
     ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
@@ -124,6 +82,50 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             return true;
         }
     };
+
+    @Override
+    protected void onCreateActivity() {
+        setContentView(R.layout.activity_book_source);
+    }
+
+    @Override
+    protected void bindView() {
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
+        initRecyclerView();
+    }
+
+    @Override
+    protected void initData() {
+        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
+        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+    }
+
+    private void initRecyclerView() {
+        recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
+        bookSourceBeanList = BookSourceManage.getAllBookSource();
+        bookSourceAdapter = new BookSourceAdapter(this);
+        recyclerViewBookSource.setAdapter(bookSourceAdapter);
+        bookSourceAdapter.addBookSource(bookSourceBeanList);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
+    }
+
+    private void resetBookSource() {
+        bookSourceBeanList = BookSourceManage.saveBookSourceToDb();
+        bookSourceAdapter.resetBookSource(bookSourceBeanList);
+    }
+
+    @Override
+    protected void firstRequest() {
+        llContent.startAnimation(animIn);
+    }
+
+    @Override
+    protected IBookSourcePresenter initInjector() {
+        return new BookSourcePresenterImpl();
+    }
 
     //设置ToolBar
     private void setupActionBar() {

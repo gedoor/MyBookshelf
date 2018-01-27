@@ -29,7 +29,9 @@
             android:id="@+id/et_book_source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:background="@null"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical" />
     </ScrollView>
 
 
