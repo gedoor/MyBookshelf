@@ -13,15 +13,22 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class BookSourceBean  implements Parcelable,Cloneable{
+    public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
+        @Override
+        public BookSourceBean createFromParcel(Parcel in) {
+            return new BookSourceBean(in);
+        }
+
+        @Override
+        public BookSourceBean[] newArray(int size) {
+            return new BookSourceBean[size];
+        }
+    };
     @Id
     private String bookSourceUrl;
-
     private String bookSourceName;
-
     private int serialNumber;
-
     private boolean enable;
-
     private String ruleBookName;
     private String ruleBookAuthor;
     private String ruleChapterUrl;
@@ -65,35 +72,6 @@ public class BookSourceBean  implements Parcelable,Cloneable{
         ruleSearchNoteUrl = in.readString();
     }
 
-    public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
-        @Override
-        public BookSourceBean createFromParcel(Parcel in) {
-            return new BookSourceBean(in);
-        }
-
-        @Override
-        public BookSourceBean[] newArray(int size) {
-            return new BookSourceBean[size];
-        }
-    };
-
-    public String getBookSourceName() {
-
-        return bookSourceName;
-    }
-
-    public void setBookSourceName(String bookSourceName) {
-        this.bookSourceName = bookSourceName;
-    }
-
-    public String getBookSourceUrl() {
-        return bookSourceUrl;
-    }
-
-    public void setBookSourceUrl(String bookSourceUrl) {
-        this.bookSourceUrl = bookSourceUrl;
-    }
-
     @Generated(hash = 260114574)
     public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber,
             boolean enable, String ruleBookName, String ruleBookAuthor, String ruleChapterUrl,
@@ -126,6 +104,23 @@ public class BookSourceBean  implements Parcelable,Cloneable{
     }
 
     public BookSourceBean() {
+    }
+
+    public String getBookSourceName() {
+
+        return bookSourceName;
+    }
+
+    public void setBookSourceName(String bookSourceName) {
+        this.bookSourceName = bookSourceName;
+    }
+
+    public String getBookSourceUrl() {
+        return bookSourceUrl;
+    }
+
+    public void setBookSourceUrl(String bookSourceUrl) {
+        this.bookSourceUrl = bookSourceUrl;
     }
 
     @Override
@@ -309,5 +304,10 @@ public class BookSourceBean  implements Parcelable,Cloneable{
 
     public void setRuleChapterName(String ruleChapterName) {
         this.ruleChapterName = ruleChapterName;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -148,6 +149,10 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_add_book_source:
+                Intent intent = new Intent(this, SourceEditActivity.class);
+                startActivityForResult(intent, EDIT_SOURCE);
+                break;
             case R.id.action_reset_book_source:
                 resetBookSource();
                 break;

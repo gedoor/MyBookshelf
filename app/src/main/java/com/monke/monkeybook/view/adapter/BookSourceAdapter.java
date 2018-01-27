@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 
 import com.google.gson.Gson;
 import com.monke.basemvplib.BaseActivity;
+import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -53,10 +54,15 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         holder.bookSource.setText(bookSourceBeanList.get(position).getBookSourceName());
         holder.bookSource.setChecked(bookSourceBeanList.get(position).getEnable());
         holder.editSource.setOnClickListener(view -> {
-            Gson gson = new Gson();
-            String bs = gson.toJson(bookSourceBeanList.get(position));
             Intent intent = new Intent(activity, SourceEditActivity.class);
-            intent.putExtra("bookSource", bs);
+            String key = String.valueOf(System.currentTimeMillis());
+            intent.putExtra("data_key", key);
+            try {
+                BitIntentDataManager.getInstance().putData(key, bookSourceBeanList.get(position).clone());
+            } catch (CloneNotSupportedException e) {
+                BitIntentDataManager.getInstance().putData(key, bookSourceBeanList.get(position));
+                e.printStackTrace();
+            }
             activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
         });
     }
