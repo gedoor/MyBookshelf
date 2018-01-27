@@ -27,9 +27,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
-    private Animation animHideLoading;
-    private Animation animShowInfo;
-
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
     @BindView(R.id.iv_blur_cover)
@@ -54,6 +51,8 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     TextView tvLoading;
     @BindView(R.id.iv_refresh)
     ImageView ivRefresh;
+    private Animation animHideLoading;
+    private Animation animShowInfo;
 
     @Override
     protected IBookDetailPresenter initInjector() {
@@ -102,7 +101,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() > 0) {
+                if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                     tvChapter.setText(String.format(getString(R.string.tv_read_durprogress),
                             mPresenter.getBookShelf().getDurChapterListBean().getDurChapterName()));
                 } else {
@@ -115,7 +114,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                     mPresenter.removeFromBookShelf();
                 });
             } else {
-                if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() == 0) {
+                if (mPresenter.getBookShelf().getChapterListSize() == 0) {
                     tvChapter.setText("无章节");
                 } else {
                     tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest),

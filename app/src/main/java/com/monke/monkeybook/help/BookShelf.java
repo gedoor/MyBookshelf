@@ -28,17 +28,17 @@ public class BookShelf {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         List<String> keys = new ArrayList<>();
-        if (bookShelfBean.getBookInfoBean().getChapterList().size() > 0) {
-            for (int i = 0; i < bookShelfBean.getBookInfoBean().getChapterList().size(); i++) {
-                keys.add(bookShelfBean.getBookInfoBean().getChapterList(i).getDurChapterUrl());
+        if (bookShelfBean.getChapterListSize() > 0) {
+            for (int i = 0; i < bookShelfBean.getChapterListSize(); i++) {
+                keys.add(bookShelfBean.getChapterList(i).getDurChapterUrl());
             }
         }
         DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
-        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getBookInfoBean().getChapterList());
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
-        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getBookInfoBean().getChapterList());
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
     }

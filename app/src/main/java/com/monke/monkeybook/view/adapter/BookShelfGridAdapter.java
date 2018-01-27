@@ -239,15 +239,15 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
             holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
 
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterList()
-                    && books.get(index).getBookInfoBean().getChapterList().size() > books.get(index).getDurChapter()) {
+            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
+                    && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
                 holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.tv_read_durprogress),
                         books.get(index).getDurChapterListBean().getDurChapterName()));
             }
             holder.llDurCursor.setVisibility(View.VISIBLE);
             holder.mpbDurProgress.setVisibility(View.VISIBLE);
-            holder.mpbDurProgress.setMaxProgress(books.get(index).getBookInfoBean().getChapterList().size());
-            float speed = books.get(index).getBookInfoBean().getChapterList().size()*1.0f/100;
+            holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
+            float speed = books.get(index).getChapterListSize() * 1.0f / 100;
 
             holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
             holder.mpbDurProgress.setProgressListener(new OnProgressListener() {
@@ -296,6 +296,36 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     public void setNeedAnim(Boolean needAnim) {
         this.needAnim = needAnim;
+    }
+
+    public synchronized void replaceAll(List<BookShelfBean> newDatas) {
+        books.clear();
+        if (null != newDatas && newDatas.size() > 0) {
+            books.addAll(newDatas);
+        }
+        order();
+
+        notifyDataSetChanged();
+    }
+
+    private void order() {
+        if (books != null && books.size() > 0) {
+            for (int i = 0; i < books.size(); i++) {
+                int temp = i;
+                for (int j = i + 1; j < books.size(); j++) {
+                    if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
+                        temp = j;
+                    }
+                }
+                BookShelfBean tempBookShelfBean = books.get(i);
+                books.set(i, books.get(temp));
+                books.set(temp, tempBookShelfBean);
+            }
+        }
+    }
+
+    public List<BookShelfBean> getBooks() {
+        return books;
     }
 
     class LastViewHolder extends RecyclerView.ViewHolder {
@@ -378,35 +408,5 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
 
         abstract void onAnimStart(Animation animation);
-    }
-
-    public synchronized void replaceAll(List<BookShelfBean> newDatas) {
-        books.clear();
-        if (null != newDatas && newDatas.size() > 0) {
-            books.addAll(newDatas);
-        }
-        order();
-
-        notifyDataSetChanged();
-    }
-
-    private void order() {
-        if (books != null && books.size() > 0) {
-            for (int i = 0; i < books.size(); i++) {
-                int temp = i;
-                for (int j = i + 1; j < books.size(); j++) {
-                    if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
-                        temp = j;
-                    }
-                }
-                BookShelfBean tempBookShelfBean = books.get(i);
-                books.set(i, books.get(temp));
-                books.set(temp, tempBookShelfBean);
-            }
-        }
-    }
-
-    public List<BookShelfBean> getBooks() {
-        return books;
     }
 }

@@ -42,7 +42,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             position = getItemCount() - 1 - posiTion;
         }
-        holder.tvName.setText(bookShelfBean.getBookInfoBean().getChapterList(position).getDurChapterName());
+        holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
         holder.flContent.setOnClickListener(v -> {
             setIndex(position);
             itemClickListener.itemClick(position);
@@ -61,7 +61,17 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (bookShelfBean == null)
             return 0;
         else
-            return bookShelfBean.getBookInfoBean().getChapterList().size();
+            return bookShelfBean.getChapterListSize();
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        notifyItemChanged(this.index);
+        this.index = index;
+        notifyItemChanged(this.index);
     }
 
     class ThisViewHolder extends RecyclerView.ViewHolder {
@@ -75,15 +85,5 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             tvName = itemView.findViewById(R.id.tv_name);
             vLine = itemView.findViewById(R.id.v_line);
         }
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        notifyItemChanged(this.index);
-        this.index = index;
-        notifyItemChanged(this.index);
     }
 }

@@ -47,16 +47,6 @@ public class ChapterListView extends FrameLayout {
     private Animation animOut;
     private OnChangeListener changeListener;
 
-    public interface OnChangeListener {
-        void animIn();
-
-        void animOut();
-    }
-
-    public void setOnChangeListener(OnChangeListener changeListener) {
-        this.changeListener = changeListener;
-    }
-
     public ChapterListView(@NonNull Context context) {
         this(context, null);
     }
@@ -74,6 +64,10 @@ public class ChapterListView extends FrameLayout {
     public ChapterListView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+    }
+
+    public void setOnChangeListener(OnChangeListener changeListener) {
+        this.changeListener = changeListener;
     }
 
     private void init() {
@@ -139,10 +133,6 @@ public class ChapterListView extends FrameLayout {
         return (changeListener != null && bookShelfBean != null);
     }
 
-    public interface OnItemClickListener {
-        void itemClick(int index);
-    }
-
     private void initView() {
         ButterKnife.bind(this);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -154,7 +144,7 @@ public class ChapterListView extends FrameLayout {
         this.bookShelfBean = bookShelfBean;
         tvName.setText(bookShelfBean.getBookInfoBean().getName());
         tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
-                bookShelfBean.getBookInfoBean().getChapterList().size()));
+                bookShelfBean.getChapterListSize()));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(index);
@@ -175,5 +165,15 @@ public class ChapterListView extends FrameLayout {
             llContent.startAnimation(animOut);
             return true;
         }
+    }
+
+    public interface OnChangeListener {
+        void animIn();
+
+        void animOut();
+    }
+
+    public interface OnItemClickListener {
+        void itemClick(int index);
     }
 }

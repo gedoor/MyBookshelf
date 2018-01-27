@@ -147,6 +147,83 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             });
         }
     };
+    /**
+     * 正文事件
+     */
+    ContentSwitchView.LoadDataListener loadDataListener = new ContentSwitchView.LoadDataListener() {
+        @Override
+        public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
+            mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
+        }
+
+        @Override
+        public void updateProgress(int chapterIndex, int pageIndex) {
+            mPresenter.updateProgress(chapterIndex, pageIndex);
+            if (mPresenter.getBookShelf().getChapterListSize() > 0) {
+                atvTitle.setText(mPresenter.getBookShelf().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
+                atvUrl.setText(mPresenter.getBookShelf().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterUrl());
+            } else {
+                atvTitle.setText("无章节");
+            }
+            if (mPresenter.getBookShelf().getChapterListSize() == 1) {
+                tvPre.setEnabled(false);
+                tvNext.setEnabled(false);
+            } else {
+                if (chapterIndex == 1) {
+                    tvPre.setEnabled(false);
+                    tvNext.setEnabled(true);
+                } else if (chapterIndex == mPresenter.getBookShelf().getChapterListSize() - 1) {
+                    tvPre.setEnabled(true);
+                    tvNext.setEnabled(false);
+                } else {
+                    tvPre.setEnabled(true);
+                    tvNext.setEnabled(true);
+                }
+            }
+        }
+
+        @Override
+        public String getChapterTitle(int chapterIndex) {
+            return mPresenter.getChapterTitle(chapterIndex);
+        }
+
+        @Override
+        public void initData(int lineCount) {
+            mPresenter.setPageLineCount(lineCount);
+            mPresenter.setPageWidth(csvBook.getContentWidth());
+            mPresenter.initContent();
+        }
+
+        @Override
+        public void showMenu() {
+            flMenu.setVisibility(View.VISIBLE);
+            llMenuTop.startAnimation(menuTopIn);
+            llMenuBottom.startAnimation(menuBottomIn);
+            hideStatusBar(false);
+            hideNavigationBar();
+        }
+
+        @Override
+        public void setHpbReadProgress(int pageIndex, int pageAll) {
+            hpbReadProgress.setMaxProgress(pageAll - 1);
+            if (hpbReadProgress.getDurProgress() != pageIndex)
+                hpbReadProgress.setDurProgress(pageIndex);
+        }
+
+        @Override
+        public void readAloud(String content) {
+            readAloudIntent.putExtra("aloudButton", aloudButton);
+            readAloudIntent.putExtra("content", content);
+            startService(readAloudIntent);
+            aloudButton = false;
+        }
+
+        @Override
+        public void stopAloud() {
+            stopAloudService();
+        }
+    };
+    private Boolean showCheckPermission = false;
 
     @Override
     protected IReadBookPresenter initInjector() {
@@ -225,83 +302,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuBottom.startAnimation(menuBottomOut);
         }
     }
-
-    /**
-     * 正文事件
-     */
-    ContentSwitchView.LoadDataListener loadDataListener = new ContentSwitchView.LoadDataListener() {
-        @Override
-        public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-            mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
-        }
-
-        @Override
-        public void updateProgress(int chapterIndex, int pageIndex) {
-            mPresenter.updateProgress(chapterIndex, pageIndex);
-            if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() > 0) {
-                atvTitle.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterName());
-                atvUrl.setText(mPresenter.getBookShelf().getBookInfoBean().getChapterList(mPresenter.getBookShelf().getDurChapter()).getDurChapterUrl());
-            } else {
-                atvTitle.setText("无章节");
-            }
-            if (mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() == 1) {
-                tvPre.setEnabled(false);
-                tvNext.setEnabled(false);
-            } else {
-                if (chapterIndex == 1) {
-                    tvPre.setEnabled(false);
-                    tvNext.setEnabled(true);
-                } else if (chapterIndex == mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() - 1) {
-                    tvPre.setEnabled(true);
-                    tvNext.setEnabled(false);
-                } else {
-                    tvPre.setEnabled(true);
-                    tvNext.setEnabled(true);
-                }
-            }
-        }
-
-        @Override
-        public String getChapterTitle(int chapterIndex) {
-            return mPresenter.getChapterTitle(chapterIndex);
-        }
-
-        @Override
-        public void initData(int lineCount) {
-            mPresenter.setPageLineCount(lineCount);
-            mPresenter.setPageWidth(csvBook.getContentWidth());
-            mPresenter.initContent();
-        }
-
-        @Override
-        public void showMenu() {
-            flMenu.setVisibility(View.VISIBLE);
-            llMenuTop.startAnimation(menuTopIn);
-            llMenuBottom.startAnimation(menuBottomIn);
-            hideStatusBar(false);
-            hideNavigationBar();
-        }
-
-        @Override
-        public void setHpbReadProgress(int pageIndex, int pageAll) {
-            hpbReadProgress.setMaxProgress(pageAll - 1);
-            if (hpbReadProgress.getDurProgress() != pageIndex)
-                hpbReadProgress.setDurProgress(pageIndex);
-        }
-
-        @Override
-        public void readAloud(String content) {
-            readAloudIntent.putExtra("aloudButton", aloudButton);
-            readAloudIntent.putExtra("content", content);
-            startService(readAloudIntent);
-            aloudButton = false;
-        }
-
-        @Override
-        public void stopAloud() {
-            stopAloudService();
-        }
-    };
 
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
@@ -424,7 +424,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
-                .setInitData(index, mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin));
     }
 
@@ -447,7 +447,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 int realDur = (int) Math.ceil(dur);
                 if ((realDur) != csvBook.getDurContentView().getDurPageIndex()) {
                     csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                            mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                            mPresenter.getBookShelf().getChapterListSize(),
                             realDur);
                 }
                 if (hpbReadProgress.getDurProgress() != realDur)
@@ -477,11 +477,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if (mPresenter.getBookShelf() != null) {
                 //弹出离线下载界面
                 int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
-                if (endIndex >= mPresenter.getBookShelf().getBookInfoBean().getChapterList().size()) {
-                    endIndex = mPresenter.getBookShelf().getBookInfoBean().getChapterList().size() - 1;
+                if (endIndex >= mPresenter.getBookShelf().getChapterListSize()) {
+                    endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
                 }
                 moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                        mPresenter.getBookShelf().getChapterListSize(),
                         (start, end) -> {
                             moProgressHUD.dismiss();
                             mPresenter.addDownload(start, end);
@@ -512,7 +512,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 mPresenter.getBookShelf().getDurChapterListBean()
                         .setBookContentBean(null);
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                        mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin);
             }
         });
@@ -544,7 +544,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         tvPre.setOnClickListener(view -> {
             if (mPresenter.getBookShelf() != null) {
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                        mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin);
             }
         });
@@ -553,7 +553,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         tvNext.setOnClickListener(view -> {
             if (mPresenter.getBookShelf() != null) {
                 csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
-                        mPresenter.getBookShelf().getBookInfoBean().getChapterList().size(),
+                        mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin);
             }
         });
@@ -686,8 +686,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void dismissLoading() {
         moProgressHUD.dismiss();
     }
-
-    private Boolean showCheckPermission = false;
 
     @SuppressLint("NewApi")
     @Override

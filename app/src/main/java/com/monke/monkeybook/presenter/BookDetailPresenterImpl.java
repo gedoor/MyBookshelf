@@ -151,7 +151,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     public void addToBookShelf() {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getBookInfoBean().getChapterList());
+                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getChapterList());
                 DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
                 //网络数据获取成功  存入BookShelf表数据库
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);

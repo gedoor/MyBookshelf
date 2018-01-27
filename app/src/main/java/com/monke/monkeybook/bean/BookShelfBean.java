@@ -9,6 +9,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.List;
+
 /**
  * 书架item Bean
  */
@@ -19,22 +21,26 @@ public class BookShelfBean implements Parcelable,Cloneable{
     public static final long REFRESH_TIME = 5*60*1000;   //更新时间间隔 至少
     @Transient
     public static final String LOCAL_TAG = "loc_book";
+    @Transient
+    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
+        @Override
+        public BookShelfBean createFromParcel(Parcel in) {
+            return new BookShelfBean(in);
+        }
 
+        @Override
+        public BookShelfBean[] newArray(int size) {
+            return new BookShelfBean[size];
+        }
+    };
     @Id
     private String noteUrl; //对应BookInfoBean noteUrl;
-
     private int durChapter;   //当前章节 （包括番外）
-
     private int durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
-
     private long finalDate;  //最后阅读时间
-
     private boolean hasUpdate;  //是否有更新
-
     private int newChapters;  //更新章节数
-
     private String tag;
-
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
 
@@ -78,19 +84,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return 0;
     }
 
-    @Transient
-    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
-        @Override
-        public BookShelfBean createFromParcel(Parcel in) {
-            return new BookShelfBean(in);
-        }
-
-        @Override
-        public BookShelfBean[] newArray(int size) {
-            return new BookShelfBean[size];
-        }
-    };
-
     public String getNoteUrl() {
         return noteUrl;
     }
@@ -103,17 +96,41 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return durChapter;
     }
 
-    //获取当前章节
-    public ChapterListBean getDurChapterListBean() {
-        return bookInfoBean.getChapterList(durChapter);
-    }
-    //获取最新章节
-    public ChapterListBean getLastChapterListBean() {
-        return bookInfoBean.getChapterList(bookInfoBean.getChapterList().size()-1);
-    }
-
     public void setDurChapter(int durChapter) {
         this.durChapter = durChapter;
+    }
+
+    //获取当前章节
+    public ChapterListBean getDurChapterListBean() {
+        return getChapterList(durChapter);
+    }
+
+    //获取最新章节
+    public ChapterListBean getLastChapterListBean() {
+        return getChapterList(bookInfoBean.getChapterList().size() - 1);
+    }
+
+    public ChapterListBean getChapterList(int index) {
+
+        if (getChapterList() == null || getChapterListSize() == 0) {
+            ChapterListBean chapterListBean = new ChapterListBean();
+            chapterListBean.setDurChapterName("暂无");
+            chapterListBean.setDurChapterUrl("暂无");
+            return chapterListBean;
+        } else if (index < getChapterListSize()) {
+            return getChapterList().get(index);
+        } else {
+            durChapter = getChapterListSize() - 1;
+            return getChapterList().get(getChapterListSize() - 1);
+        }
+    }
+
+    public List<ChapterListBean> getChapterList() {
+        return getBookInfoBean().getChapterList();
+    }
+
+    public int getChapterListSize() {
+        return getChapterList().size();
     }
 
     public int getDurChapterPage() {
@@ -148,12 +165,12 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.bookInfoBean = bookInfoBean;
     }
 
-    public void setHasUpdate(boolean hasUpdate) {
-        this.hasUpdate = hasUpdate;
-    }
-
     public boolean getHasUpdate() {
         return hasUpdate;
+    }
+
+    public void setHasUpdate(boolean hasUpdate) {
+        this.hasUpdate = hasUpdate;
     }
 
     public int getNewChapters() {

@@ -298,11 +298,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     //更新
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
         if (index <= value.size() - 1) {
-            int chapterSize = value.get(index).getBookInfoBean().getChapterList().size();
+            int chapterSize = value.get(index).getChapterListSize();
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override
                 public void success(BookShelfBean bookShelfBean) {
-                    boolean hasUpdate = chapterSize < value.get(index).getBookInfoBean().getChapterList().size();
+                    boolean hasUpdate = chapterSize < value.get(index).getChapterListSize();
                     saveBookToShelf(value, index, hasUpdate);
                 }
 
@@ -318,7 +318,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     //保存更新
     private void saveBookToShelf(final List<BookShelfBean> dataS, final int index, final boolean hasUpdate) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(dataS.get(index).getBookInfoBean().getChapterList());
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(dataS.get(index).getChapterList());
             if (hasUpdate) {
                 dataS.get(index).setHasUpdate(true);
                 dataS.get(index).getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());

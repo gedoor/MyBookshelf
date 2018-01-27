@@ -107,8 +107,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
-        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getBookInfoBean().getChapterList()
-                && books.get(index).getBookInfoBean().getChapterList().size() > books.get(index).getDurChapter()) {
+        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
+                && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.tv_read_durprogress),
                     books.get(index).getDurChapterListBean().getDurChapterName()));
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
@@ -122,8 +122,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         //进度条
         holder.llDurcursor.setVisibility(View.VISIBLE);
         holder.mpbDurprogress.setVisibility(View.VISIBLE);
-        holder.mpbDurprogress.setMaxProgress(books.get(index).getBookInfoBean().getChapterList().size());
-        float speed = books.get(index).getBookInfoBean().getChapterList().size() * 1.0f / 60;
+        holder.mpbDurprogress.setMaxProgress(books.get(index).getChapterListSize());
+        float speed = books.get(index).getChapterListSize() * 1.0f / 60;
 
         holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
         holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
@@ -181,6 +181,36 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         this.needAnim = needAnim;
     }
 
+    public synchronized void replaceAll(List<BookShelfBean> newDatas) {
+        books.clear();
+        if (null != newDatas && newDatas.size() > 0) {
+            books.addAll(newDatas);
+        }
+        order();
+
+        notifyDataSetChanged();
+    }
+
+    private void order() {
+        if (books != null && books.size() > 0) {
+            for (int i = 0; i < books.size(); i++) {
+                int temp = i;
+                for (int j = i + 1; j < books.size(); j++) {
+                    if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
+                        temp = j;
+                    }
+                }
+                BookShelfBean tempBookShelfBean = books.get(i);
+                books.set(i, books.get(temp));
+                books.set(temp, tempBookShelfBean);
+            }
+        }
+    }
+
+    public List<BookShelfBean> getBooks() {
+        return books;
+    }
+
     class OtherViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
         ImageView ivCover;
@@ -225,35 +255,5 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         }
 
         abstract void onAnimStart(Animation animation);
-    }
-
-    public synchronized void replaceAll(List<BookShelfBean> newDatas) {
-        books.clear();
-        if (null != newDatas && newDatas.size() > 0) {
-            books.addAll(newDatas);
-        }
-        order();
-
-        notifyDataSetChanged();
-    }
-
-    private void order() {
-        if (books != null && books.size() > 0) {
-            for (int i = 0; i < books.size(); i++) {
-                int temp = i;
-                for (int j = i + 1; j < books.size(); j++) {
-                    if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
-                        temp = j;
-                    }
-                }
-                BookShelfBean tempBookShelfBean = books.get(i);
-                books.set(i, books.get(temp));
-                books.set(temp, tempBookShelfBean);
-            }
-        }
-    }
-
-    public List<BookShelfBean> getBooks() {
-        return books;
     }
 }

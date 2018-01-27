@@ -139,19 +139,6 @@ public class BookInfoBean implements Parcelable,Cloneable{
         this.chapterList = chapterlist;
     }
 
-    public ChapterListBean getChapterList(int index) {
-        if (chapterList == null || chapterList.size() == 0) {
-            ChapterListBean chapterListBean = new ChapterListBean();
-            chapterListBean.setDurChapterName("暂无");
-            chapterListBean.setDurChapterUrl("暂无");
-            return chapterListBean;
-        } else if (index < chapterList.size()) {
-            return chapterList.get(index);
-        } else {
-            return chapterList.get(chapterList.size() - 1);
-        }
-    }
-
     public long getFinalRefreshData() {
         return finalRefreshData;
     }

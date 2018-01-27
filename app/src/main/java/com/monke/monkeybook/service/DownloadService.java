@@ -41,12 +41,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class DownloadService extends Service {
+    public static final String doneAction = "doneAction";
+    public static final String addDownloadAction = "addDownload";
+    public static final int reTryTimes = 1;
     private int notificationId = 19931118;
     private Boolean isStartDownload = false;
     private Boolean isInit = false;
-
-    public static final String doneAction = "doneAction";
-    public static final String addDownloadAction = "addDownload";
+    private Boolean isDownloading = false;
 
     @Override
     public void onCreate() {
@@ -112,9 +113,9 @@ public class DownloadService extends Service {
                 for (int i = start; i <= end; i++) {
                     DownloadChapterBean item = new DownloadChapterBean();
                     item.setNoteUrl(bookShelf.getNoteUrl());
-                    item.setDurChapterIndex(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterIndex());
-                    item.setDurChapterName(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterName());
-                    item.setDurChapterUrl(bookShelf.getBookInfoBean().getChapterList(i).getDurChapterUrl());
+                    item.setDurChapterIndex(bookShelf.getChapterList(i).getDurChapterIndex());
+                    item.setDurChapterName(bookShelf.getChapterList(i).getDurChapterName());
+                    item.setDurChapterUrl(bookShelf.getChapterList(i).getDurChapterUrl());
                     item.setTag(bookShelf.getTag());
                     item.setBookName(bookShelf.getBookInfoBean().getName());
                     item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
@@ -140,9 +141,6 @@ public class DownloadService extends Service {
                     }
                 });
     }
-
-    private Boolean isDownloading = false;
-    public static final int reTryTimes = 1;
 
     private void toDownload() {
         isDownloading = true;
