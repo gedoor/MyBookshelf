@@ -117,8 +117,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 if (bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
                         && bookShelf.getBookInfoBean().getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
-                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterList().
-                            get(chapterIndex).getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
+                    int tempCount = (int) Math.ceil(bookShelf.getBookInfoBean().getChapterList(chapterIndex)
+                            .getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
 
                     if (pageIndex == BookContentView.DurPageIndexBegin) {
                         pageIndex = 0;
@@ -412,6 +412,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         WebBookModelImpl.getInstance().getChapterList(changedShelfBean, new OnGetChapterListListener() {
             @Override
             public void success(BookShelfBean changedShelfBean) {
+                if (changedShelfBean.getDurChapter() > changedShelfBean.getBookInfoBean().getChapterList().size() - 1) {
+                    changedShelfBean.setDurChapter(changedShelfBean.getBookInfoBean().getChapterList().size() - 1);
+                }
                 saveChangedBook(changedShelfBean);
             }
 
@@ -515,10 +518,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 });
     }
 
-    public interface OnAddListener {
-        void addSuccess();
-    }
-
     @Override
     public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
@@ -581,5 +580,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             e.onNext(data == null ? "" : data);
             e.onComplete();
         });
+    }
+
+    public interface OnAddListener {
+        void addSuccess();
     }
 }

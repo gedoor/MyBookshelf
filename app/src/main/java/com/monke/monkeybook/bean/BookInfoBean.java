@@ -19,27 +19,29 @@ public class BookInfoBean implements Parcelable,Cloneable{
 
     @Transient
     public static final long REFRESH_DUR = 10*60*1000;
+    @Transient
+    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
+        @Override
+        public BookInfoBean createFromParcel(Parcel in) {
+            return new BookInfoBean(in);
+        }
 
+        @Override
+        public BookInfoBean[] newArray(int size) {
+            return new BookInfoBean[size];
+        }
+    };
     private String name; //小说名
-
     private String tag;
-
     @Id
     private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
-
     private String chapterUrl;  //章节目录地址
-
     @Transient
     private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
-
     private long finalRefreshData;  //章节最后更新时间
-
     private String coverUrl; //小说封面
-
     private String author;//作者
-
     private String introduce; //简介
-
     private String origin; //来源
 
     public BookInfoBean(){
@@ -93,19 +95,6 @@ public class BookInfoBean implements Parcelable,Cloneable{
         return 0;
     }
 
-    @Transient
-    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
-        @Override
-        public BookInfoBean createFromParcel(Parcel in) {
-            return new BookInfoBean(in);
-        }
-
-        @Override
-        public BookInfoBean[] newArray(int size) {
-            return new BookInfoBean[size];
-        }
-    };
-
     public String getName() {
         return name;
     }
@@ -146,19 +135,21 @@ public class BookInfoBean implements Parcelable,Cloneable{
         }
     }
 
+    public void setChapterList(List<ChapterListBean> chapterlist) {
+        this.chapterList = chapterlist;
+    }
+
     public ChapterListBean getChapterList(int index) {
-        if (chapterList != null && index < chapterList.size()) {
-            return chapterList.get(index);
-        } else {
+        if (chapterList == null || chapterList.size() == 0) {
             ChapterListBean chapterListBean = new ChapterListBean();
             chapterListBean.setDurChapterName("暂无");
             chapterListBean.setDurChapterUrl("暂无");
             return chapterListBean;
+        } else if (index < chapterList.size()) {
+            return chapterList.get(index);
+        } else {
+            return chapterList.get(chapterList.size() - 1);
         }
-    }
-
-    public void setChapterList(List<ChapterListBean> chapterlist) {
-        this.chapterList = chapterlist;
     }
 
     public long getFinalRefreshData() {
