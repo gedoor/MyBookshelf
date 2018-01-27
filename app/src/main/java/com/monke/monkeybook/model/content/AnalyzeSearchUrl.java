@@ -30,6 +30,9 @@ public class AnalyzeSearchUrl {
                 case "searchPage":
                     queryMap.put(queryM[0], String.valueOf(page));
                     break;
+                case "searchPage-1":
+                    queryMap.put(queryM[0], String.valueOf(page - 1));
+                    break;
                 default:
                     queryMap.put(queryM[0], queryM[1]);
                     break;

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="15dp">
+        android:padding="16dp">
 
         <CheckBox
             android:id="@+id/cb_book_source"
@@ -24,7 +24,17 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ic_edit_black_24dp" />
+
+
+        <ImageView
+            android:id="@+id/iv_del_source"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_delete_forever_black_24dp" />
     </LinearLayout>
 
     <View

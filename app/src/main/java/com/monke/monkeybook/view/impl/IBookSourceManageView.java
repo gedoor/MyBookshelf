@@ -1,5 +1,8 @@
 package com.monke.monkeybook.view.impl;
 
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.monke.basemvplib.impl.IView;
 
 /**
@@ -9,4 +12,7 @@ import com.monke.basemvplib.impl.IView;
 
 public interface IBookSourceManageView extends IView {
 
+    void refreshBookSource();
+
+    View getView();
 }

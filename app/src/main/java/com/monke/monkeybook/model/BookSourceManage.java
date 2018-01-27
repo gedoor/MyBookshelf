@@ -1,8 +1,5 @@
 package com.monke.monkeybook.model;
 
-import android.widget.Toast;
-
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -11,10 +8,9 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
-import com.monke.monkeybook.model.content.LingdiankanshuModelImpl;
-import com.monke.monkeybook.model.content.XBQGModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -61,16 +57,13 @@ public class BookSourceManage {
     }
 
     public static List<BookSourceBean> saveBookSourceToDb() {
-        allBookSource.clear();
-        allBookSource.add(getBookSourceDd());
-        allBookSource.add(getBookSourceBy());
-        allBookSource.add(getBookSource(XBQGModelImpl.TAG, XBQGModelImpl.name, 3));
-        allBookSource.add(getBookSource(LingdiankanshuModelImpl.TAG, LingdiankanshuModelImpl.name, 4));
-        allBookSource.add(getBookSource(GxwztvBookModelImpl.TAG, GxwztvBookModelImpl.name, 5));
-
-        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(allBookSource);
-
-        refreshBookSource();
+        List<BookSourceBean> bookSourceBeans = new ArrayList<>();
+        bookSourceBeans.add(getBookSourceDd());
+        bookSourceBeans.add(getBookSourceBy());
+        bookSourceBeans.add(getBookSourceXBQ());
+        bookSourceBeans.add(getBookSourceLD());
+        bookSourceBeans.add(getBookSourceWZ());
+        addBookSource(bookSourceBeans);
         return allBookSource;
     }
 
@@ -84,13 +77,22 @@ public class BookSourceManage {
                 .list();
     }
 
-    static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName, int serialNumber) {
+    static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName) {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl(bookSourceUrl);
         bookSourceBean.setBookSourceName(bookSourceName);
-        bookSourceBean.setSerialNumber(serialNumber);
         bookSourceBean.setEnable(true);
         return bookSourceBean;
+    }
+
+    public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
+        for (BookSourceBean bookSourceBean : bookSourceBeans) {
+            if (bookSourceBean.getSerialNumber() == 0) {
+                bookSourceBean.setSerialNumber(allBookSource.size() + 1);
+            }
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+        }
+        BookSourceManage.refreshBookSource();
     }
 
     public static void addBookSource(BookSourceBean oldBookSource, BookSourceBean newBookSource, OnObservableListener observableListener) {
@@ -119,14 +121,88 @@ public class BookSourceManage {
                         observableListener.error();
                     }
                 });
-
     }
 
-    static BookSourceBean getBookSourceBy() {
+    static BookSourceBean getBookSourceWZ() {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl("http://www.gxwztv.com");
+        bookSourceBean.setBookSourceName("梧州中文台");
+        bookSourceBean.setEnable(true);
+        bookSourceBean.setRuleSearchUrl("http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1");
+        bookSourceBean.setRuleSearchList("class.list-group-item");
+        bookSourceBean.setRuleSearchAuthor("class.col-xs-2.0@text");
+        bookSourceBean.setRuleSearchKind("class.col-xs-1.0@text");
+        bookSourceBean.setRuleSearchLastChapter("class.col-xs-4.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchName("class.col-xs-3.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchNoteUrl("class.col-xs-3.0@tag.a.0@href");
+        bookSourceBean.setRuleSearchCoverUrl("");
+        bookSourceBean.setRuleBookName("class.active.0@text");
+        bookSourceBean.setRuleBookAuthor("class.col-xs-12 list-group-item no-border.0@tag.small.0@text");
+        bookSourceBean.setRuleIntroduce("class.panel panel-default mt20.0@id.shot@text");
+        bookSourceBean.setRuleCoverUrl("class.panel-body.0@class.img-thumbnail.0@src");
+        bookSourceBean.setRuleChapterUrl("class.list-group-item tac.0@tag.a.0@href");
+        bookSourceBean.setRuleChapterList("id.chapters-list@tag.a");
+        bookSourceBean.setRuleChapterName("text");
+        bookSourceBean.setRuleContentUrl("href");
+        bookSourceBean.setRuleBookContent("id.txtContent@textNodes");
+
+        return bookSourceBean;
+    }
+
+    private static BookSourceBean getBookSourceLD() {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl("http://www.lingdiankanshu.co");
+        bookSourceBean.setBookSourceName("零点看书");
+        bookSourceBean.setEnable(true);
+        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=16865089933227718744&q=searchKey&p=searchPage-1");
+        bookSourceBean.setRuleSearchList("class.result-item");
+        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
+        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
+        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
+        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
+        bookSourceBean.setRuleSearchCoverUrl("tag.img.0@src");
+        bookSourceBean.setRuleBookName("class.box_con.0@id.info@tag.h1.0@text");
+        bookSourceBean.setRuleBookAuthor("class.box_con.0@id.info@tag.p.0@text");
+        bookSourceBean.setRuleIntroduce("id.intro@textNodes");
+        bookSourceBean.setRuleCoverUrl("id.fmimg@tag.img.0@src");
+        bookSourceBean.setRuleChapterList("id.list@tag.dd");
+        bookSourceBean.setRuleChapterName("tag.a.0@text");
+        bookSourceBean.setRuleContentUrl("tag.a.0@href");
+        bookSourceBean.setRuleBookContent("id.content@textNodes");
+
+        return bookSourceBean;
+    }
+
+    private static BookSourceBean getBookSourceXBQ() {
+        BookSourceBean bookSourceBean = new BookSourceBean();
+        bookSourceBean.setBookSourceUrl("http://www.xxbiquge.com");
+        bookSourceBean.setBookSourceName("新笔趣阁");
+        bookSourceBean.setEnable(true);
+        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=5199337987683747968&q=searchKey&p=searchPage-1");
+        bookSourceBean.setRuleSearchList("class.result-item");
+        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
+        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
+        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
+        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
+        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
+        bookSourceBean.setRuleSearchCoverUrl("tag.img.0@src");
+        bookSourceBean.setRuleBookName("class.box_con.0@id.info@tag.h1.0@text");
+        bookSourceBean.setRuleBookAuthor("class.box_con.0@id.info@tag.p.0@text");
+        bookSourceBean.setRuleIntroduce("id.intro@tag.p@text");
+        bookSourceBean.setRuleCoverUrl("id.fmimg@tag.img.0@src");
+        bookSourceBean.setRuleChapterList("id.list@tag.dd");
+        bookSourceBean.setRuleChapterName("tag.a.0@text");
+        bookSourceBean.setRuleContentUrl("tag.a.0@href");
+        bookSourceBean.setRuleBookContent("id.content@textNodes");
+
+        return bookSourceBean;
+    }
+
+    private static BookSourceBean getBookSourceBy() {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl("https://www.zwdu.com");
         bookSourceBean.setBookSourceName("八一中文");
-        bookSourceBean.setSerialNumber(1);
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("https://www.zwdu.com/search.php?keyword=searchKey&page=searchPage");
         bookSourceBean.setRuleSearchList("class.result-item");
@@ -148,13 +224,12 @@ public class BookSourceManage {
         return bookSourceBean;
     }
 
-    static BookSourceBean getBookSourceDd() {
+    private static BookSourceBean getBookSourceDd() {
         BookSourceBean bookSourceBean = new BookSourceBean();
         bookSourceBean.setBookSourceUrl("http://www.23us.so/");
         bookSourceBean.setBookSourceName("顶点小说");
-        bookSourceBean.setSerialNumber(2);
         bookSourceBean.setEnable(true);
-        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage");
+        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage-1");
         bookSourceBean.setRuleSearchList("class.result-item");
         bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
         bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
@@ -179,10 +254,6 @@ public class BookSourceManage {
                 return null;
             case GxwztvBookModelImpl.TAG:
                 return GxwztvBookModelImpl.getInstance();
-            case LingdiankanshuModelImpl.TAG:
-                return LingdiankanshuModelImpl.getInstance();
-            case XBQGModelImpl.TAG:
-                return XBQGModelImpl.getInstance();
             default:
                 return DefaultModelImpl.getInstance(tag);
         }

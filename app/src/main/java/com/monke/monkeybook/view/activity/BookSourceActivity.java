@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -64,6 +65,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             bookSourceAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
             Collections.swap(bookSourceBeanList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mPresenter.saveDate(bookSourceBeanList);
             return true;
         }
 
@@ -119,6 +121,25 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
+    public void refreshBookSource() {
+        bookSourceBeanList = BookSourceManage.getAllBookSource();
+        bookSourceAdapter.resetBookSource(bookSourceBeanList);
+    }
+
+    public void delBookSource(BookSourceBean bookSource) {
+        mPresenter.delDate(bookSource);
+    }
+
+    public void saveDate(List<BookSourceBean> date) {
+        mPresenter.saveDate(date);
+    }
+
+    @Override
+    public View getView() {
+        return llContent;
+    }
+
+    @Override
     protected void firstRequest() {
         llContent.startAnimation(animIn);
     }
@@ -167,8 +188,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_SOURCE) {
-            bookSourceBeanList = BookSourceManage.getAllBookSource();
-            bookSourceAdapter.resetBookSource(bookSourceBeanList);
+            refreshBookSource();
         }
     }
 }

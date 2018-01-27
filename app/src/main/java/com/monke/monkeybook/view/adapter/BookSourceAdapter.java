@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 
@@ -27,9 +28,9 @@ import java.util.List;
 
 public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.MyViewHolder> {
     private List<BookSourceBean> bookSourceBeanList;
-    private BaseActivity activity;
+    private BookSourceActivity activity;
 
-    public BookSourceAdapter(BaseActivity activity) {
+    public BookSourceAdapter(BookSourceActivity activity) {
         this.activity = activity;
     }
 
@@ -53,6 +54,10 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.bookSource.setText(bookSourceBeanList.get(position).getBookSourceName());
         holder.bookSource.setChecked(bookSourceBeanList.get(position).getEnable());
+        holder.bookSource.setOnCheckedChangeListener((compoundButton, b) -> {
+            bookSourceBeanList.get(position).setEnable(b);
+            activity.saveDate(bookSourceBeanList);
+        });
         holder.editSource.setOnClickListener(view -> {
             Intent intent = new Intent(activity, SourceEditActivity.class);
             String key = String.valueOf(System.currentTimeMillis());
@@ -65,6 +70,11 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             }
             activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
         });
+        holder.delSource.setOnClickListener(view -> {
+            activity.delBookSource(bookSourceBeanList.get(position));
+            bookSourceBeanList.remove(position);
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -75,11 +85,13 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder {
         CheckBox bookSource;
         ImageView editSource;
+        ImageView delSource;
 
         MyViewHolder(View itemView) {
             super(itemView);
             bookSource = itemView.findViewById(R.id.cb_book_source);
             editSource = itemView.findViewById(R.id.iv_edit_source);
+            delSource = itemView.findViewById(R.id.iv_del_source);
         }
     }
 }
