@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.activity;
 
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -37,7 +36,7 @@ public class SourceEditActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_edit_source);
+        setContentView(R.layout.activity_source_edit);
     }
 
     @Override
