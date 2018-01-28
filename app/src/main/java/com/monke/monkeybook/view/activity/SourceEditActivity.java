@@ -137,6 +137,22 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            serialNumber = savedInstanceState.getInt("serialNumber");
+            enable = savedInstanceState.getBoolean("enable");
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("serialNumber", serialNumber);
+        outState.putBoolean("enable", enable);
+    }
+
+    @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_source_edit);
     }

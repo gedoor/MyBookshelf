@@ -39,9 +39,13 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
         ClipboardManager clipboard = (ClipboardManager) mView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = clipboard != null ? clipboard.getPrimaryClip() : null;
         if (clipData != null && clipData.getItemCount() > 0) {
-            Gson gson = new Gson();
-            BookSourceBean bookSourceBean = gson.fromJson(String.valueOf(clipData.getItemAt(0).getText()), BookSourceBean.class);
-            mView.setText(bookSourceBean);
+            try {
+                Gson gson = new Gson();
+                BookSourceBean bookSourceBean = gson.fromJson(String.valueOf(clipData.getItemAt(0).getText()), BookSourceBean.class);
+                mView.setText(bookSourceBean);
+            } catch (Exception e) {
+                Toast.makeText(mView.getContext(), "数据格式不对", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
