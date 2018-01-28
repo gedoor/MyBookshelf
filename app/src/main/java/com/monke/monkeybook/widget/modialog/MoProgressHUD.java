@@ -38,6 +38,22 @@ public class MoProgressHUD {
     private Animation outAnim;
 
     private Boolean canBack = false;
+    private Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+            isFinishing = true;
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            dismissImmediately();
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+
+        }
+    };
 
     public MoProgressHUD(Context context) {
         this.context = context;
@@ -154,23 +170,6 @@ public class MoProgressHUD {
         return (mSharedView != null && mSharedView.getParent() != null);
     }
 
-    private Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {
-            isFinishing = true;
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            dismissImmediately();
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-    };
-
     private void dismissImmediately() {
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
             new Handler().post(() -> {
@@ -197,7 +196,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = false;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(null);
         if (!isShowing()) {
             onAttached();
@@ -211,7 +209,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(null);
         mSharedView.showInfo(msg, v -> dismiss());
         if (!isShowing()) {
@@ -225,7 +222,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#CC000000"));
         rootView.setOnClickListener(null);
         mSharedView.showInfo(msg, btnText, listener);
         if (!isShowing()) {
@@ -239,18 +235,12 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#CC000000"));
         rootView.setOnClickListener(null);
         mSharedView.showTwoButton(msg, b_f, c_f, b_s, c_s);
         if (!isShowing()) {
             onAttached();
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    ////////////////////离线章节选择////////////////////////////
-    public interface OnClickDownload {
-        void download(int start, int end);
     }
 
     public void showDownloadList(int startIndex, int endIndex, int all, OnClickDownload clickDownload) {
@@ -264,12 +254,6 @@ public class MoProgressHUD {
             onAttached();
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-    //////////////////////////////////////////////////////////
-
-    ////////////////////换源////////////////////////////
-    public interface OnClickSource {
-        void changeSource(SearchBookBean searchBookBean);
     }
 
     public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource) {
@@ -286,11 +270,6 @@ public class MoProgressHUD {
     }
     //////////////////////////////////////////////////////////
 
-    ////////////////////添加书籍地址////////////////////////////
-    public interface OnPutBookUrl {
-        void addBookUrl(String bookUrl);
-    }
-
     public void showPutBookUrl(OnPutBookUrl onPutBookUrl) {
         initCenter();
         initAnimation();
@@ -303,7 +282,6 @@ public class MoProgressHUD {
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
-    //////////////////////////////////////////////////////////
 
     public Boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -316,6 +294,7 @@ public class MoProgressHUD {
         }
         return false;
     }
+    //////////////////////////////////////////////////////////
 
     public Boolean getCanBack() {
         return canBack;
@@ -327,5 +306,21 @@ public class MoProgressHUD {
             return true;
         }
         return false;
+    }
+    //////////////////////////////////////////////////////////
+
+    ////////////////////离线章节选择////////////////////////////
+    public interface OnClickDownload {
+        void download(int start, int end);
+    }
+
+    ////////////////////换源////////////////////////////
+    public interface OnClickSource {
+        void changeSource(SearchBookBean searchBookBean);
+    }
+
+    ////////////////////添加书籍地址////////////////////////////
+    public interface OnPutBookUrl {
+        void addBookUrl(String bookUrl);
     }
 }
