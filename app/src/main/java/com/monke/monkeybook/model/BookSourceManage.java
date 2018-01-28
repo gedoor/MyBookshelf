@@ -77,17 +77,15 @@ public class BookSourceManage {
                 .list();
     }
 
-    static BookSourceBean getBookSource(String bookSourceUrl, String bookSourceName) {
-        BookSourceBean bookSourceBean = new BookSourceBean();
-        bookSourceBean.setBookSourceUrl(bookSourceUrl);
-        bookSourceBean.setBookSourceName(bookSourceName);
-        bookSourceBean.setEnable(true);
-        return bookSourceBean;
-    }
-
     public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
         refreshBookSource();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
+            List<BookSourceBean> temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).list();
+            if (temp != null && temp.size() > 0) {
+                bookSourceBean.setSerialNumber(temp.get(0).getSerialNumber());
+                bookSourceBean.setEnable(temp.get(0).getEnable());
+            }
             if (bookSourceBean.getSerialNumber() == 0) {
                 bookSourceBean.setSerialNumber(allBookSource.size() + 1);
             }

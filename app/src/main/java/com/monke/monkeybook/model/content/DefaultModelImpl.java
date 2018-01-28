@@ -42,10 +42,6 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     private String name;
     private BookSourceBean bookSourceBean;
 
-    public static DefaultModelImpl getInstance(String tag) {
-        return new DefaultModelImpl(tag);
-    }
-
     private DefaultModelImpl(String tag) {
         TAG = tag;
         try {
@@ -57,9 +53,14 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         }
     }
 
+    public static DefaultModelImpl getInstance(String tag) {
+        return new DefaultModelImpl(tag);
+    }
+
     private void initBookSourceBean() {
         if (bookSourceBean == null) {
-            List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder().where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
+            List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
             }
