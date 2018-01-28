@@ -101,4 +101,5 @@
     <string name="add_book_source">添加书源</string>
     <string name="copy_source">拷贝书源</string>
     <string name="paste_source">粘贴书源</string>
+    <string name="source_rule_s">书源规则说明</string>
 </resources>

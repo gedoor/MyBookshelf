@@ -17,7 +17,6 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.help.Donate;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +55,10 @@ public class AboutActivity extends MBaseActivity {
     TextView tvMail;
     @BindView(R.id.vw_mail)
     CardView vwMail;
+    @BindView(R.id.tv_source_rule)
+    TextView tvSourceRule;
+    @BindView(R.id.vw_source_rule)
+    CardView vwSourceRule;
 
     private Animation animIn;
     private Animation animOut;
@@ -103,6 +106,9 @@ public class AboutActivity extends MBaseActivity {
         });
         vwGit.setOnClickListener(view -> {
             openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL");
+        });
+        vwSourceRule.setOnClickListener(view -> {
+            openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/sourcerule.html");
         });
         vwDisclaimer.setOnClickListener(view -> {
             openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/disclaimer.html");
