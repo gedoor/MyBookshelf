@@ -225,7 +225,7 @@ public class BookSourceManage {
 
     private static BookSourceBean getBookSourceDd() {
         BookSourceBean bookSourceBean = new BookSourceBean();
-        bookSourceBean.setBookSourceUrl("http://www.23us.so/");
+        bookSourceBean.setBookSourceUrl("http://www.23us.so");
         bookSourceBean.setBookSourceName("顶点小说");
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage-1");
