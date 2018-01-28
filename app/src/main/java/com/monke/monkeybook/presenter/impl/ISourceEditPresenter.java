@@ -14,4 +14,5 @@ public interface ISourceEditPresenter extends IPresenter {
 
     void pasteSource();
 
+    void setText(String bookSourceStr);
 }

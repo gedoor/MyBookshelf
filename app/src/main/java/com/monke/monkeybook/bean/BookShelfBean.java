@@ -112,7 +112,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public ChapterListBean getChapterList(int index) {
 
-        if (getChapterList() == null || getChapterListSize() == 0) {
+        if (getChapterList() == null || getChapterListSize() == 0 || index < 0) {
             ChapterListBean chapterListBean = new ChapterListBean();
             chapterListBean.setDurChapterName("暂无");
             chapterListBean.setDurChapterUrl("暂无");

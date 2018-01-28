@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -10,19 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
@@ -31,11 +27,6 @@ import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -45,6 +36,9 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> implements ISourceEditView {
+    private final int REQUEST_QR_CAMERA = 201;
+    private final int REQUEST_QR_IMAGE = 202;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -305,11 +299,25 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             case R.id.action_paste_source:
                 mPresenter.pasteSource();
                 break;
+            case R.id.action_qr_code_camera:
+
+                break;
+            case R.id.action_qr_code_img:
+
+                break;
+            case R.id.action_qr_code_generate:
+                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override

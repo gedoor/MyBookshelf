@@ -12,6 +12,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 
 import com.monke.monkeybook.service.DownloadService;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
@@ -49,6 +50,8 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
+        //初始化二维码模块
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

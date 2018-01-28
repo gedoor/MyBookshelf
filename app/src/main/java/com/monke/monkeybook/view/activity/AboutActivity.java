@@ -59,6 +59,10 @@ public class AboutActivity extends MBaseActivity {
     TextView tvSourceRule;
     @BindView(R.id.vw_source_rule)
     CardView vwSourceRule;
+    @BindView(R.id.tv_update)
+    TextView tvUpdate;
+    @BindView(R.id.vw_update)
+    CardView vwUpdate;
 
     private Animation animIn;
     private Animation animOut;
@@ -112,6 +116,9 @@ public class AboutActivity extends MBaseActivity {
         });
         vwDisclaimer.setOnClickListener(view -> {
             openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/disclaimer.html");
+        });
+        vwUpdate.setOnClickListener(view -> {
+            openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/releases");
         });
     }
 

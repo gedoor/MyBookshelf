@@ -18,4 +18,19 @@
         android:title="@string/paste_source"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_qr_code_camera"
+        android:title="扫描二维码"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_qr_code_img"
+        android:title="扫描图片"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_qr_code_generate"
+        android:title="生成二维码"
+        app:showAsAction="never" />
+
 </menu>
