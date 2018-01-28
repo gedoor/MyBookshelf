@@ -105,7 +105,7 @@ dependencies {
     //圆形按钮
     implementation 'com.github.markushi:circlebutton:1.1'
     //二维码
-
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
 }
 
 greendao {

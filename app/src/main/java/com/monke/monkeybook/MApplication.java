@@ -5,14 +5,9 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-
-import com.monke.monkeybook.service.DownloadService;
-import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;

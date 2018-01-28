@@ -9,6 +9,11 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_share_it"
+        android:title="分享"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_copy_source"
         android:title="@string/copy_source"
         app:showAsAction="never" />
@@ -21,16 +26,6 @@
     <item
         android:id="@+id/action_qr_code_camera"
         android:title="扫描二维码"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_qr_code_img"
-        android:title="扫描图片"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_qr_code_generate"
-        android:title="生成二维码"
         app:showAsAction="never" />
 
 </menu>

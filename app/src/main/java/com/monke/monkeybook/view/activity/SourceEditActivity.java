@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -14,6 +15,9 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -133,6 +137,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
+            title = savedInstanceState.getString("title");
             serialNumber = savedInstanceState.getInt("serialNumber");
             enable = savedInstanceState.getBoolean("enable");
         }
@@ -142,6 +147,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("title", title);
         outState.putInt("serialNumber", serialNumber);
         outState.putBoolean("enable", enable);
     }
@@ -154,14 +160,16 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void initData() {
         String key = this.getIntent().getStringExtra("data_key");
-        if (isEmpty(key)) {
-            title = getString(R.string.add_book_source);
-        } else {
-            title = getString(R.string.edit_book_source);
-            bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
-            serialNumber = bookSourceBean.getSerialNumber();
-            enable = bookSourceBean.getEnable();
-            BitIntentDataManager.getInstance().cleanData(key);
+        if (title == null) {
+            if (isEmpty(key)) {
+                title = getString(R.string.add_book_source);
+            } else {
+                title = getString(R.string.edit_book_source);
+                bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
+                serialNumber = bookSourceBean.getSerialNumber();
+                enable = bookSourceBean.getEnable();
+                BitIntentDataManager.getInstance().cleanData(key);
+            }
         }
     }
 
@@ -300,12 +308,17 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
                 mPresenter.pasteSource();
                 break;
             case R.id.action_qr_code_camera:
-
+                IntentIntegrator integrator = new IntentIntegrator(this);
+                integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                integrator.initiateScan();
                 break;
-            case R.id.action_qr_code_img:
-
-                break;
-            case R.id.action_qr_code_generate:
+            case R.id.action_share_it:
+                Gson gson = new Gson();
+                String bookSourceStr = gson.toJson(getBookSource());
+                Intent textIntent = new Intent(Intent.ACTION_SEND);
+                textIntent.setType("text/plain");
+                textIntent.putExtra(Intent.EXTRA_TEXT, bookSourceStr);
+                startActivity(Intent.createChooser(textIntent, "分享书源"));
                 break;
             case android.R.id.home:
                 finish();
@@ -317,7 +330,14 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() != null) {
+                mPresenter.setText(result.getContents());
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
