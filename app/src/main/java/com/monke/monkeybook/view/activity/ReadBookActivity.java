@@ -162,7 +162,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                 atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                 String url = mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl();
-                if (!url.equals(mPresenter.getBookShelf().getTag())) {
+                if (url.startsWith("/")) {
                     url = mPresenter.getBookShelf().getTag() + url;
                 }
                 atvUrl.setText(url);

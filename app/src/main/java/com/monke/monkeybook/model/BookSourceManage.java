@@ -80,18 +80,25 @@ public class BookSourceManage {
     public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
         refreshBookSource();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
-            List<BookSourceBean> temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).list();
-            if (temp != null && temp.size() > 0) {
-                bookSourceBean.setSerialNumber(temp.get(0).getSerialNumber());
-                bookSourceBean.setEnable(temp.get(0).getEnable());
-            }
-            if (bookSourceBean.getSerialNumber() == 0) {
-                bookSourceBean.setSerialNumber(allBookSource.size() + 1);
-            }
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+            addBookSource(bookSourceBean);
         }
         BookSourceManage.refreshBookSource();
+    }
+
+    public static void addBookSource(BookSourceBean bookSourceBean) {
+        if (bookSourceBean.getBookSourceUrl().endsWith("/")) {
+            bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().substring(0, bookSourceBean.getBookSourceUrl().lastIndexOf("/")));
+        }
+        List<BookSourceBean> temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).list();
+        if (temp != null && temp.size() > 0) {
+            bookSourceBean.setSerialNumber(temp.get(0).getSerialNumber());
+            bookSourceBean.setEnable(temp.get(0).getEnable());
+        }
+        if (bookSourceBean.getSerialNumber() == 0) {
+            bookSourceBean.setSerialNumber(allBookSource.size() + 1);
+        }
+        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
     }
 
     public static void addBookSource(BookSourceBean oldBookSource, BookSourceBean newBookSource, OnObservableListener observableListener) {
@@ -104,7 +111,7 @@ public class BookSourceManage {
             if (newBookSource.getSerialNumber() == 0) {
                 newBookSource.setSerialNumber(allBookSource.size() + 1);
             }
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(newBookSource);
+            addBookSource(newBookSource);
             BookSourceManage.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
