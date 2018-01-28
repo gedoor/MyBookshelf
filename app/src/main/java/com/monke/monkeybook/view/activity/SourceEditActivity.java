@@ -205,6 +205,11 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         });
     }
 
+    private String getBookSourceStr() {
+        Gson gson = new Gson();
+        return gson.toJson(getBookSource());
+    }
+
     private BookSourceBean getBookSource() {
         BookSourceBean bookSourceBeanN = new BookSourceBean();
         bookSourceBeanN.setBookSourceName(tieBookSourceName.getText().toString());
@@ -277,6 +282,13 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilRuleSearchUrl.setHint("RuleSearchUrl");
     }
 
+    private void shareBookSource() {
+        Intent textIntent = new Intent(Intent.ACTION_SEND);
+        textIntent.setType("text/plain");
+        textIntent.putExtra(Intent.EXTRA_TEXT, getBookSourceStr());
+        startActivity(Intent.createChooser(textIntent, "分享书源"));
+    }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -313,12 +325,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
                 integrator.initiateScan();
                 break;
             case R.id.action_share_it:
-                Gson gson = new Gson();
-                String bookSourceStr = gson.toJson(getBookSource());
-                Intent textIntent = new Intent(Intent.ACTION_SEND);
-                textIntent.setType("text/plain");
-                textIntent.putExtra(Intent.EXTRA_TEXT, bookSourceStr);
-                startActivity(Intent.createChooser(textIntent, "分享书源"));
+                shareBookSource();
                 break;
             case android.R.id.home:
                 finish();
