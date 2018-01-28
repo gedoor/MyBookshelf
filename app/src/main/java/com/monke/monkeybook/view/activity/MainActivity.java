@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -341,6 +342,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
             BookSourceManage.saveBookSourceToDb();
             moProgressHUD.showInfo(getString(R.string.update_log));
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("versionCode", MApplication.getVersionCode());
+            editor.apply();
         }
     }
 
