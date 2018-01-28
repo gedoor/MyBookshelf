@@ -243,7 +243,7 @@ public class BookSourceManage {
         bookSourceBean.setRuleContentUrl("tag.a.0@href");
         bookSourceBean.setRuleBookContent("id.contents@textNodes");
         bookSourceBean.setRuleIntroduce("id.content@tag.dd.3@tag.p.1@text");
-        bookSourceBean.setRuleChapterUrl("ic.content@class.read.0@href");
+        bookSourceBean.setRuleChapterUrl("id.content@class.read.0@href");
 
         return bookSourceBean;
     }

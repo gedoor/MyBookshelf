@@ -8,4 +8,14 @@
         android:title="@string/action_save"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_copy_source"
+        android:title="@string/copy_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_paste_source"
+        android:title="@string/paste_source"
+        app:showAsAction="never" />
+
 </menu>

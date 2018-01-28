@@ -25,6 +25,9 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
+import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
+import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +44,7 @@ import static android.text.TextUtils.isEmpty;
  * 编辑书源
  */
 
-public class SourceEditActivity extends MBaseActivity {
+public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> implements ISourceEditView {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -129,8 +132,8 @@ public class SourceEditActivity extends MBaseActivity {
     private String title;
 
     @Override
-    protected IPresenter initInjector() {
-        return null;
+    protected ISourceEditPresenter initInjector() {
+        return new SourceEditPresenterImpl();
     }
 
     @Override
@@ -159,7 +162,7 @@ public class SourceEditActivity extends MBaseActivity {
         setupActionBar();
 
         setHint();
-        setText();
+        setText(bookSourceBean);
     }
 
     private void saveBookSource() {
@@ -182,7 +185,6 @@ public class SourceEditActivity extends MBaseActivity {
                 Toast.makeText(MApplication.getInstance(), "保存失败", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private BookSourceBean getBookSource() {
@@ -209,7 +211,8 @@ public class SourceEditActivity extends MBaseActivity {
         return bookSourceBeanN;
     }
 
-    private void setText() {
+    @Override
+    public void setText(BookSourceBean bookSourceBean) {
         if (bookSourceBean == null) {
             return;
         }
@@ -279,6 +282,12 @@ public class SourceEditActivity extends MBaseActivity {
         switch (id) {
             case R.id.action_save:
                 saveBookSource();
+                break;
+            case R.id.action_copy_source:
+                mPresenter.copySource(getBookSource());
+                break;
+            case R.id.action_paste_source:
+                mPresenter.pasteSource();
                 break;
             case android.R.id.home:
                 finish();
