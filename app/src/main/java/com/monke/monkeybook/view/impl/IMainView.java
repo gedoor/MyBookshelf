@@ -45,4 +45,6 @@ public interface IMainView extends IView{
      * 显示等待框
      */
     void showLoading(String msg);
+
+    void onRestore();
 }

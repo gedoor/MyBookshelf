@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -68,6 +69,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private MoProgressHUD moProgressHUD;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
+    private boolean onRestore = false;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -335,9 +337,16 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         });
     }
 
+    private void fistOpenRun() {
+        if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
+            BookSourceManage.saveBookSourceToDb();
+            moProgressHUD.showInfo(getString(R.string.update_log));
+        }
+    }
+
     @Override
     protected void firstRequest() {
-        BookSourceManage.saveBookSourceToDb();
+        fistOpenRun();
         mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
     }
 
@@ -359,7 +368,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshFinish() {
         rfRvShelf.finishRefresh(false, true);
-        moProgressHUD.dismiss();
+        if (onRestore) {
+            moProgressHUD.dismiss();
+        }
     }
 
     @Override
@@ -381,6 +392,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void showLoading(String msg) {
         moProgressHUD.showLoading(msg);
+    }
+
+    @Override
+    public void onRestore() {
+        onRestore = true;
+        moProgressHUD.showLoading(getString(R.string.restore_success));
     }
 
     @Override

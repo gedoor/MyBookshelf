@@ -19,13 +19,28 @@ public class MApplication extends Application {
     public final static String channelIReadAloud = "channel_read_aloud";
     private static MApplication instance;
     private static String versionName;
+    private static int versionCode;
+
+    public static MApplication getInstance() {
+        return instance;
+    }
+
+    public static int getVersionCode() {
+        return versionCode;
+    }
+
+    public static String getVersionName() {
+        return versionName;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         try {
+            versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
+            versionCode = 0;
             versionName = "0.0.0";
             e.printStackTrace();
         }
@@ -34,14 +49,6 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
-    }
-
-    public static MApplication getInstance() {
-        return instance;
-    }
-
-    public static String getVersionName() {
-        return versionName;
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
