@@ -24,6 +24,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
@@ -205,6 +206,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         if (TextUtils.isEmpty(bookUrl.trim())) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             URL url = new URL(bookUrl);
+            List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(String.format("%s://%s", url.getProtocol(), url.getHost()))).list();
+
             List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl.toString())).limit(1).build().list();
             if (temp != null && temp.size() > 0) {
