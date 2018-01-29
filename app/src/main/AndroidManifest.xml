@@ -78,6 +78,12 @@
         <activity
             android:name=".view.activity.SourceEditActivity"
             android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.ScanActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />

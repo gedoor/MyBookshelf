@@ -210,6 +210,13 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         return gson.toJson(getBookSource());
     }
 
+    private void scanBookSource() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
+        integrator.setCaptureActivity(ScanActivity.class);
+        integrator.initiateScan();
+    }
+
     private BookSourceBean getBookSource() {
         BookSourceBean bookSourceBeanN = new BookSourceBean();
         bookSourceBeanN.setBookSourceName(tieBookSourceName.getText().toString());
@@ -320,9 +327,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
                 mPresenter.pasteSource();
                 break;
             case R.id.action_qr_code_camera:
-                IntentIntegrator integrator = new IntentIntegrator(this);
-                integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
-                integrator.initiateScan();
+                scanBookSource();
                 break;
             case R.id.action_share_it:
                 shareBookSource();

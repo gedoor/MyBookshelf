@@ -63,8 +63,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                     .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
+                name = bookSourceBean.getBookSourceName();
             }
-            name = bookSourceBean.getBookSourceName();
         }
     }
 
