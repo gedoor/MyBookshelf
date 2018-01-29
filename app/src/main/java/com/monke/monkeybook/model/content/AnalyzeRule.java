@@ -150,21 +150,17 @@ public class AnalyzeRule {
     }
 
     @SuppressWarnings("finally")
-    public static String getAbsoluteURL(String baseURI, String relativePath){
-        String abURL=null;
+    private static String getAbsoluteURL(String baseURI, String relativePath){
+        String abURL=relativePath;
         try {
             URI base=new URI(baseURI);//基本网页URI
             URI abs=base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
             URL absURL=abs.toURL();//转成URL
-            System.out.println(absURL);
             abURL = absURL.toString();
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } finally{
-            return abURL;
         }
+        return abURL;
     }
 
 }

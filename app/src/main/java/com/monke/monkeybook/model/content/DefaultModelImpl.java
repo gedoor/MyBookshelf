@@ -86,7 +86,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                     .create(IGetWebApi.class)
                     .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
-                    .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl()));
+                    .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
