@@ -241,7 +241,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     private void getBook(BookShelfBean bookShelfBean) {
-        WebBookModelImpl.getInstance().getBookInfo(bookShelfBean).subscribeOn(Schedulers.newThread())
+        WebBookModelImpl.getInstance()
+                .getBookInfo(bookShelfBean)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
