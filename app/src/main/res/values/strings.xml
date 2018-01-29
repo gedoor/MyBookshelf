@@ -2,9 +2,9 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        编辑书源界面添加拷贝和粘贴\n
-        关于里添加书源规则说明链接\n
-        书源添加了扫描二维码
+        编辑书源界面添加分享和扫描二维码\n
+        href相对路径自动计算绝对路径\n
+
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>

@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -296,6 +297,17 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         startActivity(Intent.createChooser(textIntent, "分享书源"));
     }
 
+    private void openRuleSummary() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("https://gedoor.github.io/MONKOVEL/sourcerule.html"));
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -331,6 +343,9 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
                 break;
             case R.id.action_share_it:
                 shareBookSource();
+                break;
+            case R.id.action_rule_summary:
+                openRuleSummary();
                 break;
             case android.R.id.home:
                 finish();

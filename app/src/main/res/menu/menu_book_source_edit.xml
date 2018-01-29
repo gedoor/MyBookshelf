@@ -28,4 +28,9 @@
         android:title="扫描二维码"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_rule_summary"
+        android:title="规则说明"
+        app:showAsAction="never" />
+
 </menu>

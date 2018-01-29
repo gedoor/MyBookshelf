@@ -345,6 +345,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
+            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
         }
     }
 
