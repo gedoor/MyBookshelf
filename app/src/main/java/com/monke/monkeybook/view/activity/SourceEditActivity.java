@@ -2,11 +2,14 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -17,9 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -29,6 +38,9 @@ import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
 import com.monke.monkeybook.view.impl.ISourceEditView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -291,10 +303,39 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     }
 
     private void shareBookSource() {
-        Intent textIntent = new Intent(Intent.ACTION_SEND);
-        textIntent.setType("text/plain");
-        textIntent.putExtra(Intent.EXTRA_TEXT, getBookSourceStr());
-        startActivity(Intent.createChooser(textIntent, "分享书源"));
+        Bitmap bitmap = encodeAsBitmap(getBookSourceStr());
+        try {
+            File file = new File(this.getExternalCacheDir(), "bookSource.png");
+            FileOutputStream fOut = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            file.setReadable(true, false);
+            Uri contentUri = FileProvider.getUriForFile(this, "com.monke.monkeybook.fileprovider", file);
+            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            intent.setType("image/png");
+            startActivity(Intent.createChooser(intent, "分享书源"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap encodeAsBitmap(String str) {
+        Bitmap bitmap = null;
+        BitMatrix result;
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            bitmap = barcodeEncoder.createBitmap(result);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException iae) { // ?
+            return null;
+        }
+        return bitmap;
     }
 
     private void openRuleSummary() {
