@@ -1,5 +1,8 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,9 +66,14 @@ public class AboutActivity extends MBaseActivity {
     TextView tvUpdate;
     @BindView(R.id.vw_update)
     CardView vwUpdate;
+    @BindView(R.id.tv_qq)
+    TextView tvQq;
+    @BindView(R.id.vw_qq)
+    CardView vwQq;
 
     private Animation animIn;
     private Animation animOut;
+    private String qq = "701903217";
 
     @Override
     protected IPresenter initInjector() {
@@ -94,6 +102,7 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
+        tvQq.setText(String.format("QQ讨论群:%s", qq));
     }
 
     @Override
@@ -119,6 +128,14 @@ public class AboutActivity extends MBaseActivity {
         });
         vwUpdate.setOnClickListener(view -> {
             openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/releases");
+        });
+        tvQq.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, qq);
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
+                Toast.makeText(this, "已拷贝", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
