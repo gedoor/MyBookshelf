@@ -18,7 +18,7 @@ import com.monke.monkeybook.cache.ACache;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
-import com.monke.monkeybook.model.impl.IGetWebApi;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IGxwztvBookModel;
 import com.monke.monkeybook.presenter.LibraryPresenterImpl;
 
@@ -51,7 +51,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<LibraryBean> getLibraryData(final ACache aCache) {
         return getRetrofitObject(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent("")
                 .flatMap(s -> {
             if (s != null && s.length() > 0 && aCache != null) {
@@ -147,7 +147,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         queryMap.put("keyword", content);
         queryMap.put("pn", String.valueOf(page - 1));
         return getRetrofitString(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .searchBook("/search.htm", queryMap)
                 .flatMap(this::analyzeSearchBook);
     }
@@ -189,7 +189,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         return getRetrofitObject(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
     }
@@ -232,7 +232,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
         getRetrofitObject(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
@@ -288,7 +288,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         return getRetrofitObject(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
     }
@@ -335,7 +335,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
         return getRetrofitObject(GxwztvBookModelImpl.TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(url.replace(GxwztvBookModelImpl.TAG, ""))
                 .flatMap(this::analyzeSearchBook);
     }

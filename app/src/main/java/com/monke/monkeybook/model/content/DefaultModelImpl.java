@@ -16,7 +16,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
-import com.monke.monkeybook.model.impl.IGetWebApi;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
+import com.monke.monkeybook.model.impl.IHttpPostApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import org.jsoup.Jsoup;
@@ -81,12 +82,20 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         if (!initBookSourceBean()) {
             return null;
         }
+        Boolean isPost = bookSourceBean.getBookSourceUrl().contains("@");
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
-            return getRetrofitString(analyzeSearchUrl.getSearchUrl())
-                    .create(IGetWebApi.class)
-                    .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
-                    .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
+            if (isPost) {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpPostApi.class)
+                        .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
+                        .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
+            } else {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
+                        .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
+                        .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
@@ -134,7 +143,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return null;
         }
         return getRetrofitString(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
     }
@@ -183,7 +192,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return;
         }
         getRetrofitString(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean))
                 .subscribeOn(Schedulers.newThread())
@@ -243,7 +252,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return null;
         }
         return getRetrofitString(TAG)
-                .create(IGetWebApi.class)
+                .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
     }

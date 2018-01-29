@@ -12,10 +12,11 @@ import retrofit2.http.Url;
  * get web content
  */
 
-public interface IGetWebApi {
+public interface IHttpGetApi {
     @GET
     Observable<String> getWebContent(@Url String url);
 
     @GET()
     Observable<String> searchBook(@Url String url, @QueryMap Map<String, String> queryMap);
+
 }

@@ -16,10 +16,11 @@ public class AnalyzeSearchUrl {
     private Map<String, String> queryMap;
 
     public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws MalformedURLException {
-        URL url = new URL(ruleUrl);
+        String[] temp = ruleUrl.split("\\?|@");
+        URL url = new URL(temp[0]);
         searchUrl = String.format("%s://%s", url.getProtocol(), url.getHost());
         searchPath = url.getPath();
-        String[] queryS = url.getQuery().split("&");
+        String[] queryS = temp[1].split("&");
         queryMap = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
