@@ -27,6 +27,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.RunMediaPlayer;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -135,18 +136,20 @@ public class ReadAloudService extends Service {
             updateNotification();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
+            HashMap<String, String> map = new HashMap<>();
+            map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "content");
             for (int i = nowSpeak; i < allSpeak; i++) {
                 if (i == 0) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
                     } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null);
+                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
                     }
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
                     } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null);
+                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
                     }
                 }
             }
