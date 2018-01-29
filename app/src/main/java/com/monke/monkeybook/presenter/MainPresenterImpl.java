@@ -150,7 +150,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             if (json == null) {
                 e.onNext(false);
             } else {
-                List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {}.getType());
+                List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {
+                }.getType());
                 for (BookShelfBean bookshelf : bookShelfList) {
                     DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
                     DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
@@ -298,6 +299,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             mView.refreshFinish();
         }
     }
+
     //更新
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
         if (index <= value.size() - 1) {
@@ -318,6 +320,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             queryBookShelf(false);
         }
     }
+
     //保存更新
     private void saveBookToShelf(final List<BookShelfBean> dataS, final int index, final boolean hasUpdate) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {

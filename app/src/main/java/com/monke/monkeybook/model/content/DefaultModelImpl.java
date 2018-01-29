@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -139,9 +140,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        if (!initBookSourceBean()) {
-            return null;
-        }
+        initBookSourceBean();
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
@@ -248,9 +247,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        if (!initBookSourceBean()) {
-            return null;
-        }
+        initBookSourceBean();
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
