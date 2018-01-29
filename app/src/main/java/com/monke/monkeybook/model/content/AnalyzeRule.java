@@ -1,13 +1,15 @@
 package com.monke.monkeybook.model.content;
 
-import android.widget.ListView;
-
 import com.monke.monkeybook.help.FormatWebText;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +21,12 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeRule {
+    private String baseURI;
     private Element element;
 
-    public AnalyzeRule(Element element) {
+    public AnalyzeRule(Element element, String baseURI) {
         this.element = element;
+        this.baseURI = baseURI;
     }
 
     public static Elements getElements(Element temp, String rule) {
@@ -139,8 +143,29 @@ public class AnalyzeRule {
                 }
                 break;
             default:
-                textS.add(elements.get(0).attr(lastRule));
+                String absURL = getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
+                textS.add(absURL);
         }
         return textS;
     }
+
+    @SuppressWarnings("finally")
+    public static String getAbsoluteURL(String baseURI, String relativePath){
+        String abURL=null;
+        try {
+            URI base=new URI(baseURI);//基本网页URI
+            URI abs=base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
+            URL absURL=abs.toURL();//转成URL
+            System.out.println(absURL);
+            abURL = absURL.toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } finally{
+            return abURL;
+        }
+    }
+
 }
+

@@ -57,14 +57,19 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return new DefaultModelImpl(tag);
     }
 
-    private void initBookSourceBean() {
+    private Boolean initBookSourceBean() {
         if (bookSourceBean == null) {
             List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
                 name = bookSourceBean.getBookSourceName();
+                return true;
+            } else {
+                return false;
             }
+        } else {
+            return true;
         }
     }
 
@@ -73,8 +78,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        initBookSourceBean();
-        if (bookSourceBean == null) {
+        if (!initBookSourceBean()) {
             return null;
         }
         try {
@@ -82,14 +86,14 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                     .create(IGetWebApi.class)
                     .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
-                    .flatMap(this::analyzeSearchBook);
+                    .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl()));
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private Observable<List<SearchBookBean>> analyzeSearchBook(final String s) {
+    private Observable<List<SearchBookBean>> analyzeSearchBook(final String s, final String baseURI) {
         return Observable.create(e -> {
             try {
                 Document doc = Jsoup.parse(s);
@@ -100,7 +104,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
                         item.setOrigin(name);
-                        AnalyzeRule analyzeRule = new AnalyzeRule(booksE.get(i));
+                        AnalyzeRule analyzeRule = new AnalyzeRule(booksE.get(i), baseURI);
                         item.setAuthor(FormatWebText.getAuthor(analyzeRule.getResult(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(analyzeRule.getResult(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(analyzeRule.getResult(bookSourceBean.getRuleSearchLastChapter()));
@@ -126,8 +130,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        initBookSourceBean();
-        if (bookSourceBean == null) {
+        if (!initBookSourceBean()) {
             return null;
         }
         return getRetrofitString(TAG)
@@ -146,7 +149,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(TAG);
             Document doc = Jsoup.parse(s);
-            AnalyzeRule analyzeRule = new AnalyzeRule(doc);
+            AnalyzeRule analyzeRule = new AnalyzeRule(doc, bookShelfBean.getNoteUrl());
             if (isEmpty(bookInfoBean.getCoverUrl())) {
                 bookInfoBean.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleCoverUrl()));
             }
@@ -175,8 +178,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
-        initBookSourceBean();
-        if (bookSourceBean == null) {
+        if (!initBookSourceBean()) {
             getChapterListListener.error();
             return;
         }
@@ -219,7 +221,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         Elements chapterList = AnalyzeRule.getElements(doc, bookSourceBean.getRuleChapterList());
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
-            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i));
+            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i), novelUrl);
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterIndex(i);
             temp.setDurChapterUrl(analyzeRule.getResult(bookSourceBean.getRuleContentUrl()));   //id
@@ -237,8 +239,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        initBookSourceBean();
-        if (bookSourceBean == null) {
+        if (!initBookSourceBean()) {
             return null;
         }
         return getRetrofitString(TAG)
@@ -255,7 +256,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookContentBean.setTag(TAG);
             try {
                 Document doc = Jsoup.parse(s);
-                AnalyzeRule analyzeRule = new AnalyzeRule(doc);
+                AnalyzeRule analyzeRule = new AnalyzeRule(doc, durChapterUrl);
                 bookContentBean.setDurChapterContent(analyzeRule.getResult(bookSourceBean.getRuleBookContent()));
                 bookContentBean.setRight(true);
             } catch (Exception ex) {
