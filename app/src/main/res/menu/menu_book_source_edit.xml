@@ -29,6 +29,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_qr_code_image"
+        android:title="扫描图片"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_rule_summary"
         android:title="规则说明"
         app:showAsAction="never" />

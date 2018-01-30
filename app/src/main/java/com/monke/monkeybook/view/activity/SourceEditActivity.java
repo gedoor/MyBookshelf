@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +31,7 @@ import com.google.gson.stream.JsonWriter;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -320,7 +322,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     }
 
     private void shareBookSource() {
-        Bitmap bitmap = encodeAsBitmap(getBookSourceStr());
+        Bitmap bitmap = mPresenter.encodeAsBitmap(getBookSourceStr());
         try {
             File file = new File(this.getExternalCacheDir(), "bookSource.png");
             FileOutputStream fOut = new FileOutputStream(file);
@@ -339,23 +341,11 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         }
     }
 
-    private Bitmap encodeAsBitmap(String str) {
-        Bitmap bitmap = null;
-        BitMatrix result;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            Hashtable<EncodeHintType, Object> hst = new Hashtable();
-            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600,hst);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.createBitmap(result);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException iae) { // ?
-            return null;
-        }
-        return bitmap;
+    private void selectLocalImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_QR_IMAGE);
     }
 
     private void openRuleSummary() {
@@ -405,6 +395,9 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             case R.id.action_share_it:
                 shareBookSource();
                 break;
+            case R.id.action_qr_code_image:
+                selectLocalImage();
+                break;
             case R.id.action_rule_summary:
                 openRuleSummary();
                 break;
@@ -420,6 +413,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
+            if (requestCode == REQUEST_QR_IMAGE) {
+
+                return;
+            }
             if (result.getContents() != null) {
                 mPresenter.setText(result.getContents());
             }
