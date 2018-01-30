@@ -346,7 +346,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         try {
             Hashtable<EncodeHintType, Object> hst = new Hashtable();
             hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600,hst);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.createBitmap(result);
