@@ -15,7 +15,7 @@ public class AnalyzeSearchUrl {
     private String searchPath;
     private Map<String, String> queryMap;
 
-    public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws MalformedURLException {
+    public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws Exception {
         String[] temp = ruleUrl.split("\\?|@");
         if (temp.length != 2) {
             return;

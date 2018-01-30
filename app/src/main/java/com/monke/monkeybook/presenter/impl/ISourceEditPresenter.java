@@ -1,6 +1,7 @@
 package com.monke.monkeybook.presenter.impl;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -19,4 +20,6 @@ public interface ISourceEditPresenter extends IPresenter {
     void setText(String bookSourceStr);
 
     Bitmap encodeAsBitmap(String str);
+
+    void analyzeBitmap(Uri uri);
 }

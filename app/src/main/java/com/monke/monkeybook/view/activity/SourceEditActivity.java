@@ -411,12 +411,12 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_QR_IMAGE && resultCode == RESULT_OK && null != data) {
+            mPresenter.analyzeBitmap(data.getData());
+            return;
+        }
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            if (requestCode == REQUEST_QR_IMAGE) {
-
-                return;
-            }
             if (result.getContents() != null) {
                 mPresenter.setText(result.getContents());
             }

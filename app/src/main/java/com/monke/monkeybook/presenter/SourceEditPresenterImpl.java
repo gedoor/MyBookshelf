@@ -2,17 +2,26 @@ package com.monke.monkeybook.presenter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.basemvplib.BasePresenterImpl;
@@ -80,6 +89,30 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
             return null;
         }
         return bitmap;
+    }
+
+    @Override
+    public void analyzeBitmap(Uri uri) {
+        ContentResolver cr = mView.getContext().getContentResolver();
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);//显得到bitmap图片
+
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            int[] pixels = new int[width*height];
+            bitmap.getPixels(pixels,0,width,0,0,width,height);
+
+            RGBLuminanceSource source = new RGBLuminanceSource(width,height,pixels);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            Reader reader = new MultiFormatReader();
+            Result result = null;
+
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

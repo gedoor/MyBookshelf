@@ -100,7 +100,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
                         .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
             }
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
