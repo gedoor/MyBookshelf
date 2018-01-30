@@ -223,8 +223,6 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             @Override
             public void success() {
                 bookSourceBean = getBookSource();
-                bookSourceBean.setSerialNumber(serialNumber);
-                bookSourceBean.setEnable(enable);
                 Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -270,6 +268,8 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setRuleSearchName(tieRuleSearchName.getText().toString());
         bookSourceBeanN.setRuleSearchNoteUrl(tieRuleSearchNoteUrl.getText().toString());
         bookSourceBeanN.setRuleSearchUrl(tieRuleSearchUrl.getText().toString());
+        bookSourceBeanN.setEnable(enable);
+        bookSourceBeanN.setSerialNumber(serialNumber);
         return bookSourceBeanN;
     }
 
@@ -428,14 +428,16 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.exit))
-                    .setMessage(getString(R.string.exit_no_save))
-                    .setPositiveButton("是", (DialogInterface dialogInterface, int which) -> {
-                    })
-                    .setNegativeButton("否", (DialogInterface dialogInterface, int which) -> finish())
-                    .show();
-            return true;
+            if (!getBookSource().equals(bookSourceBean)) {
+                new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.exit))
+                        .setMessage(getString(R.string.exit_no_save))
+                        .setPositiveButton("是", (DialogInterface dialogInterface, int which) -> {
+                        })
+                        .setNegativeButton("否", (DialogInterface dialogInterface, int which) -> finish())
+                        .show();
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, keyEvent);
     }
