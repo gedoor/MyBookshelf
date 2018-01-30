@@ -17,6 +17,9 @@ public class AnalyzeSearchUrl {
 
     public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws MalformedURLException {
         String[] temp = ruleUrl.split("\\?|@");
+        if (temp.length != 2) {
+            return;
+        }
         URL url = new URL(temp[0]);
         searchUrl = String.format("%s://%s", url.getProtocol(), url.getHost());
         searchPath = url.getPath();

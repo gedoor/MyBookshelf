@@ -86,6 +86,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         Boolean isPost = bookSourceBean.getBookSourceUrl().contains("@");
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
+            if (analyzeSearchUrl.getSearchUrl() == null) {
+                return null;
+            }
             if (isPost) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpPostApi.class)

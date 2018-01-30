@@ -3,4 +3,5 @@
     <string name="pk_auto_refresh">auto_refresh</string>
     <string name="pk_screen_direction">list_screen_direction</string>
     <string name="pk_full_screen">full_screen</string>
+    <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 </resources>

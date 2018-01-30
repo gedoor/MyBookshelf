@@ -19,13 +19,22 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
+import com.google.gson.LongSerializationPolicy;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.internal.Excluder;
+import com.google.gson.stream.JsonWriter;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.BuildConfig;
@@ -41,6 +50,13 @@ import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -218,8 +234,9 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         });
     }
 
-    private String getBookSourceStr() {
-        Gson gson = new Gson();
+    @Override
+    public String getBookSourceStr() {
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(getBookSource());
     }
 
@@ -311,7 +328,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             fOut.flush();
             fOut.close();
             file.setReadable(true, false);
-            Uri contentUri = FileProvider.getUriForFile(this, "com.monke.monkeybook.fileprovider", file);
+            Uri contentUri = FileProvider.getUriForFile(this, getString(R.string.file_provider), file);
             final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
@@ -327,7 +344,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         BitMatrix result;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600);
+            Hashtable<EncodeHintType, Object> hst = new Hashtable();
+            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600,hst);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.createBitmap(result);
         } catch (WriterException e) {

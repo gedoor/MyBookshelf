@@ -11,4 +11,6 @@ import com.monke.monkeybook.bean.BookSourceBean;
 public interface ISourceEditView extends IView {
 
     void setText(BookSourceBean bookSourceBean);
+
+    String getBookSourceStr();
 }

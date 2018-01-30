@@ -25,10 +25,8 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
 
     @Override
     public void copySource(BookSourceBean bookSourceBean) {
-        Gson gson = new Gson();
-        String bs = gson.toJson(bookSourceBean);
         ClipboardManager clipboard = (ClipboardManager) mView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(null, bs);
+        ClipData clipData = ClipData.newPlainText(null, mView.getBookSourceStr());
         if (clipboard != null) {
             clipboard.setPrimaryClip(clipData);
         }
