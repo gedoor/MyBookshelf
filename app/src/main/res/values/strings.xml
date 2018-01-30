@@ -3,10 +3,8 @@
     <string name="update_log">
     更新日志\n
         编辑书源界面添加分享和扫描二维码\n
-        href相对路径自动计算绝对路径\n
-        更新清除了目录和内容数据库\n
-        本地书看不了需重新导入\n
-        尝试解决4.4朗读不翻页的问题,没手机测试不了,有问题反馈
+        搜索GET用?,POST用@\n
+        修复BUG
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>
