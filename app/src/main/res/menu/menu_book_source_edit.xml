@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_share_it"
-        android:title="分享"
+        android:title="@string/share"
         app:showAsAction="never" />
 
     <item
@@ -25,17 +25,17 @@
 
     <item
         android:id="@+id/action_qr_code_camera"
-        android:title="扫描二维码"
+        android:title="@string/camera_scan"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_qr_code_image"
-        android:title="扫描图片"
+        android:title="@string/scan_image"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_rule_summary"
-        android:title="规则说明"
+        android:title="@string/rule_summary"
         app:showAsAction="never" />
 
 </menu>

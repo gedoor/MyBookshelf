@@ -4,7 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -13,9 +15,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.FormatException;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Reader;
 import com.google.zxing.Result;
@@ -96,6 +101,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
         ContentResolver cr = mView.getContext().getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);//显得到bitmap图片
+            bitmap = getSmallerBitmap(bitmap);
 
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -105,14 +111,30 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
             RGBLuminanceSource source = new RGBLuminanceSource(width,height,pixels);
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             Reader reader = new MultiFormatReader();
-            Result result = null;
+            Result result;
 
-            
+            try {
+                result = reader.decode(binaryBitmap);
+                setText(result.getText());
+            } catch (NotFoundException | ChecksumException | FormatException e) {
+                e.printStackTrace();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private Bitmap getSmallerBitmap(Bitmap bitmap){
+        int size = bitmap.getWidth()*bitmap.getHeight() / 360000;
+        if (size <= 1) return bitmap; // 如果小于
+        else {
+            Matrix matrix = new Matrix();
+            matrix.postScale((float) (1 / Math.sqrt(size)), (float) (1 / Math.sqrt(size)));
+            Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            return resizeBitmap;
+        }
     }
 
     @Override

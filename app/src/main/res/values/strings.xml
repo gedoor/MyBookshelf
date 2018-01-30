@@ -2,7 +2,7 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        编辑书源界面添加分享和扫描二维码\n
+        分享和扫描二维码和本地图片\n
         搜索GET用?,POST用@\n
         修复BUG
     </string>
@@ -110,4 +110,8 @@
     <string name="paste_source">粘贴书源</string>
     <string name="source_rule_s">书源规则说明</string>
     <string name="update_url">查看最新版本</string>
+    <string name="camera_scan">扫描二维码</string>
+    <string name="scan_image">扫描本地图片</string>
+    <string name="rule_summary">规则说明</string>
+    <string name="share">分享</string>
 </resources>

@@ -58,7 +58,6 @@ public class BookSourceManage {
 
     public static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceBeans = new ArrayList<>();
-        bookSourceBeans.add(getBookSourceDd());
         bookSourceBeans.add(getBookSourceBy());
         bookSourceBeans.add(getBookSourceXBQ());
         bookSourceBeans.add(getBookSourceLD());
@@ -226,29 +225,6 @@ public class BookSourceManage {
         bookSourceBean.setRuleChapterName("tag.a.0@text");
         bookSourceBean.setRuleContentUrl("tag.a.0@href");
         bookSourceBean.setRuleBookContent("id.content@textNodes");
-
-        return bookSourceBean;
-    }
-
-    private static BookSourceBean getBookSourceDd() {
-        BookSourceBean bookSourceBean = new BookSourceBean();
-        bookSourceBean.setBookSourceUrl("http://www.23us.so");
-        bookSourceBean.setBookSourceName("顶点小说");
-        bookSourceBean.setEnable(true);
-        bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=8053757951023821596&q=searchKey&p=searchPage-1");
-        bookSourceBean.setRuleSearchList("class.result-item");
-        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
-        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
-        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
-        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
-        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
-        bookSourceBean.setRuleSearchCoverUrl("class.result-game-item-pic.0@tag.img.0@src");
-        bookSourceBean.setRuleChapterList("id.at@tag.td");
-        bookSourceBean.setRuleChapterName("tag.a.0@text");
-        bookSourceBean.setRuleContentUrl("tag.a.0@href");
-        bookSourceBean.setRuleBookContent("id.contents@textNodes");
-        bookSourceBean.setRuleIntroduce("id.content@tag.dd.3@tag.p.1@text");
-        bookSourceBean.setRuleChapterUrl("id.content@class.read.0@href");
 
         return bookSourceBean;
     }
