@@ -93,33 +93,12 @@
             android:orientation="horizontal"
             android:layout_gravity="center_vertical">
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="#767676"
-                android:text="点击灵敏度"
-                android:layout_gravity="center" />
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="#767676"
-                android:text="点击翻下一页"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="7dp"
-                android:layout_marginLeft="7dp" />
-            <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
-                android:id="@+id/scb_click_next"
-                android:layout_width="17dp"
-                android:layout_height="17dp"
-                app:color_unchecked="#ffffff"
-                app:color_unchecked_stroke="#c1c1c1"
-                app:color_checked="#767676"
-                app:color_tick="#ffffff"
-                app:duration="150"
-                android:clickable="false"
-                android:layout_gravity="center_vertical"/>
+                android:text="点击灵敏度"
+                android:layout_gravity="center" />
 
         </LinearLayout>
 

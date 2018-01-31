@@ -33,8 +33,6 @@ public class WindowLightPop extends PopupWindow {
     LinearLayout llClick;
     @BindView(R.id.hpb_click)
     MHorProgressBar hpbClick;
-    @BindView(R.id.scb_click_next)
-    SmoothCheckBox scbClickNext;
 
     private Context mContext;
     private Boolean isFollowSys;
@@ -108,10 +106,7 @@ public class WindowLightPop extends PopupWindow {
 
             }
         });
-        scbClickNext.setChecked(readBookControl.getClickAllNext());
-        scbClickNext.setOnCheckedChangeListener((checkBox, isChecked) -> {
-            readBookControl.setClickAllNext(isChecked);
-        });
+
         hpbClick.setMaxProgress(100);
         hpbClick.setDurProgress(readBookControl.getClickSensitivity());
         hpbClick.setProgressListener(new OnProgressListener() {

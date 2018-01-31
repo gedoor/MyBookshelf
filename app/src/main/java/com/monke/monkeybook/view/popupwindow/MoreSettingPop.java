@@ -18,6 +18,8 @@ import butterknife.ButterKnife;
 
 public class MoreSettingPop extends PopupWindow {
 
+    @BindView(R.id.sb_click_all_next)
+    SwitchButton sbClickAllNext;
     private Context mContext;
     private View view;
 
@@ -57,6 +59,7 @@ public class MoreSettingPop extends PopupWindow {
     private void bindEvent() {
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
+        sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
         sbKeepScreenOn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setKeepScreenOn(isChecked);
             changeProListener.keepScreenOnChange(isChecked);
@@ -68,6 +71,7 @@ public class MoreSettingPop extends PopupWindow {
 
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
+        sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
     }
 }
