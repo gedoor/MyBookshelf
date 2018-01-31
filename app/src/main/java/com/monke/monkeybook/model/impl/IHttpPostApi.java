@@ -5,6 +5,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 
@@ -16,5 +17,10 @@ public interface IHttpPostApi {
 
     @FormUrlEncoded()
     @POST
+    @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
+            "User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3",
+            "Keep-Alive:300",
+            "Connection:Keep-Alive",
+            "Cache-Control:no-cache"})
     Observable<String> searchBook(@Url String url, @FieldMap Map<String, String> fieldMap);
 }

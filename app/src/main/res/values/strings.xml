@@ -2,9 +2,7 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        分享和扫描二维码和本地图片\n
-        现在会备份书架,书源,和搜索记录\n
-        加入点击灵敏度调节和点击翻下一页\n
+        解决部分乱码问题/n
         修复BUG
     </string>
 
