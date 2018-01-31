@@ -145,7 +145,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     bookShelf.getChapterList(chapterIndex).getBookContentBean()
                             .setLineSize(mView.getPaint().getTextSize());
                     final int finalPageIndex = pageIndex;
-                    SeparateParagraphToLines(bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent())
+                    SeparateParagraphToLines(bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent(), chapterIndex)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
@@ -188,10 +188,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(chapterIndex).
                                             getDurChapterUrl(), chapterIndex, bookShelf.getTag()).map(bookContentBean -> {
                                         if (bookContentBean.getRight()) {
-                                            //添加章节名称
-                                            bookContentBean.setDurChapterContent(String.format("%s\r\n%s",
-                                                    bookShelf.getChapterList(chapterIndex).getDurChapterName(),
-                                                    bookContentBean.getDurChapterContent()));
                                             bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
                                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                                             bookShelf.getChapterList(chapterIndex).setHasCache(true);
@@ -258,10 +254,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(nextIndex).
                                 getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
                             if (bookContentBean.getRight()) {
-                                //添加章节名称
-                                bookContentBean.setDurChapterContent(String.format("%s\r\n%s",
-                                        bookShelf.getChapterList(nextIndex).getDurChapterName(),
-                                        bookContentBean.getDurChapterContent()));
                                 bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
                                 DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
                                 bookShelf.getChapterList(nextIndex).setHasCache(true);
@@ -314,15 +306,23 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             return bookShelf.getChapterList(chapterIndex).getDurChapterName();
     }
 
-    //内容分行
-    private Observable<List<String>> SeparateParagraphToLines(final String paragraphStr) {
+    /**
+     * @param paragraphStr 内容
+     * @return 分行内容
+     */
+    private Observable<List<String>> SeparateParagraphToLines(String paragraphStr, int chapterIndex) {
         return Observable.create(e -> {
+            String temp = paragraphStr.substring(0, 50);
+            String contect = paragraphStr;
+            if (!temp.contains(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
+                contect = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
+            }
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
-            Layout tempLayout = new StaticLayout(paragraphStr, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            Layout tempLayout = new StaticLayout(contect, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
             List<String> linesData = new ArrayList<>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
-                linesData.add(paragraphStr.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
+                linesData.add(contect.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
             e.onNext(linesData);
             e.onComplete();
