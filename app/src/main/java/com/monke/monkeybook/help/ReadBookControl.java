@@ -33,6 +33,8 @@ public class ReadBookControl {
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
     private Boolean keepScreenOn = false;
+    private int clickSensitivity = 1;
+    private Boolean clickAllNext = false;
 
     private SharedPreferences preference;
 
@@ -65,6 +67,8 @@ public class ReadBookControl {
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
         this.lineNum = preference.getInt("lineNum", 0);
+        this.clickSensitivity = preference.getInt("clickSensitivity", 1);
+        this.clickAllNext = preference.getBoolean("clickAllNext", false);
     }
 
     //字体大小
@@ -236,6 +240,28 @@ public class ReadBookControl {
         this.lineNum = lineNum;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("lineNum", lineNum);
+        editor.apply();
+    }
+
+    public int getClickSensitivity() {
+        return clickSensitivity;
+    }
+
+    public void setClickSensitivity(int clickSensitivity) {
+        this.clickSensitivity = clickSensitivity;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("clickSensitivity", clickSensitivity);
+        editor.apply();
+    }
+
+    public Boolean getClickAllNext() {
+        return clickAllNext;
+    }
+
+    public void setClickAllNext(Boolean clickAllNext) {
+        this.clickAllNext = clickAllNext;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("clickAllNext", clickAllNext);
         editor.apply();
     }
 }

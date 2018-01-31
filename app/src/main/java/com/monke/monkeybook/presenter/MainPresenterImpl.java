@@ -1,50 +1,39 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import com.google.gson.Gson;
-
-import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.v4.provider.DocumentFile;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.impl.IView;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
-import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
-import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.DataBackup;
+import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IMainView;
 
-import org.jsoup.select.Evaluator;
-
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -104,59 +93,17 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     @Override
-    public void backupBookShelf() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                    .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-            if (bookShelfList == null || bookShelfList.size() == 0) {
-                e.onNext(false);
-            } else {
-                for (BookShelfBean bookshelf : bookShelfList) {
-                    bookshelf.getBookInfoBean().setChapterList(null);
-                }
-                Gson gson = new Gson();
-                String bookshelf = gson.toJson(bookShelfList);
-                File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-                DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
-                FileHelper.writeString(bookshelf, docFile);
-                e.onNext(true);
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        if (value) {
-                            Toast.makeText(mView.getContext(), R.string.backup_success, Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(mView.getContext(), R.string.bookshelf_empty, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        Toast.makeText(mView.getContext(), R.string.backup_fail, Toast.LENGTH_LONG).show();
-                    }
-                });
+    public void backupData() {
+        DataBackup.getInstance().run();
     }
 
     @Override
-    public void restoreBookShelf() {
+    public void restoreData() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-            String json = FileHelper.readString("myBookShelf.xml", file.getPath());
-            if (json == null) {
-                e.onNext(false);
-            } else {
-                List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {
-                }.getType());
-                for (BookShelfBean bookshelf : bookShelfList) {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
-                }
+            if (DataRestore.getInstance().run()) {
                 e.onNext(true);
+            } else {
+                e.onNext(false);
             }
         })
                 .subscribeOn(Schedulers.io())

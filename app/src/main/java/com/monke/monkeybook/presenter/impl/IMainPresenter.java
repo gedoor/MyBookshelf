@@ -6,9 +6,9 @@ import com.monke.basemvplib.impl.IPresenter;
 public interface IMainPresenter extends IPresenter{
     void queryBookShelf(Boolean needRefresh);
 
-    void backupBookShelf();
+    void backupData();
 
-    void restoreBookShelf();
+    void restoreData();
 
     void clearAllContent();
 

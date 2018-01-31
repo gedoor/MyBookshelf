@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -22,24 +23,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class WindowLightPop extends PopupWindow {
-    private Context mContext;
-    private View view;
-
     @BindView(R.id.hpb_light)
     MHorProgressBar hpbLight;
     @BindView(R.id.scb_follow_sys)
     SmoothCheckBox scbFollowSys;
     @BindView(R.id.ll_follow_sys)
     LinearLayout llFollowSys;
+    @BindView(R.id.ll_click)
+    LinearLayout llClick;
+    @BindView(R.id.hpb_click)
+    MHorProgressBar hpbClick;
+    @BindView(R.id.scb_click_next)
+    SmoothCheckBox scbClickNext;
 
+    private Context mContext;
     private Boolean isFollowSys;
     private int light;
+    private ReadBookControl readBookControl;
 
     public WindowLightPop(Context context) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_window_light, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_window_light, null);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
@@ -52,8 +58,10 @@ public class WindowLightPop extends PopupWindow {
     }
 
     private void initData() {
+        readBookControl = ReadBookControl.getInstance();
         isFollowSys = getIsFollowSys();
         light = getLight();
+
     }
 
     private void bindEvent() {
@@ -88,6 +96,33 @@ public class WindowLightPop extends PopupWindow {
                     light = (int) dur;
                     setScreenBrightness((int) dur);
                 }
+            }
+
+            @Override
+            public void moveStopProgress(float dur) {
+
+            }
+
+            @Override
+            public void setDurProgress(float dur) {
+
+            }
+        });
+        scbClickNext.setChecked(readBookControl.getClickAllNext());
+        scbClickNext.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            readBookControl.setClickAllNext(isChecked);
+        });
+        hpbClick.setMaxProgress(100);
+        hpbClick.setDurProgress(readBookControl.getClickSensitivity());
+        hpbClick.setProgressListener(new OnProgressListener() {
+            @Override
+            public void moveStartProgress(float dur) {
+
+            }
+
+            @Override
+            public void durProgressChange(float dur) {
+                readBookControl.setClickSensitivity((int) dur);
             }
 
             @Override

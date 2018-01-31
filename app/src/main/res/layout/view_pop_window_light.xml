@@ -8,48 +8,36 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="@drawable/bg_shadow_bottom" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:background="#ffffff">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#767676"
-            android:text="亮度"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="7dp"
-            android:layout_marginLeft="7dp" />
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/hpb_light"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            app:fontdrawable="#767676"
-            app:cantouch="true"
-            app:bgdrawable="#e7eced"
-            app:progresswidth="2dp"
-            app:maxprogress="255"
-            app:cursordrawable="@drawable/shape_progress_cursor_read"
-            app:cursordrawable_width="13dp"
-            app:cursordrawable_height="13dp" />
+
         <LinearLayout
             android:id="@+id/ll_follow_sys"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="#767676"
+                android:text="@string/brightness"
+                android:layout_gravity="center" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="#767676"
-                android:text="跟随系统"
+                android:text="@string/flow_sys"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="7dp"
                 android:layout_marginLeft="7dp" />
@@ -65,5 +53,92 @@
                 android:clickable="false"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
+
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/hpb_light"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:fontdrawable="#767676"
+            app:cantouch="true"
+            app:bgdrawable="#e7eced"
+            app:progresswidth="2dp"
+            app:maxprogress="255"
+            app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_width="13dp"
+            app:cursordrawable_height="13dp" />
+
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/btn_bg_press"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:id="@+id/ll_click"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="#767676"
+                android:text="点击灵敏度"
+                android:layout_gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#767676"
+                android:text="点击翻下一页"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="7dp"
+                android:layout_marginLeft="7dp" />
+            <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
+                android:id="@+id/scb_click_next"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                app:color_unchecked="#ffffff"
+                app:color_unchecked_stroke="#c1c1c1"
+                app:color_checked="#767676"
+                app:color_tick="#ffffff"
+                app:duration="150"
+                android:clickable="false"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/hpb_click"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:fontdrawable="#767676"
+            app:cantouch="true"
+            app:bgdrawable="#e7eced"
+            app:progresswidth="2dp"
+            app:maxprogress="255"
+            app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_width="13dp"
+            app:cursordrawable_height="13dp" />
+
+    </LinearLayout>
+
 </LinearLayout>

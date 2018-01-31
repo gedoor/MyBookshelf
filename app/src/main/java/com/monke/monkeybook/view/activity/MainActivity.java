@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,7 +28,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.Donate;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
@@ -290,7 +288,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        mPresenter.backupBookShelf();
+                        mPresenter.backupData();
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     })
@@ -308,7 +306,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        mPresenter.restoreBookShelf();
+                        mPresenter.restoreData();
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     })

@@ -155,7 +155,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 case MotionEvent.ACTION_UP:
                     if (startX == -3)
                         startX = event.getX();
-                    if (event.getX() - startX > 1) {
+                    if (event.getX() - startX > readBookControl.getClickSensitivity()) {
                         if (state == PRE_AND_NEXT || state == ONLY_PRE) {
                             if (event.getX() - startX > scrollX) {
                                 //向前翻页成功
@@ -167,7 +167,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             //没有上一页
                             noPre();
                         }
-                    } else if (event.getX() - startX < -3) {
+                    } else if (event.getX() - startX < -readBookControl.getClickSensitivity()) {
                         if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
                             int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
                             if (startX - event.getX() > scrollX) {
@@ -186,7 +186,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                                 && ((event.getX() <= getWidth() / 3 && event.getY() <= getHeight() / 3*2)
                                 || (event.getY() <= getHeight() / 3))) {
                             //点击向前翻页
-                            gotoPrePage();
+                            if (readBookControl.getClickAllNext()) {
+                                gotoNextPage();
+                            } else {
+                                gotoPrePage();
+                            }
                         } else if (readBookControl.getCanClickTurn()
                                 && ((event.getX() >= getWidth() / 3 * 2 && event.getY() >= getHeight() / 3*1)
                                 || (event.getY() >= getHeight() / 3*2))) {
