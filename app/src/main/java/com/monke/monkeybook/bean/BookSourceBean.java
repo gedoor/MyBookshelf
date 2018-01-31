@@ -314,47 +314,31 @@ public class BookSourceBean implements Parcelable, Cloneable {
     public boolean equals(Object obj) {
         if (obj instanceof BookSourceBean) {
             BookSourceBean bs = (BookSourceBean) obj;
-            if (!Objects.equals(bookSourceUrl, bs.bookSourceUrl) && (!isEmpty(bookSourceUrl) || !isEmpty(bs.bookSourceUrl)))
-                return false;
-            if (!Objects.equals(bookSourceName, bs.bookSourceName) && (!isEmpty(bookSourceName) || !isEmpty(bs.bookSourceName)))
-                return false;
-            if (!Objects.equals(ruleBookName, bs.ruleBookName) && (!isEmpty(ruleBookName) || !isEmpty(bs.ruleBookName)))
-                return false;
-            if (!Objects.equals(ruleBookAuthor, bs.ruleBookAuthor) && (!isEmpty(ruleBookAuthor) || !isEmpty(bs.ruleBookAuthor)))
-                return false;
-            if (!Objects.equals(ruleChapterUrl, bs.ruleChapterUrl) && (!isEmpty(ruleChapterUrl) || !isEmpty(bs.ruleChapterUrl)))
-                return false;
-            if (!Objects.equals(ruleCoverUrl, bs.ruleCoverUrl) && (!isEmpty(ruleCoverUrl) || !isEmpty(bs.ruleCoverUrl)))
-                return false;
-            if (!Objects.equals(ruleIntroduce, bs.ruleIntroduce) && (!isEmpty(ruleIntroduce) || !isEmpty(bs.ruleIntroduce)))
-                return false;
-            if (!Objects.equals(ruleChapterList, bs.ruleChapterList) && (!isEmpty(ruleChapterList) || !isEmpty(bs.ruleChapterList)))
-                return false;
-            if (!Objects.equals(ruleChapterName, bs.ruleChapterName) && (!isEmpty(ruleChapterName) || !isEmpty(bs.ruleChapterName)))
-                return false;
-            if (!Objects.equals(ruleContentUrl, bs.ruleContentUrl) && (!isEmpty(ruleContentUrl) || !isEmpty(bs.ruleContentUrl)))
-                return false;
-            if (!Objects.equals(ruleBookContent, bs.ruleBookContent) && (!isEmpty(ruleBookContent) || !isEmpty(bs.ruleBookContent)))
-                return false;
-            if (!Objects.equals(ruleSearchUrl, bs.ruleSearchUrl) && (!isEmpty(ruleSearchUrl) || !isEmpty(bs.ruleSearchUrl)))
-                return false;
-            if (!Objects.equals(ruleSearchList, bs.ruleSearchList) && (!isEmpty(ruleSearchList) || !isEmpty(bs.ruleSearchList)))
-                return false;
-            if (!Objects.equals(ruleSearchName, bs.ruleSearchName) && (!isEmpty(ruleSearchName) || !isEmpty(bs.ruleSearchName)))
-                return false;
-            if (!Objects.equals(ruleSearchAuthor, bs.ruleSearchAuthor) && (!isEmpty(ruleSearchAuthor) || !isEmpty(bs.ruleSearchAuthor)))
-                return false;
-            if (!Objects.equals(ruleSearchKind, bs.ruleSearchKind) && (!isEmpty(ruleSearchKind) || !isEmpty(bs.ruleSearchKind)))
-                return false;
-            if (!Objects.equals(ruleSearchLastChapter, bs.ruleSearchLastChapter) && (!isEmpty(ruleSearchLastChapter) || !isEmpty(bs.ruleSearchLastChapter)))
-                return false;
-            if (!Objects.equals(ruleSearchCoverUrl, bs.ruleSearchCoverUrl) && (!isEmpty(ruleSearchCoverUrl) || !isEmpty(bs.ruleSearchCoverUrl)))
-                return false;
-            if (!Objects.equals(ruleSearchNoteUrl, bs.ruleSearchNoteUrl) && (!isEmpty(ruleSearchNoteUrl) || !isEmpty(bs.ruleSearchNoteUrl)))
-                return false;
-            return true;
+            return stringEquals(bookSourceUrl,bs.bookSourceUrl)
+                    && stringEquals(bookSourceName,bs.bookSourceName)
+                    && stringEquals(ruleBookName,bs.ruleBookName)
+                    && stringEquals(ruleBookAuthor,bs.ruleBookAuthor)
+                    && stringEquals(ruleChapterUrl,bs.ruleChapterUrl)
+                    && stringEquals(ruleCoverUrl,bs.ruleCoverUrl)
+                    && stringEquals(ruleIntroduce,bs.ruleIntroduce)
+                    && stringEquals(ruleChapterList,bs.ruleChapterList)
+                    && stringEquals(ruleChapterName,bs.ruleChapterName)
+                    && stringEquals(ruleContentUrl,bs.ruleContentUrl)
+                    && stringEquals(ruleBookContent,bs.ruleBookContent)
+                    && stringEquals(ruleSearchUrl,bs.ruleSearchUrl)
+                    && stringEquals(ruleSearchList,bs.ruleSearchList)
+                    && stringEquals(ruleSearchName,bs.ruleSearchName)
+                    && stringEquals(ruleSearchAuthor,bs.ruleSearchAuthor)
+                    && stringEquals(ruleSearchKind,bs.ruleSearchKind)
+                    && stringEquals(ruleSearchLastChapter,bs.ruleSearchLastChapter)
+                    && stringEquals(ruleSearchCoverUrl,bs.ruleSearchCoverUrl)
+                    && stringEquals(ruleSearchNoteUrl,bs.ruleSearchNoteUrl);
         }
         return false;
+    }
+
+    private Boolean stringEquals(String str1, String str2) {
+        return Objects.equals(str1, str2) || (isEmpty(str1) && isEmpty(str2));
     }
 
     @Override

@@ -428,6 +428,9 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (bookSourceBean == null) {
+                bookSourceBean = new BookSourceBean();
+            }
             if (!getBookSource().equals(bookSourceBean)) {
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.exit))
