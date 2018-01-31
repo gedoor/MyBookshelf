@@ -118,10 +118,12 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
                 setText(result.getText());
             } catch (NotFoundException | ChecksumException | FormatException e) {
                 e.printStackTrace();
+                Toast.makeText(mView.getContext(), "解析图片错误", Toast.LENGTH_SHORT).show();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(mView.getContext(), "图片获取错误", Toast.LENGTH_SHORT).show();
         }
 
     }
