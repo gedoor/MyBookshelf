@@ -145,6 +145,9 @@ public class ReadInterfacePop extends PopupWindow {
         if (lineSize > 2) {
             lineSize = 2;
         }
+        if (lineSize < 1) {
+            lineSize = 1;
+        }
         tvDurLineSize.setText(String.format("%.1f", lineSize));
         readBookControl.setLineMultiplier(lineSize);
     }
