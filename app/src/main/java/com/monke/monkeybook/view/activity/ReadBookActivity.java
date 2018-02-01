@@ -161,11 +161,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             mPresenter.updateProgress(chapterIndex, pageIndex);
             if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                 atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                String url = mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl();
-                if (url.startsWith("/")) {
-                    url = mPresenter.getBookShelf().getTag() + url;
-                }
-                atvUrl.setText(url);
+                atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
             } else {
                 atvTitle.setText("无章节");
             }
