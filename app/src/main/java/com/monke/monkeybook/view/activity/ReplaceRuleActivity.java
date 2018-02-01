@@ -148,14 +148,14 @@ public class ReplaceRuleActivity extends MBaseActivity<IBookSourcePresenter> imp
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.book_source_manage);
+            actionBar.setTitle(R.string.replace_rule);
         }
     }
 
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book_source_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_replace_rule_activity, menu);
         return true;
     }
 
@@ -164,12 +164,8 @@ public class ReplaceRuleActivity extends MBaseActivity<IBookSourcePresenter> imp
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_add_book_source:
-                Intent intent = new Intent(this, SourceEditActivity.class);
-                startActivityForResult(intent, EDIT_SOURCE);
-                break;
-            case R.id.action_reset_book_source:
-                resetBookSource();
+            case R.id.action_add_replace_rule:
+
                 break;
             case android.R.id.home:
                 finish();
@@ -181,8 +177,6 @@ public class ReplaceRuleActivity extends MBaseActivity<IBookSourcePresenter> imp
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_SOURCE) {
-            refreshBookSource();
-        }
+
     }
 }
