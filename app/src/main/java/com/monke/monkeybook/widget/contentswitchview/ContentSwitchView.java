@@ -271,9 +271,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         if (state == ONLY_NEXT) {
                             durPageView = viewContents.get(1);
                         } else {
-                            durPageView = viewContents.get(2);
-                            ContentSwitchView.this.removeView(viewContents.get(0));
-                            viewContents.remove(0);
+                            if (viewContents.size() >= 3) {
+                                durPageView = viewContents.get(2);
+                                ContentSwitchView.this.removeView(viewContents.get(0));
+                                viewContents.remove(0);
+                            }
                         }
                         state = ONLY_PRE;
                         if (durPageView.getDurChapterIndex() + 1 <= durPageView.getChapterAll() - 1 || durPageView.getDurPageIndex() + 1 <= durPageView.getPageAll() - 1) {
