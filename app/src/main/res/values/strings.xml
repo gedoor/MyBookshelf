@@ -114,5 +114,5 @@
     <string name="rule_summary">规则说明</string>
     <string name="share">分享</string>
     <string name="flow_sys">跟随系统</string>
-    <string name="replace_ruler">替换净化</string>
+    <string name="replace_rule">替换净化</string>
 </resources>
