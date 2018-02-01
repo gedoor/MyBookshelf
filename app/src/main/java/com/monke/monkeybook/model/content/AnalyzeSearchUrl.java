@@ -15,44 +15,52 @@ public class AnalyzeSearchUrl {
     private String searchUrl;
     private String searchPath;
     private Map<String, String> queryMap;
+    private String searchKey;
+    private int searchPage;
 
-    public AnalyzeSearchUrl(String ruleUrl, String key, int page) throws Exception {
-        String[] bm = ruleUrl.split("\\|");
-        if (bm.length > 1) {
-            String[] qtS = bm[1].split("&");
-            for (String qt : qtS) {
-                String[] gz = qt.split("=");
-                if (gz[0].equals("char")) {
-                    key = URLEncoder.encode(key, gz[1]);
-                }
-            }
+    public AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
+        searchKey = key;
+        searchPage = page;
+        String[] ruleUrlS = ruleUrl.split("\\|");
+        if (ruleUrlS.length > 1) {
+            analyzeQt(ruleUrlS[1]);
         }
-        String[] temp = bm[0].split("\\?|@");
-        if (temp.length == 1) {
-            String url = temp[0].replace("searchKey", key)
+        ruleUrlS = ruleUrlS[0].split("\\?|@");
+        if (ruleUrlS.length == 1) {
+            String url = ruleUrlS[0].replace("searchKey", key)
                     .replace("searchPage-1", String.valueOf(page - 1))
                     .replace("searchPage", String.valueOf(page));
-            generateUrlPath(ruleUrl);
+            generateUrlPath(url);
             return;
         }
-        generateUrlPath(temp[0]);
-        generateQueryMap(temp[1], key, page);
+        generateUrlPath(ruleUrlS[0]);
+        generateQueryMap(ruleUrlS[1]);
     }
 
-    private void generateQueryMap(String allQuery, String key, int page) {
+    private void analyzeQt(final String qtRule) throws Exception {
+        String[] qtS = qtRule.split("&");
+        for (String qt : qtS) {
+            String[] gz = qt.split("=");
+            if (gz[0].equals("char")) {
+                searchKey = URLEncoder.encode(searchKey, gz[1]);
+            }
+        }
+    }
+
+    private void generateQueryMap(String allQuery) {
         String[] queryS = allQuery.split("&");
         queryMap = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
             switch (queryM[1]) {
                 case "searchKey":
-                    queryMap.put(queryM[0], key);
+                    queryMap.put(queryM[0], searchKey);
                     break;
                 case "searchPage":
-                    queryMap.put(queryM[0], String.valueOf(page));
+                    queryMap.put(queryM[0], String.valueOf(searchPage));
                     break;
                 case "searchPage-1":
-                    queryMap.put(queryM[0], String.valueOf(page - 1));
+                    queryMap.put(queryM[0], String.valueOf(searchPage - 1));
                     break;
                 default:
                     queryMap.put(queryM[0], queryM[1]);
