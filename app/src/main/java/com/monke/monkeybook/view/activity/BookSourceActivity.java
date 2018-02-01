@@ -88,7 +88,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_book_source);
+        setContentView(R.layout.activity_recycler_vew);
     }
 
     @Override

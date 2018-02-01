@@ -2,7 +2,6 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -88,7 +87,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IBookSourcePresenter> imp
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_book_source);
+        setContentView(R.layout.activity_recycler_vew);
     }
 
     @Override
