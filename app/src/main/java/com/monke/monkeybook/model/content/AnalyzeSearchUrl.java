@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.text.TextUtils.isEmpty;
+
 /**
  * Created by GKF on 2018/1/24.
  * 搜索URL规则解析
@@ -17,6 +19,7 @@ public class AnalyzeSearchUrl {
     private Map<String, String> queryMap;
     private String searchKey;
     private int searchPage;
+    private String charCode;
 
     public AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
         searchKey = key;
@@ -42,12 +45,13 @@ public class AnalyzeSearchUrl {
         for (String qt : qtS) {
             String[] gz = qt.split("=");
             if (gz[0].equals("char")) {
+                charCode = gz[1];
                 searchKey = URLEncoder.encode(searchKey, gz[1]);
             }
         }
     }
 
-    private void generateQueryMap(String allQuery) {
+    private void generateQueryMap(String allQuery)  throws Exception{
         String[] queryS = allQuery.split("&");
         queryMap = new HashMap<>();
         for (String query : queryS) {
@@ -63,7 +67,11 @@ public class AnalyzeSearchUrl {
                     queryMap.put(queryM[0], String.valueOf(searchPage - 1));
                     break;
                 default:
-                    queryMap.put(queryM[0], queryM[1]);
+                    if (isEmpty(charCode)) {
+                        queryMap.put(queryM[0], queryM[1]);
+                    } else {
+                        queryMap.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
+                    }
                     break;
             }
         }

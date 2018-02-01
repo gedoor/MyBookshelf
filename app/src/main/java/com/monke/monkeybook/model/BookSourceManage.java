@@ -12,6 +12,7 @@ import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -102,13 +103,8 @@ public class BookSourceManage {
 
     public static void addBookSource(BookSourceBean oldBookSource, BookSourceBean newBookSource, OnObservableListener observableListener) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (oldBookSource != null) {
-                newBookSource.setSerialNumber(oldBookSource.getSerialNumber());
-                newBookSource.setEnable(oldBookSource.getEnable());
+            if (oldBookSource != null && !Objects.equals(newBookSource.getBookSourceUrl(), oldBookSource.getBookSourceUrl())) {
                 DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(oldBookSource);
-            }
-            if (newBookSource.getSerialNumber() == 0) {
-                newBookSource.setSerialNumber(allBookSource.size() + 1);
             }
             addBookSource(newBookSource);
             BookSourceManage.refreshBookSource();
