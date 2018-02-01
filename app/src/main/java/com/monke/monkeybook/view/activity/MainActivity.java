@@ -261,6 +261,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 case R.id.action_book_source_manage:
                     startActivityByAnim(new Intent(MainActivity.this, BookSourceActivity.class), 0, 0);
                     break;
+                case R.id.action_replace_ruler:
+                    break;
                 case R.id.action_setting:
                     startActivityByAnim(new Intent(MainActivity.this, SettingActivity.class), 0, 0);
                     break;

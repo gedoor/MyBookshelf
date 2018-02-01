@@ -19,9 +19,9 @@
             android:title="@string/book_source_manage" />
 
         <item
-            android:id="@+id/action_replace_content"
+            android:id="@+id/action_replace_ruler"
             android:icon="@drawable/ic_find_replace_black_24dp"
-            android:title="@string/book_source_manage" />
+            android:title="@string/replace_ruler" />
     </group>
 
     <group android:id="@+id/drawer_menu_setting">
