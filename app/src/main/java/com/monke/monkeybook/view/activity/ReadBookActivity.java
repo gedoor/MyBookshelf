@@ -141,8 +141,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
-        initServiceConn();
-        initLoadDataListener();
     }
 
     @Override
@@ -345,6 +343,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     protected void initData() {
+        initServiceConn();
+        initLoadDataListener();
         mPresenter.saveProgress();
         //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
