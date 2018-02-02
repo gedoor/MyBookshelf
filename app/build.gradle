@@ -8,6 +8,7 @@ static def increasedVersionCode(){
 def name = "MONKOVEL"
 def version = "1.6." + increasedVersionCode()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+def gitTag = "git tag " + version
 
 android {
     compileSdkVersion 27
@@ -27,6 +28,7 @@ android {
     }
     buildTypes {
         release {
+            gitTag.execute()
             buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
