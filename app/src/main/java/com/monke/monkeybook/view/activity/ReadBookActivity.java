@@ -124,125 +124,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
     private Intent readAloudIntent;
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
+    private ServiceConnection conn;
+    private ContentSwitchView.LoadDataListener loadDataListener;
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            //返回一个MsgService对象
-            ReadAloudService readAloudService = ((ReadAloudService.MyBinder) service).getService();
-            readAloudService.setAloudServiceListener(new ReadAloudService.AloudServiceListener() {
-                @Override
-                public void stopService() {
-                    unbindService(conn);
-                    csvBook.readAloudStop();
-                }
-
-                @Override
-                public void readAloudNext() {
-                    runOnUiThread(() -> csvBook.readAloudNext());
-                }
-
-                @Override
-                public void showMassage(String msg) {
-                    runOnUiThread(() -> toast(msg));
-                }
-
-                @Override
-                public void setStatus(int status) {
-                    aloudStatus = status;
-                    switch (status) {
-                        case PLAY:
-                            ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
-                            break;
-                        case PUSE:
-                            ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
-                            break;
-                        default:
-                            ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
-                    }
-                }
-            });
-        }
-    };
-    /**
-     * 正文事件
-     */
-    ContentSwitchView.LoadDataListener loadDataListener = new ContentSwitchView.LoadDataListener() {
-        @Override
-        public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-            mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
-        }
-
-        @Override
-        public void updateProgress(int chapterIndex, int pageIndex) {
-            mPresenter.updateProgress(chapterIndex, pageIndex);
-            if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
-            } else {
-                atvTitle.setText("无章节");
-            }
-            if (mPresenter.getBookShelf().getChapterListSize() == 1) {
-                tvPre.setEnabled(false);
-                tvNext.setEnabled(false);
-            } else {
-                if (chapterIndex == 1) {
-                    tvPre.setEnabled(false);
-                    tvNext.setEnabled(true);
-                } else if (chapterIndex == mPresenter.getBookShelf().getChapterListSize() - 1) {
-                    tvPre.setEnabled(true);
-                    tvNext.setEnabled(false);
-                } else {
-                    tvPre.setEnabled(true);
-                    tvNext.setEnabled(true);
-                }
-            }
-        }
-
-        @Override
-        public String getChapterTitle(int chapterIndex) {
-            return mPresenter.getChapterTitle(chapterIndex);
-        }
-
-        @Override
-        public void initData(int lineCount) {
-            mPresenter.setPageLineCount(lineCount);
-            mPresenter.setPageWidth(csvBook.getContentWidth());
-            mPresenter.initContent();
-        }
-
-        @Override
-        public void showMenu() {
-            flMenu.setVisibility(View.VISIBLE);
-            llMenuTop.startAnimation(menuTopIn);
-            llMenuBottom.startAnimation(menuBottomIn);
-            hideStatusBar(false);
-            hideNavigationBar();
-        }
-
-        @Override
-        public void setHpbReadProgress(int pageIndex, int pageAll) {
-            hpbReadProgress.setMaxProgress(pageAll - 1);
-            if (hpbReadProgress.getDurProgress() != pageIndex)
-                hpbReadProgress.setDurProgress(pageIndex);
-        }
-
-        @Override
-        public void readAloud(String content) {
-            readAloudIntent.putExtra("aloudButton", aloudButton);
-            readAloudIntent.putExtra("content", content);
-            startService(readAloudIntent);
-            aloudButton = false;
-        }
-
-        @Override
-        public void stopAloud() {
-            stopAloudService();
-        }
-    };
     private Boolean showCheckPermission = false;
 
     @Override
@@ -254,8 +138,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             noteUrl = savedInstanceState.getString("noteUrl");
+            aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
+        initServiceConn();
+        initLoadDataListener();
     }
 
     @Override
@@ -277,6 +164,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onSaveInstanceState(outState);
         if (mPresenter.getBookShelf() != null) {
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
+            outState.putInt("aloudStatus", aloudStatus);
         }
     }
 
@@ -325,6 +213,134 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 朗读服务
+     */
+    private void initServiceConn() {
+        conn = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                //返回一个MsgService对象
+                ReadAloudService readAloudService = ((ReadAloudService.MyBinder) service).getService();
+                readAloudService.setAloudServiceListener(new ReadAloudService.AloudServiceListener() {
+                    @Override
+                    public void stopService() {
+                        unbindService(conn);
+                        csvBook.readAloudStop();
+                    }
+
+                    @Override
+                    public void readAloudNext() {
+                        runOnUiThread(() -> csvBook.readAloudNext());
+                    }
+
+                    @Override
+                    public void showMassage(String msg) {
+                        runOnUiThread(() -> toast(msg));
+                    }
+
+                    @Override
+                    public void setStatus(int status) {
+                        aloudStatus = status;
+                        switch (status) {
+                            case PLAY:
+                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
+                                break;
+                            case PUSE:
+                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                break;
+                            default:
+                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * 正文事件
+     */
+    private void initLoadDataListener(){
+        loadDataListener = new ContentSwitchView.LoadDataListener() {
+            @Override
+            public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
+                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
+            }
+
+            @Override
+            public void updateProgress(int chapterIndex, int pageIndex) {
+                mPresenter.updateProgress(chapterIndex, pageIndex);
+                if (mPresenter.getBookShelf().getChapterListSize() > 0) {
+                    atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
+                    atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
+                } else {
+                    atvTitle.setText("无章节");
+                }
+                if (mPresenter.getBookShelf().getChapterListSize() == 1) {
+                    tvPre.setEnabled(false);
+                    tvNext.setEnabled(false);
+                } else {
+                    if (chapterIndex == 1) {
+                        tvPre.setEnabled(false);
+                        tvNext.setEnabled(true);
+                    } else if (chapterIndex == mPresenter.getBookShelf().getChapterListSize() - 1) {
+                        tvPre.setEnabled(true);
+                        tvNext.setEnabled(false);
+                    } else {
+                        tvPre.setEnabled(true);
+                        tvNext.setEnabled(true);
+                    }
+                }
+            }
+
+            @Override
+            public String getChapterTitle(int chapterIndex) {
+                return mPresenter.getChapterTitle(chapterIndex);
+            }
+
+            @Override
+            public void initData(int lineCount) {
+                mPresenter.setPageLineCount(lineCount);
+                mPresenter.setPageWidth(csvBook.getContentWidth());
+                mPresenter.initContent();
+            }
+
+            @Override
+            public void showMenu() {
+                flMenu.setVisibility(View.VISIBLE);
+                llMenuTop.startAnimation(menuTopIn);
+                llMenuBottom.startAnimation(menuBottomIn);
+                hideStatusBar(false);
+                hideNavigationBar();
+            }
+
+            @Override
+            public void setHpbReadProgress(int pageIndex, int pageAll) {
+                hpbReadProgress.setMaxProgress(pageAll - 1);
+                if (hpbReadProgress.getDurProgress() != pageIndex)
+                    hpbReadProgress.setDurProgress(pageIndex);
+            }
+
+            @Override
+            public void readAloud(String content) {
+                readAloudIntent.putExtra("aloudButton", aloudButton);
+                readAloudIntent.putExtra("content", content);
+                startService(readAloudIntent);
+                aloudButton = false;
+            }
+
+            @Override
+            public void stopAloud() {
+                stopAloudService();
+            }
+        };
     }
 
     @Override
