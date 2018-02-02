@@ -182,6 +182,9 @@ public class ReadAloudService extends Service {
         updateNotification();
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
+        if (pause && aloudServiceListener != null) {
+            aloudServiceListener.setStatus(PUSE);
+        }
     }
 
     /**
