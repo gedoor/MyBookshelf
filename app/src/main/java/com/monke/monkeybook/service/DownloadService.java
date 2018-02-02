@@ -107,7 +107,8 @@ public class DownloadService extends Service {
     private void addNewTask(final String noteUrl, final int start, final int end) {
         isStartDownload = true;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
+            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                    .where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
             if (!(temp == null || temp.size() == 0)) {
                 BookShelfBean bookShelf = temp.get(0);
                 for (int i = start; i <= end; i++) {
@@ -146,11 +147,14 @@ public class DownloadService extends Service {
         isDownloading = true;
         if (isStartDownload) {
             Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
-                List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+                List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                        .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
                 if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
                     for (BookShelfBean bookItem : bookShelfBeanList) {
                         if (!bookItem.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                            List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
+                            List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao()
+                                    .queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl()))
+                                    .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
                             if (downloadChapterList != null && downloadChapterList.size() > 0) {
                                 e.onNext(downloadChapterList.get(0));
                                 e.onComplete();
@@ -212,7 +216,8 @@ public class DownloadService extends Service {
         if (durTime < reTryTimes && isStartDownload) {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<BookContentBean>) e -> {
-                List<BookContentBean> result = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder().where(BookContentBeanDao.Properties.DurChapterUrl.eq(data.getDurChapterUrl())).list();
+                List<BookContentBean> result = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
+                        .where(BookContentBeanDao.Properties.DurChapterUrl.eq(data.getDurChapterUrl())).list();
                 if (result != null && result.size() > 0) {
                     e.onNext(result.get(0));
                 } else {
@@ -226,9 +231,9 @@ public class DownloadService extends Service {
                         DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
                         if (bookContentBean1.getRight()) {
                             bookContentBean1.setNoteUrl(data.getNoteUrl());
-                            bookContentBean1.setDurChapterContent(String.format("%s\r\n%s", data.getDurChapterName(), bookContentBean1.getDurChapterContent()));
                             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean1);
-                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(new ChapterListBean(data.getNoteUrl(), data.getDurChapterIndex(), data.getDurChapterUrl(), data.getDurChapterName(), data.getTag(), true));
+                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
+                                    .update(new ChapterListBean(data.getNoteUrl(), data.getDurChapterIndex(), data.getDurChapterUrl(), data.getDurChapterName(), data.getTag(), true));
                         }
                         return bookContentBean1;
                     });
