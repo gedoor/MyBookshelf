@@ -42,11 +42,14 @@ import static com.monke.monkeybook.MApplication.DEBUG;
 public class ReadAloudService extends Service {
     private static final String TAG = ReadAloudService.class.getSimpleName();
     public static Boolean running = false;
+    public static final int PLAY = 1;
+    public static final int STOP = 0;
+    public static final int PUSE = 2;
     public static final String mediaButtonAction = "mediaButton";
     public static final String newReadAloudAction = "newReadAloud";
     private static final String doneServiceAction = "doneService";
-    private static final String pauseServiceAction = "pauseService";
-    private static final String resumeServiceAction = "resumeService";
+    public static final String pauseServiceAction = "pauseService";
+    public static final String resumeServiceAction = "resumeService";
     private static final String readActivityAction = "readActivity";
     private static final String setTimerAction = "updateTimer";
     private static final int notificationId = 3222;
@@ -133,6 +136,7 @@ public class ReadAloudService extends Service {
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
+            aloudServiceListener.setStatus(PLAY);
             updateNotification();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
@@ -163,6 +167,7 @@ public class ReadAloudService extends Service {
         cancelTimer();
         stopSelf();
         if (aloudServiceListener != null) {
+            aloudServiceListener.setStatus(STOP);
             aloudServiceListener.stopService();
         }
     }
@@ -287,6 +292,8 @@ public class ReadAloudService extends Service {
         void readAloudNext();
 
         void showMassage(String msg);
+
+        void setStatus(int status);
     }
 
     private AloudServiceListener aloudServiceListener;
@@ -363,7 +370,8 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onError(String s) {
-
+            pauseReadAloud(true);
+            aloudServiceListener.setStatus(PUSE);
         }
     }
 

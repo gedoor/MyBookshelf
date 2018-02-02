@@ -58,7 +58,11 @@ import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+import static com.monke.monkeybook.service.ReadAloudService.PLAY;
+import static com.monke.monkeybook.service.ReadAloudService.PUSE;
 import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
+import static com.monke.monkeybook.service.ReadAloudService.pauseServiceAction;
+import static com.monke.monkeybook.service.ReadAloudService.resumeServiceAction;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     @BindView(R.id.fl_content)
@@ -111,6 +115,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private boolean aloudButton;
     private boolean hideStatusBar;
     private String noteUrl;
+    private int aloudStatus;
 
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
@@ -143,6 +148,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 @Override
                 public void showMassage(String msg) {
                     runOnUiThread(() -> toast(msg));
+                }
+
+                @Override
+                public void setStatus(int status) {
+                    aloudStatus = status;
+                    switch (status) {
+                        case PLAY:
+                            ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
+                            break;
+                        case PUSE:
+                            ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                            break;
+                        default:
+                            ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
+                    }
                 }
             });
         }
@@ -532,11 +552,23 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                aloudButton = true;
-                csvBook.readAloudStart();
-                ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+            Intent intent = new Intent(this, ReadAloudService.class);
+            switch (aloudStatus) {
+                case PUSE:
+                    intent.setAction(resumeServiceAction);
+                    startService(intent);
+                    break;
+                case PLAY:
+                    intent.setAction(pauseServiceAction);
+                    startService(intent);
+                    break;
+                default:
+                    ReadBookActivity.this.popMenuOut();
+                    if (mPresenter.getBookShelf() != null) {
+                        aloudButton = true;
+                        csvBook.readAloudStart();
+                        ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+                    }
             }
         });
 
