@@ -23,5 +23,5 @@ public interface IHttpPostApi {
             "Keep-Alive:300",
             "Connection:Keep-Alive",
             "Cache-Control:no-cache"})
-    Observable<String> searchBook(@Url String url, @FieldMap Map<String, String> fieldMap);
+    Observable<String> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap);
 }
