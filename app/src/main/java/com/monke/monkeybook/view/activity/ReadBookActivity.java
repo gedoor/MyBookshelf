@@ -59,10 +59,11 @@ import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
-import static com.monke.monkeybook.service.ReadAloudService.PUSE;
-import static com.monke.monkeybook.service.ReadAloudService.newReadAloudAction;
-import static com.monke.monkeybook.service.ReadAloudService.pauseServiceAction;
-import static com.monke.monkeybook.service.ReadAloudService.resumeServiceAction;
+import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
+import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
+import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
+import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
+import static com.monke.monkeybook.service.ReadAloudService.ActionResumeService;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     @BindView(R.id.fl_content)
@@ -149,7 +150,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         setContentView(R.layout.activity_book_read);
         hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         readAloudIntent = new Intent(this, ReadAloudService.class);
-        readAloudIntent.setAction(newReadAloudAction);
+        readAloudIntent.setAction(ActionNewReadAloud);
         ReadBookControl readBookControl = ReadBookControl.getInstance();
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -250,7 +251,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                             case PLAY:
                                 ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
                                 break;
-                            case PUSE:
+                            case PAUSE:
                                 ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                                 break;
                             default:
@@ -265,7 +266,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     /**
      * 正文事件
      */
-    private void initLoadDataListener(){
+    private void initLoadDataListener() {
         loadDataListener = new ContentSwitchView.LoadDataListener() {
             @Override
             public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
@@ -570,12 +571,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ibReadAloud.setOnClickListener(view -> {
             Intent intent = new Intent(this, ReadAloudService.class);
             switch (aloudStatus) {
-                case PUSE:
-                    intent.setAction(resumeServiceAction);
+                case PAUSE:
+                    intent.setAction(ActionResumeService);
                     startService(intent);
                     break;
                 case PLAY:
-                    intent.setAction(pauseServiceAction);
+                    intent.setAction(ActionPauseService);
                     startService(intent);
                     break;
                 default:
@@ -656,9 +657,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void stopAloudService() {
-        stopService(readAloudIntent);
-        unbindService(conn);
-        csvBook.setReadAloud(false);
+        Intent intent = new Intent(this, ReadAloudService.class);
+        intent.setAction(ActionDoneService);
+        startService(intent);
         Toast.makeText(this, R.string.aloud_stop, Toast.LENGTH_SHORT).show();
     }
 
@@ -670,28 +671,25 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
-                    llMenuTop.startAnimation(menuTopOut);
-                    llMenuBottom.startAnimation(menuBottomOut);
+                    popMenuOut();
                     return true;
                 } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+                    return true;
+                } else if (chapterListView.dismissChapterList()) {
                     return true;
                 } else if (csvBook.getReadAloud()) {
                     stopAloudService();
                     return true;
                 } else {
-                    Boolean temp2 = chapterListView.dismissChapterList();
-                    if (temp2)
-                        return true;
-                    else {
-                        finish();
-                        return true;
-                    }
+                    finish();
+                    return true;
                 }
             } else {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
-                if (temp)
+                if (temp) {
                     return true;
+                }
             }
             return super.onKeyDown(keyCode, event);
         }

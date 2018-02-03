@@ -1,18 +1,13 @@
 package com.monke.monkeybook.service;
 
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import com.monke.monkeybook.BuildConfig;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by GKF on 2018/1/6.
@@ -20,15 +15,8 @@ import java.util.Iterator;
  */
 
 public class MediaButtonIntentReceiver extends BroadcastReceiver {
-    private static final boolean DEBUG = BuildConfig.DEBUG;
     public static final String TAG = MediaButtonIntentReceiver.class.getSimpleName();
-
-    @Override
-    public void onReceive(final Context context, final Intent intent) {
-        if (handleIntent(context, intent) && isOrderedBroadcast()) {
-            abortBroadcast();
-        }
-    }
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     public static boolean handleIntent(final Context context, final Intent intent) {
         if (DEBUG) Log.d(TAG, "Received intent: " + intent);
@@ -48,7 +36,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
                 case KeyEvent.KEYCODE_MEDIA_PLAY:
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    command = ReadAloudService.mediaButtonAction;
+                    command = ReadAloudService.ActionMediaButton;
                     break;
                 default:
                     break;
@@ -68,6 +56,13 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             final Intent intent = new Intent(context, ReadAloudService.class);
             intent.setAction(command);
             context.startService(intent);
+        }
+    }
+
+    @Override
+    public void onReceive(final Context context, final Intent intent) {
+        if (handleIntent(context, intent) && isOrderedBroadcast()) {
+            abortBroadcast();
         }
     }
 }

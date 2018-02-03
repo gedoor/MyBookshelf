@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -28,7 +27,6 @@ import com.monke.monkeybook.help.RunMediaPlayer;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,19 +38,26 @@ import static com.monke.monkeybook.MApplication.DEBUG;
  */
 
 public class ReadAloudService extends Service {
-    private static final String TAG = ReadAloudService.class.getSimpleName();
-    public static Boolean running = false;
     public static final int PLAY = 1;
     public static final int STOP = 0;
-    public static final int PUSE = 2;
-    public static final String mediaButtonAction = "mediaButton";
-    public static final String newReadAloudAction = "newReadAloud";
-    private static final String doneServiceAction = "doneService";
-    public static final String pauseServiceAction = "pauseService";
-    public static final String resumeServiceAction = "resumeService";
-    private static final String readActivityAction = "readActivity";
-    private static final String setTimerAction = "updateTimer";
+    public static final int PAUSE = 2;
+    public static final String ActionMediaButton = "mediaButton";
+    public static final String ActionNewReadAloud = "newReadAloud";
+    public static final String ActionDoneService = "doneService";
+    public static final String ActionPauseService = "pauseService";
+    public static final String ActionResumeService = "resumeService";
+    private static final String TAG = ReadAloudService.class.getSimpleName();
+    private static final String ActionReadActivity = "readActivity";
+    private static final String ActionSetTimer = "updateTimer";
     private static final int notificationId = 3222;
+    private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
+            | PlaybackStateCompat.ACTION_PAUSE
+            | PlaybackStateCompat.ACTION_PLAY_PAUSE
+            | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+            | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+            | PlaybackStateCompat.ACTION_STOP
+            | PlaybackStateCompat.ACTION_SEEK_TO;
+    public static Boolean running = false;
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
@@ -64,11 +69,11 @@ public class ReadAloudService extends Service {
     private int maxTimeMinute = 60;
     private boolean timerEnable = false;
     private Timer mTimer;
-
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
     private AudioFocusRequest mFocusRequest;
+    private AloudServiceListener aloudServiceListener;
 
     @Override
     public void onCreate() {
@@ -90,22 +95,22 @@ public class ReadAloudService extends Service {
         String action = intent.getAction();
         assert action != null;
         switch (action) {
-            case doneServiceAction:
+            case ActionDoneService:
                 doneService();
                 break;
-            case pauseServiceAction:
+            case ActionPauseService:
                 pauseReadAloud(true);
                 break;
-            case resumeServiceAction:
+            case ActionResumeService:
                 resumeReadAloud();
                 break;
-            case mediaButtonAction:
+            case ActionMediaButton:
                 aloudControl();
                 break;
-            case setTimerAction:
+            case ActionSetTimer:
                 updateTimer(intent.getIntExtra("minute", 10));
                 break;
-            case newReadAloudAction:
+            case ActionNewReadAloud:
                 newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
                 break;
             default:
@@ -183,7 +188,7 @@ public class ReadAloudService extends Service {
         updateMediaSessionPlaybackState();
         textToSpeech.stop();
         if (pause && aloudServiceListener != null) {
-            aloudServiceListener.setStatus(PUSE);
+            aloudServiceListener.setStatus(PAUSE);
         }
     }
 
@@ -230,7 +235,7 @@ public class ReadAloudService extends Service {
                 @Override
                 public void run() {
                     Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                    setTimerIntent.setAction(setTimerAction);
+                    setTimerIntent.setAction(ActionSetTimer);
                     setTimerIntent.putExtra("minute", -1);
                     startService(setTimerIntent);
                 }
@@ -274,32 +279,20 @@ public class ReadAloudService extends Service {
                 .setOngoing(true)
                 .setContentTitle(title)
                 .setContentText(getString(R.string.read_aloud_s))
-                .setContentIntent(getReadBookActivityPendingIntent(readActivityAction));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(doneServiceAction));
+                .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         if (pause) {
-            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(resumeServiceAction));
+            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
         } else {
-            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(pauseServiceAction));
+            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(ActionPauseService));
         }
-        builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(setTimerAction));
+        builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(ActionSetTimer));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                 .setMediaSession(mediaSessionCompat.getSessionToken()).setShowActionsInCompactView(0, 1, 2));
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
     }
-
-    public interface AloudServiceListener {
-        void stopService();
-
-        void readAloudNext();
-
-        void showMassage(String msg);
-
-        void setStatus(int status);
-    }
-
-    private AloudServiceListener aloudServiceListener;
 
     public void setAloudServiceListener(AloudServiceListener aloudServiceListener) {
         this.aloudServiceListener = aloudServiceListener;
@@ -309,12 +302,6 @@ public class ReadAloudService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return new MyBinder();
-    }
-
-    public class MyBinder extends Binder {
-        public ReadAloudService getService() {
-            return ReadAloudService.this;
-        }
     }
 
     @Override
@@ -340,6 +327,80 @@ public class ReadAloudService extends Service {
             mediaSessionCompat.release();
         }
         audioManager.abandonAudioFocus(audioFocusChangeListener);
+    }
+
+    /**
+     * @return 音频焦点
+     */
+    private boolean requestFocus() {
+        RunMediaPlayer.playSilentSound(this);
+        int request;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            request = audioManager.requestAudioFocus(mFocusRequest);
+        } else {
+            request = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
+        return (request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void initFocusRequest() {
+        AudioAttributes mPlaybackAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build();
+        mFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(mPlaybackAttributes)
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener(audioFocusChangeListener)
+                .build();
+    }
+
+    /**
+     * 初始化MediaSession
+     */
+    private void initMediaSession() {
+        ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
+        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mediaButtonIntent.setComponent(mComponent);
+        PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(this, 0,
+                mediaButtonIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        mediaSessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
+        mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
+        mediaSessionCompat.setCallback(new MediaSessionCompat.Callback() {
+            @Override
+            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
+                return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
+            }
+        });
+        mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
+    }
+
+    private void updateMediaSessionPlaybackState() {
+        mediaSessionCompat.setPlaybackState(
+                new PlaybackStateCompat.Builder()
+                        .setActions(MEDIA_SESSION_ACTIONS)
+                        .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
+                                nowSpeak, 1)
+                        .build());
+    }
+
+    public interface AloudServiceListener {
+        void stopService();
+
+        void readAloudNext();
+
+        void showMassage(String msg);
+
+        void setStatus(int status);
+    }
+
+    public class MyBinder extends Binder {
+        public ReadAloudService getService() {
+            return ReadAloudService.this;
+        }
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
@@ -374,35 +435,8 @@ public class ReadAloudService extends Service {
         @Override
         public void onError(String s) {
             pauseReadAloud(true);
-            aloudServiceListener.setStatus(PUSE);
+            aloudServiceListener.setStatus(PAUSE);
         }
-    }
-
-    /**
-     * @return 音频焦点
-     */
-    private boolean requestFocus() {
-        RunMediaPlayer.playSilentSound(this);
-        int request;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            request = audioManager.requestAudioFocus(mFocusRequest);
-        } else {
-            request = audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        }
-        return (request == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void initFocusRequest() {
-        AudioAttributes mPlaybackAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build();
-        mFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                .setAudioAttributes(mPlaybackAttributes)
-                .setAcceptsDelayedFocusGain(true)
-                .setOnAudioFocusChangeListener(audioFocusChangeListener)
-                .build();
     }
 
     class AudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
@@ -430,45 +464,6 @@ public class ReadAloudService extends Service {
                     break;
             }
         }
-    }
-
-    /**
-     * 初始化MediaSession
-     */
-    private void initMediaSession() {
-        ComponentName mComponent = new ComponentName(getPackageName(), MediaButtonIntentReceiver.class.getName());
-        Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        mediaButtonIntent.setComponent(mComponent);
-        PendingIntent mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(this, 0,
-                mediaButtonIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        mediaSessionCompat = new MediaSessionCompat(this, TAG, mComponent, mediaButtonReceiverPendingIntent);
-        mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
-                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
-        mediaSessionCompat.setCallback(new MediaSessionCompat.Callback() {
-            @Override
-            public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-                return MediaButtonIntentReceiver.handleIntent(ReadAloudService.this, mediaButtonEvent);
-            }
-        });
-        mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
-    }
-
-    private static final long MEDIA_SESSION_ACTIONS = PlaybackStateCompat.ACTION_PLAY
-            | PlaybackStateCompat.ACTION_PAUSE
-            | PlaybackStateCompat.ACTION_PLAY_PAUSE
-            | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-            | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-            | PlaybackStateCompat.ACTION_STOP
-            | PlaybackStateCompat.ACTION_SEEK_TO;
-
-    private void updateMediaSessionPlaybackState() {
-        mediaSessionCompat.setPlaybackState(
-                new PlaybackStateCompat.Builder()
-                        .setActions(MEDIA_SESSION_ACTIONS)
-                        .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
-                                nowSpeak, 1)
-                        .build());
     }
 
 }
