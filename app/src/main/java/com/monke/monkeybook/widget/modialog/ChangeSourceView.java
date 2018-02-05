@@ -67,15 +67,16 @@ public class ChangeSourceView {
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook(List<SearchBookBean> value) {
+                adapter.reSetSourceAdapter();
                 if (value.size() > 0) {
-                    adapter.reSetSourceAdapter();
-                    if (Objects.equals(value.get(0).getName(), bookName)) {
-                        if (Objects.equals(value.get(0).getTag(), thisTag)) {
-                            value.get(0).setIsAdd(true);
+                    SearchBookBean searchBookBean = value.get(0);
+                    if (Objects.equals(searchBookBean.getName(), bookName)) {
+                        if (Objects.equals(searchBookBean.getTag(), thisTag)) {
+                            searchBookBean.setIsAdd(true);
                         } else {
-                            value.get(0).setIsAdd(false);
+                            searchBookBean.setIsAdd(false);
                         }
-                        adapter.addSourceAdapter(value.get(0));
+                        adapter.addSourceAdapter(searchBookBean);
                     }
                 }
             }
@@ -99,13 +100,14 @@ public class ChangeSourceView {
             @Override
             public void loadMoreSearchBook(List<SearchBookBean> value) {
                 if (value.size() > 0) {
-                    if (Objects.equals(value.get(0).getName(), bookName)) {
-                        if (Objects.equals(value.get(0).getTag(), thisTag)) {
-                            value.get(0).setIsAdd(true);
+                    SearchBookBean searchBookBean = value.get(0);
+                    if (Objects.equals(searchBookBean.getName(), bookName)) {
+                        if (Objects.equals(searchBookBean.getTag(), thisTag)) {
+                            searchBookBean.setIsAdd(true);
                         } else {
-                            value.get(0).setIsAdd(false);
+                            searchBookBean.setIsAdd(false);
                         }
-                        adapter.addSourceAdapter(value.get(0));
+                        adapter.addSourceAdapter(searchBookBean);
                     }
                 }
             }
