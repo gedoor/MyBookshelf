@@ -87,7 +87,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         } else {
             ((Viewholder) holder).tvOrigin.setVisibility(View.GONE);
         }
-        if (searchBooks.get(position).getAdd()) {
+        if (searchBooks.get(position).getIsAdd()) {
             ((Viewholder) holder).tvAddShelf.setText("已添加");
             ((Viewholder) holder).tvAddShelf.setEnabled(false);
         } else {

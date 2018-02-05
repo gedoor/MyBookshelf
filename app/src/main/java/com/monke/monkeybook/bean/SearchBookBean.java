@@ -4,8 +4,14 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class SearchBookBean implements Parcelable{
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
+@Entity
+public class SearchBookBean implements Parcelable{
+    @Id
     private String noteUrl;
 
     private String coverUrl;
@@ -13,13 +19,13 @@ public class SearchBookBean implements Parcelable{
     private String name;
 
     private String author;
-
+    @Transient
     private long words;
-
+    @Transient
     private String state;
-
+    @Transient
     private String lastChapter;
-
+    @Transient
     private Boolean isAdd = false;
 
     private String tag;
@@ -47,6 +53,19 @@ public class SearchBookBean implements Parcelable{
         kind = in.readString();
         origin = in.readString();
         desc = in.readString();
+    }
+
+    @Generated(hash = 1994889042)
+    public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
+            String tag, String kind, String origin, String desc) {
+        this.noteUrl = noteUrl;
+        this.coverUrl = coverUrl;
+        this.name = name;
+        this.author = author;
+        this.tag = tag;
+        this.kind = kind;
+        this.origin = origin;
+        this.desc = desc;
     }
 
     @Override
@@ -114,14 +133,6 @@ public class SearchBookBean implements Parcelable{
         this.author = author;
     }
 
-    public Boolean getAdd() {
-        return isAdd;
-    }
-
-    public void setAdd(Boolean add) {
-        isAdd = add;
-    }
-
     public long getWords() {
         return words;
     }
@@ -176,5 +187,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public Boolean getIsAdd() {
+        return this.isAdd;
+    }
+
+    public void setIsAdd(Boolean isAdd) {
+        this.isAdd = isAdd;
     }
 }

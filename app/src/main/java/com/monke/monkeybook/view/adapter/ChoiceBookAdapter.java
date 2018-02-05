@@ -88,7 +88,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         } else {
             ((Viewholder) holder).tvOrigin.setVisibility(View.GONE);
         }
-        if (searchBooks.get(realposition).getAdd()) {
+        if (searchBooks.get(realposition).getIsAdd()) {
             ((Viewholder) holder).tvAddShelf.setText("已添加");
             ((Viewholder) holder).tvAddShelf.setEnabled(false);
         } else {

@@ -26,6 +26,7 @@ import com.monke.monkeybook.view.impl.ISearchView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -278,6 +279,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
                     public void onNext(BookShelfBean value) {
                         //成功   //发送RxBus
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
+                        saveSearchBookToDb(value.getBookInfoBean().getName());
                     }
 
                     @Override
@@ -285,6 +287,16 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
                         mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
                     }
                 });
+    }
+
+    private void saveSearchBookToDb(String bookName) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e->{
+            for (SearchBookBean searchBookBean : mView.getSearchBookAdapter().getSearchBooks()) {
+                if (Objects.equals(searchBookBean.getName(), bookName)) {
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                }
+            }
+        }).subscribe();
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -304,10 +316,11 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
     public void hadAddBook(BookShelfBean bookShelfBean) {
         bookShelfS.add(bookShelfBean);
+        saveSearchBookToDb(bookShelfBean.getBookInfoBean().getName());
         List<SearchBookBean> data = mView.getSearchBookAdapter().getSearchBooks();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                data.get(i).setAdd(true);
+                data.get(i).setIsAdd(true);
                 mView.updateSearchItem(i);
                 break;
             }
@@ -328,7 +341,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         List<SearchBookBean> data = mView.getSearchBookAdapter().getSearchBooks();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                data.get(i).setAdd(false);
+                data.get(i).setIsAdd(false);
                 mView.updateSearchItem(i);
                 break;
             }

@@ -135,7 +135,7 @@ public class SearchBook {
                 for (SearchBookBean temp : value) {
                     for (BookShelfBean bookShelfBean : bookShelfS) {
                         if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                            temp.setAdd(true);
+                            temp.setIsAdd(true);
                             break;
                         }
                     }

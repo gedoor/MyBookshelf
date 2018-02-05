@@ -20,15 +20,23 @@ import java.util.List;
  * 书源Adapter
  */
 
-public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapter.MyViewHolder> implements View.OnClickListener{
+public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapter.MyViewHolder> implements View.OnClickListener {
     private List<SearchBookBean> searchBookBeans = new ArrayList<>();
     private OnItemClickListener mOnItemClickListener;
 
-    public void addSourceAdapter(List<SearchBookBean> value, String bookName) {
-        if (value.get(0).getName().equals(bookName)) {
-            searchBookBeans.add(value.get(0));
-            notifyDataSetChanged();
-        }
+    public void addSourceAdapter(SearchBookBean value) {
+        searchBookBeans.add(value);
+        notifyDataSetChanged();
+    }
+
+    public void addAllSourceAdapter(List<SearchBookBean> value) {
+        searchBookBeans.addAll(value);
+        notifyDataSetChanged();
+    }
+
+    public void reSetSourceAdapter() {
+        searchBookBeans.clear();
+        notifyDataSetChanged();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -46,12 +54,12 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     public void onClick(View view) {
         if (mOnItemClickListener != null) {
             //注意这里使用getTag方法获取position
-            mOnItemClickListener.onItemClick(view,(int)view.getTag());
+            mOnItemClickListener.onItemClick(view, (int) view.getTag());
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view , int index);
+        void onItemClick(View view, int index);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -73,7 +81,7 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.itemView.setTag(position);
         holder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
-        if (searchBookBeans.get(position).getAdd()) {
+        if (searchBookBeans.get(position).getIsAdd()) {
             holder.ivChecked.setVisibility(View.VISIBLE);
         }
     }

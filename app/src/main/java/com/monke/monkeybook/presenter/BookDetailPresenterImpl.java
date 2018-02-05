@@ -56,7 +56,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             searchBook.setTag(bookShelf.getTag());
         } else {
             searchBook = intent.getParcelableExtra("data");
-            inBookShelf = searchBook.getAdd();
+            inBookShelf = searchBook.getIsAdd();
             bookShelf = new BookShelfBean();
             bookShelf.setNoteUrl(searchBook.getNoteUrl());
             bookShelf.setFinalDate(System.currentTimeMillis());
@@ -225,7 +225,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = true;
             if (null != searchBook) {
-                searchBook.setAdd(inBookShelf);
+                searchBook.setIsAdd(inBookShelf);
             }
             mView.updateView();
         }
@@ -246,7 +246,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = false;
             if (null != searchBook) {
-                searchBook.setAdd(false);
+                searchBook.setIsAdd(false);
             }
             mView.updateView();
         }
@@ -259,7 +259,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = true;
             if (null != searchBook) {
-                searchBook.setAdd(true);
+                searchBook.setIsAdd(true);
             }
             mView.updateView();
         }

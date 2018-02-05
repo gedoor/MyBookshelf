@@ -171,7 +171,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
             TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_addshelf);
             if (tvAddShelf != null) {
-                if (searchBookAdapter.getSearchBooks().get(index).getAdd()) {
+                if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
                     tvAddShelf.setText("已添加");
                     tvAddShelf.setEnabled(false);
                 } else {
