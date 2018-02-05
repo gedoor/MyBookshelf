@@ -257,7 +257,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     } else {
                         gotoNextPage();
                     }
-                    afterOpenPage();
                 }
 
                 @Override
@@ -288,6 +287,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 state = ONLY_PRE;
             else state = PRE_AND_NEXT;
         }
+        afterOpenPage();
     }
 
     private void gotoNextPage() {
@@ -308,6 +308,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 state = ONLY_NEXT;
             else state = PRE_AND_NEXT;
         }
+        afterOpenPage();
     }
 
     private void afterOpenPage() {
@@ -439,7 +440,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
             } else {
                 gotoNextPage();
-                afterOpenPage();
             }
         } else {
             noNext();
@@ -455,7 +455,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 initMoveSuccessAnim(viewContents.get(0), 0);
             } else {
                 gotoPrePage();
-                afterOpenPage();
             }
         } else {
             noPre();
@@ -501,10 +500,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     public Boolean getReadAloud() {
         return readAloud;
-    }
-
-    public void setReadAloud(Boolean readAloud) {
-        this.readAloud = readAloud;
     }
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {
