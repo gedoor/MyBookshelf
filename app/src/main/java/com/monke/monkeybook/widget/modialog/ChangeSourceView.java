@@ -73,7 +73,6 @@ public class ChangeSourceView {
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook(List<SearchBookBean> value) {
-                adapter.reSetSourceAdapter();
                 if (value.size() > 0) {
                     SearchBookBean searchBookBean = value.get(0);
                     if (Objects.equals(searchBookBean.getName(), bookName)) {
@@ -177,6 +176,7 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
+        adapter.reSetSourceAdapter();
         long startThisSearchTime = System.currentTimeMillis();
         searchBook.setSearchTime(startThisSearchTime);
         searchBook.searchReNew();

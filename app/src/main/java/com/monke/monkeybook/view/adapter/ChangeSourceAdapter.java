@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -19,7 +20,7 @@ import java.util.List;
  * 书源Adapter
  */
 
-public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter implements View.OnClickListener {
+public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> searchBookBeans;
     private OnItemClickListener mOnItemClickListener;
 
@@ -43,14 +44,6 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter implements V
         notifyDataSetChanged();
     }
 
-    @Override
-    public void onClick(View view) {
-        if (mOnItemClickListener != null) {
-            //注意这里使用getTag方法获取position
-            mOnItemClickListener.onItemClick(view, (int) view.getTag());
-        }
-    }
-
     public interface OnItemClickListener {
         void onItemClick(View view, int index);
     }
@@ -63,12 +56,14 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter implements V
         return searchBookBeans;
     }
 
-    class thisViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder{
+        LinearLayout llContent;
         TextView tvBookSource;
         ImageView ivChecked;
 
-        thisViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
+            llContent = itemView.findViewById(R.id.ll_content);
             tvBookSource = itemView.findViewById(R.id.tv_source_name);
             ivChecked = itemView.findViewById(R.id.iv_checked);
         }
@@ -76,16 +71,24 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter implements V
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        return new thisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false));
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false));
     }
 
     @Override
     public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        ((thisViewHolder) holder).tvBookSource.setText(searchBookBeans.get(position).getOrigin());
+        MyViewHolder myViewHolder = (MyViewHolder) holder;
+        myViewHolder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
         if (searchBookBeans.get(position).getIsAdd()) {
-            ((thisViewHolder) holder).ivChecked.setVisibility(View.VISIBLE);
+            myViewHolder.ivChecked.setVisibility(View.VISIBLE);
+        } else {
+            myViewHolder.ivChecked.setVisibility(View.INVISIBLE);
         }
+        myViewHolder.llContent.setOnClickListener(view -> {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(myViewHolder.llContent, position);
+            }
+        });
     }
 
     @Override
