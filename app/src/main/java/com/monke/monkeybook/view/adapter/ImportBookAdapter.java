@@ -84,7 +84,7 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
         TextView tvLoc;
         SmoothCheckBox scbSelect;
 
-        public Viewholder(View itemView) {
+        Viewholder(View itemView) {
             super(itemView);
             llContent = itemView.findViewById(R.id.ll_content);
             tvNmae = itemView.findViewById(R.id.tv_name);
@@ -94,7 +94,7 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
         }
     }
 
-    public static String convertByte(long size) {
+    private static String convertByte(long size) {
         DecimalFormat df = new DecimalFormat("###.#");
         float f;
         if (size < 1024) {

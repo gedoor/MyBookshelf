@@ -339,13 +339,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
         public LastViewHolder(View itemView) {
             super(itemView);
-            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
-            flLastEstTip = (FrameLayout) itemView.findViewById(R.id.fl_lastest_tip);
-            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name);
-            tvDurProgress = (AutofitTextView) itemView.findViewById(R.id.tv_durprogress);
-            llDurCursor = (LinearLayout) itemView.findViewById(R.id.ll_durcursor);
-            mpbDurProgress = (MHorProgressBar) itemView.findViewById(R.id.mpb_durprogress);
-            tvWatch = (TextView) itemView.findViewById(R.id.tv_watch);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            flLastEstTip = itemView.findViewById(R.id.fl_lastest_tip);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvDurProgress = itemView.findViewById(R.id.tv_durprogress);
+            llDurCursor = itemView.findViewById(R.id.ll_durcursor);
+            mpbDurProgress = itemView.findViewById(R.id.mpb_durprogress);
+            tvWatch = itemView.findViewById(R.id.tv_watch);
         }
     }
 
@@ -368,25 +368,25 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         AutofitTextView tvName_3;
         ImageButton ibContent_3;
 
-        public OtherViewHolder(View itemView) {
+        OtherViewHolder(View itemView) {
             super(itemView);
-            flContent_1 = (FrameLayout) itemView.findViewById(R.id.fl_content_1);
-            ivCover_1 = (ImageView) itemView.findViewById(R.id.iv_cover_1);
-            ivHasNew_1 = (ImageView) itemView.findViewById(R.id.iv_has_new_1);
-            tvName_1 = (AutofitTextView) itemView.findViewById(R.id.tv_name_1);
-            ibContent_1 = (ImageButton) itemView.findViewById(R.id.ib_content_1);
+            flContent_1 = itemView.findViewById(R.id.fl_content_1);
+            ivCover_1 = itemView.findViewById(R.id.iv_cover_1);
+            ivHasNew_1 = itemView.findViewById(R.id.iv_has_new_1);
+            tvName_1 = itemView.findViewById(R.id.tv_name_1);
+            ibContent_1 = itemView.findViewById(R.id.ib_content_1);
 
-            flContent_2 = (FrameLayout) itemView.findViewById(R.id.fl_content_2);
-            ivCover_2 = (ImageView) itemView.findViewById(R.id.iv_cover_2);
-            ivHasNew_2 = (ImageView) itemView.findViewById(R.id.iv_has_new_2);
-            tvName_2 = (AutofitTextView) itemView.findViewById(R.id.tv_name_2);
-            ibContent_2 = (ImageButton) itemView.findViewById(R.id.ib_content_2);
+            flContent_2 = itemView.findViewById(R.id.fl_content_2);
+            ivCover_2 = itemView.findViewById(R.id.iv_cover_2);
+            ivHasNew_2 = itemView.findViewById(R.id.iv_has_new_2);
+            tvName_2 = itemView.findViewById(R.id.tv_name_2);
+            ibContent_2 = itemView.findViewById(R.id.ib_content_2);
 
-            flContent_3 = (FrameLayout) itemView.findViewById(R.id.fl_content_3);
-            ivCover_3 = (ImageView) itemView.findViewById(R.id.iv_cover_3);
-            ivHasNew_3 = (ImageView) itemView.findViewById(R.id.iv_has_new_3);
-            tvName_3 = (AutofitTextView) itemView.findViewById(R.id.tv_name_3);
-            ibContent_3 = (ImageButton) itemView.findViewById(R.id.ib_content_3);
+            flContent_3 = itemView.findViewById(R.id.fl_content_3);
+            ivCover_3 = itemView.findViewById(R.id.iv_cover_3);
+            ivHasNew_3 = itemView.findViewById(R.id.iv_has_new_3);
+            tvName_3 = itemView.findViewById(R.id.tv_name_3);
+            ibContent_3 = itemView.findViewById(R.id.ib_content_3);
         }
     }
 

@@ -222,17 +222,17 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         MHorProgressBar mpbDurprogress;
         ImageButton ibContent;
 
-        public OtherViewHolder(View itemView) {
+        OtherViewHolder(View itemView) {
             super(itemView);
-            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
-            ivCover = (ImageView) itemView.findViewById(R.id.iv_cover);
-            ivHasNew = (ImageView) itemView.findViewById(R.id.iv_has_new);
-            tvName = (AutofitTextView) itemView.findViewById(R.id.tv_name);
-            tvRead = (AutofitTextView) itemView.findViewById(R.id.tv_read);
-            tvLast = (AutofitTextView) itemView.findViewById(R.id.tv_last);
-            llDurcursor = (LinearLayout) itemView.findViewById(R.id.ll_durcursor);
-            mpbDurprogress = (MHorProgressBar) itemView.findViewById(R.id.mpb_durprogress);
-            ibContent = (ImageButton) itemView.findViewById(R.id.ib_content);
+            flContent = itemView.findViewById(R.id.fl_content);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            ivHasNew = itemView.findViewById(R.id.iv_has_new);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvRead = itemView.findViewById(R.id.tv_read);
+            tvLast = itemView.findViewById(R.id.tv_last);
+            llDurcursor = itemView.findViewById(R.id.ll_durcursor);
+            mpbDurprogress = itemView.findViewById(R.id.mpb_durprogress);
+            ibContent = itemView.findViewById(R.id.ib_content);
 
         }
     }
