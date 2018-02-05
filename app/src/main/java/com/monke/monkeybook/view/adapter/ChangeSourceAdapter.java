@@ -4,13 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +19,14 @@ import java.util.List;
  * 书源Adapter
  */
 
-public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapter.MyViewHolder> implements View.OnClickListener {
-    private List<SearchBookBean> searchBookBeans = new ArrayList<>();
+public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter implements View.OnClickListener {
+    private List<SearchBookBean> searchBookBeans;
     private OnItemClickListener mOnItemClickListener;
+
+    public ChangeSourceAdapter(Boolean needLoadMore) {
+        super(needLoadMore);
+        searchBookBeans = new ArrayList<>();
+    }
 
     public void addSourceAdapter(SearchBookBean value) {
         searchBookBeans.add(value);
@@ -37,17 +41,6 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
     public void reSetSourceAdapter() {
         searchBookBeans.clear();
         notifyDataSetChanged();
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvBookSource;
-        ImageView ivChecked;
-
-        MyViewHolder(View itemView) {
-            super(itemView);
-            tvBookSource = itemView.findViewById(R.id.tv_source_name);
-            ivChecked = itemView.findViewById(R.id.iv_checked);
-        }
     }
 
     @Override
@@ -70,24 +63,38 @@ public class ChangeSourceAdapter extends RecyclerView.Adapter<ChangeSourceAdapte
         return searchBookBeans;
     }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false);
-        view.setOnClickListener(this);
-        return new MyViewHolder(view);
-    }
+    class thisViewHolder extends RecyclerView.ViewHolder{
+        TextView tvBookSource;
+        ImageView ivChecked;
 
-    @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.itemView.setTag(position);
-        holder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
-        if (searchBookBeans.get(position).getIsAdd()) {
-            holder.ivChecked.setVisibility(View.VISIBLE);
+        thisViewHolder(View itemView) {
+            super(itemView);
+            tvBookSource = itemView.findViewById(R.id.tv_source_name);
+            ivChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
 
     @Override
-    public int getItemCount() {
+    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
+        return new thisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false));
+    }
+
+    @Override
+    public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
+        holder.itemView.setTag(position);
+        ((thisViewHolder) holder).tvBookSource.setText(searchBookBeans.get(position).getOrigin());
+        if (searchBookBeans.get(position).getIsAdd()) {
+            ((thisViewHolder) holder).ivChecked.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public int getItemViewtype(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getItemcount() {
         return searchBookBeans.size();
     }
 }

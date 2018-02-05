@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
+import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ChangeSourceView {
     private TextView atvTitle;
     private ImageView ivRefresh;
-    private RecyclerView rvSource;
-    private RotateAnimation rotateAnimation;
+    private RefreshRecyclerView rvSource;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -47,7 +48,6 @@ public class ChangeSourceView {
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
     private String thisTag;
     private String bookName;
-    private String bookAuthor;
 
     public static ChangeSourceView getInstance(MoProgressView moProgressView) {
         return new ChangeSourceView(moProgressView);
@@ -57,13 +57,19 @@ public class ChangeSourceView {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
-        adapter = new ChangeSourceAdapter();
-        rvSource.setLayoutManager(new LinearLayoutManager(context));
-        rvSource.setAdapter(adapter);
+        adapter = new ChangeSourceAdapter(false);
+        rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();
             onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
         });
+        View viewRefreshError = LayoutInflater.from(context).inflate(R.layout.view_searchbook_refresh_error, null);
+        viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
+            //刷新失败 ，重试
+            reSearchBook();
+        });
+        rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
+                viewRefreshError);
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook(List<SearchBookBean> value) {
@@ -83,8 +89,8 @@ public class ChangeSourceView {
 
             @Override
             public void refreshFinish(Boolean value) {
-                rotateAnimation.cancel();
                 saveSearchBook();
+                rvSource.finishRefresh(true,true);
             }
 
             @Override
@@ -130,10 +136,9 @@ public class ChangeSourceView {
         bookShelfS.add(bookShelf);
         thisTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
-        bookAuthor = bookShelf.getBookInfoBean().getAuthor();
+        String bookAuthor = bookShelf.getBookInfoBean().getAuthor();
         atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
-        ivRefresh.setOnClickListener(view -> {
-        });
+        rvSource.startRefresh();
         getSearchBookInDb(bookShelf);
     }
 
@@ -157,7 +162,7 @@ public class ChangeSourceView {
                                 }
                             }
                             adapter.addAllSourceAdapter(searchBookBeans);
-                            rotateAnimation.cancel();
+                            rvSource.finishRefresh(true, true);
                         } else {
                             reSearchBook();
                         }
@@ -171,6 +176,7 @@ public class ChangeSourceView {
     }
 
     private void reSearchBook() {
+        rvSource.startRefresh();
         long startThisSearchTime = System.currentTimeMillis();
         searchBook.setSearchTime(startThisSearchTime);
         searchBook.searchReNew();
@@ -183,27 +189,11 @@ public class ChangeSourceView {
 
         atvTitle = moProgressView.findViewById(R.id.atv_title);
         ivRefresh = moProgressView.findViewById(R.id.iv_refresh);
-        rvSource = moProgressView.findViewById(R.id.rv_book_source_list);
+        rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
 
-        atvTitle.setOnClickListener(view -> {
-            rotateAnimation.startNow();
-            reSearchBook();
-        });
-        ivRefresh.setOnClickListener(view -> {
-            rotateAnimation.startNow();
-            reSearchBook();
-        });
-        setRefreshAnimation();
-        rotateAnimation.startNow();
-    }
+        atvTitle.setOnClickListener((View view) -> reSearchBook());
+        ivRefresh.setOnClickListener((View view) -> reSearchBook());
 
-    private void setRefreshAnimation() {
-        rotateAnimation = new RotateAnimation(0, 359,
-                Animation.RELATIVE_TO_SELF,0.5f,
-                Animation.RELATIVE_TO_SELF,0.5f);
-        rotateAnimation.setDuration(500);
-        rotateAnimation.setRepeatCount(Animation.INFINITE);
-        ivRefresh.setAnimation(rotateAnimation);
     }
 
     private void saveSearchBook() {

@@ -178,7 +178,4 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks;
     }
 
-    public void setSearchBooks(List<SearchBookBean> searchBooks) {
-        this.searchBooks = searchBooks;
-    }
 }

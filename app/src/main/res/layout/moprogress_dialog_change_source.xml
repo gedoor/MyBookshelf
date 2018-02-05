@@ -49,15 +49,15 @@
             android:layout_height="0.5dp"
             android:background="@color/btn_bg_press"/>
 
-        <ScrollView
+        <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
+            android:id="@+id/rf_rv_change_source"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_book_source_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </ScrollView>
+            android:layout_height="match_parent"
+            app:bg_color="#00000000"
+            app:font_color="#767676"
+            app:second_color="#c1c1c1"
+            app:second_max_progress="80dp"
+            app:speed="2dp" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>
