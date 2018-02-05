@@ -35,6 +35,7 @@ public class ReadBookControl {
     private Boolean keepScreenOn = false;
     private int clickSensitivity = 1;
     private Boolean clickAllNext = false;
+    private Boolean clickAnim = true;
 
     private SharedPreferences preference;
 
@@ -69,6 +70,7 @@ public class ReadBookControl {
         this.lineNum = preference.getInt("lineNum", 0);
         this.clickSensitivity = preference.getInt("clickSensitivity", 1);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
+        this.clickAnim = preference.getBoolean("clickAnim", true);
     }
 
     //字体大小
@@ -262,6 +264,17 @@ public class ReadBookControl {
         this.clickAllNext = clickAllNext;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("clickAllNext", clickAllNext);
+        editor.apply();
+    }
+
+    public Boolean getClickAnim() {
+        return clickAnim;
+    }
+
+    public void setClickAnim(Boolean clickAnim) {
+        this.clickAnim = clickAnim;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("clickAnim", clickAnim);
         editor.apply();
     }
 }

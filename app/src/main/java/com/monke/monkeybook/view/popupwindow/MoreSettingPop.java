@@ -20,6 +20,8 @@ public class MoreSettingPop extends PopupWindow {
 
     @BindView(R.id.sb_click_all_next)
     SwitchButton sbClickAllNext;
+    @BindView(R.id.sb_click_anim)
+    SwitchButton sbClickAnim;
     private Context mContext;
     private View view;
 
@@ -64,6 +66,7 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setKeepScreenOn(isChecked);
             changeProListener.keepScreenOnChange(isChecked);
         });
+        sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
     }
 
     private void initData() {
@@ -73,5 +76,6 @@ public class MoreSettingPop extends PopupWindow {
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
+        sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
     }
 }

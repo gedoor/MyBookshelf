@@ -35,7 +35,7 @@
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
-                app:kswBackColor="@drawable/selector_switchbutton"
+                app:kswBackColor="@drawable/selector_switch_button"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
@@ -68,7 +68,7 @@
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
-                app:kswBackColor="@drawable/selector_switchbutton"
+                app:kswBackColor="@drawable/selector_switch_button"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
@@ -101,7 +101,7 @@
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
-                app:kswBackColor="@drawable/selector_switchbutton"
+                app:kswBackColor="@drawable/selector_switch_button"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
@@ -112,6 +112,31 @@
             android:paddingRight="15dp"
             android:background="#ffffff"
             android:src="#f3f3f3"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:background="#ffffff">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="翻页动画"
+                android:textColor="#767676"
+                android:layout_gravity="center_vertical"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/sb_click_anim"
+                android:layout_width="47dp"
+                android:layout_height="26dp"
+                app:kswThumbColor="#ffffff"
+                app:kswBackColor="@drawable/selector_switch_button"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
@@ -142,7 +167,7 @@
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
-                app:kswBackColor="@drawable/selector_switchbutton"
+                app:kswBackColor="@drawable/selector_switch_button"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
     </LinearLayout>

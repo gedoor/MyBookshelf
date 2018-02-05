@@ -184,18 +184,18 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         //点击事件
                         if (readBookControl.getCanClickTurn()
                                 && ((event.getX() <= getWidth() / 3 && event.getY() <= getHeight() / 3*2)
-                                || (event.getY() <= getHeight() / 3))) {
+                                || (event.getY() <= getHeight() / 3) && event.getX() <= getWidth() / 3*2)) {
                             //点击向前翻页
                             if (readBookControl.getClickAllNext()) {
-                                gotoNextPage();
+                                gotoNextPage(readBookControl.getClickAnim());
                             } else {
-                                gotoPrePage();
+                                gotoPrePage(readBookControl.getClickAnim());
                             }
                         } else if (readBookControl.getCanClickTurn()
-                                && ((event.getX() >= getWidth() / 3 * 2 && event.getY() >= getHeight() / 3*1)
+                                && ((event.getX() >= getWidth() / 3 * 2)
                                 || (event.getY() >= getHeight() / 3*2))) {
                             //点击向后翻页
-                            gotoNextPage();
+                            gotoNextPage(readBookControl.getClickAnim());
                         } else {
                             //点击中间部位
                             if (loadDataListener != null)
@@ -253,37 +253,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 public void onAnimationEnd(Animator animation) {
                     isMoving = false;
                     if (orderX == 0) {
-                        //翻向前一页
-                        durPageView = viewContents.get(0);
-                        if (state == PRE_AND_NEXT) {
-                            ContentSwitchView.this.removeView(viewContents.get(viewContents.size() - 1));
-                            viewContents.remove(viewContents.size() - 1);
-                        }
-                        state = ONLY_NEXT;
-                        if (durPageView.getDurChapterIndex() - 1 >= 0 || durPageView.getDurPageIndex() - 1 >= 0) {
-                            addPrePage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
-                            if (state == NONE)
-                                state = ONLY_PRE;
-                            else state = PRE_AND_NEXT;
-                        }
+                        gotoPrePage();
                     } else {
-                        //翻向后一页
-                        if (state == ONLY_NEXT) {
-                            durPageView = viewContents.get(1);
-                        } else {
-                            if (viewContents.size() >= 3) {
-                                durPageView = viewContents.get(2);
-                                ContentSwitchView.this.removeView(viewContents.get(0));
-                                viewContents.remove(0);
-                            }
-                        }
-                        state = ONLY_PRE;
-                        if (durPageView.getDurChapterIndex() + 1 <= durPageView.getChapterAll() - 1 || durPageView.getDurPageIndex() + 1 <= durPageView.getPageAll() - 1) {
-                            addNextPage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
-                            if (state == NONE)
-                                state = ONLY_NEXT;
-                            else state = PRE_AND_NEXT;
-                        }
+                        gotoNextPage();
                     }
                     afterOpenPage();
                 }
@@ -299,6 +271,42 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 }
             });
             tempAnim.start();
+        }
+    }
+
+    private void gotoPrePage() {
+        //翻向前一页
+        durPageView = viewContents.get(0);
+        if (state == PRE_AND_NEXT) {
+            ContentSwitchView.this.removeView(viewContents.get(viewContents.size() - 1));
+            viewContents.remove(viewContents.size() - 1);
+        }
+        state = ONLY_NEXT;
+        if (durPageView.getDurChapterIndex() - 1 >= 0 || durPageView.getDurPageIndex() - 1 >= 0) {
+            addPrePage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
+            if (state == NONE)
+                state = ONLY_PRE;
+            else state = PRE_AND_NEXT;
+        }
+    }
+
+    private void gotoNextPage() {
+        //翻向后一页
+        if (state == ONLY_NEXT) {
+            durPageView = viewContents.get(1);
+        } else {
+            if (viewContents.size() >= 3) {
+                durPageView = viewContents.get(2);
+                ContentSwitchView.this.removeView(viewContents.get(0));
+                viewContents.remove(0);
+            }
+        }
+        state = ONLY_PRE;
+        if (durPageView.getDurChapterIndex() + 1 <= durPageView.getChapterAll() - 1 || durPageView.getDurPageIndex() + 1 <= durPageView.getPageAll() - 1) {
+            addNextPage(durPageView.getDurChapterIndex(), durPageView.getChapterAll(), durPageView.getDurPageIndex(), durPageView.getPageAll());
+            if (state == NONE)
+                state = ONLY_NEXT;
+            else state = PRE_AND_NEXT;
         }
     }
 
@@ -424,10 +432,15 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 翻下页
      */
-    private void gotoNextPage() {
+    private void gotoNextPage(Boolean anim) {
         if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-            int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-            initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
+            if (anim) {
+                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
+                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
+            } else {
+                gotoNextPage();
+                afterOpenPage();
+            }
         } else {
             noNext();
         }
@@ -436,9 +449,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     /**
      * 翻上页
      */
-    private void gotoPrePage() {
+    private void gotoPrePage(Boolean anim) {
         if (state == PRE_AND_NEXT || state == ONLY_PRE) {
-            initMoveSuccessAnim(viewContents.get(0), 0);
+            if (anim) {
+                initMoveSuccessAnim(viewContents.get(0), 0);
+            } else {
+                gotoPrePage();
+                afterOpenPage();
+            }
         } else {
             noPre();
         }
@@ -471,7 +489,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 朗读下一页
      */
     public void readAloudNext() {
-        gotoNextPage();
+        gotoNextPage(false);
     }
 
     /**
@@ -541,10 +559,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            gotoNextPage();
+            gotoNextPage(readBookControl.getClickAnim());
             return true;
         } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            gotoPrePage();
+            gotoPrePage(readBookControl.getClickAnim());
             return true;
         }
         return false;
