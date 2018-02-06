@@ -15,6 +15,7 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.model.BookSourceManage;
 
 import java.io.File;
 import java.util.List;
@@ -82,8 +83,7 @@ public class DataBackup {
     }
 
     private void backupBookSource(File file) {
-        List<BookSourceBean> bookSourceList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                .orderDesc(BookSourceBeanDao.Properties.SerialNumber).list();
+        List<BookSourceBean> bookSourceList = BookSourceManage.getAllBookSource();
         if (bookSourceList != null && bookSourceList.size() > 0) {
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
             String str = gson.toJson(bookSourceList);

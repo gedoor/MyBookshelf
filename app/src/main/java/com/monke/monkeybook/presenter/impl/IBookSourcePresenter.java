@@ -1,5 +1,7 @@
 package com.monke.monkeybook.presenter.impl;
 
+import android.net.Uri;
+
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.BookSourceBean;
 
@@ -12,8 +14,9 @@ import java.util.List;
 
 public interface IBookSourcePresenter extends IPresenter {
 
-    public void saveDate(List<BookSourceBean> bookSourceBeans);
+    void saveDate(List<BookSourceBean> bookSourceBeans);
 
-    public void delDate(BookSourceBean bookSourceBean);
+    void delDate(BookSourceBean bookSourceBean);
 
+    void importBookSource(Uri uri);
 }

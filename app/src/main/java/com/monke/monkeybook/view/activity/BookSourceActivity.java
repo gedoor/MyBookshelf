@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ import butterknife.ButterKnife;
 
 public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceManageView {
     public static final int EDIT_SOURCE = 101;
+    public static final int IMPORT_SOURCE = 102;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -173,8 +175,10 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_book_source:
-                Intent intent = new Intent(this, SourceEditActivity.class);
-                startActivityForResult(intent, EDIT_SOURCE);
+                addBookSource();
+                break;
+            case R.id.action_import_book_source:
+                selectBookSourceFile();
                 break;
             case R.id.action_reset_book_source:
                 resetBookSource();
@@ -186,11 +190,30 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         return super.onOptionsItemSelected(item);
     }
 
+    private void addBookSource() {
+        Intent intent = new Intent(this, SourceEditActivity.class);
+        startActivityForResult(intent, EDIT_SOURCE);
+    }
+
+    private void selectBookSourceFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("text/plain");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, IMPORT_SOURCE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_SOURCE) {
-            refreshBookSource();
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case EDIT_SOURCE:
+                    refreshBookSource();
+                    break;
+                case IMPORT_SOURCE:
+                    mPresenter.importBookSource(data.getData());
+                    break;
+            }
         }
     }
 }

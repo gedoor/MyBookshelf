@@ -8,6 +8,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.model.BookSourceManage;
 
 import java.io.File;
 import java.util.List;
@@ -50,9 +51,7 @@ public class DataRestore  {
         if (json != null) {
             List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
             }.getType());
-            for (BookSourceBean bookSource : bookSourceBeans) {
-                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSource);
-            }
+            BookSourceManage.addBookSource(bookSourceBeans);
         }
     }
 

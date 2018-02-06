@@ -117,4 +117,5 @@
     <string name="flow_sys">跟随系统</string>
     <string name="replace_rule">替换净化</string>
     <string name="add">添加</string>
+    <string name="import_book_source">导入书源</string>
 </resources>

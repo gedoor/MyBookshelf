@@ -1,16 +1,23 @@
 package com.monke.monkeybook.presenter;
 
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.utils.DocumentUtil;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.impl.IBookSourceManageView;
 
 import java.util.List;
@@ -93,5 +100,13 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceManage
                 });
     }
 
-
+    @Override
+    public void importBookSource(Uri uri) {
+        String json = FileHelper.readString(uri);
+        if (json != null) {
+            List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+            }.getType());
+            BookSourceManage.addBookSource(bookSourceBeans);
+        }
+    }
 }

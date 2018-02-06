@@ -73,6 +73,17 @@ public class FileHelper {
         return string;
     }
 
+    public static String readString(Uri uri) {
+        byte[] data = DocumentUtil.readBytes(MApplication.getInstance(), uri);
+        String string = null;
+        try {
+            string = new String(data, "utf-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
+
     public static String readString(DocumentFile file) {
         byte[] data = DocumentUtil.readBytes(MApplication.getInstance(), file);
         String string = null;

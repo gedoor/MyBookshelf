@@ -31,7 +31,6 @@ android {
             buildConfigField "boolean", "IS_RELEASE", "true"
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            gitTag.execute()
         }
         debug {
             applicationIdSuffix '.debug'

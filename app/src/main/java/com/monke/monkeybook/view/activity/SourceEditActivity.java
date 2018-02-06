@@ -71,7 +71,6 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> implements ISourceEditView {
-    private final int REQUEST_QR_CAMERA = 201;
     private final int REQUEST_QR_IMAGE = 202;
 
     @BindView(R.id.toolbar)
@@ -224,6 +223,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             public void success() {
                 bookSourceBean = getBookSource();
                 Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             }
 
