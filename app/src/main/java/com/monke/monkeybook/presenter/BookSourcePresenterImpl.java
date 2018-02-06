@@ -104,9 +104,13 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceManage
     public void importBookSource(Uri uri) {
         String json = FileHelper.readString(uri);
         if (json != null) {
-            List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
-            }.getType());
-            BookSourceManage.addBookSource(bookSourceBeans);
+            try {
+                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+                }.getType());
+                BookSourceManage.addBookSource(bookSourceBeans);
+            } catch (Exception e) {
+                Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
