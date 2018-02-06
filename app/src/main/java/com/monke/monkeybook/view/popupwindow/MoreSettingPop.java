@@ -22,9 +22,6 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbClickAllNext;
     @BindView(R.id.sb_click_anim)
     SwitchButton sbClickAnim;
-    private Context mContext;
-    private View view;
-
     @BindView(R.id.sb_key)
     SwitchButton sbKey;
     @BindView(R.id.sb_click)
@@ -32,6 +29,8 @@ public class MoreSettingPop extends PopupWindow {
     @BindView(R.id.sb_keep_screen_on)
     SwitchButton sbKeepScreenOn;
 
+    private Context mContext;
+    private View view;
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener {
