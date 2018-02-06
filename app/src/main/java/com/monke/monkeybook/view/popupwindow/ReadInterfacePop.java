@@ -45,8 +45,8 @@ public class ReadInterfacePop extends PopupWindow {
     CircleImageView civBgGreen;
     @BindView(R.id.civ_bg_black)
     CircleImageView civBgBlack;
-    private Context mContext;
 
+    private Context mContext;
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener {
@@ -145,8 +145,8 @@ public class ReadInterfacePop extends PopupWindow {
         if (lineSize > 2) {
             lineSize = 2;
         }
-        if (lineSize < 1) {
-            lineSize = 1;
+        if (lineSize < 0.5) {
+            lineSize = 0.5f;
         }
         tvDurLineSize.setText(String.format("%.1f", lineSize));
         readBookControl.setLineMultiplier(lineSize);

@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/action_import_book_source"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp"
         android:title="@string/import_book_source"
         app:showAsAction="never" />
 

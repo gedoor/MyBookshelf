@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ReadBookControl {
-    public static final int DEFAULT_TEXT = 2;
+    public static final int DEFAULT_TEXT = 3;
     public static final int DEFAULT_BG = 1;
 
     private static List<Map<String, Integer>> textKind;
@@ -77,40 +77,12 @@ public class ReadBookControl {
     private void initTextKind() {
         if (null == textKind) {
             textKind = new ArrayList<>();
-            Map<String, Integer> temp1 = new HashMap<>();
-            temp1.put("textSize", 14);
-            temp1.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 6.5f));
-            textKind.add(temp1);
-
-            Map<String, Integer> temp2 = new HashMap<>();
-            temp2.put("textSize", 16);
-            temp2.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 8));
-            textKind.add(temp2);
-
-            Map<String, Integer> temp3 = new HashMap<>();
-            temp3.put("textSize", 17);
-            temp3.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 9));
-            textKind.add(temp3);
-
-            Map<String, Integer> temp4 = new HashMap<>();
-            temp4.put("textSize", 20);
-            temp4.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 11));
-            textKind.add(temp4);
-
-            Map<String, Integer> temp5 = new HashMap<>();
-            temp5.put("textSize", 22);
-            temp5.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 13));
-            textKind.add(temp5);
-
-            Map<String, Integer> temp6 = new HashMap<>();
-            temp6.put("textSize", 24);
-            temp6.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 15));
-            textKind.add(temp6);
-
-            Map<String, Integer> temp7 = new HashMap<>();
-            temp7.put("textSize", 26);
-            temp7.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), 17));
-            textKind.add(temp7);
+            for (int i = 14; i<=30; i=i+2) {
+                Map<String, Integer> temp = new HashMap<>();
+                temp.put("textSize", i);
+                temp.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), i/2));
+                textKind.add(temp);
+            }
         }
     }
 

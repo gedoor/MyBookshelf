@@ -20,12 +20,15 @@ import com.monke.monkeybook.utils.DocumentUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.impl.IBookSourceManageView;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.text.TextUtils.isEmpty;
 
 /**
  * Created by GKF on 2017/12/18.
@@ -102,12 +105,19 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceManage
 
     @Override
     public void importBookSource(Uri uri) {
-        String json = FileHelper.readString(uri);
-        if (json != null) {
+        String json;
+        if (uri.toString().startsWith("content://")) {
+            json = FileHelper.readString(uri);
+        } else {
+            DocumentFile file = DocumentFile.fromFile(new File(uri.toString()));
+            json = FileHelper.readString(file);
+        }
+        if (!isEmpty(json)) {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
                 BookSourceManage.addBookSource(bookSourceBeans);
+                mView.refreshBookSource();
             } catch (Exception e) {
                 Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
             }
