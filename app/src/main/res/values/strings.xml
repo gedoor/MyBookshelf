@@ -2,9 +2,9 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        对网页编码进行三重判断,应该不会再乱码了\n
-        朗读按钮改成动态按钮,可暂停和继续\n
-        正在添加替换净化功能
+        添加翻页动画开关\n
+        搜索记录保存,换源更快\n
+        post搜索规则已测试可用
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>

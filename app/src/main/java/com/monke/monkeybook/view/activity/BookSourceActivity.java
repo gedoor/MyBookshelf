@@ -46,7 +46,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private Animation animIn;
     private Animation animOut;
     private BookSourceAdapter bookSourceAdapter;
-    private List<BookSourceBean> bookSourceBeanList;
     ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
@@ -64,8 +63,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             //直接按照文档来操作啊，这文档写得太给力了,简直完美！
             bookSourceAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
-            Collections.swap(bookSourceBeanList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            mPresenter.saveDate(bookSourceBeanList);
+            Collections.swap(bookSourceAdapter.getBookSourceBeanList(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            mPresenter.saveDate(bookSourceAdapter.getBookSourceBeanList());
             return true;
         }
 
@@ -92,6 +91,12 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        saveDate(bookSourceAdapter.getBookSourceBeanList());
+    }
+
+    @Override
     protected void bindView() {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
@@ -107,23 +112,20 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     private void initRecyclerView() {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
-        bookSourceBeanList = BookSourceManage.getAllBookSource();
         bookSourceAdapter = new BookSourceAdapter(this);
         recyclerViewBookSource.setAdapter(bookSourceAdapter);
-        bookSourceAdapter.addBookSource(bookSourceBeanList);
+        bookSourceAdapter.addBookSource(BookSourceManage.getAllBookSource());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
     }
 
     private void resetBookSource() {
-        bookSourceBeanList = BookSourceManage.saveBookSourceToDb();
-        bookSourceAdapter.resetBookSource(bookSourceBeanList);
+        bookSourceAdapter.resetBookSource(BookSourceManage.saveBookSourceToDb());
     }
 
     @Override
     public void refreshBookSource() {
-        bookSourceBeanList = BookSourceManage.getAllBookSource();
-        bookSourceAdapter.resetBookSource(bookSourceBeanList);
+        bookSourceAdapter.resetBookSource(BookSourceManage.getAllBookSource());
     }
 
     public void delBookSource(BookSourceBean bookSource) {

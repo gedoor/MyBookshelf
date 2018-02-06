@@ -44,6 +44,10 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         notifyDataSetChanged();
     }
 
+    public List<BookSourceBean> getBookSourceBeanList() {
+        return bookSourceBeanList;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_book_source_item, parent, false);
