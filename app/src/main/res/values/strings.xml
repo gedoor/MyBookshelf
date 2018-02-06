@@ -2,9 +2,7 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        添加翻页动画开关\n
-        搜索记录保存,换源更快\n
-        post搜索规则已测试可用
+        解决bug
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>
