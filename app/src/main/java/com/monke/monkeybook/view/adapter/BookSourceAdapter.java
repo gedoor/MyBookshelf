@@ -58,9 +58,8 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.bookSource.setText(bookSourceBeanList.get(position).getBookSourceName());
         holder.bookSource.setChecked(bookSourceBeanList.get(position).getEnable());
-        holder.bookSource.setOnCheckedChangeListener((compoundButton, b) -> {
-            bookSourceBeanList.get(position).setEnable(b);
-            activity.saveDate(bookSourceBeanList);
+        holder.bookSource.setOnClickListener((View view) -> {
+            bookSourceBeanList.get(position).setEnable(holder.bookSource.isChecked());
         });
         holder.editSource.setOnClickListener(view -> {
             Intent intent = new Intent(activity, SourceEditActivity.class);
