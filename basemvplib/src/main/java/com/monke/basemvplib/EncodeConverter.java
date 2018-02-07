@@ -36,18 +36,18 @@ public class EncodeConverter extends Converter.Factory {
         return new Converter<ResponseBody, String>() {
             @Override
             public String convert(@NonNull ResponseBody value) throws IOException {
-                String charsetStr = null;
+                String charsetStr;
                 MediaType mediaType = value.contentType();
+                byte[] responseBytes = value.bytes();
+                //根据http头判断
                 if (mediaType != null) {
                     Charset charset = mediaType.charset();
                     if (charset != null) {
                         charsetStr = charset.toString();
+                        return new String(responseBytes, charsetStr);
                     }
                 }
-                byte[] responseBytes = value.bytes();
-                if (!isEmpty(charsetStr)) {
-                    return new String(responseBytes, charsetStr);
-                }
+                //根据meta判断
                 byte[] headerBytes = Arrays.copyOfRange(responseBytes, 0, 1024);
                 Document doc = Jsoup.parse(new String(headerBytes, "utf-8"));
                 Elements metaTags = doc.getElementsByTag("meta");
@@ -56,16 +56,14 @@ public class EncodeConverter extends Converter.Factory {
                     String http_equiv = metaTag.attr("http-equiv");
                     charsetStr = metaTag.attr("charset");
                     if (!charsetStr.isEmpty()) {
-                        break;
+                        return new String(responseBytes, charsetStr);
                     }
                     if (http_equiv.toLowerCase().equals("content-type")) {
                         charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
-                        break;
+                        return new String(responseBytes, charsetStr);
                     }
                 }
-                if (!isEmpty(charsetStr)) {
-                    return new String(responseBytes, charsetStr);
-                }
+                //根据内容判断
                 UniversalDetector detector = new UniversalDetector(null);
                 detector.handleData(responseBytes, 0, 2000);
                 detector.dataEnd();
