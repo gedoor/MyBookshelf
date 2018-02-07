@@ -103,7 +103,9 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
-        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
+        holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
+                books.get(index).getBookInfoBean().getName(),
+                books.get(index).getLastChapterListBean().getDurChapterName()));
         Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
