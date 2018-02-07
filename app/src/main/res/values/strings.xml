@@ -3,6 +3,7 @@
     <string name="update_log">
     更新日志\n
         解决bug
+        优化盲人使用体验
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>
