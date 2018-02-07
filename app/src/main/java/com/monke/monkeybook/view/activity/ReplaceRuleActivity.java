@@ -147,7 +147,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IBookSourcePresenter> imp
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.replace_rule);
+            actionBar.setTitle(R.string.replace_rule_title);
         }
     }
 

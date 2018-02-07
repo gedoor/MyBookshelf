@@ -109,9 +109,9 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
-            holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.tv_read_durprogress),
+            holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
                     books.get(index).getDurChapterListBean().getDurChapterName()));
-            holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.tv_searchbook_lastest),
+            holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.book_search_last),
                     books.get(index).getLastChapterListBean().getDurChapterName()));
             if (books.get(index).getHasUpdate()) {
                 holder.ivHasNew.setVisibility(View.VISIBLE);

@@ -143,7 +143,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @Override
     public void addNewBook(File newFile) {
         importBookAdapter.addData(newFile);
-        tvCount.setText(String.format(getString(R.string.tv_importbook_count), String.valueOf(importBookAdapter.getItemCount())));
+        tvCount.setText(String.format(getString(R.string.import_books_count), String.valueOf(importBookAdapter.getItemCount())));
     }
 
     @Override

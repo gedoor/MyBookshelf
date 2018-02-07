@@ -20,22 +20,18 @@
     <string name="exit">退出</string>
     <string name="exit_no_save">还未保存,是否继续编辑</string>
 
-    <string name="navigation_drawer_open">open</string>
-    <string name="navigation_drawer_close">close</string>
-    <string name="umeng_key">5954b3f999f0c76d1b001600</string>
-
-    <string name="baidu_app_id">9942412</string>
-    <string name="baidu_app_key">5cZ5UKGW2tqEXK0dUiv4ngLEQ7I4Bf6s</string>
+    <string name="navigation_drawer_open">打开侧边栏</string>
+    <string name="navigation_drawer_close">关闭侧边栏</string>
 
     <string name="net_error_10001">没有网络</string>
     <string name="net_error_10002">网络连接超时</string>
     <string name="net_error_10003">数据解析失败</string>
 
-    <string name="tv_read_durprogress">观看至:%s</string>
+    <string name="read_dur_progress">观看至:%s</string>
     <string name="tv_book_name">《%s》</string>
-    <string name="tv_searchbook_lastest">最新章节:%s</string>
-    <string name="tv_pop_checkaddshelf">是否将《%s》放入书架？</string>
-    <string name="tv_importbook_count">共%s个Text文件</string>
+    <string name="book_search_last">最新章节:%s</string>
+    <string name="check_add_bookshelf">是否将《%s》放入书架？</string>
+    <string name="import_books_count">共%s个Text文件</string>
     <string name="is_loading">加载中…</string>
     <string name="get_data_error">获取数据失败！</string>
     <string name="retry">重试</string>
@@ -113,7 +109,11 @@
     <string name="rule_summary">规则说明</string>
     <string name="share">分享</string>
     <string name="flow_sys">跟随系统</string>
-    <string name="replace_rule">替换净化</string>
     <string name="add">添加</string>
     <string name="import_book_source">导入书源</string>
+    <string name="replace_rule_title">替换净化</string>
+    <string name="replace_rule_edit">替换规则编辑</string>
+    <string name="replace_rule">替换规则</string>
+    <string name="replace_to">替换为</string>
+    <string name="img_cover">封面</string>
 </resources>

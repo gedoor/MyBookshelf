@@ -241,7 +241,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
             if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                     && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
-                holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.tv_read_durprogress),
+                holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.read_dur_progress),
                         books.get(index).getDurChapterListBean().getDurChapterName()));
             }
             holder.llDurCursor.setVisibility(View.VISIBLE);

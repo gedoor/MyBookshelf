@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model.content;
 
+import android.util.Log;
+
 import com.monke.monkeybook.help.FormatWebText;
 
 import org.jsoup.nodes.Element;
@@ -34,51 +36,56 @@ public class AnalyzeRule {
         if (temp == null || isEmpty(rule)) {
             return elements;
         }
-        String[] rs = rule.split("@");
-        if (rs.length > 1) {
-            elements.add(temp);
-            for (String rl : rs) {
-                Elements es = new Elements();
-                for (Element et : elements) {
-                    es.addAll(getElements(et, rl));
+        try {
+            String[] rs = rule.split("@");
+            if (rs.length > 1) {
+                elements.add(temp);
+                for (String rl : rs) {
+                    Elements es = new Elements();
+                    for (Element et : elements) {
+                        es.addAll(getElements(et, rl));
+                    }
+                    elements.clear();
+                    elements.addAll(es);
                 }
-                elements.clear();
-                elements.addAll(es);
-            }
-        } else {
-            String[] rulePc = rule.split("!");
-            String[] rules = rulePc[0].split("\\.");
-            switch (rules[0]) {
-                case "class":
-                    if (rules.length == 3) {
-                        elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
-                    } else {
-                        elements.addAll(temp.getElementsByClass(rules[1]));
-                    }
-                    break;
-                case "tag":
-                    if (rules.length == 3) {
-                        elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
-                    } else {
-                        elements.addAll(temp.getElementsByTag(rules[1]));
-                    }
-                    break;
-                case "id":
-                    elements.add(temp.getElementById(rules[1]));
-                    break;
-            }
-            if (rulePc.length > 1) {
-                String[] rulePcs = rulePc[1].split(":");
-                for (String pc : rulePcs) {
-                    if (pc.equals("%")) {
-                        elements.remove(elements.last());
-                    } else {
-                        elements.remove(elements.get(Integer.parseInt(pc)));
+            } else {
+                String[] rulePc = rule.split("!");
+                String[] rules = rulePc[0].split("\\.");
+                switch (rules[0]) {
+                    case "class":
+                        if (rules.length == 3) {
+                            elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
+                        } else {
+                            elements.addAll(temp.getElementsByClass(rules[1]));
+                        }
+                        break;
+                    case "tag":
+                        if (rules.length == 3) {
+                            elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
+                        } else {
+                            elements.addAll(temp.getElementsByTag(rules[1]));
+                        }
+                        break;
+                    case "id":
+                        elements.add(temp.getElementById(rules[1]));
+                        break;
+                }
+                if (rulePc.length > 1) {
+                    String[] rulePcs = rulePc[1].split(":");
+                    for (String pc : rulePcs) {
+                        if (pc.equals("%")) {
+                            elements.remove(elements.last());
+                        } else {
+                            elements.remove(elements.get(Integer.parseInt(pc)));
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("getElements", e.getMessage());
         }
-        return elements;
+        return  elements;
     }
 
     public String getResult(String ruleStr) {
@@ -124,32 +131,40 @@ public class AnalyzeRule {
         if (elements.isEmpty()) {
             return null;
         }
-        List<String> textS = new ArrayList<>();
-        String lastRule = rules[rules.length - 1];
-        switch (lastRule) {
-            case "text":
-                for (Element element : elements) {
-                    textS.add(element.text());
-                }
-                break;
-            case "textNodes":
-                List<TextNode> contentEs = elements.get(0).textNodes();
-                for (int i = 0; i < contentEs.size(); i++) {
-                    String temp = contentEs.get(i).text().trim();
-                    temp = FormatWebText.getContent(temp);
-                    if (temp.length() > 0) {
-                        textS.add(temp);
+        try {
+            List<String> textS = new ArrayList<>();
+            String lastRule = rules[rules.length - 1];
+            switch (lastRule) {
+                case "text":
+                    for (Element element : elements) {
+                        textS.add(element.text());
                     }
-                }
-                break;
-            default:
-                String absURL = getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
-                textS.add(absURL);
+                    break;
+                case "textNodes":
+                    List<TextNode> contentEs = elements.get(0).textNodes();
+                    for (int i = 0; i < contentEs.size(); i++) {
+                        String temp = contentEs.get(i).text().trim();
+                        temp = FormatWebText.getContent(temp);
+                        if (temp.length() > 0) {
+                            textS.add(temp);
+                        }
+                    }
+                    break;
+                default:
+                    String absURL = getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
+                    textS.add(absURL);
+            }
+            return textS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("getResultList", e.getMessage());
+            return null;
         }
-        return textS;
     }
 
-    @SuppressWarnings("finally")
+    /**
+     * 获取绝对地址
+     */
     private static String getAbsoluteURL(String baseURI, String relativePath){
         String abURL=relativePath;
         try {

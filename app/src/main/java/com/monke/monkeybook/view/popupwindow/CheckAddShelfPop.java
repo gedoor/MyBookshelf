@@ -41,7 +41,7 @@ public class CheckAddShelfPop extends PopupWindow{
 
     private void initView() {
         tvBookName = (TextView) view.findViewById(R.id.tv_book_name);
-        tvBookName.setText(String.format(mContext.getString(R.string.tv_pop_checkaddshelf),bookName));
+        tvBookName.setText(String.format(mContext.getString(R.string.check_add_bookshelf),bookName));
         tvExit = (TextView) view.findViewById(R.id.tv_exit);
         tvExit.setOnClickListener(v -> {
             dismiss();

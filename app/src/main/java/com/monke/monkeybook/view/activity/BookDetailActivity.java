@@ -102,7 +102,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    tvChapter.setText(String.format(getString(R.string.tv_read_durprogress),
+                    tvChapter.setText(String.format(getString(R.string.read_dur_progress),
                             mPresenter.getBookShelf().getDurChapterListBean().getDurChapterName()));
                 } else {
                     tvChapter.setText("无章节");
@@ -117,7 +117,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 if (mPresenter.getBookShelf().getChapterListSize() == 0) {
                     tvChapter.setText("无章节");
                 } else {
-                    tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest),
+                    tvChapter.setText(String.format(getString(R.string.book_search_last),
                             mPresenter.getBookShelf().getLastChapterListBean().getDurChapterName()));
                 }
                 tvShelf.setText("放入书架");
@@ -190,7 +190,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
-            tvChapter.setText(String.format(getString(R.string.tv_searchbook_lastest), mPresenter.getSearchBook().getLastChapter()));
+            tvChapter.setText(String.format(getString(R.string.book_search_last), mPresenter.getSearchBook().getLastChapter()));
             tvShelf.setText("放入书架");
             tvRead.setText("开始阅读");
             tvRead.setOnClickListener(v -> {

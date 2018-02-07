@@ -21,7 +21,7 @@
         <item
             android:id="@+id/action_replace_rule"
             android:icon="@drawable/ic_find_replace_black_24dp"
-            android:title="@string/replace_rule" />
+            android:title="@string/replace_rule_title" />
     </group>
 
     <group android:id="@+id/drawer_menu_setting">
