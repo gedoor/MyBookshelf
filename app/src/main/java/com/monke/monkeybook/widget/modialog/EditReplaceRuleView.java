@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -18,7 +19,7 @@ public class EditReplaceRuleView {
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
-    private MoProgressHUD.OnPutBookUrl onPutBookUrl;
+    private OnSaveReplaceRule saveReplaceRule;
     private Context context;
 
     public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
@@ -30,14 +31,14 @@ public class EditReplaceRuleView {
         this.context = moProgressView.getContext();
         bindView();
         tvOk.setOnClickListener(view -> {
-            onPutBookUrl.addBookUrl(etUrl.getText().toString());
+
             moProgressHUD.dismiss();
         });
     }
 
-    void showEditReplaceRule(final MoProgressHUD.OnPutBookUrl onPutBookUrl, MoProgressHUD moProgressHUD) {
+    void showEditReplaceRule(ReplaceRuleBean replaceRuleBean, final OnSaveReplaceRule saveReplaceRule, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
-        this.onPutBookUrl = onPutBookUrl;
+        this.saveReplaceRule = saveReplaceRule;
 
     }
 
@@ -49,4 +50,10 @@ public class EditReplaceRuleView {
         tvOk = moProgressView.findViewById(R.id.tv_ok);
     }
 
+    /**
+     * 输入替换规则完成
+     */
+    public interface OnSaveReplaceRule {
+        void saveReplaceRule(ReplaceRuleBean replaceRuleBean);
+    }
 }

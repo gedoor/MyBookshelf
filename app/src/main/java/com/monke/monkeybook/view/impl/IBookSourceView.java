@@ -10,7 +10,7 @@ import com.monke.basemvplib.impl.IView;
  * 书源管理
  */
 
-public interface IBookSourceManageView extends IView {
+public interface IBookSourceView extends IView {
 
     void refreshBookSource();
 

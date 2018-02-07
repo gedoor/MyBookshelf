@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 
 import java.io.File;
@@ -118,7 +119,7 @@ public class MoProgressHUD {
         }
     }
 
-    public void initViews() {
+    private void initViews() {
         decorView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
         rootView = new FrameLayout(context);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
@@ -132,15 +133,15 @@ public class MoProgressHUD {
 
     }
 
-    public Animation getInAnimation() {
+    private Animation getInAnimation() {
         return AnimationUtils.loadAnimation(context, R.anim.moprogress_in);
     }
 
-    public Animation getOutAnimation() {
+    private Animation getOutAnimation() {
         return AnimationUtils.loadAnimation(context, R.anim.moprogress_out);
     }
 
-    public boolean isShowing() {
+    private boolean isShowing() {
         return rootView.getParent() != null;
     }
 
@@ -183,12 +184,9 @@ public class MoProgressHUD {
     //隐藏输入法
     private void hideIMM(View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    //转圈的载入
-    public void showLoading() {
-        showLoading(null);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     //同上
@@ -243,7 +241,25 @@ public class MoProgressHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public void showDownloadList(int startIndex, int endIndex, int all, OnClickDownload clickDownload) {
+    /**
+     * 返回键事件
+     */
+    public Boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isShowing()) {
+                if (canBack) {
+                    dismiss();
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 离线下载
+     */
+    public void showDownloadList(int startIndex, int endIndex, int all, DownLoadView.OnClickDownload clickDownload) {
         initCenter();
         initAnimation();
         canBack = true;
@@ -256,7 +272,10 @@ public class MoProgressHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public void showChangeSource(BookShelfBean bookShelf, OnClickSource clickSource) {
+    /**
+     * 换源
+     */
+    public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
         initCenter();
         initAnimation();
         canBack = true;
@@ -268,9 +287,11 @@ public class MoProgressHUD {
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
-    //////////////////////////////////////////////////////////
 
-    public void showPutBookUrl(OnPutBookUrl onPutBookUrl) {
+    /**
+     * 输入书箱地址
+     */
+    public void showPutBookUrl(EditBookUrlView.OnPutBookUrl onPutBookUrl) {
         initCenter();
         initAnimation();
         canBack = true;
@@ -283,44 +304,20 @@ public class MoProgressHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public Boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isShowing()) {
-                if (canBack) {
-                    dismiss();
-                }
-                return true;
-            }
+    /**
+     * 编辑替换规则
+     */
+    public void showPutReplaceRule(ReplaceRuleBean replaceRuleBean, EditReplaceRuleView.OnSaveReplaceRule onSaveReplaceRule) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        EditReplaceRuleView.getInstance(mSharedView)
+                .showEditReplaceRule(replaceRuleBean, onSaveReplaceRule, this);
+        if (!isShowing()) {
+            onAttached();
         }
-        return false;
-    }
-    //////////////////////////////////////////////////////////
-
-    public Boolean getCanBack() {
-        return canBack;
+        mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public Boolean onPressBack() {
-        if (isShowing() && canBack) {
-            dismiss();
-            return true;
-        }
-        return false;
-    }
-    //////////////////////////////////////////////////////////
-
-    ////////////////////离线章节选择////////////////////////////
-    public interface OnClickDownload {
-        void download(int start, int end);
-    }
-
-    ////////////////////换源////////////////////////////
-    public interface OnClickSource {
-        void changeSource(SearchBookBean searchBookBean);
-    }
-
-    ////////////////////添加书籍地址////////////////////////////
-    public interface OnPutBookUrl {
-        void addBookUrl(String bookUrl);
-    }
 }

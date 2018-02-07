@@ -39,6 +39,20 @@
                 android:hint="@string/replace_to" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/tv_ok"
+            android:text="@string/ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/selector_book_detail_read_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:textColor="#ffffff" />
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

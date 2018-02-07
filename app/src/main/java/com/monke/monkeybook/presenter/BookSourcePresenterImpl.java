@@ -16,9 +16,7 @@ import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
-import com.monke.monkeybook.utils.DocumentUtil;
-import com.monke.monkeybook.utils.FileUtil;
-import com.monke.monkeybook.view.impl.IBookSourceManageView;
+import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
 import java.util.List;
@@ -35,7 +33,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceManageView> implements IBookSourcePresenter {
+public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
     private BookSourceBean delBookSource;
 
     @Override

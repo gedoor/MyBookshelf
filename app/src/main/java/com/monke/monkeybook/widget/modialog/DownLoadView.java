@@ -35,7 +35,7 @@ class DownLoadView {
         bindView();
     }
 
-    void showDownloadList(int startIndex, int endIndex, final int all, final MoProgressHUD.OnClickDownload clickDownload, View.OnClickListener cancel){
+    void showDownloadList(int startIndex, int endIndex, final int all, final OnClickDownload clickDownload, View.OnClickListener cancel){
         tvCancel.setOnClickListener(cancel);
         edtStart.setText(String.valueOf(startIndex+1));
         edtEnd.setText(String.valueOf(endIndex+1));
@@ -122,5 +122,13 @@ class DownLoadView {
         edtEnd = moProgressView.findViewById(R.id.edt_end);
         tvCancel = moProgressView.findViewById(R.id.tv_cancel);
         tvDownload = moProgressView.findViewById(R.id.tv_download);
+    }
+
+
+    /**
+     * 离线下载确定
+     */
+    public interface OnClickDownload {
+        void download(int start, int end);
     }
 }

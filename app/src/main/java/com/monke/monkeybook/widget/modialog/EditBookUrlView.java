@@ -18,7 +18,7 @@ public class EditBookUrlView {
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
-    private MoProgressHUD.OnPutBookUrl onPutBookUrl;
+    private OnPutBookUrl onPutBookUrl;
     private Context context;
 
     public static EditBookUrlView getInstance(MoProgressView moProgressView) {
@@ -35,7 +35,7 @@ public class EditBookUrlView {
         });
     }
 
-    void showEditBookUrl(final MoProgressHUD.OnPutBookUrl onPutBookUrl, MoProgressHUD moProgressHUD) {
+    void showEditBookUrl(final OnPutBookUrl onPutBookUrl, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.onPutBookUrl = onPutBookUrl;
 
@@ -49,4 +49,10 @@ public class EditBookUrlView {
         tvOk = moProgressView.findViewById(R.id.tv_ok);
     }
 
+    /**
+     * 输入book地址确定
+     */
+    public interface OnPutBookUrl {
+        void addBookUrl(String bookUrl);
+    }
 }

@@ -41,7 +41,7 @@ public class ChangeSourceView {
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
-    private MoProgressHUD.OnClickSource onClickSource;
+    private OnClickSource onClickSource;
     private Context context;
     private ChangeSourceAdapter adapter;
     private SearchBook searchBook;
@@ -129,7 +129,7 @@ public class ChangeSourceView {
         });
     }
 
-    void showChangeSource(BookShelfBean bookShelf, final MoProgressHUD.OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
+    void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.onClickSource = onClickSource;
         bookShelfS.add(bookShelf);
@@ -200,5 +200,12 @@ public class ChangeSourceView {
         Observable.create((ObservableOnSubscribe<Boolean>) e->{
             DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(adapter.getSearchBookBeans());
         }).subscribe();
+    }
+
+    /**
+     * 换源确定
+     */
+    public interface OnClickSource {
+        void changeSource(SearchBookBean searchBookBean);
     }
 }

@@ -220,19 +220,19 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     private Observable<WebChapterBean<BookShelfBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl());
+            WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl());
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
             e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
             e.onComplete();
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl) {
         Document doc = Jsoup.parse(s);
         Elements chapterList = AnalyzeRule.getElements(doc, bookSourceBean.getRuleChapterList());
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         for (int i = 0; i < chapterList.size(); i++) {
-            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i), novelUrl);
+            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i), chapterUrl);
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterIndex(i);
             temp.setDurChapterUrl(analyzeRule.getResult(bookSourceBean.getRuleContentUrl()));   //id

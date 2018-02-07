@@ -1,7 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
-import com.monke.monkeybook.view.impl.IBookSourceManageView;
+import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 
 import java.util.Collections;
@@ -34,7 +33,7 @@ import butterknife.ButterKnife;
  * 书源管理
  */
 
-public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceManageView {
+public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceView {
     public static final int EDIT_SOURCE = 101;
     public static final int IMPORT_SOURCE = 102;
 
