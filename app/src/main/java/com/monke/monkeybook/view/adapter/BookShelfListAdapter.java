@@ -27,8 +27,8 @@ import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
-    public static final int VIEW_TYPE_ITEM = 1;
-    public static final int VIEW_TYPE_EMPTY = 0;
+    private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_EMPTY = 0;
 
     private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 
@@ -98,12 +98,12 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                 }
             });
             new Handler().postDelayed(() -> {
-                if (null != holder)
-                    holder.flContent.startAnimation(animation);
+                holder.flContent.startAnimation(animation);
             }, index * DUR_ANIM_ITEM);
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
+        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));

@@ -119,6 +119,7 @@
         android:id="@+id/ib_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_ib_pre2" />
+        android:background="@drawable/bg_ib_pre2"
+        android:contentDescription="@string/book" />
 
 </FrameLayout>

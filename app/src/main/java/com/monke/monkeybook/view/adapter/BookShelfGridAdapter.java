@@ -99,8 +99,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 }
             });
             new Handler().postDelayed(() -> {
-                if (null != holder)
-                    holder.flContent_1.startAnimation(animation);
+                holder.flContent_1.startAnimation(animation);
             }, index_1 * DUR_ANIM_ITEM);
         } else {
             holder.flContent_1.setVisibility(View.VISIBLE);
@@ -109,6 +108,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 .load(books.get(index_1).getBookInfoBean().getCoverUrl())
                 .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
         holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
+        holder.ibContent_1.setContentDescription(books.get(index_1).getBookInfoBean().getName());
         if (books.get(index_1).getHasUpdate()) {
             holder.ivHasNew_1.setVisibility(View.VISIBLE);
         } else {
@@ -149,6 +149,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                     .load(books.get(index_2).getBookInfoBean().getCoverUrl())
                     .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
             holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
+            holder.ibContent_2.setContentDescription(books.get(index_2).getBookInfoBean().getName());
             if (books.get(index_2).getHasUpdate()) {
                 holder.ivHasNew_2.setVisibility(View.VISIBLE);
             } else {
@@ -160,8 +161,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             });
             holder.ibContent_2.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
-                    if (itemClickListener != null)
-                        itemClickListener.onLongClick(holder.ivCover_2, books.get(index_2), index_2);
+                    itemClickListener.onLongClick(holder.ivCover_2, books.get(index_2), index_2);
                     return true;
                 } else
                     return false;
@@ -179,8 +179,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                         }
                     });
                     new Handler().postDelayed(() -> {
-                        if (null != holder)
-                            holder.flContent_3.startAnimation(animation);
+                        holder.flContent_3.startAnimation(animation);
                     }, index_3 * DUR_ANIM_ITEM);
                 } else {
                     holder.flContent_3.setVisibility(View.VISIBLE);
@@ -189,6 +188,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                         .load(books.get(index_3).getBookInfoBean().getCoverUrl())
                         .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
                 holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
+                holder.ibContent_3.setContentDescription(books.get(index_3).getBookInfoBean().getName());
                 if (books.get(index_3).getHasUpdate()) {
                     holder.ivHasNew_3.setVisibility(View.VISIBLE);
                 } else {
@@ -200,8 +200,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 });
                 holder.ibContent_3.setOnLongClickListener(v -> {
                     if (itemClickListener != null) {
-                        if (itemClickListener != null)
-                            itemClickListener.onLongClick(holder.ivCover_3, books.get(index_3), index_3);
+                        itemClickListener.onLongClick(holder.ivCover_3, books.get(index_3), index_3);
                         return true;
                     } else
                         return false;
@@ -337,7 +336,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         MHorProgressBar mpbDurProgress;
         TextView tvWatch;
 
-        public LastViewHolder(View itemView) {
+        LastViewHolder(View itemView) {
             super(itemView);
             ivCover = itemView.findViewById(R.id.iv_cover);
             flLastEstTip = itemView.findViewById(R.id.fl_lastest_tip);
