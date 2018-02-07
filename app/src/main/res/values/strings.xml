@@ -117,4 +117,9 @@
     <string name="replace_to">替换为</string>
     <string name="img_cover">封面</string>
     <string name="book">书</string>
+    <string name="volume_open_page">音量键翻页</string>
+    <string name="click_open_page">点击翻页</string>
+    <string name="click_all_next_page">点击总是翻下一页</string>
+    <string name="open_page_anim">翻页动画</string>
+    <string name="keep_light">保持屏幕常亮</string>
 </resources>

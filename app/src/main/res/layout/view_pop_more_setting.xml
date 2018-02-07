@@ -21,31 +21,28 @@
             android:paddingRight="15dp"
             android:background="#ffffff">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="音量键翻页"
+                android:layout_weight="1"
+                android:text="@string/volume_open_page"
                 android:textColor="#767676"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_key"
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
                 app:kswBackColor="@drawable/selector_switch_button"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/volume_open_page"/>
         </LinearLayout>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:background="#ffffff"
-            android:src="#f3f3f3"/>
+            android:background="@color/btn_bg_press" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -54,31 +51,28 @@
             android:paddingRight="15dp"
             android:background="#ffffff">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="点击翻页"
+                android:layout_weight="1"
+                android:text="@string/click_open_page"
                 android:textColor="#767676"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_click"
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
                 app:kswBackColor="@drawable/selector_switch_button"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/click_open_page"/>
         </LinearLayout>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:background="#ffffff"
-            android:src="#f3f3f3"/>
+            android:background="@color/btn_bg_press" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -87,31 +81,28 @@
             android:paddingRight="15dp"
             android:background="#ffffff">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="点击总是翻下一页"
+                android:layout_weight="1"
+                android:text="@string/click_all_next_page"
                 android:textColor="#767676"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_click_all_next"
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
                 app:kswBackColor="@drawable/selector_switch_button"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/click_all_next_page"/>
         </LinearLayout>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:background="#ffffff"
-            android:src="#f3f3f3"/>
+            android:background="@color/btn_bg_press" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -120,31 +111,28 @@
             android:paddingRight="15dp"
             android:background="#ffffff">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="翻页动画"
+                android:layout_weight="1"
+                android:text="@string/open_page_anim"
                 android:textColor="#767676"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_click_anim"
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
                 app:kswBackColor="@drawable/selector_switch_button"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/open_page_anim"/>
         </LinearLayout>
 
-        <ImageView
+        <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:background="#ffffff"
-            android:src="#f3f3f3"/>
+            android:background="@color/btn_bg_press" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -153,22 +141,23 @@
             android:paddingRight="15dp"
             android:background="#ffffff">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="保持屏幕常亮"
+                android:layout_weight="1"
+                android:text="@string/keep_light"
                 android:textColor="#767676"
                 android:layout_gravity="center_vertical"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
             <com.kyleduo.switchbutton.SwitchButton
                 android:id="@+id/sb_keep_screen_on"
                 android:layout_width="47dp"
                 android:layout_height="26dp"
                 app:kswThumbColor="#ffffff"
                 app:kswBackColor="@drawable/selector_switch_button"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/keep_light"/>
+
         </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>
