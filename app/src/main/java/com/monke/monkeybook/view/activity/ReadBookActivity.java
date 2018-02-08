@@ -448,9 +448,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void initPop() {
-        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(), new CheckAddShelfPop.OnItemClickListener() {
+        //是否添加书架
+        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
+                new CheckAddShelfPop.OnItemClickListener() {
             @Override
             public void clickExit() {
+                mPresenter.removeFromShelf();
                 finish();
             }
 
@@ -460,6 +463,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 checkAddShelfPop.dismiss();
             }
         });
+        //目录
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
                 .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin));
@@ -673,13 +677,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 if (flMenu.getVisibility() == View.VISIBLE) {
                     popMenuOut();
                     return true;
-                } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
-                    checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
-                    return true;
                 } else if (chapterListView.dismissChapterList()) {
                     return true;
                 } else if (csvBook.getReadAloud()) {
                     stopAloudService();
+                    return true;
+                } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
+                    checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
                     return true;
                 } else {
                     finish();

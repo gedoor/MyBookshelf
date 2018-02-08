@@ -554,6 +554,18 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         }
     }
 
+    @Override
+    public void removeFromShelf() {
+        if (bookShelf != null) {
+            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                BookShelf.removeFromBookShelf(bookShelf);
+                e.onNext(true);
+                e.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .subscribe();
+        }
+    }
+
     public Boolean getAdd() {
         return isAdd;
     }

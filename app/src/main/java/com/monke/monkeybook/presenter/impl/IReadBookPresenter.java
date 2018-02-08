@@ -33,6 +33,8 @@ public interface IReadBookPresenter extends IPresenter {
 
     void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 
+    void removeFromShelf();
+
     Boolean getAdd();
 
     void initData(Activity activity);
