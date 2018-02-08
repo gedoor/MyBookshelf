@@ -207,6 +207,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/icon_readbook_white"
+                android:contentDescription="白色背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#00000000"/>
 
@@ -219,6 +220,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/icon_readbook_yellow"
+                android:contentDescription="古铜色背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#F3B63F"/>
             <View
@@ -230,6 +232,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/icon_readbook_green"
+                android:contentDescription="淡绿色背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#00000000"/>
             <View
@@ -241,6 +244,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/icon_readbook_black"
+                android:contentDescription="黑色背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="#00000000"/>
             <View
