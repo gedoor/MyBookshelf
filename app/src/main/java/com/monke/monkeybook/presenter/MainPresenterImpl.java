@@ -1,6 +1,9 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -261,7 +264,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                 @Override
                 public void error() {
-                    Toast.makeText(mView.getContext(), String.format("%s %s", value.get(index).getBookInfoBean().getName(), "更新失败"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mView.getContext(),
+                            String.format("%s 更新失败\n%s", value.get(index).getBookInfoBean().getName()),
+                            Toast.LENGTH_SHORT).show();
                     refreshBookShelf(value, index + 1);
                 }
             });
@@ -272,15 +277,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     //保存更新
     private void saveBookToShelf(final List<BookShelfBean> dataS, final int index, final boolean hasUpdate) {
+        BookShelfBean bookShelfBean = dataS.get(index);
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(dataS.get(index).getChapterList());
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
             if (hasUpdate) {
-                dataS.get(index).setHasUpdate(true);
-                dataS.get(index).getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(dataS.get(index).getBookInfoBean());
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(dataS.get(index));
+                bookShelfBean.setHasUpdate(true);
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
-            e.onNext(dataS.get(index));
+            e.onNext(bookShelfBean);
             e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
@@ -294,7 +300,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(mView.getContext(), String.format("%s %s", dataS.get(index).getBookInfoBean().getName(), "保存更新失败"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mView.getContext(),
+                                String.format("%s 保存更新失败\n%s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()),
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
