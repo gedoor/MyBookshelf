@@ -123,4 +123,9 @@
     <string name="click_all_next_page">点击总是翻下一页</string>
     <string name="open_page_anim">翻页动画</string>
     <string name="keep_light">保持屏幕常亮</string>
+    <string name="back">返回</string>
+    <string name="menu">菜单</string>
+    <string name="adjust">调节</string>
+    <string name="scroll_bar">滚动条</string>
+    <string name="qqq">讨论群:701903217</string>
 </resources>

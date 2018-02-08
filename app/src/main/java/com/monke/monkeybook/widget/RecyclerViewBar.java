@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -17,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -77,8 +75,9 @@ public class RecyclerViewBar extends LinearLayout {
 
     private float finalY = -10000;
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initIvSlider() {
-        ivSlider.setOnTouchListener((v, event) -> {
+        ivSlider.setOnTouchListener((View v, MotionEvent event) -> {
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
@@ -198,11 +197,11 @@ public class RecyclerViewBar extends LinearLayout {
 
     class TimeCountDown extends CountDownTimer {
 
-        public TimeCountDown() {
+        TimeCountDown() {
             this(1000, 1000);
         }
 
-        public TimeCountDown(long millisInFuture, long countDownInterval) {
+        TimeCountDown(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 

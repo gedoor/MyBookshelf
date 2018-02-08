@@ -92,7 +92,7 @@
                         android:layout_gravity="center_vertical"
                         android:visibility="invisible"
                         android:focusable="true"
-                        android:contentDescription="more" />
+                        android:contentDescription="@string/menu" />
                 </LinearLayout>
             </com.monke.immerselayout.ImmerseFrameLayout>
 
@@ -220,7 +220,8 @@
                             android:layout_weight="1"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_catalog"
-                            tools:ignore="NestedWeights" />
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/table_of_contents" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -246,11 +247,12 @@
                             android:layout_weight="1"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_light"
-                            tools:ignore="NestedWeights" />
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/adjust" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="调节"
+                            android:text="@string/adjust"
                             android:layout_gravity="center_horizontal"
                             android:textSize="12sp"
                             android:textColor="#767676"
@@ -272,7 +274,8 @@
                             android:layout_weight="1"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_font"
-                            tools:ignore="NestedWeights" />
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/interface_setting" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -298,7 +301,8 @@
                             android:layout_weight="1"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_setting"
-                            tools:ignore="NestedWeights" />
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/setting" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

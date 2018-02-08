@@ -28,7 +28,7 @@
                 android:layout_height="24dp"
                 android:layout_margin="6dp"
                 android:src="@drawable/ic_arrow_back_black_24dp"
-                android:contentDescription="back" />
+                android:contentDescription="@string/back" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,7 +71,8 @@
                 android:id="@+id/rvb_slider"
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
+                android:contentDescription="@string/scroll_bar"
                 app:slider_height="32dp"
                 app:slider_paddingLeft="7dp" />
         </FrameLayout>
