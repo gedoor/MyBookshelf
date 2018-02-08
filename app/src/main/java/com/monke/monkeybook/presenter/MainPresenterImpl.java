@@ -294,7 +294,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_NONET));
+                        Toast.makeText(mView.getContext(), String.format("%s %s", dataS.get(index).getBookInfoBean().getName(), "保存更新失败"), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
