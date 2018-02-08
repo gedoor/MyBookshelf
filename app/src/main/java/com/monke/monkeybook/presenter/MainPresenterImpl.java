@@ -256,11 +256,13 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 public void success(BookShelfBean bookShelfBean) {
                     boolean hasUpdate = chapterSize < value.get(index).getChapterListSize();
                     saveBookToShelf(value, index, hasUpdate);
+                    refreshBookShelf(value, index + 1);
                 }
 
                 @Override
                 public void error() {
-                    mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_NONET));
+                    Toast.makeText(mView.getContext(), String.format("%s %s", value.get(index).getBookInfoBean().getName(), "更新失败"), Toast.LENGTH_SHORT).show();
+                    refreshBookShelf(value, index + 1);
                 }
             });
         } else {
@@ -287,7 +289,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(BookShelfBean value) {
                         mView.refreshRecyclerViewItemAdd();
-                        refreshBookShelf(dataS, index + 1);
                     }
 
                     @Override
