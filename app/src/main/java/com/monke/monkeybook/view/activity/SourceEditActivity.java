@@ -341,6 +341,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
             fOut.flush();
             fOut.close();
+            file.setReadable(true, false);
             Uri contentUri = FileProvider.getUriForFile(this, getString(R.string.file_provider), file);
             final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
