@@ -75,7 +75,10 @@ public class DataBackup {
             for (BookShelfBean bookshelf : bookShelfList) {
                 bookshelf.getBookInfoBean().setChapterList(null);
             }
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
             String bookshelf = gson.toJson(bookShelfList);
             DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
             FileHelper.writeString(bookshelf, docFile);
@@ -85,7 +88,10 @@ public class DataBackup {
     private void backupBookSource(File file) {
         List<BookSourceBean> bookSourceList = BookSourceManage.getAllBookSource();
         if (bookSourceList != null && bookSourceList.size() > 0) {
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
             String str = gson.toJson(bookSourceList);
             DocumentFile docFile = FileHelper.createFileIfNotExist("myBookSource.xml", file.getPath());
             FileHelper.writeString(str, docFile);
@@ -96,7 +102,10 @@ public class DataBackup {
         List<SearchHistoryBean> searchHistoryBeans = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
                 .queryBuilder().list();
         if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
             String str = gson.toJson(searchHistoryBeans);
             DocumentFile docFile = FileHelper.createFileIfNotExist("myBookSearchHistory.xml", file.getPath());
             FileHelper.writeString(str, docFile);

@@ -249,7 +249,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     //更新
     private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
-        if (index <= value.size() - 1) {
+        if (index < value.size()) {
             int chapterSize = value.get(index).getChapterListSize();
             WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
                 @Override
