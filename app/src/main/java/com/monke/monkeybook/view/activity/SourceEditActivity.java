@@ -282,25 +282,25 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         if (bookSourceBean == null) {
             return;
         }
-        tieBookSourceName.setText(bookSourceBean.getBookSourceName().trim());
-        tieBookSourceUrl.setText(bookSourceBean.getBookSourceUrl().trim());
-        tieRuleBookAuthor.setText(bookSourceBean.getRuleBookAuthor().trim());
-        tieRuleBookContent.setText(bookSourceBean.getRuleBookContent().trim());
-        tieRuleBookName.setText(bookSourceBean.getRuleBookName().trim());
-        tieRuleChapterList.setText(bookSourceBean.getRuleChapterList().trim());
-        tieRuleChapterName.setText(bookSourceBean.getRuleChapterName().trim());
-        tieRuleChapterUrl.setText(bookSourceBean.getRuleChapterUrl().trim());
-        tieRuleContentUrl.setText(bookSourceBean.getRuleContentUrl().trim());
-        tieRuleCoverUrl.setText(bookSourceBean.getRuleCoverUrl().trim());
-        tieRuleIntroduce.setText(bookSourceBean.getRuleIntroduce().trim());
-        tieRuleSearchAuthor.setText(bookSourceBean.getRuleSearchAuthor().trim());
-        tieRuleSearchCoverUrl.setText(bookSourceBean.getRuleSearchCoverUrl().trim());
-        tieRuleSearchKind.setText(bookSourceBean.getRuleSearchKind().trim());
-        tieRuleSearchLastChapter.setText(bookSourceBean.getRuleSearchLastChapter().trim());
-        tieRuleSearchList.setText(bookSourceBean.getRuleSearchList().trim());
-        tieRuleSearchName.setText(bookSourceBean.getRuleSearchName().trim());
-        tieRuleSearchNoteUrl.setText(bookSourceBean.getRuleSearchNoteUrl().trim());
-        tieRuleSearchUrl.setText(bookSourceBean.getRuleSearchUrl().trim());
+        tieBookSourceName.setText(bookSourceBean.getBookSourceName());
+        tieBookSourceUrl.setText(bookSourceBean.getBookSourceUrl());
+        tieRuleBookAuthor.setText(bookSourceBean.getRuleBookAuthor());
+        tieRuleBookContent.setText(bookSourceBean.getRuleBookContent());
+        tieRuleBookName.setText(bookSourceBean.getRuleBookName());
+        tieRuleChapterList.setText(bookSourceBean.getRuleChapterList());
+        tieRuleChapterName.setText(bookSourceBean.getRuleChapterName());
+        tieRuleChapterUrl.setText(bookSourceBean.getRuleChapterUrl());
+        tieRuleContentUrl.setText(bookSourceBean.getRuleContentUrl());
+        tieRuleCoverUrl.setText(bookSourceBean.getRuleCoverUrl());
+        tieRuleIntroduce.setText(bookSourceBean.getRuleIntroduce());
+        tieRuleSearchAuthor.setText(bookSourceBean.getRuleSearchAuthor());
+        tieRuleSearchCoverUrl.setText(bookSourceBean.getRuleSearchCoverUrl());
+        tieRuleSearchKind.setText(bookSourceBean.getRuleSearchKind());
+        tieRuleSearchLastChapter.setText(bookSourceBean.getRuleSearchLastChapter());
+        tieRuleSearchList.setText(bookSourceBean.getRuleSearchList());
+        tieRuleSearchName.setText(bookSourceBean.getRuleSearchName());
+        tieRuleSearchNoteUrl.setText(bookSourceBean.getRuleSearchNoteUrl());
+        tieRuleSearchUrl.setText(bookSourceBean.getRuleSearchUrl());
     }
 
     private void setHint() {
