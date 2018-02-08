@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
@@ -74,11 +75,14 @@ public class AnalyzeRule {
                     String[] rulePcs = rulePc[1].split(":");
                     for (String pc : rulePcs) {
                         if (pc.equals("%")) {
-                            elements.remove(elements.last());
+                            elements.set(elements.size()-1, null);
                         } else {
-                            elements.remove(elements.get(Integer.parseInt(pc)));
+                            elements.set(Integer.parseInt(pc), null);
                         }
                     }
+                    Elements es = new Elements();
+                    es.add(null);
+                    elements.removeAll(es);
                 }
             }
         } catch (Exception e) {
