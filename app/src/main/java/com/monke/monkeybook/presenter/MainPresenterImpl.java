@@ -158,7 +158,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             URL url = new URL(bookUrl);
             List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl.toString())).limit(1).build().list();
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().list();
             if (temp != null && temp.size() > 0) {
                 e.onNext(null);
             } else {
@@ -265,7 +265,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 @Override
                 public void error() {
                     Toast.makeText(mView.getContext(),
-                            String.format("%s 更新失败\n%s", value.get(index).getBookInfoBean().getName()),
+                            String.format("%s 更新失败", value.get(index).getBookInfoBean().getName()),
                             Toast.LENGTH_SHORT).show();
                     refreshBookShelf(value, index + 1);
                 }
@@ -301,7 +301,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         Toast.makeText(mView.getContext(),
-                                String.format("%s 保存更新失败\n%s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()),
+                                String.format("%s 保存更新失败", bookShelfBean.getBookInfoBean().getName()),
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
