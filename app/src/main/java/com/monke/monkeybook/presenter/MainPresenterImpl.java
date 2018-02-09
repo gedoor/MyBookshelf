@@ -1,9 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -70,7 +67,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfList = getAllBookShelf();
-            e.onNext(bookShelfList == null ? new ArrayList<BookShelfBean>() : bookShelfList);
+            e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
