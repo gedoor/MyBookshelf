@@ -28,6 +28,6 @@ public interface IHttpGetApi {
             "Keep-Alive:300",
             "Connection:Keep-Alive",
             "Cache-Control:no-cache"})
-    Observable<String> searchBook(@Url String url, @QueryMap Map<String, String> queryMap);
+    Observable<String> searchBook(@Url String url, @QueryMap(encoded = true) Map<String, String> queryMap);
 
 }

@@ -103,26 +103,22 @@ public class SearchBook {
     }
 
     private void searchOnEngine(final String content, final long searchTime, List<BookShelfBean> bookShelfS, final int searchEngineIndex) {
-        Observable<List<SearchBookBean>> searchOtherBook = WebBookModelImpl.getInstance().searchOtherBook(content, page, searchEngineS.get(searchEngineIndex).getTag());
-        if (searchOtherBook == null) {
-            searchError(searchEngineIndex, searchTime);
-        } else {
-            searchOtherBook
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.newThread())
-                    .subscribe(new SimpleObserver<List<SearchBookBean>>() {
-                        @Override
-                        public void onNext(List<SearchBookBean> value) {
-                            searchSuccess(content, searchTime, bookShelfS, searchEngineIndex, value);
-                        }
+        WebBookModelImpl.getInstance()
+                .searchOtherBook(content, page, searchEngineS.get(searchEngineIndex).getTag())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+                    @Override
+                    public void onNext(List<SearchBookBean> value) {
+                        searchSuccess(content, searchTime, bookShelfS, searchEngineIndex, value);
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            searchError(searchEngineIndex, searchTime);
-                        }
-                    });
-        }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        searchError(searchEngineIndex, searchTime);
+                    }
+                });
     }
 
     private void searchSuccess(final String content, final long searchTime, List<BookShelfBean> bookShelfS, final int searchEngineIndex, List<SearchBookBean> value) {

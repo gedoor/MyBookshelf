@@ -81,13 +81,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         if (!initBookSourceBean()) {
-            return null;
+            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
         }
         Boolean isPost = bookSourceBean.getRuleSearchUrl().contains("@");
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
-                return null;
+                return Observable.error(new Throwable(String.format("搜索规则错误%s", TAG)));
             }
             if (isPost) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
@@ -102,7 +102,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return Observable.error(new Throwable(String.format("搜索规则错误%s", TAG)));
         }
     }
 
@@ -143,7 +143,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        initBookSourceBean();
+        if (!initBookSourceBean()) {
+            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+        }
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
@@ -251,7 +253,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        initBookSourceBean();
+        if (!initBookSourceBean()) {
+            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+        }
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))

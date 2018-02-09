@@ -19,7 +19,7 @@ public class AnalyzeSearchUrl {
     private Map<String, String> queryMap;
     private String searchKey;
     private int searchPage;
-    private String charCode;
+    private String charCode = "utf-8";
 
     public AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
         searchKey = key;
