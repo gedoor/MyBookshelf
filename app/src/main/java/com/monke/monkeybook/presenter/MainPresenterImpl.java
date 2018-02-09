@@ -242,6 +242,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         if (index < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(index);
             if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                mView.refreshRecyclerViewItemAdd();
                 refreshBookShelf(bookShelfBeans, index + 1);
             } else {
                 int chapterSize = bookShelfBeans.get(index).getChapterListSize();
@@ -259,6 +260,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                             @Override
                             public void onError(Throwable e) {
+                                mView.refreshRecyclerViewItemAdd();
                                 refreshBookShelf(bookShelfBeans, index + 1);
                                 Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -292,6 +294,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.refreshRecyclerViewItemAdd();
                         e.printStackTrace();
                         Toast.makeText(mView.getContext(),
                                 String.format("%s 保存更新失败", bookShelfBean.getBookInfoBean().getName()),
