@@ -34,7 +34,12 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.SerializedObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
@@ -237,6 +242,34 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         }
     }
 
+    private void refreshBookShelf(final List<BookShelfBean> bookShelfBeans) {
+        Observable.fromIterable(bookShelfBeans)
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        saveBookToShelf1(bookShelfBean);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.refreshFinish();
+                    }
+                });
+    }
+
     //更新
     private void refreshBookShelf(final List<BookShelfBean> bookShelfBeans, final int index) {
         if (index < bookShelfBeans.size()) {
@@ -245,7 +278,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 mView.refreshRecyclerViewItemAdd();
                 refreshBookShelf(bookShelfBeans, index + 1);
             } else {
-                int chapterSize = bookShelfBeans.get(index).getChapterListSize();
                 WebBookModelImpl.getInstance()
                         .getChapterList(bookShelfBean)
                         .subscribeOn(Schedulers.newThread())
@@ -253,8 +285,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         .subscribe(new SimpleObserver<BookShelfBean>() {
                             @Override
                             public void onNext(BookShelfBean value) {
-                                boolean hasUpdate = chapterSize < value.getChapterListSize();
-                                saveBookToShelf(value, hasUpdate);
+                                saveBookToShelf1(value);
                                 refreshBookShelf(bookShelfBeans, index + 1);
                             }
 
@@ -272,12 +303,10 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     //保存更新
-    private void saveBookToShelf(final BookShelfBean bookShelfBean, final boolean hasUpdate) {
+    private void saveBookToShelf1(final BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
-            if (hasUpdate) {
-                bookShelfBean.setHasUpdate(true);
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+            if (bookShelfBean.getHasUpdate()) {
                 DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
