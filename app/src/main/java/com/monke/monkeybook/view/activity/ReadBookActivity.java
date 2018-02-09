@@ -30,11 +30,11 @@ import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
@@ -58,12 +58,12 @@ import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
-import static com.monke.monkeybook.service.ReadAloudService.PLAY;
-import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionResumeService;
+import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
+import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     @BindView(R.id.fl_content)

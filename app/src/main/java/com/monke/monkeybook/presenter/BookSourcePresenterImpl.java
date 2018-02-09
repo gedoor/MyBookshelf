@@ -13,7 +13,6 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
-import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
@@ -78,17 +77,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                     public void onNext(Boolean aBoolean) {
                         Snackbar.make(mView.getView(), delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> {
-                                    BookSourceManage.addBookSource(null, delBookSource, new OnObservableListener() {
-                                        @Override
-                                        public void success() {
-                                            mView.refreshBookSource();
-                                        }
-
-                                        @Override
-                                        public void error() {
-
-                                        }
-                                    });
+                                    restoreBookSource(delBookSource);
                                 })
                                 .show();
                     }
@@ -97,6 +86,26 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                     public void onError(Throwable e) {
                         Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
                         mView.refreshBookSource();
+                    }
+                });
+    }
+
+    private void restoreBookSource(BookSourceBean bookSourceBean) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            BookSourceManage.addBookSource(bookSourceBean);
+            BookSourceManage.refreshBookSource();
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        mView.refreshBookSource();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
                     }
                 });
     }

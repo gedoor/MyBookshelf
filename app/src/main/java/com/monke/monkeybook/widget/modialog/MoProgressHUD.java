@@ -2,8 +2,6 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -17,11 +15,6 @@ import android.widget.FrameLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.bean.SearchBookBean;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 对话框

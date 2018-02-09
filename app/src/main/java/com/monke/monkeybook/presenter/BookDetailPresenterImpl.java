@@ -4,30 +4,32 @@ package com.monke.monkeybook.presenter;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
+
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.impl.IView;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
 import com.monke.monkeybook.view.impl.IBookDetailView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -112,36 +114,26 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 }
             }
             return bookShelfBean;
-        }).subscribeOn(Schedulers.newThread())
+        })
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+                .subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean value) {
-                        WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
-                            @Override
-                            public void success(BookShelfBean bookShelfBean) {
-                                if (openFrom == FROM_BOOKSHELF && bookShelf != null) {
-                                    int durChapter = bookShelf.getDurChapter();
-                                    bookShelf = bookShelfBean;
-                                    bookShelf.setDurChapter(durChapter);
-                                } else {
-                                    bookShelf = bookShelfBean;
-                                }
-                                mView.updateView();
-                            }
-
-                            @Override
-                            public void error() {
-                                bookShelf = null;
-                                mView.getBookShelfError();
-                            }
-                        });
+                    public void onNext(BookShelfBean bookShelfResult) {
+                        if (openFrom == FROM_BOOKSHELF && bookShelf != null) {
+                            int durChapter = bookShelf.getDurChapter();
+                            bookShelf = bookShelfResult;
+                            bookShelf.setDurChapter(durChapter);
+                        } else {
+                            bookShelf = bookShelfResult;
+                        }
+                        mView.updateView();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        bookShelf = null;
                         mView.getBookShelfError();
                     }
                 });

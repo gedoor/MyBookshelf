@@ -6,22 +6,20 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.impl.IView;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.help.BookShelf;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.ISearchPresenter;
-import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.ISearchView;
 
 import java.util.ArrayList;
@@ -242,27 +240,18 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
         bookInfoBean.setTag(searchBookBean.getTag());
         bookShelfResult.setBookInfoBean(bookInfoBean);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean value) {
-                        WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
-                            @Override
-                            public void success(BookShelfBean bookShelfBean) {
-                                saveBookToShelf(bookShelfBean);
-                            }
-
-                            @Override
-                            public void error() {
-                                mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
-                            }
-                        });
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        saveBookToShelf(bookShelfBean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
+                        mView.addBookShelfFailed(String.format("添加书籍失败%s", e.getMessage()));
                     }
                 });
     }
@@ -284,7 +273,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
+                        mView.addBookShelfFailed(String.format("保存书籍失败%s", e.getMessage()));
                     }
                 });
     }

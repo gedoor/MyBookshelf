@@ -1,6 +1,5 @@
 package com.monke.monkeybook.model.content;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;

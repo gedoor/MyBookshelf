@@ -14,12 +14,11 @@ import android.widget.Toast;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ChoiceBookPresenterImpl;
-import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.impl.IChoiceBookView;
+import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
+import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -156,8 +155,8 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     }
 
     @Override
-    public void addBookShelfFailed(int code) {
-        Toast.makeText(this, NetworkUtil.getErrorTip(code), Toast.LENGTH_SHORT).show();
+    public void addBookShelfFailed(String massage) {
+        Toast.makeText(this, massage, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.monke.monkeybook.model.content;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -14,7 +13,6 @@ import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IHttpPostApi;
@@ -30,9 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -190,41 +185,22 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      * 获取目录
      */
     @Override
-    public void getChapterList(final BookShelfBean bookShelfBean, final OnGetChapterListListener getChapterListListener) {
+    public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         if (!initBookSourceBean()) {
-            getChapterListListener.error();
-            return;
+            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
         }
-        getRetrofitString(TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
-                .flatMap(s -> analyzeChapterList(s, bookShelfBean))
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<WebChapterBean<BookShelfBean>>() {
-                    @Override
-                    public void onNext(WebChapterBean<BookShelfBean> value) {
-                        if (getChapterListListener != null) {
-                            getChapterListListener.success(value.getData());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        if (getChapterListListener != null) {
-                            getChapterListListener.error();
-                        }
-                    }
-                });
+                .flatMap(s -> analyzeChapterList(s, bookShelfBean));
     }
 
-    private Observable<WebChapterBean<BookShelfBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl());
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
-            e.onNext(new WebChapterBean<>(bookShelfBean, temp.getNext()));
+            e.onNext(bookShelfBean);
             e.onComplete();
         });
     }

@@ -34,13 +34,12 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
-import com.monke.monkeybook.presenter.impl.ISearchPresenter;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchPresenterImpl;
-import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.impl.ISearchView;
+import com.monke.monkeybook.presenter.impl.ISearchPresenter;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
+import com.monke.monkeybook.view.impl.ISearchView;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
@@ -470,8 +469,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     }
 
     @Override
-    public void addBookShelfFailed(int code) {
-        Toast.makeText(this, NetworkUtil.getErrorTip(code), Toast.LENGTH_SHORT).show();
+    public void addBookShelfFailed(String massage) {
+        Toast.makeText(this, massage, Toast.LENGTH_SHORT).show();
     }
 
     @Override

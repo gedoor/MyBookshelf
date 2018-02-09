@@ -15,7 +15,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
@@ -23,7 +23,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -191,27 +190,18 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     private void getBook(BookShelfBean bookShelfBean) {
         WebBookModelImpl.getInstance()
                 .getBookInfo(bookShelfBean)
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
-                        WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
-                            @Override
-                            public void success(BookShelfBean bookShelfBean) {
-                                saveBookToShelf(bookShelfBean);
-                            }
-
-                            @Override
-                            public void error() {
-                                Toast.makeText(mView.getContext(), "获取书籍目录失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        saveBookToShelf(value);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "获取书籍信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -248,33 +238,39 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     //更新
-    private void refreshBookShelf(final List<BookShelfBean> value, final int index) {
-        if (index < value.size()) {
-            int chapterSize = value.get(index).getChapterListSize();
-            WebBookModelImpl.getInstance().getChapterList(value.get(index), new OnGetChapterListListener() {
-                @Override
-                public void success(BookShelfBean bookShelfBean) {
-                    boolean hasUpdate = chapterSize < value.get(index).getChapterListSize();
-                    saveBookToShelf(value, index, hasUpdate);
-                    refreshBookShelf(value, index + 1);
-                }
+    private void refreshBookShelf(final List<BookShelfBean> bookShelfBeans, final int index) {
+        if (index < bookShelfBeans.size()) {
+            BookShelfBean bookShelfBean = bookShelfBeans.get(index);
+            if (bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                refreshBookShelf(bookShelfBeans, index + 1);
+            } else {
+                int chapterSize = bookShelfBeans.get(index).getChapterListSize();
+                WebBookModelImpl.getInstance()
+                        .getChapterList(bookShelfBean)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new SimpleObserver<BookShelfBean>() {
+                            @Override
+                            public void onNext(BookShelfBean value) {
+                                boolean hasUpdate = chapterSize < value.getChapterListSize();
+                                saveBookToShelf(value, hasUpdate);
+                                refreshBookShelf(bookShelfBeans, index + 1);
+                            }
 
-                @Override
-                public void error() {
-                    Toast.makeText(mView.getContext(),
-                            String.format("%s 更新失败", value.get(index).getBookInfoBean().getName()),
-                            Toast.LENGTH_SHORT).show();
-                    refreshBookShelf(value, index + 1);
-                }
-            });
+                            @Override
+                            public void onError(Throwable e) {
+                                refreshBookShelf(bookShelfBeans, index + 1);
+                                Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
         } else {
             queryBookShelf(false);
         }
     }
 
     //保存更新
-    private void saveBookToShelf(final List<BookShelfBean> dataS, final int index, final boolean hasUpdate) {
-        BookShelfBean bookShelfBean = dataS.get(index);
+    private void saveBookToShelf(final BookShelfBean bookShelfBean, final boolean hasUpdate) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
             if (hasUpdate) {

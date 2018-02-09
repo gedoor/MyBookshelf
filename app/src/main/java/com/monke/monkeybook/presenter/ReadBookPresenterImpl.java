@@ -28,12 +28,11 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -415,30 +414,18 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         bookInfo.setOrigin(searchBook.getOrigin());
         bookShelfBean.setBookInfoBean(bookInfo);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        WebBookModelImpl.getInstance().getChapterList(bookShelfBean, new OnGetChapterListListener() {
-                            @Override
-                            public void success(BookShelfBean bookShelfBean) {
-                                if (bookShelf.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
-                                    bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
-                                } else {
-                                    bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-                                }
-                                saveChangedBook(bookShelfBean);
-                            }
-
-                            @Override
-                            public void error() {
-                                mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
-                                        bookShelf.getChapterListSize(),
-                                        bookShelf.getDurChapterPage());
-                                Toast.makeText(MApplication.getInstance(), "换源失败！", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        if (bookShelf.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
+                            bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
+                        } else {
+                            bookShelfBean.setDurChapter(bookShelf.getDurChapter());
+                        }
+                        saveChangedBook(bookShelfBean);
                     }
 
                     @Override
@@ -446,7 +433,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
                                 bookShelf.getChapterListSize(),
                                 bookShelf.getDurChapterPage());
-                        Toast.makeText(MApplication.getInstance(), "换源失败！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

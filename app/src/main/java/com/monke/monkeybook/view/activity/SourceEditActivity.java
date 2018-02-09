@@ -1,66 +1,38 @@
 package com.monke.monkeybook.view.activity;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.InstanceCreator;
-import com.google.gson.LongSerializationPolicy;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.Excluder;
-import com.google.gson.stream.JsonWriter;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.monkeybook.BitIntentDataManager;
-import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.listener.OnObservableListener;
-import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
 import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -220,20 +192,15 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             Toast.makeText(MApplication.getInstance(), "书源名称和URL不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-        BookSourceManage.addBookSource(bookSourceBean, getBookSource(), new OnObservableListener() {
-            @Override
-            public void success() {
-                bookSourceBean = getBookSource();
-                Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
-                finish();
-            }
+        mPresenter.saveSource(getBookSource(), bookSourceBean);
+    }
 
-            @Override
-            public void error() {
-                Toast.makeText(MApplication.getInstance(), "保存失败", Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void saveSuccess() {
+        bookSourceBean = getBookSource();
+        Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override

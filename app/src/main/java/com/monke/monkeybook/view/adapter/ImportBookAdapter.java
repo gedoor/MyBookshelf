@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
+
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;

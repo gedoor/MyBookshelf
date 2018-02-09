@@ -17,16 +17,17 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
-import com.monke.monkeybook.view.impl.IBookSourceView;
+import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
+import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 
 /**
  * Created by GKF on 2017/12/16.

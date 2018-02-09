@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
+
 import java.lang.reflect.Method;
 
 public class DensityUtil {

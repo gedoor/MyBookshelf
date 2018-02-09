@@ -8,7 +8,6 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

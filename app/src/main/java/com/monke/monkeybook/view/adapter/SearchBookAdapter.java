@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;

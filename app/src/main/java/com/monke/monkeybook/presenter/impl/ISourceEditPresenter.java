@@ -13,6 +13,8 @@ import com.monke.monkeybook.bean.BookSourceBean;
 
 public interface ISourceEditPresenter extends IPresenter {
 
+    void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld);
+
     void copySource(BookSourceBean bookSourceBean);
 
     void pasteSource();

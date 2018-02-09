@@ -1,23 +1,14 @@
 package com.monke.monkeybook.model;
 
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.listener.OnObservableListener;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
-import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -59,7 +50,6 @@ public class BookSourceManage {
 
     public static List<BookSourceBean> saveBookSourceToDb() {
         List<BookSourceBean> bookSourceBeans = new ArrayList<>();
-        bookSourceBeans.add(getBookSourceBy());
         bookSourceBeans.add(getBookSourceXBQ());
         bookSourceBeans.add(getBookSourceLD());
         bookSourceBeans.add(getBookSourceWZ());
@@ -99,29 +89,6 @@ public class BookSourceManage {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
-    }
-
-    public static void addBookSource(BookSourceBean oldBookSource, BookSourceBean newBookSource, OnObservableListener observableListener) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (oldBookSource != null && !Objects.equals(newBookSource.getBookSourceUrl(), oldBookSource.getBookSourceUrl())) {
-                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(oldBookSource);
-            }
-            addBookSource(newBookSource);
-            BookSourceManage.refreshBookSource();
-            e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        observableListener.success();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        observableListener.error();
-                    }
-                });
     }
 
     private static BookSourceBean getBookSourceWZ() {
@@ -181,31 +148,6 @@ public class BookSourceManage {
         bookSourceBean.setBookSourceName("新笔趣阁");
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://zhannei.baidu.com/cse/search?s=5199337987683747968&q=searchKey&p=searchPage-1");
-        bookSourceBean.setRuleSearchList("class.result-item");
-        bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
-        bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");
-        bookSourceBean.setRuleSearchLastChapter("class.result-game-item-info-tag.3@tag.a.0@text");
-        bookSourceBean.setRuleSearchName("class.result-item-title.0@tag.a.0@text");
-        bookSourceBean.setRuleSearchNoteUrl("class.result-item-title.0@tag.a.0@href");
-        bookSourceBean.setRuleSearchCoverUrl("tag.img.0@src");
-        bookSourceBean.setRuleBookName("class.box_con.0@id.info@tag.h1.0@text");
-        bookSourceBean.setRuleBookAuthor("class.box_con.0@id.info@tag.p.0@text");
-        bookSourceBean.setRuleIntroduce("id.intro@tag.p@text");
-        bookSourceBean.setRuleCoverUrl("id.fmimg@tag.img.0@src");
-        bookSourceBean.setRuleChapterList("id.list@tag.dd");
-        bookSourceBean.setRuleChapterName("tag.a.0@text");
-        bookSourceBean.setRuleContentUrl("tag.a.0@href");
-        bookSourceBean.setRuleBookContent("id.content@textNodes");
-
-        return bookSourceBean;
-    }
-
-    private static BookSourceBean getBookSourceBy() {
-        BookSourceBean bookSourceBean = new BookSourceBean();
-        bookSourceBean.setBookSourceUrl("https://www.zwdu.com");
-        bookSourceBean.setBookSourceName("八一中文");
-        bookSourceBean.setEnable(true);
-        bookSourceBean.setRuleSearchUrl("https://www.zwdu.com/search.php?keyword=searchKey&page=searchPage");
         bookSourceBean.setRuleSearchList("class.result-item");
         bookSourceBean.setRuleSearchAuthor("class.result-game-item-info-tag.0@tag.span.1@text");
         bookSourceBean.setRuleSearchKind("class.result-game-item-info-tag.1@tag.span.1@text");

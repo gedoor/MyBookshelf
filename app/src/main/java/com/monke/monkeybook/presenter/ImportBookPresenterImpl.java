@@ -2,16 +2,19 @@
 package com.monke.monkeybook.presenter;
 
 import android.os.Environment;
+
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
 import com.monke.monkeybook.view.impl.IImportBookView;
+
 import java.io.File;
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -55,13 +58,15 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
     private void searchBook(ObservableEmitter<File> e, File parentFile) {
         if (null != parentFile && parentFile.listFiles().length > 0) {
             File[] childFiles = parentFile.listFiles();
-            for (int i = 0; i < childFiles.length; i++) {
-                if (childFiles[i].isFile() && childFiles[i].getName().substring(childFiles[i].getName().lastIndexOf(".") + 1).equalsIgnoreCase("txt") && childFiles[i].length() > 100*1024) {   //100kb
-                    e.onNext(childFiles[i]);
+            for (File childFile : childFiles) {
+                if (childFile.isFile()
+                        && childFile.getName().substring(childFile.getName().lastIndexOf(".") + 1).equalsIgnoreCase("txt")
+                        && childFile.length() > 100 * 1024) {   //100kb
+                    e.onNext(childFile);
                     continue;
                 }
-                if (childFiles[i].isDirectory() && childFiles[i].listFiles().length > 0) {
-                    searchBook(e, childFiles[i]);
+                if (childFile.isDirectory() && childFile.listFiles().length > 0) {
+                    searchBook(e, childFile);
                 }
             }
         }

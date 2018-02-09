@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -31,14 +30,20 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.listener.OnObservableListener;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
 import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.util.Hashtable;
+import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2018/1/28.
@@ -46,6 +51,30 @@ import java.util.Hashtable;
  */
 
 public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> implements ISourceEditPresenter {
+
+    @Override
+    public void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            if (bookSourceOld != null && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
+                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
+            }
+            BookSourceManage.addBookSource(bookSource);
+            BookSourceManage.refreshBookSource();
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        mView.saveSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
 
     @Override
     public void copySource(BookSourceBean bookSourceBean) {
@@ -134,8 +163,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
         else {
             Matrix matrix = new Matrix();
             matrix.postScale((float) (1 / Math.sqrt(size)), (float) (1 / Math.sqrt(size)));
-            Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            return resizeBitmap;
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
     }
 

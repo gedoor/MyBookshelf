@@ -1,16 +1,10 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monke.monkeybook.R;
 import com.victor.loading.rotate.RotateLoading;

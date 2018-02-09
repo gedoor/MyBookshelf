@@ -4,8 +4,9 @@ package com.monke.monkeybook.model.impl;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
+
 import java.util.List;
+
 import io.reactivex.Observable;
 
 public interface IWebBookModel {
@@ -17,7 +18,7 @@ public interface IWebBookModel {
     /**
      * 网络解析图书目录
      */
-    void getChapterList(final BookShelfBean bookShelfBean,OnGetChapterListListener getChapterListListener);
+    Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean);
 
     /**
      * 章节缓存

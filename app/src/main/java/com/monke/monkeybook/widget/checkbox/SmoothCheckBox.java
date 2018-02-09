@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.DensityUtil;
 

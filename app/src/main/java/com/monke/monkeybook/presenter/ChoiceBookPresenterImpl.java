@@ -3,26 +3,27 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.impl.IView;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.common.RxBusTag;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
-import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,7 +43,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
-                temp = new ArrayList<BookShelfBean>();
+                temp = new ArrayList<>();
             e.onNext(temp);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,7 +83,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
     private void searchBook(final long searchTime) {
         WebBookModelImpl.getInstance().getKindBook(url, page)
                 .subscribeOn(Schedulers.newThread())
-                .compose(((BaseActivity)mView.getContext()).<List<SearchBookBean>>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(((BaseActivity)mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<List<SearchBookBean>>() {
                     @Override
@@ -98,10 +99,10 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
                             }
                             if (page == 1) {
                                 mView.refreshSearchBook(value);
-                                mView.refreshFinish(value.size()<=0?true:false);
+                                mView.refreshFinish(value.size() <= 0);
                             } else {
                                 mView.loadMoreSearchBook(value);
-                                mView.loadMoreFinish(value.size()<=0?true:false);
+                                mView.loadMoreFinish(value.size() <= 0);
                             }
                             page++;
                         }
@@ -125,28 +126,19 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
         bookShelfResult.setDurChapterPage(0);
         bookShelfResult.setTag(searchBookBean.getTag());
         WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
+                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity)mView.getContext()).<BookShelfBean>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(((BaseActivity)mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
-                    public void onNext(BookShelfBean value) {
-                        WebBookModelImpl.getInstance().getChapterList(value, new OnGetChapterListListener() {
-                            @Override
-                            public void success(BookShelfBean bookShelfBean) {
-                                saveBookToShelf(bookShelfBean);
-                            }
-
-                            @Override
-                            public void error() {
-                                mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
-                            }
-                        });
+                    public void onNext(BookShelfBean bookShelfResult) {
+                        saveBookToShelf(bookShelfResult);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
+                        mView.addBookShelfFailed(e.getMessage());
                     }
                 });
     }
@@ -166,7 +158,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity)mView.getContext()).<BookShelfBean>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(((BaseActivity)mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
@@ -176,7 +168,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.addBookShelfFailed(NetworkUtil.ERROR_CODE_OUTTIME);
+                        mView.addBookShelfFailed(e.getMessage());
                     }
                 });
     }

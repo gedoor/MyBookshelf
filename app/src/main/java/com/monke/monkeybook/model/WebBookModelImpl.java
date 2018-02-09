@@ -4,10 +4,9 @@ package com.monke.monkeybook.model;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.listener.OnGetChapterListListener;
+import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 import com.monke.monkeybook.model.impl.IWebBookModel;
-import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,12 @@ public class WebBookModelImpl implements IWebBookModel {
      * return BookShelfBean
      */
     @Override
-    public void getChapterList(final BookShelfBean bookShelfBean, OnGetChapterListListener getChapterListListener) {
+    public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         IStationBookModel bookModel = BookSourceManage.getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
-            bookModel.getChapterList(bookShelfBean, getChapterListListener);
+            return bookModel.getChapterList(bookShelfBean);
         } else {
-            if (getChapterListListener != null)
-                getChapterListListener.success(bookShelfBean);
+            return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName()+"没有书源"));
         }
     }
 

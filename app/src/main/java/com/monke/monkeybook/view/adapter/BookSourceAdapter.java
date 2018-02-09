@@ -6,16 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 
-import com.google.gson.Gson;
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 

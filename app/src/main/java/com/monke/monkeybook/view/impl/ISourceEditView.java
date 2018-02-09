@@ -13,4 +13,6 @@ public interface ISourceEditView extends IView {
     void setText(BookSourceBean bookSourceBean);
 
     String getBookSourceStr();
+
+    void saveSuccess();
 }

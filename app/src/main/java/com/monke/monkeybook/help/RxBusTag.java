@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.common;
+package com.monke.monkeybook.help;
 
 public class RxBusTag {
 

@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
@@ -23,6 +24,7 @@ import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {

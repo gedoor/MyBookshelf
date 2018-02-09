@@ -3,10 +3,12 @@ package com.monke.monkeybook.widget.libraryview;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.LibraryNewBookBean;
 import com.monke.monkeybook.widget.flowlayout.FlowLayout;
 import com.monke.monkeybook.widget.flowlayout.TagAdapter;
+
 import java.util.ArrayList;
 
 public class LibraryNewBooksAdapter extends TagAdapter<LibraryNewBookBean> {

@@ -4,8 +4,10 @@ package com.monke.monkeybook.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+
 import java.util.HashMap;
 import java.util.Map;
 

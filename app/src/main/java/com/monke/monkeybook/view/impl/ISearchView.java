@@ -7,6 +7,7 @@ import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
+
 import java.util.List;
 
 public interface ISearchView extends IView{
@@ -55,24 +56,26 @@ public interface ISearchView extends IView{
 
     /**
      * 获取搜索内容EditText
-     * @return
      */
     EditText getEdtContent();
 
     /**
      * 添加书籍失败
-     * @param code
      */
-    void addBookShelfFailed(int code);
+    void addBookShelfFailed(String massage);
 
+    /**
+     * @return SearchBookAdapter
+     */
     SearchBookAdapter getSearchBookAdapter();
 
+    /**
+     * @param index
+     */
     void updateSearchItem(int index);
 
     /**
      * 判断书籍是否已经在书架上
-     * @param searchBookBean
-     * @return
      */
     Boolean checkIsExist(SearchBookBean searchBookBean);
 }

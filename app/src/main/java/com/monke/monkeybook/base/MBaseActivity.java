@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 
-import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.BaseActivity;
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 
 import java.lang.reflect.Method;
