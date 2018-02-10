@@ -184,9 +184,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_url:
-                moProgressHUD.showPutBookUrl(bookUrl -> {
-                    mPresenter.addBookUrl(bookUrl);
-                });
+                moProgressHUD.showPutBookUrl(bookUrl -> mPresenter.addBookUrl(bookUrl));
                 break;
             case R.id.action_download:
                 downloadListPop.showAsDropDown(toolbar);
@@ -213,10 +211,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     private void clearContent() {
-        moProgressHUD.showTwoButton("清除缓存会删除所有已保存章节,是否确认删除?",
-                getString(R.string.cancel), view -> {
-                    moProgressHUD.dismiss();
-                },
+        moProgressHUD.showTwoButton(getString(R.string.clear_all_content),
+                getString(R.string.cancel), view -> moProgressHUD.dismiss(),
                 getString(R.string.ok), view -> {
                     moProgressHUD.dismiss();
                     mPresenter.clearAllContent();
@@ -290,9 +286,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             new AlertDialog.Builder(this)
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        mPresenter.backupData();
-                    })
+                    .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     })
                     .show();
@@ -308,9 +302,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             new AlertDialog.Builder(this)
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        mPresenter.restoreData();
-                    })
+                    .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     })
                     .show();
