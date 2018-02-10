@@ -19,26 +19,11 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
 
     public static final String TABLENAME = "SEARCH_BOOK_BEAN";
 
-    /**
-     * Properties of entity SearchBookBean.<br/>
-     * Can be used for QueryBuilder and for referencing column names.
-     */
-    public static class Properties {
-        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", true, "NOTE_URL");
-        public final static Property CoverUrl = new Property(1, String.class, "coverUrl", false, "COVER_URL");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Author = new Property(3, String.class, "author", false, "AUTHOR");
-        public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
-        public final static Property Kind = new Property(5, String.class, "kind", false, "KIND");
-        public final static Property Origin = new Property(6, String.class, "origin", false, "ORIGIN");
-        public final static Property Desc = new Property(7, String.class, "desc", false, "DESC");
-    }
-
-
     public SearchBookBeanDao(DaoConfig config) {
         super(config);
     }
-    
+
+
     public SearchBookBeanDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
     }
@@ -66,42 +51,42 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, SearchBookBean entity) {
         stmt.clearBindings();
- 
+
         String noteUrl = entity.getNoteUrl();
         if (noteUrl != null) {
             stmt.bindString(1, noteUrl);
         }
- 
+
         String coverUrl = entity.getCoverUrl();
         if (coverUrl != null) {
             stmt.bindString(2, coverUrl);
         }
- 
+
         String name = entity.getName();
         if (name != null) {
             stmt.bindString(3, name);
         }
- 
+
         String author = entity.getAuthor();
         if (author != null) {
             stmt.bindString(4, author);
         }
- 
+
         String tag = entity.getTag();
         if (tag != null) {
             stmt.bindString(5, tag);
         }
- 
+
         String kind = entity.getKind();
         if (kind != null) {
             stmt.bindString(6, kind);
         }
- 
+
         String origin = entity.getOrigin();
         if (origin != null) {
             stmt.bindString(7, origin);
         }
- 
+
         String desc = entity.getDesc();
         if (desc != null) {
             stmt.bindString(8, desc);
@@ -111,42 +96,42 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, SearchBookBean entity) {
         stmt.clearBindings();
- 
+
         String noteUrl = entity.getNoteUrl();
         if (noteUrl != null) {
             stmt.bindString(1, noteUrl);
         }
- 
+
         String coverUrl = entity.getCoverUrl();
         if (coverUrl != null) {
             stmt.bindString(2, coverUrl);
         }
- 
+
         String name = entity.getName();
         if (name != null) {
             stmt.bindString(3, name);
         }
- 
+
         String author = entity.getAuthor();
         if (author != null) {
             stmt.bindString(4, author);
         }
- 
+
         String tag = entity.getTag();
         if (tag != null) {
             stmt.bindString(5, tag);
         }
- 
+
         String kind = entity.getKind();
         if (kind != null) {
             stmt.bindString(6, kind);
         }
- 
+
         String origin = entity.getOrigin();
         if (origin != null) {
             stmt.bindString(7, origin);
         }
- 
+
         String desc = entity.getDesc();
         if (desc != null) {
             stmt.bindString(8, desc);
@@ -156,7 +141,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
-    }    
+    }
 
     @Override
     public SearchBookBean readEntity(Cursor cursor, int offset) {
@@ -172,7 +157,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         );
         return entity;
     }
-     
+
     @Override
     public void readEntity(Cursor cursor, SearchBookBean entity, int offset) {
         entity.setNoteUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
@@ -184,7 +169,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         entity.setOrigin(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setDesc(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
-    
+
     @Override
     protected final String updateKeyAfterInsert(SearchBookBean entity, long rowId) {
         return entity.getNoteUrl();
@@ -207,6 +192,21 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     protected final boolean isEntityUpdateable() {
         return true;
+    }
+
+    /**
+     * Properties of entity SearchBookBean.<br/>
+     * Can be used for QueryBuilder and for referencing column names.
+     */
+    public static class Properties {
+        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", true, "NOTE_URL");
+        public final static Property CoverUrl = new Property(1, String.class, "coverUrl", false, "COVER_URL");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Author = new Property(3, String.class, "author", false, "AUTHOR");
+        public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
+        public final static Property Kind = new Property(5, String.class, "kind", false, "KIND");
+        public final static Property Origin = new Property(6, String.class, "origin", false, "ORIGIN");
+        public final static Property Desc = new Property(7, String.class, "desc", false, "DESC");
     }
     
 }

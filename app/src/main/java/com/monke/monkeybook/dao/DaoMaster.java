@@ -19,40 +19,6 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 public class DaoMaster extends AbstractDaoMaster {
     public static final int SCHEMA_VERSION = 10;
 
-    /** Creates underlying database table using DAOs. */
-    public static void createAllTables(Database db, boolean ifNotExists) {
-        BookContentBeanDao.createTable(db, ifNotExists);
-        BookInfoBeanDao.createTable(db, ifNotExists);
-        BookShelfBeanDao.createTable(db, ifNotExists);
-        BookSourceBeanDao.createTable(db, ifNotExists);
-        ChapterListBeanDao.createTable(db, ifNotExists);
-        DownloadChapterBeanDao.createTable(db, ifNotExists);
-        SearchBookBeanDao.createTable(db, ifNotExists);
-        SearchHistoryBeanDao.createTable(db, ifNotExists);
-    }
-
-    /** Drops underlying database table using DAOs. */
-    public static void dropAllTables(Database db, boolean ifExists) {
-        BookContentBeanDao.dropTable(db, ifExists);
-        BookInfoBeanDao.dropTable(db, ifExists);
-        BookShelfBeanDao.dropTable(db, ifExists);
-        BookSourceBeanDao.dropTable(db, ifExists);
-        ChapterListBeanDao.dropTable(db, ifExists);
-        DownloadChapterBeanDao.dropTable(db, ifExists);
-        SearchBookBeanDao.dropTable(db, ifExists);
-        SearchHistoryBeanDao.dropTable(db, ifExists);
-    }
-
-    /**
-     * WARNING: Drops all table on Upgrade! Use only during development.
-     * Convenience method using a {@link DevOpenHelper}.
-     */
-    public static DaoSession newDevSession(Context context, String name) {
-        Database db = new DevOpenHelper(context, name).getWritableDb();
-        DaoMaster daoMaster = new DaoMaster(db);
-        return daoMaster.newSession();
-    }
-
     public DaoMaster(SQLiteDatabase db) {
         this(new StandardDatabase(db));
     }
@@ -65,8 +31,42 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(BookSourceBeanDao.class);
         registerDaoClass(ChapterListBeanDao.class);
         registerDaoClass(DownloadChapterBeanDao.class);
-        registerDaoClass(SearchBookBeanDao.class);
         registerDaoClass(SearchHistoryBeanDao.class);
+        registerDaoClass(SearchBookBeanDao.class);
+    }
+
+    /** Creates underlying database table using DAOs. */
+    public static void createAllTables(Database db, boolean ifNotExists) {
+        BookContentBeanDao.createTable(db, ifNotExists);
+        BookInfoBeanDao.createTable(db, ifNotExists);
+        BookShelfBeanDao.createTable(db, ifNotExists);
+        BookSourceBeanDao.createTable(db, ifNotExists);
+        ChapterListBeanDao.createTable(db, ifNotExists);
+        DownloadChapterBeanDao.createTable(db, ifNotExists);
+        SearchHistoryBeanDao.createTable(db, ifNotExists);
+        SearchBookBeanDao.createTable(db, ifNotExists);
+    }
+
+    /** Drops underlying database table using DAOs. */
+    public static void dropAllTables(Database db, boolean ifExists) {
+        BookContentBeanDao.dropTable(db, ifExists);
+        BookInfoBeanDao.dropTable(db, ifExists);
+        BookShelfBeanDao.dropTable(db, ifExists);
+        BookSourceBeanDao.dropTable(db, ifExists);
+        ChapterListBeanDao.dropTable(db, ifExists);
+        DownloadChapterBeanDao.dropTable(db, ifExists);
+        SearchHistoryBeanDao.dropTable(db, ifExists);
+        SearchBookBeanDao.dropTable(db, ifExists);
+    }
+
+    /**
+     * WARNING: Drops all table on Upgrade! Use only during development.
+     * Convenience method using a {@link DevOpenHelper}.
+     */
+    public static DaoSession newDevSession(Context context, String name) {
+        Database db = new DevOpenHelper(context, name).getWritableDb();
+        DaoMaster daoMaster = new DaoMaster(db);
+        return daoMaster.newSession();
     }
 
     public DaoSession newSession() {
