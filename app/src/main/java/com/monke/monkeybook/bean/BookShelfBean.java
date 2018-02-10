@@ -20,21 +20,8 @@ import java.util.List;
 @Entity
 public class BookShelfBean implements Parcelable,Cloneable{
     @Transient
-    public static final long REFRESH_TIME = 5*60*1000;   //更新时间间隔 至少
-    @Transient
     public static final String LOCAL_TAG = "loc_book";
-    @Transient
-    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
-        @Override
-        public BookShelfBean createFromParcel(Parcel in) {
-            return new BookShelfBean(in);
-        }
 
-        @Override
-        public BookShelfBean[] newArray(int size) {
-            return new BookShelfBean[size];
-        }
-    };
     @Id
     private String noteUrl; //对应BookInfoBean noteUrl;
     private int durChapter;   //当前章节 （包括番外）
@@ -49,6 +36,19 @@ public class BookShelfBean implements Parcelable,Cloneable{
     public BookShelfBean(){
 
     }
+
+    @Transient
+    public static final Creator<BookShelfBean> CREATOR = new Creator<BookShelfBean>() {
+        @Override
+        public BookShelfBean createFromParcel(Parcel in) {
+            return new BookShelfBean(in);
+        }
+
+        @Override
+        public BookShelfBean[] newArray(int size) {
+            return new BookShelfBean[size];
+        }
+    };
 
     protected BookShelfBean(Parcel in) {
         noteUrl = in.readString();

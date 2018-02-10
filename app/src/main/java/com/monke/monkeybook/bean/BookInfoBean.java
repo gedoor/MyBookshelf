@@ -18,18 +18,7 @@ import java.util.List;
  */
 @Entity
 public class BookInfoBean implements Parcelable,Cloneable{
-    @Transient
-    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
-        @Override
-        public BookInfoBean createFromParcel(Parcel in) {
-            return new BookInfoBean(in);
-        }
 
-        @Override
-        public BookInfoBean[] newArray(int size) {
-            return new BookInfoBean[size];
-        }
-    };
     private String name; //小说名
     private String tag;
     @Id
@@ -46,6 +35,19 @@ public class BookInfoBean implements Parcelable,Cloneable{
     public BookInfoBean(){
 
     }
+
+    @Transient
+    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
+        @Override
+        public BookInfoBean createFromParcel(Parcel in) {
+            return new BookInfoBean(in);
+        }
+
+        @Override
+        public BookInfoBean[] newArray(int size) {
+            return new BookInfoBean[size];
+        }
+    };
 
     protected BookInfoBean(Parcel in) {
         name = in.readString();

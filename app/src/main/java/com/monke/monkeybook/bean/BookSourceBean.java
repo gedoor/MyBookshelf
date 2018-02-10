@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
 
@@ -17,17 +18,6 @@ import static android.text.TextUtils.isEmpty;
  */
 @Entity
 public class BookSourceBean implements Parcelable, Cloneable {
-    public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
-        @Override
-        public BookSourceBean createFromParcel(Parcel in) {
-            return new BookSourceBean(in);
-        }
-
-        @Override
-        public BookSourceBean[] newArray(int size) {
-            return new BookSourceBean[size];
-        }
-    };
     @Id
     private String bookSourceUrl;
     private String bookSourceName;
@@ -50,6 +40,19 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String ruleSearchLastChapter;
     private String ruleSearchCoverUrl;
     private String ruleSearchNoteUrl;
+
+    @Transient
+    public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
+        @Override
+        public BookSourceBean createFromParcel(Parcel in) {
+            return new BookSourceBean(in);
+        }
+
+        @Override
+        public BookSourceBean[] newArray(int size) {
+            return new BookSourceBean[size];
+        }
+    };
 
     protected BookSourceBean(Parcel in) {
         bookSourceUrl = in.readString();
