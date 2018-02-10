@@ -119,7 +119,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         item.setName(analyzeRule.getResult(bookSourceBean.getRuleSearchName()));
                         item.setNoteUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchNoteUrl()));
                         item.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchCoverUrl()));
-                        books.add(item);
+                        if (!isEmpty(item.getNoteUrl())) {
+                            books.add(item);
+                        }
                     }
                     e.onNext(books);
                 } else {
