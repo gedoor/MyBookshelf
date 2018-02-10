@@ -19,22 +19,6 @@ import org.greenrobot.greendao.identityscope.IdentityScopeType;
 public class DaoMaster extends AbstractDaoMaster {
     public static final int SCHEMA_VERSION = 10;
 
-    public DaoMaster(SQLiteDatabase db) {
-        this(new StandardDatabase(db));
-    }
-
-    public DaoMaster(Database db) {
-        super(db, SCHEMA_VERSION);
-        registerDaoClass(BookContentBeanDao.class);
-        registerDaoClass(BookInfoBeanDao.class);
-        registerDaoClass(BookShelfBeanDao.class);
-        registerDaoClass(BookSourceBeanDao.class);
-        registerDaoClass(ChapterListBeanDao.class);
-        registerDaoClass(DownloadChapterBeanDao.class);
-        registerDaoClass(SearchHistoryBeanDao.class);
-        registerDaoClass(SearchBookBeanDao.class);
-    }
-
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         BookContentBeanDao.createTable(db, ifNotExists);
@@ -67,6 +51,22 @@ public class DaoMaster extends AbstractDaoMaster {
         Database db = new DevOpenHelper(context, name).getWritableDb();
         DaoMaster daoMaster = new DaoMaster(db);
         return daoMaster.newSession();
+    }
+
+    public DaoMaster(SQLiteDatabase db) {
+        this(new StandardDatabase(db));
+    }
+
+    public DaoMaster(Database db) {
+        super(db, SCHEMA_VERSION);
+        registerDaoClass(BookContentBeanDao.class);
+        registerDaoClass(BookInfoBeanDao.class);
+        registerDaoClass(BookShelfBeanDao.class);
+        registerDaoClass(BookSourceBeanDao.class);
+        registerDaoClass(ChapterListBeanDao.class);
+        registerDaoClass(DownloadChapterBeanDao.class);
+        registerDaoClass(SearchHistoryBeanDao.class);
+        registerDaoClass(SearchBookBeanDao.class);
     }
 
     public DaoSession newSession() {
