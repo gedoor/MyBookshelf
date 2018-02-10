@@ -1,6 +1,5 @@
 package com.monke.monkeybook.model.content;
 
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.monke.monkeybook.help.FormatWebText;
