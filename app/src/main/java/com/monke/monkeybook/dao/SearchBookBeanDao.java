@@ -19,10 +19,25 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
 
     public static final String TABLENAME = "SEARCH_BOOK_BEAN";
 
+    /**
+     * Properties of entity SearchBookBean.<br/>
+     * Can be used for QueryBuilder and for referencing column names.
+     */
+    public static class Properties {
+        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", true, "NOTE_URL");
+        public final static Property CoverUrl = new Property(1, String.class, "coverUrl", false, "COVER_URL");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Author = new Property(3, String.class, "author", false, "AUTHOR");
+        public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
+        public final static Property Kind = new Property(5, String.class, "kind", false, "KIND");
+        public final static Property Origin = new Property(6, String.class, "origin", false, "ORIGIN");
+        public final static Property Desc = new Property(7, String.class, "desc", false, "DESC");
+    }
+
+
     public SearchBookBeanDao(DaoConfig config) {
         super(config);
     }
-
 
     public SearchBookBeanDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
@@ -141,7 +156,7 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
-    }
+    }    
 
     @Override
     public SearchBookBean readEntity(Cursor cursor, int offset) {
@@ -192,21 +207,6 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
     @Override
     protected final boolean isEntityUpdateable() {
         return true;
-    }
-
-    /**
-     * Properties of entity SearchBookBean.<br/>
-     * Can be used for QueryBuilder and for referencing column names.
-     */
-    public static class Properties {
-        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", true, "NOTE_URL");
-        public final static Property CoverUrl = new Property(1, String.class, "coverUrl", false, "COVER_URL");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Author = new Property(3, String.class, "author", false, "AUTHOR");
-        public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
-        public final static Property Kind = new Property(5, String.class, "kind", false, "KIND");
-        public final static Property Origin = new Property(6, String.class, "origin", false, "ORIGIN");
-        public final static Property Desc = new Property(7, String.class, "desc", false, "DESC");
     }
     
 }
