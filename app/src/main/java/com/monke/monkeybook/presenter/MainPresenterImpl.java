@@ -69,6 +69,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfList = getAllBookShelf();
             e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
+            e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,6 +107,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             } else {
                 e.onNext(false);
             }
+            e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -133,6 +135,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
             e.onNext(true);
+            e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -274,7 +277,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
-    public void hadddOrRemoveBook(BookShelfBean bookShelfBean) {
+    public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false);
     }
 }
