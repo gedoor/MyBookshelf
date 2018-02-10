@@ -20,10 +20,10 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
+import com.monke.monkeybook.help.RxBusTag;
 
 import java.util.List;
 

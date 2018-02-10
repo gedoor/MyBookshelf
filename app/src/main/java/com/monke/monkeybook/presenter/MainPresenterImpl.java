@@ -15,7 +15,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
@@ -23,6 +22,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -33,14 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.SerializedObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
@@ -197,31 +193,12 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         WebBookModelImpl.getInstance()
                 .getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+                .flatMap(this::saveBookToShelfO)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
-                        saveBookToShelf(value);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void saveBookToShelf(BookShelfBean bookShelfBean) {
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            BookShelf.saveBookToShelf(bookShelfBean);
-            e.onNext(bookShelfBean);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
                         //成功   //发送RxBus
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
                         Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
@@ -229,7 +206,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "保存书籍失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mView.getContext(), "添加书籍失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -276,11 +253,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelfBean.getChapterList());
-            if (bookShelfBean.getHasUpdate()) {
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-            }
+            BookShelf.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
             e.onComplete();
         });
