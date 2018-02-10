@@ -238,7 +238,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             temp.setDurChapterName(analyzeRule.getResult(bookSourceBean.getRuleChapterName()));
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
-            if (!isEmpty(temp.getDurChapterUrl())) {
+            if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
                 chapterBeans.add(temp);
             }
         }
