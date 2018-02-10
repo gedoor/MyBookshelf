@@ -12,7 +12,7 @@ import static android.text.TextUtils.isEmpty;
  * 搜索URL规则解析
  */
 
-public class AnalyzeSearchUrl {
+class AnalyzeSearchUrl {
     private String searchUrl;
     private String searchPath;
     private Map<String, String> queryMap;
@@ -20,7 +20,7 @@ public class AnalyzeSearchUrl {
     private int searchPage;
     private String charCode = "utf-8";
 
-    public AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
+    AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
         searchKey = key;
         searchPage = page;
         String[] ruleUrlS = ruleUrl.split("\\|");
@@ -82,15 +82,15 @@ public class AnalyzeSearchUrl {
         searchPath = url.getPath();
     }
 
-    public String getSearchUrl() {
+    String getSearchUrl() {
         return searchUrl;
     }
 
-    public String getSearchPath() {
+    String getSearchPath() {
         return searchPath;
     }
 
-    public Map<String, String> getQueryMap() {
+    Map<String, String> getQueryMap() {
         return queryMap;
     }
 }
