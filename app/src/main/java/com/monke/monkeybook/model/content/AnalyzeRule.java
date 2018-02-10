@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model.content;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.monke.monkeybook.help.FormatWebText;
@@ -22,20 +23,38 @@ import static android.text.TextUtils.isEmpty;
  * 书源规则解析
  */
 
-public class AnalyzeRule {
+class AnalyzeRule {
     private String baseURI;
     private Element element;
 
-    public AnalyzeRule(Element element, String baseURI) {
+    AnalyzeRule(Element element, String baseURI) {
         this.element = element;
         this.baseURI = baseURI;
     }
 
-    public static Elements getElements(Element temp, String rule) {
+    /**
+     * 获取
+     */
+    static Elements getElements(Element temp, String rule) {
         Elements elements = new Elements();
         if (temp == null || isEmpty(rule)) {
             return elements;
         }
+        String[] ruleStrS = rule.split("\\|");
+        for (String ruleStr : ruleStrS) {
+            elements = getElementsSingle(temp, ruleStr);
+            if (elements.size() > 0) {
+                break;
+            }
+        }
+        return elements;
+    }
+
+    /**
+     * 获取Elements按照一个规则
+     */
+    private static Elements getElementsSingle(Element temp, String rule) {
+        Elements elements = new Elements();
         try {
             String[] rs = rule.split("@");
             if (rs.length > 1) {
@@ -74,7 +93,7 @@ public class AnalyzeRule {
                     String[] rulePcs = rulePc[1].split(":");
                     for (String pc : rulePcs) {
                         if (pc.equals("%")) {
-                            elements.set(elements.size()-1, null);
+                            elements.set(elements.size() - 1, null);
                         } else {
                             elements.set(Integer.parseInt(pc), null);
                         }
@@ -88,14 +107,24 @@ public class AnalyzeRule {
             e.printStackTrace();
             Log.e("getElements", e.getMessage());
         }
-        return  elements;
+        return elements;
     }
 
-    public String getResult(String ruleStr) {
+    /**
+     * 合并内容列表,得到内容
+     */
+    String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
         }
-        List<String> textS = getResultList(ruleStr);
+        String[] ruleStrS = ruleStr.split("\\|");
+        List<String> textS = null;
+        for (String ruleStrX : ruleStrS) {
+            textS = getResultList(ruleStrX);
+            if (textS != null) {
+                break;
+            }
+        }
         if (textS == null) {
             return null;
         }
@@ -116,7 +145,10 @@ public class AnalyzeRule {
         return content.toString();
     }
 
-    public List<String> getResultList(String ruleStr) {
+    /**
+     * 获取内容列表
+     */
+    private List<String> getResultList(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
         }
@@ -126,7 +158,7 @@ public class AnalyzeRule {
         for (int i = 0; i < rules.length - 1; i++) {
             Elements es = new Elements();
             for (Element elt : elements) {
-                es.addAll(getElements(elt, rules[i]));
+                es.addAll(getElementsSingle(elt, rules[i]));
             }
             elements.clear();
             elements = es;
@@ -134,9 +166,15 @@ public class AnalyzeRule {
         if (elements.isEmpty()) {
             return null;
         }
+        return getResultLast(elements, rules[rules.length - 1]);
+    }
+
+    /**
+     * 根据最后一个规则获取内容
+     */
+    private List<String> getResultLast(Elements elements, String lastRule) {
         try {
             List<String> textS = new ArrayList<>();
-            String lastRule = rules[rules.length - 1];
             switch (lastRule) {
                 case "text":
                     for (Element element : elements) {
@@ -168,12 +206,12 @@ public class AnalyzeRule {
     /**
      * 获取绝对地址
      */
-    private static String getAbsoluteURL(String baseURI, String relativePath){
-        String abURL=relativePath;
+    private static String getAbsoluteURL(String baseURI, String relativePath) {
+        String abURL = relativePath;
         try {
-            URI base=new URI(baseURI);//基本网页URI
-            URI abs=base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
-            URL absURL=abs.toURL();//转成URL
+            URI base = new URI(baseURI);//基本网页URI
+            URI abs = base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
+            URL absURL = abs.toURL();//转成URL
             abURL = absURL.toString();
         } catch (MalformedURLException | URISyntaxException e) {
             e.printStackTrace();

@@ -36,7 +36,7 @@ public class DataBackup {
 
     public void run() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            FileHelper.createDirIfNotExist(Environment.getExternalStorageDirectory().getPath(), "Document");
+            FileHelper.createDirIfNotExist(Environment.getExternalStorageDirectory().getPath(), "Documents");
             File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             if (file == null) {
                 e.onNext(false);

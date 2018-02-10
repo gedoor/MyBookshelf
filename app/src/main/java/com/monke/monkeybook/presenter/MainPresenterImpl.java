@@ -202,9 +202,13 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
-                        //成功   //发送RxBus
-                        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
-                        Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
+                        if (value.getBookInfoBean().getChapterUrl() == null) {
+                            Toast.makeText(mView.getContext(), "添加书籍失败", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //成功   //发送RxBus
+                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
+                            Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -237,12 +241,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
+                        if (bookShelfBean.getBookInfoBean().getChapterUrl() == null) {
+                            Toast.makeText(mView.getContext(), bookShelfBean.getBookInfoBean().getName() + "更新失败", Toast.LENGTH_SHORT).show();
+                        }
                         mView.refreshRecyclerViewItemAdd();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.refreshRecyclerViewItemAdd();
+                        queryBookShelf(false);
+                        mView.refreshFinish();
                         Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 

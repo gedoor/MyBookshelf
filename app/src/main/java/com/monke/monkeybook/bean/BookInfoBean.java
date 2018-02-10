@@ -18,9 +18,6 @@ import java.util.List;
  */
 @Entity
 public class BookInfoBean implements Parcelable,Cloneable{
-
-    @Transient
-    public static final long REFRESH_DUR = 10*60*1000;
     @Transient
     public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
         @Override

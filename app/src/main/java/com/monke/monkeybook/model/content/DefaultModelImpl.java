@@ -76,13 +76,19 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
         if (!initBookSourceBean()) {
-            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+            return Observable.create(emitter -> {
+                emitter.onNext(new ArrayList<>());
+                emitter.onComplete();
+            });
         }
         Boolean isPost = bookSourceBean.getRuleSearchUrl().contains("@");
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
-                return Observable.error(new Throwable(String.format("搜索规则错误%s", TAG)));
+                return Observable.create(emitter -> {
+                    emitter.onNext(new ArrayList<>());
+                    emitter.onComplete();
+                });
             }
             if (isPost) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
@@ -97,7 +103,10 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return Observable.error(new Throwable(String.format("搜索规则错误%s", TAG)));
+            return Observable.create(emitter -> {
+                emitter.onNext(new ArrayList<>());
+                emitter.onComplete();
+            });
         }
     }
 
@@ -189,7 +198,12 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         if (!initBookSourceBean()) {
-            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+            return Observable.create(emitter -> {
+                bookShelfBean.getBookInfoBean().setChapterUrl(null);
+                bookShelfBean.getBookInfoBean().setChapterList(null);
+                emitter.onNext(bookShelfBean);
+                emitter.onComplete();
+            });
         }
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
@@ -237,7 +251,10 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
         if (!initBookSourceBean()) {
-            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+            return Observable.create(emitter -> {
+                emitter.onNext(new BookContentBean());
+                emitter.onComplete();
+            });
         }
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
