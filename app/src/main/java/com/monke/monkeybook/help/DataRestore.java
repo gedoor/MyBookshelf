@@ -26,8 +26,8 @@ public class DataRestore  {
     public Boolean run() throws Exception{
         File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         if (file != null) {
-            restoreBookShelf(file);
             restoreBookSource(file);
+            restoreBookShelf(file);
             restoreSearchHistory(file);
             return true;
         }

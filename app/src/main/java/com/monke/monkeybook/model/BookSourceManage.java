@@ -68,11 +68,10 @@ public class BookSourceManage {
     }
 
     public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
-        refreshBookSource();
         for (BookSourceBean bookSourceBean : bookSourceBeans) {
             addBookSource(bookSourceBean);
         }
-        BookSourceManage.refreshBookSource();
+        refreshBookSource();
     }
 
     public static void addBookSource(BookSourceBean bookSourceBean) {
