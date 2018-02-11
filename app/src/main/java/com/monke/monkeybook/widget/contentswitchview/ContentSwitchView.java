@@ -7,6 +7,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -511,11 +512,13 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     }
 
     private void noPre() {
-        Toast.makeText(getContext(), "没有上一页", Toast.LENGTH_SHORT).show();
+        Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     private void noNext() {
-        Toast.makeText(getContext(), "没有下一页", Toast.LENGTH_SHORT).show();
+        Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
+                .show();
         if (readAloud) {
             loadDataListener.stopAloud();
         }
