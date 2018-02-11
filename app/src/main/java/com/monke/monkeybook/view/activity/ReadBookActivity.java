@@ -70,7 +70,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     FrameLayout flContent;
     @BindView(R.id.csv_book)
     ContentSwitchView csvBook;
-    //主菜单
     @BindView(R.id.fl_menu)
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
@@ -337,7 +336,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void stopAloud() {
-                stopAloudService();
+                pauseAloudService();
             }
         };
     }
@@ -660,11 +659,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mPresenter.saveProgress();
     }
 
-    private void stopAloudService() {
+    private void pauseAloudService() {
         Intent intent = new Intent(this, ReadAloudService.class);
-        intent.setAction(ActionDoneService);
+        intent.setAction(ActionPauseService);
         startService(intent);
-        Toast.makeText(this, R.string.aloud_stop, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -679,8 +678,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     return true;
                 } else if (chapterListView.dismissChapterList()) {
                     return true;
-                } else if (csvBook.getReadAloud()) {
-                    stopAloudService();
+                } else if (aloudStatus == PLAY) {
+                    pauseAloudService();
                     return true;
                 } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
