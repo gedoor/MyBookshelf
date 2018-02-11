@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
@@ -15,11 +16,16 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
+import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
 
 public class ContentSwitchView extends FrameLayout implements BookContentView.SetDataListener {
     public final static int NONE = -1;
@@ -518,9 +524,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private void noNext() {
         Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
                 .show();
-        if (readAloud) {
-            loadDataListener.stopAloud();
-        }
+        Intent intent = new Intent(MApplication.getInstance(), ReadAloudService.class);
+        intent.setAction(ActionDoneService);
+        MApplication.getInstance().startService(intent);
     }
 
     public Paint getTextPaint() {
