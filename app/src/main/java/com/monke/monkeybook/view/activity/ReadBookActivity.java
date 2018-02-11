@@ -334,10 +334,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 aloudButton = false;
             }
 
-            @Override
-            public void stopAloud() {
-                pauseAloudService();
-            }
         };
     }
 
