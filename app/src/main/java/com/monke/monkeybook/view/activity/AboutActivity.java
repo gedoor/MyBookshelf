@@ -70,9 +70,10 @@ public class AboutActivity extends MBaseActivity {
     TextView tvQq;
     @BindView(R.id.vw_qq)
     CardView vwQq;
+    @BindView(R.id.vw_source_share)
+    CardView vwSourceShare;
 
     private Animation animIn;
-    private Animation animOut;
     private String qq = "701903217";
 
     @Override
@@ -93,7 +94,7 @@ public class AboutActivity extends MBaseActivity {
     @Override
     protected void initData() {
         animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+        Animation animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
     }
 
     @Override
@@ -111,24 +112,13 @@ public class AboutActivity extends MBaseActivity {
             Intent intent = new Intent(this, DonateActivity.class);
             startActivity(intent);
         });
-        vwScoring.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName());
-        });
-        vwMail.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com");
-        });
-        vwGit.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL");
-        });
-        vwSourceRule.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/sourcerule.html");
-        });
-        vwDisclaimer.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/disclaimer.html");
-        });
-        vwUpdate.setOnClickListener(view -> {
-            openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/releases");
-        });
+        vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
+        vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
+        vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL"));
+        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/sourcerule.html"));
+        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/disclaimer.html"));
+        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/releases"));
+        vwSourceShare.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://pan.baidu.com/s/1i6QHi77"));
         tvQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, qq);
