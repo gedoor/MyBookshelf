@@ -13,11 +13,8 @@ import org.greenrobot.greendao.annotation.Transient;
 public class SearchBookBean implements Parcelable{
     @Id
     private String noteUrl;
-
     private String coverUrl;
-
     private String name;
-
     private String author;
     @Transient
     private long words;
@@ -27,13 +24,9 @@ public class SearchBookBean implements Parcelable{
     private String lastChapter;
     @Transient
     private Boolean isAdd = false;
-
     private String tag;
-
     private String kind;
-
     private String origin;
-
     private String desc;
 
     public SearchBookBean(){
