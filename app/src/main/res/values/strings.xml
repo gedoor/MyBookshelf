@@ -2,7 +2,8 @@
     <string name="app_name">阅读</string>
     <string name="update_log">
     更新日志\n
-        解决了一些说了你也不懂的bug
+        解决了一些说了你也不懂的bug\n
+        搜索直接跳到书籍页面的网站也支持了
     </string>
 
     <string name="bookshelf_empty">书架还空着，先去添加吧！</string>

@@ -145,7 +145,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .searchBook("/search.htm", queryMap)
-                .flatMap(this::analyzeSearchBook);
+                .flatMap(response -> analyzeSearchBook(response.body()));
     }
 
     private Observable<List<SearchBookBean>> analyzeSearchBook(final String s) {

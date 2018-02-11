@@ -3,6 +3,7 @@ package com.monke.monkeybook.model.impl;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.QueryMap;
@@ -28,6 +29,6 @@ public interface IHttpGetApi {
             "Keep-Alive:300",
             "Connection:Keep-Alive",
             "Cache-Control:no-cache"})
-    Observable<String> searchBook(@Url String url, @QueryMap(encoded = true) Map<String, String> queryMap);
+    Observable<Response<String>> searchBook(@Url String url, @QueryMap(encoded = true) Map<String, String> queryMap);
 
 }

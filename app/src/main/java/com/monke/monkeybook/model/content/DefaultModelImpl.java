@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -94,12 +95,12 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpPostApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
-                        .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
+                        .flatMap(this::analyzeSearchBook);
             } else {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
-                        .flatMap(s -> analyzeSearchBook(s, analyzeSearchUrl.getSearchUrl() + analyzeSearchUrl.getSearchPath()));
+                        .flatMap(this::analyzeSearchBook);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,10 +111,17 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         }
     }
 
-    private Observable<List<SearchBookBean>> analyzeSearchBook(final String s, final String baseURI) {
+    private Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             try {
-                Document doc = Jsoup.parse(s);
+                String baseURI;
+                okhttp3.Response networkResponse = response.raw().networkResponse();
+                if (networkResponse != null && networkResponse.request() != null) {
+                    baseURI = networkResponse.request().url().toString();
+                } else {
+                    baseURI = response.raw().request().url().toString();
+                }
+                Document doc = Jsoup.parse(response.body());
                 Elements booksE = AnalyzeRule.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     List<SearchBookBean> books = new ArrayList<>();

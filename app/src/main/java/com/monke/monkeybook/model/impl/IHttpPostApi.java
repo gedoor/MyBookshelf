@@ -3,6 +3,7 @@ package com.monke.monkeybook.model.impl;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.Response;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
@@ -23,5 +24,5 @@ public interface IHttpPostApi {
             "Keep-Alive:300",
             "Connection:Keep-Alive",
             "Cache-Control:no-cache"})
-    Observable<String> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap);
+    Observable<Response<String>> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap);
 }
