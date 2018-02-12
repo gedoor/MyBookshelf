@@ -18,7 +18,7 @@ class AnalyzeSearchUrl {
     private Map<String, String> queryMap;
     private String searchKey;
     private int searchPage;
-    private String charCode = "utf-8";
+    private String charCode;
 
     AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
         searchKey = key;
@@ -48,7 +48,7 @@ class AnalyzeSearchUrl {
             String[] gz = qt.split("=");
             if (gz[0].equals("char")) {
                 charCode = gz[1];
-                searchKey = URLEncoder.encode(searchKey, gz[1]);
+                searchKey = URLEncoder.encode(searchKey, charCode);
             }
         }
     }

@@ -13,7 +13,7 @@ import com.monke.monkeybook.bean.LibraryKindBookListBean;
 import com.monke.monkeybook.bean.LibraryNewBookBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
-import com.monke.monkeybook.cache.ACache;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IGxwztvBookModel;
