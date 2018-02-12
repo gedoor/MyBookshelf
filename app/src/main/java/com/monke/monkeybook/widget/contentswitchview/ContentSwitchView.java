@@ -516,11 +516,17 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         return durPageView;
     }
 
+    /**
+     * 没有上一页
+     */
     private void noPre() {
         Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT)
                 .show();
     }
 
+    /**
+     * 没有下一页
+     */
     private void noNext() {
         Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
                 .show();
