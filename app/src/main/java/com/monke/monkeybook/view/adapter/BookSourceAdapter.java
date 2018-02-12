@@ -22,25 +22,25 @@ import java.util.List;
  */
 
 public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.MyViewHolder> {
-    private List<BookSourceBean> bookSourceBeanList;
+    private List<BookSourceBean> dataList;
     private BookSourceActivity activity;
 
     public BookSourceAdapter(BookSourceActivity activity) {
         this.activity = activity;
     }
 
-    public void addBookSource(List<BookSourceBean> bookSourceBeanList) {
-        this.bookSourceBeanList = bookSourceBeanList;
+    public void addDataS(List<BookSourceBean> bookSourceBeanList) {
+        this.dataList = bookSourceBeanList;
         notifyDataSetChanged();
     }
 
-    public void resetBookSource(List<BookSourceBean> bookSourceBeanList) {
-        this.bookSourceBeanList = bookSourceBeanList;
+    public void resetDataS(List<BookSourceBean> bookSourceBeanList) {
+        this.dataList = bookSourceBeanList;
         notifyDataSetChanged();
     }
 
     public List<BookSourceBean> getBookSourceBeanList() {
-        return bookSourceBeanList;
+        return dataList;
     }
 
     @Override
@@ -51,45 +51,45 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bookSource.setText(bookSourceBeanList.get(position).getBookSourceName());
-        holder.bookSource.setChecked(bookSourceBeanList.get(position).getEnable());
-        holder.bookSource.setOnClickListener((View view) -> {
-            bookSourceBeanList.get(position).setEnable(holder.bookSource.isChecked());
+        holder.cbView.setText(dataList.get(position).getBookSourceName());
+        holder.cbView.setChecked(dataList.get(position).getEnable());
+        holder.cbView.setOnClickListener((View view) -> {
+            dataList.get(position).setEnable(holder.cbView.isChecked());
         });
-        holder.editSource.setOnClickListener(view -> {
+        holder.editView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, SourceEditActivity.class);
             String key = String.valueOf(System.currentTimeMillis());
             intent.putExtra("data_key", key);
             try {
-                BitIntentDataManager.getInstance().putData(key, bookSourceBeanList.get(position).clone());
+                BitIntentDataManager.getInstance().putData(key, dataList.get(position).clone());
             } catch (CloneNotSupportedException e) {
-                BitIntentDataManager.getInstance().putData(key, bookSourceBeanList.get(position));
+                BitIntentDataManager.getInstance().putData(key, dataList.get(position));
                 e.printStackTrace();
             }
             activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
         });
-        holder.delSource.setOnClickListener(view -> {
-            activity.delBookSource(bookSourceBeanList.get(position));
-            bookSourceBeanList.remove(position);
+        holder.delView.setOnClickListener(view -> {
+            activity.delBookSource(dataList.get(position));
+            dataList.remove(position);
             notifyDataSetChanged();
         });
     }
 
     @Override
     public int getItemCount() {
-        return bookSourceBeanList.size();
+        return dataList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        CheckBox bookSource;
-        ImageView editSource;
-        ImageView delSource;
+        CheckBox cbView;
+        ImageView editView;
+        ImageView delView;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            bookSource = itemView.findViewById(R.id.cb_book_source);
-            editSource = itemView.findViewById(R.id.iv_edit_source);
-            delSource = itemView.findViewById(R.id.iv_del_source);
+            cbView = itemView.findViewById(R.id.cb_book_source);
+            editView = itemView.findViewById(R.id.iv_edit_source);
+            delView = itemView.findViewById(R.id.iv_del_source);
         }
     }
 }

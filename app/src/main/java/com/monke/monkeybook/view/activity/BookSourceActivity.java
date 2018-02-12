@@ -41,12 +41,12 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     Toolbar toolbar;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    @BindView(R.id.rv_book_source_list)
-    RecyclerView recyclerViewBookSource;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     private Animation animIn;
     private Animation animOut;
-    private BookSourceAdapter bookSourceAdapter;
+    private BookSourceAdapter adapter;
     ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
@@ -62,11 +62,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             //直接按照文档来操作啊，这文档写得太给力了,简直完美！
-            bookSourceAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            bookSourceAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-            bookSourceAdapter.notifyItemChanged(target.getAdapterPosition());
+            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+            adapter.notifyItemChanged(target.getAdapterPosition());
             //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
-            Collections.swap(bookSourceAdapter.getBookSourceBeanList(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            Collections.swap(adapter.getBookSourceBeanList(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
 
@@ -95,7 +95,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onPause() {
         super.onPause();
-        saveDate(bookSourceAdapter.getBookSourceBeanList());
+        saveDate(adapter.getBookSourceBeanList());
     }
 
     @Override
@@ -113,21 +113,21 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     private void initRecyclerView() {
-        recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
-        bookSourceAdapter = new BookSourceAdapter(this);
-        recyclerViewBookSource.setAdapter(bookSourceAdapter);
-        bookSourceAdapter.addBookSource(BookSourceManage.getAllBookSource());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new BookSourceAdapter(this);
+        recyclerView.setAdapter(adapter);
+        adapter.addDataS(BookSourceManage.getAllBookSource());
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void resetBookSource() {
-        bookSourceAdapter.resetBookSource(BookSourceManage.saveBookSourceToDb());
+        adapter.resetDataS(BookSourceManage.saveBookSourceToDb());
     }
 
     @Override
     public void refreshBookSource() {
-        bookSourceAdapter.resetBookSource(BookSourceManage.getAllBookSource());
+        adapter.resetDataS(BookSourceManage.getAllBookSource());
     }
 
     public void delBookSource(BookSourceBean bookSource) {
