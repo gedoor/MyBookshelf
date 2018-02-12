@@ -44,6 +44,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    private boolean selectAll = true;
     private Animation animIn;
     private Animation animOut;
     private BookSourceAdapter adapter;
@@ -125,6 +126,14 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         adapter.resetDataS(BookSourceManage.saveBookSourceToDb());
     }
 
+    private void selectAllDataS() {
+        for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
+            bookSourceBean.setEnable(selectAll);
+        }
+        adapter.notifyDataSetChanged();
+        selectAll = !selectAll;
+    }
+
     @Override
     public void refreshBookSource() {
         adapter.resetDataS(BookSourceManage.getAllBookSource());
@@ -176,6 +185,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         switch (id) {
             case R.id.action_add_book_source:
                 addBookSource();
+                break;
+            case R.id.action_select_all:
+                selectAllDataS();
                 break;
             case R.id.action_import_book_source:
                 selectBookSourceFile();

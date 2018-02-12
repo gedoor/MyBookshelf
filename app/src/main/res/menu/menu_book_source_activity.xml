@@ -10,6 +10,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_done_all_black_24dp"
+        android:title="@string/select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_import_book_source"
         android:icon="@drawable/ic_settings_ethernet_black_24dp"
         android:title="@string/import_book_source"

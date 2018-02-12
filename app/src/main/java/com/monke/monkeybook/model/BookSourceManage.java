@@ -5,6 +5,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
+import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.util.ArrayList;
@@ -172,6 +173,8 @@ public class BookSourceManage {
         switch (tag) {
             case BookShelfBean.LOCAL_TAG:
                 return null;
+            case GxwztvBookModelImpl.TAG:
+                return GxwztvBookModelImpl.getInstance();
             default:
                 return DefaultModelImpl.getInstance(tag);
         }
