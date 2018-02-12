@@ -19,17 +19,22 @@ public class ReplaceRuleBean implements Parcelable {
     private String regex;
     private String replacement;
 
+    private Boolean enable;
+
     private ReplaceRuleBean(Parcel in) {
         regex = in.readString();
         replacement = in.readString();
         replaceSummary = in.readString();
+        enable = in.readByte() != 0;
     }
 
-    @Generated(hash = 533850999)
-    public ReplaceRuleBean(String replaceSummary, String regex, String replacement) {
+    @Generated(hash = 1696217036)
+    public ReplaceRuleBean(String replaceSummary, String regex, String replacement,
+                           Boolean enable) {
         this.replaceSummary = replaceSummary;
         this.regex = regex;
         this.replacement = replacement;
+        this.enable = enable;
     }
 
     @Generated(hash = 582692869)
@@ -41,6 +46,7 @@ public class ReplaceRuleBean implements Parcelable {
         parcel.writeString(regex);
         parcel.writeString(replacement);
         parcel.writeString(replaceSummary);
+        parcel.writeByte((byte) (enable ? 1 : 0));
     }
 
     @Transient
@@ -83,6 +89,14 @@ public class ReplaceRuleBean implements Parcelable {
 
     public void setReplacement(String replacement) {
         this.replacement = replacement;
+    }
+
+    public Boolean getEnable() {
+        return this.enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 
 }
