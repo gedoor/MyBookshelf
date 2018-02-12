@@ -31,7 +31,12 @@ public class EditReplaceRuleView {
         this.context = moProgressView.getContext();
         bindView();
         tvOk.setOnClickListener(view -> {
-
+            ReplaceRuleBean replaceRuleBean = new ReplaceRuleBean();
+            replaceRuleBean.setEnable(true);
+            replaceRuleBean.setReplaceSummary("");
+            replaceRuleBean.setRegex("");
+            replaceRuleBean.setReplacement("");
+            saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
     }

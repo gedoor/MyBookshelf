@@ -76,10 +76,10 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
         if (replacement != null) {
             stmt.bindString(3, replacement);
         }
-
+ 
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(4, enable ? 1L : 0L);
+            stmt.bindLong(4, enable ? 1L: 0L);
         }
     }
 
@@ -101,10 +101,10 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
         if (replacement != null) {
             stmt.bindString(3, replacement);
         }
-
+ 
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(4, enable ? 1L : 0L);
+            stmt.bindLong(4, enable ? 1L: 0L);
         }
     }
 

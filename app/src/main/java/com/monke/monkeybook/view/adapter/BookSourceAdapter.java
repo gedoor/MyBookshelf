@@ -14,6 +14,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     public BookSourceAdapter(BookSourceActivity activity) {
         this.activity = activity;
+        dataList = new ArrayList<>();
     }
 
     public void addDataS(List<BookSourceBean> bookSourceBeanList) {

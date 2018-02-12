@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
@@ -65,17 +66,16 @@ public class ReplaceRuleActivity extends MBaseActivity {
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReplaceRuleAdapter(this);
         recyclerViewBookSource.setAdapter(adapter);
-
-
+        adapter.resetDataS(ReplaceRuleManage.getAll());
     }
 
-    private void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
+    public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
         moProgressHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
 
         });
     }
 
-    private void delData(ReplaceRuleBean replaceRuleBean) {
+    public void delData(ReplaceRuleBean replaceRuleBean) {
 
     }
 

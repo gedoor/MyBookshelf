@@ -16,6 +16,7 @@ import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +30,11 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
     public ReplaceRuleAdapter(ReplaceRuleActivity activity) {
         this.activity = activity;
+        dataList = new ArrayList<>();
     }
 
     public void addDataS(List<ReplaceRuleBean> dataList) {
-        this.dataList = dataList;
+        this.dataList.addAll(dataList);
         notifyDataSetChanged();
     }
 
@@ -47,13 +49,25 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_book_source_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_replace_rule_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
+        holder.checkBox.setText(dataList.get(position).getReplaceSummary());
+        holder.checkBox.setChecked(dataList.get(position).getEnable());
+        holder.checkBox.setOnClickListener((View view) -> {
+            dataList.get(position).setEnable(holder.checkBox.isChecked());
+        });
+        holder.editView.setOnClickListener(view -> {
+            activity.editReplaceRule(dataList.get(position));
+        });
+        holder.delView.setOnClickListener(view -> {
+            activity.delData(dataList.get(position));
+            dataList.remove(position);
+            notifyDataSetChanged();
+        });
     }
 
     @Override
