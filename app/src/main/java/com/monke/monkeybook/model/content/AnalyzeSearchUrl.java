@@ -27,7 +27,10 @@ class AnalyzeSearchUrl {
         if (ruleUrlS.length > 1) {
             analyzeQt(ruleUrlS[1]);
         }
-        ruleUrlS = ruleUrlS[0].split("\\?|@");
+        ruleUrlS = ruleUrlS[0].split("@");
+        if (ruleUrlS.length == 1) {
+            ruleUrlS = ruleUrlS[0].split("\\?");
+        }
         if (ruleUrlS.length == 1) {
             String url = ruleUrlS[0].replace("searchKey", key)
                     .replace("searchPage-1", String.valueOf(page - 1))
@@ -36,7 +39,7 @@ class AnalyzeSearchUrl {
             return;
         }
         generateUrlPath(ruleUrlS[0]);
-        generateQueryMap(ruleUrlS[1]);
+        queryMap = getQueryMap(ruleUrlS[1]);
     }
 
     private void analyzeQt(final String qtRule) throws Exception {
@@ -50,36 +53,37 @@ class AnalyzeSearchUrl {
         }
     }
 
-    private void generateQueryMap(String allQuery)  throws Exception{
+    private Map<String, String> getQueryMap(String allQuery) throws Exception {
         String[] queryS = allQuery.split("&");
-        queryMap = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
             switch (queryM[1]) {
                 case "searchKey":
-                    queryMap.put(queryM[0], searchKey);
+                    map.put(queryM[0], searchKey);
                     break;
                 case "searchPage":
-                    queryMap.put(queryM[0], String.valueOf(searchPage));
+                    map.put(queryM[0], String.valueOf(searchPage));
                     break;
                 case "searchPage-1":
-                    queryMap.put(queryM[0], String.valueOf(searchPage - 1));
+                    map.put(queryM[0], String.valueOf(searchPage - 1));
                     break;
                 default:
                     if (isEmpty(charCode)) {
-                        queryMap.put(queryM[0], queryM[1]);
+                        map.put(queryM[0], queryM[1]);
                     } else {
-                        queryMap.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
+                        map.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
                     }
                     break;
             }
         }
+        return map;
     }
 
     private void generateUrlPath(String ruleUrl) throws Exception {
         URL url = new URL(ruleUrl);
         searchUrl = String.format("%s://%s", url.getProtocol(), url.getHost());
-        searchPath = url.getPath();
+        searchPath = ruleUrl.replace(searchUrl, "");
     }
 
     String getSearchUrl() {

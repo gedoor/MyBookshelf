@@ -8,6 +8,9 @@ package com.monke.monkeybook.help;
 public class FormatWebText {
 
     public static String getContent(String str) {
+        if (str == null) {
+            return null;
+        }
         return str
                 .replaceAll(" ", "")
                 .replaceAll(" ", "")
@@ -20,6 +23,9 @@ public class FormatWebText {
     }
 
     public static String getAuthor(String str) {
+        if (str == null) {
+            return null;
+        }
         return str
                 .replaceAll(" ", "")
                 .replaceAll("  ", "")

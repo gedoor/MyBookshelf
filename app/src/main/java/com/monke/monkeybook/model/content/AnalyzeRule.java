@@ -32,7 +32,7 @@ class AnalyzeRule {
     }
 
     /**
-     * 获取
+     * 获取Elements
      */
     static Elements getElements(Element temp, String rule) {
         Elements elements = new Elements();
