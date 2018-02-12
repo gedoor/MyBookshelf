@@ -19,7 +19,6 @@ public class ReplaceRuleBean implements Parcelable {
     private String regex;
     private String replacement;
 
-
     private ReplaceRuleBean(Parcel in) {
         regex = in.readString();
         replacement = in.readString();
