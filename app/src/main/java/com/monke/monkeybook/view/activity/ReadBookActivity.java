@@ -53,12 +53,12 @@ import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.Objects;
 
+import at.markushi.ui.CircleButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
-import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionResumeService;
@@ -66,6 +66,7 @@ import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
+    public static final int ResultReplace = 101;
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.csv_book)
@@ -105,7 +106,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.clp_chapterlist)
     ChapterListView chapterListView;
     @BindView(R.id.ib_read_aloud)
-    ImageView ibReadAloud;
+    CircleButton ibReadAloud;
+    @BindView(R.id.ib_replace_rule)
+    CircleButton ibReplaceRule;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -446,18 +449,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //是否添加书架
         checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
                 new CheckAddShelfPop.OnItemClickListener() {
-            @Override
-            public void clickExit() {
-                mPresenter.removeFromShelf();
-                finish();
-            }
+                    @Override
+                    public void clickExit() {
+                        mPresenter.removeFromShelf();
+                        finish();
+                    }
 
-            @Override
-            public void clickAddShelf() {
-                mPresenter.addToShelf(null);
-                checkAddShelfPop.dismiss();
-            }
-        });
+                    @Override
+                    public void clickAddShelf() {
+                        mPresenter.addToShelf(null);
+                        checkAddShelfPop.dismiss();
+                    }
+                });
         //目录
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
                 .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
@@ -586,6 +589,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
                     }
             }
+        });
+
+        //替换
+        ibReplaceRule.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ReplaceRuleActivity.class);
+            startActivityForResult(intent, ResultReplace);
         });
 
         //上一章
