@@ -20,7 +20,6 @@ public class EditReplaceRuleView {
     private TextInputEditText tieReplaceSummary;
     private TextInputEditText tieReplaceRule;
     private TextInputEditText tieReplaceTo;
-    private View tvOk;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -35,15 +34,6 @@ public class EditReplaceRuleView {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
-        tvOk.setOnClickListener(view -> {
-            ReplaceRuleBean replaceRuleBean = new ReplaceRuleBean();
-            replaceRuleBean.setEnable(true);
-            replaceRuleBean.setReplaceSummary(tieReplaceSummary.getText().toString());
-            replaceRuleBean.setRegex(tieReplaceRule.getText().toString());
-            replaceRuleBean.setReplacement(tieReplaceTo.getText().toString());
-            saveReplaceRule.saveReplaceRule(replaceRuleBean);
-            moProgressHUD.dismiss();
-        });
     }
 
     void showEditReplaceRule(ReplaceRuleBean replaceRuleBean, final OnSaveReplaceRule saveReplaceRule, MoProgressHUD moProgressHUD) {
@@ -73,7 +63,17 @@ public class EditReplaceRuleView {
         tieReplaceRule = moProgressView.findViewById(R.id.tie_replace_rule);
         tieReplaceSummary = moProgressView.findViewById(R.id.tie_replace_summary);
         tieReplaceTo = moProgressView.findViewById(R.id.tie_replace_to);
-        tvOk = moProgressView.findViewById(R.id.tv_ok);
+
+        View tvOk = moProgressView.findViewById(R.id.tv_ok);
+        tvOk.setOnClickListener(view -> {
+            ReplaceRuleBean replaceRuleBean = new ReplaceRuleBean();
+            replaceRuleBean.setEnable(true);
+            replaceRuleBean.setReplaceSummary(tieReplaceSummary.getText().toString());
+            replaceRuleBean.setRegex(tieReplaceRule.getText().toString());
+            replaceRuleBean.setReplacement(tieReplaceTo.getText().toString());
+            saveReplaceRule.saveReplaceRule(replaceRuleBean);
+            moProgressHUD.dismiss();
+        });
     }
 
     /**
