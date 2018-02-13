@@ -128,10 +128,10 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp">
 
                 <at.markushi.ui.CircleButton
                     android:id="@+id/ib_read_aloud"
@@ -140,6 +140,19 @@
                     android:src="@drawable/ic_volume_up_black_24dp"
                     app:cb_color="@color/bdp_white"
                     android:contentDescription="@string/read_aloud" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_replace_rule"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_find_replace_black_24dp"
+                    app:cb_color="@color/bdp_white"
+                    android:contentDescription="@string/replace_rule_title" />
 
             </LinearLayout>
 
