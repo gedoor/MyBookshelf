@@ -1,7 +1,10 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,8 +17,10 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
  */
 
 public class EditReplaceRuleView {
-    private EditText etUrl;
-    private TextView tvOk;
+    private TextInputEditText tieReplaceSummary;
+    private TextInputEditText tieReplaceRule;
+    private TextInputEditText tieReplaceTo;
+    private View tvOk;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -33,9 +38,9 @@ public class EditReplaceRuleView {
         tvOk.setOnClickListener(view -> {
             ReplaceRuleBean replaceRuleBean = new ReplaceRuleBean();
             replaceRuleBean.setEnable(true);
-            replaceRuleBean.setReplaceSummary("");
-            replaceRuleBean.setRegex("");
-            replaceRuleBean.setReplacement("");
+            replaceRuleBean.setReplaceSummary(tieReplaceSummary.getText().toString());
+            replaceRuleBean.setRegex(tieReplaceRule.getText().toString());
+            replaceRuleBean.setReplacement(tieReplaceTo.getText().toString());
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
@@ -45,13 +50,29 @@ public class EditReplaceRuleView {
         this.moProgressHUD = moProgressHUD;
         this.saveReplaceRule = saveReplaceRule;
 
+        if (replaceRuleBean != null) {
+            tieReplaceSummary.setText(replaceRuleBean.getReplaceSummary());
+            tieReplaceTo.setText(replaceRuleBean.getReplacement());
+            tieReplaceRule.setText(replaceRuleBean.getRegex());
+        }
     }
 
     private void bindView() {
         moProgressView.removeAllViews();
         LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_replace_rule, moProgressView, true);
 
-        etUrl = moProgressView.findViewById(R.id.et_book_url);
+        View llContent = moProgressView.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
+
+        TextInputLayout tilReplaceSummary = moProgressView.findViewById(R.id.til_replace_summary);
+        tilReplaceSummary.setHint(context.getString(R.string.replace_rule_summary));
+        TextInputLayout tilReplaceRule = moProgressView.findViewById(R.id.til_replace_rule);
+        tilReplaceRule.setHint(context.getString(R.string.replace_rule));
+        TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_replace_to);
+        tilReplaceTo.setHint(context.getString(R.string.replace_to));
+        tieReplaceRule = moProgressView.findViewById(R.id.tie_replace_rule);
+        tieReplaceSummary = moProgressView.findViewById(R.id.tie_replace_summary);
+        tieReplaceTo = moProgressView.findViewById(R.id.tie_replace_to);
         tvOk = moProgressView.findViewById(R.id.tv_ok);
     }
 

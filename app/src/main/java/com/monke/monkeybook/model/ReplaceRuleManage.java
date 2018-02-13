@@ -34,4 +34,23 @@ public class ReplaceRuleManage {
         return replaceRuleBeansAll;
     }
 
+    public static void saveData(ReplaceRuleBean replaceRuleBean) {
+        DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
+        refreshDataS();
+    }
+
+    public static void delData(ReplaceRuleBean replaceRuleBean) {
+        DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().delete(replaceRuleBean);
+        refreshDataS();
+    }
+
+    private static void refreshDataS() {
+        replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
+                .getReplaceRuleBeanDao().queryBuilder()
+                .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
+                .list();
+        replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
+                .getReplaceRuleBeanDao().queryBuilder()
+                .list();
+    }
 }

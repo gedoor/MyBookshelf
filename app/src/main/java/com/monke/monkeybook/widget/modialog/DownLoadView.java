@@ -118,6 +118,8 @@ class DownLoadView {
         moProgressView.removeAllViews();
         LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_download_choice, moProgressView, true);
 
+        View llContent = moProgressView.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
         edtStart = moProgressView.findViewById(R.id.edt_start);
         edtEnd = moProgressView.findViewById(R.id.edt_end);
         tvCancel = moProgressView.findViewById(R.id.tv_cancel);

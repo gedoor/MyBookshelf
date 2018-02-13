@@ -14,9 +14,12 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class ReplaceRuleBean implements Parcelable {
+    //描述
     private String replaceSummary;
+    //替换规则
     @Id
     private String regex;
+    //替换为
     private String replacement;
 
     private Boolean enable;

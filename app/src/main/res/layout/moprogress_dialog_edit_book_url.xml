@@ -4,6 +4,7 @@
     android:background="@color/bdp_white">
 
     <LinearLayout
+        android:id="@+id/ll_content"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"

@@ -184,6 +184,8 @@ public class ChangeSourceView {
         moProgressView.removeAllViews();
         LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_change_source, moProgressView, true);
 
+        View llContent = moProgressView.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
         atvTitle = moProgressView.findViewById(R.id.atv_title);
         ivRefresh = moProgressView.findViewById(R.id.iv_refresh);
         rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);

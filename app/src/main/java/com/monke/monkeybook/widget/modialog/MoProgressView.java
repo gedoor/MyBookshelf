@@ -3,6 +3,7 @@ package com.monke.monkeybook.widget.modialog;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,8 @@ public class MoProgressView extends LinearLayout {
     public void showInfo(String msg, final OnClickListener listener) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
+        View llContent = findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
         TextView msgTv = findViewById(R.id.msg_tv);
         msgTv.setText(msg);
         TextView tvClose = findViewById(R.id.tv_close);
@@ -56,6 +59,8 @@ public class MoProgressView extends LinearLayout {
     public void showInfo(String msg, String btnText, final OnClickListener listener) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
+        View llContent = findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
         TextView msgTv = findViewById(R.id.msg_tv);
         msgTv.setText(msg);
         TextView tvClose = findViewById(R.id.tv_close);

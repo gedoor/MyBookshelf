@@ -27,6 +27,7 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -34,6 +35,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
@@ -312,16 +314,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private Observable<List<String>> SeparateParagraphToLines(String paragraphStr, int chapterIndex) {
         return Observable.create(e -> {
             String temp = paragraphStr.substring(0, 50);
-            String contect = paragraphStr;
+            String content = paragraphStr;
             if (!temp.contains(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
-                contect = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
+                content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
+            }
+            for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
             }
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
-            Layout tempLayout = new StaticLayout(contect, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            Layout tempLayout = new StaticLayout(content, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
             List<String> linesData = new ArrayList<>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
-                linesData.add(contect.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
+                linesData.add(content.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
             e.onNext(linesData);
             e.onComplete();

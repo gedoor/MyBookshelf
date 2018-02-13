@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +14,23 @@ import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -71,12 +80,74 @@ public class ReplaceRuleActivity extends MBaseActivity {
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
         moProgressHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
+            Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+                if (replaceRuleBean != null) {
+                    DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao()
+                            .delete(replaceRuleBean);
+                }
+                ruleBean.setEnable(true);
+                ReplaceRuleManage.saveData(ruleBean);
+                e.onNext(ReplaceRuleManage.getAll());
+                e.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+                        @Override
+                        public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
+                            adapter.resetDataS(replaceRuleBeans);
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
         });
     }
 
     public void delData(ReplaceRuleBean replaceRuleBean) {
+        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+            ReplaceRuleManage.delData(replaceRuleBean);
+            e.onNext(ReplaceRuleManage.getAll());
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+                    @Override
+                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
+                        adapter.resetDataS(replaceRuleBeans);
+                        Snackbar.make(llContent, replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
+                                .setAction("恢复", view -> {
+                                    restoreData(replaceRuleBean);
+                                })
+                                .show();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    private void restoreData(ReplaceRuleBean replaceRuleBean) {
+        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+            ReplaceRuleManage.saveData(replaceRuleBean);
+            e.onNext(ReplaceRuleManage.getAll());
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
+                    @Override
+                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
+                        adapter.resetDataS(replaceRuleBeans);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     @Override

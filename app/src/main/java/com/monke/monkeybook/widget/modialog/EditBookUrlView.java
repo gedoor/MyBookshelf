@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -45,6 +46,8 @@ public class EditBookUrlView {
         moProgressView.removeAllViews();
         LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_edit_book_url, moProgressView, true);
 
+        View llContent = moProgressView.findViewById(R.id.ll_content);
+        llContent.setOnClickListener(null);
         etUrl = moProgressView.findViewById(R.id.et_book_url);
         tvOk = moProgressView.findViewById(R.id.tv_ok);
     }
