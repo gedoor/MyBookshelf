@@ -18,12 +18,6 @@ public class WelcomeActivity extends MBaseActivity {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
-    @BindView(R.id.iv_transfer_logo)
-    ImageView ivTransferLogo;
-    @BindView(R.id.iv_icon)
-    ImageView ivIcon;
-    @BindView(R.id.tv_intro)
-    TextView tvIntro;
 
     private ValueAnimator welAnimator;
 
@@ -53,8 +47,6 @@ public class WelcomeActivity extends MBaseActivity {
         welAnimator.addUpdateListener(animation -> {
             float alpha = (Float) animation.getAnimatedValue();
             ivBg.setAlpha(alpha);
-            ivIcon.setAlpha(alpha);
-            tvIntro.setAlpha(1f - alpha);
         });
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
