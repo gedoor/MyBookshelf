@@ -2,7 +2,9 @@ package com.monke.monkeybook.model.content;
 
 import android.util.Log;
 
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.FormatWebText;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -177,13 +179,28 @@ class AnalyzeRule {
             switch (lastRule) {
                 case "text":
                     for (Element element : elements) {
-                        textS.add(element.text());
+                        String text = element.text();
+                        for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                            try {
+                                text = text.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        textS.add(text);
                     }
                     break;
                 case "textNodes":
                     List<TextNode> contentEs = elements.get(0).textNodes();
                     for (int i = 0; i < contentEs.size(); i++) {
                         String temp = contentEs.get(i).text().trim();
+                        for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                            try {
+                                temp = temp.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                         temp = FormatWebText.getContent(temp);
                         if (temp.length() > 0) {
                             textS.add(temp);

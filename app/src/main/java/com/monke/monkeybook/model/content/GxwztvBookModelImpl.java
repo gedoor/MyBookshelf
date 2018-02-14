@@ -11,11 +11,13 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LibraryBean;
 import com.monke.monkeybook.bean.LibraryKindBookListBean;
 import com.monke.monkeybook.bean.LibraryNewBookBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.model.impl.IGxwztvBookModel;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.presenter.LibraryPresenterImpl;
@@ -283,6 +285,13 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
                 StringBuilder content = new StringBuilder();
                 for (int i = 0; i < contentEs.size(); i++) {
                     String temp = contentEs.get(i).text().trim();
+                    for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                        try {
+                            temp = temp.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                     temp = FormatWebText.getContent(temp);
                     if (temp.length() > 0) {
                         if (content.length() > 0) {

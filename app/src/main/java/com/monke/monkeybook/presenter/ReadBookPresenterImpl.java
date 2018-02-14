@@ -318,9 +318,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             if (!temp.contains(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                 content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
             }
-            for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-            }
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
             Layout tempLayout = new StaticLayout(content, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
