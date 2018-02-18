@@ -42,12 +42,12 @@
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/tv_title"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:singleLine="true"
+                        android:textColor="#ffffff"
                         android:textSize="14sp"
-                        app:minTextSize="14sp"
-                        android:textColor="#ffffff"/>
+                        app:minTextSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_page"
