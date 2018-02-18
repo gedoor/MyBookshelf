@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -444,8 +445,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Toast.makeText(getApplicationContext(), "再按一次退出程序",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(rfRvShelf, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
         } else {
             finish();
