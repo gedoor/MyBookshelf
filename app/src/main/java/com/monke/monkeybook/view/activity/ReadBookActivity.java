@@ -452,7 +452,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     @Override
                     public void clickExit() {
                         mPresenter.removeFromShelf();
-                        finish();
                     }
 
                     @Override

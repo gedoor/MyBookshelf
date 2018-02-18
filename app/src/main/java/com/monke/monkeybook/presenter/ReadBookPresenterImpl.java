@@ -278,7 +278,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     @Override
     public void saveProgress() {
-        if (bookShelf != null) {
+        if (bookShelf != null && isAdd) {
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 BookShelf.saveBookToShelf(bookShelf);
@@ -551,7 +551,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
-                    .subscribe();
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean aBoolean) {
+                            RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                            mView.finish();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
         }
     }
 
