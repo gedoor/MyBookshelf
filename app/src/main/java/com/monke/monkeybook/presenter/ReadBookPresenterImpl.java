@@ -313,9 +313,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     private Observable<List<String>> SeparateParagraphToLines(String paragraphStr, int chapterIndex) {
         return Observable.create(e -> {
-            String temp = paragraphStr.substring(0, 50);
             String content = paragraphStr;
-            if (!temp.contains(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
+            if (!content.contains(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                 content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
             }
             TextPaint mPaint = (TextPaint) mView.getPaint();
