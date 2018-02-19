@@ -335,9 +335,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private void fistOpenRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
             BookSourceManage.saveBookSourceToDb();
-            if (!MApplication.DEBUG) {
-                moProgressHUD.showInfo(getString(R.string.update_log));
-            }
+//            if (!MApplication.DEBUG) {
+//                moProgressHUD.showInfo(getString(R.string.update_log));
+//            }
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
