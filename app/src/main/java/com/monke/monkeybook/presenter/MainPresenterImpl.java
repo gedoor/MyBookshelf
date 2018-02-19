@@ -221,7 +221,13 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     private void startRefreshBook(List<BookShelfBean> value) {
         if (value != null && value.size() > 0) {
             mView.setRecyclerMaxProgress(value.size());
-            refreshBookShelf(value);
+            List<BookShelfBean> bookShelfBeanList = new ArrayList<>();
+            for (BookShelfBean bookShelfBean : value) {
+                if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                    bookShelfBeanList.add(bookShelfBean);
+                }
+            }
+            refreshBookShelf(bookShelfBeanList);
         } else {
             mView.refreshFinish();
         }
@@ -241,8 +247,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean.getBookInfoBean().getChapterUrl() == null) {
-                            Toast.makeText(mView.getContext(), bookShelfBean.getBookInfoBean().getName() + "更新失败", Toast.LENGTH_SHORT).show();
+                        if (bookShelfBean.getErrorMsg() != null) {
+                            bookShelfBean.setErrorMsg(null);
+                            Toast.makeText(mView.getContext(), bookShelfBean.getErrorMsg(), Toast.LENGTH_SHORT).show();
                         }
                         mView.refreshRecyclerViewItemAdd();
                     }

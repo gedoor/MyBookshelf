@@ -210,8 +210,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
-                bookShelfBean.getBookInfoBean().setChapterUrl(null);
-                bookShelfBean.getBookInfoBean().setChapterList(null);
+                bookShelfBean.setErrorMsg(String.format("%s没有找到书源配置", bookShelfBean.getBookInfoBean().getName()));
                 emitter.onNext(bookShelfBean);
                 emitter.onComplete();
             });
