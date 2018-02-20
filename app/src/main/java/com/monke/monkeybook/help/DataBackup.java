@@ -11,6 +11,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
@@ -44,6 +45,7 @@ public class DataBackup {
             backupBookShelf(file);
             backupBookSource(file);
             backupSearchHistory(file);
+            backupReplaceRule(file);
 
             e.onNext(true);
         })
@@ -107,6 +109,20 @@ public class DataBackup {
                     .create();
             String str = gson.toJson(searchHistoryBeans);
             DocumentFile docFile = FileHelper.createFileIfNotExist("myBookSearchHistory.xml", file.getPath());
+            FileHelper.writeString(str, docFile);
+        }
+    }
+
+    private void backupReplaceRule(File file) {
+        List<ReplaceRuleBean> replaceRuleBeans = DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao()
+                .queryBuilder().list();
+        if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
+            String str = gson.toJson(replaceRuleBeans);
+            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookReplaceRule.xml", file.getPath());
             FileHelper.writeString(str, docFile);
         }
     }

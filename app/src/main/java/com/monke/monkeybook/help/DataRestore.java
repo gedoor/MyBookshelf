@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -27,6 +28,7 @@ public class DataRestore  {
         File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         if (file != null) {
             restoreBookSource(file);
+            restoreReplaceRule(file);
             restoreBookShelf(file);
             restoreSearchHistory(file);
             return true;
@@ -60,8 +62,20 @@ public class DataRestore  {
         if (json != null) {
             List<SearchHistoryBean> searchHistoryBeans = new Gson().fromJson(json, new TypeToken<List<SearchHistoryBean>>() {
             }.getType());
-            for (SearchHistoryBean searchHistoryBean : searchHistoryBeans) {
-                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insertOrReplace(searchHistoryBean);
+            if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
+                DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
+            }
+
+        }
+    }
+
+    private void restoreReplaceRule(File file) throws Exception {
+        String json = FileHelper.readString("myBookReplaceRule.xml", file.getPath());
+        if (json != null) {
+            List<ReplaceRuleBean> replaceRuleBeans = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
+            }.getType());
+            if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
+                DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
             }
         }
     }

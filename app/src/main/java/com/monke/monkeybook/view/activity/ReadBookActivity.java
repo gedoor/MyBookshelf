@@ -394,7 +394,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ButterKnife.bind(this);
         initCsvBook();
         if (preferences.getBoolean("nightTheme", false)) {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_5_black_24dp);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
         } else {
             ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
         }
