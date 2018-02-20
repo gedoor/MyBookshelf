@@ -4,21 +4,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:need_immerse="true"
-    android:background="#30000000">
-    <com.monke.immerselayout.ImmerseFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:need_immerse="false">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="#ffffff" />
-    </com.monke.immerselayout.ImmerseFrameLayout>
+    android:background="@color/bdp_white">
+
     <ImageView
         android:id="@+id/iv_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/bg_welcome"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:contentDescription="@string/welcome" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/welcome"
+        android:contentDescription="@string/welcome" />
 
 </com.monke.immerselayout.ImmerseFrameLayout>

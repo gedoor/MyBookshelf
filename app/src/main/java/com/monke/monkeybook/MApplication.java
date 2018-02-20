@@ -5,9 +5,12 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatDelegate;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
@@ -61,7 +64,9 @@ public class MApplication extends Application {
         firstChannel.setSound(null, null);
         //向notification manager 提交channel
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(firstChannel);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(firstChannel);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,6 +81,8 @@ public class MApplication extends Application {
         firstChannel.setSound(null, null);
         //向notification manager 提交channel
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.createNotificationChannel(firstChannel);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(firstChannel);
+        }
     }
 }

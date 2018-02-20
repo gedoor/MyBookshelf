@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
@@ -193,8 +195,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
-                finish();
-                startActivity(getIntent());
+                recreate();
                 break;
             case R.id.action_clear_content:
                 clearContent();
@@ -246,6 +247,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     //侧边栏按钮
     private void setUpNavigationView() {
+        Menu drawerMenu = navigationView.getMenu();
+        Switch swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
+        swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
+        swNightTheme.setOnClickListener(view -> saveNightTheme(swNightTheme.isChecked()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
@@ -276,9 +281,25 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 case R.id.action_restore:
                     restore();
                     break;
+                case R.id.action_night_theme:
+                    swNightTheme.setChecked(!swNightTheme.isChecked());
+                    saveNightTheme(swNightTheme.isChecked());
+                    break;
             }
             return true;
         });
+    }
+
+    private void saveNightTheme(Boolean isNightTheme) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("nightTheme", isNightTheme);
+        editor.apply();
+        if (isNightTheme) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        recreate();
     }
 
     //备份

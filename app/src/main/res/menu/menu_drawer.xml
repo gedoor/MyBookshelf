@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/drawer_menu_library">
         <item
@@ -22,6 +23,14 @@
             android:id="@+id/action_replace_rule"
             android:icon="@drawable/ic_find_replace_black_24dp"
             android:title="@string/replace_rule_title" />
+    </group>
+
+    <group android:id="@+id/drawer_night_theme">
+        <item
+            android:id="@+id/action_night_theme"
+            android:icon="@drawable/ic_brightness_2_black_24dp"
+            android:title="@string/night_theme"
+            app:actionLayout="@layout/switch_item_night_theme" />
     </group>
 
     <group android:id="@+id/drawer_menu_setting">

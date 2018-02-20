@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/bdp_white</item>
         <item name="colorPrimaryDark">@color/btn_bg_press_2</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="CAppTransparentTheme" parent="CAppTheme">

@@ -5,27 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@color/bdp_white"
-        android:orientation="vertical"
-        android:padding="6dp">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/icon_monkovel_black" />
-
-        <TextView
-            android:id="@+id/google_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/bdp_white" />
-    </LinearLayout>
+        android:layout_height="60dp"
+        android:padding="6dp"
+        android:src="@drawable/icon_monkovel_black" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"

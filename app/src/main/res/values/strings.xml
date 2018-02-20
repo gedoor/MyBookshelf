@@ -132,5 +132,7 @@
     <string name="book_source_share_url">书源共享</string>
     <string name="replace_rule_summary">替换规则描述</string>
     <string name="select_all">全选</string>
+    <string name="night_theme">夜间模式</string>
+    <string name="welcome">启动页</string>
 
 </resources>
