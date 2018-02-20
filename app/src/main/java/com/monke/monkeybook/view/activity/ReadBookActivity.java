@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -109,6 +110,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     CircleButton ibReadAloud;
     @BindView(R.id.ib_replace_rule)
     CircleButton ibReplaceRule;
+    @BindView(R.id.ib_night_theme)
+    CircleButton ibNightTheme;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -390,6 +393,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void bindView() {
         ButterKnife.bind(this);
         initCsvBook();
+        if (preferences.getBoolean("nightTheme", false)) {
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_5_black_24dp);
+        } else {
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
+        }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
         //界面设置
@@ -594,6 +602,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ibReplaceRule.setOnClickListener(view -> {
             Intent intent = new Intent(this, ReplaceRuleActivity.class);
             startActivityForResult(intent, ResultReplace);
+        });
+
+        //夜间模式
+        ibNightTheme.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));
+            editor.apply();
+            recreate();
         });
 
         //上一章

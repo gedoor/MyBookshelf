@@ -63,6 +63,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     Toolbar toolbar;
     @BindView(R.id.rf_rv_shelf)
     RefreshRecyclerView rfRvShelf;
+    private Switch swNightTheme;
+
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
@@ -119,6 +121,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         super.onPostCreate(savedInstanceState);
         // 这个必须要，没有的话进去的默认是个箭头。。正常应该是三横杠的
         mDrawerToggle.syncState();
+        if (swNightTheme != null) {
+            swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
+        }
     }
 
     @Override
@@ -248,7 +253,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     //侧边栏按钮
     private void setUpNavigationView() {
         Menu drawerMenu = navigationView.getMenu();
-        Switch swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
+        swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
         swNightTheme.setOnClickListener(view -> saveNightTheme(swNightTheme.isChecked()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
@@ -471,5 +476,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

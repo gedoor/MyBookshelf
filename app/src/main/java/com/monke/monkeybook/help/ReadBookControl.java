@@ -3,6 +3,7 @@ package com.monke.monkeybook.help;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -38,6 +39,7 @@ public class ReadBookControl {
     private Boolean clickAnim = true;
 
     private SharedPreferences preference;
+    private SharedPreferences defaultPreference;
 
     private static ReadBookControl readBookControl;
 
@@ -56,6 +58,7 @@ public class ReadBookControl {
         initTextKind();
         initTextDrawable();
         preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
+        defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
@@ -121,10 +124,16 @@ public class ReadBookControl {
     }
 
     public int getTextColor() {
+        if (defaultPreference.getBoolean("nightTheme", false)) {
+            return textDrawable.get(3).get("textColor");
+        }
         return textColor;
     }
 
     public int getTextBackground() {
+        if (defaultPreference.getBoolean("nightTheme", false)) {
+            return textDrawable.get(3).get("textBackground");
+        }
         return textBackground;
     }
 

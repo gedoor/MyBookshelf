@@ -154,6 +154,19 @@
                     app:cb_color="@color/bdp_white"
                     android:contentDescription="@string/replace_rule_title" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_night_theme"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_brightness_2_black_24dp"
+                    app:cb_color="@color/bdp_white"
+                    android:contentDescription="@string/night_theme" />
+
             </LinearLayout>
 
             <View
