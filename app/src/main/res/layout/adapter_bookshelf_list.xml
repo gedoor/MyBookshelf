@@ -109,7 +109,7 @@
                 android:layout_marginRight="12.5dp"
                 app:fontdrawable="#767676"
                 app:cantouch="false"
-                app:bgdrawable="#e7eced"
+                app:bgdrawable="@color/btn_bg_press"
                 android:visibility="invisible"/>
 
         </LinearLayout>
