@@ -60,6 +60,7 @@ import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionResumeService;
@@ -679,13 +680,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mPresenter.saveProgress();
     }
 
-    private void pauseAloudService() {
-        Intent intent = new Intent(this, ReadAloudService.class);
-        intent.setAction(ActionPauseService);
-        startService(intent);
-        Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
@@ -699,7 +693,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 } else if (chapterListView.dismissChapterList()) {
                     return true;
                 } else if (aloudStatus == PLAY) {
-                    pauseAloudService();
+                    ReadAloudService.pause(this);
+                    Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
                     checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
@@ -787,7 +782,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(readAloudIntent);
+        ReadAloudService.stop(this);
     }
 
     @Override

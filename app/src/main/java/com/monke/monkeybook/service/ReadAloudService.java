@@ -165,6 +165,20 @@ public class ReadAloudService extends Service {
         }
     }
 
+    public static void stop(Context context) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionDoneService);
+            context.startService(intent);
+        }
+    }
+
+    public static void pause(Context context) {
+        Intent intent = new Intent(context, ReadAloudService.class);
+        intent.setAction(ActionPauseService);
+        context.startService(intent);
+    }
+
     /**
      * 关闭服务
      */
