@@ -579,15 +579,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ReadAloudService.class);
             switch (aloudStatus) {
                 case PAUSE:
-                    intent.setAction(ActionResumeService);
-                    startService(intent);
+                    ReadAloudService.resume(this);
                     break;
                 case PLAY:
-                    intent.setAction(ActionPauseService);
-                    startService(intent);
+                    ReadAloudService.pause(this);
                     break;
                 default:
                     ReadBookActivity.this.popMenuOut();

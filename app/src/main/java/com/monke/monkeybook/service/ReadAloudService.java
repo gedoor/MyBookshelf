@@ -179,6 +179,12 @@ public class ReadAloudService extends Service {
         context.startService(intent);
     }
 
+    public static void resume(Context context) {
+        Intent intent = new Intent(context, ReadAloudService.class);
+        intent.setAction(ActionResumeService);
+        context.startService(intent);
+    }
+
     /**
      * 关闭服务
      */
