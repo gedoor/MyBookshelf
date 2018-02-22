@@ -579,6 +579,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         //朗读
         ibReadAloud.setOnClickListener(view -> {
+            if (!ReadAloudService.running) {
+                aloudStatus = ReadAloudService.STOP;
+            }
             switch (aloudStatus) {
                 case PAUSE:
                     ReadAloudService.resume(this);
@@ -689,7 +692,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     return true;
                 } else if (chapterListView.dismissChapterList()) {
                     return true;
-                } else if (aloudStatus == PLAY) {
+                } else if (ReadAloudService.running && aloudStatus == PLAY) {
                     ReadAloudService.pause(this);
                     Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
                     return true;
