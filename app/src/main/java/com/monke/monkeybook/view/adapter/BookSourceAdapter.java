@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.adapter;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,9 +56,9 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.cbView.setText(dataList.get(position).getBookSourceName());
         holder.cbView.setChecked(dataList.get(position).getEnable());
-        holder.cbView.setOnClickListener((View view) -> {
-            dataList.get(position).setEnable(holder.cbView.isChecked());
-        });
+        holder.cbView.setOnClickListener((View view) -> dataList.get(position).setEnable(holder.cbView.isChecked()));
+        holder.editView.getDrawable().mutate();
+        holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.editView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, SourceEditActivity.class);
             String key = String.valueOf(System.currentTimeMillis());
@@ -70,6 +71,8 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             }
             activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
         });
+        holder.delView.getDrawable().mutate();
+        holder.delView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.delView.setOnClickListener(view -> {
             activity.delBookSource(dataList.get(position));
             dataList.remove(position);

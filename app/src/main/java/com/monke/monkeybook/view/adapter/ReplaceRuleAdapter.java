@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.adapter;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,12 +58,12 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.checkBox.setText(dataList.get(position).getReplaceSummary());
         holder.checkBox.setChecked(dataList.get(position).getEnable());
-        holder.checkBox.setOnClickListener((View view) -> {
-            dataList.get(position).setEnable(holder.checkBox.isChecked());
-        });
-        holder.editView.setOnClickListener(view -> {
-            activity.editReplaceRule(dataList.get(position));
-        });
+        holder.checkBox.setOnClickListener((View view) -> dataList.get(position).setEnable(holder.checkBox.isChecked()));
+        holder.editView.getDrawable().mutate();
+        holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        holder.editView.setOnClickListener(view -> activity.editReplaceRule(dataList.get(position)));
+        holder.delView.getDrawable().mutate();
+        holder.delView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.delView.setOnClickListener(view -> {
             activity.delData(dataList.get(position));
             dataList.remove(position);
