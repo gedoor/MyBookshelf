@@ -14,7 +14,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textSize="15sp"
-        android:textColor="#767676"
         android:text="第三章:hahah"
         android:singleLine="true"
         android:ellipsize="end"

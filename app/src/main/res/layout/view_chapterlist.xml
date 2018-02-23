@@ -12,7 +12,7 @@
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="@color/bdp_white"
         android:orientation="vertical"
         android:visibility="invisible">
 
@@ -20,19 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="9dp"
             android:background="@color/btn_bg_press">
 
             <ImageView
+                android:id="@+id/iv_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_margin="6dp"
+                android:layout_margin="16dp"
                 android:src="@drawable/ic_arrow_back_black_24dp"
                 android:contentDescription="@string/back" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -41,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:singleLine="true"
-                    android:textColor="#343434"
+                    android:textColor="@color/tv_text_default"
                     android:textSize="16sp" />
 
                 <TextView
@@ -50,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:singleLine="true"
-                    android:textColor="#767676"
+                    android:textColor="@color/tv_text_default"
                     android:textSize="13sp" />
 
             </LinearLayout>

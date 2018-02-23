@@ -49,7 +49,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             itemClickListener.itemClick(position);
         });
         if (position == index) {
-            holder.flContent.setBackgroundColor(Color.parseColor("#cfcfcf"));
+            holder.flContent.setBackgroundResource(R.color.tv_text_addshelf_deep_pre);
             holder.flContent.setClickable(false);
         } else {
             holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre2);
