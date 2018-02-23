@@ -175,7 +175,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_source_activity, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     //菜单

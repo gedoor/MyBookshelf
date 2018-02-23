@@ -5,6 +5,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -177,7 +179,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     //菜单

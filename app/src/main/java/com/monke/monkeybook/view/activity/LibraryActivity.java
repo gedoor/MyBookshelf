@@ -138,7 +138,7 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_library_activity, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     //菜单

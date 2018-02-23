@@ -175,7 +175,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_replace_rule_activity, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     //菜单

@@ -351,7 +351,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_source_edit, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     //菜单
