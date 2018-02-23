@@ -21,11 +21,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
-        if (preferences.getBoolean("nightTheme", false)) {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        setNightTheme();
     }
 
     @Override
@@ -65,6 +61,14 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             case "2":
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
+        }
+    }
+
+    public void setNightTheme() {
+        if (preferences.getBoolean("nightTheme", false)) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 }

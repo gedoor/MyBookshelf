@@ -44,6 +44,13 @@ public class ReplaceRuleManage {
         refreshDataS();
     }
 
+    public static void addDataS(List<ReplaceRuleBean> replaceRuleBeans) {
+        if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
+            DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
+            refreshDataS();
+        }
+    }
+
     private static void refreshDataS() {
         replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()

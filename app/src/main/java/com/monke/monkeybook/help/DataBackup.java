@@ -16,6 +16,7 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 
 import java.io.File;
 import java.util.List;
@@ -27,6 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2018/1/30.
+ * 数据备份
  */
 
 public class DataBackup {
@@ -114,8 +116,7 @@ public class DataBackup {
     }
 
     private void backupReplaceRule(File file) {
-        List<ReplaceRuleBean> replaceRuleBeans = DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao()
-                .queryBuilder().list();
+        List<ReplaceRuleBean> replaceRuleBeans = ReplaceRuleManage.getAll();
         if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
             Gson gson = new GsonBuilder()
                     .disableHtmlEscaping()

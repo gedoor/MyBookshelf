@@ -121,6 +121,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private boolean aloudButton;
     private boolean hideStatusBar;
+    private boolean isBind;
     private String noteUrl;
     private int aloudStatus;
 
@@ -236,8 +237,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 readAloudService.setAloudServiceListener(new ReadAloudService.AloudServiceListener() {
                     @Override
                     public void stopService() {
-                        unbindService(conn);
                         csvBook.readAloudStop();
+                        if (isBind) {
+                            unbindService(conn);
+                            isBind = false;
+                        }
                     }
 
                     @Override
@@ -594,7 +598,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     if (mPresenter.getBookShelf() != null) {
                         aloudButton = true;
                         csvBook.readAloudStart();
-                        ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+                        isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
                     }
             }
         });
@@ -610,7 +614,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));
             editor.apply();
-            recreate();
+            setNightTheme();
         });
 
         //上一章

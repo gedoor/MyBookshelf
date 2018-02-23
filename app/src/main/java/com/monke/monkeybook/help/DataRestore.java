@@ -10,12 +10,14 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 
 import java.io.File;
 import java.util.List;
 
 /**
  * Created by GKF on 2018/1/30.
+ * 数据恢复
  */
 
 public class DataRestore  {
@@ -65,7 +67,6 @@ public class DataRestore  {
             if (searchHistoryBeans != null && searchHistoryBeans.size() > 0) {
                 DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().insertOrReplaceInTx(searchHistoryBeans);
             }
-
         }
     }
 
@@ -74,9 +75,7 @@ public class DataRestore  {
         if (json != null) {
             List<ReplaceRuleBean> replaceRuleBeans = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
             }.getType());
-            if (replaceRuleBeans != null && replaceRuleBeans.size() > 0) {
-                DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplaceInTx(replaceRuleBeans);
-            }
+            ReplaceRuleManage.addDataS(replaceRuleBeans);
         }
     }
 }
