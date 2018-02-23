@@ -116,7 +116,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         if (uri.toString().startsWith("content://")) {
             json = FileHelper.readString(uri);
         } else {
-            DocumentFile file = DocumentFile.fromFile(new File(uri.toString()));
+            DocumentFile file = DocumentFile.fromFile(new File(uri.getPath()));
             json = FileHelper.readString(file);
         }
         if (!isEmpty(json)) {
