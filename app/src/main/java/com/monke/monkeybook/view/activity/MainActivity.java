@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -65,6 +66,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     Toolbar toolbar;
     @BindView(R.id.rf_rv_shelf)
     RefreshRecyclerView rfRvShelf;
+    @BindView(R.id.iv_drawer_top)
+    ImageView ivDrawerTop;
+
     private Switch swNightTheme;
 
     private BookShelfGridAdapter bookShelfGridAdapter;
@@ -254,6 +258,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     //侧边栏按钮
     private void setUpNavigationView() {
+        ivDrawerTop.getDrawable().mutate();
+        ivDrawerTop.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));

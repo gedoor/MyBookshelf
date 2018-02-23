@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -512,6 +513,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
 
         //菜单
+        ivMenuMore.getDrawable().mutate();
+        ivMenuMore.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ivMenuMore.setOnClickListener(view -> readBookMenuMorePop
                 .showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
 
@@ -519,6 +522,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         csvBook.setLoadDataListener(loadDataListener);
 
         //返回按钮
+        ivReturn.getDrawable().mutate();
+        ivReturn.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ivReturn.setOnClickListener(view -> finish());
 
         //离线下载
@@ -555,6 +560,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
 
         //刷新按钮
+        ivRefresh.getDrawable().mutate();
+        ivRefresh.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ivRefresh.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
@@ -582,6 +589,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
 
         //朗读
+        ibReadAloud.getDrawable().mutate();
+        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibReadAloud.setOnClickListener(view -> {
             if (!ReadAloudService.running) {
                 aloudStatus = ReadAloudService.STOP;
@@ -604,12 +613,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
 
         //替换
+        ibReplaceRule.getDrawable().mutate();
+        ibReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibReplaceRule.setOnClickListener(view -> {
             Intent intent = new Intent(this, ReplaceRuleActivity.class);
             startActivityForResult(intent, ResultReplace);
         });
 
         //夜间模式
+        ibNightTheme.getDrawable().mutate();
+        ibNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibNightTheme.setOnClickListener(view -> {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));

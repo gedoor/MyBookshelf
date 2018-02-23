@@ -4,6 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -72,8 +74,13 @@ public class AboutActivity extends MBaseActivity {
     CardView vwQq;
     @BindView(R.id.vw_source_share)
     CardView vwSourceShare;
+    @BindView(R.id.tv_app_summary)
+    TextView tvAppSummary;
+    @BindView(R.id.tv_source_share)
+    TextView tvSourceShare;
 
     private Animation animIn;
+
     private String qq = "701903217";
 
     @Override
@@ -104,6 +111,39 @@ public class AboutActivity extends MBaseActivity {
         setupActionBar();
         tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
         tvQq.setText(String.format("QQ讨论群:%s", qq));
+
+        tvAppSummary.getCompoundDrawablesRelative()[1].mutate();
+        tvAppSummary.getCompoundDrawablesRelative()[1].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvDonate.getCompoundDrawablesRelative()[0].mutate();
+        tvDonate.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvGit.getCompoundDrawablesRelative()[0].mutate();
+        tvGit.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvMail.getCompoundDrawablesRelative()[0].mutate();
+        tvMail.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvQq.getCompoundDrawablesRelative()[0].mutate();
+        tvQq.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvScoring.getCompoundDrawablesRelative()[0].mutate();
+        tvScoring.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvSourceRule.getCompoundDrawablesRelative()[0].mutate();
+        tvSourceRule.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvDisclaimer.getCompoundDrawablesRelative()[0].mutate();
+        tvDisclaimer.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvUpdate.getCompoundDrawablesRelative()[0].mutate();
+        tvUpdate.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvVersion.getCompoundDrawablesRelative()[0].mutate();
+        tvVersion.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+
+        tvSourceShare.getCompoundDrawablesRelative()[0].mutate();
+        tvSourceShare.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override

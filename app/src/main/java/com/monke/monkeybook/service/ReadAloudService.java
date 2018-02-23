@@ -66,7 +66,7 @@ public class ReadAloudService extends Service {
     private int nowSpeak;
     private int allSpeak;
     private int timeMinute = 0;
-    private int maxTimeMinute = 60;
+    private final int maxTimeMinute = 60;
     private boolean timerEnable = false;
     private Timer mTimer;
     private AudioManager audioManager;
