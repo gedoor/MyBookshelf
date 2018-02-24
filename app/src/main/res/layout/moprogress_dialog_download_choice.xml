@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="离线章节"
-                android:textColor="@color/tv_btn_black"
+                android:textColor="@color/tv_text_default"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -44,7 +44,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:text="第"
-                    android:textColor="@color/tv_btn_black"
+                    android:textColor="@color/tv_text_default"
                     android:textSize="16sp" />
 
                 <EditText
@@ -62,7 +62,7 @@
                     android:paddingTop="4dp"
                     android:inputType="number"
                     android:textSize="14sp"
-                    android:textColor="@color/tv_btn_black" />
+                    android:textColor="@color/tv_text_default" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:text="章 至 第"
-                    android:textColor="@color/tv_btn_black"
+                    android:textColor="@color/tv_text_default"
                     android:textSize="16sp" />
 
                 <EditText
@@ -89,7 +89,7 @@
                     android:paddingTop="4dp"
                     android:inputType="number"
                     android:textSize="14sp"
-                    android:textColor="@color/tv_btn_black" />
+                    android:textColor="@color/tv_text_default" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="章"
-                    android:textColor="@color/tv_btn_black"
+                    android:textColor="@color/tv_text_default"
                     android:textSize="16sp" />
 
                 <View

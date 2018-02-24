@@ -134,5 +134,8 @@
     <string name="select_all">全选</string>
     <string name="night_theme">夜间模式</string>
     <string name="welcome">启动页</string>
+    <string name="download_start">开始下载</string>
+    <string name="download_cancel">取消下载</string>
+    <string name="no_download">暂无任务</string>
 
 </resources>

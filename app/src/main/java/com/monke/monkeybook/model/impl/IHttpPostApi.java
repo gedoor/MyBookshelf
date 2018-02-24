@@ -19,10 +19,9 @@ public interface IHttpPostApi {
 
     @FormUrlEncoded
     @POST
-    @Headers({"Accept: text/html,application/xhtml+xml,application/xml",
-            "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
+    @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
+            "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
             "Keep-Alive:300",
-            "Connection:Keep-Alive",
-            "Cache-Control:no-cache"})
+            "Connection:Keep-Alive"})
     Observable<Response<String>> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap);
 }
