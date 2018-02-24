@@ -1,4 +1,3 @@
-//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
@@ -32,7 +31,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -95,17 +93,25 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     @Override
     public void getBookShelfInfo() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            List<BookShelfBean> bookShelfBeans = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-            if (bookShelfBeans != null) {
-                bookShelfS.addAll(bookShelfBeans);
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            bookShelfS = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            if (bookShelfS == null) {
+                bookShelfS = new ArrayList<>();
             }
-            e.onNext(true);
+            for (int i = 0; i < bookShelfS.size(); i++) {
+                if (bookShelfS.get(i).getNoteUrl().equals(bookShelf.getNoteUrl())) {
+                    if (openFrom == FROM_BOOKSHELF) {
+                        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
+                    }
+                    inBookShelf = true;
+                    break;
+                }
+            }
+            e.onNext(bookShelf);
             e.onComplete();
         })
-                .flatMap(e -> WebBookModelImpl.getInstance().getBookInfo(bookShelf))
-                .map(this::checkInBookShelf)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+                .flatMap(bookShelfBean -> WebBookModelImpl.getInstance().getBookInfo(bookShelfBean))
+                .flatMap(bookShelfBean -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean))
                 .subscribeOn(Schedulers.io())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,19 +134,6 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         mView.getBookShelfError();
                     }
                 });
-    }
-
-    private BookShelfBean checkInBookShelf(BookShelfBean bookShelfBean) {
-        for (int i = 0; i < bookShelfS.size(); i++) {
-            if (bookShelfS.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                if (openFrom == FROM_BOOKSHELF) {
-                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                }
-                inBookShelf = true;
-                break;
-            }
-        }
-        return bookShelfBean;
     }
 
     @Override
@@ -221,7 +214,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
             inBookShelf = true;
             if (null != searchBook) {
-                searchBook.setIsAdd(inBookShelf);
+                searchBook.setIsAdd(true);
             }
             mView.updateView();
         }

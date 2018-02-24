@@ -48,7 +48,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<LibraryBean> getLibraryData(final ACache aCache) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent("")
                 .flatMap(s -> {
@@ -144,7 +144,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put("keyword", content);
         queryMap.put("pn", String.valueOf(page - 1));
-        return getRetrofitString(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .searchBook("/search.htm", queryMap)
                 .flatMap(response -> analyzeSearchBook(response.body()));
@@ -186,7 +186,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
@@ -195,33 +195,32 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     private Observable<BookShelfBean> analyzeBookInfo(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            bookShelfBean.setBookInfoBean(analyzeBookinfo(s, bookShelfBean.getNoteUrl()));
+            BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
+            if (bookInfoBean == null) {
+                bookInfoBean = new BookInfoBean();
+            }
+            bookInfoBean.setNoteUrl(bookInfoBean.getNoteUrl());   //id
+            bookInfoBean.setTag(TAG);
+            Document doc = Jsoup.parse(s);
+            Element resultE = doc.getElementsByClass("panel panel-warning").get(0);
+            bookInfoBean.setCoverUrl(resultE.getElementsByClass("panel-body").get(0).getElementsByClass("img-thumbnail").get(0).attr("src"));
+            bookInfoBean.setName(resultE.getElementsByClass("active").get(0).text());
+            String author = resultE.getElementsByClass("col-xs-12 list-group-item no-border").get(0).getElementsByTag("small").get(0).text();
+            bookInfoBean.setAuthor(FormatWebText.getAuthor(author));
+            Element introduceE = resultE.getElementsByClass("panel panel-default mt20").get(0);
+            String introduce;
+            if (introduceE.getElementById("all") != null) {
+                introduce = introduceE.getElementById("all").text().replace("[收起]", "");
+            } else {
+                introduce = introduceE.getElementById("shot").text();
+            }
+            bookInfoBean.setIntroduce("\u3000\u3000" + introduce);
+            bookInfoBean.setChapterUrl(TAG + resultE.getElementsByClass("list-group-item tac").get(0).getElementsByTag("a").get(0).attr("href"));
+            bookInfoBean.setOrigin(name);
+            bookShelfBean.setBookInfoBean(bookInfoBean);
             e.onNext(bookShelfBean);
             e.onComplete();
         });
-    }
-
-    private BookInfoBean analyzeBookinfo(String s, String novelUrl) {
-        BookInfoBean bookInfoBean = new BookInfoBean();
-        bookInfoBean.setNoteUrl(novelUrl);   //id
-        bookInfoBean.setTag(TAG);
-        Document doc = Jsoup.parse(s);
-        Element resultE = doc.getElementsByClass("panel panel-warning").get(0);
-        bookInfoBean.setCoverUrl(resultE.getElementsByClass("panel-body").get(0).getElementsByClass("img-thumbnail").get(0).attr("src"));
-        bookInfoBean.setName(resultE.getElementsByClass("active").get(0).text());
-        String author = resultE.getElementsByClass("col-xs-12 list-group-item no-border").get(0).getElementsByTag("small").get(0).text();
-        bookInfoBean.setAuthor(FormatWebText.getAuthor(author));
-        Element introduceE = resultE.getElementsByClass("panel panel-default mt20").get(0);
-        String introduce;
-        if (introduceE.getElementById("all") != null) {
-            introduce = introduceE.getElementById("all").text().replace("[收起]", "");
-        } else {
-            introduce = introduceE.getElementById("shot").text();
-        }
-        bookInfoBean.setIntroduce("\u3000\u3000" + introduce);
-        bookInfoBean.setChapterUrl(TAG + resultE.getElementsByClass("list-group-item tac").get(0).getElementsByTag("a").get(0).attr("href"));
-        bookInfoBean.setOrigin(name);
-        return bookInfoBean;
     }
 
     /**
@@ -229,7 +228,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
-        return getRetrofitString(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean));
@@ -238,8 +237,13 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
+            int chapterSize = bookShelfBean.getChapterListSize();
             WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl());
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
+            if (chapterSize < bookShelfBean.getChapterListSize()) {
+                bookShelfBean.setHasUpdate(true);
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+            }
             e.onNext(bookShelfBean);
             e.onComplete();
         });
@@ -247,13 +251,13 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl) {
         Document doc = Jsoup.parse(s);
-        Elements chapterlist = doc.getElementById("chapters-list").getElementsByTag("a");
+        Elements chapterS = doc.getElementById("chapters-list").getElementsByTag("a");
         List<ChapterListBean> chapterBeans = new ArrayList<>();
-        for (int i = 0; i < chapterlist.size(); i++) {
+        for (int i = 0; i < chapterS.size(); i++) {
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(TAG + chapterlist.get(i).attr("href"));   //id
+            temp.setDurChapterUrl(TAG + chapterS.get(i).attr("href"));   //id
             temp.setDurChapterIndex(i);
-            temp.setDurChapterName(chapterlist.get(i).text());
+            temp.setDurChapterName(chapterS.get(i).text());
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
 
@@ -267,7 +271,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitObject(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
@@ -321,7 +325,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
-        return getRetrofitObject(GxwztvBookModelImpl.TAG)
+        return getRetrofitString(MApplication.getInstance(), GxwztvBookModelImpl.TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(url.replace(GxwztvBookModelImpl.TAG, ""))
                 .flatMap(this::analyzeSearchBook);

@@ -92,12 +92,12 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 });
             }
             if (isPost) {
-                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                return getRetrofitString(MApplication.getInstance(), analyzeSearchUrl.getSearchUrl())
                         .create(IHttpPostApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
                         .flatMap(this::analyzeSearchBook);
             } else {
-                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                return getRetrofitString(MApplication.getInstance(), analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(), analyzeSearchUrl.getQueryMap())
                         .flatMap(this::analyzeSearchBook);
@@ -163,7 +163,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         if (!initBookSourceBean()) {
             return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
         }
-        return getRetrofitString(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
@@ -215,7 +215,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl().replace(TAG, ""))
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean));
@@ -266,7 +266,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(TAG)
+        return getRetrofitString(MApplication.getInstance(), TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl.replace(TAG, ""))
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
