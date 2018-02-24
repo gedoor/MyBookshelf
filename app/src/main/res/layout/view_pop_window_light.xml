@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="#ffffff">
+        android:background="@color/background">
 
         <LinearLayout
             android:id="@+id/ll_follow_sys"
@@ -29,14 +29,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"
-                android:textColor="#767676"
+                android:textColor="@color/tv_text_default"
                 android:text="@string/brightness"
                 android:layout_gravity="center" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#767676"
+                android:textColor="@color/tv_text_default"
                 android:text="@string/flow_sys"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="7dp"
@@ -61,9 +61,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:fontdrawable="#767676"
+            app:fontdrawable="@color/btn_bg_press_2"
             app:cantouch="true"
-            app:bgdrawable="#e7eced"
+            app:bgdrawable="@color/btn_bg_press"
             app:progresswidth="2dp"
             app:maxprogress="255"
             app:cursordrawable="@drawable/shape_progress_cursor_read"
@@ -83,7 +83,7 @@
         android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="#ffffff">
+        android:background="@color/background">
 
         <LinearLayout
             android:id="@+id/ll_click"
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#767676"
+                android:textColor="@color/tv_text_default"
                 android:text="点击灵敏度"
                 android:layout_gravity="center" />
 
@@ -109,9 +109,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:fontdrawable="#767676"
+            app:fontdrawable="@color/btn_bg_press_2"
             app:cantouch="true"
-            app:bgdrawable="#e7eced"
+            app:bgdrawable="@color/btn_bg_press"
             app:progresswidth="2dp"
             app:maxprogress="255"
             app:cursordrawable="@drawable/shape_progress_cursor_read"

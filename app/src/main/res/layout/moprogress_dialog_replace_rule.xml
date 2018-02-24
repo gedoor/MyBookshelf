@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="30dp"
-    android:background="@color/bdp_white">
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/ll_content"

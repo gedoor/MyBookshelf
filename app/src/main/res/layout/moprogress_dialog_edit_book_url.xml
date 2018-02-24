@@ -1,7 +1,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/bdp_white">
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/ll_content"

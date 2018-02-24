@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bdp_white">
+    android:background="@color/background">
 
     <include layout="@layout/content_main" />
 
@@ -15,7 +15,7 @@
         android:layout_width="220dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/bdp_white"
+        android:background="@color/background"
         android:clickable="true"
         android:orientation="vertical"
         tools:ignore="KeyboardInaccessibleWidget">

@@ -42,7 +42,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/bdp_white"
+                    android:background="@color/background"
                     android:orientation="horizontal">
                     <ImageButton
                         android:id="@+id/iv_return"
@@ -110,7 +110,7 @@
                 android:paddingEnd="10dp"
                 android:visibility="gone"
                 android:textColor="@color/tv_text_default"
-                android:background="@color/bdp_white"/>
+                android:background="@color/background" />
 
             <View
                 android:layout_width="match_parent"
@@ -139,7 +139,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_volume_up_black_24dp"
-                    app:cb_color="@color/bdp_white"
+                    app:cb_color="@color/background"
                     android:contentDescription="@string/read_aloud" />
 
                 <View
@@ -152,7 +152,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_find_replace_black_24dp"
-                    app:cb_color="@color/bdp_white"
+                    app:cb_color="@color/background"
                     android:contentDescription="@string/replace_rule_title" />
 
                 <View
@@ -165,7 +165,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_brightness_2_black_24dp"
-                    app:cb_color="@color/bdp_white"
+                    app:cb_color="@color/background"
                     android:contentDescription="@string/night_theme" />
 
             </LinearLayout>
@@ -178,7 +178,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bdp_white"
+                android:background="@color/background"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -206,9 +206,9 @@
                         android:layout_height="25dp"
                         android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        app:fontdrawable="#767676"
+                        app:fontdrawable="@color/btn_bg_press_2"
                         app:cantouch="true"
-                        app:bgdrawable="#e7eced"
+                        app:bgdrawable="@color/btn_bg_press"
                         app:progresswidth="2dp"
                         app:cursordrawable="@drawable/shape_progress_cursor_read"
                         app:cursordrawable_width="13dp"

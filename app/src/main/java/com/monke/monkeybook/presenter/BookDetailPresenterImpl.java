@@ -32,6 +32,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -94,29 +95,18 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     @Override
     public void getBookShelfInfo() {
-        Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-            if (temp == null)
-                temp = new ArrayList<>();
-            e.onNext(temp);
-            e.onComplete();
-        }).flatMap(bookShelfBeen -> {
-            bookShelfS.addAll(bookShelfBeen);
-            return WebBookModelImpl.getInstance().getBookInfo(bookShelf);
-        }).map(bookShelfBean -> {
-            for (int i = 0; i < bookShelfS.size(); i++) {
-                if (bookShelfS.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                    if (openFrom == FROM_BOOKSHELF) {
-                        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
-                    }
-                    inBookShelf = true;
-                    break;
-                }
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            List<BookShelfBean> bookShelfBeans = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
+            if (bookShelfBeans != null) {
+                bookShelfS.addAll(bookShelfBeans);
             }
-            return bookShelfBean;
+            e.onNext(true);
+            e.onComplete();
         })
+                .flatMap(e -> WebBookModelImpl.getInstance().getBookInfo(bookShelf))
+                .map(this::checkInBookShelf)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
@@ -134,9 +124,23 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
                     @Override
                     public void onError(Throwable e) {
+                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         mView.getBookShelfError();
                     }
                 });
+    }
+
+    private BookShelfBean checkInBookShelf(BookShelfBean bookShelfBean) {
+        for (int i = 0; i < bookShelfS.size(); i++) {
+            if (bookShelfS.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
+                if (openFrom == FROM_BOOKSHELF) {
+                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+                }
+                inBookShelf = true;
+                break;
+            }
+        }
+        return bookShelfBean;
     }
 
     @Override
@@ -149,7 +153,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
                 e.onNext(true);
                 e.onComplete();
-            }).subscribeOn(Schedulers.newThread())
+            }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new SimpleObserver<Boolean>() {
@@ -178,7 +182,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 BookShelf.removeFromBookShelf(bookShelf);
                 e.onNext(true);
                 e.onComplete();
-            }).subscribeOn(Schedulers.newThread())
+            }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new SimpleObserver<Boolean>() {

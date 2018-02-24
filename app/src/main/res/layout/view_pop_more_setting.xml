@@ -13,13 +13,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bdp_white"
+        android:background="@color/background"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/bdp_white"
+            android:background="@color/background"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -39,7 +39,7 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/volume_open_page"
                 app:kswBackColor="@drawable/selector_switch_button"
-                app:kswThumbColor="@color/bdp_white" />
+                app:kswThumbColor="@color/background" />
         </LinearLayout>
 
         <View
@@ -52,7 +52,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/bdp_white"
+            android:background="@color/background"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -72,7 +72,7 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/click_open_page"
                 app:kswBackColor="@drawable/selector_switch_button"
-                app:kswThumbColor="@color/bdp_white" />
+                app:kswThumbColor="@color/background" />
         </LinearLayout>
 
         <View
@@ -85,7 +85,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/bdp_white"
+            android:background="@color/background"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -105,7 +105,7 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/click_all_next_page"
                 app:kswBackColor="@drawable/selector_switch_button"
-                app:kswThumbColor="@color/bdp_white" />
+                app:kswThumbColor="@color/background" />
         </LinearLayout>
 
         <View
@@ -118,7 +118,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/bdp_white"
+            android:background="@color/background"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -138,7 +138,7 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/open_page_anim"
                 app:kswBackColor="@drawable/selector_switch_button"
-                app:kswThumbColor="@color/bdp_white" />
+                app:kswThumbColor="@color/background" />
         </LinearLayout>
 
         <View
@@ -151,7 +151,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/bdp_white"
+            android:background="@color/background"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
@@ -171,7 +171,7 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/keep_light"
                 app:kswBackColor="@drawable/selector_switch_button"
-                app:kswThumbColor="@color/bdp_white" />
+                app:kswThumbColor="@color/background" />
 
         </LinearLayout>
 
