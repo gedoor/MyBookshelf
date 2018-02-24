@@ -3,9 +3,11 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -36,6 +38,12 @@ public class ReadBookMenuMorePop extends PopupWindow{
     private void initView() {
         llDownload = view.findViewById(R.id.ll_download);
         llChangeSource = view.findViewById(R.id.ll_exchange_source);
+        ImageView ivChangeSource = view.findViewById(R.id.iv_change_source);
+        ImageView ivDownload = view.findViewById(R.id.iv_download_offline);
+        ivChangeSource.getDrawable().mutate();
+        ivChangeSource.getDrawable().setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivDownload.getDrawable().mutate();
+        ivDownload.getDrawable().setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     public void setOnClickDownload(View.OnClickListener clickDownload){
