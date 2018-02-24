@@ -15,6 +15,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
+import com.monke.monkeybook.widget.refreshview.BaseRefreshListener;
+import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.ArrayList;
@@ -91,7 +93,8 @@ public class ChangeSourceView {
 
             @Override
             public void loadMoreFinish(Boolean value) {
-
+                saveSearchBook();
+                rvSource.finishRefresh(true);
             }
 
             @Override
@@ -116,7 +119,8 @@ public class ChangeSourceView {
 
             @Override
             public void searchBookError(Boolean value) {
-
+                saveSearchBook();
+                rvSource.finishRefresh(true);
             }
 
             @Override
@@ -190,8 +194,7 @@ public class ChangeSourceView {
         ivRefresh = moProgressView.findViewById(R.id.iv_refresh);
         rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
 
-        atvTitle.setOnClickListener((View view) -> reSearchBook());
-        ivRefresh.setOnClickListener((View view) -> reSearchBook());
+        rvSource.setBaseRefreshListener(this::reSearchBook);
 
     }
 
