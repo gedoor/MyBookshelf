@@ -5,14 +5,19 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,22 +38,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> implements IImportBookView {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    @BindView(R.id.iv_return)
-    ImageButton ivReturn;
     @BindView(R.id.tv_scan)
     TextView tvScan;
     @BindView(R.id.rl_loading)
     RotateLoading rlLoading;
     @BindView(R.id.tv_count)
     TextView tvCount;
-    @BindView(R.id.tv_addshelf)
-    TextView tvAddShelf;
     @BindView(R.id.rcv_books)
     RecyclerView rcvBooks;
+    @BindView(R.id.tv_select_dir)
+    TextView tvSelectDir;
+    @BindView(R.id.ll_scan)
+    TextView llScan;
 
     private ImportBookAdapter importBookAdapter;
+    private MenuItem menuItem;
 
     private Animation animIn;
     private Animation animOut;
@@ -70,16 +78,63 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
         animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
 
-        importBookAdapter = new ImportBookAdapter(count -> tvAddShelf.setVisibility(count == 0 ? View.INVISIBLE : View.VISIBLE));
+        importBookAdapter = new ImportBookAdapter(count -> {
+            if (menuItem != null) {
+                menuItem.setVisible(count != 0);
+            }
+        });
     }
 
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         moProgressHUD = new MoProgressHUD(this);
 
         rcvBooks.setAdapter(importBookAdapter);
         rcvBooks.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.book_local);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_import, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单状态
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menuItem = menu.getItem(0);
+        menuItem.setVisible(false);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_import_book:
+                //添加书籍
+                moProgressHUD.showLoading("放入书架中...");
+                mPresenter.importBooks(importBookAdapter.getSelectDatas());
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -92,10 +147,13 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         0x11);
             } else {
-                mPresenter.searchLocationBook();
-                tvScan.setVisibility(View.INVISIBLE);
+                mPresenter.searchLocationBook(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
+                llScan.setVisibility(View.INVISIBLE);
                 rlLoading.start();
             }
+        });
+        tvSelectDir.setOnClickListener(view -> {
+
         });
         animOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -115,13 +173,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
             }
         });
-        ivReturn.setOnClickListener(v -> finish());
 
-        tvAddShelf.setOnClickListener(v -> {
-            //添加书籍
-            moProgressHUD.showLoading("放入书架中...");
-            mPresenter.importBooks(importBookAdapter.getSelectDatas());
-        });
     }
 
     @Override
@@ -134,7 +186,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @Override
     public void finish() {
         if (!isExiting) {
-            if(moProgressHUD.isShow()){
+            if (moProgressHUD.isShow()) {
                 moProgressHUD.dismiss();
             }
             isExiting = true;
@@ -158,7 +210,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @Override
     public void addSuccess() {
         moProgressHUD.dismiss();
-        Toast.makeText(this,"添加书籍成功",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "添加书籍成功", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -169,18 +221,18 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @SuppressLint("NewApi")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == 0x11){
+        if (requestCode == 0x11) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                mPresenter.searchLocationBook();
-                tvScan.setVisibility(View.INVISIBLE);
+                mPresenter.searchLocationBook(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
+                llScan.setVisibility(View.INVISIBLE);
                 rlLoading.start();
-            }else{
-                if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            } else {
+                if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> moProgressHUD.dismiss(), "设置", v -> {
                         moProgressHUD.dismiss();
                         PremissionCheck.requestPermissionSetting(ImportBookActivity.this);
                     });
-                }else{
+                } else {
                     Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -193,4 +245,5 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         Boolean a = moProgressHUD.onKeyDown(keyCode, event);
         return a || super.onKeyDown(keyCode, event);
     }
+
 }

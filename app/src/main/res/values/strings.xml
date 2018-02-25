@@ -137,5 +137,6 @@
     <string name="download_start">开始下载</string>
     <string name="download_cancel">取消下载</string>
     <string name="no_download">暂无任务</string>
+    <string name="import_select_book">导入选择书籍</string>
 
 </resources>

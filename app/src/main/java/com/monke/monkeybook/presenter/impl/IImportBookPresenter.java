@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 
 public interface IImportBookPresenter extends IPresenter{
-    void searchLocationBook();
+    void searchLocationBook(File file);
 
     void importBooks(List<File> books);
 }

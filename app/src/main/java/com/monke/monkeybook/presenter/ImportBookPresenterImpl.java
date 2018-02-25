@@ -28,11 +28,10 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
 
     }
     @Override
-    public void searchLocationBook(){
+    public void searchLocationBook(File file) {
         Observable.create((ObservableOnSubscribe<File>) e -> {
-            if (Environment.getExternalStorageState().equals(
-                    Environment.MEDIA_MOUNTED)){
-                searchBook(e,new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                searchBook(e, file);
             }
             e.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
