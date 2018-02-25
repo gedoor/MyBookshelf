@@ -3,10 +3,13 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +29,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.adapter.ImportBookAdapter;
 import com.monke.monkeybook.view.impl.IImportBookView;
@@ -38,6 +42,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> implements IImportBookView {
+    private final int RESULT_CHOOSE_DIRECTORY = 1;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
@@ -153,7 +159,21 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
             }
         });
         tvSelectDir.setOnClickListener(view -> {
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(ImportBookActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //申请权限
+                ImportBookActivity.this.requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        0x11);
+            } else {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                    intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                    startActivityForResult(intent, RESULT_CHOOSE_DIRECTORY);
+                } else {
+                    Toast.makeText(this, "当前系统版本不支持", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
         animOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -246,4 +266,23 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         return a || super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) switch (requestCode) {
+            case RESULT_CHOOSE_DIRECTORY:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Uri uri = data.getData();
+                    Uri docUri = DocumentsContract.buildDocumentUriUsingTree(uri,
+                            DocumentsContract.getTreeDocumentId(uri));
+                    String path = FileUtil.getPath(this, docUri);
+                    if (path != null) {
+                        mPresenter.searchLocationBook(new File(path));
+                        llScan.setVisibility(View.INVISIBLE);
+                        rlLoading.start();
+                    }
+                }
+                break;
+        }
+    }
 }
