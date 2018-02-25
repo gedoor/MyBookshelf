@@ -53,7 +53,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     @BindView(R.id.tv_select_dir)
     TextView tvSelectDir;
     @BindView(R.id.ll_scan)
-    TextView llScan;
+    LinearLayout llScan;
 
     private ImportBookAdapter importBookAdapter;
     private MenuItem menuItem;
