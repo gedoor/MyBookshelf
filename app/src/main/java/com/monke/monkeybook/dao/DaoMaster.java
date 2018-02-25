@@ -27,9 +27,9 @@ public class DaoMaster extends AbstractDaoMaster {
         BookSourceBeanDao.createTable(db, ifNotExists);
         ChapterListBeanDao.createTable(db, ifNotExists);
         DownloadChapterBeanDao.createTable(db, ifNotExists);
+        ReplaceRuleBeanDao.createTable(db, ifNotExists);
         SearchBookBeanDao.createTable(db, ifNotExists);
         SearchHistoryBeanDao.createTable(db, ifNotExists);
-        ReplaceRuleBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -40,9 +40,9 @@ public class DaoMaster extends AbstractDaoMaster {
         BookSourceBeanDao.dropTable(db, ifExists);
         ChapterListBeanDao.dropTable(db, ifExists);
         DownloadChapterBeanDao.dropTable(db, ifExists);
+        ReplaceRuleBeanDao.dropTable(db, ifExists);
         SearchBookBeanDao.dropTable(db, ifExists);
         SearchHistoryBeanDao.dropTable(db, ifExists);
-        ReplaceRuleBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -67,9 +67,9 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(BookSourceBeanDao.class);
         registerDaoClass(ChapterListBeanDao.class);
         registerDaoClass(DownloadChapterBeanDao.class);
+        registerDaoClass(ReplaceRuleBeanDao.class);
         registerDaoClass(SearchBookBeanDao.class);
         registerDaoClass(SearchHistoryBeanDao.class);
-        registerDaoClass(ReplaceRuleBeanDao.class);
     }
 
     public DaoSession newSession() {
