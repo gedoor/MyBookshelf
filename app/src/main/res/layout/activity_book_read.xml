@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/fl_content">
+
+    <com.monke.monkeybook.widget.contentswitchview.ContentSwitchView
+        android:id="@+id/csv_book"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <FrameLayout
+        android:id="@+id/fl_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+        <View
+            android:id="@+id/v_menu_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <LinearLayout
+            android:id="@+id/ll_menu_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.monke.immerselayout.ImmerseFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#767676">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/background"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:id="@+id/iv_return"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/selector_icon_return"
+                        android:background="@drawable/bg_ib_pre"
+                        android:clickable="true"
+                        android:layout_gravity="center_vertical"
+                        android:focusable="true"
+                        android:contentDescription="@string/text_return" />
+
+                    <me.grantland.widget.AutofitTextView
+                        android:id="@+id/atv_title"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:singleLine="true"
+                        android:textSize="16sp"
+                        app:minTextSize="14sp"
+                        android:textColor="@color/tv_text_default"
+                        android:gravity="center|start"/>
+
+                    <ImageButton
+                        android:id="@+id/iv_refresh"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_refresh_black_24dp"
+                        android:background="@drawable/bg_ib_pre"
+                        android:clickable="true"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
+                        android:focusable="true"
+                        android:contentDescription="@string/refresh" />
+
+                    <ImageView
+                        android:id="@+id/iv_more"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="7dp"
+                        android:src="@drawable/selector_icon_more"
+                        android:background="@drawable/bg_ib_pre"
+                        android:clickable="true"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"
+                        android:focusable="true"
+                        android:contentDescription="@string/menu" />
+                </LinearLayout>
+            </com.monke.immerselayout.ImmerseFrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/btn_bg_press"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/atv_url"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:singleLine="true"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:visibility="gone"
+                android:textColor="@color/tv_text_default"
+                android:background="@color/background" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_shadow_top" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_menu_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp">
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_read_aloud"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_volume_up_black_24dp"
+                    app:cb_color="@color/background"
+                    android:contentDescription="@string/read_aloud" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_replace_rule"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_find_replace_black_24dp"
+                    app:cb_color="@color/background"
+                    android:contentDescription="@string/replace_rule_title" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_night_theme"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_brightness_2_black_24dp"
+                    app:cb_color="@color/background"
+                    android:contentDescription="@string/night_theme" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_shadow_bottom" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+                    <TextView
+                        android:id="@+id/tv_pre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/previous_chapter"
+                        android:textSize="14sp"
+                        android:padding="10dp"
+                        android:textColor="@drawable/selector_tv_black"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:enabled="false"
+                        android:focusable="true" />
+                    <com.monke.mprogressbar.MHorProgressBar
+                        android:id="@+id/hpb_read_progress"
+                        android:layout_width="0dp"
+                        android:layout_height="25dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        app:fontdrawable="@color/btn_bg_press_2"
+                        app:cantouch="true"
+                        app:bgdrawable="@color/btn_bg_press"
+                        app:progresswidth="2dp"
+                        app:cursordrawable="@drawable/shape_progress_cursor_read"
+                        app:cursordrawable_width="13dp"
+                        app:cursordrawable_height="13dp" />
+                    <TextView
+                        android:id="@+id/tv_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/next_chapter"
+                        android:textSize="14sp"
+                        android:padding="10dp"
+                        android:textColor="@drawable/selector_tv_black"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:enabled="false"
+                        android:focusable="true" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+                    <LinearLayout
+                        android:id="@+id/ll_catalog"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:padding="3dp"
+                            android:src="@drawable/selector_icon_catalog"
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/table_of_contents" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/table_of_contents"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="12sp"
+                            android:textColor="#767676"
+                            android:layout_marginTop="3dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_light"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:padding="3dp"
+                            android:src="@drawable/selector_icon_light"
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/adjust" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/adjust"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="12sp"
+                            android:textColor="#767676"
+                            android:layout_marginTop="3dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_font"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:padding="3dp"
+                            android:src="@drawable/selector_icon_font"
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/interface_setting" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/interface_setting"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="12sp"
+                            android:textColor="#767676"
+                            android:layout_marginTop="3dp"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_setting"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp"
+                        android:clickable="true"
+                        android:background="@drawable/bg_ib_pre"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:padding="3dp"
+                            android:src="@drawable/selector_icon_setting"
+                            tools:ignore="NestedWeights"
+                            android:contentDescription="@string/setting" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/setting"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="12sp"
+                            android:textColor="#767676"
+                            android:layout_marginTop="3dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <com.monke.monkeybook.widget.ChapterListView
+        android:id="@+id/clp_chapterlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</FrameLayout>

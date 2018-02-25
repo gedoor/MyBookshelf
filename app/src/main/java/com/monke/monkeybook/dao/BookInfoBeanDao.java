@@ -22,7 +22,7 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
     /**
      * Properties of entity BookInfoBean.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property Name = new Property(0, String.class, "name", false, "NAME");
         public final static Property Tag = new Property(1, String.class, "tag", false, "TAG");
@@ -33,7 +33,7 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         public final static Property Author = new Property(6, String.class, "author", false, "AUTHOR");
         public final static Property Introduce = new Property(7, String.class, "introduce", false, "INTRODUCE");
         public final static Property Origin = new Property(8, String.class, "origin", false, "ORIGIN");
-    };
+    }
 
 
     public BookInfoBeanDao(DaoConfig config) {
@@ -203,6 +203,11 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(BookInfoBean entity) {
+        return entity.getNoteUrl() != null;
     }
 
     @Override

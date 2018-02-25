@@ -4,8 +4,10 @@ package com.monke.monkeybook.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,11 +34,7 @@ public class NetworkUtil {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (manager != null) {
             NetworkInfo info = manager.getActiveNetworkInfo();
-            if (info != null && info.isConnected()) {
-                return true;
-            } else {
-                return false;
-            }
+            return info != null && info.isConnected();
         } else {
             return false;
         }

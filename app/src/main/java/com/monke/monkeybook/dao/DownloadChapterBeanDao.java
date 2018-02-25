@@ -22,7 +22,7 @@ public class DownloadChapterBeanDao extends AbstractDao<DownloadChapterBean, Str
     /**
      * Properties of entity DownloadChapterBean.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
         public final static Property DurChapterIndex = new Property(1, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
@@ -31,7 +31,7 @@ public class DownloadChapterBeanDao extends AbstractDao<DownloadChapterBean, Str
         public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
         public final static Property BookName = new Property(5, String.class, "bookName", false, "BOOK_NAME");
         public final static Property CoverUrl = new Property(6, String.class, "coverUrl", false, "COVER_URL");
-    };
+    }
 
 
     public DownloadChapterBeanDao(DaoConfig config) {
@@ -175,6 +175,11 @@ public class DownloadChapterBeanDao extends AbstractDao<DownloadChapterBean, Str
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(DownloadChapterBean entity) {
+        return entity.getDurChapterUrl() != null;
     }
 
     @Override

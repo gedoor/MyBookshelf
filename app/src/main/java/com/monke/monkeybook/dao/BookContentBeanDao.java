@@ -22,13 +22,14 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
     /**
      * Properties of entity BookContentBean.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
-        public final static Property DurChapterUrl = new Property(0, String.class, "durChapterUrl", true, "DUR_CHAPTER_URL");
-        public final static Property DurChapterIndex = new Property(1, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
-        public final static Property DurCapterContent = new Property(2, String.class, "durCapterContent", false, "DUR_CAPTER_CONTENT");
-        public final static Property Tag = new Property(3, String.class, "tag", false, "TAG");
-    };
+        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
+        public final static Property DurChapterUrl = new Property(1, String.class, "durChapterUrl", true, "DUR_CHAPTER_URL");
+        public final static Property DurChapterIndex = new Property(2, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
+        public final static Property DurChapterContent = new Property(3, String.class, "durChapterContent", false, "DUR_CHAPTER_CONTENT");
+        public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
+    }
 
 
     public BookContentBeanDao(DaoConfig config) {
@@ -43,10 +44,11 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_CONTENT_BEAN\" (" + //
-                "\"DUR_CHAPTER_URL\" TEXT PRIMARY KEY NOT NULL ," + // 0: durChapterUrl
-                "\"DUR_CHAPTER_INDEX\" INTEGER NOT NULL ," + // 1: durChapterIndex
-                "\"DUR_CAPTER_CONTENT\" TEXT," + // 2: durCapterContent
-                "\"TAG\" TEXT);"); // 3: tag
+                "\"NOTE_URL\" TEXT," + // 0: noteUrl
+                "\"DUR_CHAPTER_URL\" TEXT PRIMARY KEY NOT NULL ," + // 1: durChapterUrl
+                "\"DUR_CHAPTER_INDEX\" INTEGER NOT NULL ," + // 2: durChapterIndex
+                "\"DUR_CHAPTER_CONTENT\" TEXT," + // 3: durChapterContent
+                "\"TAG\" TEXT);"); // 4: tag
     }
 
     /** Drops the underlying database table. */
@@ -59,20 +61,25 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
     protected final void bindValues(DatabaseStatement stmt, BookContentBean entity) {
         stmt.clearBindings();
  
+        String noteUrl = entity.getNoteUrl();
+        if (noteUrl != null) {
+            stmt.bindString(1, noteUrl);
+        }
+ 
         String durChapterUrl = entity.getDurChapterUrl();
         if (durChapterUrl != null) {
-            stmt.bindString(1, durChapterUrl);
+            stmt.bindString(2, durChapterUrl);
         }
-        stmt.bindLong(2, entity.getDurChapterIndex());
+        stmt.bindLong(3, entity.getDurChapterIndex());
  
-        String durCapterContent = entity.getDurCapterContent();
-        if (durCapterContent != null) {
-            stmt.bindString(3, durCapterContent);
+        String durChapterContent = entity.getDurChapterContent();
+        if (durChapterContent != null) {
+            stmt.bindString(4, durChapterContent);
         }
  
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(4, tag);
+            stmt.bindString(5, tag);
         }
     }
 
@@ -80,45 +87,52 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
     protected final void bindValues(SQLiteStatement stmt, BookContentBean entity) {
         stmt.clearBindings();
  
+        String noteUrl = entity.getNoteUrl();
+        if (noteUrl != null) {
+            stmt.bindString(1, noteUrl);
+        }
+ 
         String durChapterUrl = entity.getDurChapterUrl();
         if (durChapterUrl != null) {
-            stmt.bindString(1, durChapterUrl);
+            stmt.bindString(2, durChapterUrl);
         }
-        stmt.bindLong(2, entity.getDurChapterIndex());
+        stmt.bindLong(3, entity.getDurChapterIndex());
  
-        String durCapterContent = entity.getDurCapterContent();
-        if (durCapterContent != null) {
-            stmt.bindString(3, durCapterContent);
+        String durChapterContent = entity.getDurChapterContent();
+        if (durChapterContent != null) {
+            stmt.bindString(4, durChapterContent);
         }
  
         String tag = entity.getTag();
         if (tag != null) {
-            stmt.bindString(4, tag);
+            stmt.bindString(5, tag);
         }
     }
 
     @Override
     public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+        return cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1);
     }    
 
     @Override
     public BookContentBean readEntity(Cursor cursor, int offset) {
         BookContentBean entity = new BookContentBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // durChapterUrl
-            cursor.getInt(offset + 1), // durChapterIndex
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // durCapterContent
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // tag
+            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // noteUrl
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // durChapterUrl
+            cursor.getInt(offset + 2), // durChapterIndex
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // durChapterContent
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // tag
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, BookContentBean entity, int offset) {
-        entity.setDurChapterUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setDurChapterIndex(cursor.getInt(offset + 1));
-        entity.setDurCapterContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setTag(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setNoteUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
+        entity.setDurChapterUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setDurChapterIndex(cursor.getInt(offset + 2));
+        entity.setDurChapterContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setTag(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override
@@ -133,6 +147,11 @@ public class BookContentBeanDao extends AbstractDao<BookContentBean, String> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(BookContentBean entity) {
+        return entity.getDurChapterUrl() != null;
     }
 
     @Override

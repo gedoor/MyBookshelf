@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:id="@+id/fl_content"
     android:clickable="true"
-    android:background="@drawable/bg_ib_pre2">
+    android:background="@drawable/bg_ib_pre2"
+    android:focusable="true">
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
@@ -13,7 +14,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textSize="15sp"
-        android:textColor="#767676"
         android:text="第三章:hahah"
         android:singleLine="true"
         android:ellipsize="end"

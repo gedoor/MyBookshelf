@@ -1,11 +1,11 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="CAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="CAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#767676</item>
+        <item name="colorPrimary">@color/background</item>
+        <item name="colorPrimaryDark">@color/btn_bg_press_2</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="CAppTransparentTheme" parent="CAppTheme">
@@ -13,6 +13,10 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="anim_pop_checkaddshelf">
         <item name="android:windowEnterAnimation">@anim/anim_pop_checkaddshelf_in</item>

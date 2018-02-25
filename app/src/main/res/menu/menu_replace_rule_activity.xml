@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.BookSourceActivity">
+
+    <item
+        android:id="@+id/action_add_replace_rule"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
+
+</menu>

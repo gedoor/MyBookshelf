@@ -2,10 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/ifl_content"
     android:clickable="true"
     android:background="#40000000">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="360dp"
@@ -17,12 +19,15 @@
         android:paddingLeft="10.5dp"
         android:paddingRight="10.5dp"
         android:background="@drawable/bg_search"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
+
         <ImageView
             android:id="@+id/iv_blur_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,13 +37,15 @@
                 android:layout_height="123dp"
                 android:orientation="horizontal"
                 android:background="#70000000">
+
                 <ImageView
                     android:id="@+id/iv_cover"
                     android:layout_width="87dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_cover_default"
-                    android:transitionName="img_cover"/>
+                    android:contentDescription="@string/img_cover"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -47,17 +54,35 @@
                     android:paddingRight="10dp"
                     android:paddingTop="8dp">
 
-                    <TextView
-                        android:id="@+id/tv_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:lines="1"
-                        android:textColor="#ffffff"
-                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp">
+
+                        <me.grantland.widget.AutofitTextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:singleLine="true"
+                            android:textSize="16sp"
+                            app:minTextSize="14sp"
+                            android:textColor="#ffffff"
+                            android:gravity="center|start"/>
+
+                        <ImageView
+                            android:id="@+id/iv_refresh"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_refresh_white_24dp"
+                            android:contentDescription="@string/refresh" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_author"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:textSize="13sp"
@@ -65,7 +90,7 @@
                         android:layout_marginTop="6dp"/>
                     <TextView
                         android:id="@+id/tv_origin"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:textSize="13sp"
@@ -104,7 +129,8 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:clickable="true"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                android:focusable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"

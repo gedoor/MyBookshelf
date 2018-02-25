@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.widget.ChapterListView;
 
-public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.Viewholder> {
+public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
     private int index = 0;
@@ -25,12 +26,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     @Override
-    public Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new Viewholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_adapter_chapterlist, parent, false));
+    public ThisViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_adapter_chapterlist, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(Viewholder holder, final int posiTion) {
+    public void onBindViewHolder(ThisViewHolder holder, final int posiTion) {
         if (posiTion == getItemCount() - 1) {
             holder.vLine.setVisibility(View.INVISIBLE);
         } else
@@ -42,16 +43,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             position = getItemCount() - 1 - posiTion;
         }
-        holder.tvName.setText(bookShelfBean.getBookInfoBean().getChapterlist().get(position).getDurChapterName());
-        holder.flContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setIndex(position);
-                itemClickListener.itemClick(position);
-            }
+        holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
+        holder.flContent.setOnClickListener(v -> {
+            setIndex(position);
+            itemClickListener.itemClick(position);
         });
         if (position == index) {
-            holder.flContent.setBackgroundColor(Color.parseColor("#cfcfcf"));
+            holder.flContent.setBackgroundResource(R.color.tv_text_addshelf_deep_pre);
             holder.flContent.setClickable(false);
         } else {
             holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre2);
@@ -64,20 +62,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (bookShelfBean == null)
             return 0;
         else
-            return bookShelfBean.getBookInfoBean().getChapterlist().size();
-    }
-
-    public class Viewholder extends RecyclerView.ViewHolder {
-        private FrameLayout flContent;
-        private TextView tvName;
-        private View vLine;
-
-        public Viewholder(View itemView) {
-            super(itemView);
-            flContent = (FrameLayout) itemView.findViewById(R.id.fl_content);
-            tvName = (TextView) itemView.findViewById(R.id.tv_name);
-            vLine = itemView.findViewById(R.id.v_line);
-        }
+            return bookShelfBean.getChapterListSize();
     }
 
     public int getIndex() {
@@ -88,5 +73,18 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         notifyItemChanged(this.index);
         this.index = index;
         notifyItemChanged(this.index);
+    }
+
+    class ThisViewHolder extends RecyclerView.ViewHolder {
+        private FrameLayout flContent;
+        private TextView tvName;
+        private View vLine;
+
+        ThisViewHolder(View itemView) {
+            super(itemView);
+            flContent = itemView.findViewById(R.id.fl_content);
+            tvName = itemView.findViewById(R.id.tv_name);
+            vLine = itemView.findViewById(R.id.v_line);
+        }
     }
 }

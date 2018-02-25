@@ -1,0 +1,65 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/drawer_menu_library">
+        <item
+            android:id="@+id/action_library"
+            android:icon="@drawable/ic_store_black_24dp"
+            android:title="@string/book_library" />
+
+        <item
+            android:id="@+id/action_add_local"
+            android:icon="@drawable/ic_add_black_24dp"
+            android:title="@string/book_local" />
+    </group>
+
+    <group android:id="@+id/drawer_menu_book_source">
+        <item
+            android:id="@+id/action_book_source_manage"
+            android:icon="@drawable/ic_list_black_24dp"
+            android:title="@string/book_source_manage" />
+
+        <item
+            android:id="@+id/action_replace_rule"
+            android:icon="@drawable/ic_find_replace_black_24dp"
+            android:title="@string/replace_rule_title" />
+    </group>
+
+    <group android:id="@+id/drawer_night_theme">
+        <item
+            android:id="@+id/action_night_theme"
+            android:icon="@drawable/ic_brightness_2_black_24dp"
+            android:title="@string/night_theme"
+            app:actionLayout="@layout/switch_item_night_theme" />
+    </group>
+
+    <group android:id="@+id/drawer_menu_setting">
+        <item
+            android:id="@+id/action_setting"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/setting" />
+
+        <item
+            android:id="@+id/action_about"
+            android:icon="@drawable/ic_beach_access_black_24dp"
+            android:title="@string/about" />
+
+        <item
+            android:id="@+id/action_donate"
+            android:icon="@drawable/ic_local_cafe_black_24dp"
+            android:title="@string/donate" />
+    </group>
+
+    <group android:id="@+id/drawer_menu_backup">
+        <item
+            android:id="@+id/action_backup"
+            android:icon="@drawable/ic_settings_backup_restore_black_24dp"
+            android:title="@string/backup" />
+
+        <item
+            android:id="@+id/action_restore"
+            android:icon="@drawable/ic_restore_black_24dp"
+            android:title="@string/restore" />
+    </group>
+
+</menu>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:paddingTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="118dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/img_shelf_other" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+
+        <FrameLayout
+            android:id="@+id/fl_content_1"
+            android:layout_width="87dp"
+            android:layout_height="123dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/iv_cover_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default"
+                android:transitionName="img_cover" />
+
+            <ImageView
+                android:id="@+id/iv_has_new_1"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_gravity="bottom"
+                android:background="#7f000000"
+                android:orientation="vertical">
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/tv_name_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:gravity="center"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    app:minTextSize="7sp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_content_1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <FrameLayout
+            android:id="@+id/fl_content_2"
+            android:layout_width="87dp"
+            android:layout_height="123dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/iv_cover_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default"
+                android:transitionName="img_cover" />
+
+            <ImageView
+                android:id="@+id/iv_has_new_2"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_gravity="bottom"
+                android:background="#7f000000"
+                android:orientation="vertical">
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/tv_name_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    app:minTextSize="7sp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_content_2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <FrameLayout
+            android:id="@+id/fl_content_3"
+            android:layout_width="87dp"
+            android:layout_height="123dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/iv_cover_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default"
+                android:transitionName="img_cover" />
+
+            <ImageView
+                android:id="@+id/iv_has_new_3"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="right"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:layout_gravity="bottom"
+                android:background="#7f000000"
+                android:orientation="vertical">
+
+                <me.grantland.widget.AutofitTextView
+                    android:id="@+id/tv_name_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:singleLine="true"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    app:minTextSize="7sp" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_content_3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="3" />
+    </LinearLayout>
+</FrameLayout>

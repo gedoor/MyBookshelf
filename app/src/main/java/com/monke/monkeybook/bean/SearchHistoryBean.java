@@ -2,9 +2,8 @@
 package com.monke.monkeybook.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Unique;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
 
 @Entity
 public class SearchHistoryBean {
@@ -13,6 +12,7 @@ public class SearchHistoryBean {
     private int type;
     private String content;
     private long date;
+
     public long getDate() {
         return this.date;
     }

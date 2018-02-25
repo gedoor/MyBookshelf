@@ -2,8 +2,6 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -15,13 +13,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 
 /**
- * Created by ZQH on 2016/7/24.
+ * 对话框
  */
 public class MoProgressHUD {
     private Boolean isFinishing = false;
@@ -36,123 +32,7 @@ public class MoProgressHUD {
     private Animation outAnim;
 
     private Boolean canBack = false;
-
-    public MoProgressHUD(Context context) {
-        this.context = context;
-        initViews();
-        initCenter();
-        initAnimation();
-    }
-
-    private void initAnimation() {
-        inAnim = getInAnimation();
-        outAnim = getOutAnimation();
-    }
-    private void initFromTopRight(){
-        inAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_in_top_right);
-        outAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_out_top_right);
-    }
-    private void initFromBottomRight(){
-        inAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_in_bottom_right);
-        outAnim = AnimationUtils.loadAnimation(context,R.anim.moprogress_out_bottom_right);
-    }
-
-    private void initFromBottomAnimation() {
-        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_bottom_in);
-        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_bottom_out);
-    }
-
-    private void initCenter() {
-        mSharedView.setGravity(Gravity.CENTER);
-        if(mSharedView != null){
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
-                layoutParams.setMargins(0, 0, 0, 0);
-                mSharedView.setLayoutParams(layoutParams);
-            }
-            mSharedView.setPadding(0,0,0,0);
-        }
-    }
-
-    private void initBottom() {
-        mSharedView.setGravity(Gravity.BOTTOM);
-        if(mSharedView != null){
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
-                layoutParams.setMargins(0, 0, 0, 0);
-                mSharedView.setLayoutParams(layoutParams);
-            }
-            mSharedView.setPadding(0,0,0,0);
-        }
-    }
-
-    private void initMarRightTop() {
-        mSharedView.setGravity(Gravity.RIGHT | Gravity.TOP);
-        if(mSharedView != null){
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
-            if(layoutParams!=null){
-                layoutParams.setMargins(0, 0, 0, 0);
-                mSharedView.setLayoutParams(layoutParams);
-            }
-            mSharedView.setPadding(0, 0, 0, 0);
-        }
-    }
-
-    private void initViews() {
-        decorView = (ViewGroup) ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
-        rootView = new FrameLayout(context);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-        );
-        rootView.setLayoutParams(layoutParams);
-        rootView.setClickable(true);
-
-        mSharedView = new MoProgressView(context);
-
-    }
-
-    public Animation getInAnimation() {
-        return AnimationUtils.loadAnimation(context, R.anim.moprogress_in);
-    }
-
-    public Animation getOutAnimation() {
-        return AnimationUtils.loadAnimation(context, R.anim.moprogress_out);
-    }
-
-    public boolean isShowing() {
-        return rootView.getParent() != null;
-    }
-
-    private void onAttached() {
-        decorView.addView(rootView);
-        if (mSharedView.getParent() != null)
-            ((ViewGroup) mSharedView.getParent()).removeView(mSharedView);
-        rootView.addView(mSharedView);
-
-        isFinishing = false;
-    }
-
-    public void dismiss() {
-        //消失动画
-        if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
-            if (!isFinishing) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        outAnim.setAnimationListener(outAnimListener);
-                        mSharedView.getChildAt(0).startAnimation(outAnim);
-                    }
-                });
-            }
-        }
-    }
-
-    public Boolean isShow() {
-        if (mSharedView != null && mSharedView.getParent() != null) return true;
-        return false;
-    }
-
-    Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
+    private Animation.AnimationListener outAnimListener = new Animation.AnimationListener() {
         @Override
         public void onAnimationStart(Animation animation) {
             isFinishing = true;
@@ -169,22 +49,137 @@ public class MoProgressHUD {
         }
     };
 
-    public void dismissImmediately() {
+    public MoProgressHUD(Context context) {
+        this.context = context;
+        initViews();
+        initCenter();
+        initAnimation();
+    }
+
+    private void initAnimation() {
+        inAnim = getInAnimation();
+        outAnim = getOutAnimation();
+    }
+
+    private void initFromTopRight() {
+        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_in_top_right);
+        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_out_top_right);
+    }
+
+    private void initFromBottomRight() {
+        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_in_bottom_right);
+        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_out_bottom_right);
+    }
+
+    private void initFromBottomAnimation() {
+        inAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_bottom_in);
+        outAnim = AnimationUtils.loadAnimation(context, R.anim.moprogress_bottom_out);
+    }
+
+    private void initCenter() {
+        mSharedView.setGravity(Gravity.CENTER);
+        if (mSharedView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.setMargins(0, 0, 0, 0);
+                mSharedView.setLayoutParams(layoutParams);
+            }
+            mSharedView.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    private void initBottom() {
+        mSharedView.setGravity(Gravity.BOTTOM);
+        if (mSharedView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.setMargins(0, 0, 0, 0);
+                mSharedView.setLayoutParams(layoutParams);
+            }
+            mSharedView.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    private void initMarRightTop() {
+        mSharedView.setGravity(Gravity.RIGHT | Gravity.TOP);
+        if (mSharedView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mSharedView.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.setMargins(0, 0, 0, 0);
+                mSharedView.setLayoutParams(layoutParams);
+            }
+            mSharedView.setPadding(0, 0, 0, 0);
+        }
+    }
+
+    private void initViews() {
+        decorView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView = new FrameLayout(context);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        rootView.setLayoutParams(layoutParams);
+        rootView.setClickable(true);
+        rootView.setBackgroundColor(context.getResources().getColor(R.color.btn_bg_press_tp));
+
+        mSharedView = new MoProgressView(context);
+
+    }
+
+    private Animation getInAnimation() {
+        return AnimationUtils.loadAnimation(context, R.anim.moprogress_in);
+    }
+
+    private Animation getOutAnimation() {
+        return AnimationUtils.loadAnimation(context, R.anim.moprogress_out);
+    }
+
+    private boolean isShowing() {
+        return rootView.getParent() != null;
+    }
+
+    private void onAttached() {
+        decorView.addView(rootView);
+        if (mSharedView.getParent() != null)
+            ((ViewGroup) mSharedView.getParent()).removeView(mSharedView);
+        rootView.addView(mSharedView);
+
+        isFinishing = false;
+    }
+
+    public void dismiss() {
+        //消失动画
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    rootView.removeView(mSharedView);
-                    decorView.removeView(rootView);
-                }
+            hideIMM(rootView);
+            if (!isFinishing) {
+                new Handler().post(() -> {
+                    outAnim.setAnimationListener(outAnimListener);
+                    mSharedView.getChildAt(0).startAnimation(outAnim);
+                });
+            }
+        }
+    }
+
+    public Boolean isShow() {
+        return (mSharedView != null && mSharedView.getParent() != null);
+    }
+
+    private void dismissImmediately() {
+        if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
+            new Handler().post(() -> {
+                rootView.removeView(mSharedView);
+                decorView.removeView(rootView);
             });
         }
         isFinishing = false;
     }
 
-    //转圈的载入
-    public void showLoading() {
-        showLoading(null);
+    //隐藏输入法
+    private void hideIMM(View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     //同上
@@ -192,7 +187,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = false;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(null);
         if (!isShowing()) {
             onAttached();
@@ -206,14 +200,8 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
         rootView.setOnClickListener(null);
-        mSharedView.showInfo(msg, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        mSharedView.showInfo(msg, v -> dismiss());
         if (!isShowing()) {
             onAttached();
         }
@@ -225,7 +213,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#CC000000"));
         rootView.setOnClickListener(null);
         mSharedView.showInfo(msg, btnText, listener);
         if (!isShowing()) {
@@ -239,7 +226,6 @@ public class MoProgressHUD {
         initCenter();
         initAnimation();
         canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#CC000000"));
         rootView.setOnClickListener(null);
         mSharedView.showTwoButton(msg, b_f, c_f, b_s, c_s);
         if (!isShowing()) {
@@ -247,53 +233,84 @@ public class MoProgressHUD {
         }
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
-    ////////////////////离线章节选择////////////////////////////
-    public interface OnClickDownload{
-        public void download(int start,int end);
-    }
-    public void showDownloadList(int startIndex, int endIndex,int all, OnClickDownload clickDownload){
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setBackgroundColor(Color.parseColor("#00000000"));
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        mSharedView.showDownloadList(startIndex, endIndex, all, clickDownload, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-    //////////////////////////////////////////////////////////
 
+    /**
+     * 返回键事件
+     */
     public Boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isShowing() && canBack) {
-                dismiss();
+            if (isShowing()) {
+                if (canBack) {
+                    dismiss();
+                }
                 return true;
             }
         }
         return false;
     }
 
-    public Boolean getCanBack() {
-        return canBack;
+    /**
+     * 离线下载
+     */
+    public void showDownloadList(int startIndex, int endIndex, int all, DownLoadView.OnClickDownload clickDownload) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        DownLoadView.getInstance(mSharedView)
+                .showDownloadList(startIndex, endIndex, all, clickDownload, v -> dismiss());
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public Boolean onPressBack() {
-        if (isShowing() && canBack) {
-            dismiss();
-            return true;
+    /**
+     * 换源
+     */
+    public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        ChangeSourceView.getInstance(mSharedView)
+                .showChangeSource(bookShelf, clickSource, this);
+        if (!isShowing()) {
+            onAttached();
         }
-        return false;
+        mSharedView.getChildAt(0).startAnimation(inAnim);
     }
+
+    /**
+     * 输入书箱地址
+     */
+    public void showPutBookUrl(EditBookUrlView.OnPutBookUrl onPutBookUrl) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        EditBookUrlView.getInstance(mSharedView)
+                .showEditBookUrl(onPutBookUrl, this);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
+     * 编辑替换规则
+     */
+    public void showPutReplaceRule(ReplaceRuleBean replaceRuleBean, EditReplaceRuleView.OnSaveReplaceRule onSaveReplaceRule) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        EditReplaceRuleView.getInstance(mSharedView)
+                .showEditReplaceRule(replaceRuleBean, onSaveReplaceRule, this);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
 }

@@ -3,10 +3,12 @@ package com.monke.monkeybook.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
-import org.greenrobot.greendao.annotation.Generated;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,41 +19,42 @@ import java.util.List;
 @Entity
 public class BookInfoBean implements Parcelable,Cloneable{
 
-    @Transient
-    public static final long REFRESH_DUR = 10*60*1000;
-
     private String name; //小说名
-
     private String tag;
-
     @Id
     private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
-
     private String chapterUrl;  //章节目录地址
-
     @Transient
-    private List<ChapterListBean> chapterlist = new ArrayList<>();    //章节列表
-
+    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
     private long finalRefreshData;  //章节最后更新时间
-
     private String coverUrl; //小说封面
-
     private String author;//作者
-
     private String introduce; //简介
-
     private String origin; //来源
 
     public BookInfoBean(){
 
     }
 
+    @Transient
+    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
+        @Override
+        public BookInfoBean createFromParcel(Parcel in) {
+            return new BookInfoBean(in);
+        }
+
+        @Override
+        public BookInfoBean[] newArray(int size) {
+            return new BookInfoBean[size];
+        }
+    };
+
     protected BookInfoBean(Parcel in) {
         name = in.readString();
         tag = in.readString();
         noteUrl = in.readString();
         chapterUrl = in.readString();
-        chapterlist = in.createTypedArrayList(ChapterListBean.CREATOR);
+        chapterList = in.createTypedArrayList(ChapterListBean.CREATOR);
         finalRefreshData = in.readLong();
         coverUrl = in.readString();
         author = in.readString();
@@ -80,7 +83,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         dest.writeString(tag);
         dest.writeString(noteUrl);
         dest.writeString(chapterUrl);
-        dest.writeTypedList(chapterlist);
+        dest.writeTypedList(chapterList);
         dest.writeLong(finalRefreshData);
         dest.writeString(coverUrl);
         dest.writeString(author);
@@ -92,19 +95,6 @@ public class BookInfoBean implements Parcelable,Cloneable{
     public int describeContents() {
         return 0;
     }
-
-    @Transient
-    public static final Creator<BookInfoBean> CREATOR = new Creator<BookInfoBean>() {
-        @Override
-        public BookInfoBean createFromParcel(Parcel in) {
-            return new BookInfoBean(in);
-        }
-
-        @Override
-        public BookInfoBean[] newArray(int size) {
-            return new BookInfoBean[size];
-        }
-    };
 
     public String getName() {
         return name;
@@ -138,15 +128,16 @@ public class BookInfoBean implements Parcelable,Cloneable{
         this.chapterUrl = chapterUrl;
     }
 
-    public List<ChapterListBean> getChapterlist() {
-        return chapterlist;
+    public List<ChapterListBean> getChapterList() {
+        if (chapterList == null) {
+            return new ArrayList<>();
+        } else {
+            return chapterList;
+        }
     }
 
-    public void setChapterlist(List<ChapterListBean> chapterlist) {
-        this.chapterlist = chapterlist;
-    }
-    public void addChapterlist(List<ChapterListBean> chapterlist){
-        this.chapterlist.addAll(chapterlist);
+    public void setChapterList(List<ChapterListBean> chapterlist) {
+        this.chapterList = chapterlist;
     }
 
     public long getFinalRefreshData() {
@@ -200,13 +191,13 @@ public class BookInfoBean implements Parcelable,Cloneable{
         bookInfoBean.author = author;
         bookInfoBean.introduce = introduce;
         bookInfoBean.origin = origin;
-        if(chapterlist!=null){
+        if(chapterList !=null){
             List<ChapterListBean> newList = new ArrayList<>();
-            Iterator<ChapterListBean> iterator = chapterlist.iterator();
+            Iterator<ChapterListBean> iterator = chapterList.iterator();
             while(iterator.hasNext()){
                 newList.add((ChapterListBean) iterator.next().clone());
             }
-            bookInfoBean.setChapterlist(newList);
+            bookInfoBean.setChapterList(newList);
         }
         return bookInfoBean;
     }

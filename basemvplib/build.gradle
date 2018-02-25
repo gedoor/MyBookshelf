@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 27
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 2
         versionName "1.1.0"
     }
@@ -19,28 +19,33 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    testApi 'junit:junit:4.12'
+    //识别编码
+    api files('libs/juniversalchardet-1.0.3.jar')
+    //support
+    api 'com.android.support:appcompat-v7:27.0.2'
     //RxAndroid
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.2'
 
-    //Rxlifecycle
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'  // If you want to bind to Android-specific lifecycles
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'  // If you want pre-written Activities and Fragments you can subclass as providers
-    compile 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0.1'  // If you want to use Navi for providers
-    compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0.1' // If you want to use Kotlin syntax
+    //Rx_lifecycle
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'  // If you want to bind to Android-specific lifecycles
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'  // If you want pre-written Activities and Fragments you can subclass as providers
+    api 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0.1'  // If you want to use Navi for providers
+    api 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0.1' // If you want to use Kotlin syntax
 
     //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.2.0'
 
     //RxBus
-    compile ('com.hwangjr.rxbus:rxbus:2.0.0-beta') {
+    api ('com.hwangjr.rxbus:rxbus:2.0.0-beta') {
         exclude group: 'com.jakewharton.timber', module: 'timber'
     }
+
+    //J_SOUP
+    api 'org.jsoup:jsoup:1.10.2'
 }

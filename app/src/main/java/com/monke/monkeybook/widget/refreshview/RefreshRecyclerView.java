@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.refreshview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +13,20 @@ import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RefreshRecyclerView extends FrameLayout {
-    private View view;
-    private RefreshProgressBar rpb;
-    private RecyclerView recyclerView;
 
     private View noDataView;
     private View refreshErrorView;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.rpb)
+    RefreshProgressBar rpb;
+    @BindView(R.id.fl_content)
+    FrameLayout flContent;
 
     public RefreshRecyclerView(Context context) {
         this(context, null);
@@ -31,10 +39,10 @@ public class RefreshRecyclerView extends FrameLayout {
     public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recyclerview, this, false);
-        rpb = (RefreshProgressBar) view.findViewById(R.id.rpb);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recycler_view, this, false);
+        ButterKnife.bind(this, view);
 
+        @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RefreshProgressBar);
         rpb.setSpeed(a.getDimensionPixelSize(R.styleable.RefreshProgressBar_speed, rpb.getSpeed()));
         rpb.setMaxProgress(a.getInt(R.styleable.RefreshProgressBar_max_progress, rpb.getMaxProgress()));
@@ -72,11 +80,11 @@ public class RefreshRecyclerView extends FrameLayout {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).canLoadMore() && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getItemCount() - 1 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition()) {
-                    if(!((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getLoadMoreError()){
+                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).canLoadMore() && recyclerView.getAdapter().getItemCount() - 1 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition()) {
+                    if (!((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getLoadMoreError()) {
                         if (null != loadMoreListener) {
                             ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(2, false);
-                            loadMoreListener.startLoadmore();
+                            loadMoreListener.startLoadMore();
                         }
                     }
                 }
@@ -169,12 +177,9 @@ public class RefreshRecyclerView extends FrameLayout {
     }
 
     public void setRefreshRecyclerViewAdapter(RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
-        refreshRecyclerViewAdapter.setClickTryAgainListener(new RefreshRecyclerViewAdapter.OnClickTryAgainListener() {
-            @Override
-            public void loadMoreErrorTryAgain() {
-                if (loadMoreListener != null)
-                    loadMoreListener.loadMoreErrorTryAgain();
-            }
+        refreshRecyclerViewAdapter.setClickTryAgainListener(() -> {
+            if (loadMoreListener != null)
+                loadMoreListener.loadMoreErrorTryAgain();
         });
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(refreshRecyclerViewAdapter);
@@ -226,11 +231,7 @@ public class RefreshRecyclerView extends FrameLayout {
                         } else {
                             rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
                         }
-                        if (rpb.getSecondDurProgress() <= 0) {
-                            return false;
-                        } else {
-                            return true;
-                        }
+                        return rpb.getSecondDurProgress() > 0;
                     }
                     break;
                 case MotionEvent.ACTION_UP:

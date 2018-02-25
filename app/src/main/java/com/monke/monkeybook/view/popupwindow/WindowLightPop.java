@@ -12,30 +12,41 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WindowLightPop extends PopupWindow {
+    @BindView(R.id.hpb_light)
+    MHorProgressBar hpbLight;
+    @BindView(R.id.scb_follow_sys)
+    SmoothCheckBox scbFollowSys;
+    @BindView(R.id.ll_follow_sys)
+    LinearLayout llFollowSys;
+    @BindView(R.id.ll_click)
+    LinearLayout llClick;
+    @BindView(R.id.hpb_click)
+    MHorProgressBar hpbClick;
+
     private Context mContext;
-    private View view;
-
-    private MHorProgressBar hpbLight;
-    private LinearLayout llFollowSys;
-    private SmoothCheckBox scbFollowSys;
-
     private Boolean isFollowSys;
     private int light;
+    private ReadBookControl readBookControl;
 
     public WindowLightPop(Context context) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_windowlight, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_window_light, null);
         this.setContentView(view);
+        ButterKnife.bind(this, view);
         initData();
-        initView();
         bindEvent();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -45,40 +56,30 @@ public class WindowLightPop extends PopupWindow {
     }
 
     private void initData() {
+        readBookControl = ReadBookControl.getInstance();
         isFollowSys = getIsFollowSys();
         light = getLight();
-    }
 
-    private void initView() {
-        hpbLight = (MHorProgressBar) view.findViewById(R.id.hpb_light);
-        llFollowSys = (LinearLayout) view.findViewById(R.id.ll_follow_sys);
-        scbFollowSys = (SmoothCheckBox) view.findViewById(R.id.scb_follow_sys);
     }
 
     private void bindEvent() {
-        llFollowSys.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (scbFollowSys.isChecked()) {
-                    scbFollowSys.setChecked(false, true);
-                } else {
-                    scbFollowSys.setChecked(true, true);
-                }
+        llFollowSys.setOnClickListener(v -> {
+            if (scbFollowSys.isChecked()) {
+                scbFollowSys.setChecked(false, true);
+            } else {
+                scbFollowSys.setChecked(true, true);
             }
         });
-        scbFollowSys.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-                isFollowSys = isChecked;
-                if (isChecked) {
-                    //跟随系统
-                    hpbLight.setCanTouch(false);
-                    setScreenBrightness();
-                } else {
-                    //不跟随系统
-                    hpbLight.setCanTouch(true);
-                    hpbLight.setDurProgress(light);
-                }
+        scbFollowSys.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            isFollowSys = isChecked;
+            if (isChecked) {
+                //跟随系统
+                hpbLight.setCanTouch(false);
+                setScreenBrightness();
+            } else {
+                //不跟随系统
+                hpbLight.setCanTouch(true);
+                hpbLight.setDurProgress(light);
             }
         });
         hpbLight.setProgressListener(new OnProgressListener() {
@@ -105,6 +106,30 @@ public class WindowLightPop extends PopupWindow {
 
             }
         });
+
+        hpbClick.setMaxProgress(100);
+        hpbClick.setDurProgress(readBookControl.getClickSensitivity());
+        hpbClick.setProgressListener(new OnProgressListener() {
+            @Override
+            public void moveStartProgress(float dur) {
+
+            }
+
+            @Override
+            public void durProgressChange(float dur) {
+                readBookControl.setClickSensitivity((int) dur);
+            }
+
+            @Override
+            public void moveStopProgress(float dur) {
+
+            }
+
+            @Override
+            public void setDurProgress(float dur) {
+
+            }
+        });
     }
 
     public void setScreenBrightness(int value) {
@@ -112,6 +137,7 @@ public class WindowLightPop extends PopupWindow {
         params.screenBrightness = value * 1.0f / 255f;
         ((Activity) mContext).getWindow().setAttributes(params);
     }
+
     public void setScreenBrightness() {
         WindowManager.LayoutParams params = ((Activity) mContext).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
@@ -161,8 +187,8 @@ public class WindowLightPop extends PopupWindow {
         scbFollowSys.setChecked(isFollowSys);
     }
 
-    public void initLight(){
-        if(!isFollowSys){
+    public void initLight() {
+        if (!isFollowSys) {
             setScreenBrightness(light);
         }
     }

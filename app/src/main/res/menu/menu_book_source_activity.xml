@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.BookSourceActivity">
+
+    <item
+        android:id="@+id/action_add_book_source"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/add_book_source"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_done_all_black_24dp"
+        android:title="@string/select_all"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_import_book_source"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp"
+        android:title="@string/import_book_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reset_book_source"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:title="@string/refresh"
+        app:showAsAction="never" />
+
+</menu>

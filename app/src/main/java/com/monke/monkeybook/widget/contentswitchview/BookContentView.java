@@ -1,9 +1,11 @@
 package com.monke.monkeybook.widget.contentswitchview;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Paint;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,29 +15,43 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.MTextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import me.grantland.widget.AutofitTextView;
+
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
 
-    public static final int DURPAGEINDEXBEGIN = -1;
-    public static final int DURPAGEINDEXEND = -2;
+    public static final int DurPageIndexBegin = -1;
+    public static final int DurPageIndexEnd = -2;
 
-    private View view;
-    private ImageView ivBg;
-    private TextView tvTitle;
-    private LinearLayout llContent;
-    private MTextView tvContent;
-    private View vBottom;
-    private TextView tvPage;
+    @BindView(R.id.iv_bg)
+    ImageView ivBg;
+    @BindView(R.id.tv_title)
+    AutofitTextView tvTitle;
+    @BindView(R.id.tv_page)
+    TextView tvPage;
+    @BindView(R.id.v_bottom)
+    View vBottom;
+    @BindView(R.id.tv_content)
+    MTextView tvContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.tv_loading)
+    TextView tvLoading;
+    @BindView(R.id.tv_error_info)
+    TextView tvErrorInfo;
+    @BindView(R.id.tv_load_again)
+    TextView tvLoadAgain;
+    @BindView(R.id.ll_error)
+    LinearLayout llError;
 
-    private TextView tvLoading;
-    private LinearLayout llError;
-    private TextView tvErrorInfo;
-    private TextView tvLoadAgain;
+    private SharedPreferences preferences;
 
     private String title;
     private String content;
@@ -49,7 +65,7 @@ public class BookContentView extends FrameLayout {
     private SetDataListener setDataListener;
 
     public interface SetDataListener {
-        public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
+        void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
     }
 
     public BookContentView(Context context) {
@@ -62,6 +78,7 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         init();
     }
 
@@ -71,28 +88,26 @@ public class BookContentView extends FrameLayout {
         init();
     }
 
-    private void init() {
-        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_switch_item, this, false);
+    public void init() {
+        View view;
+        if (preferences.getBoolean("hide_status_bar", false)) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_hide_status_bar, this, false);
+        } else {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_show_status_bar, this, false);
+        }
         addView(view);
-        ivBg = (ImageView) view.findViewById(R.id.iv_bg);
-        tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        llContent = (LinearLayout) view.findViewById(R.id.ll_content);
-        tvContent = (com.monke.monkeybook.widget.MTextView) view.findViewById(R.id.tv_content);
-        vBottom = view.findViewById(R.id.v_bottom);
-        tvPage = (TextView) view.findViewById(R.id.tv_page);
+        ButterKnife.bind(this, view);
 
-        tvLoading = (TextView) view.findViewById(R.id.tv_loading);
-        llError = (LinearLayout) view.findViewById(R.id.ll_error);
-        tvErrorInfo = (TextView) view.findViewById(R.id.tv_error_info);
-        tvLoadAgain = (TextView) view.findViewById(R.id.tv_load_again);
-
-        tvLoadAgain.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (loadDataListener != null)
-                    loading();
-            }
+        tvLoadAgain.setOnClickListener(v -> {
+            if (loadDataListener != null)
+                loading();
         });
+    }
+
+    public void showLoading() {
+        llError.setVisibility(GONE);
+        tvLoading.setVisibility(VISIBLE);
+        llContent.setVisibility(INVISIBLE);
     }
 
     public void loading() {
@@ -102,7 +117,7 @@ public class BookContentView extends FrameLayout {
         qTag = System.currentTimeMillis();
         //执行请求操作
         if (loadDataListener != null) {
-            loadDataListener.loaddata(this, qTag, durChapterIndex, durPageIndex);
+            loadDataListener.loadData(this, qTag, durChapterIndex, durPageIndex);
         }
     }
 
@@ -112,19 +127,16 @@ public class BookContentView extends FrameLayout {
         tvLoading.setVisibility(GONE);
     }
 
+    @SuppressLint("DefaultLocale")
     public void setNoData(String contentLines) {
         this.content = contentLines;
-
-        tvPage.setText((this.durPageIndex + 1) + "/" + this.pageAll);
-
+        tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
         finishLoading();
     }
 
     public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
-            if (setDataListener != null) {
-                setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
-            }
+
             if (contentLines == null) {
                 this.content = "";
             } else {
@@ -142,8 +154,11 @@ public class BookContentView extends FrameLayout {
 
             tvTitle.setText(this.title);
             tvContent.setText(this.content);
-            tvPage.setText((this.durPageIndex + 1) + "/" + this.pageAll);
+            tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
+            if (setDataListener != null) {
+                setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
+            }
             finishLoading();
         }
     }
@@ -157,6 +172,7 @@ public class BookContentView extends FrameLayout {
         tvPage.setText("");
 
         loading();
+
     }
 
     public ContentSwitchView.LoadDataListener getLoadDataListener() {
@@ -218,11 +234,11 @@ public class BookContentView extends FrameLayout {
         this.setDataListener = setDataListener;
     }
 
-    public long getqTag() {
+    public long getQTag() {
         return qTag;
     }
 
-    public void setqTag(long qTag) {
+    public void setQTag(long qTag) {
         this.qTag = qTag;
     }
 
@@ -230,11 +246,13 @@ public class BookContentView extends FrameLayout {
         return tvContent;
     }
 
-    public int getLineCount(int height) {
-        float ascent = tvContent.getPaint().ascent();
-        float descent = tvContent.getPaint().descent();
-        float textHeight = descent - ascent;
-        return (int) ((height * 1.0f - tvContent.getLineSpacingExtra()) / (textHeight + tvContent.getLineSpacingExtra()));
+    public String getContent() {
+        return content;
+    }
+
+    //显示行数
+    public int getLineCount(int height, int lineNum) {
+        return (int) (height * 1.0f / tvContent.getLineHeight() + lineNum);
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
@@ -254,6 +272,6 @@ public class BookContentView extends FrameLayout {
 
     public void setTextKind(ReadBookControl readBookControl) {
         tvContent.setTextSize(readBookControl.getTextSize());
-        tvContent.setLineSpacing(readBookControl.getTextExtra(), 1);
+        tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
 }

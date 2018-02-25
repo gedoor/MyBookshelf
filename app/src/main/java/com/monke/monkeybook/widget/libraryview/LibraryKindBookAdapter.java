@@ -6,12 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import me.grantland.widget.AutofitTextView;
 
 public class LibraryKindBookAdapter extends RecyclerView.Adapter<LibraryKindBookAdapter.Viewholder>{
@@ -39,12 +42,9 @@ public class LibraryKindBookAdapter extends RecyclerView.Adapter<LibraryKindBook
                 .into(holder.ivCover);
         holder.tvName.setText(datas.get(position).getName());
         holder.tvAuthor.setText(datas.get(position).getAuthor());
-        holder.ibContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemListener != null)
-                    itemListener.onClickBook(holder.ivCover,datas.get(position));
-            }
+        holder.ibContent.setOnClickListener(v -> {
+            if (itemListener != null)
+                itemListener.onClickBook(holder.ivCover,datas.get(position));
         });
     }
 

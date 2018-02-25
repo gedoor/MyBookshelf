@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
+
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,25 +44,17 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
         holder.tvSize.setText(convertByte(datas.get(position).length()));
         holder.tvLoc.setText(datas.get(position).getAbsolutePath().replace(Environment.getExternalStorageDirectory().getAbsolutePath(),"存储空间"));
 
-        holder.scbSelect.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(SmoothCheckBox checkBox, boolean isChecked) {
-                if(isChecked){
-                    selectDatas.add(datas.get(position));
-                }else{
-                    selectDatas.remove(datas.get(position));
-                }
-                checkBookListener.checkBook(selectDatas.size());
+        holder.scbSelect.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            if(isChecked){
+                selectDatas.add(datas.get(position));
+            }else{
+                selectDatas.remove(datas.get(position));
             }
+            checkBookListener.checkBook(selectDatas.size());
         });
         if(canCheck){
             holder.scbSelect.setVisibility(View.VISIBLE);
-            holder.llContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    holder.scbSelect.setChecked(!holder.scbSelect.isChecked(),true);
-                }
-            });
+            holder.llContent.setOnClickListener(v -> holder.scbSelect.setChecked(!holder.scbSelect.isChecked(),true));
         }else{
             holder.scbSelect.setVisibility(View.INVISIBLE);
             holder.llContent.setOnClickListener(null);
@@ -92,30 +86,30 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
         TextView tvLoc;
         SmoothCheckBox scbSelect;
 
-        public Viewholder(View itemView) {
+        Viewholder(View itemView) {
             super(itemView);
-            llContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
-            tvNmae = (TextView) itemView.findViewById(R.id.tv_name);
-            tvSize = (TextView) itemView.findViewById(R.id.tv_size);
-            scbSelect = (SmoothCheckBox) itemView.findViewById(R.id.scb_select);
-            tvLoc = (TextView) itemView.findViewById(R.id.tv_loc);
+            llContent = itemView.findViewById(R.id.ll_content);
+            tvNmae = itemView.findViewById(R.id.tv_name);
+            tvSize = itemView.findViewById(R.id.tv_size);
+            scbSelect = itemView.findViewById(R.id.scb_select);
+            tvLoc = itemView.findViewById(R.id.tv_loc);
         }
     }
 
-    public static String convertByte(long size) {
+    private static String convertByte(long size) {
         DecimalFormat df = new DecimalFormat("###.#");
         float f;
         if (size < 1024) {
             f = size / 1.0f;
             return (df.format(new Float(f).doubleValue()) + "B");
         } else if (size < 1024 * 1024) {
-            f = (float) ((float) size / (float) 1024);
+            f = (float) size / (float) 1024;
             return (df.format(new Float(f).doubleValue()) + "KB");
         } else if (size < 1024 * 1024 * 1024) {
-            f = (float) ((float) size / (float) (1024 * 1024));
+            f = (float) size / (float) (1024 * 1024);
             return (df.format(new Float(f).doubleValue()) + "MB");
         } else {
-            f = (float) ((float) size / (float) (1024 * 1024 * 1024));
+            f = (float) size / (float) (1024 * 1024 * 1024);
             return (df.format(new Float(f).doubleValue()) + "GB");
         }
     }

@@ -2,10 +2,10 @@ package com.monke.monkeybook.widget;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -55,7 +54,7 @@ public class RecyclerViewBar extends LinearLayout {
 
     private void init(AttributeSet attrs) {
         setOrientation(VERTICAL);
-        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RecyclerViewBar);
+        @SuppressLint("Recycle") TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.RecyclerViewBar);
         sliderHeight = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_height, sliderHeight);
         int paddingLeft = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_paddingLeft, 0);
         int paddingRight = a.getDimensionPixelSize(R.styleable.RecyclerViewBar_slider_paddingRight, 0);
@@ -76,43 +75,41 @@ public class RecyclerViewBar extends LinearLayout {
 
     private float finalY = -10000;
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initIvSlider() {
-        ivSlider.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        finalY = event.getY();
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        if (finalY >= 0) {
-                            float tempY = event.getY();
-                            float durY = tempY - finalY;
-                            updateSlider(durY);
+        ivSlider.setOnTouchListener((View v, MotionEvent event) -> {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    finalY = event.getY();
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    if (finalY >= 0) {
+                        float tempY = event.getY();
+                        float durY = tempY - finalY;
+                        updateSlider(durY);
 
-                            showSlide();
-                        } else {
-                            finalY = event.getY();
-                        }
+                        showSlide();
+                    } else {
+                        finalY = event.getY();
+                    }
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    if (finalY >= 0) {
+                        finalY = -10000;
+                        timeCountDown.cancel();
+                        timeCountDown.start();
                         return true;
-                    case MotionEvent.ACTION_UP:
-                        if (finalY >= 0) {
-                            finalY = -10000;
-                            timeCountDown.cancel();
-                            timeCountDown.start();
-                            return true;
-                        }
-                        break;
-                    default:
-                        if (finalY >= 0) {
-                            finalY = -10000;
-                            return true;
-                        }
-                        break;
-                }
-                return false;
+                    }
+                    break;
+                default:
+                    if (finalY >= 0) {
+                        finalY = -10000;
+                        return true;
+                    }
+                    break;
             }
+            return false;
         });
     }
 
@@ -200,11 +197,11 @@ public class RecyclerViewBar extends LinearLayout {
 
     class TimeCountDown extends CountDownTimer {
 
-        public TimeCountDown() {
+        TimeCountDown() {
             this(1000, 1000);
         }
 
-        public TimeCountDown(long millisInFuture, long countDownInterval) {
+        TimeCountDown(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 

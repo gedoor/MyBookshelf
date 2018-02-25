@@ -7,9 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.LibraryKindBookListBean;
 
@@ -65,12 +65,9 @@ public class LibraryKindBookView extends LinearLayout{
         tvKindName.setText(data.getKindName());
         if(hasMore){
             tvMore.setVisibility(VISIBLE);
-            tvMore.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(itemListener!=null)
-                        itemListener.onClickMore(data.getKindName(),data.getKindUrl());
-                }
+            tvMore.setOnClickListener(v -> {
+                if(itemListener!=null)
+                    itemListener.onClickMore(data.getKindName(),data.getKindUrl());
             });
         }else{
             tvMore.setVisibility(GONE);

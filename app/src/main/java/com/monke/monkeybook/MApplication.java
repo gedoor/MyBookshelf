@@ -2,36 +2,87 @@
 package com.monke.monkeybook;
 
 import android.app.Application;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import com.monke.monkeybook.service.DownloadService;
-import com.umeng.analytics.MobclickAgent;
+import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatDelegate;
 
 public class MApplication extends Application {
-
+    public final static boolean DEBUG = BuildConfig.DEBUG;
+    public final static String channelIdDownload = "channel_download";
+    public final static String channelIReadAloud = "channel_read_aloud";
     private static MApplication instance;
+    private static String versionName;
+    private static int versionCode;
+
+    public static MApplication getInstance() {
+        return instance;
+    }
+
+    public static int getVersionCode() {
+        return versionCode;
+    }
+
+    public static String getVersionName() {
+        return versionName;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.IS_RELEASE) {
-            String channel = "debug";
-            try {
-                ApplicationInfo appInfo = getPackageManager()
-                        .getApplicationInfo(getPackageName(),
-                                PackageManager.GET_META_DATA);
-                channel = appInfo.metaData.getString("UMENG_CHANNEL_VALUE");
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this, getString(R.string.umeng_key), channel, MobclickAgent.EScenarioType.E_UM_NORMAL, true));
+        try {
+            versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            versionCode = 0;
+            versionName = "0.0.0";
+            e.printStackTrace();
         }
         instance = this;
-        startService(new Intent(this, DownloadService.class));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannelIdDownload();
+            createChannelIdReadAloud();
+        }
+        //初始化二维码模块
+
     }
 
-    public static MApplication getInstance() {
-        return instance;
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createChannelIdDownload() {
+        //用唯一的ID创建渠道对象
+        NotificationChannel firstChannel = new NotificationChannel(channelIdDownload,
+                getString(R.string.download_offline),
+                NotificationManager.IMPORTANCE_LOW);
+        //初始化channel
+        firstChannel.enableLights(false);
+        firstChannel.enableVibration(false);
+        firstChannel.setSound(null, null);
+        //向notification manager 提交channel
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(firstChannel);
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createChannelIdReadAloud() {
+        //用唯一的ID创建渠道对象
+        NotificationChannel firstChannel = new NotificationChannel(channelIReadAloud,
+                getString(R.string.read_aloud),
+                NotificationManager.IMPORTANCE_LOW);
+        //初始化channel
+        firstChannel.enableLights(false);
+        firstChannel.enableVibration(false);
+        firstChannel.setSound(null, null);
+        //向notification manager 提交channel
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(firstChannel);
+        }
     }
 }

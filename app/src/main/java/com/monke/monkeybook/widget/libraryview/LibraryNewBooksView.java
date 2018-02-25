@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.LibraryNewBookBean;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
+
 import java.util.List;
 
 public class LibraryNewBooksView extends LinearLayout {

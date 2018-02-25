@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hwangjr.rxbus.RxBus;
@@ -19,36 +20,46 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.common.RxBusTag;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
+import com.monke.monkeybook.help.RxBusTag;
+
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class DownloadListPop extends PopupWindow {
+
     private Context mContext;
     private View view;
 
-    private TextView tvNone;
-    private LinearLayout llDownload;
-
-    private ImageView ivCover;
-    private TextView tvName;
-    private TextView tvChapterName;
-    private TextView tvCancel;
-    private TextView tvDownload;
+    @BindView(R.id.iv_cover)
+    ImageView ivCover;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_chapter_name)
+    TextView tvChapterName;
+    @BindView(R.id.ll_download)
+    LinearLayout llDownload;
+    @BindView(R.id.tv_download)
+    TextView tvDownload;
+    @BindView(R.id.tv_cancel)
+    TextView tvCancel;
+    @BindView(R.id.tv_none)
+    TextView tvNone;
 
     public DownloadListPop(Context context) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_downloadlist, null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_download_list, null);
         this.setContentView(view);
-        bindView();
+        ButterKnife.bind(this, view);
         bindEvent();
         initWait();
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -59,59 +70,40 @@ public class DownloadListPop extends PopupWindow {
     }
 
     private void bindEvent() {
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, new Object());
-                tvNone.setVisibility(View.VISIBLE);
+        tvCancel.setOnClickListener(v -> {
+            RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, new Object());
+            tvNone.setVisibility(View.VISIBLE);
+        });
+        tvDownload.setOnClickListener(v -> {
+            if (tvDownload.getText().equals("开始下载")) {
+                RxBus.get().post(RxBusTag.START_DOWNLOAD, new Object());
+            } else {
+                RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, new Object());
             }
         });
-        tvDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvDownload.getText().equals("开始下载")) {
-                    RxBus.get().post(RxBusTag.START_DOWNLOAD, new Object());
-                } else {
-                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, new Object());
-                }
-            }
-        });
-    }
-
-    private void bindView() {
-        tvNone = (TextView) view.findViewById(R.id.tv_none);
-        llDownload = (LinearLayout) view.findViewById(R.id.ll_download);
-        ivCover = (ImageView) view.findViewById(R.id.iv_cover);
-        tvName = (TextView) view.findViewById(R.id.tv_name);
-        tvChapterName = (TextView) view.findViewById(R.id.tv_chapter_name);
-        tvCancel = (TextView) view.findViewById(R.id.tv_cancel);
-        tvDownload = (TextView) view.findViewById(R.id.tv_download);
     }
 
     private void initWait() {
-        Observable.create(new ObservableOnSubscribe<DownloadChapterBean>() {
-            @Override
-            public void subscribe(ObservableEmitter<DownloadChapterBean> e) throws Exception {
-                List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-                if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
-                    for (BookShelfBean bookItem : bookShelfBeanList) {
-                        if (!bookItem.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                            List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
-                            if (downloadChapterList != null && downloadChapterList.size() > 0) {
-                                e.onNext(downloadChapterList.get(0));
-                                e.onComplete();
-                                return;
-                            }
+        Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
+            List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+            if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
+                for (BookShelfBean bookItem : bookShelfBeanList) {
+                    if (!bookItem.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                        List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
+                        if (downloadChapterList != null && downloadChapterList.size() > 0) {
+                            e.onNext(downloadChapterList.get(0));
+                            e.onComplete();
+                            return;
                         }
                     }
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                    e.onNext(new DownloadChapterBean());
-                } else {
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                    e.onNext(new DownloadChapterBean());
                 }
-                e.onComplete();
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
+                e.onNext(new DownloadChapterBean());
+            } else {
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
+                e.onNext(new DownloadChapterBean());
             }
+            e.onComplete();
         })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())

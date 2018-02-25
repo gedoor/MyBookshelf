@@ -1,15 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="260dp"
+    android:layout_height="180dp"
+    android:background="@drawable/bg_search">
+
     <LinearLayout
-        android:layout_width="260dp"
-        android:layout_height="180dp"
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="3.5dp"
-        android:paddingLeft="10.5dp"
-        android:paddingRight="10.5dp"
-        android:paddingBottom="16.5dp"
-        android:background="@drawable/bg_search"
         android:gravity="center_horizontal">
         <TextView
             android:id="@+id/tv_msg"
@@ -51,4 +49,4 @@
                 android:background="@drawable/selector_book_detail_read_bg"/>
         </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</android.support.v7.widget.CardView>

@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="background">#ededed</color>
+    <color name="background_menu">#fcfcfc</color>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="btn_bg_press">#c1c1c1</color>
-    <color name="btn_bg_press_2">#aaaaaa</color>
+    <color name="btn_bg_press">#c4c4c4</color>
+    <color name="btn_bg_press_2">#949494</color>
+    <color name="btn_bg_press_tp">#88000000</color>
 
     <color name="tv_btn_normal_black">#737373</color>
     <color name="tv_btn_press_black">#adadad</color>
     <color name="tv_btn_black">#343434</color>
     <color name="bg_library">#f1f1f1</color>
 
+    <color name="tv_text_default">#383838</color>
+
     <color name="tv_text_addshelf_nor">#ffffff</color>
     <color name="tv_text_addshelf_pre">#7891A5</color>
     <color name="tv_text_addshelf_disable">#7891A5</color>
     <color name="tv_text_addshelf_deep_pre">#587A8A</color>
+
+    <color name="welcome">#00000000</color>
 </resources>

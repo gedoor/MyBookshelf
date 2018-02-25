@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_shadow_bottom" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/background">
+
+        <LinearLayout
+            android:id="@+id/ll_follow_sys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="@color/tv_text_default"
+                android:text="@string/brightness"
+                android:layout_gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/tv_text_default"
+                android:text="@string/flow_sys"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="7dp"
+                android:layout_marginLeft="7dp" />
+            <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
+                android:id="@+id/scb_follow_sys"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                app:color_unchecked="#ffffff"
+                app:color_unchecked_stroke="#c1c1c1"
+                app:color_checked="#767676"
+                app:color_tick="#ffffff"
+                app:duration="150"
+                android:clickable="false"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/hpb_light"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:fontdrawable="@color/btn_bg_press_2"
+            app:cantouch="true"
+            app:bgdrawable="@color/btn_bg_press"
+            app:progresswidth="2dp"
+            app:maxprogress="255"
+            app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_width="13dp"
+            app:cursordrawable_height="13dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/btn_bg_press"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@color/background">
+
+        <LinearLayout
+            android:id="@+id/ll_click"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/tv_text_default"
+                android:text="点击灵敏度"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/hpb_click"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            app:fontdrawable="@color/btn_bg_press_2"
+            app:cantouch="true"
+            app:bgdrawable="@color/btn_bg_press"
+            app:progresswidth="2dp"
+            app:maxprogress="255"
+            app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_width="13dp"
+            app:cursordrawable_height="13dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

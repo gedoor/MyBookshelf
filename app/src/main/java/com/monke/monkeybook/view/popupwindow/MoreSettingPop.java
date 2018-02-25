@@ -1,33 +1,54 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.PopupWindow;
+
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.ReadBookControl;
+import com.monke.monkeybook.help.ReadBookControl;
 
-public class MoreSettingPop extends PopupWindow{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MoreSettingPop extends PopupWindow {
+
+    @BindView(R.id.sb_click_all_next)
+    SwitchButton sbClickAllNext;
+    @BindView(R.id.sb_click_anim)
+    SwitchButton sbClickAnim;
+    @BindView(R.id.sb_key)
+    SwitchButton sbKey;
+    @BindView(R.id.sb_click)
+    SwitchButton sbClick;
+    @BindView(R.id.sb_keep_screen_on)
+    SwitchButton sbKeepScreenOn;
+
     private Context mContext;
     private View view;
-
-    private SwitchButton sbKey;
-    private SwitchButton sbClick;
-
     private ReadBookControl readBookControl;
 
-    public MoreSettingPop(Context context){
+    public interface OnChangeProListener {
+        void keepScreenOnChange(Boolean keepScreenOn);
+    }
+
+    private OnChangeProListener changeProListener;
+
+    @SuppressLint("InflateParams")
+    public MoreSettingPop(Context context, @NonNull OnChangeProListener changeProListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
+        this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_moresetting,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
         this.setContentView(view);
+        ButterKnife.bind(this, view);
         initData();
-        bindView();
         bindEvent();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
@@ -37,33 +58,23 @@ public class MoreSettingPop extends PopupWindow{
     }
 
     private void bindEvent() {
-        sbKey.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                readBookControl.setCanKeyTurn(isChecked);
-            }
+        sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
+        sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
+        sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
+        sbKeepScreenOn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setKeepScreenOn(isChecked);
+            changeProListener.keepScreenOnChange(isChecked);
         });
-        sbClick.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                readBookControl.setCanClickTurn(isChecked);
-            }
-        });
-    }
-
-    private void bindView() {
-        sbKey = (SwitchButton) view.findViewById(R.id.sb_key);
-        sbClick = (SwitchButton) view.findViewById(R.id.sb_click);
-
-        if(readBookControl.getCanKeyTurn())
-            sbKey.setCheckedImmediatelyNoEvent(true);
-        else sbKey.setCheckedImmediatelyNoEvent(false);
-        if(readBookControl.getCanClickTurn())
-            sbClick.setCheckedImmediatelyNoEvent(true);
-        else sbClick.setCheckedImmediatelyNoEvent(false);
+        sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
     }
 
     private void initData() {
         readBookControl = ReadBookControl.getInstance();
+
+        sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
+        sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
+        sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
+        sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
+        sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
     }
 }

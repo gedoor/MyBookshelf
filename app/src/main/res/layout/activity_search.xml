@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="@color/background"
         android:paddingBottom="13dp"
         android:paddingTop="13dp"
         android:orientation="horizontal">
@@ -30,7 +30,7 @@
                 android:textColorHint="#6f6f6f"
                 android:textSize="13sp"
                 android:singleLine="true"
-                android:imeOptions="actionSearch"
+                android:imeOptions="actionSearch|flagNoExtractUi"
                 android:textColor="#767676"
                 android:cursorVisible="false"
                 android:textCursorDrawable="@drawable/shape_text_cursor"/>
@@ -40,7 +40,7 @@
                 android:layout_height="15dp"
                 android:layout_gravity="center_vertical|left"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/icon_search_nor" />
+                android:src="@drawable/ic_search_black_24dp" />
         </FrameLayout>
         <TextView
             android:id="@+id/tv_tosearch"
@@ -62,7 +62,7 @@
             android:id="@+id/rfRv_search_books"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#f1f1f1"
+            android:background="@color/background"
             app:bg_color="#00000000"
             app:font_color="#767676"
             app:second_color="#c1c1c1"
@@ -75,7 +75,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="invisible"
-            android:background="#ffffff">
+            android:background="@color/background">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:background="@drawable/bg_shadow"
+            android:background="@drawable/bg_shadow_top"
             android:layout_gravity="top"/>
     </FrameLayout>
 </com.monke.immerselayout.ImmerseLinearLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
 import com.monke.monkeybook.R;
 
 public class CheckAddShelfPop extends PopupWindow{
@@ -29,7 +30,7 @@ public class CheckAddShelfPop extends PopupWindow{
         mContext = context;
         this.bookName = bookName;
         this.itemClick = itemClick;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_checkaddshelf,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_check_add_shelf,null);
         this.setContentView(view);
 
         initView();
@@ -40,22 +41,14 @@ public class CheckAddShelfPop extends PopupWindow{
     }
 
     private void initView() {
-        tvBookName = (TextView) view.findViewById(R.id.tv_book_name);
-        tvBookName.setText(String.format(mContext.getString(R.string.tv_pop_checkaddshelf),bookName));
-        tvExit = (TextView) view.findViewById(R.id.tv_exit);
-        tvExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                itemClick.clickExit();
-            }
+        tvBookName = view.findViewById(R.id.tv_book_name);
+        tvBookName.setText(String.format(mContext.getString(R.string.check_add_bookshelf),bookName));
+        tvExit = view.findViewById(R.id.tv_exit);
+        tvExit.setOnClickListener(v -> {
+            dismiss();
+            itemClick.clickExit();
         });
-        tvAddShelf = (TextView) view.findViewById(R.id.tv_addshelf);
-        tvAddShelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClick.clickAddShelf();
-            }
-        });
+        tvAddShelf = view.findViewById(R.id.tv_addshelf);
+        tvAddShelf.setOnClickListener(v -> itemClick.clickAddShelf());
     }
 }

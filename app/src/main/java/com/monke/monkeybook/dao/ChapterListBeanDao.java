@@ -22,7 +22,7 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
     /**
      * Properties of entity ChapterListBean.<br/>
      * Can be used for QueryBuilder and for referencing column names.
-    */
+     */
     public static class Properties {
         public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
         public final static Property DurChapterIndex = new Property(1, int.class, "durChapterIndex", false, "DUR_CHAPTER_INDEX");
@@ -30,7 +30,7 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         public final static Property DurChapterName = new Property(3, String.class, "durChapterName", false, "DUR_CHAPTER_NAME");
         public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
         public final static Property HasCache = new Property(5, Boolean.class, "hasCache", false, "HAS_CACHE");
-    };
+    }
 
 
     public ChapterListBeanDao(DaoConfig config) {
@@ -161,6 +161,11 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public boolean hasKey(ChapterListBean entity) {
+        return entity.getDurChapterUrl() != null;
     }
 
     @Override
