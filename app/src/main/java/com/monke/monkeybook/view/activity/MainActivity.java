@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -434,6 +433,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     public void onRestore() {
         onRestore = true;
         moProgressHUD.showLoading(getString(R.string.restore_success));
+    }
+
+    @Override
+    public SharedPreferences getPreferences() {
+        return preferences;
     }
 
     @Override

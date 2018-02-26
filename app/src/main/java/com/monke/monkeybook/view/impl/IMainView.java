@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.impl;
 
+import android.content.SharedPreferences;
+
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.BookShelfBean;
 
@@ -47,4 +49,6 @@ public interface IMainView extends IView{
     void showLoading(String msg);
 
     void onRestore();
+
+    SharedPreferences getPreferences();
 }

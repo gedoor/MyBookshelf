@@ -1,5 +1,10 @@
 package com.monke.monkeybook.model;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -28,6 +33,8 @@ public class SearchBook {
 
     public SearchBook(OnSearchListener searchListener) {
         this.searchListener = searchListener;
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        threadsNum = preference.getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
 
         //搜索引擎初始化
         searchEngineS = new ArrayList<>();

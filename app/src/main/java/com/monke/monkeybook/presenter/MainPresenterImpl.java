@@ -39,27 +39,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
-    private int threadsNum = 6;
-
-    private List<BookShelfBean> getAllBookShelf() {
-        List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-        for (int i = 0; i < bookShelfList.size(); i++) {
-            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().list();
-            if (temp != null && temp.size() > 0) {
-                BookInfoBean bookInfoBean = temp.get(0);
-                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
-                bookShelfList.get(i).setBookInfoBean(bookInfoBean);
-            } else {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
-                bookShelfList.remove(i);
-                i--;
-            }
-        }
-        return bookShelfList;
-    }
+    private int threadsNum = 0;
+    private int refreshIndex;
 
     @Override
     public void queryBookShelf(final Boolean needRefresh) {
@@ -92,6 +73,26 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
                     }
                 });
+    }
+
+    private List<BookShelfBean> getAllBookShelf() {
+        List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+        for (int i = 0; i < bookShelfList.size(); i++) {
+            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().list();
+            if (temp != null && temp.size() > 0) {
+                BookInfoBean bookInfoBean = temp.get(0);
+                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
+                bookShelfList.get(i).setBookInfoBean(bookInfoBean);
+            } else {
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
+                bookShelfList.remove(i);
+                i--;
+            }
+        }
+        return bookShelfList;
     }
 
     @Override
@@ -218,13 +219,18 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 });
     }
 
-    private int refreshIndex;
+    private int getThreadsNum() {
+        if (threadsNum == 0) {
+            threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
+        }
+        return threadsNum;
+    }
 
     private void startRefreshBook(List<BookShelfBean> value) {
         if (value != null && value.size() > 0) {
             mView.setRecyclerMaxProgress(value.size());
             refreshIndex = -1;
-            for (int i = 1; i <= threadsNum; i++) {
+            for (int i = 1; i <= getThreadsNum(); i++) {
                 refreshBookshelf(value);
             }
         } else {
@@ -264,7 +270,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 refreshBookshelf(bookShelfBeans);
             }
         } else {
-            if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
+            if (refreshIndex >= bookShelfBeans.size() + getThreadsNum() - 1) {
                 mView.refreshFinish();
                 queryBookShelf(false);
             }
