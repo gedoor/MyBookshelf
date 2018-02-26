@@ -6,12 +6,12 @@
         android:defaultValue="0"
         android:entries="@array/screen_direction_list_title"
         android:entryValues="@array/screen_direction_list_value"
-        android:key="list_screen_direction"
+        android:key="@string/pk_screen_direction"
         android:title="@string/screen_direction" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="auto_refresh"
+        android:key="@string/pk_auto_refresh"
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
