@@ -39,7 +39,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
-    private int threadsNum = 0;
+    private int threadsNum = 6;
     private int refreshIndex;
 
     @Override
@@ -220,9 +220,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     private int getThreadsNum() {
-        if (threadsNum == 0) {
-            threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
-        }
+        threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
         return threadsNum;
     }
 
@@ -270,7 +268,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 refreshBookshelf(bookShelfBeans);
             }
         } else {
-            if (refreshIndex >= bookShelfBeans.size() + getThreadsNum() - 1) {
+            if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 mView.refreshFinish();
                 queryBookShelf(false);
             }
