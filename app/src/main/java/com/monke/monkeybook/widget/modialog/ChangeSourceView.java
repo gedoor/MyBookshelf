@@ -53,7 +53,7 @@ public class ChangeSourceView {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
-        adapter = new ChangeSourceAdapter(false);
+        adapter = new ChangeSourceAdapter(context, false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();

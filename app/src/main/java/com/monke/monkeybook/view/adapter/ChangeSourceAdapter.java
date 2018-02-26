@@ -1,5 +1,7 @@
 package com.monke.monkeybook.view.adapter;
 
+import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +25,11 @@ import java.util.List;
 public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> searchBookBeans;
     private OnItemClickListener mOnItemClickListener;
+    private Context mContext;
 
-    public ChangeSourceAdapter(Boolean needLoadMore) {
+    public ChangeSourceAdapter(Context context, Boolean needLoadMore) {
         super(needLoadMore);
+        mContext = context;
         searchBookBeans = new ArrayList<>();
     }
 
@@ -79,6 +83,8 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         holder.itemView.setTag(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
+        myViewHolder.ivChecked.getDrawable().mutate();
+        myViewHolder.ivChecked.setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (searchBookBeans.get(position).getIsAdd()) {
             myViewHolder.ivChecked.setVisibility(View.VISIBLE);
         } else {
