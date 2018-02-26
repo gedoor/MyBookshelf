@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by GKF on 2017/12/16.
+ * 设置
  */
 
 public class SettingActivity extends MBaseActivity {
