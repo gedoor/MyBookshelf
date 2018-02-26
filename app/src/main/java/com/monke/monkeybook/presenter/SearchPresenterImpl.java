@@ -208,7 +208,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
 
     @Override
     public void initPage() {
-        searchBook.setPage(1);
+        searchBook.setPage(0);
     }
 
     @Override
