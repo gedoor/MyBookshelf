@@ -28,6 +28,19 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name=".BookIcon"
+            android:targetActivity=".view.activity.WelcomeActivity"
+            android:label="@string/app_name"
+            android:icon="@mipmap/book_launcher"
+            android:roundIcon="@mipmap/book_launcher_round"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".view.activity.MainActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"

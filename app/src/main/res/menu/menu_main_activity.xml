@@ -28,6 +28,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_change_icon"
+        android:icon="@drawable/ic_face_black_24dp"
+        android:title="@string/change_icon"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_clear_content"
         android:icon="@drawable/ic_clear_all_black_24dp"
         android:title="@string/clear_content"

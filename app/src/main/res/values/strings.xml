@@ -139,5 +139,6 @@
     <string name="no_download">暂无任务</string>
     <string name="import_select_book">导入选择书籍</string>
     <string name="update_search_threads_num">更新和搜索线程数</string>
+    <string name="change_icon">切换图标</string>
 
 </resources>

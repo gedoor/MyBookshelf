@@ -33,6 +33,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
@@ -206,6 +207,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
                 recreate();
+                break;
+            case R.id.action_change_icon:
+                LauncherIcon.Change();
                 break;
             case R.id.action_clear_content:
                 clearContent();
