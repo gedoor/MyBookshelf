@@ -122,7 +122,7 @@ public class ChangeSourceView {
     private void getSearchBookInDb(BookShelfBean bookShelf) {
         Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
-                    .where(SearchBookBeanDao.Properties.Name.eq(bookName)).build().list();
+                    .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
             e.onNext(searchBookBeans == null ? new ArrayList<>() : searchBookBeans);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
