@@ -27,7 +27,6 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
-import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -35,7 +34,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
-import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
@@ -454,6 +452,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     public void onNext(BookShelfBean value) {
                         bookShelf = value;
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
+                        mView.initChapterList();
                         mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
                                 bookShelf.getChapterListSize(),
                                 BookContentView.DurPageIndexBegin);

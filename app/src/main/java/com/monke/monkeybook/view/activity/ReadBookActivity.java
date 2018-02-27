@@ -61,10 +61,7 @@ import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
-import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
-import static com.monke.monkeybook.service.ReadAloudService.ActionPauseService;
-import static com.monke.monkeybook.service.ReadAloudService.ActionResumeService;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
@@ -474,7 +471,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         checkAddShelfPop.dismiss();
                     }
                 });
-        //目录
+        initChapterList();
+    }
+
+    @Override
+    public void initChapterList() {
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
                 .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
                         BookContentView.DurPageIndexBegin));
