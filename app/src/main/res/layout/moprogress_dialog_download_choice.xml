@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="260dp"
     android:layout_height="185dp"
     android:background="@drawable/bg_search">
@@ -45,7 +46,8 @@
                     android:layout_marginRight="5dp"
                     android:text="第"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <EditText
                     android:id="@+id/edt_start"
@@ -98,7 +100,8 @@
                     android:layout_marginLeft="5dp"
                     android:text="章"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="0dp"
@@ -126,8 +129,9 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="取消"
-                android:textColor="#767676"
-                android:textSize="15sp" />
+                android:textColor="@color/tv_text_default"
+                android:textSize="15sp"
+                tools:ignore="KeyboardInaccessibleWidget" />
 
             <TextView
                 android:id="@+id/tv_download"
@@ -139,9 +143,9 @@
                 android:gravity="center"
                 android:text="下载"
                 android:textColor="#ffffff"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:focusable="true" />
         </LinearLayout>
     </LinearLayout>
-
 
 </android.support.v7.widget.CardView>

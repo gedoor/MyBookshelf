@@ -140,5 +140,9 @@
     <string name="import_select_book">导入选择书籍</string>
     <string name="update_search_threads_num">更新和搜索线程数</string>
     <string name="change_icon">切换图标</string>
+    <string name="remove_from_bookshelf">移出书架</string>
+    <string name="start_read">开始阅读</string>
+    <string name="data_loading">加载数据中…</string>
+    <string name="book_intro">内容简介</string>
 
 </resources>

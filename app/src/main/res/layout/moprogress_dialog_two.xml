@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="#767676"
+                android:textColor="@color/tv_text_default"
                 android:gravity="center"
                 android:textSize="15sp"
                 android:clickable="true"

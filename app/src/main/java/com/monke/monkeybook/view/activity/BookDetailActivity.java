@@ -128,7 +128,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                     mPresenter.addToBookShelf();
                 });
             }
-            if (tvIntro.getText().toString().trim().length() == 0) {
+            if (mPresenter.getBookShelf().getBookInfoBean().getIntroduce() != null) {
                 tvIntro.setText(mPresenter.getBookShelf().getBookInfoBean().getIntroduce());
             }
             if (tvIntro.getVisibility() != View.VISIBLE) {

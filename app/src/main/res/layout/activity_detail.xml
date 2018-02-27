@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ifl_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/ifl_content"
+    android:background="#77000000"
     android:clickable="true"
-    android:background="#40000000">
+    android:focusable="true"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,37 +16,39 @@
         android:layout_gravity="center"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:paddingBottom="16.5dp"
-        android:paddingTop="3.5dp"
-        android:paddingLeft="10.5dp"
-        android:paddingRight="10.5dp"
         android:background="@drawable/bg_search"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:paddingBottom="16.5dp"
+        android:paddingLeft="10.5dp"
+        android:paddingRight="10.5dp"
+        android:paddingTop="3.5dp">
 
         <ImageView
             android:id="@+id/iv_blur_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#70000000"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="123dp"
-                android:orientation="horizontal"
-                android:background="#70000000">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/iv_cover"
                     android:layout_width="87dp"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/img_cover"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/img_cover_default"
-                    android:contentDescription="@string/img_cover"/>
+                    android:src="@drawable/img_cover_default" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,22 +65,22 @@
                         <me.grantland.widget.AutofitTextView
                             android:id="@+id/tv_name"
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
                             android:singleLine="true"
-                            android:textSize="16sp"
-                            app:minTextSize="14sp"
                             android:textColor="#ffffff"
-                            android:gravity="center|start"/>
+                            android:textSize="16sp"
+                            app:minTextSize="14sp" />
 
                         <ImageView
                             android:id="@+id/iv_refresh"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_refresh_white_24dp"
-                            android:contentDescription="@string/refresh" />
+                            android:contentDescription="@string/refresh"
+                            android:src="@drawable/ic_refresh_white_24dp" />
 
                     </LinearLayout>
 
@@ -84,100 +88,120 @@
                         android:id="@+id/tv_author"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:lines="1"
-                        android:textSize="13sp"
                         android:textColor="#dfdfdf"
-                        android:layout_marginTop="6dp"/>
+                        android:textSize="13sp" />
+
                     <TextView
                         android:id="@+id/tv_origin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
                         android:lines="1"
-                        android:textSize="13sp"
                         android:textColor="#dfdfdf"
-                        android:layout_marginTop="6dp"/>
+                        android:textSize="13sp" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
+
                     <TextView
                         android:id="@+id/tv_chapter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#ffffff"
-                        android:textSize="15sp"
                         android:ellipsize="end"
-                        android:lines="2"/>
+                        android:lines="2"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/btn_bg_press_2" />
+
             <TextView
                 android:id="@+id/tv_intro"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:scrollbars="vertical"
-                android:background="#ffffff"
-                android:scrollbarStyle="outsideInset"
-                android:textSize="15sp"
-                android:textColor="#767676"
+                android:background="@color/background"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:clickable="true"
-                android:visibility="invisible"
-                android:focusable="true" />
+                android:scrollbarStyle="outsideInset"
+                android:scrollbars="vertical"
+                android:text="@string/book_intro"
+                android:textColor="@color/tv_text_default"
+                android:textSize="15sp"
+                android:visibility="invisible" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="#c1c1c1"/>
-           <FrameLayout
-               android:layout_width="match_parent"
-               android:layout_height="50dp">
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:orientation="horizontal"
-                   android:background="#ffffff">
-                   <TextView
-                       android:id="@+id/tv_shelf"
-                       android:layout_width="0dp"
-                       android:layout_height="match_parent"
-                       android:layout_weight="1"
-                       android:textColor="#767676"
-                       android:text="移出书架"
-                       android:gravity="center"
-                       android:textSize="15sp"
-                       android:clickable="true"
-                       android:background="@drawable/selector_book_detail_shelf_bg"/>
-                   <TextView
-                       android:id="@+id/tv_read"
-                       android:layout_width="0dp"
-                       android:layout_height="match_parent"
-                       android:layout_weight="1"
-                       android:text="开始阅读"
-                       android:gravity="center"
-                       android:textColor="#ffffff"
-                       android:clickable="true"
-                       android:textSize="15sp"
-                       android:background="@drawable/selector_book_detail_read_bg"/>
-               </LinearLayout>
-               <TextView
-                   android:id="@+id/tv_loading"
-                   android:visibility="gone"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:clickable="true"
-                   android:background="@drawable/bg_ib_pre3"
-                   android:text="加载数据中..."
-                   android:gravity="center"
-                   android:textSize="16sp"
-                   android:textColor="#767676"/>
-           </FrameLayout>
+                android:background="@color/btn_bg_press_2" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffffff"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_shelf"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_book_detail_shelf_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:text="@string/remove_from_bookshelf"
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_read"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_book_detail_read_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:text="@string/start_read"
+                        android:textColor="#ffffff"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_ib_pre3"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/data_loading"
+                    android:textColor="#767676"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+            </FrameLayout>
         </LinearLayout>
     </FrameLayout>
 

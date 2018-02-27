@@ -18,10 +18,10 @@
 
     <color name="tv_text_default">#b7b7b7</color>
 
-    <color name="tv_text_addshelf_nor">#e7e7e7</color>
-    <color name="tv_text_addshelf_pre">#7891A5</color>
-    <color name="tv_text_addshelf_disable">#7891A5</color>
-    <color name="tv_text_addshelf_deep_pre">#587A8A</color>
+    <color name="tv_text_addshelf_nor">#434343</color>
+    <color name="tv_text_addshelf_pre">#657a8b</color>
+    <color name="tv_text_addshelf_disable">#536573</color>
+    <color name="tv_text_addshelf_deep_pre">#354953</color>
 
     <color name="welcome">#67000000</color>
 </resources>
