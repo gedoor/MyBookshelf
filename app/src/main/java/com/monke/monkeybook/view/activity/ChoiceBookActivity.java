@@ -168,7 +168,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     public void updateSearchItem(int index) {
         if (index < searchBookAdapter.getItemcount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
-            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_addshelf);
+            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
             if (tvAddShelf != null) {
                 if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
                     tvAddShelf.setText("已添加");

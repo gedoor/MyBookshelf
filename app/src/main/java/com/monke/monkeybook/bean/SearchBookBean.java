@@ -16,6 +16,10 @@ public class SearchBookBean implements Parcelable{
     private String coverUrl;
     private String name;
     private String author;
+    private String tag;
+    private String kind;
+    private String origin;
+    private String desc;
     @Transient
     private long words;
     @Transient
@@ -24,10 +28,8 @@ public class SearchBookBean implements Parcelable{
     private String lastChapter;
     @Transient
     private Boolean isAdd = false;
-    private String tag;
-    private String kind;
-    private String origin;
-    private String desc;
+    @Transient
+    private int originNum = 1;
 
     public SearchBookBean(){
 
@@ -46,6 +48,7 @@ public class SearchBookBean implements Parcelable{
         kind = in.readString();
         origin = in.readString();
         desc = in.readString();
+        originNum = in.readInt();
     }
 
     @Generated(hash = 1994889042)
@@ -75,6 +78,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(kind);
         dest.writeString(origin);
         dest.writeString(desc);
+        dest.writeInt(originNum);
     }
 
     @Override
@@ -188,5 +192,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setIsAdd(Boolean isAdd) {
         this.isAdd = isAdd;
+    }
+
+    public void originNumAdd() {
+        originNum = originNum + 1;
+    }
+
+    public int getOriginNum() {
+        return originNum;
     }
 }

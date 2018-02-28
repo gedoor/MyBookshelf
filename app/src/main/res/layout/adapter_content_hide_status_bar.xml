@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/selector_tv_addshelf"
+                    android:background="@drawable/selector_tv_first_button"
                     android:gravity="center"
                     android:lines="1"
                     android:paddingBottom="7dp"
@@ -120,7 +120,7 @@
                     android:paddingRight="18dp"
                     android:paddingTop="7dp"
                     android:text="@string/retry"
-                    android:textColor="@drawable/selector_tv_addshelf_text"
+                    android:textColor="@drawable/selector_tv_first_text"
                     android:textSize="16sp" />
             </LinearLayout>
         </FrameLayout>

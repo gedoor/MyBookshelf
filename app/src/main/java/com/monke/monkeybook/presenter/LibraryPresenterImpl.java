@@ -84,7 +84,8 @@ public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implem
     }
 
     private void getLibraryNewData() {
-        GxwztvBookModelImpl.getInstance().getLibraryData(mCache).subscribeOn(Schedulers.io())
+        GxwztvBookModelImpl.getInstance().getLibraryData(mCache)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<LibraryBean>() {
                     @Override

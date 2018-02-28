@@ -21,10 +21,10 @@
         android:paddingTop="7dp"
         android:paddingBottom="7dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/selector_tv_addshelf"
+        android:background="@drawable/selector_tv_first_button"
         android:text="重试"
         android:gravity="center"
         android:textSize="16sp"
         android:lines="1"
-        android:textColor="@drawable/selector_tv_addshelf_text"/>
+        android:textColor="@drawable/selector_tv_first_text" />
 </LinearLayout>

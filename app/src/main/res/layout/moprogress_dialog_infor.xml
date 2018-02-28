@@ -30,11 +30,11 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/selector_tv_addshelf"
+                android:background="@drawable/selector_tv_first_button"
                 android:gravity="center"
                 android:lines="1"
                 android:text="@string/ok"
-                android:textColor="@drawable/selector_tv_addshelf_text"
+                android:textColor="@drawable/selector_tv_first_text"
                 android:textSize="14sp" />
 
     </LinearLayout>

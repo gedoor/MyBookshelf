@@ -48,7 +48,7 @@ public class CheckAddShelfPop extends PopupWindow{
             dismiss();
             itemClick.clickExit();
         });
-        tvAddShelf = view.findViewById(R.id.tv_addshelf);
+        tvAddShelf = view.findViewById(R.id.tv_add_shelf);
         tvAddShelf.setOnClickListener(v -> itemClick.clickAddShelf());
     }
 }

@@ -43,7 +43,7 @@
                 android:clickable="true"
                 android:background="@drawable/selector_book_detail_shelf_bg"/>
             <TextView
-                android:id="@+id/tv_addshelf"
+                android:id="@+id/tv_add_shelf"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
