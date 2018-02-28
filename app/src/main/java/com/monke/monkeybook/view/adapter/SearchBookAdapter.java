@@ -13,11 +13,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> searchBooks;
@@ -151,9 +157,24 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     public void addAll(List<SearchBookBean> newDataS, String bookName) {
         if(newDataS!=null && newDataS.size()>0){
+            saveSearchToDb(newDataS);
+            List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             int oldCount = getItemcount();
-            Boolean changed = false;
             for (SearchBookBean temp : newDataS) {
+                for (int i = 0; i < searchBooks.size(); i++) {
+                    SearchBookBean searchBook = searchBooks.get(i);
+                    if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
+                        if (temp.getIsAdd()) {
+                            searchBook.setIsAdd(true);
+                            notifyItemChanged(i);
+                        }
+                    } else {
+                        searchBookBeansAdd.add(temp);
+                    }
+                }
+            }
+            Boolean changed = false;
+            for (SearchBookBean temp : searchBookBeansAdd) {
                 if (temp.getName().equals(bookName)) {
                     searchBooks.add(0, temp);
                     changed = true;
@@ -173,12 +194,25 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         searchBooks.clear();
         if (newData != null && newData.size() > 0) {
             searchBooks.addAll(newData);
+            saveSearchToDb(newData);
         }
         notifyDataSetChanged();
     }
 
     public List<SearchBookBean> getSearchBooks() {
         return searchBooks;
+    }
+
+    private void saveSearchToDb(List<SearchBookBean> newDataS) {
+        Observable.create(e -> {
+            DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao()
+                    .insertOrReplaceInTx(newDataS);
+            e.onNext(true);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
 }

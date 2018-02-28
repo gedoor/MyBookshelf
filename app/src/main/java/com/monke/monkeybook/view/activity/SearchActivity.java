@@ -447,7 +447,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         if (isRefresh) {
             rfRvSearchBooks.refreshError();
         } else {
-
             rfRvSearchBooks.loadMoreError();
         }
     }
