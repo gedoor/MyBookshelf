@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,7 +48,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             itemClickListener.itemClick(position);
         });
         if (position == index) {
-            holder.flContent.setBackgroundResource(R.color.tv_text_addshelf_deep_pre);
+            holder.flContent.setBackgroundResource(R.color.tv_text_button_deep_pre);
             holder.flContent.setClickable(false);
         } else {
             holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre2);

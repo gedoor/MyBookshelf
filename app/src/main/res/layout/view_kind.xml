@@ -26,5 +26,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/tv_text_addshelf_pre"/>
+        android:background="@color/tv_text_button_pre" />
 </LinearLayout>
