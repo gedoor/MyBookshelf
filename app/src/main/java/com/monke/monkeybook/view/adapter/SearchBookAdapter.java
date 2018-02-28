@@ -161,6 +161,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             int oldCount = getItemcount();
             for (SearchBookBean temp : newDataS) {
+                Boolean hasSame = false;
                 for (int i = 0; i < searchBooks.size(); i++) {
                     SearchBookBean searchBook = searchBooks.get(i);
                     if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
@@ -168,9 +169,12 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                             searchBook.setIsAdd(true);
                             notifyItemChanged(i);
                         }
-                    } else {
-                        searchBookBeansAdd.add(temp);
+                        hasSame = true;
+                        break;
                     }
+                }
+                if (!hasSame) {
+                    searchBookBeansAdd.add(temp);
                 }
             }
             Boolean changed = false;

@@ -70,6 +70,9 @@ public class SearchBook {
         if (page == 0) {
             page = 1;
         }
+        if (page == 1) {
+            searchListener.refreshSearchBook(new ArrayList<>());
+        }
         searchSuccessNum = 0;
         searchEngineIndex = -1;
         for (int i = 1; i <= threadsNum; i++) {
@@ -123,10 +126,16 @@ public class SearchBook {
         } else {
             if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
                 if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
-                    searchListener.searchBookError(true);
+                    if (page == 1) {
+                        searchListener.searchBookError(true);
+                    } else {
+                        searchListener.searchBookError(false);
+                    }
                 } else {
                     if (page == 1) {
-                        searchListener.refreshFinish(true);
+                        searchListener.refreshFinish(false);
+                    } else if (page < 3) {
+                        searchListener.loadMoreFinish(false);
                     } else {
                         searchListener.loadMoreFinish(true);
                     }
@@ -146,15 +155,15 @@ public class SearchBook {
     public interface OnSearchListener {
         void refreshSearchBook(List<SearchBookBean> value);
 
-        void refreshFinish(Boolean value);
+        void refreshFinish(Boolean isAll);
 
-        void loadMoreFinish(Boolean value);
+        void loadMoreFinish(Boolean isAll);
 
-        Boolean checkIsExist(SearchBookBean value);
+        Boolean checkIsExist(SearchBookBean searchBook);
 
         void loadMoreSearchBook(List<SearchBookBean> value);
 
-        void searchBookError(Boolean value);
+        void searchBookError(Boolean isRefresh);
 
         int getItemCount();
     }
