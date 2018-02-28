@@ -153,15 +153,15 @@ public class SearchBook {
     }
 
     public interface OnSearchListener {
-        void refreshSearchBook(List<SearchBookBean> value);
+        void refreshSearchBook(List<SearchBookBean> searchBookBeanList);
 
         void refreshFinish(Boolean isAll);
 
         void loadMoreFinish(Boolean isAll);
 
-        Boolean checkIsExist(SearchBookBean searchBook);
+        Boolean checkIsExist(SearchBookBean searchBookBean);
 
-        void loadMoreSearchBook(List<SearchBookBean> value);
+        void loadMoreSearchBook(List<SearchBookBean> searchBookBeanList);
 
         void searchBookError(Boolean isRefresh);
 
