@@ -190,7 +190,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             if (changed) {
                 notifyDataSetChanged();
             } else {
-                notifyItemRangeInserted(oldCount, newDataS.size());
+                notifyItemRangeInserted(oldCount, searchBookBeansAdd.size());
             }
         }
     }
