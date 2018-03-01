@@ -130,9 +130,19 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         adapter.resetDataS(BookSourceManage.saveBookSourceToDb());
     }
 
+    public void upDateSelectAll() {
+        selectAll = true;
+        for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
+            if (!bookSourceBean.getEnable()) {
+                selectAll = false;
+                break;
+            }
+        }
+    }
+
     private void selectAllDataS() {
         for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
-            bookSourceBean.setEnable(selectAll);
+            bookSourceBean.setEnable(!selectAll);
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;

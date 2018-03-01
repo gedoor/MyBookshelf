@@ -35,11 +35,13 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     public void addDataS(List<BookSourceBean> bookSourceBeanList) {
         this.dataList = bookSourceBeanList;
         notifyDataSetChanged();
+        activity.upDateSelectAll();
     }
 
     public void resetDataS(List<BookSourceBean> bookSourceBeanList) {
         this.dataList = bookSourceBeanList;
         notifyDataSetChanged();
+        activity.upDateSelectAll();
     }
 
     public List<BookSourceBean> getBookSourceBeanList() {
@@ -56,7 +58,10 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.cbView.setText(dataList.get(position).getBookSourceName());
         holder.cbView.setChecked(dataList.get(position).getEnable());
-        holder.cbView.setOnClickListener((View view) -> dataList.get(position).setEnable(holder.cbView.isChecked()));
+        holder.cbView.setOnClickListener((View view) -> {
+            dataList.get(position).setEnable(holder.cbView.isChecked());
+            activity.upDateSelectAll();
+        });
         holder.editView.getDrawable().mutate();
         holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.editView.setOnClickListener(view -> {
