@@ -265,6 +265,9 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             rotateAnimation.setDuration(1000);
             animationSet.addAnimation(rotateAnimation);
             ivRefresh.startAnimation(animationSet);
+            tvLoading.setVisibility(View.VISIBLE);
+            tvLoading.setText("加载中...");
+            tvLoading.setOnClickListener(null);
             mPresenter.getBookShelfInfo();
         });
     }
