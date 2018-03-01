@@ -18,11 +18,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
 import com.monke.monkeybook.utils.BlurTransformation;
 import com.monke.monkeybook.view.impl.IBookDetailView;
+import com.monke.monkeybook.widget.modialog.ChangeSourceView;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,8 +55,12 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     TextView tvLoading;
     @BindView(R.id.iv_refresh)
     ImageView ivRefresh;
+    @BindView(R.id.tv_change_origin)
+    TextView tvChangeOrigin;
+
     private Animation animHideLoading;
     private Animation animShowInfo;
+    private MoProgressHUD moProgressHUD;
 
     @Override
     protected IBookDetailPresenter initInjector() {
@@ -91,6 +98,8 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+        //弹窗
+        moProgressHUD = new MoProgressHUD(this);
 
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
         initView();
@@ -134,7 +143,6 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             if (tvIntro.getVisibility() != View.VISIBLE) {
                 tvIntro.setVisibility(View.VISIBLE);
                 tvIntro.startAnimation(animShowInfo);
-                tvLoading.startAnimation(animHideLoading);
             }
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
@@ -143,6 +151,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 tvOrigin.setVisibility(View.GONE);
             }
         }
+        tvLoading.startAnimation(animHideLoading);
         tvLoading.setOnClickListener(null);
     }
 
@@ -229,6 +238,16 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 overridePendingTransition(0,android.R.anim.fade_out);
             }
         });
+
+        tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
+                searchBookBean -> {
+                    tvOrigin.setText(String.format("来源:%s", searchBookBean.getOrigin()));
+                    mPresenter.initBookFormSearch(searchBookBean);
+                    tvLoading.setVisibility(View.VISIBLE);
+                    tvLoading.setText("加载中...");
+                    tvLoading.setOnClickListener(null);
+                    mPresenter.getBookShelfInfo();
+                }));
 
         tvRead.setOnClickListener(v -> {
             //进入阅读

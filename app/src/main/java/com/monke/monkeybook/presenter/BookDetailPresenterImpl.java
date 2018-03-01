@@ -56,23 +56,28 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             searchBook.setNoteUrl(bookShelf.getNoteUrl());
             searchBook.setTag(bookShelf.getTag());
         } else {
-            searchBook = intent.getParcelableExtra("data");
-            inBookShelf = searchBook.getIsAdd();
-            bookShelf = new BookShelfBean();
-            bookShelf.setNoteUrl(searchBook.getNoteUrl());
-            bookShelf.setFinalDate(System.currentTimeMillis());
-            bookShelf.setDurChapter(0);
-            bookShelf.setDurChapterPage(0);
-            bookShelf.setTag(searchBook.getTag());
-            BookInfoBean bookInfo = new BookInfoBean();
-            bookInfo.setNoteUrl(searchBook.getNoteUrl());
-            bookInfo.setAuthor(searchBook.getAuthor());
-            bookInfo.setCoverUrl(searchBook.getCoverUrl());
-            bookInfo.setName(searchBook.getName());
-            bookInfo.setTag(searchBook.getTag());
-            bookInfo.setOrigin(searchBook.getOrigin());
-            bookShelf.setBookInfoBean(bookInfo);
+            initBookFormSearch(intent.getParcelableExtra("data"));
         }
+    }
+
+    @Override
+    public void initBookFormSearch(SearchBookBean searchBookBean) {
+        searchBook = searchBookBean;
+        inBookShelf = searchBookBean.getIsAdd();
+        bookShelf = new BookShelfBean();
+        bookShelf.setNoteUrl(searchBookBean.getNoteUrl());
+        bookShelf.setFinalDate(System.currentTimeMillis());
+        bookShelf.setDurChapter(0);
+        bookShelf.setDurChapterPage(0);
+        bookShelf.setTag(searchBookBean.getTag());
+        BookInfoBean bookInfo = new BookInfoBean();
+        bookInfo.setNoteUrl(searchBookBean.getNoteUrl());
+        bookInfo.setAuthor(searchBookBean.getAuthor());
+        bookInfo.setCoverUrl(searchBookBean.getCoverUrl());
+        bookInfo.setName(searchBookBean.getName());
+        bookInfo.setTag(searchBookBean.getTag());
+        bookInfo.setOrigin(searchBookBean.getOrigin());
+        bookShelf.setBookInfoBean(bookInfo);
     }
 
     public Boolean getInBookShelf() {

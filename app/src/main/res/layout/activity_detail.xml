@@ -56,7 +56,8 @@
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="8dp">
+                    android:paddingTop="8dp"
+                    android:paddingBottom="6dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -95,16 +96,17 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
 
                         <TextView
                             android:id="@+id/tv_origin"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:layout_marginTop="6dp"
                             android:lines="1"
                             android:paddingRight="6dp"
                             android:text="@string/origin"
@@ -113,20 +115,17 @@
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                         <TextView
+                            android:id="@+id/tv_change_origin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/selector_tv_first_button"
-                            android:padding="3dp"
+                            android:paddingStart="3dp"
+                            android:paddingEnd="3dp"
                             android:text="@string/change_origin"
-                            android:textColor="#dfdfdf"
+                            android:textColor="#ffffff"
                             android:textSize="13sp" />
 
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/tv_chapter"
@@ -137,10 +136,6 @@
                         android:textColor="#ffffff"
                         android:textSize="15sp" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
                 </LinearLayout>
             </LinearLayout>
 
