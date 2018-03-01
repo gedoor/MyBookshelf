@@ -50,4 +50,6 @@ public interface IReadBookView extends IView {
     void showLoading(String msg);
 
     void dismissLoading();
+
+    void openBookFromOther();
 }

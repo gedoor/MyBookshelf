@@ -2,13 +2,11 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -59,6 +57,8 @@ import at.markushi.ui.CircleButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
@@ -66,7 +66,9 @@ import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
-    public static final int ResultReplace = 101;
+    private final int ResultReplace = 101;
+    private final int RESULT_OPEN_OTHER_PERMS = 102;
+
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.csv_book)
@@ -123,6 +125,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String noteUrl;
     private int aloudStatus;
 
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
     private WindowLightPop windowLightPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
@@ -769,22 +772,26 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         moProgressHUD.dismiss();
     }
 
-    @SuppressLint("NewApi")
+    @Override
+    public void openBookFromOther() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            mPresenter.openBookFromOther(this);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.open_from_other),
+                    RESULT_OPEN_OTHER_PERMS, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
+    private void onResultOpenOtherPerms() {
+        openBookFromOther();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 0x11) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                mPresenter.openBookFromOther(ReadBookActivity.this);
-            } else {
-                if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    showCheckPermission = true;
-                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> finish(), "设置", v -> PremissionCheck.requestPermissionSetting(ReadBookActivity.this));
-                } else {
-                    Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override

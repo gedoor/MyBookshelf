@@ -1,14 +1,12 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -37,7 +35,6 @@ import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
-import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -91,14 +88,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             }
             checkInShelf();
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(activity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //申请权限
-                activity.requestPermissions(
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0x11);
-            } else {
-                openBookFromOther(activity);
-            }
+            mView.openBookFromOther();
         }
     }
 

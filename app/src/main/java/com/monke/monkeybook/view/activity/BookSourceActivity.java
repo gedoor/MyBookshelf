@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -225,6 +226,13 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @AfterPermissionGranted(RESULT_IMPORT_PERMS)
     private void resultImportPerms() {
         selectBookSourceFile();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override

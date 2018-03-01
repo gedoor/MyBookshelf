@@ -144,5 +144,6 @@
     <string name="start_read">开始阅读</string>
     <string name="data_loading">加载数据中…</string>
     <string name="book_intro">内容简介</string>
+    <string name="open_from_other">打开外部书籍</string>
 
 </resources>
