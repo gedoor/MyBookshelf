@@ -431,8 +431,10 @@ public class ReadAloudService extends Service {
                 ttsInitSuccess = true;
                 playTTS();
             } else {
-                aloudServiceListener.showMassage("TTS初始化失败");
-                doneService();
+                if (aloudServiceListener != null) {
+                    aloudServiceListener.showMassage("TTS初始化失败");
+                    doneService();
+                }
             }
         }
     }
