@@ -236,7 +236,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         }
     }
 
-    private void refreshBookshelf(final List<BookShelfBean> bookShelfBeans) {
+    private synchronized void refreshBookshelf(final List<BookShelfBean> bookShelfBeans) {
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
@@ -249,8 +249,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                             @Override
                             public void onNext(BookShelfBean bookShelfBean) {
                                 if (bookShelfBean.getErrorMsg() != null) {
-                                    bookShelfBean.setErrorMsg(null);
                                     Toast.makeText(mView.getContext(), bookShelfBean.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                                    bookShelfBean.setErrorMsg(null);
                                 }
                                 mView.refreshRecyclerViewItemAdd();
                                 refreshBookshelf(bookShelfBeans);
@@ -258,7 +258,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
                             @Override
                             public void onError(Throwable e) {
-                                Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
                                 mView.refreshRecyclerViewItemAdd();
                                 refreshBookshelf(bookShelfBeans);
                             }

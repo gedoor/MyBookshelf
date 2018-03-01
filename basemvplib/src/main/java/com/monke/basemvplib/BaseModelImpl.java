@@ -18,7 +18,7 @@ public class BaseModelImpl {
                     .writeTimeout(20, TimeUnit.SECONDS)
                     .readTimeout(20, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
-                    .addInterceptor(new RetryInterceptor(1));
+                    .addInterceptor(new RetryInterceptor(2));
         }
         return clientBuilder;
     }
