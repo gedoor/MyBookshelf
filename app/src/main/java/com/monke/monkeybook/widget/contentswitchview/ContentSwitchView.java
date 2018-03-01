@@ -503,10 +503,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         readAloud = false;
     }
 
-    public Boolean getReadAloud() {
-        return readAloud;
-    }
-
     public void setLoadDataListener(LoadDataListener loadDataListener) {
         this.loadDataListener = loadDataListener;
     }
@@ -529,11 +525,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private void noNext() {
         Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
                 .show();
-        if (readAloud) {
-            Intent intent = new Intent(MApplication.getInstance(), ReadAloudService.class);
-            intent.setAction(ActionDoneService);
-            MApplication.getInstance().startService(intent);
-        }
+        ReadAloudService.stop(getContext());
     }
 
     public Paint getTextPaint() {
