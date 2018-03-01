@@ -93,14 +93,35 @@
                         android:textColor="#dfdfdf"
                         android:textSize="13sp" />
 
-                    <TextView
-                        android:id="@+id/tv_origin"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:lines="1"
-                        android:textColor="#dfdfdf"
-                        android:textSize="13sp" />
+                        android:layout_height="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_origin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_marginTop="6dp"
+                            android:lines="1"
+                            android:paddingRight="6dp"
+                            android:text="@string/origin"
+                            android:textColor="#dfdfdf"
+                            android:textSize="13sp"
+                            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_tv_first_button"
+                            android:padding="3dp"
+                            android:text="@string/change_origin"
+                            android:textColor="#dfdfdf"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
 
                     <View
                         android:layout_width="0dp"

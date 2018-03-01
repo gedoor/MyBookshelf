@@ -38,14 +38,14 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_repeat_one_black_24dp"
-                    android:contentDescription="@string/exchange_source" />
+                    android:contentDescription="@string/change_origin" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/exchange_source"
+                    android:text="@string/change_origin"
                     android:textColor="@color/tv_text_default"
                     android:textSize="15sp"
                     tools:ignore="RtlHardcoded" />

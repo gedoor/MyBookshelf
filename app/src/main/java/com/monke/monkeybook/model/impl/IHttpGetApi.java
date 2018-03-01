@@ -16,12 +16,12 @@ import retrofit2.http.Url;
  */
 
 public interface IHttpGetApi {
-    @GET("{path}")
+    @GET()
     @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
             "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
             "Keep-Alive:300",
             "Connection:Keep-Alive"})
-    Observable<String> getWebContent(@Path("path") String path);
+    Observable<String> getWebContent(@Url String url);
 
     @GET()
     @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
