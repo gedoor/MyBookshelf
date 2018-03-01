@@ -71,7 +71,7 @@ public class ReadBookControl {
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
         this.lineNum = preference.getInt("lineNum", 0);
-        this.clickSensitivity = preference.getInt("clickSensitivity", 1);
+        this.clickSensitivity = preference.getInt("clickSensitivity", 10);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
     }
