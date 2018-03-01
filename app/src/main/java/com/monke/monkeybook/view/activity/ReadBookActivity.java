@@ -784,7 +784,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
     private void onResultOpenOtherPerms() {
-        openBookFromOther();
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            mPresenter.openBookFromOther(this);
+        } else {
+            Toast.makeText(this, "未获取到权限", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

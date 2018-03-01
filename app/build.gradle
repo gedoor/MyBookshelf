@@ -101,7 +101,7 @@ dependencies {
     //动画
     implementation 'com.victor:lib:1.0.4'
     //简易权限获取
-    implementation 'pub.devrel:easypermissions:1.1.1'
+    implementation 'pub.devrel:easypermissions:1.1.3'
     //圆形按钮
     implementation 'com.github.markushi:circlebutton:1.1'
     //二维码
