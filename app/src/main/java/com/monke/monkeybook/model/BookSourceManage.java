@@ -94,7 +94,7 @@ public class BookSourceManage {
 
     private static BookSourceBean getBookSourceWZ() {
         BookSourceBean bookSourceBean = new BookSourceBean();
-        bookSourceBean.setBookSourceUrl("http://www.gxwztv.com");
+        bookSourceBean.setBookSourceUrl("https://www.gxwztv.com");
         bookSourceBean.setBookSourceName("梧州中文台");
         bookSourceBean.setEnable(true);
         bookSourceBean.setRuleSearchUrl("http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1");
