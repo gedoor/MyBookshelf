@@ -42,8 +42,6 @@ public class SearchBook {
             SearchEngine se = new SearchEngine();
             se.setTag(bookSourceBean.getBookSourceUrl());
             se.setHasMore(true);
-            se.setDurRequestTime(1);
-            se.setMaxRequestTime(3);
             searchEngineS.add(se);
         }
     }
@@ -52,7 +50,6 @@ public class SearchBook {
         page = 0;
         for (SearchEngine searchEngine : searchEngineS) {
             searchEngine.setHasMore(true);
-            searchEngine.setDurRequestTime(1);
         }
     }
 
@@ -93,7 +90,6 @@ public class SearchBook {
                             @Override
                             public void onNext(List<SearchBookBean> value) {
                                 searchSuccessNum++;
-                                searchEngine.setDurRequestTime(1);
                                 if (value.size() == 0) {
                                     searchEngine.setHasMore(false);
                                 } else {
@@ -169,10 +165,6 @@ public class SearchBook {
     private class SearchEngine {
         private String tag;
         private Boolean hasMore;
-        //当前搜索引擎失败次数  成功一次会重新开始计数
-        private int durRequestTime;
-        //最大连续请求失败次数
-        private int maxRequestTime;
 
         public String getTag() {
             return tag;
@@ -188,22 +180,6 @@ public class SearchBook {
 
         void setHasMore(Boolean hasMore) {
             this.hasMore = hasMore;
-        }
-
-        int getDurRequestTime() {
-            return durRequestTime;
-        }
-
-        void setDurRequestTime(int durRequestTime) {
-            this.durRequestTime = durRequestTime;
-        }
-
-        int getMaxRequestTime() {
-            return maxRequestTime;
-        }
-
-        void setMaxRequestTime(int maxRequestTime) {
-            this.maxRequestTime = maxRequestTime;
         }
 
     }
