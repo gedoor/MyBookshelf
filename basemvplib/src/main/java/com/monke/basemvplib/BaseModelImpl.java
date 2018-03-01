@@ -14,11 +14,13 @@ public class BaseModelImpl {
     private OkHttpClient.Builder getClientBuilder(Context mContext) {
         if (clientBuilder == null) {
             clientBuilder = new OkHttpClient.Builder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .writeTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(20, TimeUnit.SECONDS)
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.createTrustAllManager())
+                    .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
                     .retryOnConnectionFailure(true)
-                    .addInterceptor(new RetryInterceptor(2));
+                    .addInterceptor(new RetryInterceptor(1));
         }
         return clientBuilder;
     }
