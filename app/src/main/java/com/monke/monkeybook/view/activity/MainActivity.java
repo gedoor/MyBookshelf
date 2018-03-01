@@ -334,6 +334,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
     }
 
+    @AfterPermissionGranted(BACKUP_RESULT)
+    private void backupResult() {
+        backup();
+    }
+
     //恢复
     private void restore() {
         if (EasyPermissions.hasPermissions(this, perms)) {
@@ -348,6 +353,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
                     RESTORE_RESULT, perms);
         }
+    }
+
+    @AfterPermissionGranted(RESTORE_RESULT)
+    private void restoreResult() {
+        restore();
     }
 
     private void bindRvShelfEvent() {
@@ -449,16 +459,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @AfterPermissionGranted(BACKUP_RESULT)
-    private void backupResult() {
-        backup();
-    }
-
-    @AfterPermissionGranted(RESTORE_RESULT)
-    private void restoreResult() {
-        restore();
     }
 
     @Override
