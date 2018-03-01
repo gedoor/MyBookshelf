@@ -428,8 +428,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     }
 
     @Override
-    public void refreshSearchBook(List<SearchBookBean> books) {
-        searchBookAdapter.replaceAll(books);
+    public void refreshSearchBook() {
+        searchBookAdapter.clearAll();
     }
 
     @Override

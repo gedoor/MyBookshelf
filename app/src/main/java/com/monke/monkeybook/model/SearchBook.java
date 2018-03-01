@@ -71,7 +71,7 @@ public class SearchBook {
             page = 1;
         }
         if (page == 1) {
-            searchListener.refreshSearchBook(new ArrayList<>());
+            searchListener.refreshSearchBook();
         }
         searchSuccessNum = 0;
         searchEngineIndex = -1;
@@ -105,9 +105,7 @@ public class SearchBook {
                                             }
                                         }
                                     }
-                                    if (searchListener.getItemCount() == 0) {
-                                        searchListener.refreshSearchBook(value);
-                                    } else if (!searchListener.checkIsExist(value.get(0))) {
+                                    if (!searchListener.checkIsExist(value.get(0))) {
                                         searchListener.loadMoreSearchBook(value);
                                     }
                                 }
@@ -153,7 +151,7 @@ public class SearchBook {
     }
 
     public interface OnSearchListener {
-        void refreshSearchBook(List<SearchBookBean> searchBookBeanList);
+        void refreshSearchBook();
 
         void refreshFinish(Boolean isAll);
 

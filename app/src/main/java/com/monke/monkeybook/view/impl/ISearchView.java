@@ -26,9 +26,8 @@ public interface ISearchView extends IView{
 
     /**
      * 首次查询成功 更新UI
-     * @param books
      */
-    void refreshSearchBook(List<SearchBookBean> books);
+    void refreshSearchBook();
 
     /**
      * 加载更多书籍成功 更新UI

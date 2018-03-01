@@ -68,8 +68,8 @@ public class ChangeSourceView {
                 viewRefreshError);
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
-            public void refreshSearchBook(List<SearchBookBean> value) {
-                addSearchBook(value);
+            public void refreshSearchBook() {
+                adapter.reSetSourceAdapter();
             }
 
             @Override
@@ -85,8 +85,15 @@ public class ChangeSourceView {
             }
 
             @Override
-            public Boolean checkIsExist(SearchBookBean value) {
-                return false;
+            public Boolean checkIsExist(SearchBookBean searchBookBean) {
+                Boolean result = false;
+                for (int i = 0; i < adapter.getItemcount(); i++) {
+                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
+                        result = true;
+                        break;
+                    }
+                }
+                return result;
             }
 
             @Override

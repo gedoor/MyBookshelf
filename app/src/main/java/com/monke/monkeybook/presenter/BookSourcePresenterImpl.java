@@ -116,7 +116,8 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         if (uri.toString().startsWith("content://")) {
             json = FileHelper.readString(uri);
         } else {
-            DocumentFile file = DocumentFile.fromFile(new File(uri.getPath()));
+            String path = uri.getPath();
+            DocumentFile file = DocumentFile.fromFile(new File(path));
             json = FileHelper.readString(file);
         }
         if (!isEmpty(json)) {
@@ -125,9 +126,12 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                 }.getType());
                 BookSourceManage.addBookSource(bookSourceBeans);
                 mView.refreshBookSource();
+                Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

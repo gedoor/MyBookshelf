@@ -155,7 +155,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public void addAll(List<SearchBookBean> newDataS, String bookName) {
+    public synchronized void addAll(List<SearchBookBean> newDataS, String bookName) {
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
@@ -195,12 +195,8 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    public void replaceAll(List<SearchBookBean> newData) {
+    public void clearAll() {
         searchBooks.clear();
-        if (newData != null && newData.size() > 0) {
-            searchBooks.addAll(newData);
-            saveSearchToDb(newData);
-        }
         notifyDataSetChanged();
     }
 
