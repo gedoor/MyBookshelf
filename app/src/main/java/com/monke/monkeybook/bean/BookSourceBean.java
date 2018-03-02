@@ -40,6 +40,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String ruleSearchLastChapter;
     private String ruleSearchCoverUrl;
     private String ruleSearchNoteUrl;
+    private String httpHeaders;
 
     @Transient
     public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
@@ -77,16 +78,16 @@ public class BookSourceBean implements Parcelable, Cloneable {
         ruleSearchLastChapter = in.readString();
         ruleSearchCoverUrl = in.readString();
         ruleSearchNoteUrl = in.readString();
+        httpHeaders = in.readString();
     }
 
-    @Generated(hash = 260114574)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber,
-                          boolean enable, String ruleBookName, String ruleBookAuthor, String ruleChapterUrl,
-                          String ruleCoverUrl, String ruleIntroduce, String ruleChapterList,
-                          String ruleChapterName, String ruleContentUrl, String ruleBookContent,
-                          String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
-                          String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
-                          String ruleSearchCoverUrl, String ruleSearchNoteUrl) {
+    @Generated(hash = 1631896)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber, boolean enable,
+            String ruleBookName, String ruleBookAuthor, String ruleChapterUrl, String ruleCoverUrl,
+            String ruleIntroduce, String ruleChapterList, String ruleChapterName, String ruleContentUrl,
+            String ruleBookContent, String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
+            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
+            String ruleSearchCoverUrl, String ruleSearchNoteUrl, String httpHeaders) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.serialNumber = serialNumber;
@@ -108,13 +109,13 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.ruleSearchLastChapter = ruleSearchLastChapter;
         this.ruleSearchCoverUrl = ruleSearchCoverUrl;
         this.ruleSearchNoteUrl = ruleSearchNoteUrl;
+        this.httpHeaders = httpHeaders;
     }
 
     public BookSourceBean() {
     }
 
     public String getBookSourceName() {
-
         return bookSourceName;
     }
 
@@ -159,6 +160,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(ruleSearchLastChapter);
         parcel.writeString(ruleSearchCoverUrl);
         parcel.writeString(ruleSearchNoteUrl);
+        parcel.writeString(httpHeaders);
     }
 
     public int getSerialNumber() {
@@ -313,29 +315,38 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.ruleChapterName = ruleChapterName;
     }
 
+    public String getHttpHeaders() {
+        return this.httpHeaders;
+    }
+
+    public void setHttpHeaders(String httpHeaders) {
+        this.httpHeaders = httpHeaders;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof BookSourceBean) {
             BookSourceBean bs = (BookSourceBean) obj;
-            return stringEquals(bookSourceUrl,bs.bookSourceUrl)
-                    && stringEquals(bookSourceName,bs.bookSourceName)
-                    && stringEquals(ruleBookName,bs.ruleBookName)
-                    && stringEquals(ruleBookAuthor,bs.ruleBookAuthor)
-                    && stringEquals(ruleChapterUrl,bs.ruleChapterUrl)
-                    && stringEquals(ruleCoverUrl,bs.ruleCoverUrl)
-                    && stringEquals(ruleIntroduce,bs.ruleIntroduce)
-                    && stringEquals(ruleChapterList,bs.ruleChapterList)
-                    && stringEquals(ruleChapterName,bs.ruleChapterName)
-                    && stringEquals(ruleContentUrl,bs.ruleContentUrl)
-                    && stringEquals(ruleBookContent,bs.ruleBookContent)
-                    && stringEquals(ruleSearchUrl,bs.ruleSearchUrl)
-                    && stringEquals(ruleSearchList,bs.ruleSearchList)
-                    && stringEquals(ruleSearchName,bs.ruleSearchName)
-                    && stringEquals(ruleSearchAuthor,bs.ruleSearchAuthor)
-                    && stringEquals(ruleSearchKind,bs.ruleSearchKind)
-                    && stringEquals(ruleSearchLastChapter,bs.ruleSearchLastChapter)
-                    && stringEquals(ruleSearchCoverUrl,bs.ruleSearchCoverUrl)
-                    && stringEquals(ruleSearchNoteUrl,bs.ruleSearchNoteUrl);
+            return stringEquals(bookSourceUrl, bs.bookSourceUrl)
+                    && stringEquals(bookSourceName, bs.bookSourceName)
+                    && stringEquals(ruleBookName, bs.ruleBookName)
+                    && stringEquals(ruleBookAuthor, bs.ruleBookAuthor)
+                    && stringEquals(ruleChapterUrl, bs.ruleChapterUrl)
+                    && stringEquals(ruleCoverUrl, bs.ruleCoverUrl)
+                    && stringEquals(ruleIntroduce, bs.ruleIntroduce)
+                    && stringEquals(ruleChapterList, bs.ruleChapterList)
+                    && stringEquals(ruleChapterName, bs.ruleChapterName)
+                    && stringEquals(ruleContentUrl, bs.ruleContentUrl)
+                    && stringEquals(ruleBookContent, bs.ruleBookContent)
+                    && stringEquals(ruleSearchUrl, bs.ruleSearchUrl)
+                    && stringEquals(ruleSearchList, bs.ruleSearchList)
+                    && stringEquals(ruleSearchName, bs.ruleSearchName)
+                    && stringEquals(ruleSearchAuthor, bs.ruleSearchAuthor)
+                    && stringEquals(ruleSearchKind, bs.ruleSearchKind)
+                    && stringEquals(ruleSearchLastChapter, bs.ruleSearchLastChapter)
+                    && stringEquals(ruleSearchCoverUrl, bs.ruleSearchCoverUrl)
+                    && stringEquals(ruleSearchNoteUrl, bs.ruleSearchNoteUrl)
+                    && stringEquals(httpHeaders, bs.httpHeaders);
         }
         return false;
     }

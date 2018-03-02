@@ -127,6 +127,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieRuleBookContent;
     @BindView(R.id.til_ruleBookContent)
     TextInputLayout tilRuleBookContent;
+    @BindView(R.id.tie_httpHeaders)
+    TextInputEditText tiehttpHeaders;
+    @BindView(R.id.til_httpHeaders)
+    TextInputLayout tilhttpHeaders;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -276,6 +280,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tieRuleSearchName.setText(trim(bookSourceBean.getRuleSearchName()));
         tieRuleSearchNoteUrl.setText(trim(bookSourceBean.getRuleSearchNoteUrl()));
         tieRuleSearchUrl.setText(trim(bookSourceBean.getRuleSearchUrl()));
+        tiehttpHeaders.setText(trim(bookSourceBean.getHttpHeaders()));
     }
 
     private void setHint() {
@@ -298,6 +303,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilRuleSearchName.setHint("RuleSearchName");
         tilRuleSearchNoteUrl.setHint("RuleSearchNoteUrl");
         tilRuleSearchUrl.setHint("RuleSearchUrl");
+        tilhttpHeaders.setHint("HttpHeaders");
     }
 
     private void shareBookSource() {
