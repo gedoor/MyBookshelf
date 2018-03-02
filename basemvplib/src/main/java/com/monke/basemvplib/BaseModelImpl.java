@@ -33,7 +33,6 @@ public class BaseModelImpl {
                     .readTimeout(10, TimeUnit.SECONDS)
                     .sslSocketFactory(SSLSocketClient.getSSLSocketFactory(), SSLSocketClient.createTrustAllManager())
                     .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
-                    .retryOnConnectionFailure(true)
                     .addInterceptor(getHeaderInterceptor())
                     .addInterceptor(new RetryInterceptor(1));
         }

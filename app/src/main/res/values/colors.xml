@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#ededed</color>
+    <color name="background">#f4f4f4</color>
     <color name="background_menu">#fcfcfc</color>
 
     <color name="colorPrimary">#3F51B5</color>

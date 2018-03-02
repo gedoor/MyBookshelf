@@ -36,7 +36,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 
 public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookModel {
-    public static final String TAG = "https://www.gxwztv.com";
+    public static final String TAG = "http://www.gxwztv.com";
     public static final String name = "梧州中文台";
     private Map<String, String> headerMap = AnalyzeHeaders.getMap(null);
 
