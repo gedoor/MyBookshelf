@@ -4,6 +4,9 @@
     <string name="pk_screen_direction">list_screen_direction</string>
     <string name="pk_full_screen">full_screen</string>
     <string name="pk_threads_num">threads_num</string>
+    <string name="pk_user_agent">user_agent</string>
+
+    <string name="pv_user_agent">Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3</string>
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 </resources>

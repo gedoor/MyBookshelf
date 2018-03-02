@@ -35,4 +35,9 @@
         app:MaxValue="16"
         app:MinValue="1" />
 
+    <EditTextPreference
+        android:defaultValue="@string/pv_user_agent"
+        android:key="@string/pk_user_agent"
+        android:title="User Agent"/>
+
 </PreferenceScreen>
