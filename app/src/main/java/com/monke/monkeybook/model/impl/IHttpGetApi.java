@@ -5,7 +5,8 @@ import java.util.Map;
 import io.reactivex.Observable;
 import retrofit2.Response;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
+import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -17,11 +18,13 @@ import retrofit2.http.Url;
 
 public interface IHttpGetApi {
     @GET
-    @Headers({"User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",})
-    Observable<String> getWebContent(@Url String url);
+    Observable<String> getWebContent(@Url String url,
+                                     @Header("User-Agent") String userAgent,
+                                     @HeaderMap Map<String, String> headers);
 
     @GET("{path}")
-    @Headers({"User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",})
-    Observable<Response<String>> searchBook(@Path("path") String path, @QueryMap(encoded = true) Map<String, String> queryMap);
+    Observable<Response<String>> searchBook(@Path("path") String path,
+                                            @QueryMap(encoded = true) Map<String, String> queryMap,
+                                            @HeaderMap Map<String, String> headers);
 
 }
