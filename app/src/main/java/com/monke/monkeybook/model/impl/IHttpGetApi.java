@@ -16,18 +16,12 @@ import retrofit2.http.Url;
  */
 
 public interface IHttpGetApi {
-    @GET()
-    @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
-            "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
-            "Keep-Alive:300",
-            "Connection:Keep-Alive"})
+    @GET
+    @Headers({"User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",})
     Observable<String> getWebContent(@Url String url);
 
-    @GET()
-    @Headers({"Accept:text/html,application/xhtml+xml,application/xml",
-            "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
-            "Keep-Alive:300",
-            "Connection:Keep-Alive"})
-    Observable<Response<String>> searchBook(@Url String url, @QueryMap(encoded = true) Map<String, String> queryMap);
+    @GET("{path}")
+    @Headers({"User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",})
+    Observable<Response<String>> searchBook(@Path("path") String path, @QueryMap(encoded = true) Map<String, String> queryMap);
 
 }
