@@ -19,7 +19,6 @@ import retrofit2.http.Url;
 public interface IHttpGetApi {
     @GET
     Observable<String> getWebContent(@Url String url,
-                                     @Header("User-Agent") String userAgent,
                                      @HeaderMap Map<String, String> headers);
 
     @GET("{path}")
