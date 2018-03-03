@@ -19,24 +19,13 @@ import static android.text.TextUtils.isEmpty;
 class AnalyzeHeaders {
     private static SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
 
-    static Map<String, String> getMap(String headerStr) {
+    static Map<String, String> getMap(String userAgent) {
         Map<String, String> headerMap = new HashMap<>();
-        if (isEmpty(headerStr)) {
+        if (isEmpty(userAgent)) {
             headerMap.put("User-Agent", getDefaultUserAgent());
             return headerMap;
-        }
-        String headerStrS[] = headerStr.split(",");
-        boolean hasUserAgent = false;
-        for (String hs : headerStrS) {
-            String key = hs.substring(1, hs.indexOf(":"));
-            String value = hs.substring(hs.indexOf(":")+1);
-            headerMap.put(key, value);
-            if (key.equalsIgnoreCase("User-Agent")) {
-                hasUserAgent = true;
-            }
-        }
-        if (!hasUserAgent) {
-            headerMap.put("User-Agent", getDefaultUserAgent());
+        } else {
+            headerMap.put("User-Agent", userAgent);
         }
         return headerMap;
     }

@@ -259,13 +259,13 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_httpHeaders"
+                android:id="@+id/til_httpUserAgent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="httpHeaders">
+                android:hint="httpUserAgent">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/tie_httpHeaders"
+                    android:id="@+id/tie_httpUserAgent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
