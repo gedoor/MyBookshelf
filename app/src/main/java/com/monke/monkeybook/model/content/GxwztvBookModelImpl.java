@@ -49,7 +49,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<LibraryBean> getLibraryData(final ACache aCache) {
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(TAG, headerMap)
                 .flatMap(s -> {
@@ -145,7 +145,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         Map<String, String> queryMap = new HashMap<>();
         queryMap.put("keyword", content);
         queryMap.put("pn", String.valueOf(page - 1));
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .searchBook("/search.htm", queryMap, headerMap)
                 .flatMap(response -> analyzeSearchBook(response.body()));
@@ -187,7 +187,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
@@ -229,7 +229,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean));
@@ -272,7 +272,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
      */
     @Override
     public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
@@ -326,7 +326,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
     @Override
     public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
         url = url + page + ".htm";
-        return getRetrofitString(MApplication.getInstance(), GxwztvBookModelImpl.TAG)
+        return getRetrofitString(GxwztvBookModelImpl.TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(url, headerMap)
                 .flatMap(this::analyzeSearchBook);
