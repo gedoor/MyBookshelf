@@ -12,7 +12,7 @@ def gitTag = "git tag " + version
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
@@ -57,7 +57,7 @@ repositories {
     }
 }
 ext {
-    support_library_version = '27.0.2'
+    support_library_version = '27.1.0'
 }
 dependencies {
     api project(':basemvplib')
@@ -74,7 +74,7 @@ dependencies {
     implementation "com.android.support:design:$support_library_version"
     implementation "com.android.support:cardview-v7:$support_library_version"
     implementation "com.android.support:support-compat:$support_library_version"
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'

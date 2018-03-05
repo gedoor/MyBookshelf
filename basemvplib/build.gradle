@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
@@ -24,7 +24,7 @@ dependencies {
     //识别编码
     api files('libs/juniversalchardet-1.0.3.jar')
     //support
-    api 'com.android.support:appcompat-v7:27.0.2'
+    api 'com.android.support:appcompat-v7:27.1.0'
     //RxAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
     api 'io.reactivex.rxjava2:rxjava:2.1.2'
