@@ -31,6 +31,8 @@ import android.widget.Toast;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.BookContentBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
@@ -218,6 +220,17 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 显示菜单
+     */
+    private void popMenuIn() {
+        flMenu.setVisibility(View.VISIBLE);
+        llMenuTop.startAnimation(menuTopIn);
+        llMenuBottom.startAnimation(menuBottomIn);
+        hideStatusBar(false);
+        hideNavigationBar();
+    }
+
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
@@ -324,11 +337,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void showMenu() {
-                flMenu.setVisibility(View.VISIBLE);
-                llMenuTop.startAnimation(menuTopIn);
-                llMenuBottom.startAnimation(menuBottomIn);
-                hideStatusBar(false);
-                hideNavigationBar();
+                popMenuIn();
             }
 
             @Override
@@ -620,6 +629,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ibReplaceRule.getDrawable().mutate();
         ibReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibReplaceRule.setOnClickListener(view -> {
+            popMenuOut();
             Intent intent = new Intent(this, ReplaceRuleActivity.class);
             startActivityForResult(intent, ResultReplace);
         });
@@ -724,7 +734,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     finish();
                     return true;
                 }
-            } else {
+            } else if (keyCode == KeyEvent.KEYCODE_MENU) {
+                popMenuIn();
+            }else {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
                 if (temp) {
                     return true;
@@ -796,6 +808,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ResultReplace) {
+            recreate();
+        }
     }
 
     @Override
