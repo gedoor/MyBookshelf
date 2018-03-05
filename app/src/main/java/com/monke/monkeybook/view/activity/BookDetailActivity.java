@@ -18,13 +18,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
 import com.monke.monkeybook.utils.BlurTransformation;
 import com.monke.monkeybook.view.impl.IBookDetailView;
-import com.monke.monkeybook.widget.modialog.ChangeSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -69,7 +67,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_book_detail);
     }
 
     @Override
