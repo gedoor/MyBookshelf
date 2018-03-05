@@ -251,6 +251,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setRuleSearchName(trim(tieRuleSearchName.getText().toString()));
         bookSourceBeanN.setRuleSearchNoteUrl(trim(tieRuleSearchNoteUrl.getText().toString()));
         bookSourceBeanN.setRuleSearchUrl(trim(tieRuleSearchUrl.getText().toString()));
+        bookSourceBeanN.setHttpUserAgent(trim(tieHttpUserAgent.getText().toString()));
         bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
         return bookSourceBeanN;
