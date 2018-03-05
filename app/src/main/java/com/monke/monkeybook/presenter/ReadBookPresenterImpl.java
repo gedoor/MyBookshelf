@@ -25,6 +25,7 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
+import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -32,6 +33,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
+import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
@@ -304,6 +306,28 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             String content = paragraphStr;
             if (!content.startsWith(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                 content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
+            }
+            String allLine[] = content.split("\r\n\u3000\u3000");
+            //替换
+            if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
+                StringBuilder contentBuilder = new StringBuilder();
+                for (String line : allLine) {
+                    for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                        try {
+                            line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                        if (line.length() > 0) {
+                            if (contentBuilder.length() == 0) {
+                                contentBuilder.append(line);
+                            } else {
+                                contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
+                            }
+                        }
+                    }
+                }
+                content = contentBuilder.toString();
             }
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
