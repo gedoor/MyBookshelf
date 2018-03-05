@@ -1,8 +1,12 @@
 package com.monke.monkeybook.model;
 
+import com.monke.monkeybook.bean.BookContentBean;
+import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.ReplaceRuleBeanDao;
+import com.monke.monkeybook.help.BookShelf;
 
 import java.util.List;
 
@@ -59,5 +63,15 @@ public class ReplaceRuleManage {
         replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .list();
+        BookContentBean bookContentBean;
+        for (BookShelfBean bookShelfBean : BookShelf.getAllBook()) {
+            for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
+                bookContentBean = chapterListBean.getBookContentBean();
+                if (bookContentBean != null) {
+                    bookContentBean.setLineSize(0);
+                    bookContentBean.setLineContent(null);
+                }
+            }
+        }
     }
 }

@@ -48,7 +48,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             mView.activityRefreshView();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> bookShelfList = getAllBookShelf();
+            List<BookShelfBean> bookShelfList = BookShelf.getAllBook();
             e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
             e.onComplete();
         })
@@ -73,26 +73,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         mView.refreshError(NetworkUtil.getErrorTip(NetworkUtil.ERROR_CODE_ANALY));
                     }
                 });
-    }
-
-    private List<BookShelfBean> getAllBookShelf() {
-        List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-        for (int i = 0; i < bookShelfList.size(); i++) {
-            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().list();
-            if (temp != null && temp.size() > 0) {
-                BookInfoBean bookInfoBean = temp.get(0);
-                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
-                bookShelfList.get(i).setBookInfoBean(bookInfoBean);
-            } else {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
-                bookShelfList.remove(i);
-                i--;
-            }
-        }
-        return bookShelfList;
     }
 
     @Override
