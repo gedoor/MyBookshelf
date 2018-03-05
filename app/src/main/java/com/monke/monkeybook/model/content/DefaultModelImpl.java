@@ -25,7 +25,6 @@ import org.jsoup.select.Elements;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
                 name = bookSourceBean.getBookSourceName();
-                headerMap = AnalyzeHeaders.getMap(bookSourceBean.getHttpHeaders());
+                headerMap = AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent());
                 return true;
             } else {
                 return false;
@@ -96,14 +95,14 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 });
             }
             if (isPost) {
-                return getRetrofitString(MApplication.getInstance(), analyzeSearchUrl.getSearchUrl())
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpPostApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
                         .flatMap(this::analyzeSearchBook);
             } else {
-                return getRetrofitString(MApplication.getInstance(), analyzeSearchUrl.getSearchUrl())
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
@@ -171,7 +170,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         if (!initBookSourceBean()) {
             return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
         }
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
                 .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
@@ -223,7 +222,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
                 .flatMap(s -> analyzeChapterList(s, bookShelfBean));
@@ -274,7 +273,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(MApplication.getInstance(), TAG)
+        return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
                 .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));

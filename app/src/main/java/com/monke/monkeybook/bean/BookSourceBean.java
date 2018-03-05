@@ -40,7 +40,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String ruleSearchLastChapter;
     private String ruleSearchCoverUrl;
     private String ruleSearchNoteUrl;
-    private String httpHeaders;
+    private String httpUserAgent;
 
     @Transient
     public static final Creator<BookSourceBean> CREATOR = new Creator<BookSourceBean>() {
@@ -78,16 +78,16 @@ public class BookSourceBean implements Parcelable, Cloneable {
         ruleSearchLastChapter = in.readString();
         ruleSearchCoverUrl = in.readString();
         ruleSearchNoteUrl = in.readString();
-        httpHeaders = in.readString();
+        httpUserAgent = in.readString();
     }
 
-    @Generated(hash = 1631896)
+    @Generated(hash = 454951953)
     public BookSourceBean(String bookSourceUrl, String bookSourceName, int serialNumber, boolean enable,
-            String ruleBookName, String ruleBookAuthor, String ruleChapterUrl, String ruleCoverUrl,
-            String ruleIntroduce, String ruleChapterList, String ruleChapterName, String ruleContentUrl,
-            String ruleBookContent, String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
-            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
-            String ruleSearchCoverUrl, String ruleSearchNoteUrl, String httpHeaders) {
+                          String ruleBookName, String ruleBookAuthor, String ruleChapterUrl, String ruleCoverUrl,
+                          String ruleIntroduce, String ruleChapterList, String ruleChapterName, String ruleContentUrl,
+                          String ruleBookContent, String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
+                          String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter,
+                          String ruleSearchCoverUrl, String ruleSearchNoteUrl, String httpUserAgent) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.serialNumber = serialNumber;
@@ -109,7 +109,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.ruleSearchLastChapter = ruleSearchLastChapter;
         this.ruleSearchCoverUrl = ruleSearchCoverUrl;
         this.ruleSearchNoteUrl = ruleSearchNoteUrl;
-        this.httpHeaders = httpHeaders;
+        this.httpUserAgent = httpUserAgent;
     }
 
     public BookSourceBean() {
@@ -160,7 +160,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(ruleSearchLastChapter);
         parcel.writeString(ruleSearchCoverUrl);
         parcel.writeString(ruleSearchNoteUrl);
-        parcel.writeString(httpHeaders);
+        parcel.writeString(httpUserAgent);
     }
 
     public int getSerialNumber() {
@@ -315,12 +315,12 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.ruleChapterName = ruleChapterName;
     }
 
-    public String getHttpHeaders() {
-        return this.httpHeaders;
+    public String getHttpUserAgent() {
+        return this.httpUserAgent;
     }
 
-    public void setHttpHeaders(String httpHeaders) {
-        this.httpHeaders = httpHeaders;
+    public void setHttpUserAgent(String httpHeaders) {
+        this.httpUserAgent = httpHeaders;
     }
 
     @Override
@@ -346,7 +346,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
                     && stringEquals(ruleSearchLastChapter, bs.ruleSearchLastChapter)
                     && stringEquals(ruleSearchCoverUrl, bs.ruleSearchCoverUrl)
                     && stringEquals(ruleSearchNoteUrl, bs.ruleSearchNoteUrl)
-                    && stringEquals(httpHeaders, bs.httpHeaders);
+                    && stringEquals(httpUserAgent, bs.httpUserAgent);
         }
         return false;
     }
