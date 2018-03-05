@@ -65,20 +65,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     public void initBookFormSearch(SearchBookBean searchBookBean) {
         searchBook = searchBookBean;
         inBookShelf = searchBookBean.getIsAdd();
-        bookShelf = new BookShelfBean();
-        bookShelf.setNoteUrl(searchBookBean.getNoteUrl());
-        bookShelf.setFinalDate(System.currentTimeMillis());
-        bookShelf.setDurChapter(0);
-        bookShelf.setDurChapterPage(0);
-        bookShelf.setTag(searchBookBean.getTag());
-        BookInfoBean bookInfo = new BookInfoBean();
-        bookInfo.setNoteUrl(searchBookBean.getNoteUrl());
-        bookInfo.setAuthor(searchBookBean.getAuthor());
-        bookInfo.setCoverUrl(searchBookBean.getCoverUrl());
-        bookInfo.setName(searchBookBean.getName());
-        bookInfo.setTag(searchBookBean.getTag());
-        bookInfo.setOrigin(searchBookBean.getOrigin());
-        bookShelf.setBookInfoBean(bookInfo);
+        bookShelf = BookShelf.getBookFromSearchBook(searchBookBean);
     }
 
     public Boolean getInBookShelf() {

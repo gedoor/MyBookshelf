@@ -194,7 +194,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 bookInfoBean.setName(analyzeRule.getResult(bookSourceBean.getRuleBookName()));
             }
             if (isEmpty(bookInfoBean.getAuthor())) {
-                bookInfoBean.setAuthor(analyzeRule.getResult(bookSourceBean.getRuleBookAuthor()));
+                bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeRule.getResult(bookSourceBean.getRuleBookAuthor())));
             }
             bookInfoBean.setIntroduce(analyzeRule.getResult(bookSourceBean.getRuleIntroduce()));
             String chapterUrl = analyzeRule.getResult(bookSourceBean.getRuleChapterUrl());
