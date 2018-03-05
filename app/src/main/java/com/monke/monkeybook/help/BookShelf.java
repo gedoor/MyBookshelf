@@ -2,6 +2,7 @@ package com.monke.monkeybook.help;
 
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
@@ -66,5 +67,23 @@ public class BookShelf {
             DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
             DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
         }
+    }
+
+    public static BookShelfBean getBookFromSearchBook(SearchBookBean searchBookBean) {
+        BookShelfBean bookShelfBean = new BookShelfBean();
+        bookShelfBean.setTag(searchBookBean.getTag());
+        bookShelfBean.setNoteUrl(searchBookBean.getNoteUrl());
+        bookShelfBean.setFinalDate(System.currentTimeMillis());
+        bookShelfBean.setDurChapter(0);
+        bookShelfBean.setDurChapterPage(0);
+        BookInfoBean bookInfo = new BookInfoBean();
+        bookInfo.setNoteUrl(searchBookBean.getNoteUrl());
+        bookInfo.setAuthor(searchBookBean.getAuthor());
+        bookInfo.setCoverUrl(searchBookBean.getCoverUrl());
+        bookInfo.setName(searchBookBean.getName());
+        bookInfo.setTag(searchBookBean.getTag());
+        bookInfo.setOrigin(searchBookBean.getOrigin());
+        bookShelfBean.setBookInfoBean(bookInfo);
+        return bookShelfBean;
     }
 }

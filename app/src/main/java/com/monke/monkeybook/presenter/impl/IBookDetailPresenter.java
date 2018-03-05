@@ -22,4 +22,6 @@ public interface IBookDetailPresenter extends IPresenter{
     void addToBookShelf();
 
     void removeFromBookShelf();
+
+    void changeBookSource(SearchBookBean searchBookBean);
 }

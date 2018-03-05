@@ -28,6 +28,8 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.monke.monkeybook.presenter.BookDetailPresenterImpl.FROM_BOOKSHELF;
+
 public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
@@ -177,7 +179,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
         String coverUrl;
         String name;
         String author;
-        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_BOOKSHELF) {
+        if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             coverUrl = mPresenter.getBookShelf().getBookInfoBean().getCoverUrl();
             name = mPresenter.getBookShelf().getBookInfoBean().getName();
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
@@ -240,11 +242,15 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
         tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
                 searchBookBean -> {
                     tvOrigin.setText(String.format("来源:%s", searchBookBean.getOrigin()));
-                    mPresenter.initBookFormSearch(searchBookBean);
                     tvLoading.setVisibility(View.VISIBLE);
                     tvLoading.setText("加载中...");
                     tvLoading.setOnClickListener(null);
-                    mPresenter.getBookShelfInfo();
+                    if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
+                        mPresenter.changeBookSource(searchBookBean);
+                    } else {
+                        mPresenter.initBookFormSearch(searchBookBean);
+                        mPresenter.getBookShelfInfo();
+                    }
                 }));
 
         tvRead.setOnClickListener(v -> {

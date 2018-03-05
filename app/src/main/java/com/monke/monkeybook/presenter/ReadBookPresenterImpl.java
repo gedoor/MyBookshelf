@@ -413,20 +413,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
-        BookShelfBean bookShelfBean = new BookShelfBean();
-        bookShelfBean.setTag(searchBook.getTag());
-        bookShelfBean.setNoteUrl(searchBook.getNoteUrl());
-        bookShelfBean.setFinalDate(System.currentTimeMillis());
-        bookShelfBean.setDurChapter(0);
-        bookShelfBean.setDurChapterPage(0);
-        BookInfoBean bookInfo = new BookInfoBean();
-        bookInfo.setNoteUrl(searchBook.getNoteUrl());
-        bookInfo.setAuthor(searchBook.getAuthor());
-        bookInfo.setCoverUrl(searchBook.getCoverUrl());
-        bookInfo.setName(searchBook.getName());
-        bookInfo.setTag(searchBook.getTag());
-        bookInfo.setOrigin(searchBook.getOrigin());
-        bookShelfBean.setBookInfoBean(bookInfo);
+        BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBook);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
@@ -465,8 +452,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean value) {
-                        bookShelf = value;
+                        RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
+                        bookShelf = value;
                         mView.initChapterList();
                         mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
                                 bookShelf.getChapterListSize(),
@@ -479,7 +467,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
                                 bookShelf.getChapterListSize(),
                                 bookShelf.getDurChapterPage());
-                        Toast.makeText(MApplication.getInstance(), "换源失败！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
