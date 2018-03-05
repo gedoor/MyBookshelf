@@ -180,13 +180,6 @@ class AnalyzeRule {
                 case "text":
                     for (Element element : elements) {
                         String text = element.text();
-                        for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                            try {
-                                text = text.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
                         textS.add(text);
                     }
                     break;
@@ -194,13 +187,6 @@ class AnalyzeRule {
                     List<TextNode> contentEs = elements.get(0).textNodes();
                     for (int i = 0; i < contentEs.size(); i++) {
                         String temp = contentEs.get(i).text().trim();
-                        for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                            try {
-                                temp = temp.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
                         temp = FormatWebText.getContent(temp);
                         if (temp.length() > 0) {
                             textS.add(temp);
