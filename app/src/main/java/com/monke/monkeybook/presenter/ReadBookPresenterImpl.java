@@ -106,6 +106,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             if (null != bookShelf.getChapterList(chapterIndex).getBookContentBean()
                     && null != bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent()) {
                 if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
+                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
                     //已有数据
                     int tempCount = (int) Math.ceil(bookShelf.getChapterList(chapterIndex)

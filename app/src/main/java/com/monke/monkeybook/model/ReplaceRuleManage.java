@@ -68,7 +68,6 @@ public class ReplaceRuleManage {
             for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
                 bookContentBean = chapterListBean.getBookContentBean();
                 if (bookContentBean != null) {
-                    bookContentBean.setLineSize(0);
                     bookContentBean.setLineContent(null);
                 }
             }
