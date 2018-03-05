@@ -21,8 +21,8 @@ public interface IHttpGetApi {
     Observable<String> getWebContent(@Url String url,
                                      @HeaderMap Map<String, String> headers);
 
-    @GET("{path}")
-    Observable<Response<String>> searchBook(@Path("path") String path,
+    @GET
+    Observable<Response<String>> searchBook(@Url String url,
                                             @QueryMap(encoded = true) Map<String, String> queryMap,
                                             @HeaderMap Map<String, String> headers);
 

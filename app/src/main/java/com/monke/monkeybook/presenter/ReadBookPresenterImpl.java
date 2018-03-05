@@ -318,12 +318,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
-                        if (line.length() > 0) {
-                            if (contentBuilder.length() == 0) {
-                                contentBuilder.append(line);
-                            } else {
-                                contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
-                            }
+                    }
+                    if (line.length() > 0) {
+                        if (contentBuilder.length() == 0) {
+                            contentBuilder.append(line);
+                        } else {
+                            contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
                         }
                     }
                 }

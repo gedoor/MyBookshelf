@@ -9,6 +9,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 /**
  * Created by GKF on 2018/1/29.
@@ -18,6 +19,6 @@ import retrofit2.http.Path;
 public interface IHttpPostApi {
 
     @FormUrlEncoded
-    @POST("{path}")
-    Observable<Response<String>> searchBook(@Path("path") String path, @FieldMap(encoded = true) Map<String, String> fieldMap, @HeaderMap Map<String, String> headers);
+    @POST
+    Observable<Response<String>> searchBook(@Url String url, @FieldMap(encoded = true) Map<String, String> fieldMap, @HeaderMap Map<String, String> headers);
 }
