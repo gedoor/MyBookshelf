@@ -18,7 +18,7 @@
             android:gravity="center"
             android:textSize="16sp"
             android:padding="10dp"
-            android:textColor="#343434"/>
+            android:textColor="@color/tv_text_default"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"

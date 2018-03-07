@@ -131,34 +131,19 @@ public class DownloadListPop extends PopupWindow {
         RxBus.get().unregister(DownloadListPop.this);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.PAUSE_DOWNLOAD_LISTENER)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PAUSE_DOWNLOAD_LISTENER)})
     public void pauseTask(Object o) {
         tvNone.setVisibility(View.GONE);
         llDownload.setVisibility(View.GONE);
         tvDownload.setText("开始下载");
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.FINISH_DOWNLOAD_LISTENER)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.FINISH_DOWNLOAD_LISTENER)})
     public void finishTask(Object o) {
         tvNone.setVisibility(View.VISIBLE);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)})
     public void progressTask(DownloadChapterBean downloadChapterBean) {
         tvNone.setVisibility(View.GONE);
         llDownload.setVisibility(View.VISIBLE);
