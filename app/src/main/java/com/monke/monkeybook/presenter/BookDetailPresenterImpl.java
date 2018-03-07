@@ -192,7 +192,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
-        BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBook);
+        BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBookBean);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
