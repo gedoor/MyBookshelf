@@ -79,7 +79,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
-        if (!initBookSourceBean()) {
+        if (!initBookSourceBean() || isEmpty(bookSourceBean.getRuleSearchUrl())) {
             return Observable.create(emitter -> {
                 emitter.onNext(new ArrayList<>());
                 emitter.onComplete();
