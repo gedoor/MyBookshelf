@@ -254,7 +254,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                     refreshBookSource();
                     break;
                 case IMPORT_SOURCE:
-                    mPresenter.importBookSource(data.getData());
+                    if (data != null) {
+                        mPresenter.importBookSource(data.getData());
+                    }
                     break;
             }
         }
