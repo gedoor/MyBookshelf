@@ -359,7 +359,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         mView.showLoading("文本导入中...");
         getRealFilePath(activity, uri)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new SimpleObserver<String>() {
                     @Override
                     public void onNext(String value) {
@@ -416,7 +416,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBook);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
@@ -447,7 +447,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             e.onNext(bookShelfBean);
             e.onComplete();
         })
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override

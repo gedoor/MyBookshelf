@@ -195,7 +195,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBook);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
@@ -223,7 +223,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             e.onNext(bookShelfBean);
             e.onComplete();
         })
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
