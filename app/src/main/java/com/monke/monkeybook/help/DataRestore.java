@@ -30,9 +30,9 @@ public class DataRestore  {
         File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         if (file != null) {
             restoreBookSource(file);
-            restoreReplaceRule(file);
             restoreBookShelf(file);
             restoreSearchHistory(file);
+            restoreReplaceRule(file);
             return true;
         }
         return false;
