@@ -4,33 +4,22 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#f1f1f1">
-    <LinearLayout
+    android:background="@color/background">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#ffffff"
-        android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/iv_return"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/selector_icon_return"
-            android:background="@drawable/bg_ib_pre"
-            android:clickable="true"
-            android:layout_gravity="center_vertical"/>
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="45dp"
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:text="类型书籍"
-            android:textColor="#343434"
-            android:gravity="center|left"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

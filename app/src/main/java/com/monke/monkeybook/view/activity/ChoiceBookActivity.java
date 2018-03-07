@@ -4,8 +4,12 @@ package com.monke.monkeybook.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -28,10 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> implements IChoiceBookView {
-    @BindView(R.id.iv_return)
-    ImageButton ivReturn;
-    @BindView(R.id.tv_title)
-    TextView tvTitle;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.rfRv_search_books)
     RefreshRecyclerView rfRvSearchBooks;
 
@@ -63,7 +65,9 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
-        tvTitle.setText(mPresenter.getTitle());
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
+
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);
@@ -78,9 +82,29 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
                 viewRefreshError);
     }
 
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(mPresenter.getTitle());
+        }
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void bindEvent() {
-        ivReturn.setOnClickListener(v -> finish());
         searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
             @Override
             public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
