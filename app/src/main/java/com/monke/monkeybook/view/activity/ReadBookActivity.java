@@ -288,6 +288,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                                 ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
                                 llReadAloudTimer.setVisibility(View.INVISIBLE);
                         }
+                        ibReadAloud.getDrawable().mutate();
+                        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
                     }
 
                     @Override

@@ -161,10 +161,10 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateBg(int index) {
-        civBgWhite.setBorderColor(Color.parseColor("#00000000"));
-        civBgYellow.setBorderColor(Color.parseColor("#00000000"));
-        civBgGreen.setBorderColor(Color.parseColor("#00000000"));
-        civBgBlack.setBorderColor(Color.parseColor("#00000000"));
+        civBgWhite.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
+        civBgYellow.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
+        civBgGreen.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
+        civBgBlack.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
         switch (index) {
             case 0:
                 civBgWhite.setBorderColor(Color.parseColor("#F3B63F"));
