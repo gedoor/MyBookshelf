@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomTextView">
+        <!--<attr name="textSolidColor" format="color" />-->
+        <attr name="textStrokeColor" format="color" />
+        <attr name="textRadius" format="dimension" />
+        <attr name="textLeftTopRadius" format="dimension" />
+        <attr name="textLeftBottomRadius" format="dimension" />
+        <attr name="textRightTopRadius" format="dimension" />
+        <attr name="textRightBottomRadius" format="dimension" />
+        <attr name="textStrokeWidth" format="dimension" />
+        <attr name="textDrawable" format="reference" />
+        <attr name="textNormalTextColor" format="color" />
+        <attr name="textSelectedTextColor" format="color" />
+        <attr name="textNoLeftStroke" format="boolean"/>
+        <attr name="textNoRightStroke" format="boolean"/>
+        <attr name="textNoTopStroke" format="boolean"/>
+        <attr name="textNoBottomStroke" format="boolean"/>
+        <attr name="textPressedSolidColor" format="color"/>
+        <attr name="textNormalSolidColor" format="color"/>
+        <attr name="textIsSelected" format="boolean" />
+    </declare-styleable>
+
+</resources>

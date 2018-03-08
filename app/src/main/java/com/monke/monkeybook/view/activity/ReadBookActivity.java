@@ -31,8 +31,6 @@ import android.widget.Toast;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
@@ -115,6 +113,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     CircleButton ibReplaceRule;
     @BindView(R.id.ib_night_theme)
     CircleButton ibNightTheme;
+    @BindView(R.id.ib_read_aloud_timer)
+    CircleButton ibReadAloudTimer;
+    @BindView(R.id.tv_read_aloud_timer)
+    TextView tvReadAloudTimer;
+    @BindView(R.id.ll_read_aloud_timer)
+    LinearLayout llReadAloudTimer;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -274,13 +278,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         switch (status) {
                             case PLAY:
                                 ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
+                                llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             case PAUSE:
                                 ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             default:
                                 ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
+                                llReadAloudTimer.setVisibility(View.INVISIBLE);
                         }
+                    }
+
+                    @Override
+                    public void upTimer(String text) {
+                        tvReadAloudTimer.setText(text);
                     }
                 });
             }
@@ -601,6 +613,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
 
+        //朗读定时
+        ibReadAloudTimer.getDrawable().mutate();
+        ibReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ibReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
+
         //朗读
         ibReadAloud.getDrawable().mutate();
         ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -736,7 +753,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 }
             } else if (keyCode == KeyEvent.KEYCODE_MENU) {
                 popMenuIn();
-            }else {
+            } else {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
                 if (temp) {
                     return true;

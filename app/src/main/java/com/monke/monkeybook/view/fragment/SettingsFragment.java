@@ -27,7 +27,6 @@ public class SettingsFragment extends PreferenceFragment {
         preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_screen_direction)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_user_agent)));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value)-> {

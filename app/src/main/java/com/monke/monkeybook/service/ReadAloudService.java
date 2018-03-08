@@ -185,6 +185,12 @@ public class ReadAloudService extends Service {
         context.startService(intent);
     }
 
+    public static void setTimer(Context context) {
+        Intent intent = new Intent(context, ReadAloudService.class);
+        intent.setAction(ActionSetTimer);
+        context.startService(intent);
+    }
+
     /**
      * 关闭服务
      */
@@ -293,7 +299,7 @@ public class ReadAloudService extends Service {
         } else {
             title = getString(R.string.read_aloud_t);
         }
-
+        aloudServiceListener.upTimer(title);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
@@ -415,6 +421,8 @@ public class ReadAloudService extends Service {
         void showMassage(String msg);
 
         void setStatus(int status);
+
+        void upTimer(String text);
     }
 
     public class MyBinder extends Binder {

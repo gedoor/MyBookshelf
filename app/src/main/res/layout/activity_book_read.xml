@@ -2,10 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/fl_content">
+    android:orientation="vertical">
 
     <com.monke.monkeybook.widget.contentswitchview.ContentSwitchView
         android:id="@+id/csv_book"
@@ -44,73 +44,74 @@
                     android:layout_height="48dp"
                     android:background="@color/background"
                     android:orientation="horizontal">
+
                     <ImageButton
                         android:id="@+id/iv_return"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/selector_icon_return"
+                        android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
-                        android:layout_gravity="center_vertical"
+                        android:contentDescription="@string/text_return"
                         android:focusable="true"
-                        android:contentDescription="@string/text_return" />
+                        android:src="@drawable/selector_icon_return" />
 
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/atv_title"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
                         android:singleLine="true"
-                        android:textSize="16sp"
-                        app:minTextSize="14sp"
                         android:textColor="@color/tv_text_default"
-                        android:gravity="center|start"/>
+                        android:textSize="16sp"
+                        app:minTextSize="14sp" />
 
                     <ImageButton
                         android:id="@+id/iv_refresh"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_refresh_black_24dp"
+                        android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
-                        android:layout_gravity="center_vertical"
-                        android:visibility="invisible"
+                        android:contentDescription="@string/refresh"
                         android:focusable="true"
-                        android:contentDescription="@string/refresh" />
+                        android:src="@drawable/ic_refresh_black_24dp"
+                        android:visibility="invisible" />
 
                     <ImageView
                         android:id="@+id/iv_more"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:paddingTop="7dp"
-                        android:paddingBottom="7dp"
-                        android:src="@drawable/selector_icon_more"
+                        android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
-                        android:layout_gravity="center_vertical"
-                        android:visibility="invisible"
+                        android:contentDescription="@string/menu"
                         android:focusable="true"
-                        android:contentDescription="@string/menu" />
+                        android:paddingBottom="7dp"
+                        android:paddingTop="7dp"
+                        android:src="@drawable/selector_icon_more"
+                        android:visibility="invisible" />
                 </LinearLayout>
             </com.monke.immerselayout.ImmerseFrameLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/btn_bg_press"/>
+                android:background="@color/btn_bg_press" />
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/atv_url"
                 android:layout_width="match_parent"
                 android:layout_height="22dp"
-                android:singleLine="true"
-                android:paddingStart="10dp"
+                android:background="@color/background"
                 android:paddingEnd="10dp"
-                android:visibility="gone"
+                android:paddingStart="10dp"
+                android:singleLine="true"
                 android:textColor="@color/tv_text_default"
-                android:background="@color/background" />
+                android:visibility="gone" />
 
             <View
                 android:layout_width="match_parent"
@@ -123,24 +124,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_read_aloud_timer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:paddingEnd="32dp"
+                android:paddingStart="32dp"
+                android:visibility="invisible">
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ib_read_aloud_timer"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="@string/read_aloud"
+                    android:src="@drawable/ic_timer_black_24dp"
+                    app:cb_color="@color/background" />
+
+                <com.monke.monkeybook.widget.CustomTextView
+                    android:id="@+id/tv_read_aloud_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/read_aloud_timer"
+                    app:textNormalSolidColor="@color/background"
+                    app:textRadius="5dp"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:orientation="horizontal"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp">
+                android:paddingEnd="32dp"
+                android:paddingStart="32dp">
 
                 <at.markushi.ui.CircleButton
                     android:id="@+id/ib_read_aloud"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/read_aloud"
                     android:src="@drawable/ic_volume_up_black_24dp"
-                    app:cb_color="@color/background"
-                    android:contentDescription="@string/read_aloud" />
+                    app:cb_color="@color/background" />
 
                 <View
                     android:layout_width="0dp"
@@ -151,9 +181,9 @@
                     android:id="@+id/ib_replace_rule"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/replace_rule_title"
                     android:src="@drawable/ic_find_replace_black_24dp"
-                    app:cb_color="@color/background"
-                    android:contentDescription="@string/replace_rule_title" />
+                    app:cb_color="@color/background" />
 
                 <View
                     android:layout_width="0dp"
@@ -164,9 +194,9 @@
                     android:id="@+id/ib_night_theme"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:contentDescription="@string/night_theme"
                     android:src="@drawable/ic_brightness_2_black_24dp"
-                    app:cb_color="@color/background"
-                    android:contentDescription="@string/night_theme" />
+                    app:cb_color="@color/background" />
 
             </LinearLayout>
 
@@ -180,164 +210,181 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
+                    android:orientation="horizontal">
+
                     <TextView
                         android:id="@+id/tv_pre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/previous_chapter"
-                        android:textSize="14sp"
-                        android:padding="10dp"
-                        android:textColor="@drawable/selector_tv_black"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
+                        android:clickable="true"
                         android:enabled="false"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:padding="10dp"
+                        android:text="@string/previous_chapter"
+                        android:textColor="@drawable/selector_tv_black"
+                        android:textSize="14sp" />
+
                     <com.monke.mprogressbar.MHorProgressBar
                         android:id="@+id/hpb_read_progress"
                         android:layout_width="0dp"
                         android:layout_height="25dp"
-                        android:layout_weight="1"
                         android:layout_gravity="center_vertical"
-                        app:fontdrawable="@color/btn_bg_press_2"
-                        app:cantouch="true"
+                        android:layout_weight="1"
                         app:bgdrawable="@color/btn_bg_press"
-                        app:progresswidth="2dp"
+                        app:cantouch="true"
                         app:cursordrawable="@drawable/shape_progress_cursor_read"
+                        app:cursordrawable_height="13dp"
                         app:cursordrawable_width="13dp"
-                        app:cursordrawable_height="13dp" />
+                        app:fontdrawable="@color/btn_bg_press_2"
+                        app:progresswidth="2dp" />
+
                     <TextView
                         android:id="@+id/tv_next"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/next_chapter"
-                        android:textSize="14sp"
-                        android:padding="10dp"
-                        android:textColor="@drawable/selector_tv_black"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
+                        android:clickable="true"
                         android:enabled="false"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:padding="10dp"
+                        android:text="@string/next_chapter"
+                        android:textColor="@drawable/selector_tv_black"
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="58dp"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/ll_catalog"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingBottom="7dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:focusable="true">
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+                            android:contentDescription="@string/table_of_contents"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_catalog"
-                            tools:ignore="NestedWeights"
-                            android:contentDescription="@string/table_of_contents" />
+                            tools:ignore="NestedWeights" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/table_of_contents"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/table_of_contents"
                             android:textColor="#767676"
-                            android:layout_marginTop="3dp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ll_light"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingBottom="7dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:focusable="true">
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+                            android:contentDescription="@string/adjust"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_light"
-                            tools:ignore="NestedWeights"
-                            android:contentDescription="@string/adjust" />
+                            tools:ignore="NestedWeights" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/adjust"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/adjust"
                             android:textColor="#767676"
-                            android:layout_marginTop="3dp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ll_font"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingBottom="7dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:focusable="true">
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+                            android:contentDescription="@string/interface_setting"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_font"
-                            tools:ignore="NestedWeights"
-                            android:contentDescription="@string/interface_setting" />
+                            tools:ignore="NestedWeights" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/interface_setting"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/interface_setting"
                             android:textColor="#767676"
-                            android:layout_marginTop="3dp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/ll_setting"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingBottom="7dp"
-                        android:clickable="true"
                         android:background="@drawable/bg_ib_pre"
-                        android:focusable="true">
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:paddingBottom="7dp">
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+                            android:contentDescription="@string/setting"
                             android:padding="3dp"
                             android:src="@drawable/selector_icon_setting"
-                            tools:ignore="NestedWeights"
-                            android:contentDescription="@string/setting" />
+                            tools:ignore="NestedWeights" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/setting"
                             android:layout_gravity="center_horizontal"
-                            android:textSize="12sp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/setting"
                             android:textColor="#767676"
-                            android:layout_marginTop="3dp"/>
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -347,5 +394,5 @@
     <com.monke.monkeybook.widget.ChapterListView
         android:id="@+id/clp_chapterlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </FrameLayout>

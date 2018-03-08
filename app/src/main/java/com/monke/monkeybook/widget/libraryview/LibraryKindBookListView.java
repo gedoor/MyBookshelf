@@ -1,6 +1,5 @@
 package com.monke.monkeybook.widget.libraryview;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -18,8 +17,8 @@ import java.util.List;
 
 public class LibraryKindBookListView extends LinearLayout{
     public interface OnItemListener{
-        public void onClickMore(String title,String url);
-        public void onClickBook(ImageView animView,SearchBookBean searchBookBean);
+        void onClickMore(String title, String url);
+        void onClickBook(ImageView animView, SearchBookBean searchBookBean);
     }
     public LibraryKindBookListView(Context context) {
         super(context);
@@ -33,12 +32,6 @@ public class LibraryKindBookListView extends LinearLayout{
 
     public LibraryKindBookListView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    @SuppressLint("NewApi")
-    public LibraryKindBookListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 
