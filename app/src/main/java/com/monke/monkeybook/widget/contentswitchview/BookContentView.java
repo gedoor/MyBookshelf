@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.widget.MTextView;
+import com.monke.monkeybook.widget.ContentTextView;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.v_bottom)
     View vBottom;
     @BindView(R.id.tv_content)
-    MTextView tvContent;
+    ContentTextView tvContent;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.tv_loading)

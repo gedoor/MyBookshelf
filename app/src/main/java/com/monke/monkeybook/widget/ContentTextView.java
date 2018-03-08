@@ -9,11 +9,12 @@ import android.util.AttributeSet;
 
 /**
  * Created by ZQH on 2017/4/10.
+ * 内容显示
  */
 
-public class MTextView extends android.support.v7.widget.AppCompatTextView {
+public class ContentTextView extends android.support.v7.widget.AppCompatTextView {
 
-    public MTextView(Context context, AttributeSet attrs) {
+    public ContentTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
