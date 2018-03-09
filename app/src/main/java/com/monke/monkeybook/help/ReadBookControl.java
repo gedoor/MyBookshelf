@@ -163,8 +163,9 @@ public class ReadBookControl {
         if (textDrawableIndex < 4) {
             this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
             this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
+        } else {
+            this.textColor = MApplication.getInstance().getResources().getColor(R.color.tv_text_default);
         }
-
     }
 
     public static List<Map<String, Integer>> getTextKind() {
