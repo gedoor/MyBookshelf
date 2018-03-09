@@ -78,7 +78,6 @@ public class ReadAloudService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        updateNotification();
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -89,6 +88,7 @@ public class ReadAloudService extends Service {
         initMediaSession();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
+        updateNotification();
     }
 
     @Override
@@ -300,7 +300,9 @@ public class ReadAloudService extends Service {
         } else {
             title = getString(R.string.read_aloud_t);
         }
-        aloudServiceListener.upTimer(title);
+        if (aloudServiceListener != null) {
+            aloudServiceListener.upTimer(title);
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
