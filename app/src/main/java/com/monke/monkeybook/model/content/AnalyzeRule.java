@@ -16,6 +16,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -118,7 +120,12 @@ class AnalyzeRule {
         if (isEmpty(ruleStr)) {
             return null;
         }
-        String[] ruleStrS = ruleStr.split("\\|");
+        String regex = null;
+        String[] ruleStrS = ruleStr.split("#");
+        if (ruleStrS.length > 1) {
+            regex = ruleStrS[1];
+        }
+        ruleStrS = ruleStrS[0].split("\\|");
         List<String> textS = null;
         for (String ruleStrX : ruleStrS) {
             textS = getResultList(ruleStrX);
@@ -132,6 +139,9 @@ class AnalyzeRule {
         StringBuilder content = new StringBuilder();
         for (String text : textS) {
             text = FormatWebText.getContent(text);
+            if (!isEmpty(regex)) {
+                text = text.replaceAll(regex, "");
+            }
             if (textS.size() > 1) {
                 if (text.length() > 0) {
                     if (content.length() > 0) {
