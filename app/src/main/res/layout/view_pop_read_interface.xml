@@ -255,7 +255,7 @@
                 android:id="@+id/civ_bg_custom"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/icon_more_nor"
+                android:src="@drawable/ic_more_vert_black_24dp"
                 android:contentDescription="自定义背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="@color/tv_text_default"/>
