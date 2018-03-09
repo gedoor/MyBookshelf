@@ -54,7 +54,7 @@
                 android:id="@+id/tv_dur_text_size"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/tv_text_default"
                 android:text="18"
                 android:gravity="center"
@@ -121,7 +121,7 @@
                 android:id="@+id/tv_dur_line_size"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/tv_text_default"
                 android:text="1.5"
                 android:gravity="center"
@@ -158,7 +158,7 @@
                 android:id="@+id/tv_dur_line_num"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/tv_text_default"
                 android:text="0"
                 android:gravity="center"
@@ -194,13 +194,13 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@color/tv_text_default"
                 android:gravity="center"
                 android:text="@string/background"
                 android:layout_gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"/>
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_bg_white"
@@ -209,7 +209,7 @@
                 android:src="@drawable/icon_readbook_white"
                 android:contentDescription="白色背景"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#00000000"/>
+                app:civ_border_color="@color/tv_text_default"/>
 
             <View
                 android:layout_width="0dp"
@@ -222,7 +222,7 @@
                 android:src="@drawable/icon_readbook_yellow"
                 android:contentDescription="古铜色背景"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#F3B63F"/>
+                app:civ_border_color="@color/tv_text_default"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -234,7 +234,7 @@
                 android:src="@drawable/icon_readbook_green"
                 android:contentDescription="淡绿色背景"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#00000000"/>
+                app:civ_border_color="@color/tv_text_default"/>
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -246,9 +246,21 @@
                 android:src="@drawable/icon_readbook_black"
                 android:contentDescription="黑色背景"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#00000000"/>
+                app:civ_border_color="@color/tv_text_default"/>
             <View
-                android:layout_width="50dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_bg_custom"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/icon_more_nor"
+                android:contentDescription="自定义背景"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/tv_text_default"/>
+            <View
+                android:layout_width="10dp"
                 android:layout_height="0dp"/>
         </LinearLayout>
     </LinearLayout>

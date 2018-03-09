@@ -92,7 +92,7 @@ dependencies {
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.2@aar'
     //CircleImageView
-    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:1.4.4'
     //bind view

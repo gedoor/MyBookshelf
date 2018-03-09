@@ -80,7 +80,7 @@ public class ReadBookControl {
     private void initTextKind() {
         if (null == textKind) {
             textKind = new ArrayList<>();
-            for (int i = 14; i<=30; i=i+2) {
+            for (int i = 14; i<=30; i++) {
                 Map<String, Integer> temp = new HashMap<>();
                 temp.put("textSize", i);
                 temp.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), i/2));
