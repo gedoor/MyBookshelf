@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
 
@@ -261,13 +262,24 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
-        ivBg.setImageResource(readBookControl.getTextBackground());
-        tvTitle.setTextColor(readBookControl.getTextColor());
-        tvContent.setTextColor(readBookControl.getTextColor());
-        tvPage.setTextColor(readBookControl.getTextColor());
-        vBottom.setBackgroundColor(readBookControl.getTextColor());
-        tvLoading.setTextColor(readBookControl.getTextColor());
-        tvErrorInfo.setTextColor(readBookControl.getTextColor());
+        if (readBookControl.getTextDrawableIndex() < 4) {
+            ivBg.setImageResource(readBookControl.getTextBackground());
+            tvTitle.setTextColor(readBookControl.getTextColor());
+            tvContent.setTextColor(readBookControl.getTextColor());
+            tvPage.setTextColor(readBookControl.getTextColor());
+            vBottom.setBackgroundColor(readBookControl.getTextColor());
+            tvLoading.setTextColor(readBookControl.getTextColor());
+            tvErrorInfo.setTextColor(readBookControl.getTextColor());
+        } else {
+            ACache aCache = ACache.get(this.getContext());
+            ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
+            tvTitle.setTextColor(readBookControl.getTextColor());
+            tvContent.setTextColor(readBookControl.getTextColor());
+            tvPage.setTextColor(readBookControl.getTextColor());
+            vBottom.setBackgroundColor(readBookControl.getTextColor());
+            tvLoading.setTextColor(readBookControl.getTextColor());
+            tvErrorInfo.setTextColor(readBookControl.getTextColor());
+        }
     }
 
     public void setTextKind(ReadBookControl readBookControl) {

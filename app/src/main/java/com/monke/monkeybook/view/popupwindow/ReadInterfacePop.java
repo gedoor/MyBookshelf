@@ -1,8 +1,13 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
-import android.content.Context;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +15,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +40,6 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tvDurLineNum;
     @BindView(R.id.fl_line_num)
     FrameLayout flLineNum;
-    private View view;
     @BindView(R.id.fl_text_smaller)
     FrameLayout flTextSmaller;
     @BindView(R.id.tv_dur_text_size)
@@ -45,8 +54,10 @@ public class ReadInterfacePop extends PopupWindow {
     CircleImageView civBgGreen;
     @BindView(R.id.civ_bg_black)
     CircleImageView civBgBlack;
+    @BindView(R.id.civ_bg_custom)
+    CircleImageView civBgCustom;
 
-    private Context mContext;
+    private ReadBookActivity activity;
     private ReadBookControl readBookControl;
 
     public interface OnChangeProListener {
@@ -59,18 +70,18 @@ public class ReadInterfacePop extends PopupWindow {
 
     private OnChangeProListener changeProListener;
 
-    public ReadInterfacePop(Context context, @NonNull OnChangeProListener changeProListener) {
+    public ReadInterfacePop(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.mContext = context;
+        this.activity = readBookActivity;
         this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_interface, null);
+        View view = LayoutInflater.from(readBookActivity).inflate(R.layout.view_pop_read_interface, null);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
 
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
+        setBackgroundDrawable(readBookActivity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
         setAnimationStyle(R.style.anim_pop_windowlight);
@@ -123,6 +134,26 @@ public class ReadInterfacePop extends PopupWindow {
             updateBg(3);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
+        civBgCustom.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            activity.startActivityForResult(intent, activity.ResultSelectBg);
+        });
+    }
+
+    public void setCustomBg(Uri uri) {
+        ContentResolver cr = activity.getContentResolver();
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
+            ACache aCache = ACache.get(activity);
+            aCache.put("customBg", bitmap);
+            updateBg(4);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateText(int textKindIndex) {
@@ -161,10 +192,13 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateBg(int index) {
-        civBgWhite.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
-        civBgYellow.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
-        civBgGreen.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
-        civBgBlack.setBorderColor(mContext.getResources().getColor(R.color.tv_text_default));
+        civBgCustom.getDrawable().mutate();
+        civBgCustom.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        civBgWhite.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        civBgYellow.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        civBgGreen.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        civBgBlack.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        civBgCustom.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         switch (index) {
             case 0:
                 civBgWhite.setBorderColor(Color.parseColor("#F3B63F"));
@@ -175,8 +209,11 @@ public class ReadInterfacePop extends PopupWindow {
             case 2:
                 civBgGreen.setBorderColor(Color.parseColor("#F3B63F"));
                 break;
-            default:
+            case 3:
                 civBgBlack.setBorderColor(Color.parseColor("#F3B63F"));
+                break;
+            default:
+                civBgCustom.setBorderColor(Color.parseColor("#F3B63F"));
                 break;
         }
         readBookControl.setTextDrawableIndex(index);

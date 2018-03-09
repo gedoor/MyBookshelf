@@ -62,10 +62,7 @@ public class ReadBookControl {
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
-        this.textDrawableIndex = preference.getInt("textDrawableIndex", DEFAULT_BG);
-        this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
-        this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
-
+        setTextDrawableIndex(preference.getInt("textDrawableIndex", DEFAULT_BG));
         this.canClickTurn = preference.getBoolean("canClickTurn", true);
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
@@ -159,8 +156,11 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
         editor.apply();
-        this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
-        this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
+        if (textDrawableIndex < 3) {
+            this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
+            this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
+        }
+
     }
 
     public static List<Map<String, Integer>> getTextKind() {

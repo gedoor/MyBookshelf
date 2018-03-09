@@ -68,6 +68,7 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
     private final int RESULT_OPEN_OTHER_PERMS = 102;
+    public final int ResultSelectBg = 103;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -834,6 +835,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ResultReplace) {
             recreate();
+        } else if (requestCode == ResultSelectBg && resultCode == RESULT_OK && null != data) {
+            readInterfacePop.setCustomBg(data.getData());
         }
     }
 
