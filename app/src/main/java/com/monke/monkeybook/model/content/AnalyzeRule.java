@@ -121,39 +121,49 @@ class AnalyzeRule {
             return null;
         }
         String regex = null;
+        String result = "";
         String[] ruleStrS = ruleStr.split("#");
         if (ruleStrS.length > 1) {
             regex = ruleStrS[1];
         }
-        ruleStrS = ruleStrS[0].split("\\|");
-        List<String> textS = null;
-        for (String ruleStrX : ruleStrS) {
-            textS = getResultList(ruleStrX);
-            if (textS != null) {
-                break;
-            }
-        }
-        if (textS == null) {
-            return null;
-        }
-        StringBuilder content = new StringBuilder();
-        for (String text : textS) {
-            text = FormatWebText.getContent(text);
-            if (!isEmpty(regex)) {
-                text = text.replaceAll(regex, "");
-            }
-            if (textS.size() > 1) {
-                if (text.length() > 0) {
-                    if (content.length() > 0) {
-                        content.append("\r\n");
-                    }
-                    content.append("\u3000\u3000").append(text);
+        if (isEmpty(ruleStrS[0])) {
+            result = element.data();
+        } else {
+            ruleStrS = ruleStrS[0].split("\\|");
+            List<String> textS = null;
+            for (String ruleStrX : ruleStrS) {
+                textS = getResultList(ruleStrX);
+                if (textS != null) {
+                    break;
                 }
-            } else {
-                content.append(text);
+            }
+            if (textS == null) {
+                return null;
+            }
+            StringBuilder content = new StringBuilder();
+            for (String text : textS) {
+                text = FormatWebText.getContent(text);
+                if (textS.size() > 1) {
+                    if (text.length() > 0) {
+                        if (content.length() > 0) {
+                            content.append("\r\n");
+                        }
+                        content.append("\u3000\u3000").append(text);
+                    }
+                } else {
+                    content.append(text);
+                }
+                result = content.toString();
             }
         }
-        return content.toString();
+        if (!isEmpty(regex)) {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(result);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+        return result;
     }
 
     /**
