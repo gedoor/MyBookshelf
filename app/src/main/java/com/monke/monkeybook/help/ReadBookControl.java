@@ -160,7 +160,7 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
         editor.apply();
-        if (textDrawableIndex < 3) {
+        if (textDrawableIndex < 4) {
             this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
             this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
         }
