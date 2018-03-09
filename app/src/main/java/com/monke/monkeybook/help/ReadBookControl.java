@@ -127,8 +127,12 @@ public class ReadBookControl {
         return textColor;
     }
 
+    public boolean getIsNightTheme() {
+        return defaultPreference.getBoolean("nightTheme", false);
+    }
+
     public int getTextBackground() {
-        if (defaultPreference.getBoolean("nightTheme", false)) {
+        if (getIsNightTheme()) {
             return textDrawable.get(3).get("textBackground");
         }
         return textBackground;

@@ -262,7 +262,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
-        if (readBookControl.getTextDrawableIndex() < 4) {
+        if (readBookControl.getTextDrawableIndex() < 4 || readBookControl.getIsNightTheme()) {
             ivBg.setImageResource(readBookControl.getTextBackground());
             tvTitle.setTextColor(readBookControl.getTextColor());
             tvContent.setTextColor(readBookControl.getTextColor());

@@ -78,6 +78,7 @@ public class ReadAloudService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        updateNotification();
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
