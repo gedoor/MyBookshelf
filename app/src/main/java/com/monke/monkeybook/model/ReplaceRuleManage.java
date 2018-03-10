@@ -24,6 +24,7 @@ public class ReplaceRuleManage {
             replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
                     .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
+                    .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                     .list();
         }
         return replaceRuleBeansEnabled;
@@ -33,6 +34,7 @@ public class ReplaceRuleManage {
         if (replaceRuleBeansAll == null) {
             replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
                     .getReplaceRuleBeanDao().queryBuilder()
+                    .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                     .list();
         }
         return replaceRuleBeansAll;
@@ -59,9 +61,11 @@ public class ReplaceRuleManage {
         replaceRuleBeansEnabled = DbHelper.getInstance().getmDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
                 .where(ReplaceRuleBeanDao.Properties.Enable.eq(true))
+                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
         replaceRuleBeansAll = DbHelper.getInstance().getmDaoSession()
                 .getReplaceRuleBeanDao().queryBuilder()
+                .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
         BookContentBean bookContentBean;
         for (BookShelfBean bookShelfBean : BookShelf.getAllBook()) {
