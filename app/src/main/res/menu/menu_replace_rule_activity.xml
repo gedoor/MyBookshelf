@@ -9,4 +9,10 @@
         android:title="@string/add"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp"
+        android:title="@string/import_str"
+        app:showAsAction="never" />
+
 </menu>

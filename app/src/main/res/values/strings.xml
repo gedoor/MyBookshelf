@@ -146,5 +146,6 @@
     <string name="book_intro">内容简介</string>
     <string name="open_from_other">打开外部书籍</string>
     <string name="origin">来源</string>
+    <string name="import_str">导入</string>
 
 </resources>

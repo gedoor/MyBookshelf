@@ -1,7 +1,7 @@
 package com.monke.monkeybook.view.adapter;
 
-import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +9,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
-import com.monke.monkeybook.view.activity.SourceEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,17 +44,21 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         return dataList;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_replace_rule_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.checkBox.setText(dataList.get(position).getReplaceSummary());
         holder.checkBox.setChecked(dataList.get(position).getEnable());
-        holder.checkBox.setOnClickListener((View view) -> dataList.get(position).setEnable(holder.checkBox.isChecked()));
+        holder.checkBox.setOnClickListener((View view) -> {
+            dataList.get(position).setEnable(holder.checkBox.isChecked());
+            activity.saveDataS();
+        });
         holder.editView.getDrawable().mutate();
         holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.editView.setOnClickListener(view -> activity.editReplaceRule(dataList.get(position)));

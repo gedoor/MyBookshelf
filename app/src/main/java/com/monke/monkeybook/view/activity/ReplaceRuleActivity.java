@@ -1,7 +1,10 @@
 package com.monke.monkeybook.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.provider.DocumentFile;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,18 +16,23 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +42,12 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.text.TextUtils.isEmpty;
+import static com.monke.monkeybook.view.activity.BookSourceActivity.IMPORT_SOURCE;
+import static com.monke.monkeybook.view.activity.BookSourceActivity.RESULT_IMPORT_PERMS;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -49,6 +63,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerViewBookSource;
 
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private MoProgressHUD moProgressHUD;
     private Animation animIn;
     private ReplaceRuleAdapter adapter;
@@ -77,6 +92,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
                 i++;
                 replaceRuleBean.setSerialNumber(i);
             }
+            saveDataS();
             return true;
         }
 
@@ -100,18 +116,6 @@ public class ReplaceRuleActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_vew);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManage.addDataS(adapter.getDataList());
-            e.onNext(ReplaceRuleManage.getAll());
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
     }
 
     @Override
@@ -214,6 +218,16 @@ public class ReplaceRuleActivity extends MBaseActivity {
                 });
     }
 
+    public void saveDataS() {
+        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+            ReplaceRuleManage.addDataS(adapter.getDataList());
+            e.onNext(ReplaceRuleManage.getAll());
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
     @Override
     protected void firstRequest() {
         llContent.startAnimation(animIn);
@@ -248,11 +262,55 @@ public class ReplaceRuleActivity extends MBaseActivity {
             case R.id.action_add_replace_rule:
                 editReplaceRule(null);
                 break;
+            case R.id.action_import:
+                selectReplaceRuleFile();
+                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void selectReplaceRuleFile() {
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("text/plain");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            startActivityForResult(intent, IMPORT_SOURCE);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
+                    RESULT_IMPORT_PERMS, perms);
+        }
+    }
+
+    @AfterPermissionGranted(RESULT_IMPORT_PERMS)
+    private void resultImportPerms() {
+        selectReplaceRuleFile();
+    }
+
+    private void importBookSource(Uri uri) {
+        String json;
+        if (uri.toString().startsWith("content://")) {
+            json = FileHelper.readString(uri);
+        } else {
+            String path = uri.getPath();
+            DocumentFile file = DocumentFile.fromFile(new File(path));
+            json = FileHelper.readString(file);
+        }
+        if (!isEmpty(json)) {
+            try {
+                List<ReplaceRuleBean> dataS = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
+                }.getType());
+                ReplaceRuleManage.addDataS(dataS);
+                adapter.resetDataS(ReplaceRuleManage.getAll());
+                Toast.makeText(this, "导入成功", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, "格式不对", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "文件读取失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -272,6 +330,14 @@ public class ReplaceRuleActivity extends MBaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case IMPORT_SOURCE:
+                    if (data != null) {
+                        importBookSource(data.getData());
+                    }
+                    break;
+            }
+        }
     }
 }
