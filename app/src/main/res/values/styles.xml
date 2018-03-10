@@ -16,7 +16,9 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="overlapAnchor">false</item>
+    </style>
 
     <style name="anim_pop_checkaddshelf">
         <item name="android:windowEnterAnimation">@anim/anim_pop_checkaddshelf_in</item>
