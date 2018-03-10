@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
     @Id
     private String bookSourceUrl;
     private String bookSourceName;
+    @OrderBy
     private int serialNumber;
     private boolean enable;
     private String ruleBookName;

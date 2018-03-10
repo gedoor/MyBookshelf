@@ -4,9 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.OrderBy;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by GKF on 2018/2/7.
@@ -23,21 +24,25 @@ public class ReplaceRuleBean implements Parcelable {
     private String replacement;
 
     private Boolean enable;
+    @OrderBy
+    private int serialNumber;
 
     private ReplaceRuleBean(Parcel in) {
         regex = in.readString();
         replacement = in.readString();
         replaceSummary = in.readString();
         enable = in.readByte() != 0;
+        serialNumber = in.readInt();
     }
 
-    @Generated(hash = 1696217036)
+    @Generated(hash = 956114041)
     public ReplaceRuleBean(String replaceSummary, String regex, String replacement,
-                           Boolean enable) {
+                           Boolean enable, int serialNumber) {
         this.replaceSummary = replaceSummary;
         this.regex = regex;
         this.replacement = replacement;
         this.enable = enable;
+        this.serialNumber = serialNumber;
     }
 
     @Generated(hash = 582692869)
@@ -50,6 +55,7 @@ public class ReplaceRuleBean implements Parcelable {
         parcel.writeString(replacement);
         parcel.writeString(replaceSummary);
         parcel.writeByte((byte) (enable ? 1 : 0));
+        parcel.writeInt(serialNumber);
     }
 
     @Transient
@@ -100,6 +106,14 @@ public class ReplaceRuleBean implements Parcelable {
 
     public void setEnable(Boolean enable) {
         this.enable = enable;
+    }
+
+    public int getSerialNumber() {
+        return this.serialNumber;
+    }
+
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
 }

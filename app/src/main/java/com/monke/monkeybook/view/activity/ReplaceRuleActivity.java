@@ -2,11 +2,11 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +25,7 @@ import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,10 +52,66 @@ public class ReplaceRuleActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
     private Animation animIn;
     private ReplaceRuleAdapter adapter;
+    ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            //也就是说返回值是组合式的
+            //makeMovementFlags (int dragFlags, int swipeFlags)，看下面的解释说明
+            int swipeFlag = 0;
+            //如果也监控左右方向的话，swipeFlag=ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+            int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            //等价于：0001&0010;多点触控标记触屏手指的顺序和个数也是这样标记哦
+            return makeMovementFlags(dragFlag, swipeFlag);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            //直接按照文档来操作啊，这文档写得太给力了,简直完美！
+            adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            adapter.notifyItemChanged(viewHolder.getAdapterPosition());
+            adapter.notifyItemChanged(target.getAdapterPosition());
+            //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
+            Collections.swap(adapter.getDataList(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            int i = 0;
+            for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+                i++;
+                replaceRuleBean.setSerialNumber(i);
+            }
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            //暂不处理
+        }
+
+        @Override
+        public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            //return true后，可以实现长按拖动排序和拖动动画了
+            return true;
+        }
+    };
 
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_vew);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+            ReplaceRuleManage.addDataS(adapter.getDataList());
+            e.onNext(ReplaceRuleManage.getAll());
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     @Override
@@ -78,6 +135,8 @@ public class ReplaceRuleActivity extends MBaseActivity {
         adapter = new ReplaceRuleAdapter(this);
         recyclerViewBookSource.setAdapter(adapter);
         adapter.resetDataS(ReplaceRuleManage.getAll());
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerViewBookSource);
     }
 
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
@@ -86,6 +145,9 @@ public class ReplaceRuleActivity extends MBaseActivity {
                 if (replaceRuleBean != null) {
                     DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao()
                             .delete(replaceRuleBean);
+                    ruleBean.setSerialNumber(replaceRuleBean.getSerialNumber());
+                } else {
+                    ruleBean.setSerialNumber(adapter.getItemCount() + 1);
                 }
                 ruleBean.setEnable(true);
                 ReplaceRuleManage.saveData(ruleBean);
