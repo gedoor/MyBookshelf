@@ -208,7 +208,6 @@ public class ReadAloudService extends Service {
      * @param pause true 暂停, false 失去焦点
      */
     private void pauseReadAloud(Boolean pause) {
-        cancelTimer();
         this.pause = pause;
         speak = false;
         updateNotification();
@@ -261,10 +260,12 @@ public class ReadAloudService extends Service {
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                    setTimerIntent.setAction(ActionSetTimer);
-                    setTimerIntent.putExtra("minute", -1);
-                    startService(setTimerIntent);
+                    if (!pause) {
+                        Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+                        setTimerIntent.setAction(ActionSetTimer);
+                        setTimerIntent.putExtra("minute", -1);
+                        startService(setTimerIntent);
+                    }
                 }
             }, 60000, 60000);
         }
