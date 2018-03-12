@@ -32,6 +32,9 @@ public class BookShelfBean implements Parcelable,Cloneable{
     private boolean hasUpdate;  //是否有更新
     private int newChapters;  //更新章节数
     private String tag;
+    private int serialNumber; //手动排序
+    private long finalRefreshData;  //章节最后更新时间
+
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
 
@@ -60,11 +63,14 @@ public class BookShelfBean implements Parcelable,Cloneable{
         tag = in.readString();
         bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
         errorMsg = in.readString();
+        serialNumber = in.readInt();
+        finalRefreshData = in.readLong();
     }
 
-    @Generated(hash = 189691701)
+    @Generated(hash = 826920685)
     public BookShelfBean(String noteUrl, int durChapter, int durChapterPage, long finalDate,
-            boolean hasUpdate, int newChapters, String tag) {
+            boolean hasUpdate, int newChapters, String tag, int serialNumber,
+            long finalRefreshData) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -72,6 +78,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.hasUpdate = hasUpdate;
         this.newChapters = newChapters;
         this.tag = tag;
+        this.serialNumber = serialNumber;
+        this.finalRefreshData = finalRefreshData;
     }
 
     @Override
@@ -83,6 +91,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeString(tag);
         dest.writeParcelable(bookInfoBean, flags);
         dest.writeString(errorMsg);
+        dest.writeInt(serialNumber);
+        dest.writeLong(finalRefreshData);
     }
 
     @Override
@@ -202,5 +212,21 @@ public class BookShelfBean implements Parcelable,Cloneable{
         bookShelfBean.tag = tag;
         bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
         return bookShelfBean;
+    }
+
+    public int getSerialNumber() {
+        return this.serialNumber;
+    }
+
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public long getFinalRefreshData() {
+        return this.finalRefreshData;
+    }
+
+    public void setFinalRefreshData(long finalRefreshData) {
+        this.finalRefreshData = finalRefreshData;
     }
 }

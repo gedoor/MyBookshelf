@@ -87,11 +87,6 @@ public class ReplaceRuleActivity extends MBaseActivity {
             adapter.notifyItemChanged(target.getAdapterPosition());
             //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
             Collections.swap(adapter.getDataList(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            int i = 0;
-            for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
-                i++;
-                replaceRuleBean.setSerialNumber(i);
-            }
             saveDataS();
             return true;
         }
@@ -220,6 +215,11 @@ public class ReplaceRuleActivity extends MBaseActivity {
 
     public void saveDataS() {
         Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
+            int i = 0;
+            for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+                i++;
+                replaceRuleBean.setSerialNumber(i);
+            }
             ReplaceRuleManage.addDataS(adapter.getDataList());
             e.onNext(ReplaceRuleManage.getAll());
             e.onComplete();

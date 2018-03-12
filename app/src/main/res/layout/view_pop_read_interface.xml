@@ -182,8 +182,8 @@
                         android:src="@drawable/ic_format_list_numbered_black_24dp"/>
 
                 </LinearLayout>
-
             </FrameLayout>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

@@ -157,11 +157,7 @@ class AnalyzeRule {
             }
         }
         if (!isEmpty(regex)) {
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(result);
-            if (matcher.find()) {
-                return matcher.group(1);
-            }
+            result = result.replaceAll(regex, "");
         }
         return result;
     }
