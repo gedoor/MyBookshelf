@@ -235,30 +235,48 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     }
 
     private void LoadNextChapter(int durChapterIndex) {
-        new Thread(() -> {
-            int nextIndex = durChapterIndex + 1;
-            if (bookShelf.getChapterListSize() > nextIndex) {
-                if (bookShelf.getChapterList(nextIndex).getBookContentBean() == null) {
-                    List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
-                            .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(nextIndex).getDurChapterUrl()))
-                            .build().list();
-                    if (tempList == null) {
-                        WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(nextIndex).
-                                getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
-                            if (bookContentBean.getRight()) {
-                                bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
-                                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
-                                bookShelf.getChapterList(nextIndex).setHasCache(true);
-                                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
-                                        .update(bookShelf.getChapterList(nextIndex));
-                            }
-                            return bookContentBean;
-                        })
-                                .subscribe();
-                    }
+        int nextIndex = durChapterIndex + 1;
+        if (bookShelf.getChapterListSize() > nextIndex && bookShelf.getChapterList(nextIndex).getBookContentBean() == null) {
+            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
+                        .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(nextIndex).getDurChapterUrl()))
+                        .build().list();
+                if (tempList == null) {
+                    e.onNext(true);
+                } else {
+                    e.onNext(false);
                 }
-            }
-        }).start();
+                e.onComplete();
+            }).observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new SimpleObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean aBoolean) {
+                            if (aBoolean) {
+                                WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(nextIndex).
+                                        getDurChapterUrl(), nextIndex, bookShelf.getTag()).map(bookContentBean -> {
+                                    if (bookContentBean.getRight()) {
+                                        bookContentBean.setNoteUrl(bookShelf.getNoteUrl());
+                                        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean);
+                                        bookShelf.getChapterList(nextIndex).setHasCache(true);
+                                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
+                                                .update(bookShelf.getChapterList(nextIndex));
+                                    }
+                                    return bookContentBean;
+                                }).observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.newThread())
+                                        .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
+                                        .subscribe();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
+
+        }
     }
 
     @Override
