@@ -160,12 +160,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 Observable.create((ObservableOnSubscribe<ReadBookContentBean>) e -> {
                     List<BookContentBean> tempList = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(chapterIndex).getDurChapterUrl())).build().list();
-                    //加载下一章节
-                    LoadNextChapter(chapterIndex);
                     e.onNext(new ReadBookContentBean(tempList == null ? new ArrayList<>() : tempList, finalPageIndex1));
                     e.onComplete();
                 }).observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
+                        .subscribeOn(Schedulers.io())
                         .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new SimpleObserver<ReadBookContentBean>() {
                             @Override
@@ -174,6 +172,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                         && tempList.getBookContentList().get(0).getDurChapterContent() != null) {
                                     bookShelf.getChapterList(chapterIndex).setBookContentBean(tempList.getBookContentList().get(0));
                                     loadContent(bookContentView, bookTag, chapterIndex, tempList.getPageIndex());
+                                    //加载下一章节
+                                    LoadNextChapter(chapterIndex);
                                 } else {
                                     final int finalPageIndex1 = tempList.getPageIndex();
                                     //网络获取正文
