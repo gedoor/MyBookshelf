@@ -120,7 +120,6 @@ public class ReplaceRuleActivity extends MBaseActivity {
         setupActionBar();
         initRecyclerView();
         moProgressHUD = new MoProgressHUD(this);
-        initRecyclerView();
     }
 
     @Override
