@@ -2,10 +2,12 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,6 +19,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -56,6 +62,8 @@ public class ReadInterfacePop extends PopupWindow {
     CircleImageView civBgBlack;
     @BindView(R.id.civ_bg_custom)
     CircleImageView civBgCustom;
+    @BindView(R.id.civ_text_color)
+    CircleImageView civTextColor;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl;
@@ -93,6 +101,7 @@ public class ReadInterfacePop extends PopupWindow {
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
         updateLineNum(readBookControl.getLineNum());
+        upTextColor(readBookControl.getTextColorCustom());
     }
 
     private void bindEvent() {
@@ -140,6 +149,31 @@ public class ReadInterfacePop extends PopupWindow {
             intent.setType("image/*");
             activity.startActivityForResult(intent, activity.ResultSelectBg);
         });
+        civTextColor.setOnClickListener(view -> {
+            ColorPickerDialogBuilder
+                    .with(activity)
+                    .setTitle("选择文字颜色")
+                    .initialColor(readBookControl.getTextColorCustom())
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(12)
+                    .setOnColorSelectedListener(selectedColor -> {
+
+                    })
+                    .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
+                        readBookControl.setTextColorCustom(selectedColor);
+                        upTextColor(selectedColor);
+                        changeProListener.bgChange(selectedColor);
+                    })
+                    .setNegativeButton("cancel", (dialog, which) -> {
+
+                    })
+                    .build()
+                    .show();
+        });
+    }
+
+    private void upTextColor(int textColor) {
+        civTextColor.setImageDrawable(new ColorDrawable(textColor));
     }
 
     public void setCustomBg(Uri uri) {
@@ -148,7 +182,7 @@ public class ReadInterfacePop extends PopupWindow {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
             ACache aCache = ACache.get(activity);
             aCache.put("customBg", bitmap);
-            updateBg(4);
+            updateBg(-1);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         } catch (IOException e) {
             e.printStackTrace();

@@ -38,8 +38,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     private OnItemClickListener itemClickListener;
 
-
-
     public BookShelfListAdapter() {
         super(false);
         books = new ArrayList<>();

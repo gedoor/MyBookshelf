@@ -37,6 +37,7 @@ public class ReadBookControl {
     private int clickSensitivity = 1;
     private Boolean clickAllNext = false;
     private Boolean clickAnim = true;
+    private int textColorCustom;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -71,6 +72,7 @@ public class ReadBookControl {
         this.clickSensitivity = preference.getInt("clickSensitivity", 10);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
+        this.textColorCustom = preference.getInt("textColorCustom", Color.parseColor("#383838"));
     }
 
     //字体大小
@@ -160,12 +162,21 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
         editor.apply();
-        if (textDrawableIndex < 4) {
+        if (textDrawableIndex != -1) {
             this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
             this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
-        } else {
-            this.textColor = MApplication.getInstance().getResources().getColor(R.color.tv_text_default);
         }
+    }
+
+    public int getTextColorCustom() {
+        return textColorCustom;
+    }
+
+    public void setTextColorCustom(int textColorCustom) {
+        this.textColorCustom = textColorCustom;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("textColorCustom", textColorCustom);
+        editor.apply();
     }
 
     public static List<Map<String, Integer>> getTextKind() {

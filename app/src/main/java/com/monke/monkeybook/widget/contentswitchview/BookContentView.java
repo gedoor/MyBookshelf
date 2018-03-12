@@ -262,7 +262,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
-        if (readBookControl.getTextDrawableIndex() < 4 || readBookControl.getIsNightTheme()) {
+        if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
             ivBg.setImageResource(readBookControl.getTextBackground());
             tvTitle.setTextColor(readBookControl.getTextColor());
             tvContent.setTextColor(readBookControl.getTextColor());
@@ -273,12 +273,12 @@ public class BookContentView extends FrameLayout {
         } else {
             ACache aCache = ACache.get(this.getContext());
             ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
-            tvTitle.setTextColor(readBookControl.getTextColor());
-            tvContent.setTextColor(readBookControl.getTextColor());
-            tvPage.setTextColor(readBookControl.getTextColor());
-            vBottom.setBackgroundColor(readBookControl.getTextColor());
-            tvLoading.setTextColor(readBookControl.getTextColor());
-            tvErrorInfo.setTextColor(readBookControl.getTextColor());
+            tvTitle.setTextColor(readBookControl.getTextColorCustom());
+            tvContent.setTextColor(readBookControl.getTextColorCustom());
+            tvPage.setTextColor(readBookControl.getTextColorCustom());
+            vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
+            tvLoading.setTextColor(readBookControl.getTextColorCustom());
+            tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
         }
     }
 

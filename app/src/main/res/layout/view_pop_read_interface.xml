@@ -13,14 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/background"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:background="@color/background">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="6dp"
+            android:text="文字段落"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:layout_height="55dp"
+            android:padding="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center">
 
@@ -184,23 +188,36 @@
                 </LinearLayout>
             </FrameLayout>
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_text_color"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@color/tv_text_default"
+                android:contentDescription="文字颜色"
+                android:layout_marginLeft="10dp"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/tv_text_default"
+                tools:ignore="RtlHardcoded" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/btn_bg_press"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="6dp"
+            android:text="背景"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp">
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:textColor="@color/tv_text_default"
-                android:gravity="center"
-                android:text="@string/background"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"/>
+            android:padding="10dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_bg_white"
@@ -259,9 +276,6 @@
                 android:contentDescription="自定义背景"
                 app:civ_border_width="1dp"
                 app:civ_border_color="@color/tv_text_default"/>
-            <View
-                android:layout_width="10dp"
-                android:layout_height="0dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
