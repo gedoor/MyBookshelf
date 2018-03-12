@@ -30,13 +30,9 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         dataList = new ArrayList<>();
     }
 
-    public void addDataS(List<ReplaceRuleBean> dataList) {
-        this.dataList.addAll(dataList);
-        notifyDataSetChanged();
-    }
-
     public void resetDataS(List<ReplaceRuleBean> dataList) {
-        this.dataList = dataList;
+        this.dataList.clear();
+        this.dataList.addAll(dataList);
         notifyDataSetChanged();
     }
 
