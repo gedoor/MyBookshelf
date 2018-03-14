@@ -103,6 +103,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         Glide.with(holder.ivCover.getContext())
                 .load(books.get(index).getBookInfoBean().getCoverUrl())
                 .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+
         holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (books.get(index).getHasUpdate()) {
@@ -115,13 +116,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             if (itemClickListener != null)
                 itemClickListener.onClick(books.get(index), index);
         });
-//        holder.ibContent.setOnLongClickListener(v -> {
-//            if (itemClickListener != null) {
-//                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
-//                return true;
-//            } else
-//                return false;
-//        });
+        holder.tvName.setOnClickListener(view -> {
+            if (itemClickListener != null) {
+                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+            }
+        });
     }
 
     public View getHeaderView(LinearLayout parent) {

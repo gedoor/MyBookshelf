@@ -166,17 +166,14 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 //直接按照文档来操作啊，这文档写得太给力了,简直完美！
                 if (isList) {
+                    Collections.swap(bookShelfListAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
                     bookShelfListAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
                     bookShelfListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
                     bookShelfListAdapter.notifyItemChanged(target.getAdapterPosition());
-                    //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
-                    Collections.swap(bookShelfListAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
                 } else {
-                    bookShelfGridAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    bookShelfGridAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                    bookShelfGridAdapter.notifyItemChanged(target.getAdapterPosition());
-                    //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
                     Collections.swap(bookShelfGridAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                    bookShelfGridAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                    bookShelfGridAdapter.notifyDataSetChanged();
                 }
                 return true;
             }

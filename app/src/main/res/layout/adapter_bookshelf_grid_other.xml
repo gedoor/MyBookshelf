@@ -39,6 +39,12 @@
                 android:src="@drawable/ic_circle_red_24dp"
                 android:visibility="invisible" />
 
+            <ImageButton
+                android:id="@+id/ib_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ib_pre2" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -60,12 +66,6 @@
                     app:minTextSize="7sp" />
 
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/ib_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_ib_pre2" />
 
         </FrameLayout>
 
