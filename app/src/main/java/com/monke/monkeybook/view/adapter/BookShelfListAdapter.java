@@ -155,14 +155,13 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                 itemClickListener.onClick(books.get(index), index);
         });
 
-//        holder.ibContent.setOnLongClickListener(v -> {
-//            if (itemClickListener != null) {
-//                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
-//                return true;
-//            } else
-//                return false;
-//        });
-
+        holder.ibContent.setOnLongClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                return true;
+            } else
+                return false;
+        });
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
