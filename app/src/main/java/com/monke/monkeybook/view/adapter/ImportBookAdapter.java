@@ -35,7 +35,7 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
 
     @Override
     public Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new Viewholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_adapter_importbook,parent,false));
+        return new Viewholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_importbook,parent,false));
     }
 
     @Override

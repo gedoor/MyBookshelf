@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
-import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,7 +73,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             return new RecyclerView.ViewHolder(view) {
             };
         }
-        return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_other, parent, false));
+        return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid, parent, false));
     }
 
     @Override
@@ -124,7 +123,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public View getHeaderView(LinearLayout parent) {
-        View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_lastest, parent, false);
+        View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_bookshelf_lastest, parent, false);
         lastViewHolder = new LastViewHolder(headerView);
         return headerView;
     }

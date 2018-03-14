@@ -15,6 +15,13 @@
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/bookshelf_px_title"
+        android:entryValues="@array/bookshelf_px__value"
+        android:key="@string/pk_bookshelf_px"
+        android:title="@string/bookshelf_px" />
+
     <SwitchPreference
         android:defaultValue="false"
         android:key="hide_status_bar"

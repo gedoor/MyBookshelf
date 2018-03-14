@@ -50,7 +50,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="bottom"
                     android:gravity="center"
-                    android:text="最近观看"
+                    android:text="最近阅读"
                     android:textSize="12sp"
                     android:textColor="#ffffff"/>
             </FrameLayout>
