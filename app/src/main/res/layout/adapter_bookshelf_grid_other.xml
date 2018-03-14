@@ -4,23 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background"
-    android:paddingTop="10dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="118dp" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/img_shelf_lastest" />
-    </LinearLayout>
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,12 +15,12 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="3" />
+            android:layout_weight="1" />
 
         <FrameLayout
             android:id="@+id/fl_content"
-            android:layout_width="87dp"
-            android:layout_height="123dp"
+            android:layout_width="90dp"
+            android:layout_height="128dp"
             android:visibility="invisible">
 
             <ImageView
@@ -88,6 +73,6 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="3" />
+            android:layout_weight="1" />
     </LinearLayout>
 </FrameLayout>
