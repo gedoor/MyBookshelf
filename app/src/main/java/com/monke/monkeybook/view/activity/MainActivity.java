@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -118,7 +119,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
         } else {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter, new LinearLayoutManager(this));
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter.getHeaderView(rfRvShelf.getHeader()), bookShelfGridAdapter, new GridLayoutManager(this, 3));
         }
     }
 

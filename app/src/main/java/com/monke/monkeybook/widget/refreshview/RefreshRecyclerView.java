@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
 
@@ -17,16 +18,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RefreshRecyclerView extends FrameLayout {
-
-    private View noDataView;
-    private View refreshErrorView;
-
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
     @BindView(R.id.rpb)
     RefreshProgressBar rpb;
-    @BindView(R.id.fl_content)
-    FrameLayout flContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.ll_header)
+    LinearLayout llHeader;
+
+    private View noDataView;
+    private View refreshErrorView;
+
+    public LinearLayout getHeader() {
+        return llHeader;
+    }
 
     public RefreshRecyclerView(Context context) {
         this(context, null);
@@ -90,7 +96,6 @@ public class RefreshRecyclerView extends FrameLayout {
                 }
             }
         });
-
         recyclerView.setOnTouchListener(refreshTouchListener);
     }
 
@@ -185,6 +190,16 @@ public class RefreshRecyclerView extends FrameLayout {
         recyclerView.setAdapter(refreshRecyclerViewAdapter);
     }
 
+    public void setRefreshRecyclerViewAdapter(View headerView ,RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
+        refreshRecyclerViewAdapter.setClickTryAgainListener(() -> {
+            if (loadMoreListener != null)
+                loadMoreListener.loadMoreErrorTryAgain();
+        });
+        llContent.addView(headerView, 0);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(refreshRecyclerViewAdapter);
+    }
+
     public void loadMoreError() {
         rpb.setIsAutoLoading(false);
         rpb.clean();
@@ -274,4 +289,5 @@ public class RefreshRecyclerView extends FrameLayout {
             return false;
         }
     };
+
 }

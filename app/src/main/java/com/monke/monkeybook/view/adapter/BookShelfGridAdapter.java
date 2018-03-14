@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,8 +29,8 @@ import java.util.List;
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
-    private final int TYPE_LAST = 1;
-    private final int TYPE_OTHER = 2;
+    private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_EMPTY = 0;
 
     private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 
@@ -38,6 +39,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     private Boolean needAnim = true;
 
     private OnItemClickListener itemClickListener;
+    private LastViewHolder lastViewHolder;
 
     public BookShelfGridAdapter() {
         super(false);
@@ -46,175 +48,88 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemcount() {
+        //如果mData.size()为0的话，只引入一个布局，就是emptyView
+        //那么，这个recyclerView的itemCount为1
         if (books.size() == 0) {
             return 1;
-        } else {
-            if (books.size() % 3 == 0) {
-                return 1 + books.size() / 3;
-            } else {
-                return 1 + (books.size() / 3 + 1);
-            }
         }
-    }
-
-    public int getRealItemCount() {
+        //如果不为0，按正常的流程跑
         return books.size();
     }
 
     @Override
     public int getItemViewtype(int position) {
-        if (position == 0) {
-            return TYPE_LAST;
-        } else {
-            return TYPE_OTHER;
+        //在这里进行判断，如果我们的集合的长度为0时，我们就使用emptyView的布局
+        if (books.size() == 0) {
+            return VIEW_TYPE_EMPTY;
         }
+        //如果有数据，则使用ITEM的布局
+        return VIEW_TYPE_ITEM;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_LAST) {
-            return new LastViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_lastest, parent, false));
-        } else {
-            return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_other, parent, false));
+        if (viewType == VIEW_TYPE_EMPTY) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_empty, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
         }
+        return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_other, parent, false));
     }
 
     @Override
     public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == TYPE_LAST) {
-            bindLastViewHolder((LastViewHolder) holder, position);
-        } else {
-            bindOtherViewHolder((OtherViewHolder) holder, position - 1);
+        if (holder instanceof OtherViewHolder) {
+            bindOtherViewHolder((OtherViewHolder) holder, position);
         }
     }
 
     private void bindOtherViewHolder(final OtherViewHolder holder, int index) {
-        //第一列
-        final int index_1 = index * 3;
         if (needAnim) {
-            final Animation animation = AnimationUtils.loadAnimation(holder.flContent_1.getContext(), R.anim.anim_bookshelf_item);
+            final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
             animation.setAnimationListener(new AnimationStartListener() {
                 @Override
                 void onAnimStart(Animation animation) {
                     needAnim = false;
-                    holder.flContent_1.setVisibility(View.VISIBLE);
+                    holder.flContent.setVisibility(View.VISIBLE);
                 }
             });
             new Handler().postDelayed(() -> {
-                holder.flContent_1.startAnimation(animation);
-            }, index_1 * DUR_ANIM_ITEM);
+                holder.flContent.startAnimation(animation);
+            }, index * DUR_ANIM_ITEM);
         } else {
-            holder.flContent_1.setVisibility(View.VISIBLE);
+            holder.flContent.setVisibility(View.VISIBLE);
         }
-        Glide.with(holder.ivCover_1.getContext())
-                .load(books.get(index_1).getBookInfoBean().getCoverUrl())
-                .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_1);
-        holder.tvName_1.setText(books.get(index_1).getBookInfoBean().getName());
-        holder.ibContent_1.setContentDescription(books.get(index_1).getBookInfoBean().getName());
-        if (books.get(index_1).getHasUpdate()) {
-            holder.ivHasNew_1.setVisibility(View.VISIBLE);
+        Glide.with(holder.ivCover.getContext())
+                .load(books.get(index).getBookInfoBean().getCoverUrl())
+                .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
+        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
+        if (books.get(index).getHasUpdate()) {
+            holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
-            holder.ivHasNew_1.setVisibility(View.INVISIBLE);
+            holder.ivHasNew.setVisibility(View.INVISIBLE);
         }
 
-        holder.ibContent_1.setOnClickListener(v -> {
+        holder.ibContent.setOnClickListener(v -> {
             if (itemClickListener != null)
-                itemClickListener.onClick(books.get(index_1), index_1);
+                itemClickListener.onClick(books.get(index), index);
         });
-        holder.ibContent_1.setOnLongClickListener(v -> {
+        holder.ibContent.setOnLongClickListener(v -> {
             if (itemClickListener != null) {
-                itemClickListener.onLongClick(holder.ivCover_1, books.get(index_1), index_1);
+                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
                 return true;
             } else
                 return false;
         });
-        //第二列
-        final int index_2 = index_1 + 1;
-        if (index_2 < books.size()) {
-            if (needAnim) {
-                final Animation animation = AnimationUtils.loadAnimation(holder.flContent_2.getContext(), R.anim.anim_bookshelf_item);
-                animation.setAnimationListener(new AnimationStartListener() {
-                    @Override
-                    void onAnimStart(Animation animation) {
-                        needAnim = false;
-                        holder.flContent_2.setVisibility(View.VISIBLE);
-                    }
-                });
-                new Handler().postDelayed(() -> {
-                    if (null != holder)
-                        holder.flContent_2.startAnimation(animation);
-                }, index_2 * DUR_ANIM_ITEM);
-            } else {
-                holder.flContent_2.setVisibility(View.VISIBLE);
-            }
-            Glide.with(holder.ivCover_2.getContext())
-                    .load(books.get(index_2).getBookInfoBean().getCoverUrl())
-                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_2);
-            holder.tvName_2.setText(books.get(index_2).getBookInfoBean().getName());
-            holder.ibContent_2.setContentDescription(books.get(index_2).getBookInfoBean().getName());
-            if (books.get(index_2).getHasUpdate()) {
-                holder.ivHasNew_2.setVisibility(View.VISIBLE);
-            } else {
-                holder.ivHasNew_2.setVisibility(View.INVISIBLE);
-            }
-            holder.ibContent_2.setOnClickListener(v -> {
-                if (itemClickListener != null)
-                    itemClickListener.onClick(books.get(index_2), index_2);
-            });
-            holder.ibContent_2.setOnLongClickListener(v -> {
-                if (itemClickListener != null) {
-                    itemClickListener.onLongClick(holder.ivCover_2, books.get(index_2), index_2);
-                    return true;
-                } else
-                    return false;
-            });
-            //第三列
-            final int index_3 = index_2 + 1;
-            if (index_3 < books.size()) {
-                if (needAnim) {
-                    final Animation animation = AnimationUtils.loadAnimation(holder.flContent_3.getContext(), R.anim.anim_bookshelf_item);
-                    animation.setAnimationListener(new AnimationStartListener() {
-                        @Override
-                        void onAnimStart(Animation animation) {
-                            needAnim = false;
-                            holder.flContent_3.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    new Handler().postDelayed(() -> {
-                        holder.flContent_3.startAnimation(animation);
-                    }, index_3 * DUR_ANIM_ITEM);
-                } else {
-                    holder.flContent_3.setVisibility(View.VISIBLE);
-                }
-                Glide.with(holder.ivCover_3.getContext())
-                        .load(books.get(index_3).getBookInfoBean().getCoverUrl())
-                        .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover_3);
-                holder.tvName_3.setText(books.get(index_3).getBookInfoBean().getName());
-                holder.ibContent_3.setContentDescription(books.get(index_3).getBookInfoBean().getName());
-                if (books.get(index_3).getHasUpdate()) {
-                    holder.ivHasNew_3.setVisibility(View.VISIBLE);
-                } else {
-                    holder.ivHasNew_3.setVisibility(View.INVISIBLE);
-                }
-                holder.ibContent_3.setOnClickListener(v -> {
-                    if (itemClickListener != null)
-                        itemClickListener.onClick(books.get(index_3), index_3);
-                });
-                holder.ibContent_3.setOnLongClickListener(v -> {
-                    if (itemClickListener != null) {
-                        itemClickListener.onLongClick(holder.ivCover_3, books.get(index_3), index_3);
-                        return true;
-                    } else
-                        return false;
-                });
-            }else{
-                holder.flContent_3.setVisibility(View.INVISIBLE);
-            }
-        }else{
-            holder.flContent_2.setVisibility(View.INVISIBLE);
-            holder.flContent_3.setVisibility(View.INVISIBLE);
-        }
     }
+
+    public View getHeaderView(LinearLayout parent) {
+        View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid_lastest, parent, false);
+        lastViewHolder = new LastViewHolder(headerView);
+        return headerView;
+    }
+
     //最近阅读
     private void bindLastViewHolder(final LastViewHolder holder, final int index) {
         if (books.size() == 0) {
@@ -291,21 +206,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public Boolean getNeedAnim() {
-        return needAnim;
-    }
-
-    public void setNeedAnim(Boolean needAnim) {
-        this.needAnim = needAnim;
-    }
-
     public synchronized void replaceAll(List<BookShelfBean> newDatas) {
         books.clear();
         if (null != newDatas && newDatas.size() > 0) {
             books.addAll(newDatas);
         }
         order();
-
+        bindLastViewHolder(lastViewHolder, 0);
         notifyDataSetChanged();
     }
 
@@ -329,7 +236,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         return books;
     }
 
-    class LastViewHolder extends RecyclerView.ViewHolder {
+    class LastViewHolder {
         ImageView ivCover;
         FrameLayout flLastEstTip;
         AutofitTextView tvName;
@@ -339,7 +246,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         TextView tvWatch;
 
         LastViewHolder(View itemView) {
-            super(itemView);
             ivCover = itemView.findViewById(R.id.iv_cover);
             flLastEstTip = itemView.findViewById(R.id.fl_lastest_tip);
             tvName = itemView.findViewById(R.id.tv_name);
@@ -351,43 +257,20 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     }
 
     class OtherViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent_1;
-        ImageView ivCover_1;
-        ImageView ivHasNew_1;
-        AutofitTextView tvName_1;
-        ImageButton ibContent_1;
-
-        FrameLayout flContent_2;
-        ImageView ivCover_2;
-        ImageView ivHasNew_2;
-        AutofitTextView tvName_2;
-        ImageButton ibContent_2;
-
-        FrameLayout flContent_3;
-        ImageView ivCover_3;
-        ImageView ivHasNew_3;
-        AutofitTextView tvName_3;
-        ImageButton ibContent_3;
+        FrameLayout flContent;
+        ImageView ivCover;
+        ImageView ivHasNew;
+        AutofitTextView tvName;
+        ImageButton ibContent;
 
         OtherViewHolder(View itemView) {
             super(itemView);
-            flContent_1 = itemView.findViewById(R.id.fl_content_1);
-            ivCover_1 = itemView.findViewById(R.id.iv_cover_1);
-            ivHasNew_1 = itemView.findViewById(R.id.iv_has_new_1);
-            tvName_1 = itemView.findViewById(R.id.tv_name_1);
-            ibContent_1 = itemView.findViewById(R.id.ib_content_1);
+            flContent = itemView.findViewById(R.id.fl_content);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            ivHasNew = itemView.findViewById(R.id.iv_has_new);
+            tvName = itemView.findViewById(R.id.tv_name);
+            ibContent = itemView.findViewById(R.id.ib_content);
 
-            flContent_2 = itemView.findViewById(R.id.fl_content_2);
-            ivCover_2 = itemView.findViewById(R.id.iv_cover_2);
-            ivHasNew_2 = itemView.findViewById(R.id.iv_has_new_2);
-            tvName_2 = itemView.findViewById(R.id.tv_name_2);
-            ibContent_2 = itemView.findViewById(R.id.ib_content_2);
-
-            flContent_3 = itemView.findViewById(R.id.fl_content_3);
-            ivCover_3 = itemView.findViewById(R.id.iv_cover_3);
-            ivHasNew_3 = itemView.findViewById(R.id.iv_has_new_3);
-            tvName_3 = itemView.findViewById(R.id.tv_name_3);
-            ibContent_3 = itemView.findViewById(R.id.ib_content_3);
         }
     }
 
