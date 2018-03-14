@@ -67,7 +67,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
     private Animation animIn;
     private ReplaceRuleAdapter adapter;
-    ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+    private ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             //也就是说返回值是组合式的

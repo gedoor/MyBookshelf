@@ -54,10 +54,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         return books.size();
     }
 
-    public int getRealItemCount() {
-        return books.size();
-    }
-
     @Override
     public int getItemViewtype(int position) {
         //在这里进行判断，如果我们的集合的长度为0时，我们就使用emptyView的布局
@@ -159,13 +155,13 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                 itemClickListener.onClick(books.get(index), index);
         });
 
-        holder.ibContent.setOnLongClickListener(v -> {
-            if (itemClickListener != null) {
-                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
-                return true;
-            } else
-                return false;
-        });
+//        holder.ibContent.setOnLongClickListener(v -> {
+//            if (itemClickListener != null) {
+//                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+//                return true;
+//            } else
+//                return false;
+//        });
 
     }
 

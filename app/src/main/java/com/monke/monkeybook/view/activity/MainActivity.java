@@ -18,7 +18,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,6 +51,7 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -141,6 +144,59 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         } else {
             bookShelfGridAdapter.setItemClickListener(getAdapterListener());
         }
+        rfRvShelf.setItemTouchHelperCallback(getItemTouchHelperCallback(viewIsList));
+    }
+
+    private ItemTouchHelper.Callback getItemTouchHelperCallback(boolean isList) {
+        return new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    final int swipeFlags = 0;
+                    return makeMovementFlags(dragFlags, swipeFlags);
+                } else {
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                    final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                    return makeMovementFlags(dragFlags, swipeFlags);
+                }
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                //直接按照文档来操作啊，这文档写得太给力了,简直完美！
+                if (isList) {
+                    bookShelfListAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                    bookShelfListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    bookShelfListAdapter.notifyItemChanged(target.getAdapterPosition());
+                    //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
+                    Collections.swap(bookShelfListAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                } else {
+                    bookShelfGridAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                    bookShelfGridAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
+                    bookShelfGridAdapter.notifyItemChanged(target.getAdapterPosition());
+                    //注意这里有个坑的，itemView 都移动了，对应的数据也要移动
+                    Collections.swap(bookShelfGridAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                }
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //暂不处理
+            }
+
+            @Override
+            public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
+                return true;
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                //return true后，可以实现长按拖动排序和拖动动画了
+                return true;
+            }
+        };
     }
 
     private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
