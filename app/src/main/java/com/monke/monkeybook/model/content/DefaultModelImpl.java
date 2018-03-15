@@ -236,6 +236,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
             if (chapterSize < bookShelfBean.getChapterListSize()) {
                 bookShelfBean.setHasUpdate(true);
+                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
             e.onNext(bookShelfBean);

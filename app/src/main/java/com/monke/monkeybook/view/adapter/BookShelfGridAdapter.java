@@ -18,12 +18,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookShelf;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
@@ -36,9 +39,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     private List<BookShelfBean> books;
 
     private Boolean needAnim = true;
-
     private OnItemClickListener itemClickListener;
     private LastViewHolder lastViewHolder;
+    private String bookshelfPx;
 
     public BookShelfGridAdapter() {
         super(false);
@@ -120,6 +123,22 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
             }
         });
+        if (!Objects.equals(bookshelfPx, "2")) {
+            holder.ibContent.setOnLongClickListener(v -> {
+                if (itemClickListener != null) {
+                    itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                    return true;
+                } else
+                    return false;
+            });
+        } else if (books.get(index).getSerialNumber() != index){
+            books.get(index).setSerialNumber(index);
+            new Thread(){
+                public void run() {
+                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index));
+                }
+            }.start();
+        }
     }
 
     public View getHeaderView(LinearLayout parent) {
@@ -204,30 +223,15 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public synchronized void replaceAll(List<BookShelfBean> newDatas) {
+    public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
+        this.bookshelfPx = bookshelfPx;
         books.clear();
-        if (null != newDatas && newDatas.size() > 0) {
-            books.addAll(newDatas);
+        if (null != newDataS && newDataS.size() > 0) {
+            books.addAll(newDataS);
         }
-        order();
+        BookShelf.order(books, bookshelfPx);
         bindLastViewHolder(lastViewHolder, 0);
         notifyDataSetChanged();
-    }
-
-    private void order() {
-        if (books != null && books.size() > 0) {
-            for (int i = 0; i < books.size(); i++) {
-                int temp = i;
-                for (int j = i + 1; j < books.size(); j++) {
-                    if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
-                        temp = j;
-                    }
-                }
-                BookShelfBean tempBookShelfBean = books.get(i);
-                books.set(i, books.get(temp));
-                books.set(temp, tempBookShelfBean);
-            }
-        }
     }
 
     public List<BookShelfBean> getBooks() {

@@ -86,4 +86,57 @@ public class BookShelf {
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
     }
+
+    /**
+     * 排序
+     */
+    public static void order(List<BookShelfBean> books, String bookshelfOrder) {
+        switch (bookshelfOrder) {
+            case "0":
+                if (books != null && books.size() > 0) {
+                    for (int i = 0; i < books.size(); i++) {
+                        int temp = i;
+                        for (int j = i + 1; j < books.size(); j++) {
+                            if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
+                                temp = j;
+                            }
+                        }
+                        BookShelfBean tempBookShelfBean = books.get(i);
+                        books.set(i, books.get(temp));
+                        books.set(temp, tempBookShelfBean);
+                    }
+                }
+                break;
+            case "1":
+                if (books != null && books.size() > 0) {
+                    for (int i = 0; i < books.size(); i++) {
+                        int temp = i;
+                        for (int j = i + 1; j < books.size(); j++) {
+                            if (books.get(temp).getFinalRefreshData() < books.get(j).getFinalRefreshData()) {
+                                temp = j;
+                            }
+                        }
+                        BookShelfBean tempBookShelfBean = books.get(i);
+                        books.set(i, books.get(temp));
+                        books.set(temp, tempBookShelfBean);
+                    }
+                }
+                break;
+            case "2":
+                if (books != null && books.size() > 0) {
+                    for (int i = 0; i < books.size(); i++) {
+                        int temp = i;
+                        for (int j = i + 1; j < books.size(); j++) {
+                            if (books.get(temp).getSerialNumber() > books.get(j).getSerialNumber()) {
+                                temp = j;
+                            }
+                        }
+                        BookShelfBean tempBookShelfBean = books.get(i);
+                        books.set(i, books.get(temp));
+                        books.set(temp, tempBookShelfBean);
+                    }
+                }
+                break;
+        }
+    }
 }

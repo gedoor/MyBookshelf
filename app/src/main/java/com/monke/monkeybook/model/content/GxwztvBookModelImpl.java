@@ -243,6 +243,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
             bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
             if (chapterSize < bookShelfBean.getChapterListSize()) {
                 bookShelfBean.setHasUpdate(true);
+                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
             e.onNext(bookShelfBean);

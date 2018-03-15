@@ -60,6 +60,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
+    private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     @BindView(R.id.drawer)
@@ -337,7 +338,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, ReplaceRuleActivity.class), 0, 0);
                     break;
                 case R.id.action_setting:
-                    startActivityByAnim(new Intent(MainActivity.this, SettingActivity.class), 0, 0);
+                    startActivityForResultByAnim(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING,0, 0);
                     break;
                 case R.id.action_about:
                     startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
@@ -456,9 +457,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
         if (viewIsList) {
-            bookShelfListAdapter.replaceAll(bookShelfBeanList);
+            bookShelfListAdapter.replaceAll(bookShelfBeanList, preferences.getString(getString(R.string.pk_bookshelf_px), "0"));
         } else {
-            bookShelfGridAdapter.replaceAll(bookShelfBeanList);
+            bookShelfGridAdapter.replaceAll(bookShelfBeanList, preferences.getString(getString(R.string.pk_bookshelf_px), "0"));
         }
     }
 
@@ -551,5 +552,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SETTING) {
+            mPresenter.queryBookShelf(false);
+        }
     }
 }
