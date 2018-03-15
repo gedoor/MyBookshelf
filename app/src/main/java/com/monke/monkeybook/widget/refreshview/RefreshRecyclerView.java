@@ -254,7 +254,6 @@ public class RefreshRecyclerView extends FrameLayout {
                 case MotionEvent.ACTION_MOVE:
                     if (durTouchX == -1000000) {
                         durTouchX = event.getX();
-                        timer = new Timer();
                         upLongClickTimer();
                     }
                     if (durTouchY == -1000000)
