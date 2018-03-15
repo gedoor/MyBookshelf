@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ public class SettingActivity extends MBaseActivity {
     private Animation animIn;
     private Animation animOut;
 
+    private String bookPx;
+
     @Override
     protected IPresenter initInjector() {
         return null;
@@ -55,6 +58,7 @@ public class SettingActivity extends MBaseActivity {
     @Override
     protected void firstRequest() {
         llContent.startAnimation(animIn);
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
     }
 
     //设置ToolBar
@@ -76,5 +80,15 @@ public class SettingActivity extends MBaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import com.monke.monkeybook.R;
  */
 
 public class SettingsFragment extends PreferenceFragment {
-    private static SharedPreferences preferences;
     private Context mContext;
 
     @Override
@@ -25,14 +23,10 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_settings);
         mContext = this.getActivity();
-        preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_screen_direction)));
         bindPreferenceSummaryToValue(findPreference(mContext.getString(R.string.pk_bookshelf_px)));
-        findPreference(mContext.getString(R.string.pk_bookshelf_px)).setOnPreferenceClickListener(preference -> {
-            this.getActivity().setResult(Activity.RESULT_OK);
-            return false;
-        });
+
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value)-> {

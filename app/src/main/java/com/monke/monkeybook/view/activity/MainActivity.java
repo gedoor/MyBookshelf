@@ -85,6 +85,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
     private boolean onRestore = false;
+    private String bookPx;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -98,6 +99,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void initData() {
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         if (viewIsList) {
             bookShelfListAdapter = new BookShelfListAdapter();
@@ -459,9 +461,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
         if (viewIsList) {
-            bookShelfListAdapter.replaceAll(bookShelfBeanList, preferences.getString(getString(R.string.pk_bookshelf_px), "0"));
+            bookShelfListAdapter.replaceAll(bookShelfBeanList, bookPx);
         } else {
-            bookShelfGridAdapter.replaceAll(bookShelfBeanList, preferences.getString(getString(R.string.pk_bookshelf_px), "0"));
+            bookShelfGridAdapter.replaceAll(bookShelfBeanList, bookPx);
         }
     }
 
@@ -554,8 +556,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SETTING && resultCode == RESULT_OK) {
-            recreate();
+        if (requestCode == REQUEST_SETTING) {
+            if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
+                recreate();
+            }
         }
     }
 }
