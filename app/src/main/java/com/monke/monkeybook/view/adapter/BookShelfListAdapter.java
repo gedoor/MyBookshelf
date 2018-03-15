@@ -94,9 +94,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                     holder.flContent.setVisibility(View.VISIBLE);
                 }
             });
-            new Handler().postDelayed(() -> {
-                holder.flContent.startAnimation(animation);
-            }, index * DUR_ANIM_ITEM);
+            new Handler().postDelayed(() -> holder.flContent.startAnimation(animation), index * DUR_ANIM_ITEM);
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
