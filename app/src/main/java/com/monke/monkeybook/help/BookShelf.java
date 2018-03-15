@@ -9,6 +9,8 @@ import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -91,51 +93,34 @@ public class BookShelf {
      * 排序
      */
     public static void order(List<BookShelfBean> books, String bookshelfOrder) {
+        if (books == null || books.size() == 0) {
+            return;
+        }
         switch (bookshelfOrder) {
             case "0":
-                if (books != null && books.size() > 0) {
-                    for (int i = 0; i < books.size(); i++) {
-                        int temp = i;
-                        for (int j = i + 1; j < books.size(); j++) {
-                            if (books.get(temp).getFinalDate() < books.get(j).getFinalDate()) {
-                                temp = j;
-                            }
-                        }
-                        BookShelfBean tempBookShelfBean = books.get(i);
-                        books.set(i, books.get(temp));
-                        books.set(temp, tempBookShelfBean);
+                Collections.sort(books, (o1, o2) -> {
+                    if (o1.getFinalDate() - o2.getFinalDate() > 0) {
+                        return -1;
+                    } else if (o1.getFinalDate() - o2.getFinalDate() < 0) {
+                        return 1;
+                    } else {
+                        return 0;
                     }
-                }
+                });
                 break;
             case "1":
-                if (books != null && books.size() > 0) {
-                    for (int i = 0; i < books.size(); i++) {
-                        int temp = i;
-                        for (int j = i + 1; j < books.size(); j++) {
-                            if (books.get(temp).getFinalRefreshData() < books.get(j).getFinalRefreshData()) {
-                                temp = j;
-                            }
-                        }
-                        BookShelfBean tempBookShelfBean = books.get(i);
-                        books.set(i, books.get(temp));
-                        books.set(temp, tempBookShelfBean);
+                Collections.sort(books, (o1, o2) -> {
+                    if (o1.getFinalRefreshData() - o2.getFinalRefreshData() > 0) {
+                        return -1;
+                    } else if (o1.getFinalRefreshData() - o2.getFinalRefreshData() < 0) {
+                        return 1;
+                    } else {
+                        return 0;
                     }
-                }
+                });
                 break;
             case "2":
-                if (books != null && books.size() > 0) {
-                    for (int i = 0; i < books.size(); i++) {
-                        int temp = i;
-                        for (int j = i + 1; j < books.size(); j++) {
-                            if (books.get(temp).getSerialNumber() > books.get(j).getSerialNumber()) {
-                                temp = j;
-                            }
-                        }
-                        BookShelfBean tempBookShelfBean = books.get(i);
-                        books.set(i, books.get(temp));
-                        books.set(temp, tempBookShelfBean);
-                    }
-                }
+                Collections.sort(books, (o1, o2) -> o1.getSerialNumber() - o2.getSerialNumber());
                 break;
         }
     }

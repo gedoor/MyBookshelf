@@ -123,4 +123,11 @@
         android:background="@drawable/bg_ib_pre2"
         android:contentDescription="@string/book" />
 
+    <ImageButton
+        android:id="@+id/ib_cover"
+        android:layout_width="60dp"
+        android:layout_height="90dp"
+        android:background="@drawable/bg_ib_pre2"
+        android:contentDescription="@string/book" />
+
 </FrameLayout>

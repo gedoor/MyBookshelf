@@ -146,7 +146,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     }
 
     //最近阅读
-    private void bindLastViewHolder(final LastViewHolder holder, final int index) {
+    private void bindLastViewHolder(final LastViewHolder holder, BookShelfBean bookShelfBean) {
         if (books.size() == 0) {
             holder.tvWatch.setOnClickListener(v -> {
                 if (null != itemClickListener) {
@@ -163,22 +163,22 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             holder.tvWatch.setText("去选书");
         } else {
             Glide.with(holder.ivCover.getContext())
-                    .load(books.get(index).getBookInfoBean().getCoverUrl())
+                    .load(bookShelfBean.getBookInfoBean().getCoverUrl())
                     .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
 
             holder.flLastEstTip.setVisibility(View.VISIBLE);
 
-            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
+            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), bookShelfBean.getBookInfoBean().getName()));
 
-            if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
-                    && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
+            if (null != bookShelfBean.getBookInfoBean() && null != bookShelfBean.getChapterList()
+                    && bookShelfBean.getChapterListSize() > bookShelfBean.getDurChapter()) {
                 holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.read_dur_progress),
-                        books.get(index).getDurChapterListBean().getDurChapterName()));
+                        bookShelfBean.getDurChapterListBean().getDurChapterName()));
             }
             holder.llDurCursor.setVisibility(View.VISIBLE);
             holder.mpbDurProgress.setVisibility(View.VISIBLE);
-            holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
-            float speed = books.get(index).getChapterListSize() * 1.0f / 100;
+            holder.mpbDurProgress.setMaxProgress(bookShelfBean.getChapterListSize());
+            float speed = bookShelfBean.getChapterListSize() * 1.0f / 100;
 
             holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
             holder.mpbDurProgress.setProgressListener(new OnProgressListener() {
@@ -204,14 +204,14 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 }
             });
             if (needAnim) {
-                holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter());
+                holder.mpbDurProgress.setDurProgressWithAnim(bookShelfBean.getDurChapter());
             } else {
-                holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
+                holder.mpbDurProgress.setDurProgress(bookShelfBean.getDurChapter());
             }
             holder.tvWatch.setText("继续阅读");
             holder.tvWatch.setOnClickListener(v -> {
                 if (null != itemClickListener) {
-                    itemClickListener.onClick(books.get(index), index);
+                    itemClickListener.onClick(bookShelfBean, 0);
                 }
             });
         }
@@ -226,9 +226,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         books.clear();
         if (null != newDataS && newDataS.size() > 0) {
             books.addAll(newDataS);
-            BookShelf.order(books, bookshelfPx);
+            bindLastViewHolder(lastViewHolder, books.get(0));
+        } else {
+            bindLastViewHolder(lastViewHolder, null);
         }
-        bindLastViewHolder(lastViewHolder, 0);
+        BookShelf.order(books, bookshelfPx);
         notifyDataSetChanged();
     }
 

@@ -150,7 +150,17 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
         }
-
+        holder.ibCover.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.onClick(books.get(index), index);
+        });
+        holder.ibCover.setOnLongClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                return true;
+            } else
+                return false;
+        });
         holder.ibContent.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(books.get(index), index);
@@ -209,6 +219,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         LinearLayout llDurcursor;
         MHorProgressBar mpbDurprogress;
         ImageButton ibContent;
+        ImageButton ibCover;
 
         OtherViewHolder(View itemView) {
             super(itemView);
@@ -221,7 +232,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             llDurcursor = itemView.findViewById(R.id.ll_durcursor);
             mpbDurprogress = itemView.findViewById(R.id.mpb_durprogress);
             ibContent = itemView.findViewById(R.id.ib_content);
-
+            ibCover = itemView.findViewById(R.id.ib_cover);
         }
     }
 
