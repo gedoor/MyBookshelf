@@ -152,13 +152,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         return new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                if (isList) {
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                     final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 } else {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                    final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 }
             }
@@ -553,7 +553,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SETTING) {
-            mPresenter.queryBookShelf(false);
+            recreate();
         }
     }
 }

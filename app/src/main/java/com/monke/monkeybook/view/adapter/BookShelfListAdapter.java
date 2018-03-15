@@ -190,8 +190,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         books.clear();
         if (null != newDataS && newDataS.size() > 0) {
             books.addAll(newDataS);
+            BookShelf.order(books, bookshelfPx);
         }
-        BookShelf.order(books, bookshelfPx);
         notifyDataSetChanged();
     }
 
