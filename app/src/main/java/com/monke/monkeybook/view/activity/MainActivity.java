@@ -145,7 +145,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         } else {
             bookShelfGridAdapter.setItemClickListener(getAdapterListener());
         }
-        rfRvShelf.setItemTouchHelperCallback(getItemTouchHelperCallback(viewIsList));
+        if (preferences.getString(getString(R.string.pk_bookshelf_px), "0").equals("2")) {
+            rfRvShelf.setItemTouchHelperCallback(getItemTouchHelperCallback(viewIsList));
+        }
     }
 
     private ItemTouchHelper.Callback getItemTouchHelperCallback(boolean isList) {
