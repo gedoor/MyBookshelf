@@ -19,7 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -230,7 +230,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         } else {
             bindLastViewHolder(lastViewHolder, null);
         }
-        BookShelf.order(books, bookshelfPx);
+        BookshelfHelp.order(books, bookshelfPx);
         notifyDataSetChanged();
     }
 

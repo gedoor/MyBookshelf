@@ -18,7 +18,7 @@ import java.util.List;
  * 添加删除Book
  */
 
-public class BookShelf {
+public class BookshelfHelp {
 
     public static List<BookShelfBean> getAllBook() {
         List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()

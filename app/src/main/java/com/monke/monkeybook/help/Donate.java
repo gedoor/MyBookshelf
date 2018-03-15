@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 
 /**
  * Created by GKF on 2017/12/18.
+ * 捐赠
  */
 
 public class Donate {

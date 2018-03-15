@@ -16,10 +16,8 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
@@ -48,7 +46,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             mView.activityRefreshView();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> bookShelfList = BookShelf.getAllBook();
+            List<BookShelfBean> bookShelfList = BookshelfHelp.getAllBook();
             e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
             e.onComplete();
         })
@@ -260,7 +258,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
      */
     private Observable<BookShelfBean> saveBookToShelfO(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            BookShelf.saveBookToShelf(bookShelfBean);
+            BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
             e.onComplete();
         });

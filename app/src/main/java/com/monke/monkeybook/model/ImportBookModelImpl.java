@@ -8,7 +8,7 @@ import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.impl.IImportBookModel;
 
@@ -46,7 +46,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
 
             String md5 = new BigInteger(1, md.digest()).toString(16);
             BookShelfBean bookShelfBean;
-            bookShelfBean = BookShelf.getBook(md5);
+            bookShelfBean = BookshelfHelp.getBook(md5);
             Boolean isNew = true;
             if (bookShelfBean != null) {
                 isNew = false;

@@ -21,7 +21,6 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReadBookContentBean;
@@ -30,7 +29,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.ReplaceRuleManage;
@@ -74,7 +73,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (open_from == OPEN_FROM_APP) {
             String noteUrl = mView.getNoteUrl();
             if (noteUrl != null && !noteUrl.isEmpty()) {
-                bookShelf = BookShelf.getBook(noteUrl);
+                bookShelf = BookshelfHelp.getBook(noteUrl);
             }
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
@@ -290,7 +289,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (bookShelf != null && isAdd) {
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
-                BookShelf.saveBookToShelf(bookShelf);
+                BookshelfHelp.saveBookToShelf(bookShelf);
                 e.onNext(bookShelf);
                 e.onComplete();
             }).subscribeOn(Schedulers.newThread())
@@ -431,7 +430,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
-        BookShelfBean bookShelfBean = BookShelf.getBookFromSearchBook(searchBook);
+        BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBook);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
@@ -460,8 +459,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            BookShelf.removeFromBookShelf(bookShelf);
-            BookShelf.saveBookToShelf(bookShelfBean);
+            BookshelfHelp.removeFromBookShelf(bookShelf);
+            BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
             e.onComplete();
         })
@@ -566,7 +565,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void removeFromShelf() {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                BookShelf.removeFromBookShelf(bookShelf);
+                BookshelfHelp.removeFromBookShelf(bookShelf);
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.io())

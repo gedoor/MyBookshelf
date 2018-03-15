@@ -6,7 +6,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.ReplaceRuleBeanDao;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class ReplaceRuleManage {
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
         BookContentBean bookContentBean;
-        for (BookShelfBean bookShelfBean : BookShelf.getAllBook()) {
+        for (BookShelfBean bookShelfBean : BookshelfHelp.getAllBook()) {
             for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
                 bookContentBean = chapterListBean.getBookContentBean();
                 if (bookContentBean != null) {

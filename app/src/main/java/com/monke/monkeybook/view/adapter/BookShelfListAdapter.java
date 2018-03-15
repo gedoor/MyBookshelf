@@ -18,7 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookShelf;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.Observable;
 import me.grantland.widget.AutofitTextView;
 
 public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
@@ -200,7 +199,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         books.clear();
         if (null != newDataS && newDataS.size() > 0) {
             books.addAll(newDataS);
-            BookShelf.order(books, bookshelfPx);
+            BookshelfHelp.order(books, bookshelfPx);
         }
         notifyDataSetChanged();
     }
