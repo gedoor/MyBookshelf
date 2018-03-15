@@ -125,9 +125,8 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             holder.ibContent.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
                     itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
-                    return true;
-                } else
-                    return false;
+                }
+                return true;
             });
         } else if (books.get(index).getSerialNumber() != index){
             books.get(index).setSerialNumber(index);
