@@ -24,7 +24,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     private OnClickTryAgainListener clickTryAgainListener;
 
     public interface OnClickTryAgainListener {
-        public void loadMoreErrorTryAgain();
+        void loadMoreErrorTryAgain();
     }
 
     public interface OnItemClickListener {
@@ -131,8 +131,8 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
         public LoadMoreViewHolder(View itemView) {
             super(itemView);
-            llLoadMore = (FrameLayout) itemView.findViewById(R.id.ll_loadmore);
-            tvLoadMore = (TextView) itemView.findViewById(R.id.tv_loadmore);
+            llLoadMore = itemView.findViewById(R.id.ll_loadmore);
+            tvLoadMore = itemView.findViewById(R.id.tv_loadmore);
         }
     }
 

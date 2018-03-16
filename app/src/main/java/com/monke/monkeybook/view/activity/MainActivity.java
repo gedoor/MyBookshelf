@@ -125,7 +125,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
         } else {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter.getHeaderView(rfRvShelf.getHeader()), bookShelfGridAdapter, new GridLayoutManager(this, 3));
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter.setHeaderView(rfRvShelf.getHeader()),
+                    bookShelfGridAdapter, new GridLayoutManager(this, 3));
         }
     }
 
@@ -156,12 +157,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         return new ItemTouchHelper.Callback() {
             @Override
             public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (isList) {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                     final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 } else {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                     final int swipeFlags = 0;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 }

@@ -12,10 +12,12 @@ import android.widget.ImageView;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +28,22 @@ import java.util.List;
 public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.MyViewHolder> {
     private List<BookSourceBean> dataList;
     private BookSourceActivity activity;
+
+    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+        @Override
+        public void onSwiped(int adapterPosition) {
+
+        }
+
+        @Override
+        public boolean onMove(int srcPosition, int targetPosition) {
+            Collections.swap(dataList, srcPosition, targetPosition);
+            notifyItemMoved(srcPosition, targetPosition);
+            notifyItemChanged(srcPosition);
+            notifyItemChanged(targetPosition);
+            return true;
+        }
+    };
 
     public BookSourceAdapter(BookSourceActivity activity) {
         this.activity = activity;
@@ -46,6 +64,10 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     public List<BookSourceBean> getBookSourceBeanList() {
         return dataList;
+    }
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
     }
 
     @Override

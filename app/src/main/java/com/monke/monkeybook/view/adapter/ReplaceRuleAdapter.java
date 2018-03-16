@@ -11,9 +11,11 @@ import android.widget.ImageView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +26,25 @@ import java.util.List;
 public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.MyViewHolder> {
     private List<ReplaceRuleBean> dataList;
     private ReplaceRuleActivity activity;
+    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+        @Override
+        public void onSwiped(int adapterPosition) {
+
+        }
+
+        @Override
+        public boolean onMove(int srcPosition, int targetPosition) {
+            Collections.swap(dataList, srcPosition, targetPosition);
+            notifyItemMoved(srcPosition, targetPosition);
+            notifyItemChanged(srcPosition);
+            notifyItemChanged(targetPosition);
+            return true;
+        }
+    };
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
+    }
 
     public ReplaceRuleAdapter(ReplaceRuleActivity activity) {
         this.activity = activity;

@@ -138,7 +138,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    public View getHeaderView(LinearLayout parent) {
+    public View setHeaderView(LinearLayout parent) {
         View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_bookshelf_lastest, parent, false);
         lastViewHolder = new LastViewHolder(headerView);
         return headerView;
