@@ -19,11 +19,13 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +41,26 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     private Boolean needAnim = true;
     private OnItemClickListener itemClickListener;
     private String bookshelfPx;
+
+    private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
+        @Override
+        public void onSwiped(int adapterPosition) {
+
+        }
+
+        @Override
+        public boolean onMove(int srcPosition, int targetPosition) {
+            Collections.swap(books, srcPosition, targetPosition);
+            notifyItemMoved(srcPosition, targetPosition);
+            notifyItemChanged(srcPosition);
+            notifyItemChanged(targetPosition);
+            return true;
+        }
+    };
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
+    }
 
     public BookShelfListAdapter() {
         super(false);

@@ -37,6 +37,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.LauncherIcon;
+import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
@@ -143,63 +144,16 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void bindEvent() {
         bindRvShelfEvent();
+        MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
+        itemTouchHelpCallback.setDragEnable(true);
         if (viewIsList) {
             bookShelfListAdapter.setItemClickListener(getAdapterListener());
+            itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfListAdapter.getItemTouchCallbackListener());
         } else {
             bookShelfGridAdapter.setItemClickListener(getAdapterListener());
+            itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfGridAdapter.getItemTouchCallbackListener());
         }
-        if (preferences.getString(getString(R.string.pk_bookshelf_px), "0").equals("2")) {
-            rfRvShelf.setItemTouchHelperCallback(getItemTouchHelperCallback(viewIsList));
-        }
-    }
-
-    private ItemTouchHelper.Callback getItemTouchHelperCallback(boolean isList) {
-        return new ItemTouchHelper.Callback() {
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-                    final int swipeFlags = 0;
-                    return makeMovementFlags(dragFlags, swipeFlags);
-                } else {
-                    final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                    final int swipeFlags = 0;
-                    return makeMovementFlags(dragFlags, swipeFlags);
-                }
-            }
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                //直接按照文档来操作啊，这文档写得太给力了,简直完美！
-                if (isList) {
-                    Collections.swap(bookShelfListAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    bookShelfListAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    bookShelfListAdapter.notifyItemChanged(viewHolder.getAdapterPosition());
-                    bookShelfListAdapter.notifyItemChanged(target.getAdapterPosition());
-                } else {
-                    Collections.swap(bookShelfGridAdapter.getBooks(), viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    bookShelfGridAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                    bookShelfGridAdapter.notifyDataSetChanged();
-                }
-                return true;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                //暂不处理
-            }
-
-            @Override
-            public boolean canDropOver(RecyclerView recyclerView, RecyclerView.ViewHolder current, RecyclerView.ViewHolder target) {
-                return true;
-            }
-
-            @Override
-            public boolean isLongPressDragEnabled() {
-                //return true后，可以实现长按拖动排序和拖动动画了
-                return true;
-            }
-        };
+        rfRvShelf.setItemTouchHelperCallback(itemTouchHelpCallback);
     }
 
     private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
