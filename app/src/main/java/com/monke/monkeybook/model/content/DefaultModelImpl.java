@@ -32,6 +32,7 @@ import io.reactivex.Observable;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
+import static android.text.TextUtils.stringOrSpannedString;
 
 /**
  * 默认检索规则
@@ -85,7 +86,6 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        Boolean isPost = bookSourceBean.getRuleSearchUrl().contains("@");
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
@@ -94,9 +94,16 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                     emitter.onComplete();
                 });
             }
-            if (isPost) {
+            if (bookSourceBean.getRuleSearchUrl().contains("@")) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpPostApi.class)
+                        .searchBook(analyzeSearchUrl.getSearchPath(),
+                                analyzeSearchUrl.getQueryMap(),
+                                headerMap)
+                        .flatMap(this::analyzeSearchBook);
+            } else if (bookSourceBean.getRuleSearchUrl().contains("?")) {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
@@ -104,8 +111,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             } else {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
-                        .searchBook(analyzeSearchUrl.getSearchPath(),
-                                analyzeSearchUrl.getQueryMap(),
+                        .getWebContent(analyzeSearchUrl.getSearchPath(),
                                 headerMap)
                         .flatMap(this::analyzeSearchBook);
             }
