@@ -9,6 +9,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
@@ -25,6 +26,7 @@ import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IMainView;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -223,6 +225,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         .flatMap(this::saveBookToShelfO)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
+                        .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new SimpleObserver<BookShelfBean>() {
                             @Override
                             public void onNext(BookShelfBean bookShelfBean) {

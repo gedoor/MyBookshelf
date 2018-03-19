@@ -248,6 +248,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 e.onComplete();
             }).observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
+                    .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new SimpleObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean aBoolean) {
@@ -282,6 +283,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void updateProgress(int chapterIndex, int pageIndex) {
         bookShelf.setDurChapter(chapterIndex);
         bookShelf.setDurChapterPage(pageIndex);
+        saveProgress();
     }
 
     @Override

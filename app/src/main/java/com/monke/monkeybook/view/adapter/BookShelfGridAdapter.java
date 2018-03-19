@@ -55,8 +55,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         public boolean onMove(int srcPosition, int targetPosition) {
             Collections.swap(books, srcPosition, targetPosition);
             notifyItemMoved(srcPosition, targetPosition);
-            notifyItemChanged(srcPosition);
-            notifyItemChanged(targetPosition);
+            int start = srcPosition;
+            int end = targetPosition;
+            if (start > end) {
+                start = targetPosition;
+                end = srcPosition;
+            }
+            notifyItemRangeChanged(start, end - start + 1);
             return true;
         }
     };
