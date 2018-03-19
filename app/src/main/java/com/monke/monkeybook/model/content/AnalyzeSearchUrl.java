@@ -32,7 +32,7 @@ class AnalyzeSearchUrl {
             ruleUrlS = ruleUrlS[0].split("\\?");
         }
         if (ruleUrlS.length == 1) {
-            String url = ruleUrlS[0].replace("searchKey", key)
+            String url = ruleUrlS[0].replace("searchKey", searchKey)
                     .replace("searchPage-1", String.valueOf(page - 1))
                     .replace("searchPage", String.valueOf(page));
             generateUrlPath(url);
