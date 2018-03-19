@@ -173,7 +173,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
-                .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
+                .flatMap(response -> analyzeBookInfo(response.body(), bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
@@ -225,7 +225,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
-                .flatMap(s -> analyzeChapterList(s, bookShelfBean));
+                .flatMap(response -> analyzeChapterList(response.body(), bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
@@ -277,7 +277,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
-                .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
+                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {

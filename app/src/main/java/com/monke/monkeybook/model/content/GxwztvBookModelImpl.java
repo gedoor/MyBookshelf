@@ -52,11 +52,11 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(TAG, headerMap)
-                .flatMap(s -> {
-            if (s != null && s.length() > 0 && aCache != null) {
-                aCache.put(LibraryPresenterImpl.LIBRARY_CACHE_KEY, s);
+                .flatMap(response -> {
+            if (response.body() != null && response.body().length() > 0 && aCache != null) {
+                aCache.put(LibraryPresenterImpl.LIBRARY_CACHE_KEY, response.body());
             }
-            return analyzeLibraryData(s);
+            return analyzeLibraryData(response.body());
         });
     }
 
@@ -190,7 +190,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
-                .flatMap(s -> analyzeBookInfo(s, bookShelfBean));
+                .flatMap(response -> analyzeBookInfo(response.body(), bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyzeBookInfo(final String s, final BookShelfBean bookShelfBean) {
@@ -232,7 +232,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
-                .flatMap(s -> analyzeChapterList(s, bookShelfBean));
+                .flatMap(response -> analyzeChapterList(response.body(), bookShelfBean));
     }
 
     private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
@@ -276,7 +276,7 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
-                .flatMap(s -> analyzeBookContent(s, durChapterUrl, durChapterIndex));
+                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
@@ -330,6 +330,6 @@ public class GxwztvBookModelImpl extends BaseModelImpl implements IGxwztvBookMod
         return getRetrofitString(GxwztvBookModelImpl.TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(url, headerMap)
-                .flatMap(this::analyzeSearchBook);
+                .flatMap(response -> analyzeSearchBook(response.body()));
     }
 }
