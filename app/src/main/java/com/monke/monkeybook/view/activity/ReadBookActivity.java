@@ -560,10 +560,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             ReadBookActivity.this.popMenuOut();
             if (mPresenter.getBookShelf() != null) {
                 //弹出离线下载界面
-                int endIndex = mPresenter.getBookShelf().getDurChapter() + 50;
-                if (endIndex >= mPresenter.getBookShelf().getChapterListSize()) {
-                    endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
-                }
+                int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
                 moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
                         mPresenter.getBookShelf().getChapterListSize(),
                         (start, end) -> {
