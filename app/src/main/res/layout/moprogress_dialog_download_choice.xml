@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="260dp"
     android:layout_height="185dp"
-    android:background="@drawable/bg_search">
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/ll_content"
