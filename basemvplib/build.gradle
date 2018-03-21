@@ -37,9 +37,9 @@ dependencies {
     api 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0.1' // If you want to use Kotlin syntax
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.3.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.2.0'
+    api 'com.squareup.retrofit2:retrofit:2.4.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.4.0'
 
     //RxBus
     api ('com.hwangjr.rxbus:rxbus:2.0.0-beta') {
