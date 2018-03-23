@@ -12,7 +12,7 @@
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/bookshelf_px_title"
-        android:entryValues="@array/bookshelf_px__value"
+        android:entryValues="@array/bookshelf_px_value"
         android:key="@string/pk_bookshelf_px"
         android:title="@string/bookshelf_px" />
 
@@ -33,6 +33,13 @@
         android:key="hide_navigation_bar"
         android:summary="@string/ps_hide_navigation_bar"
         android:title="@string/pt_hide_navigation_bar" />
+
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/read_type_title"
+        android:entryValues="@array/read_type_value"
+        android:key="@string/pk_read_type"
+        android:title="@string/read_type" />
 
     <com.monke.monkeybook.widget.NumberPickerPreference
         android:defaultValue="6"

@@ -19,9 +19,19 @@
         <item>@string/bookshelf_px_2</item>
     </string-array>
 
-    <string-array name="bookshelf_px__value">
+    <string-array name="bookshelf_px_value">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="read_type_title">
+        <item>@string/horizontal_page_turning</item>
+        <item>@string/vertical_scroll</item>
+    </string-array>
+
+    <string-array name="read_type_value">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 </resources>

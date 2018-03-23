@@ -26,7 +26,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_screen_direction)));
         bindPreferenceSummaryToValue(findPreference(mContext.getString(R.string.pk_bookshelf_px)));
-
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_read_type)));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value)-> {
