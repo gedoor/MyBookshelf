@@ -44,10 +44,17 @@ public class BookshelfHelp {
         List<BookShelfBean> bookShelfBeanS = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                 .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl)).build().list();
         if (!(bookShelfBeanS == null || bookShelfBeanS.size() == 0)) {
-            return bookShelfBeanS.get(0);
-        } else {
-            return null;
+            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBeanS.get(0).getNoteUrl())).limit(1).build().list();
+            if (temp != null && temp.size() > 0) {
+                BookInfoBean bookInfoBean = temp.get(0);
+                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBeanS.get(0).getNoteUrl())).orderAsc(ChapterListBeanDao.Properties.DurChapterIndex).build().list());
+                bookShelfBeanS.get(0).setBookInfoBean(bookInfoBean);
+                return bookShelfBeanS.get(0);
+            }
         }
+        return null;
     }
 
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
