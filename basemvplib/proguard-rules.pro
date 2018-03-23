@@ -20,6 +20,7 @@
 -dontusemixedcaseclassnames
 -classobfuscationdictionary  obfuscationClassNames.txt
 -dontskipnonpubliclibraryclasses
+-verbose
 
 ##################OKGO########################
 #okgo

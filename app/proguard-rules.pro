@@ -167,22 +167,23 @@ public static java.lang.String TABLENAME;
 -dontwarn okio.**
 -dontwarn retrofit2.**
 -dontwarn javax.annotation.**
--keep class retrofit2.**{*;}
--keep class okhttp3.**{*;}
--keep class okio.**{*;}
--keep class com.hwangjr.rxbus.**{*;}
 -dontwarn org.apache.log4j.lf5.viewer.**
 -dontnote org.apache.log4j.lf5.viewer.**
 -dontwarn freemarker.**
 -dontnote org.python.core.**
 -dontwarn com.hwangjr.rxbus.**
+-dontwarn okhttp3.**
 
+-keep class retrofit2.**{*;}
+-keep class okhttp3.**{*;}
+-keep class okio.**{*;}
+-keep class com.hwangjr.rxbus.**{*;}
+-keep class org.conscrypt.**{*;}
 -keep class com.monke.monkeybook.widget.**{*;}
 -keep class com.monke.monkeybook.bean.**{*;}
 -keep class android.support.**{*;}
 -keep class me.grantland.widget.**{*;}
 -keep class de.hdodenhof.circleimageview.**{*;}
--keep class retrofit2.**{*;}
 -keep class tyrant.explosionfield.**{*;}
 -keep class tyrantgit.explosionfield.**{*;}
 -keep class freemarker.**{*;}
