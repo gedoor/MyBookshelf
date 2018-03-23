@@ -433,6 +433,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Override
     public void changeBookSource(SearchBookBean searchBook) {
         BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBook);
+        bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
