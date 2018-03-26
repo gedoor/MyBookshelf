@@ -459,6 +459,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void setConvert() {
                 csvBook.setTextConvert();
             }
+
+            @Override
+            public void setBold() {
+                csvBook.setTextBold();
+            }
         });
         //目录
         chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {

@@ -566,6 +566,12 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    public void setTextBold() {
+        for (BookContentView item : viewContents) {
+            item.setTextBold(readBookControl);
+        }
+    }
+
     public void changeTextSize() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);

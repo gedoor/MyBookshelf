@@ -50,6 +50,8 @@ public class ReadInterfacePop extends PopupWindow {
     TextView flLineBigger;//行间距大
     @BindView(R.id.fl_text_convert)
     TextView flTextConvert;
+    @BindView(R.id.fl_text_Bold)
+    TextView flTextBold;
 
     /*@BindView(R.id.tv_dur_line_num)
     TextView tvDurLineNum;//增减行数字*/
@@ -97,6 +99,8 @@ public class ReadInterfacePop extends PopupWindow {
         void setFont(String path);
 
         void setConvert();
+
+        void setBold();
     }
 
     private OnChangeProListener changeProListener;
@@ -150,6 +154,12 @@ public class ReadInterfacePop extends PopupWindow {
             readBookControl.setTextConvert(!readBookControl.getTextConvert());
             updateConvertText(readBookControl.getTextConvert());
             changeProListener.setConvert();
+        });
+        //加粗切换
+        flTextBold.setOnClickListener(view -> {
+            readBookControl.setTextBold(!readBookControl.getTextBold());
+            updateBoldText(readBookControl.getTextBold());
+            changeProListener.setBold();
         });
         /*flLineNum.setOnClickListener(view1 -> {
             updateLineNum(readBookControl.getLineNum() + 1);
@@ -282,6 +292,14 @@ public class ReadInterfacePop extends PopupWindow {
             flTextConvert.setText("简");
         }else {
             flTextConvert.setText("繁");
+        }
+    }
+
+    private void updateBoldText(Boolean convent){
+        if (convent){
+            flTextBold.setText("细");
+        }else {
+            flTextBold.setText("粗");
         }
     }
 

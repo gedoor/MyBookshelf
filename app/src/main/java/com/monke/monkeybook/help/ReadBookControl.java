@@ -34,6 +34,7 @@ public class ReadBookControl {
     private String fontPath;
 
     private Boolean TextConvert =false;
+    private Boolean TextBold =false;
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
     private Boolean keepScreenOn = false;
@@ -187,6 +188,13 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public void setTextBold(boolean TextBold) {
+        this.TextBold = TextBold;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("TextBold", TextBold);
+        editor.apply();
+    }
+
     public String setReadBookFont(String fontPath) {
         this.fontPath = fontPath;
         SharedPreferences.Editor editor = preference.edit();
@@ -201,6 +209,10 @@ public class ReadBookControl {
 
     public Boolean getTextConvert() {
         return TextConvert;
+    }
+
+    public Boolean getTextBold() {
+        return TextBold;
     }
 
     public int getTextColorCustom() {

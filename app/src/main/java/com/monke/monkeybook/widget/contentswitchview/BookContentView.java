@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -266,6 +268,7 @@ public class BookContentView extends FrameLayout {
 
     public void setReadBookControl(ReadBookControl readBookControl) {
         setFont(readBookControl);
+        setTextBold(readBookControl);
         setTextKind(readBookControl);
         setBg(readBookControl);
     }
@@ -301,11 +304,23 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setFontConvert(ReadBookControl readBookControl) {
-        //自定义字体
+        //简繁体
         if (readBookControl.getTextConvert()){
             tvContent.setText(JianFan.j2f(tvContent.getText().toString()));
         }else{
             tvContent.setText(JianFan.f2j(tvContent.getText().toString()));
+        }
+
+    }
+
+    public void setTextBold(ReadBookControl readBookControl) {
+        TextPaint tp = tvContent.getPaint();
+        if (readBookControl.getTextBold()){
+            tp.setFakeBoldText(true);
+            tvContent.setText(tvContent.getText());
+        }else{
+            tp.setFakeBoldText(false);
+            tvContent.setText(tvContent.getText());
         }
 
     }
