@@ -100,6 +100,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     @Override
     public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex) {
+        //查询简繁体配置
+        boolean convert = MApplication.getInstance().getSharedPreferences("CONFIG", 0)
+                .getBoolean("TextConvert",false);
+
         //载入正文
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             if (null != bookShelf.getChapterList(chapterIndex).getBookContentBean()
@@ -129,7 +133,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
                                 pageIndex,
-                                tempCount + 1);
+                                tempCount + 1,convert);
                     }
                 } else {
                     //有元数据  重新分行

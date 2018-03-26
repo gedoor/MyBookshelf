@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -18,6 +19,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
+
+import org.nlpcn.commons.lang.jianfan.JianFan;
 
 import java.util.List;
 
@@ -135,7 +138,7 @@ public class BookContentView extends FrameLayout {
         finishLoading();
     }
 
-    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
+    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll, boolean convert) {
         if (tag == qTag) {
 
             if (contentLines == null) {
@@ -152,6 +155,11 @@ public class BookContentView extends FrameLayout {
             this.chapterAll = chapterAll;
             this.durPageIndex = durPageIndex;
             this.pageAll = durPageAll;
+
+            //显示之前先判断简 繁体
+            if (convert&&this.content!=null) {
+                this.content = JianFan.j2f(this.content);
+            }
 
             tvTitle.setText(this.title);
             tvContent.setText(this.content);
@@ -257,6 +265,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
+        setFont(readBookControl);
         setTextKind(readBookControl);
         setBg(readBookControl);
     }
@@ -280,6 +289,25 @@ public class BookContentView extends FrameLayout {
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
         }
+    }
+
+    public void setFont(ReadBookControl readBookControl) {
+        //自定义字体
+        if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
+            Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
+            tvContent.setTypeface(typeface);
+        }
+
+    }
+
+    public void setFontConvert(ReadBookControl readBookControl) {
+        //自定义字体
+        if (readBookControl.getTextConvert()){
+            tvContent.setText(JianFan.j2f(tvContent.getText().toString()));
+        }else{
+            tvContent.setText(JianFan.f2j(tvContent.getText().toString()));
+        }
+
     }
 
     public void setTextKind(ReadBookControl readBookControl) {

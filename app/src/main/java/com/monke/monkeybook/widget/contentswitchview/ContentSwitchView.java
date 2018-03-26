@@ -145,7 +145,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                                 tempX = -getWidth();
                             else if (tempX > 0)
                                 tempX = 0;
-                            viewContents.get(0).layout(tempX, viewContents.get(0).getTop(), tempX + getWidth(), viewContents.get(0).getBottom());
+                            if (readBookControl.getClickAnim()){
+                                viewContents.get(0).layout(tempX, viewContents.get(0).getTop(), tempX + getWidth(), viewContents.get(0).getBottom());
+                            }
                         } else if (durX < 0 && (state == PRE_AND_NEXT || state == ONLY_NEXT)) {
                             int tempX = durX;
                             if (tempX > 0)
@@ -153,7 +155,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             else if (tempX < -getWidth())
                                 tempX = -getWidth();
                             int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-                            viewContents.get(tempIndex).layout(tempX, viewContents.get(tempIndex).getTop(), tempX + getWidth(), viewContents.get(tempIndex).getBottom());
+                            if (readBookControl.getClickAnim()) {
+                                viewContents.get(tempIndex).layout(tempX, viewContents.get(tempIndex).getTop(), tempX + getWidth(), viewContents.get(tempIndex).getBottom());
+                            }
                         }
                     }
                     break;
@@ -162,11 +166,15 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         startX = event.getX();
                     if (event.getX() - startX > readBookControl.getClickSensitivity()) {
                         if (state == PRE_AND_NEXT || state == ONLY_PRE) {
-                            if (event.getX() - startX > scrollX) {
-                                //向前翻页成功
-                                initMoveSuccessAnim(viewContents.get(0), 0);
-                            } else {
-                                initMoveFailAnim(viewContents.get(0), -getWidth());
+                            if (readBookControl.getClickAnim()){
+                                if (event.getX() - startX > scrollX) {
+                                    //向前翻页成功
+                                    initMoveSuccessAnim(viewContents.get(0), 0);
+                                } else {
+                                    initMoveFailAnim(viewContents.get(0), -getWidth());
+                                }
+                            }else{
+                                gotoPrePage();
                             }
                         } else {
                             //没有上一页
@@ -174,12 +182,16 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                         }
                     } else if (event.getX() - startX < -readBookControl.getClickSensitivity()) {
                         if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-                            int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-                            if (startX - event.getX() > scrollX) {
-                                //向后翻页成功
-                                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
-                            } else {
-                                initMoveFailAnim(viewContents.get(tempIndex), 0);
+                            if (readBookControl.getClickAnim()){
+                                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
+                                if (startX - event.getX() > scrollX) {
+                                    //向后翻页成功
+                                    initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
+                                } else {
+                                    initMoveFailAnim(viewContents.get(tempIndex), 0);
+                                }
+                            }else{
+                                gotoNextPage();
                             }
                         } else {
                             //没有下一页
@@ -542,6 +554,18 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    public void setFont() {
+        for (BookContentView item : viewContents) {
+            item.setFont(readBookControl);
+        }
+    }
+
+    public void setTextConvert() {
+        for (BookContentView item : viewContents) {
+            item.setFontConvert(readBookControl);
+        }
+    }
+
     public void changeTextSize() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
@@ -555,6 +579,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
         loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum()));
     }
+
+
 
     /**
      * 音量键翻页

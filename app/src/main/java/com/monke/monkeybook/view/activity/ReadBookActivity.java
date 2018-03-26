@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
@@ -69,6 +71,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private final int ResultReplace = 101;
     private final int RESULT_OPEN_OTHER_PERMS = 102;
     public final int ResultSelectBg = 103;
+    public final int ResultSelectFont = 104;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -445,6 +448,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange(int index) {
                 csvBook.changeBg();
+            }
+
+            @Override
+            public void setFont(String path) {
+                csvBook.setFont();
+            }
+
+            @Override
+            public void setConvert() {
+                csvBook.setTextConvert();
             }
         });
         //目录
@@ -830,11 +843,34 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ResultReplace) {
+        switch (requestCode){
+            case ResultReplace:
+                recreate();
+                break;
+            case ResultSelectBg:
+                if (resultCode == RESULT_OK && null != data){
+                    readInterfacePop.setCustomBg(data.getData());
+                }
+                break;
+            case ResultSelectFont:
+                if (resultCode == RESULT_OK && null != data){
+                    String path = FileUtil.getPath(this,data.getData());
+                    try{
+                        //判断是否字体文件或字体是否损坏
+                        Typeface typeface = Typeface.createFromFile(path);
+                        readInterfacePop.setReadFonts(path);
+                    }catch (Exception e){
+                        Toast.makeText(this,"不是字体文件",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+
+        /*if (requestCode == ResultReplace) {
             recreate();
         } else if (requestCode == ResultSelectBg && resultCode == RESULT_OK && null != data) {
             readInterfacePop.setCustomBg(data.getData());
-        }
+        }*/
     }
 
     @Override

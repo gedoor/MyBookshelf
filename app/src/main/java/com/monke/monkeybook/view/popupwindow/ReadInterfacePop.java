@@ -1,16 +1,20 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,25 +37,33 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadInterfacePop extends PopupWindow {
 
     @BindView(R.id.fl_line_smaller)
-    FrameLayout flLineSmaller;
+    TextView flLineSmaller;//行间距小
     @BindView(R.id.tv_dur_line_size)
-    TextView tvDurLineSize;
+    TextView tvDurLineSize;//行间距数字
     @BindView(R.id.fl_line_bigger)
-    FrameLayout flLineBigger;
-    @BindView(R.id.tv_dur_line_num)
-    TextView tvDurLineNum;
-    @BindView(R.id.fl_line_num)
-    FrameLayout flLineNum;
+    TextView flLineBigger;//行间距大
+    @BindView(R.id.fl_text_convert)
+    TextView flTextConvert;
+
+    /*@BindView(R.id.tv_dur_line_num)
+    TextView tvDurLineNum;//增减行数字*/
+    /*@BindView(R.id.fl_line_num)
+    FrameLayout flLineNum;//增减行*/
     @BindView(R.id.fl_text_smaller)
-    FrameLayout flTextSmaller;
+    TextView flTextSmaller;//字号小
     @BindView(R.id.tv_dur_text_size)
-    TextView tvDurTextSize;
+    TextView tvDurTextSize;//字号数字
     @BindView(R.id.fl_text_bigger)
-    FrameLayout flTextBigger;
+    TextView flTextBigger;//字号大
+    @BindView(R.id.fl_text_font)
+    TextView fl_text_font;
+
     @BindView(R.id.civ_bg_white)
     CircleImageView civBgWhite;
     @BindView(R.id.civ_bg_yellow)
@@ -60,13 +72,20 @@ public class ReadInterfacePop extends PopupWindow {
     CircleImageView civBgGreen;
     @BindView(R.id.civ_bg_black)
     CircleImageView civBgBlack;
+    @BindView(R.id.civ_bg_blue)
+    CircleImageView civBgBlue;
+
     @BindView(R.id.civ_bg_custom)
-    CircleImageView civBgCustom;
+    TextView civBgCustom;
     @BindView(R.id.civ_text_color)
-    CircleImageView civTextColor;
+    TextView civTextColor;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl;
+
+    public static final int RESULT_CHOOSEFONT_PERMS =  106;
+
+    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public interface OnChangeProListener {
         void textSizeChange(int index);
@@ -74,6 +93,10 @@ public class ReadInterfacePop extends PopupWindow {
         void lineSizeChange(float lineMultiplier);
 
         void bgChange(int index);
+
+        void setFont(String path);
+
+        void setConvert();
     }
 
     private OnChangeProListener changeProListener;
@@ -101,7 +124,7 @@ public class ReadInterfacePop extends PopupWindow {
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
         updateLineNum(readBookControl.getLineNum());
-        upTextColor(readBookControl.getTextColorCustom());
+        //upTextColor(readBookControl.getTextColorCustom());
     }
 
     private void bindEvent() {
@@ -121,10 +144,17 @@ public class ReadInterfacePop extends PopupWindow {
             updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
             changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
         });
-        flLineNum.setOnClickListener(view1 -> {
+
+        //繁简切换
+        flTextConvert.setOnClickListener(v -> {
+            readBookControl.setTextConvert(!readBookControl.getTextConvert());
+            updateConvertText(readBookControl.getTextConvert());
+            changeProListener.setConvert();
+        });
+        /*flLineNum.setOnClickListener(view1 -> {
             updateLineNum(readBookControl.getLineNum() + 1);
             changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
-        });
+        });*/
 
 
         civBgWhite.setOnClickListener(v -> {
@@ -139,14 +169,23 @@ public class ReadInterfacePop extends PopupWindow {
             updateBg(2);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
-        civBgBlack.setOnClickListener(v -> {
+        civBgBlue.setOnClickListener(v -> {
             updateBg(3);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+        });
+
+        civBgBlack.setOnClickListener(v -> {
+            updateBg(4);
+            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+        });
+
+        fl_text_font.setOnClickListener(view -> {
+            chooseReadBookFont();
         });
         civBgCustom.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
+            intent.setType("image*//**//*");
             activity.startActivityForResult(intent, activity.ResultSelectBg);
         });
         civTextColor.setOnClickListener(view -> {
@@ -161,7 +200,7 @@ public class ReadInterfacePop extends PopupWindow {
                     })
                     .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
                         readBookControl.setTextColorCustom(selectedColor);
-                        upTextColor(selectedColor);
+                        //upTextColor(selectedColor);
                         changeProListener.bgChange(selectedColor);
                     })
                     .setNegativeButton("cancel", (dialog, which) -> {
@@ -172,9 +211,18 @@ public class ReadInterfacePop extends PopupWindow {
         });
     }
 
-    private void upTextColor(int textColor) {
-        civTextColor.setImageDrawable(new ColorDrawable(textColor));
+    private void chooseReadBookFont(){
+        if (EasyPermissions.hasPermissions(activity, perms)) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("fonts*//**//*");
+            activity.startActivityForResult(intent, activity.ResultSelectFont);
+        }else{
+            EasyPermissions.requestPermissions(activity, "选择字体",
+                    RESULT_CHOOSEFONT_PERMS, perms);
+        }
     }
+
 
     public void setCustomBg(Uri uri) {
         ContentResolver cr = activity.getContentResolver();
@@ -188,6 +236,10 @@ public class ReadInterfacePop extends PopupWindow {
             e.printStackTrace();
             Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setReadFonts(String path){
+        changeProListener.setFont(readBookControl.setReadBookFont(path));
     }
 
     private void updateText(int textKindIndex) {
@@ -221,17 +273,26 @@ public class ReadInterfacePop extends PopupWindow {
         if (linenum > 2) {
             linenum = -1;
         }
-        tvDurLineNum.setText(String.format("%d", linenum));
+        //tvDurLineNum.setText(String.format("%d", linenum));
         readBookControl.setLineNum(linenum);
     }
 
+    private void updateConvertText(Boolean convent){
+        if (convent){
+            flTextConvert.setText("简");
+        }else {
+            flTextConvert.setText("繁");
+        }
+    }
+
     private void updateBg(int index) {
-        civBgCustom.setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        //civBgCustom.setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         civBgWhite.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgYellow.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgGreen.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgBlack.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
-        civBgCustom.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        civBgBlue.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
+        //civBgCustom.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         switch (index) {
             case 0:
                 civBgWhite.setBorderColor(Color.parseColor("#F3B63F"));
@@ -243,11 +304,14 @@ public class ReadInterfacePop extends PopupWindow {
                 civBgGreen.setBorderColor(Color.parseColor("#F3B63F"));
                 break;
             case 3:
+                civBgBlue.setBorderColor(Color.parseColor("#F3B63F"));
+                break;
+            case 4:
                 civBgBlack.setBorderColor(Color.parseColor("#F3B63F"));
                 break;
-            default:
+            /*default:
                 civBgCustom.setBorderColor(Color.parseColor("#F3B63F"));
-                break;
+                break;*/
         }
         readBookControl.setTextDrawableIndex(index);
     }
