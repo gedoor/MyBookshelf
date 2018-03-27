@@ -31,6 +31,10 @@ public class ReadBookControl {
     private int textKindIndex = DEFAULT_TEXT;
     private int textDrawableIndex = DEFAULT_BG;
 
+    private String fontPath;
+
+    private Boolean TextConvert =false;
+    private Boolean TextBold =false;
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
     private Boolean keepScreenOn = false;
@@ -73,6 +77,8 @@ public class ReadBookControl {
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
         this.textColorCustom = preference.getInt("textColorCustom", Color.parseColor("#383838"));
+        this.fontPath = preference.getString("fontPath",null);
+        this.TextConvert = preference.getBoolean("TextConvert",false);
     }
 
     //字体大小
@@ -108,9 +114,16 @@ public class ReadBookControl {
             textDrawable.add(temp3);
 
             Map<String, Integer> temp4 = new HashMap<>();
-            temp4.put("textColor", Color.parseColor("#808080"));
-            temp4.put("textBackground", R.drawable.bg_readbook_black);
+            temp4.put("textColor", Color.parseColor("#FFFFFF"));
+            temp4.put("textBackground", R.drawable.bg_readbook_blue);
             textDrawable.add(temp4);
+
+            Map<String, Integer> temp5 = new HashMap<>();
+            temp5.put("textColor", Color.parseColor("#808080"));
+            temp5.put("textBackground", R.drawable.bg_readbook_black);
+            textDrawable.add(temp5);
+
+
         }
     }
 
@@ -124,7 +137,7 @@ public class ReadBookControl {
 
     public int getTextColor() {
         if (defaultPreference.getBoolean("nightTheme", false)) {
-            return textDrawable.get(3).get("textColor");
+            return textDrawable.get(4).get("textColor");
         }
         return textColor;
     }
@@ -135,7 +148,7 @@ public class ReadBookControl {
 
     public int getTextBackground() {
         if (getIsNightTheme()) {
-            return textDrawable.get(3).get("textBackground");
+            return textDrawable.get(4).get("textBackground");
         }
         return textBackground;
     }
@@ -166,6 +179,40 @@ public class ReadBookControl {
             this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
             this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
         }
+    }
+
+    public void setTextConvert(boolean TextConvert) {
+        this.TextConvert = TextConvert;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("TextConvert", TextConvert);
+        editor.apply();
+    }
+
+    public void setTextBold(boolean TextBold) {
+        this.TextBold = TextBold;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("TextBold", TextBold);
+        editor.apply();
+    }
+
+    public String setReadBookFont(String fontPath) {
+        this.fontPath = fontPath;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString("fontPath", fontPath);
+        editor.apply();
+        return fontPath;
+    }
+
+    public String getFontPath() {
+        return fontPath;
+    }
+
+    public Boolean getTextConvert() {
+        return TextConvert;
+    }
+
+    public Boolean getTextBold() {
+        return TextBold;
     }
 
     public int getTextColorCustom() {
@@ -274,4 +321,5 @@ public class ReadBookControl {
         editor.putBoolean("clickAnim", clickAnim);
         editor.apply();
     }
+
 }

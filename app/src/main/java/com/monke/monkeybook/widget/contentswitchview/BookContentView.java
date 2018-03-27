@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,13 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -135,7 +137,7 @@ public class BookContentView extends FrameLayout {
         finishLoading();
     }
 
-    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
+    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll, boolean convert) {
         if (tag == qTag) {
 
             if (contentLines == null) {
@@ -152,6 +154,11 @@ public class BookContentView extends FrameLayout {
             this.chapterAll = chapterAll;
             this.durPageIndex = durPageIndex;
             this.pageAll = durPageAll;
+
+            //显示之前先判断简 繁体
+            if (convert&&this.content!=null) {
+                this.content = ChineseUtils.toTraditional(this.content);
+            }
 
             tvTitle.setText(this.title);
             tvContent.setText(this.content);
@@ -257,6 +264,8 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
+        setFont(readBookControl);
+        setTextBold(readBookControl);
         setTextKind(readBookControl);
         setBg(readBookControl);
     }
@@ -280,6 +289,37 @@ public class BookContentView extends FrameLayout {
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
         }
+    }
+
+    public void setFont(ReadBookControl readBookControl) {
+        //自定义字体
+        if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
+            Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
+            tvContent.setTypeface(typeface);
+        }
+
+    }
+
+    public void setFontConvert(ReadBookControl readBookControl) {
+        //简繁体
+        if (readBookControl.getTextConvert()){
+            tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
+        }else{
+            tvContent.setText(ChineseUtils.toSimplified(tvContent.getText().toString()));
+        }
+
+    }
+
+    public void setTextBold(ReadBookControl readBookControl) {
+        TextPaint tp = tvContent.getPaint();
+        if (readBookControl.getTextBold()){
+            tp.setFakeBoldText(true);
+            tvContent.setText(tvContent.getText());
+        }else{
+            tp.setFakeBoldText(false);
+            tvContent.setText(tvContent.getText());
+        }
+
     }
 
     public void setTextKind(ReadBookControl readBookControl) {

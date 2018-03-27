@@ -1,281 +1,301 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
-    <View
+
+    <!--<View
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/bg_shadow_bottom" />
+        android:layout_height="30dp"
+        android:background="@drawable/bg_shadow_bottom" />-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background"
         android:orientation="vertical"
-        android:background="@color/background">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="6dp"
-            android:text="文字段落"/>
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:padding="10dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp">
 
-            <FrameLayout
+            <TextView
                 android:id="@+id/fl_text_smaller"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/selector_pop_font_bg">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_format_size_black_24dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="-"
-                        android:layout_gravity="center"
-                        android:textColor="#767676"
-                        android:textSize="22sp"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="A-"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-            </FrameLayout>
             <TextView
                 android:id="@+id/tv_dur_text_size"
-                android:layout_width="30dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:textColor="@color/tv_text_default"
-                android:text="18"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:gravity="center"
-                android:singleLine="true"
-                android:layout_gravity="center"
-                tools:ignore="HardcodedText" />
-            <FrameLayout
+                android:text="字号" />
+
+            <TextView
                 android:id="@+id/fl_text_bigger"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/selector_pop_font_bg">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                <ImageView
-                    android:layout_gravity="center"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_format_size_black_24dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="+"
-                        android:layout_gravity="center"
-                        android:textColor="#767676"
-                        android:textSize="22sp"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="A+"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-            </FrameLayout>
-            <View
-                android:layout_width="10dp"
-                android:layout_height="match_parent"/>
-            <FrameLayout
+            <TextView
+                android:id="@+id/fl_text_convert"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="繁"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/fl_text_font"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="自定义字体"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="5dp"
+            android:paddingTop="5dp">
+
+            <TextView
                 android:id="@+id/fl_line_smaller"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/selector_pop_font_bg">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_format_line_spacing_black_24dp"/>
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="L-"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="-"
-                        android:layout_gravity="center"
-                        android:textColor="#767676"
-                        android:textSize="22sp"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
-
-            </FrameLayout>
             <TextView
                 android:id="@+id/tv_dur_line_size"
-                android:layout_width="30dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:textColor="@color/tv_text_default"
-                android:text="1.5"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:gravity="center"
-                android:singleLine="true"
-                android:layout_gravity="center"
-                tools:ignore="HardcodedText" />
-            <FrameLayout
+                android:text="间距" />
+
+            <TextView
                 android:id="@+id/fl_line_bigger"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/selector_pop_font_bg">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_format_line_spacing_black_24dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="+"
-                        android:layout_gravity="center"
-                        android:textColor="#767676"
-                        android:textSize="22sp"
-                        tools:ignore="HardcodedText" />
-                </LinearLayout>
-
-            </FrameLayout>
-            <TextView
-                android:id="@+id/tv_dur_line_num"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:textSize="16sp"
-                android:textColor="@color/tv_text_default"
-                android:text="0"
-                android:gravity="center"
-                android:singleLine="true"
                 android:layout_gravity="center"
-                tools:ignore="HardcodedText" />
-            <FrameLayout
-                android:id="@+id/fl_line_num"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/selector_pop_font_bg">
-                <LinearLayout
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_format_list_numbered_black_24dp"/>
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="L+"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-                </LinearLayout>
-            </FrameLayout>
+            <TextView
+                android:id="@+id/fl_text_Bold"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="粗"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <TextView
                 android:id="@+id/civ_text_color"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@color/tv_text_default"
-                android:contentDescription="文字颜色"
-                android:layout_marginLeft="10dp"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"
-                tools:ignore="RtlHardcoded" />
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="文字颜色"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/btn_bg_press"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="6dp"
-            android:text="背景"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:orientation="horizontal"
+            android:layout_height="55dp"
             android:layout_gravity="center"
+            android:orientation="horizontal"
             android:padding="10dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_bg_white"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/icon_readbook_white"
-                android:contentDescription="白色背景"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"/>
 
-            <View
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_bg_yellow"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/icon_readbook_yellow"
-                android:contentDescription="古铜色背景"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_bg_green"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/icon_readbook_green"
-                android:contentDescription="淡绿色背景"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_bg_black"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/icon_readbook_black"
-                android:contentDescription="黑色背景"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="35dp"
+                    android:contentDescription="白色背景"
+                    android:src="@drawable/icon_readbook_white"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_yellow"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:contentDescription="古铜色背景"
+                    android:src="@drawable/icon_readbook_yellow"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_green"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:contentDescription="淡绿色背景"
+                    android:src="@drawable/icon_readbook_green"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_blue"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:contentDescription="蓝色背景"
+                    android:src="@drawable/icon_readbook_blue"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_black"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:contentDescription="黑色背景"
+                    android:src="@drawable/icon_readbook_black"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
+
+                <!--<FrameLayout
+                    android:id="@+id/civ_bg_custom"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:contentDescription="黑色背景"
+                        android:src="@color/bg_library"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="自"/>
+
+                </FrameLayout>-->
+
+
+            </LinearLayout>
+
+
+            <TextView
                 android:id="@+id/civ_bg_custom"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/ic_more_vert_black_24dp"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="自定义背景"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <!--<TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="自定义"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/selector_pop_font_bg"/>-->
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_bg_custom"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:contentDescription="自定义背景"
-                app:civ_border_width="1dp"
-                app:civ_border_color="@color/tv_text_default"/>
+                android:src="@drawable/ic_more_vert_black_24dp"
+                app:civ_border_color="@color/tv_text_default"
+                app:civ_border_width="1dp" />-->
         </LinearLayout>
+
     </LinearLayout>
+
 </LinearLayout>

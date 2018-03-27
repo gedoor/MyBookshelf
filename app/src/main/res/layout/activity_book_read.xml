@@ -204,13 +204,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="@drawable/bg_shadow_bottom" />
-
+            <!--底部设置栏-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background"
                 android:orientation="vertical">
-
+                <!--章节设置-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -267,6 +267,7 @@
                     android:baselineAligned="false"
                     android:orientation="horizontal">
 
+                    <!--目录按钮-->
                     <LinearLayout
                         android:id="@+id/ll_catalog"
                         android:layout_width="0dp"
@@ -296,7 +297,7 @@
                             android:textColor="#767676"
                             android:textSize="12sp" />
                     </LinearLayout>
-
+                    <!--调节按钮-->
                     <LinearLayout
                         android:id="@+id/ll_light"
                         android:layout_width="0dp"
@@ -326,7 +327,7 @@
                             android:textColor="#767676"
                             android:textSize="12sp" />
                     </LinearLayout>
-
+                    <!--界面按钮-->
                     <LinearLayout
                         android:id="@+id/ll_font"
                         android:layout_width="0dp"
@@ -356,7 +357,7 @@
                             android:textColor="#767676"
                             android:textSize="12sp" />
                     </LinearLayout>
-
+                    <!--设置按钮-->
                     <LinearLayout
                         android:id="@+id/ll_setting"
                         android:layout_width="0dp"
