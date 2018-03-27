@@ -17,15 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
-
-import org.nlpcn.commons.lang.jianfan.JianFan;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -160,7 +157,7 @@ public class BookContentView extends FrameLayout {
 
             //显示之前先判断简 繁体
             if (convert&&this.content!=null) {
-                this.content = JianFan.j2f(this.content);
+                this.content = ChineseUtils.toTraditional(this.content);
             }
 
             tvTitle.setText(this.title);
@@ -306,9 +303,9 @@ public class BookContentView extends FrameLayout {
     public void setFontConvert(ReadBookControl readBookControl) {
         //简繁体
         if (readBookControl.getTextConvert()){
-            tvContent.setText(JianFan.j2f(tvContent.getText().toString()));
+            tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
         }else{
-            tvContent.setText(JianFan.f2j(tvContent.getText().toString()));
+            tvContent.setText(ChineseUtils.toSimplified(tvContent.getText().toString()));
         }
 
     }

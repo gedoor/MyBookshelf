@@ -112,7 +112,7 @@ dependencies {
     //颜色选择
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
     //简繁转换
-    compile 'org.nlpcn:nlp-lang:1.7.7'
+    compile 'com.luhuiguo:chinese-utils:1.0'
 }
 
 greendao {

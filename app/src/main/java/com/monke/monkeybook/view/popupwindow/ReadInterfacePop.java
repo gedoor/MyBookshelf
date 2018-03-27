@@ -195,7 +195,7 @@ public class ReadInterfacePop extends PopupWindow {
         civBgCustom.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image*//**//*");
+            intent.setType("image/*");
             activity.startActivityForResult(intent, activity.ResultSelectBg);
         });
         civTextColor.setOnClickListener(view -> {
@@ -225,7 +225,7 @@ public class ReadInterfacePop extends PopupWindow {
         if (EasyPermissions.hasPermissions(activity, perms)) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("fonts*//**//*");
+            intent.setType("*/*");
             activity.startActivityForResult(intent, activity.ResultSelectFont);
         }else{
             EasyPermissions.requestPermissions(activity, "选择字体",
