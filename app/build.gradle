@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 static def increasedVersionCode() {
     return (int) (System.currentTimeMillis() / 1000 / 60 / 60 - 17141)
@@ -68,7 +68,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('libs/commons-codec-1.10-sources.jar')
     //fireBase
-    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-core:12.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
@@ -112,7 +112,7 @@ dependencies {
     //颜色选择
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
     //简繁转换
-    compile 'com.luhuiguo:chinese-utils:1.0'
+    implementation 'com.luhuiguo:chinese-utils:1.0'
 }
 
 greendao {
@@ -121,5 +121,5 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-/*
-apply plugin: 'com.google.gms.google-services'*/
+
+apply plugin: 'com.google.gms.google-services'
