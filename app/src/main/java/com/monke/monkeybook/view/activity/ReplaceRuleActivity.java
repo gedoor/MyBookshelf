@@ -239,7 +239,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
         if (EasyPermissions.hasPermissions(this, perms)) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/plain");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+            intent.setType("text/*");//设置类型
             startActivityForResult(intent, IMPORT_SOURCE);
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
