@@ -26,7 +26,6 @@ import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -122,11 +121,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     public void delBookSource(BookSourceBean bookSource) {
-        mPresenter.delDate(bookSource);
+        mPresenter.delData(bookSource);
     }
 
     public void saveDate(List<BookSourceBean> date) {
-        mPresenter.saveDate(date);
+        mPresenter.saveData(date);
     }
 
     @Override
@@ -175,7 +174,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 selectBookSourceFile();
                 break;
             case R.id.action_import_book_source_onLine:
-                moProgressHUD.showInputBox("输入书源网址", null, inputText -> {});
+                moProgressHUD.showInputBox("输入书源网址", null,
+                        inputText -> mPresenter.importBookSource(inputText));
                 break;
             case R.id.action_reset_book_source:
                 resetBookSource();

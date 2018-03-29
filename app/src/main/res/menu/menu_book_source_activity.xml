@@ -28,6 +28,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_del_select"
+        android:icon="@drawable/ic_delete_forever_black_24dp"
+        android:title="@string/del_select"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_reset_book_source"
         android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/refresh"

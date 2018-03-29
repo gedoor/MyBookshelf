@@ -156,6 +156,7 @@
     <string name="read_type">阅读方式</string>
     <string name="horizontal_page_turning">水平翻页</string>
     <string name="vertical_scroll">垂直滚动</string>
+    <string name="del_select">删除所选</string>
 
 
 </resources>

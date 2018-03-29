@@ -26,7 +26,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源规则解析
  */
 
-class AnalyzeRule {
+public class AnalyzeRule {
     private String baseURI;
     private Element element;
 

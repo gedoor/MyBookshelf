@@ -15,7 +15,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 public class BaseModelImpl {
     private static OkHttpClient.Builder clientBuilder;
 
-    protected Retrofit getRetrofitString(String url) {
+    public Retrofit getRetrofitString(String url) {
         return new Retrofit.Builder().baseUrl(url)
                 //增加返回值为字符串的支持(以实体类返回)
                 .addConverterFactory(EncodeConverter.create())

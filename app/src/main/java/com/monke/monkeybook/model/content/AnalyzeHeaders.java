@@ -16,10 +16,10 @@ import static android.text.TextUtils.isEmpty;
  * 解析Headers
  */
 
-class AnalyzeHeaders {
+public class AnalyzeHeaders {
     private static SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
 
-    static Map<String, String> getMap(String userAgent) {
+    public static Map<String, String> getMap(String userAgent) {
         Map<String, String> headerMap = new HashMap<>();
         if (isEmpty(userAgent)) {
             headerMap.put("User-Agent", getDefaultUserAgent());
