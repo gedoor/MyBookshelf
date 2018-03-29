@@ -177,6 +177,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 moProgressHUD.showInputBox("输入书源网址", null,
                         inputText -> mPresenter.importBookSource(inputText));
                 break;
+            case R.id.action_del_select:
+                mPresenter.delData(adapter.getBookSourceBeanList());
+                break;
             case R.id.action_reset_book_source:
                 resetBookSource();
                 break;
