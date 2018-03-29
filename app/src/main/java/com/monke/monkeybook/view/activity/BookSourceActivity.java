@@ -93,10 +93,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-    private void resetBookSource() {
-        adapter.resetDataS(BookSourceManage.saveBookSourceToDb());
-    }
-
     public void upDateSelectAll() {
         selectAll = true;
         for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
@@ -181,7 +177,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 mPresenter.delData(adapter.getBookSourceBeanList());
                 break;
             case R.id.action_reset_book_source:
-                resetBookSource();
+                refreshBookSource();
                 break;
             case android.R.id.home:
                 finish();
