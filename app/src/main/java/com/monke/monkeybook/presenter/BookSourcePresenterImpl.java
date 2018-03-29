@@ -99,6 +99,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             for (BookSourceBean sourceBean : bookSourceBeans) {
                 DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
             }
+            BookSourceManage.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
