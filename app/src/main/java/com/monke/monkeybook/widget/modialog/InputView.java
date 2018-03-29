@@ -13,49 +13,54 @@ import com.monke.monkeybook.R;
  * 换源
  */
 
-public class EditBookUrlView {
-    private EditText etUrl;
+public class InputView {
+    private TextView tvTitle;
+    private EditText etInput;
     private TextView tvOk;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
-    private OnPutBookUrl onPutBookUrl;
+    private OnInputOk onInputOk;
     private Context context;
 
-    public static EditBookUrlView getInstance(MoProgressView moProgressView) {
-        return new EditBookUrlView(moProgressView);
+    public static InputView getInstance(MoProgressView moProgressView) {
+        return new InputView(moProgressView);
     }
 
-    private EditBookUrlView(MoProgressView moProgressView) {
+    private InputView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
         tvOk.setOnClickListener(view -> {
-            onPutBookUrl.addBookUrl(etUrl.getText().toString());
+            onInputOk.setInputText(etInput.getText().toString());
             moProgressHUD.dismiss();
         });
     }
 
-    void showEditBookUrl(final OnPutBookUrl onPutBookUrl, MoProgressHUD moProgressHUD) {
+    void showInputView(final OnInputOk onInputOk, MoProgressHUD moProgressHUD, String title, String defaultValue) {
         this.moProgressHUD = moProgressHUD;
-        this.onPutBookUrl = onPutBookUrl;
-
+        this.onInputOk = onInputOk;
+        tvTitle.setText(title);
+        if (defaultValue != null) {
+            etInput.setText(defaultValue);
+        }
     }
 
     private void bindView() {
         moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_edit_book_url, moProgressView, true);
+        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_input, moProgressView, true);
 
         View llContent = moProgressView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
-        etUrl = moProgressView.findViewById(R.id.et_book_url);
+        tvTitle = moProgressView.findViewById(R.id.tv_title);
+        etInput = moProgressView.findViewById(R.id.et_input);
         tvOk = moProgressView.findViewById(R.id.tv_ok);
     }
 
     /**
      * 输入book地址确定
      */
-    public interface OnPutBookUrl {
-        void addBookUrl(String bookUrl);
+    public interface OnInputOk {
+        void setInputText(String inputText);
     }
 }
