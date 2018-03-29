@@ -21,6 +21,7 @@ import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -163,11 +164,19 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     }
 
     @Override
-    public void importBookSource(String url) {
+    public void importBookSource(String sourceUrl) {
+        URL url;
+        try {
+            url = new URL(sourceUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }
         BaseModelImpl baseModel = new BaseModelImpl();
-        baseModel.getRetrofitString(url)
+        baseModel.getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
                 .create(IHttpGetApi.class)
-                .getWebContent(url, AnalyzeHeaders.getMap(null))
+                .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                 .flatMap(rsp -> importBookSourceO(rsp.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
