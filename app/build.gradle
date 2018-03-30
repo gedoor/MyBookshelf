@@ -66,7 +66,6 @@ dependencies {
     api project(':basemvplib')
     testImplementation 'junit:junit:4.12'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('libs/commons-codec-1.10-sources.jar')
     //fireBase
     implementation 'com.google.firebase:firebase-core:12.0.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
@@ -81,6 +80,8 @@ dependencies {
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
+    //codecMD5
+    implementation "commons-codec:commons-codec:1.11"
     //沉浸式状态栏
     implementation 'com.zhangmonke:ImmerseLayout:1.1.1'
     //ProgressBar
