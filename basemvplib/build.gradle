@@ -20,21 +20,21 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    testApi 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     //识别编码
     api files('libs/juniversalchardet-1.0.3.jar')
     //support
     api 'com.android.support:appcompat-v7:27.1.0'
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    api 'io.reactivex.rxjava2:rxjava:2.1.2'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    api 'io.reactivex.rxjava2:rxjava:2.1.12'
 
     //Rx_lifecycle
-    api 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
-    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'  // If you want to bind to Android-specific lifecycles
-    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'  // If you want pre-written Activities and Fragments you can subclass as providers
-    api 'com.trello.rxlifecycle2:rxlifecycle-navi:2.0.1'  // If you want to use Navi for providers
-    api 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.0.1' // If you want to use Kotlin syntax
+    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.1'
+    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.1'  // If you want to bind to Android-specific lifecycles
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'  // If you want pre-written Activities and Fragments you can subclass as providers
+    api 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.1'  // If you want to use Navi for providers
+    api 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.2.1' // If you want to use Kotlin syntax
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -42,7 +42,7 @@ dependencies {
     api 'com.squareup.retrofit2:converter-scalars:2.4.0'
 
     //RxBus
-    api ('com.hwangjr.rxbus:rxbus:2.0.0-beta') {
+    api ('com.hwangjr.rxbus:rxbus:2.0.0') {
         exclude group: 'com.jakewharton.timber', module: 'timber'
     }
 

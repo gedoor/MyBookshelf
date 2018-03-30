@@ -18,9 +18,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +50,6 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -212,7 +209,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_url:
-                moProgressHUD.showPutBookUrl(bookUrl -> mPresenter.addBookUrl(bookUrl));
+                moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
                 break;
             case R.id.action_download:
                 downloadListPop.showAsDropDown(toolbar);

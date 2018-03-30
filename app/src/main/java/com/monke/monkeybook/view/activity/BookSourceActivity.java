@@ -24,8 +24,8 @@ import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,6 +54,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private boolean selectAll = true;
     private Animation animIn;
     private BookSourceAdapter adapter;
+    private MoProgressHUD moProgressHUD;
 
     @Override
     protected void onCreateActivity() {
@@ -72,6 +73,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initRecyclerView();
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     @Override
@@ -89,10 +91,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         itemTouchHelpCallback.setDragEnable(true);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    private void resetBookSource() {
-        adapter.resetDataS(BookSourceManage.saveBookSourceToDb());
     }
 
     public void upDateSelectAll() {
@@ -119,11 +117,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     public void delBookSource(BookSourceBean bookSource) {
-        mPresenter.delDate(bookSource);
+        mPresenter.delData(bookSource);
     }
 
     public void saveDate(List<BookSourceBean> date) {
-        mPresenter.saveDate(date);
+        mPresenter.saveData(date);
     }
 
     @Override
@@ -168,11 +166,18 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             case R.id.action_select_all:
                 selectAllDataS();
                 break;
-            case R.id.action_import_book_source:
+            case R.id.action_import_book_source_local:
                 selectBookSourceFile();
                 break;
+            case R.id.action_import_book_source_onLine:
+                moProgressHUD.showInputBox("输入书源网址", null,
+                        inputText -> mPresenter.importBookSource(inputText));
+                break;
+            case R.id.action_del_select:
+                mPresenter.delData(adapter.getBookSourceBeanList());
+                break;
             case R.id.action_reset_book_source:
-                resetBookSource();
+                refreshBookSource();
                 break;
             case android.R.id.home:
                 finish();
@@ -189,8 +194,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private void selectBookSourceFile() {
         if (EasyPermissions.hasPermissions(this, perms)) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("text/plain");//设置类型，我这里是任意类型，任意后缀的可以这样写。
             intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("text/*");//设置类型
             startActivityForResult(intent, IMPORT_SOURCE);
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),

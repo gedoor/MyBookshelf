@@ -8,16 +8,20 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
+import com.monke.basemvplib.BaseModelImpl;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.content.AnalyzeHeaders;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -41,7 +45,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     }
 
     @Override
-    public void saveDate(List<BookSourceBean> bookSourceBeans) {
+    public void saveData(List<BookSourceBean> bookSourceBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (int i = 1; i <= bookSourceBeans.size(); i++) {
                 bookSourceBeans.get(i - 1).setSerialNumber(i);
@@ -65,7 +69,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     }
 
     @Override
-    public void delDate(BookSourceBean bookSourceBean) {
+    public void delData(BookSourceBean bookSourceBean) {
         this.delBookSource = bookSourceBean;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
@@ -86,6 +90,30 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                     public void onError(Throwable e) {
                         Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
                         mView.refreshBookSource();
+                    }
+                });
+    }
+
+    @Override
+    public void delData(List<BookSourceBean> bookSourceBeans) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            for (BookSourceBean sourceBean : bookSourceBeans) {
+                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
+            }
+            BookSourceManage.refreshBookSource();
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        Toast.makeText(mView.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        mView.refreshBookSource();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -133,5 +161,54 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         } else {
             Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void importBookSource(String sourceUrl) {
+        URL url;
+        try {
+            url = new URL(sourceUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        BaseModelImpl baseModel = new BaseModelImpl();
+        baseModel.getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+                .create(IHttpGetApi.class)
+                .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
+                .flatMap(rsp -> importBookSourceO(rsp.body()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
+                            Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private Observable<Boolean> importBookSourceO(String json) {
+        return Observable.create(e -> {
+            try {
+                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+                }.getType());
+                BookSourceManage.addBookSource(bookSourceBeans);
+                mView.refreshBookSource();
+                e.onNext(true);
+            } catch (Exception e1) {
+                e.onNext(false);
+            }
+            e.onComplete();
+        });
     }
 }

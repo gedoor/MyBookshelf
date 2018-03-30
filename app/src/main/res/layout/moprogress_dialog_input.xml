@@ -11,13 +11,13 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="添加书籍网址" />
+            android:layout_margin="5dp" />
 
         <EditText
-            android:id="@+id/et_book_url"
+            android:id="@+id/et_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp" />

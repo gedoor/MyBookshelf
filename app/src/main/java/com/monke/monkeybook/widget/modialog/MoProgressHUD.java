@@ -282,15 +282,15 @@ public class MoProgressHUD {
     }
 
     /**
-     * 输入书箱地址
+     * 弹出输入框
      */
-    public void showPutBookUrl(EditBookUrlView.OnPutBookUrl onPutBookUrl) {
+    public void showInputBox(String title, String defaultValue, InputView.OnInputOk onInputOk) {
         initCenter();
         initAnimation();
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
-        EditBookUrlView.getInstance(mSharedView)
-                .showEditBookUrl(onPutBookUrl, this);
+        InputView.getInstance(mSharedView)
+                .showInputView(onInputOk, this, title, defaultValue);
         if (!isShowing()) {
             onAttached();
         }

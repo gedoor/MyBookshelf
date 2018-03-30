@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -268,6 +269,7 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl.setTextKindIndex(textKindIndex);
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateLineSize(float lineSize) {
         if (lineSize > 2) {
             lineSize = 2;
@@ -279,12 +281,12 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl.setLineMultiplier(lineSize);
     }
 
-    private void updateLineNum(int linenum) {
-        if (linenum > 2) {
-            linenum = -1;
+    private void updateLineNum(int lineNum) {
+        if (lineNum > 2) {
+            lineNum = -1;
         }
         //tvDurLineNum.setText(String.format("%d", linenum));
-        readBookControl.setLineNum(linenum);
+        readBookControl.setLineNum(lineNum);
     }
 
     private void updateConvertText(Boolean convent){

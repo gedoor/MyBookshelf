@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ReadBookControl {
-    public static final int DEFAULT_TEXT = 3;
-    public static final int DEFAULT_BG = 1;
+    private static final int DEFAULT_TEXT = 3;
+    private static final int DEFAULT_BG = 1;
 
-    private static List<Map<String, Integer>> textKind;
-    private static List<Map<String, Integer>> textDrawable;
+    private List<Map<String, Integer>> textKind;
+    private List<Map<String, Integer>> textDrawable;
 
     private int textSize;
     private int textExtra;
@@ -226,11 +226,11 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public static List<Map<String, Integer>> getTextKind() {
+    public List<Map<String, Integer>> getTextKind() {
         return textKind;
     }
 
-    public static List<Map<String, Integer>> getTextDrawable() {
+    public List<Map<String, Integer>> getTextDrawable() {
         return textDrawable;
     }
 
