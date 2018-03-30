@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -122,8 +123,10 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
                 books.get(index).getBookInfoBean().getName(),
                 books.get(index).getLastChapterListBean().getDurChapterName()));
-        Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl()).dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+        Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl())
+                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop().placeholder(R.drawable.img_cover_default))
+                .into(holder.ivCover);
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 
@@ -35,10 +36,11 @@ public class LibraryKindBookAdapter extends RecyclerView.Adapter<LibraryKindBook
     public void onBindViewHolder(final Viewholder holder, final int position) {
         Glide.with(holder.ivCover.getContext())
                 .load(datas.get(position).getCoverUrl())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .apply(new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .fitCenter()
                 .dontAnimate()
-                .placeholder(R.drawable.img_cover_default)
+                .placeholder(R.drawable.img_cover_default))
                 .into(holder.ivCover);
         holder.tvName.setText(datas.get(position).getName());
         holder.tvAuthor.setText(datas.get(position).getAuthor());

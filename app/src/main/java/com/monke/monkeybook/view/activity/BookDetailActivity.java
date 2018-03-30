@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -212,13 +213,15 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             tvLoading.setOnClickListener(null);
         }
 
-        Glide.with(this).load(coverUrl).dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
-                .placeholder(R.drawable.img_cover_default).into(ivCover);
-        Glide.with(this).load(coverUrl).dontAnimate()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop()
-                .placeholder(R.drawable.img_cover_default)
-                .bitmapTransform(new BlurTransformation(this, 6)).into(ivBlurCover);
+        Glide.with(this).load(coverUrl)
+                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+        Glide.with(this).load(coverUrl).apply(new RequestOptions()
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                    .placeholder(R.drawable.img_cover_default)
+                    .bitmapTransform(new BlurTransformation(this, 6)))
+                .into(ivBlurCover);
         tvName.setText(name);
         tvAuthor.setText(author);
     }

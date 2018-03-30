@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
@@ -45,10 +46,10 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         Glide.with(myViewHolder.ivCover.getContext())
                 .load(searchBooks.get(position).getCoverUrl())
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .fitCenter()
-                .dontAnimate()
-                .placeholder(R.drawable.img_cover_default)
+                .apply(new RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .fitCenter().dontAnimate()
+                    .placeholder(R.drawable.img_cover_default))
                 .into(myViewHolder.ivCover);
         myViewHolder.tvName.setText(String.format("%s(%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
         String state = searchBooks.get(position).getState();
