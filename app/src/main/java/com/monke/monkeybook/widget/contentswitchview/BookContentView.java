@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,6 +66,7 @@ public class BookContentView extends FrameLayout {
     private int chapterAll;
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
+    private int TitleSize = 0;//标题长度（取第一行长度）
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -161,7 +166,16 @@ public class BookContentView extends FrameLayout {
             }
 
             tvTitle.setText(this.title);
-            tvContent.setText(this.content);
+
+            if (this.durPageIndex==0){
+                TitleSize = contentLines.get(0).length();
+            }
+
+            SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
+            spanBuilder.setSpan(new TextAppearanceSpan(null, 0, 70, null, null),
+                    0, TitleSize, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+            tvContent.setText(spanBuilder);
             tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
             if (setDataListener != null) {
@@ -296,6 +310,10 @@ public class BookContentView extends FrameLayout {
         if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
             Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
             tvContent.setTypeface(typeface);
+            tvTitle.setTypeface(typeface);
+        }else{
+            tvContent.setTypeface(Typeface.SANS_SERIF);
+            tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
 
     }
