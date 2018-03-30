@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -148,7 +149,10 @@ public class DownloadListPop extends PopupWindow {
         tvNone.setVisibility(View.GONE);
         llDownload.setVisibility(View.VISIBLE);
         tvDownload.setText("暂停下载");
-        Glide.with(mContext).load(downloadChapterBean.getCoverUrl()).dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(ivCover);
+        Glide.with(mContext).load(downloadChapterBean.getCoverUrl())
+                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop().placeholder(R.drawable.img_cover_default))
+                .into(ivCover);
         tvName.setText(downloadChapterBean.getBookName());
         tvChapterName.setText(downloadChapterBean.getDurChapterName());
     }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -129,7 +130,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
         Glide.with(holder.ivCover.getContext())
                 .load(books.get(index).getBookInfoBean().getCoverUrl())
-                .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                        .centerCrop().placeholder(R.drawable.img_cover_default))
+                .into(holder.ivCover);
 
         holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
@@ -190,7 +193,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         } else {
             Glide.with(holder.ivCover.getContext())
                     .load(bookShelfBean.getBookInfoBean().getCoverUrl())
-                    .dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESULT).centerCrop().placeholder(R.drawable.img_cover_default).into(holder.ivCover);
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop().placeholder(R.drawable.img_cover_default))
+                    .into(holder.ivCover);
 
             holder.flLastEstTip.setVisibility(View.VISIBLE);
 
