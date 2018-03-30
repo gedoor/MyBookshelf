@@ -169,12 +169,14 @@ public class BookContentView extends FrameLayout {
 
             if (this.durPageIndex==0){
                 TitleSize = contentLines.get(0).length();
+            }else{
+                TitleSize=0;
             }
 
             SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
-            spanBuilder.setSpan(new TextAppearanceSpan(null, 0, 70, null, null),
+            spanBuilder.setSpan(new TextAppearanceSpan(null, 0, (int)tvContent.getTextSize()+10, null, null),
                     0, TitleSize, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-
+            Log.e("TextSize>>",tvContent.getTextSize()+"");
             tvContent.setText(spanBuilder);
             tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
@@ -341,6 +343,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setTextKind(ReadBookControl readBookControl) {
+
         tvContent.setTextSize(readBookControl.getTextSize());
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
