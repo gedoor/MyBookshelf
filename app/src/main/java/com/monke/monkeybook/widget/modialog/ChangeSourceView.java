@@ -161,6 +161,7 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
+        DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().deleteInTx(adapter.getSearchBookBeans());
         adapter.reSetSourceAdapter();
         long startThisSearchTime = System.currentTimeMillis();
         searchBook.setSearchTime(startThisSearchTime);
