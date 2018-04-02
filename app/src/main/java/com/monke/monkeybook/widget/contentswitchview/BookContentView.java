@@ -173,11 +173,11 @@ public class BookContentView extends FrameLayout {
                 TitleSize=0;
             }
 
-            SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
+            /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
             spanBuilder.setSpan(new TextAppearanceSpan(null, 0, (int)tvContent.getTextSize()+10, null, null),
                     0, TitleSize, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-            Log.e("TextSize>>",tvContent.getTextSize()+"");
-            tvContent.setText(spanBuilder);
+            tvContent.setText(spanBuilder);*/
+            tvContent.setText(this.content);
             tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
             if (setDataListener != null) {
