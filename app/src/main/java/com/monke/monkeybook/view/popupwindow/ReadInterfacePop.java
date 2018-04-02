@@ -54,10 +54,10 @@ public class ReadInterfacePop extends PopupWindow {
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
 
-    /*@BindView(R.id.tv_dur_line_num)
-    TextView tvDurLineNum;//增减行数字*/
-    /*@BindView(R.id.fl_line_num)
-    FrameLayout flLineNum;//增减行*/
+    @BindView(R.id.tv_dur_line_num)
+    TextView tvDurLineNum;//增减行数字
+    @BindView(R.id.fl_line_num)
+    TextView flLineNum;//增减行
     @BindView(R.id.fl_text_smaller)
     TextView flTextSmaller;//字号小
     @BindView(R.id.tv_dur_text_size)
@@ -162,10 +162,10 @@ public class ReadInterfacePop extends PopupWindow {
             updateBoldText(readBookControl.getTextBold());
             changeProListener.setBold();
         });
-        /*flLineNum.setOnClickListener(view1 -> {
+        flLineNum.setOnClickListener(view1 -> {
             updateLineNum(readBookControl.getLineNum() + 1);
             changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
-        });*/
+        });
 
 
         civBgWhite.setOnClickListener(v -> {
@@ -189,10 +189,17 @@ public class ReadInterfacePop extends PopupWindow {
             updateBg(4);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         });
-
+        //选择字体
         fl_text_font.setOnClickListener(view -> {
             chooseReadBookFont();
         });
+        //长按清除字体
+        fl_text_font.setOnLongClickListener(view -> {
+            clearFontPath();
+            Toast.makeText(activity,R.string.clear_font,Toast.LENGTH_SHORT).show();
+            return true;
+        });
+
         civBgCustom.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -249,8 +256,13 @@ public class ReadInterfacePop extends PopupWindow {
         }
     }
 
+    //设置字体
     public void setReadFonts(String path){
         changeProListener.setFont(readBookControl.setReadBookFont(path));
+    }
+
+    public void clearFontPath(){
+        changeProListener.setFont(readBookControl.setReadBookFont(null));
     }
 
     private void updateText(int textKindIndex) {
@@ -285,7 +297,7 @@ public class ReadInterfacePop extends PopupWindow {
         if (lineNum > 2) {
             lineNum = -1;
         }
-        //tvDurLineNum.setText(String.format("%d", linenum));
+        tvDurLineNum.setText(String.format("%d", lineNum));
         readBookControl.setLineNum(lineNum);
     }
 

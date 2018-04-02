@@ -45,10 +45,8 @@
 
             <TextView
                 android:id="@+id/tv_dur_text_size"
-                android:layout_width="wrap_content"
+                android:layout_width="38dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:text="字号" />
 
@@ -70,10 +68,23 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="繁"
+                android:textColor="#767676"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/fl_text_Bold"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="粗"
+                android:layout_marginLeft="10dp"
                 android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
@@ -83,7 +94,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="自定义字体"
@@ -119,10 +130,8 @@
 
             <TextView
                 android:id="@+id/tv_dur_line_size"
-                android:layout_width="wrap_content"
+                android:layout_width="38dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:text="间距" />
 
@@ -140,24 +149,34 @@
                 tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/fl_text_Bold"
+                android:id="@+id/tv_dur_line_num"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="缩进" />
+
+            <TextView
+                android:id="@+id/fl_line_num"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="粗"
+                android:text="缩进"
+                android:layout_marginLeft="10dp"
                 android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
+
+
 
             <TextView
                 android:id="@+id/civ_text_color"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="文字颜色"
@@ -265,7 +284,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="自定义背景"

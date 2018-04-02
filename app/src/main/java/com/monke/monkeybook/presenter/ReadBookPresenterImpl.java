@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -125,6 +126,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     }
                     int start = pageIndex * pageLineCount;
+                    Log.e("pageLineCount",pageLineCount+"");
                     int end = pageIndex == tempCount ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
@@ -365,8 +367,13 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         });
     }
 
+    /**
+     * 设置每页行数
+     * @param pageLineCount
+     */
     @Override
     public void setPageLineCount(int pageLineCount) {
+        Log.e("pageLineCount>>>",pageLineCount+"");
         this.pageLineCount = pageLineCount;
     }
 
