@@ -1,22 +1,34 @@
 package com.monke.monkeybook.model;
 
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.model.content.AnalyzeHeaders;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/15.
  * 所有书源
  */
 
-public class BookSourceManage {
+public class BookSourceManage extends BaseModelImpl {
     private static List<BookSourceBean> selectedBookSource;
     private static List<BookSourceBean> allBookSource;
 
@@ -78,6 +90,30 @@ public class BookSourceManage {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+    }
+
+    public static Observable<Boolean> importSourceFromWww(URL url) {
+        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+                .create(IHttpGetApi.class)
+                .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
+                .flatMap(rsp -> importBookSourceO(rsp.body()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private static Observable<Boolean> importBookSourceO(String json) {
+        return Observable.create(e -> {
+            try {
+                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+                }.getType());
+                BookSourceManage.addBookSource(bookSourceBeans);
+                e.onNext(true);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+                e.onNext(false);
+            }
+            e.onComplete();
+        });
     }
 
     //获取book source class

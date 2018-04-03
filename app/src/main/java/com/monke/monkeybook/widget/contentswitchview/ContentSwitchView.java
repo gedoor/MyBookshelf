@@ -485,6 +485,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
             updateOtherPage(durChapterIndex, chapterAll, durPageIndex, pageAll);
         }
+        bookContentView.setFontConvert(readBookControl);
     }
 
     private void readAloud() {

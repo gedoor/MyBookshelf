@@ -11,4 +11,6 @@
     <string name="pv_user_agent">Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3</string>
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
+
+    <string name="default_source_url">https://gedoor.github.io/MONKOVEL/bookSource.txt</string>
 </resources>

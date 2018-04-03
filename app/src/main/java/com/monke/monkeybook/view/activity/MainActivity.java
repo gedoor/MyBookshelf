@@ -50,6 +50,7 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
@@ -396,11 +397,19 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 //            if (!MApplication.DEBUG) {
 //                moProgressHUD.showInfo(getString(R.string.update_log));
 //            }
+            //书源为空时加载默认书源
+            if (BookSourceManage.getAllBookSource() == null || BookSourceManage.getAllBookSource().size() == 0) {
+                try {
+                    URL url = new URL(getString(R.string.default_source_url));
+                    BookSourceManage.importSourceFromWww(url)
+                            .subscribe();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
-//            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
-//            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
         }
     }
 

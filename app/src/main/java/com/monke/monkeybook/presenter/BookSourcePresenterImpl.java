@@ -8,15 +8,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.BaseModelImpl;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.content.AnalyzeHeaders;
-import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 
@@ -173,17 +170,12 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
-        BaseModelImpl baseModel = new BaseModelImpl();
-        baseModel.getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
-                .create(IHttpGetApi.class)
-                .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
-                .flatMap(rsp -> importBookSourceO(rsp.body()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        BookSourceManage.importSourceFromWww(url)
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
+                            mView.refreshBookSource();
                             Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
@@ -197,18 +189,4 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                 });
     }
 
-    private Observable<Boolean> importBookSourceO(String json) {
-        return Observable.create(e -> {
-            try {
-                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
-                }.getType());
-                BookSourceManage.addBookSource(bookSourceBeans);
-                mView.refreshBookSource();
-                e.onNext(true);
-            } catch (Exception e1) {
-                e.onNext(false);
-            }
-            e.onComplete();
-        });
-    }
 }

@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:id="@+id/ll_content"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">

@@ -170,7 +170,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 selectBookSourceFile();
                 break;
             case R.id.action_import_book_source_onLine:
-                moProgressHUD.showInputBox("输入书源网址", null,
+                moProgressHUD.showInputBox("输入书源网址", getString(R.string.default_source_url),
                         inputText -> mPresenter.importBookSource(inputText));
                 break;
             case R.id.action_del_select:

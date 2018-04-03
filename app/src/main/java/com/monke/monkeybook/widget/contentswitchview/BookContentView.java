@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.R;
@@ -309,19 +310,27 @@ public class BookContentView extends FrameLayout {
 
     public void setFont(ReadBookControl readBookControl) {
         //自定义字体
-        if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
-            Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
-            tvContent.setTypeface(typeface);
-            tvTitle.setTypeface(typeface);
-        }else{
+        try {
+            if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
+                Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
+                tvContent.setTypeface(typeface);
+                tvTitle.setTypeface(typeface);
+            } else {
+                tvContent.setTypeface(Typeface.SANS_SERIF);
+                tvTitle.setTypeface(Typeface.SANS_SERIF);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
+            readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
             tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
-
     }
 
+    /**
+     * 简繁转换
+     */
     public void setFontConvert(ReadBookControl readBookControl) {
-        //简繁体
         if (readBookControl.getTextConvert()){
             tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
         }else{
@@ -330,6 +339,9 @@ public class BookContentView extends FrameLayout {
 
     }
 
+    /**
+     * 字体加粗
+     */
     public void setTextBold(ReadBookControl readBookControl) {
         TextPaint tp = tvContent.getPaint();
         if (readBookControl.getTextBold()){

@@ -457,6 +457,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         } else {
                             bookShelfBean.setDurChapter(bookShelf.getDurChapter());
                         }
+                        bookShelfBean.setHasUpdate(false);
                         saveChangedBook(bookShelfBean);
                     }
 

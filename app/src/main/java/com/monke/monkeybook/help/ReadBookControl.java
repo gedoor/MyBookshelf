@@ -33,8 +33,8 @@ public class ReadBookControl {
 
     private String fontPath;
 
-    private Boolean TextConvert =false;
-    private Boolean TextBold =false;
+    private Boolean textConvert =false;
+    private Boolean textBold =false;
     private Boolean canClickTurn = true;
     private Boolean canKeyTurn = true;
     private Boolean keepScreenOn = false;
@@ -78,7 +78,8 @@ public class ReadBookControl {
         this.clickAnim = preference.getBoolean("clickAnim", true);
         this.textColorCustom = preference.getInt("textColorCustom", Color.parseColor("#383838"));
         this.fontPath = preference.getString("fontPath",null);
-        this.TextConvert = preference.getBoolean("TextConvert",false);
+        this.textConvert = preference.getBoolean("textConvert",false);
+        this.textBold = preference.getBoolean("textBold", false);
     }
 
     //字体大小
@@ -181,17 +182,17 @@ public class ReadBookControl {
         }
     }
 
-    public void setTextConvert(boolean TextConvert) {
-        this.TextConvert = TextConvert;
+    public void setTextConvert(boolean textConvert) {
+        this.textConvert = textConvert;
         SharedPreferences.Editor editor = preference.edit();
-        editor.putBoolean("TextConvert", TextConvert);
+        editor.putBoolean("textConvert", textConvert);
         editor.apply();
     }
 
-    public void setTextBold(boolean TextBold) {
-        this.TextBold = TextBold;
+    public void setTextBold(boolean textBold) {
+        this.textBold = textBold;
         SharedPreferences.Editor editor = preference.edit();
-        editor.putBoolean("TextBold", TextBold);
+        editor.putBoolean("textBold", textBold);
         editor.apply();
     }
 
@@ -208,11 +209,11 @@ public class ReadBookControl {
     }
 
     public Boolean getTextConvert() {
-        return TextConvert;
+        return textConvert;
     }
 
     public Boolean getTextBold() {
-        return TextBold;
+        return textBold;
     }
 
     public int getTextColorCustom() {
