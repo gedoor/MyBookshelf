@@ -327,8 +327,10 @@ public class BookContentView extends FrameLayout {
         }
     }
 
+    /**
+     * 简繁转换
+     */
     public void setFontConvert(ReadBookControl readBookControl) {
-        //简繁体
         if (readBookControl.getTextConvert()){
             tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
         }else{
