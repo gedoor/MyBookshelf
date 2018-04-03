@@ -309,15 +309,20 @@ public class BookContentView extends FrameLayout {
 
     public void setFont(ReadBookControl readBookControl) {
         //自定义字体
-        if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
-            Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
-            tvContent.setTypeface(typeface);
-            tvTitle.setTypeface(typeface);
-        }else{
+        try {
+            if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
+                Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
+                tvContent.setTypeface(typeface);
+                tvTitle.setTypeface(typeface);
+            } else {
+                tvContent.setTypeface(Typeface.SANS_SERIF);
+                tvTitle.setTypeface(Typeface.SANS_SERIF);
+            }
+        } catch (Exception e) {
+            readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
             tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
-
     }
 
     public void setFontConvert(ReadBookControl readBookControl) {
