@@ -204,6 +204,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         } else {
                             bookShelfBean.setDurChapter(bookShelf.getDurChapter());
                         }
+                        if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
+                            bookShelfBean.setHasUpdate(false);
+                        }
                         saveChangedBook(bookShelfBean);
                     }
 
