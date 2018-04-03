@@ -97,6 +97,7 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
                 });
     }
 
+
     @Override
     public void detachView() {
 

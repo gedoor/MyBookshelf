@@ -100,6 +100,10 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
         rcvBooks.setAdapter(importBookAdapter);
         rcvBooks.setLayoutManager(new LinearLayoutManager(this));
+
+        mPresenter.searchLocationBook(new File(getIntent().getStringExtra("path")));
+        llScan.setVisibility(View.INVISIBLE);
+        rlLoading.start();
     }
 
     //设置ToolBar

@@ -61,7 +61,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
-                app:loading_color="@color/tv_text_button_pre"
+                app:loading_color="#515151"
                 app:loading_width="2dp" />
 
             <TextView
@@ -69,12 +69,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/tv_text_button_pre"
+                android:text="共0个Text文件"
+                android:textColor="#515151"
                 android:textSize="16sp" />
         </FrameLayout>
 
         <LinearLayout
             android:id="@+id/ll_scan"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
