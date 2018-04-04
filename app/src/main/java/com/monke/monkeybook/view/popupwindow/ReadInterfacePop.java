@@ -129,6 +129,8 @@ public class ReadInterfacePop extends PopupWindow {
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
         updateLineNum(readBookControl.getLineNum());
+        updateBoldText(readBookControl.getTextBold());
+        updateConvertText(readBookControl.getTextConvert());
         //upTextColor(readBookControl.getTextColorCustom());
     }
 
@@ -261,7 +263,7 @@ public class ReadInterfacePop extends PopupWindow {
         changeProListener.setFont(readBookControl.setReadBookFont(path));
     }
 
-    public void clearFontPath(){
+    private void clearFontPath(){
         changeProListener.setFont(readBookControl.setReadBookFont(null));
     }
 
