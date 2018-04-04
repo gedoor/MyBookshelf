@@ -244,6 +244,9 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
 
+    /**
+     * 自定义背景
+     */
     public void setCustomBg(Uri uri) {
         ContentResolver cr = activity.getContentResolver();
         try {
