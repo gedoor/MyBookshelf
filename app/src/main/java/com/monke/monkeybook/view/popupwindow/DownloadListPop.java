@@ -149,12 +149,14 @@ public class DownloadListPop extends PopupWindow {
         tvNone.setVisibility(View.GONE);
         llDownload.setVisibility(View.VISIBLE);
         tvDownload.setText("暂停下载");
-        Glide.with(mContext).load(downloadChapterBean.getCoverUrl())
-                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop().placeholder(R.drawable.img_cover_default))
-                .into(ivCover);
-        tvName.setText(downloadChapterBean.getBookName());
-        tvChapterName.setText(downloadChapterBean.getDurChapterName());
+        if (mContext != null) {
+            Glide.with(mContext).load(downloadChapterBean.getCoverUrl())
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop().placeholder(R.drawable.img_cover_default))
+                    .into(ivCover);
+            tvName.setText(downloadChapterBean.getBookName());
+            tvChapterName.setText(downloadChapterBean.getDurChapterName());
+        }
     }
 
 }

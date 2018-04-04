@@ -128,12 +128,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
-        Glide.with(holder.ivCover.getContext())
-                .load(books.get(index).getBookInfoBean().getCoverUrl())
-                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop().placeholder(R.drawable.img_cover_default))
-                .into(holder.ivCover);
-
+        if (holder.ivCover.getContext() != null) {
+            Glide.with(holder.ivCover.getContext())
+                    .load(books.get(index).getBookInfoBean().getCoverUrl())
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop().placeholder(R.drawable.img_cover_default))
+                    .into(holder.ivCover);
+        }
         holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (books.get(index).getHasUpdate()) {
@@ -191,12 +192,13 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             holder.mpbDurProgress.setProgressListener(null);
             holder.tvWatch.setText("去选书");
         } else {
-            Glide.with(holder.ivCover.getContext())
-                    .load(bookShelfBean.getBookInfoBean().getCoverUrl())
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .centerCrop().placeholder(R.drawable.img_cover_default))
-                    .into(holder.ivCover);
-
+            if (holder.ivCover.getContext() != null) {
+                Glide.with(holder.ivCover.getContext())
+                        .load(bookShelfBean.getBookInfoBean().getCoverUrl())
+                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .into(holder.ivCover);
+            }
             holder.flLastEstTip.setVisibility(View.VISIBLE);
 
             holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), bookShelfBean.getBookInfoBean().getName()));

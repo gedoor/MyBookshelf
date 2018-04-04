@@ -45,7 +45,7 @@ public class EncodeConverter extends Converter.Factory {
                     if (charset != null) {
                         charsetStr = charset.toString();
                         if (!isEmpty(charsetStr)) {
-                            return new String(responseBytes, charsetStr);
+                            return new String(responseBytes, Charset.forName(charsetStr));
                         }
                     }
                 }
@@ -59,13 +59,13 @@ public class EncodeConverter extends Converter.Factory {
                     charsetStr = metaTag.attr("charset");
                     if (!charsetStr.isEmpty()) {
                         if (!isEmpty(charsetStr)) {
-                            return new String(responseBytes, charsetStr);
+                            return new String(responseBytes, Charset.forName(charsetStr));
                         }
                     }
                     if (http_equiv.toLowerCase().equals("content-type")) {
                         charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
                         if (!isEmpty(charsetStr)) {
-                            return new String(responseBytes, charsetStr);
+                            return new String(responseBytes, Charset.forName(charsetStr));
                         }
                     }
                 }
@@ -74,7 +74,7 @@ public class EncodeConverter extends Converter.Factory {
                 detector.handleData(responseBytes, 0, 2000);
                 detector.dataEnd();
                 charsetStr = detector.getDetectedCharset();
-                return new String(responseBytes, charsetStr);
+                return new String(responseBytes, Charset.forName(charsetStr));
             }
         };
     }

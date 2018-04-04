@@ -212,16 +212,18 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             tvLoading.setText("加载中...");
             tvLoading.setOnClickListener(null);
         }
-
-        Glide.with(this).load(coverUrl)
-                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                .placeholder(R.drawable.img_cover_default)).into(ivCover);
-        Glide.with(this).load(coverUrl).apply(new RequestOptions()
-                    .dontAnimate()
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                    .placeholder(R.drawable.img_cover_default)
-                    .bitmapTransform(new BlurTransformation(this, 6)))
-                .into(ivBlurCover);
+        if (!this.isFinishing()) {
+            Glide.with(this).load(coverUrl)
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .placeholder(R.drawable.img_cover_default)).into(ivCover);
+            Glide.with(this).load(coverUrl)
+                    .apply(new RequestOptions()
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .placeholder(R.drawable.img_cover_default))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 6)))
+                    .into(ivBlurCover);
+        }
         tvName.setText(name);
         tvAuthor.setText(author);
     }
