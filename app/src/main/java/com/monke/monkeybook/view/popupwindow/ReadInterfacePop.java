@@ -4,29 +4,21 @@ package com.monke.monkeybook.view.popupwindow;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
@@ -38,7 +30,6 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadInterfacePop extends PopupWindow {
@@ -243,7 +234,6 @@ public class ReadInterfacePop extends PopupWindow {
         }
     }
 
-
     /**
      * 自定义背景
      */
@@ -251,6 +241,7 @@ public class ReadInterfacePop extends PopupWindow {
         ContentResolver cr = activity.getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
+            bitmap = getSmallerBitmap(bitmap);
             ACache aCache = ACache.get(activity);
             aCache.put("customBg", bitmap);
             updateBg(-1);
@@ -258,6 +249,16 @@ public class ReadInterfacePop extends PopupWindow {
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Bitmap getSmallerBitmap(Bitmap bitmap){
+        int size = bitmap.getWidth()*bitmap.getHeight() / 360000;
+        if (size <= 1) return bitmap; // 如果小于
+        else {
+            Matrix matrix = new Matrix();
+            matrix.postScale((float) (1 / Math.sqrt(size)), (float) (1 / Math.sqrt(size)));
+            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
     }
 
