@@ -28,19 +28,19 @@ public class ReadBookControl {
     private float lineMultiplier;
     private int lineNum;
 
-    private int textKindIndex = DEFAULT_TEXT;
+    private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
 
     private String fontPath;
 
-    private Boolean textConvert =false;
-    private Boolean textBold =false;
-    private Boolean canClickTurn = true;
-    private Boolean canKeyTurn = true;
-    private Boolean keepScreenOn = false;
-    private int clickSensitivity = 1;
-    private Boolean clickAllNext = false;
-    private Boolean clickAnim = true;
+    private Boolean textConvert;
+    private Boolean textBold;
+    private Boolean canClickTurn;
+    private Boolean canKeyTurn;
+    private Boolean keepScreenOn;
+    private int clickSensitivity;
+    private Boolean clickAllNext;
+    private Boolean clickAnim;
     private int textColorCustom;
 
     private SharedPreferences preference;
@@ -172,6 +172,10 @@ public class ReadBookControl {
     }
 
     public void setTextDrawableIndex(int textDrawableIndex) {
+        ACache aCache = ACache.get(MApplication.getInstance());
+        if (aCache.getAsBitmap("customBg") == null) {
+            textDrawableIndex = DEFAULT_BG;
+        }
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
