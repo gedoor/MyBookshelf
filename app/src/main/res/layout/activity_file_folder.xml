@@ -4,7 +4,7 @@
     android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:background="@color/background"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
 
     <android.support.design.widget.AppBarLayout
@@ -22,37 +22,29 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    
-    <LinearLayout
-        android:id="@+id/ll_file_folder_path"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_below="@+id/rl_file_folder_head"
-        android:background="@color/bg_grey" >
 
-        <TextView
-            android:id="@+id/tv_file_folder_path"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textSize="12sp" />
-        
-    </LinearLayout>
-    
+    <TextView
+        android:id="@+id/tv_file_folder_path"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/rl_file_folder_head"
+        android:background="@color/bg_grey"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textSize="12sp" />
+
+
     <ListView
         android:id="@+id/lv_file_folder_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ll_file_folder_path"
+        android:layout_below="@+id/tv_file_folder_path"
         android:divider="@null" />
-    
+
     <TextView
         android:id="@+id/tv_file_folder_tip"
         android:layout_width="wrap_content"

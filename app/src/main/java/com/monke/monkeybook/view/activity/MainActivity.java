@@ -63,6 +63,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
+    private static final int FILESELECT_RESULT = 13;
     private static final int REQUESTCODE_FROM_ACTIVITY = 110;
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -288,10 +289,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
                     break;
                 case R.id.action_add_local:
-                    /*FileHomeActivity.actionStart(MainActivity.this, Environment.getDataDirectory().getAbsolutePath(),
-                            REQUESTCODE_FROM_ACTIVITY, "files");*/
-
-                    startActivityByAnim(new Intent(MainActivity.this, FileHomeActivity.class), 0, 0);
+                    if (EasyPermissions.hasPermissions(this, perms)) {
+                        startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
+                    } else {
+                        EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
+                                FILESELECT_RESULT, perms);
+                    }
                     //startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
                     break;
                 case R.id.action_book_source_manage:
@@ -376,6 +379,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @AfterPermissionGranted(RESTORE_RESULT)
     private void restoreResult() {
         restore();
+    }
+
+    @AfterPermissionGranted(FILESELECT_RESULT)
+    private void fileselectResult() {
+        startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
     }
 
     private void bindRvShelfEvent() {
