@@ -64,7 +64,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onPause() {
         super.onPause();
-        saveDate(adapter.getBookSourceBeanList());
+        saveDate(adapter.getDataList());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     public void upDateSelectAll() {
         selectAll = true;
-        for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
+        for (BookSourceBean bookSourceBean : adapter.getDataList()) {
             if (!bookSourceBean.getEnable()) {
                 selectAll = false;
                 break;
@@ -104,7 +104,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     private void selectAllDataS() {
-        for (BookSourceBean bookSourceBean : adapter.getBookSourceBeanList()) {
+        for (BookSourceBean bookSourceBean : adapter.getDataList()) {
             bookSourceBean.setEnable(!selectAll);
         }
         adapter.notifyDataSetChanged();
@@ -174,7 +174,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                         inputText -> mPresenter.importBookSource(inputText));
                 break;
             case R.id.action_del_select:
-                mPresenter.delData(adapter.getBookSourceBeanList());
+                mPresenter.delData(adapter.getSelectDataList());
                 break;
             case R.id.action_reset_book_source:
                 refreshBookSource();
