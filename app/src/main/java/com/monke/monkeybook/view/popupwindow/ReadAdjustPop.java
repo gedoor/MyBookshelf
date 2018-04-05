@@ -151,15 +151,15 @@ public class ReadAdjustPop extends PopupWindow {
 
             @Override
             public void durProgressChange(float dur) {
-                readBookControl.setSpeechRate((int)dur + 5);
-                if (adjustListener != null) {
-                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
-                }
+
             }
 
             @Override
             public void moveStopProgress(float dur) {
-
+                readBookControl.setSpeechRate((int)dur + 5);
+                if (adjustListener != null) {
+                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
+                }
             }
 
             @Override

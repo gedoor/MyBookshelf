@@ -76,6 +76,7 @@ public class ReadAloudService extends Service {
     private AudioFocusRequest mFocusRequest;
     private AloudServiceListener aloudServiceListener;
     private SharedPreferences preference;
+    private int speechRate;
 
     @Override
     public void onCreate() {
@@ -171,7 +172,11 @@ public class ReadAloudService extends Service {
     }
 
     private void initSpeechRate() {
-        textToSpeech.setSpeechRate(preference.getInt("speechRate", 10));
+        if (speechRate != preference.getInt("speechRate", 10)) {
+            speechRate = preference.getInt("speechRate", 10);
+            float speechRateF = (float) speechRate / 10;
+            textToSpeech.setSpeechRate(speechRateF);
+        }
     }
 
     public static void stop(Context context) {
