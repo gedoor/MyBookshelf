@@ -19,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
-            android:src="@drawable/icon_text" />
+            android:src="@drawable/ic_txt_24dp" />
 
         <LinearLayout
             android:layout_width="0dp"

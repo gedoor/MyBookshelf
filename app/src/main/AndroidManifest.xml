@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
+
     <application
         android:name=".MApplication"
         android:allowBackup="true"
@@ -107,6 +108,18 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity
+            android:name=".view.activity.FileHomeActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme" >
+        </activity>
+
+        <activity
+            android:name=".view.activity.FileFolderActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme" >
+        </activity>
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />

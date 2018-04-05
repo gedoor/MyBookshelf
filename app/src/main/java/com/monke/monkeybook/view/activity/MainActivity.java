@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -62,6 +63,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
+    private static final int REQUESTCODE_FROM_ACTIVITY = 110;
     @BindView(R.id.drawer)
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
@@ -286,7 +288,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
                     break;
                 case R.id.action_add_local:
-                    startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
+                    /*FileHomeActivity.actionStart(MainActivity.this, Environment.getDataDirectory().getAbsolutePath(),
+                            REQUESTCODE_FROM_ACTIVITY, "files");*/
+
+                    startActivityByAnim(new Intent(MainActivity.this, FileHomeActivity.class), 0, 0);
+                    //startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
                     break;
                 case R.id.action_book_source_manage:
                     startActivityByAnim(new Intent(MainActivity.this, BookSourceActivity.class), 0, 0);

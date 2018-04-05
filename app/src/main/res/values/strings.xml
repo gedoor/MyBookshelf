@@ -101,6 +101,8 @@
     <string name="action_save">保存</string>
     <string name="edit_book_source">编辑书源</string>
     <string name="add_book_source">添加书源</string>
+    <string name="book_file_selector">添加书籍</string>
+    <string name="scan_book_source">扫描</string>
     <string name="copy_source">拷贝书源</string>
     <string name="paste_source">粘贴书源</string>
     <string name="source_rule_s">书源规则说明</string>
