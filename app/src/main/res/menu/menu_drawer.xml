@@ -20,6 +20,11 @@
             android:title="@string/book_source_manage" />
 
         <item
+            android:id="@+id/action_find_source_manage"
+            android:icon="@drawable/ic_list_black_24dp"
+            android:title="@string/find_source_manage" />
+
+        <item
             android:id="@+id/action_replace_rule"
             android:icon="@drawable/ic_find_replace_black_24dp"
             android:title="@string/replace_rule_title" />
