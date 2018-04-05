@@ -42,10 +42,16 @@ public class ReadAdjustPop extends PopupWindow {
     private Boolean isFollowSys;
     private int light;
     private ReadBookControl readBookControl;
+    private OnAdjustListener adjustListener;
 
-    public ReadAdjustPop(Context context) {
+    public interface OnAdjustListener {
+        void changeSpeechRate(int speechRate);
+    }
+
+    public ReadAdjustPop(Context context, OnAdjustListener adjustListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
+        this.adjustListener = adjustListener;
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_adjust, null);
         this.setContentView(view);
@@ -146,7 +152,9 @@ public class ReadAdjustPop extends PopupWindow {
             @Override
             public void durProgressChange(float dur) {
                 readBookControl.setSpeechRate((int)dur + 5);
-
+                if (adjustListener != null) {
+                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
+                }
             }
 
             @Override

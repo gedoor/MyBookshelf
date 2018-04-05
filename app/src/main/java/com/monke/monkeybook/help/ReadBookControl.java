@@ -329,7 +329,7 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public float getSpeechRate() {
+    public int getSpeechRate() {
         return speechRate;
     }
 
