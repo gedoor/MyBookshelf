@@ -21,6 +21,7 @@ public class ReadBookControl {
     private List<Map<String, Integer>> textKind;
     private List<Map<String, Integer>> textDrawable;
 
+    private int speechRate;
     private int textSize;
     private int textExtra;
     private int textColor;
@@ -80,6 +81,7 @@ public class ReadBookControl {
         this.fontPath = preference.getString("fontPath",null);
         this.textConvert = preference.getBoolean("textConvert",false);
         this.textBold = preference.getBoolean("textBold", false);
+        this.speechRate = preference.getInt("speechRate", 10);
     }
 
     //字体大小
@@ -327,4 +329,14 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public float getSpeechRate() {
+        return speechRate;
+    }
+
+    public void setSpeechRate(int speechRate) {
+        this.speechRate = speechRate;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("speechRate", speechRate);
+        editor.apply();
+    }
 }
