@@ -33,6 +33,7 @@ import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
 import com.monke.monkeybook.utils.fileselectorutil.EmptyFileFilter;
 import com.monke.monkeybook.utils.fileselectorutil.FileComparator;
+import com.monke.monkeybook.utils.fileselectorutil.SDCardScanner;
 import com.monke.monkeybook.view.adapter.FileFolderListAdapter;
 import com.monke.monkeybook.view.impl.IImportBookView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -44,8 +45,8 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 	private FileFolderActivity instance = this;
 	private ArrayList<MyFile> data = new ArrayList<>();
 	private FileFolderListAdapter adapter;
-	private String root;//进入文件夹时的根路径，用于判断按返回键时何时返回上一界面以及后退到上一文件夹
 	private String currentPath;//当前选中的文件夹路径
+	private List<String> externalPaths;
 
 	@BindView(R.id.tv_file_folder_path)
 	TextView tvPath;
@@ -61,15 +62,8 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 
 	private Animation animIn;
 	private MoProgressHUD moProgressHUD;
-	
-	/**
-	 * 启动活动的入口方法
-	 * */
-	public static void actionStart(Context context, String root, int REQUEST) {
-		Intent intent = new Intent(context, FileFolderActivity.class); 
-		intent.putExtra("root", root);//添加首次加载的根路径
-		((Activity)context).startActivityForResult(intent, REQUEST);
-	}
+
+	private Menu aMenu;//获取菜单
 
 	@Override
 	protected void onCreateActivity() {
@@ -80,10 +74,6 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 	@Override
 	protected void initData() {
 		animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-
-		root = getIntent().getStringExtra("root");
-		currentPath = root;
-
 	}
 
 	@Override
@@ -93,7 +83,8 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 		setupActionBar();
 		moProgressHUD = new MoProgressHUD(this);
 
-		refreshView();
+		refreshRootView();
+		//refreshView();
 	}
 
 
@@ -141,12 +132,26 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
         return llContent;
     }
 
+	/**
+	 * 获取根目录
+	 */
+	private void refreshRootView(){
+		tvPath.setVisibility(View.GONE);
+		refreshRootData();
+		refreshList();
+	}
+
     /**
 	 * 刷新界面
 	 * */
     private void refreshView() {
+		tvPath.setVisibility(View.VISIBLE);
 		//刷新列表
 		refreshData();
+		refreshList();
+    }
+
+	private void refreshList(){
 		if (adapter == null) {
 			adapter = new FileFolderListAdapter(instance, data);
 			lvContent.setAdapter(adapter);
@@ -167,12 +172,28 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     public void onBackPressed() {
-        if (!currentPath.equals(root)) {//若未到达根目录，则返回文件上层目录
+    	boolean isRoot = false;
+        //判断是否到达根目录
+		if (externalPaths!=null&&currentPath!=null){
+			for (int i = 0; i < externalPaths.size(); i++) {
+				if (currentPath.equals(externalPaths.get(i))){
+					isRoot = true;
+				}
+			}
+		}else{
+			super.onBackPressed();//等同于直接finish();
+			return;
+		}
+
+    	if (!isRoot&&currentPath!=null) {//若未到达根目录，则返回文件上层目录
             File file = new File(currentPath);
             currentPath = file.getParentFile().getAbsolutePath();
             refreshView();
-        } else {//到达根目录，直接返回
-            super.onBackPressed();//等同于直接finish();
+        } else if (currentPath!=null){//到达根目录，展示根目录列表
+			tvPath.setVisibility(View.GONE);
+			refreshRootView();
+			checkOptionMenu(false);
+			currentPath = null;
         }
     }
 
@@ -187,17 +208,26 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 				String suffix=file.getName().substring(file.getName().lastIndexOf(".") + 1, file.getName().length());
 				if (file.isDirectory()||suffix.equalsIgnoreCase("txt")){
 					MyFile temp = new MyFile();
-					if (SelectedFiles.files.containsKey(file.getAbsolutePath())) {//若文件已选中过，则标记为选中
-						temp.checked = true;
-					}
 
-					if (suffix.equalsIgnoreCase("txt")){
-						temp.isTxt = true;
-					}
 					temp.file = file;
 					data.add(temp);
 				}
 
+			}
+		}
+	}
+
+	/**
+	 * 获取根目录数据
+	 */
+	private void refreshRootData(){
+		data.clear();
+		externalPaths = SDCardScanner.getStorageData(this);
+		if (externalPaths!=null){
+			for (int i = 0; i < externalPaths.size(); i++) {
+				MyFile temp = new MyFile();
+				temp.file = new File(externalPaths.get(i));
+				data.add(temp);
 			}
 		}
 	}
@@ -224,13 +254,13 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 		if (file.file.isDirectory()) {//文件夹
 			currentPath = file.file.getAbsolutePath();
 			refreshView();
+			checkOptionMenu(true);
 		} else {
-			if (file.isTxt){
-				moProgressHUD.showLoading("放入书架中...");
-				List<File> fileList = new ArrayList<>();
-				fileList.add(file.file);
-				mPresenter.importBooks(fileList);
-			}
+			moProgressHUD.showLoading("放入书架中...");
+			List<File> fileList = new ArrayList<>();
+			fileList.add(file.file);
+			mPresenter.importBooks(fileList);
+
 		}
 	}
 
@@ -254,7 +284,33 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 		}
 	}
 
-    @Override
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		aMenu = menu;
+		for (int i = 0; i < menu.size(); i++){
+			menu.getItem(i).setVisible(false);
+			menu.getItem(i).setEnabled(false);
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	private void checkOptionMenu(Boolean optionMenuOn){
+		if(null != aMenu){
+			if(optionMenuOn){
+				for (int i = 0; i < aMenu.size(); i++){
+					aMenu.getItem(i).setVisible(true);
+					aMenu.getItem(i).setEnabled(true);
+				}
+			}else{
+				for (int i = 0; i < aMenu.size(); i++){
+					aMenu.getItem(i).setVisible(false);
+					aMenu.getItem(i).setEnabled(false);
+				}
+			}
+		}
+	}
+
+	@Override
     public void addNewBook(File newFile) {
 
     }

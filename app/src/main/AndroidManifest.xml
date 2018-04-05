@@ -110,12 +110,6 @@
             android:windowSoftInputMode="stateAlwaysHidden"/>
 
         <activity
-            android:name=".view.activity.FileHomeActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" >
-        </activity>
-
-        <activity
             android:name=".view.activity.FileFolderActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" >
