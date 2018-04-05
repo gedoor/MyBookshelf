@@ -22,7 +22,7 @@ import com.monke.mprogressbar.OnProgressListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class WindowLightPop extends PopupWindow {
+public class ReadAdjustPop extends PopupWindow {
     @BindView(R.id.hpb_light)
     MHorProgressBar hpbLight;
     @BindView(R.id.scb_follow_sys)
@@ -33,17 +33,21 @@ public class WindowLightPop extends PopupWindow {
     LinearLayout llClick;
     @BindView(R.id.hpb_click)
     MHorProgressBar hpbClick;
+    @BindView(R.id.ll_tts_SpeechRate)
+    LinearLayout llTtsSpeechRate;
+    @BindView(R.id.hpb_tts_SpeechRate)
+    MHorProgressBar hpbTtsSpeechRate;
 
     private Context mContext;
     private Boolean isFollowSys;
     private int light;
     private ReadBookControl readBookControl;
 
-    public WindowLightPop(Context context) {
+    public ReadAdjustPop(Context context) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.mContext = context;
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_window_light, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_adjust, null);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
@@ -82,6 +86,7 @@ public class WindowLightPop extends PopupWindow {
                 hpbLight.setDurProgress(light);
             }
         });
+        //亮度调节
         hpbLight.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -106,7 +111,7 @@ public class WindowLightPop extends PopupWindow {
 
             }
         });
-
+        //点击灵敏度调节
         hpbClick.setMaxProgress(100);
         hpbClick.setDurProgress(readBookControl.getClickSensitivity());
         hpbClick.setProgressListener(new OnProgressListener() {
@@ -118,6 +123,30 @@ public class WindowLightPop extends PopupWindow {
             @Override
             public void durProgressChange(float dur) {
                 readBookControl.setClickSensitivity((int) dur);
+            }
+
+            @Override
+            public void moveStopProgress(float dur) {
+
+            }
+
+            @Override
+            public void setDurProgress(float dur) {
+
+            }
+        });
+        //朗读语速调节
+        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate()-5);
+        hpbTtsSpeechRate.setProgressListener(new OnProgressListener() {
+            @Override
+            public void moveStartProgress(float dur) {
+
+            }
+
+            @Override
+            public void durProgressChange(float dur) {
+                readBookControl.setSpeechRate((int)dur + 5);
+
             }
 
             @Override

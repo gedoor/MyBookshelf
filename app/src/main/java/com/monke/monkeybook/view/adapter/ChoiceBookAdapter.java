@@ -44,13 +44,15 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        Glide.with(myViewHolder.ivCover.getContext())
-                .load(searchBooks.get(position).getCoverUrl())
-                .apply(new RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                    .fitCenter().dontAnimate()
-                    .placeholder(R.drawable.img_cover_default))
-                .into(myViewHolder.ivCover);
+        if (myViewHolder.ivCover.getContext() != null) {
+            Glide.with(myViewHolder.ivCover.getContext())
+                    .load(searchBooks.get(position).getCoverUrl())
+                    .apply(new RequestOptions()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .fitCenter().dontAnimate()
+                            .placeholder(R.drawable.img_cover_default))
+                    .into(myViewHolder.ivCover);
+        }
         myViewHolder.tvName.setText(String.format("%s(%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
         String state = searchBooks.get(position).getState();
         if (state == null || state.length() == 0) {

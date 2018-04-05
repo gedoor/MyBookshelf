@@ -123,10 +123,12 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
                 books.get(index).getBookInfoBean().getName(),
                 books.get(index).getLastChapterListBean().getDurChapterName()));
-        Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl())
-                .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop().placeholder(R.drawable.img_cover_default))
-                .into(holder.ivCover);
+        if (holder.ivCover.getContext() != null) {
+            Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl())
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop().placeholder(R.drawable.img_cover_default))
+                    .into(holder.ivCover);
+        }
         holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {

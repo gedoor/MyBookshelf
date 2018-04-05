@@ -21,6 +21,7 @@ public class ReadBookControl {
     private List<Map<String, Integer>> textKind;
     private List<Map<String, Integer>> textDrawable;
 
+    private int speechRate;
     private int textSize;
     private int textExtra;
     private int textColor;
@@ -28,19 +29,19 @@ public class ReadBookControl {
     private float lineMultiplier;
     private int lineNum;
 
-    private int textKindIndex = DEFAULT_TEXT;
+    private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
 
     private String fontPath;
 
-    private Boolean textConvert =false;
-    private Boolean textBold =false;
-    private Boolean canClickTurn = true;
-    private Boolean canKeyTurn = true;
-    private Boolean keepScreenOn = false;
-    private int clickSensitivity = 1;
-    private Boolean clickAllNext = false;
-    private Boolean clickAnim = true;
+    private Boolean textConvert;
+    private Boolean textBold;
+    private Boolean canClickTurn;
+    private Boolean canKeyTurn;
+    private Boolean keepScreenOn;
+    private int clickSensitivity;
+    private Boolean clickAllNext;
+    private Boolean clickAnim;
     private int textColorCustom;
 
     private SharedPreferences preference;
@@ -80,6 +81,7 @@ public class ReadBookControl {
         this.fontPath = preference.getString("fontPath",null);
         this.textConvert = preference.getBoolean("textConvert",false);
         this.textBold = preference.getBoolean("textBold", false);
+        this.speechRate = preference.getInt("speechRate", 10);
     }
 
     //字体大小
@@ -172,6 +174,10 @@ public class ReadBookControl {
     }
 
     public void setTextDrawableIndex(int textDrawableIndex) {
+        ACache aCache = ACache.get(MApplication.getInstance());
+        if (textDrawableIndex == -1 && aCache.getAsBitmap("customBg") == null) {
+            textDrawableIndex = DEFAULT_BG;
+        }
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
@@ -323,4 +329,14 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public float getSpeechRate() {
+        return speechRate;
+    }
+
+    public void setSpeechRate(int speechRate) {
+        this.speechRate = speechRate;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("speechRate", speechRate);
+        editor.apply();
+    }
 }
