@@ -604,12 +604,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            return true;
-        } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            return true;
-        }
-        return false;
+        return readBookControl.getCanKeyTurn() && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP);
     }
 
     public void showLoading() {

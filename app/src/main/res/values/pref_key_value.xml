@@ -12,5 +12,5 @@
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 
-    <string name="default_source_url">https://gedoor.github.io/MONKOVEL/bookSource.txt</string>
+    <string name="default_source_url">http://ab52.cn/books.txt</string>
 </resources>

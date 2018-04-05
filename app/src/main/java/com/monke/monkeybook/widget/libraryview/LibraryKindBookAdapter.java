@@ -34,14 +34,16 @@ public class LibraryKindBookAdapter extends RecyclerView.Adapter<LibraryKindBook
 
     @Override
     public void onBindViewHolder(final Viewholder holder, final int position) {
-        Glide.with(holder.ivCover.getContext())
-                .load(datas.get(position).getCoverUrl())
-                .apply(new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .fitCenter()
-                .dontAnimate()
-                .placeholder(R.drawable.img_cover_default))
-                .into(holder.ivCover);
+        if (holder.ivCover.getContext() != null) {
+            Glide.with(holder.ivCover.getContext())
+                    .load(datas.get(position).getCoverUrl())
+                    .apply(new RequestOptions()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .fitCenter()
+                            .dontAnimate()
+                            .placeholder(R.drawable.img_cover_default))
+                    .into(holder.ivCover);
+        }
         holder.tvName.setText(datas.get(position).getName());
         holder.tvAuthor.setText(datas.get(position).getAuthor());
         holder.ibContent.setOnClickListener(v -> {

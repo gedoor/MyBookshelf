@@ -43,9 +43,9 @@ import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
+import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
-import com.monke.monkeybook.view.popupwindow.WindowLightPop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
@@ -137,7 +137,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
-    private WindowLightPop windowLightPop;
+    private ReadAdjustPop readAdjustPop;
     private ReadBookMenuMorePop readBookMenuMorePop;
     private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
@@ -486,8 +486,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         //亮度设置
-        windowLightPop = new WindowLightPop(this);
-        windowLightPop.initLight();
+        readAdjustPop = new ReadAdjustPop(this);
+        readAdjustPop.initLight();
         readBookMenuMorePop = new ReadBookMenuMorePop(this);
     }
 
@@ -708,7 +708,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //亮度
         llLight.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> windowLightPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            new Handler().postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //界面
