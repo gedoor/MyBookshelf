@@ -200,8 +200,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                     } else {
                         //点击事件
                         if (readBookControl.getCanClickTurn()
-                                && ((event.getX() <= getWidth() / 3 && event.getY() <= getHeight() / 3*2)
-                                || (event.getY() <= getHeight() / 3) && event.getX() <= getWidth() / 3*2)) {
+                                && ((event.getX() <= getWidth()*2 / 3 && event.getY() <= getHeight() / 3)
+                                ||  event.getX() <= getWidth() / 3)) {
                             //点击向前翻页
                             if (readBookControl.getClickAllNext()) {
                                 gotoNextPage(readBookControl.getClickAnim());
@@ -209,8 +209,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                                 gotoPrePage(readBookControl.getClickAnim());
                             }
                         } else if (readBookControl.getCanClickTurn()
-                                && ((event.getX() >= getWidth() / 3 * 2)
-                                || (event.getY() >= getHeight() / 3*2))) {
+                                && ((event.getX() >= getWidth()*2 / 3)
+                                || (event.getY() >= getHeight()*2 / 3)&&(event.getX()>=getWidth()/3))) {
                             //点击向后翻页
                             gotoNextPage(readBookControl.getClickAnim());
                         } else {
