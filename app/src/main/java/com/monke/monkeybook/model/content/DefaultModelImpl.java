@@ -76,6 +76,55 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     }
 
     /**
+     * 发现
+     */
+    @Override
+    public Observable<List<SearchBookBean>> findBook(String url, int page) {
+        if (!initBookSourceBean() || isEmpty(bookSourceBean.getRuleSearchUrl())) {
+            return Observable.create(emitter -> {
+                emitter.onNext(new ArrayList<>());
+                emitter.onComplete();
+            });
+        }
+        try {
+            AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(url, "", page);
+            if (analyzeSearchUrl.getSearchUrl() == null) {
+                return Observable.create(emitter -> {
+                    emitter.onNext(new ArrayList<>());
+                    emitter.onComplete();
+                });
+            }
+            if (url.contains("@")) {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpPostApi.class)
+                        .searchBook(analyzeSearchUrl.getSearchPath(),
+                                analyzeSearchUrl.getQueryMap(),
+                                headerMap)
+                        .flatMap(this::analyzeSearchBook);
+            } else if (url.contains("?")) {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
+                        .searchBook(analyzeSearchUrl.getSearchPath(),
+                                analyzeSearchUrl.getQueryMap(),
+                                headerMap)
+                        .flatMap(this::analyzeSearchBook);
+            } else {
+                return getRetrofitString(analyzeSearchUrl.getSearchUrl())
+                        .create(IHttpGetApi.class)
+                        .getWebContent(analyzeSearchUrl.getSearchPath(),
+                                headerMap)
+                        .flatMap(this::analyzeSearchBook);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Observable.create(emitter -> {
+                emitter.onNext(new ArrayList<>());
+                emitter.onComplete();
+            });
+        }
+    }
+
+    /**
      * 搜索
      */
     @Override

@@ -4,7 +4,7 @@ package com.monke.monkeybook.model;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
+import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 import com.monke.monkeybook.model.impl.IWebBookModel;
 
@@ -84,11 +84,17 @@ public class WebBookModelImpl implements IWebBookModel {
         }
     }
 
-    /**
-     * 获取分类书籍
-     */
     @Override
-    public Observable<List<SearchBookBean>> getKindBook(String url, int page) {
-        return GxwztvBookModelImpl.getInstance().getKindBook(url, page);
+    public Observable<List<SearchBookBean>> findBook(String url, int page, String tag) {
+        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
+        if (bookModel != null) {
+            return bookModel.findBook(url, page);
+        } else {
+            return Observable.create(e -> {
+                e.onNext(new ArrayList<>());
+                e.onComplete();
+            });
+        }
     }
+
 }

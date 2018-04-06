@@ -30,7 +30,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> implements IChoiceBookPresenter {
-    private String url = "";
+    private String tag;
+    private String url;
     private String title;
 
     private int page = 1;
@@ -40,6 +41,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
     public ChoiceBookPresenterImpl(final Intent intent) {
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");
+        tag = intent.getStringExtra("tag");
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
@@ -81,7 +83,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
     }
 
     private void searchBook(final long searchTime) {
-        WebBookModelImpl.getInstance().getKindBook(url, page)
+        WebBookModelImpl.getInstance().findBook(url, page, tag)
                 .subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity)mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
