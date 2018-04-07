@@ -104,7 +104,6 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> 
                                 mView.refreshFinish(value.size() <= 0);
                             } else {
                                 mView.loadMoreSearchBook(value);
-                                mView.loadMoreFinish(value.size() <= 0);
                             }
                             page++;
                         }
