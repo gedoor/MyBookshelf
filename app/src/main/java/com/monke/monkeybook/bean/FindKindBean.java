@@ -1,18 +1,13 @@
 package com.monke.monkeybook.bean;
 
 public class FindKindBean {
+    private String group;
     private String tag;
     private String kindName;
     private String kindUrl;
 
     public FindKindBean() {
 
-    }
-
-    public FindKindBean(String tag, String kindName, String kindUrl) {
-        this.tag = tag;
-        this.kindName = kindName;
-        this.kindUrl = kindUrl;
     }
 
     public String getKindName() {
@@ -37,5 +32,13 @@ public class FindKindBean {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

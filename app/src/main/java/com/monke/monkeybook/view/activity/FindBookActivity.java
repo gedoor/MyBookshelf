@@ -2,51 +2,53 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.FindKindBean;
-import com.monke.monkeybook.presenter.LibraryPresenterImpl;
-import com.monke.monkeybook.presenter.impl.ILibraryPresenter;
+import com.monke.monkeybook.bean.FindKindGroupBean;
+import com.monke.monkeybook.presenter.FindBookPresenterImpl;
+import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
-import com.monke.monkeybook.view.impl.ILibraryView;
+import com.monke.monkeybook.view.impl.IFindBookView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements ILibraryView {
-
-    private Animation animIn;
-    private Animation animOut;
+public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implements IFindBookView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    @BindView(R.id.recycler_view)
-    RecyclerView recyclerView;
+    @BindView(R.id.expandable_list)
+    ExpandableListView expandableList;
 
+    private Animation animIn;
+    private Animation animOut;
     private FindKindAdapter adapter;
 
     @Override
-    protected ILibraryPresenter initInjector() {
-        return new LibraryPresenterImpl();
+    protected IFindBookPresenter initInjector() {
+        return new FindBookPresenterImpl();
     }
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_recycler_vew);
+        setContentView(R.layout.activity_expandable_list_vew);
     }
 
     @Override
@@ -66,11 +68,40 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
         setSupportActionBar(toolbar);
         setupActionBar();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FindKindAdapter(this);
-        recyclerView.setAdapter(adapter);
+        initExpandableList();
 
         mPresenter.initData();
+    }
+
+    private void initExpandableList() {
+        adapter = new FindKindAdapter(this);
+        expandableList.setAdapter(adapter);
+        adapter.setOnGroupExpandedListener(this::expandOnlyOne);
+        //  设置分组项的点击监听事件
+        expandableList.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            // 请务必返回 false，否则分组不会展开
+            return false;
+        });
+
+        //  设置子选项点击监听事件
+        expandableList.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            FindKindBean kindBean = adapter.getDataList().get(groupPosition).getChildren().get(childPosition);
+            ChoiceBookActivity.startChoiceBookActivity(this, kindBean.getKindName(), kindBean.getKindUrl(), kindBean.getTag());
+            return true;
+        });
+
+    }
+
+    // 每次展开一个分组后，关闭其他的分组
+    private boolean expandOnlyOne(int expandedPosition) {
+        boolean result = true;
+        int groupLength = expandableList.getExpandableListAdapter().getGroupCount();
+        for (int i = 0; i < groupLength; i++) {
+            if (i != expandedPosition && expandableList.isGroupExpanded(i)) {
+                result &= expandableList.collapseGroup(i);
+            }
+        }
+        return result;
     }
 
     //设置ToolBar
@@ -112,8 +143,17 @@ public class LibraryActivity extends MBaseActivity<ILibraryPresenter> implements
     }
 
     @Override
-    public void updateUI(List<FindKindBean> kinds) {
-        adapter.resetDataS(kinds);
+    public void updateUI(List<FindKindGroupBean> group) {
+        if (group.size() > 0) {
+            adapter.resetDataS(group);
+            expandableList.expandGroup(0);
+        }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

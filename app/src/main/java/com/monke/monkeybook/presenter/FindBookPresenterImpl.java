@@ -8,9 +8,10 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
+import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.ILibraryPresenter;
-import com.monke.monkeybook.view.impl.ILibraryView;
+import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
+import com.monke.monkeybook.view.impl.IFindBookView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,8 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implements ILibraryPresenter {
-
-    private final List<FindKindBean> kinds = new ArrayList<>();
+public class FindBookPresenterImpl extends BasePresenterImpl<IFindBookView> implements IFindBookPresenter {
+    private final List<FindKindGroupBean> group = new ArrayList<>();
 
     @Override
     public void detachView() {
@@ -35,11 +35,21 @@ public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implem
             for (BookSourceBean sourceBean : BookSourceManage.getSelectedBookSource()) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
+                    List<FindKindBean> children = new ArrayList<>();
                     for (String kindB : kindA) {
                         String kind[] = kindB.split("::");
-                        FindKindBean findKindBean = new FindKindBean(sourceBean.getBookSourceUrl(), kind[0], kind[1]);
-                        kinds.add(findKindBean);
+                        FindKindBean findKindBean = new FindKindBean();
+                        findKindBean.setGroup(sourceBean.getBookSourceName());
+                        findKindBean.setTag(sourceBean.getBookSourceUrl());
+                        findKindBean.setKindName(kind[0]);
+                        findKindBean.setKindUrl(kind[1]);
+                        children.add(findKindBean);
                     }
+                    FindKindGroupBean groupBean = new FindKindGroupBean();
+                    groupBean.setGroupName(sourceBean.getBookSourceName());
+                    groupBean.setChildrenCount(kindA.length);
+                    groupBean.setChildren(children);
+                    group.add(groupBean);
                 }
             }
             e.onNext(true);
@@ -51,7 +61,7 @@ public class LibraryPresenterImpl extends BasePresenterImpl<ILibraryView> implem
                     @Override
                     public void onNext(Boolean value) {
                         //执行刷新界面
-                        mView.updateUI(kinds);
+                        mView.updateUI(group);
 
                     }
 

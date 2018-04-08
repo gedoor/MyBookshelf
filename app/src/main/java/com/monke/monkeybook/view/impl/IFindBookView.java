@@ -3,15 +3,16 @@ package com.monke.monkeybook.view.impl;
 
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.FindKindBean;
+import com.monke.monkeybook.bean.FindKindGroupBean;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public interface ILibraryView extends IView{
+public interface IFindBookView extends IView{
 
     /**
      * 更新UI
      */
-    void updateUI(List<FindKindBean> kinds);
+    void updateUI(List<FindKindGroupBean> group);
 
 }

@@ -53,7 +53,7 @@
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".view.activity.LibraryActivity"
+            android:name=".view.activity.FindBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity

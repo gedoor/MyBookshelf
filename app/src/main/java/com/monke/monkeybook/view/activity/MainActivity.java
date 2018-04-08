@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -162,7 +161,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             @Override
             public void toSearch() {
                 //点击去选书
-                startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
+                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
             }
 
             @Override
@@ -286,7 +285,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_library:
-                    startActivityByAnim(new Intent(MainActivity.this, LibraryActivity.class), 0, 0);
+                    startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
                     break;
                 case R.id.action_add_local:
                     if (EasyPermissions.hasPermissions(this, perms)) {
