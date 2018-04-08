@@ -4,8 +4,8 @@
     <group android:id="@+id/drawer_menu_library">
         <item
             android:id="@+id/action_library"
-            android:icon="@drawable/ic_store_black_24dp"
-            android:title="@string/book_library" />
+            android:icon="@drawable/ic_track_changes_black_24dp"
+            android:title="@string/find_on_www" />
 
         <item
             android:id="@+id/action_add_local"

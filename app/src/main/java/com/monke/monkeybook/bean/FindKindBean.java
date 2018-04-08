@@ -1,15 +1,14 @@
-//Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.bean;
 
-import java.util.List;
-
-/**
- * 书城 书籍分类推荐列表
- */
-public class LibraryKindBookListBean {
+public class FindKindBean {
+    private String group;
+    private String tag;
     private String kindName;
     private String kindUrl;
-    private List<SearchBookBean> books;
+
+    public FindKindBean() {
+
+    }
 
     public String getKindName() {
         return kindName;
@@ -19,19 +18,27 @@ public class LibraryKindBookListBean {
         this.kindName = kindName;
     }
 
-    public List<SearchBookBean> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<SearchBookBean> books) {
-        this.books = books;
-    }
-
     public String getKindUrl() {
         return kindUrl;
     }
 
     public void setKindUrl(String kindUrl) {
         this.kindUrl = kindUrl;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

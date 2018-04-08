@@ -26,12 +26,12 @@ public interface IWebBookModel {
     Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex, String tag);
 
     /**
-     * 获取分类书籍
-     */
-    Observable<List<SearchBookBean>> getKindBook(String url,int page);
-
-    /**
      * 其他站点资源整合搜索
      */
-    Observable<List<SearchBookBean>> searchOtherBook(String content,int page,String tag);
+    Observable<List<SearchBookBean>> searchOtherBook(String content, int page, String tag);
+
+    /**
+     * 发现
+     */
+    Observable<List<SearchBookBean>> findBook(String url, int page, String tag);
 }

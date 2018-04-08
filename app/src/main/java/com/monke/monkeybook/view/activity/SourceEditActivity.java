@@ -131,6 +131,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieHttpUserAgent;
     @BindView(R.id.til_httpUserAgent)
     TextInputLayout tilHttpUserAgent;
+    @BindView(R.id.tie_ruleFindUrl)
+    TextInputEditText tieRuleFindUrl;
+    @BindView(R.id.til_ruleFindUrl)
+    TextInputLayout tilRuleFindUrl;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -252,6 +256,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setRuleSearchNoteUrl(trim(tieRuleSearchNoteUrl.getText().toString()));
         bookSourceBeanN.setRuleSearchUrl(trim(tieRuleSearchUrl.getText().toString()));
         bookSourceBeanN.setHttpUserAgent(trim(tieHttpUserAgent.getText().toString()));
+        bookSourceBeanN.setRuleFindUrl(trim(tieRuleFindUrl.getText().toString()));
         bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
         return bookSourceBeanN;
@@ -282,6 +287,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tieRuleSearchNoteUrl.setText(trim(bookSourceBean.getRuleSearchNoteUrl()));
         tieRuleSearchUrl.setText(trim(bookSourceBean.getRuleSearchUrl()));
         tieHttpUserAgent.setText(trim(bookSourceBean.getHttpUserAgent()));
+        tieRuleFindUrl.setText(trim(bookSourceBean.getRuleFindUrl()));
     }
 
     private void setHint() {
@@ -305,6 +311,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilRuleSearchNoteUrl.setHint("RuleSearchNoteUrl");
         tilRuleSearchUrl.setHint("RuleSearchUrl");
         tilHttpUserAgent.setHint("HttpUserAgent");
+        tilRuleFindUrl.setHint("RuleFindUrl");
     }
 
     private void shareBookSource() {
@@ -317,7 +324,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             fOut.close();
             file.setReadable(true, false);
             Uri contentUri = FileProvider.getUriForFile(this, getString(R.string.file_provider), file);
-            final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
             intent.setType("image/png");

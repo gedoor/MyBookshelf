@@ -39,10 +39,11 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     private ChoiceBookAdapter searchBookAdapter;
 
-    public static void startChoiceBookActivity(Context context, String title, String url) {
+    public static void startChoiceBookActivity(Context context, String title, String url, String tag) {
         Intent intent = new Intent(context, ChoiceBookActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("title", title);
+        intent.putExtra("tag", tag);
         context.startActivity(intent);
     }
 
@@ -155,7 +156,18 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     @Override
     public void loadMoreSearchBook(final List<SearchBookBean> books) {
+        if (books.size() <= 0) {
+            loadMoreFinish(true);
+            return;
+        }
+        for (SearchBookBean searchBook : searchBookAdapter.getSearchBooks()) {
+            if (books.get(0).getName().equals(searchBook.getName()) && books.get(0).getAuthor().equals(searchBook.getAuthor())) {
+                loadMoreFinish(true);
+                return;
+            }
+        }
         searchBookAdapter.addAll(books);
+        loadMoreFinish(false);
     }
 
     @Override

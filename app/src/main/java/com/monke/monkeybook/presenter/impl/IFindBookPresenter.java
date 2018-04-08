@@ -5,9 +5,6 @@ import com.monke.basemvplib.impl.IPresenter;
 
 import java.util.LinkedHashMap;
 
-public interface ILibraryPresenter extends IPresenter{
-
-    LinkedHashMap<String, String> getKinds();
-
-    void getLibraryData();
+public interface IFindBookPresenter extends IPresenter{
+    void initData();
 }

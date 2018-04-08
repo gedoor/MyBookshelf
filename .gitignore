@@ -1,5 +1,6 @@
 *.iml
 /.gradle
+/.idae/assetWizardSettings.xml
 /.idea/workspace.xml
 /.idea/misc.xml
 /.idea/libraries

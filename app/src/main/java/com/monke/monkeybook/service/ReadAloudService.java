@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -74,10 +75,13 @@ public class ReadAloudService extends Service {
     private AudioFocusChangeListener audioFocusChangeListener;
     private AudioFocusRequest mFocusRequest;
     private AloudServiceListener aloudServiceListener;
+    private SharedPreferences preference;
+    private int speechRate;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        preference = this.getSharedPreferences("CONFIG", 0);
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -144,6 +148,7 @@ public class ReadAloudService extends Service {
             speak = !speak;
             aloudServiceListener.setStatus(PLAY);
             updateNotification();
+            initSpeechRate();
             String[] splitSpeech = content.split("\r\n");
             allSpeak = splitSpeech.length;
             HashMap<String, String> map = new HashMap<>();
@@ -163,6 +168,14 @@ public class ReadAloudService extends Service {
                     }
                 }
             }
+        }
+    }
+
+    private void initSpeechRate() {
+        if (speechRate != preference.getInt("speechRate", 10)) {
+            speechRate = preference.getInt("speechRate", 10);
+            float speechRateF = (float) speechRate / 10;
+            textToSpeech.setSpeechRate(speechRateF);
         }
     }
 

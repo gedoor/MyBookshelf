@@ -1,7 +1,5 @@
 package com.monke.monkeybook.model;
 
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.monke.basemvplib.BaseModelImpl;
@@ -11,12 +9,10 @@ import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.content.AnalyzeHeaders;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
-import com.monke.monkeybook.model.content.GxwztvBookModelImpl;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -36,7 +32,7 @@ public class BookSourceManage extends BaseModelImpl {
         return new BookSourceManage();
     }
 
-    static List<BookSourceBean> getSelectedBookSource() {
+    public static List<BookSourceBean> getSelectedBookSource() {
         if (selectedBookSource == null) {
             selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .where(BookSourceBeanDao.Properties.Enable.eq(true))
@@ -121,8 +117,6 @@ public class BookSourceManage extends BaseModelImpl {
         switch (tag) {
             case BookShelfBean.LOCAL_TAG:
                 return null;
-            case GxwztvBookModelImpl.TAG:
-                return GxwztvBookModelImpl.getInstance();
             default:
                 return DefaultModelImpl.getInstance(tag);
         }

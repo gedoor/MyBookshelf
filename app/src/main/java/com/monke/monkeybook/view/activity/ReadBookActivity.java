@@ -485,8 +485,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         });
-        //亮度设置
-        readAdjustPop = new ReadAdjustPop(this);
+        //调节
+        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
+            @Override
+            public void changeSpeechRate(int speechRate) {
+                ReadAloudService.pause(ReadBookActivity.this);
+                ReadAloudService.resume(ReadBookActivity.this);
+            }
+        });
         readAdjustPop.initLight();
         readBookMenuMorePop = new ReadBookMenuMorePop(this);
     }

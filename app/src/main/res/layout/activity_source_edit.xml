@@ -55,6 +55,18 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_ruleFindUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ruleFindUrl">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tie_ruleFindUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_ruleSearchUrl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

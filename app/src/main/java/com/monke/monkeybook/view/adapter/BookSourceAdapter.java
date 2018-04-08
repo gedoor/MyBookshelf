@@ -62,8 +62,18 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         activity.upDateSelectAll();
     }
 
-    public List<BookSourceBean> getBookSourceBeanList() {
+    public List<BookSourceBean> getDataList() {
         return dataList;
+    }
+
+    public List<BookSourceBean> getSelectDataList() {
+        List<BookSourceBean> selectDataS = new ArrayList<>();
+        for (BookSourceBean data : dataList) {
+            if (data.getEnable()) {
+                selectDataS.add(data);
+            }
+        }
+        return selectDataS;
     }
 
     public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {

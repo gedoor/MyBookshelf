@@ -12,6 +12,11 @@ import io.reactivex.Observable;
 public interface IStationBookModel {
 
     /**
+     * 发现书籍
+     */
+     Observable<List<SearchBookBean>> findBook(String url, int page);
+
+    /**
      * 搜索书籍
      */
     Observable<List<SearchBookBean>> searchBook(String content, int page);
@@ -30,4 +35,6 @@ public interface IStationBookModel {
      * 章节缓存
      */
     Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex);
+
+
 }
