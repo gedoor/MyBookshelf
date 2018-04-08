@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,9 +131,14 @@ public class RecyclerViewBar extends LinearLayout {
         ivSlider.setLayoutParams(l);
     }
 
+    /**
+     * listview滚动时定位滚动条位置
+     * @param recyclerView
+     */
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         if (this.recyclerView != null) {
+
             this.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -145,6 +151,7 @@ public class RecyclerViewBar extends LinearLayout {
                     }
                 }
 
+                //定位
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -155,8 +162,26 @@ public class RecyclerViewBar extends LinearLayout {
     }
 
     public void scrollToPositionWithOffset(int position) {
-        if (recyclerView != null && position < recyclerView.getAdapter().getItemCount()) {
-            float temp = position * 1.0f / recyclerView.getAdapter().getItemCount();
+        //判断listView一页显示多少条
+        View listItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findViewByPosition(position);
+
+        Log.e("height",recyclerView.getMeasuredHeight()+"");
+        Log.e("heightItem",listItem.getMeasuredHeight()+"");
+
+        int onePageCount = recyclerView.getMeasuredHeight()/listItem.getMeasuredHeight();//一页显示多少项
+        int lastCount = recyclerView.getAdapter().getItemCount()-onePageCount;
+        int posi = 0;
+        if (((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition()<=onePageCount){//第一页
+            posi = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        }else if (((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition()>lastCount){//最后一页
+            posi = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+        }else{
+            posi = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        }
+
+
+        if (recyclerView != null && posi < recyclerView.getAdapter().getItemCount()) {
+            float temp = posi * 1.0f / recyclerView.getAdapter().getItemCount();
             LayoutParams l = (LayoutParams) ivSlider.getLayoutParams();
             l.topMargin = Math.round(((getHeight() - sliderHeight) * temp));
             ivSlider.setLayoutParams(l);

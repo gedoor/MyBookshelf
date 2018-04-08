@@ -27,7 +27,7 @@
         android:id="@+id/tv_file_folder_path"
         android:layout_width="match_parent"
         android:layout_below="@+id/rl_file_folder_head"
-        android:background="@color/bg_grey"
+        android:background="@drawable/bg_ib_pre2"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
