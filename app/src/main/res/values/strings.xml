@@ -150,7 +150,8 @@
     <string name="book_intro">内容简介</string>
     <string name="open_from_other">打开外部书籍</string>
     <string name="origin">来源</string>
-    <string name="import_replace_rule">导入替换规则</string>
+    <string name="import_replace_rule">本地导入</string>
+    <string name="import_replace_rule_on_line">网络导入</string>
     <string name="bookshelf_px">书架排序</string>
     <string name="bookshelf_px_0">按阅读时间排序</string>
     <string name="bookshelf_px_1">按更新时间排序</string>
