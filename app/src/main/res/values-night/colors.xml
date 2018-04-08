@@ -16,6 +16,8 @@
     <color name="tv_btn_black">#343434</color>
     <color name="bg_library">#404040</color>
 
+    <color name="bg_chapter">#464646</color>
+
     <color name="tv_text_default">#b7b7b7</color>
 
     <color name="tv_text_button_nor">#434343</color>

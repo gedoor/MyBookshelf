@@ -519,6 +519,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         initChapterList();
     }
 
+    /**
+     * 初始化目录列表
+     */
     @Override
     public void initChapterList() {
         chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook

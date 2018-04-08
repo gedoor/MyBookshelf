@@ -4,6 +4,7 @@
     android:id="@+id/fl_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
@@ -20,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/btn_bg_press">
+            android:elevation="5dp"
+            android:background="@color/bg_chapter">
 
             <ImageView
                 android:id="@+id/iv_back"

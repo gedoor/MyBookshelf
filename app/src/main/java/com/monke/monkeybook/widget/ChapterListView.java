@@ -128,6 +128,10 @@ public class ChapterListView extends FrameLayout {
         });
     }
 
+    /**
+     * 显示章节列表，并定位当前阅读章节
+     * @param durChapter
+     */
     public void show(int durChapter) {
         chapterListAdapter.setIndex(durChapter);
         ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
@@ -159,7 +163,7 @@ public class ChapterListView extends FrameLayout {
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(index);
-                rvbSlider.scrollToPositionWithOffset(index);
+                //rvbSlider.scrollToPositionWithOffset(index);
                 dismissChapterList();
             }
         });
