@@ -1,3 +1,7 @@
+# 开发人员
+fork 之后主要开发人员 kunfei https://github.com/gedoor
+合作开发人员 大古队员 https://github.com/DaguDuiyuan
+
 # 免责声明（Disclaimer）
 MONKOVEL是一款提供网络文学搜索的工具，为广大网络文学爱好者提供一种方便、快捷舒适的试读体验。
 
