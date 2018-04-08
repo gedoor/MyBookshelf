@@ -103,7 +103,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex) {
         //查询简繁体配置
         boolean convert = MApplication.getInstance().getSharedPreferences("CONFIG", 0)
-                .getBoolean("TextConvert",false);
+                .getBoolean("TextConvert", false);
 
         //载入正文
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
@@ -126,7 +126,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     }
                     int start = pageIndex * pageLineCount;
-                    Log.e("pageLineCount",pageLineCount+"");
+                    Log.e("pageLineCount", pageLineCount + "");
                     int end = pageIndex == tempCount ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
@@ -135,7 +135,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
                                 pageIndex,
-                                tempCount + 1,convert);
+                                tempCount + 1, convert);
                     }
                 } else {
                     //有元数据  重新分行
@@ -333,27 +333,15 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             if (!content.startsWith(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                 content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
             }
-            String allLine[] = content.split("\r\n\u3000\u3000");
             //替换
             if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
-                StringBuilder contentBuilder = new StringBuilder();
-                for (String line : allLine) {
-                    for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                        try {
-                            line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                    if (line.length() > 0) {
-                        if (contentBuilder.length() == 0) {
-                            contentBuilder.append(line);
-                        } else {
-                            contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
-                        }
+                for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                    try {
+                        content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
                 }
-                content = contentBuilder.toString();
             }
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
@@ -369,11 +357,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     /**
      * 设置每页行数
+     *
      * @param pageLineCount
      */
     @Override
     public void setPageLineCount(int pageLineCount) {
-        Log.e("pageLineCount>>>",pageLineCount+"");
+        Log.e("pageLineCount>>>", pageLineCount + "");
         this.pageLineCount = pageLineCount;
     }
 
