@@ -2,17 +2,15 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -36,6 +34,8 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     LinearLayout llContent;
     @BindView(R.id.expandable_list)
     ExpandableListView expandableList;
+    @BindView(R.id.tv_empty)
+    TextView tvEmpty;
 
     private Animation animIn;
     private Animation animOut;
@@ -76,6 +76,8 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     private void initExpandableList() {
         adapter = new FindKindAdapter(this);
         expandableList.setAdapter(adapter);
+        tvEmpty.setText(R.string.find_empty);
+        expandableList.setEmptyView(tvEmpty);
         adapter.setOnGroupExpandedListener(this::expandOnlyOne);
         //  设置分组项的点击监听事件
         expandableList.setOnGroupClickListener((parent, v, groupPosition, id) -> {
@@ -150,10 +152,4 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
