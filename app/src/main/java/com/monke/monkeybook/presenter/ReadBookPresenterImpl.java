@@ -239,6 +239,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         }
     }
 
+    /**
+     * 预加载下一章节
+     */
     private void LoadNextChapter(int durChapterIndex) {
         int nextIndex = durChapterIndex + 1;
         if (bookShelf.getChapterListSize() > nextIndex && bookShelf.getChapterList(nextIndex).getBookContentBean() == null) {
@@ -398,9 +401,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         this.pageWidth = pageWidth;
     }
 
+    /**
+     * APP外部打开
+     */
     @Override
     public void openBookFromOther(Activity activity) {
-        //APP外部打开
         Uri uri = activity.getIntent().getData();
         mView.showLoading("文本导入中...");
         getRealFilePath(activity, uri)
@@ -488,6 +493,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     }
 
+    /**
+     * 保存换源后book
+     */
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             BookshelfHelp.removeFromBookShelf(bookShelf);
