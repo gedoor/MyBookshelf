@@ -478,6 +478,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void setFont(String path) {
                 csvBook.setFont();
+                csvBook.changeTextSize();
             }
 
             @Override
