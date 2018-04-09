@@ -514,14 +514,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
             @Override
             public void changeSpeechRate(int speechRate) {
-                ReadAloudService.pause(ReadBookActivity.this);
-                ReadAloudService.resume(ReadBookActivity.this);
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
             }
 
             @Override
             public void speechRateFollowSys() {
-                ReadAloudService.stop(ReadBookActivity.this);
-                startReadAloud();
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
+                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         readAdjustPop.initLight();
