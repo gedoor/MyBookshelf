@@ -299,8 +299,9 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl.setLineMultiplier(lineSize);
     }
 
+    @SuppressLint("DefaultLocale")
     private void updateLineNum(int lineNum) {
-        if (lineNum > 2) {
+        if (lineNum > 3) {
             lineNum = -1;
         }
         tvDurLineNum.setText(String.format("%d", lineNum));
