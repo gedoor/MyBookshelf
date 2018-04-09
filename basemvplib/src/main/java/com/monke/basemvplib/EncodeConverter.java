@@ -43,7 +43,7 @@ public class EncodeConverter extends Converter.Factory {
                 if (mediaType != null) {
                     Charset charset = mediaType.charset();
                     if (charset != null) {
-                        charsetStr = charset.toString();
+                        charsetStr = charset.displayName();
                         if (!isEmpty(charsetStr)) {
                             return new String(responseBytes, Charset.forName(charsetStr));
                         }

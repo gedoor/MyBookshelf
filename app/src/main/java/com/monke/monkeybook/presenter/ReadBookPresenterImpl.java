@@ -103,7 +103,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void loadContent(final BookContentView bookContentView, final long bookTag, final int chapterIndex, int pageIndex) {
         //查询简繁体配置
         boolean convert = MApplication.getInstance().getSharedPreferences("CONFIG", 0)
-                .getBoolean("TextConvert",false);
+                .getBoolean("TextConvert", false);
 
         //载入正文
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
@@ -126,7 +126,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     }
                     int start = pageIndex * pageLineCount;
-                    Log.e("pageLineCount",pageLineCount+"");
+                    Log.e("pageLineCount", pageLineCount + "");
                     int end = pageIndex == tempCount ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
@@ -135,7 +135,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
                                 pageIndex,
-                                tempCount + 1,convert);
+                                tempCount + 1, convert);
                     }
                 } else {
                     //有元数据  重新分行
@@ -239,6 +239,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         }
     }
 
+    /**
+     * 预加载下一章节
+     */
     private void LoadNextChapter(int durChapterIndex) {
         int nextIndex = durChapterIndex + 1;
         if (bookShelf.getChapterListSize() > nextIndex && bookShelf.getChapterList(nextIndex).getBookContentBean() == null) {
@@ -333,28 +336,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             if (!content.startsWith(bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                 content = String.format("%s\r\n%s", bookShelf.getChapterList(chapterIndex).getDurChapterName(), paragraphStr);
             }
-            String allLine[] = content.split("\r\n\u3000\u3000");
-            //替换
-            if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
-                StringBuilder contentBuilder = new StringBuilder();
-                for (String line : allLine) {
-                    for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                        try {
-                            line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                    if (line.length() > 0) {
-                        if (contentBuilder.length() == 0) {
-                            contentBuilder.append(line);
-                        } else {
-                            contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
-                        }
-                    }
-                }
-                content = contentBuilder.toString();
-            }
+            content = replaceContent(content);
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
             Layout tempLayout = new StaticLayout(content, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
@@ -368,12 +350,49 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     }
 
     /**
+     * 替换净化
+     */
+    private String replaceContent(String content) {
+        String allLine[] = content.split("\r\n\u3000\u3000");
+        //替换
+        if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
+            StringBuilder contentBuilder = new StringBuilder();
+            for (String line : allLine) {
+                for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                    try {
+                        line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (line.length() > 0) {
+                    if (contentBuilder.length() == 0) {
+                        contentBuilder.append(line);
+                    } else {
+                        contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
+                    }
+                }
+            }
+            content = contentBuilder.toString();
+            for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                if (replaceRule.getRegex().contains("\\n")) {
+                    try {
+                        content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+        return content;
+    }
+
+    /**
      * 设置每页行数
-     * @param pageLineCount
      */
     @Override
     public void setPageLineCount(int pageLineCount) {
-        Log.e("pageLineCount>>>",pageLineCount+"");
+        Log.e("pageLineCount>>>", pageLineCount + "");
         this.pageLineCount = pageLineCount;
     }
 
@@ -382,9 +401,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         this.pageWidth = pageWidth;
     }
 
+    /**
+     * APP外部打开
+     */
     @Override
     public void openBookFromOther(Activity activity) {
-        //APP外部打开
         Uri uri = activity.getIntent().getData();
         mView.showLoading("文本导入中...");
         getRealFilePath(activity, uri)
@@ -472,6 +493,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     }
 
+    /**
+     * 保存换源后book
+     */
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             BookshelfHelp.removeFromBookShelf(bookShelf);
