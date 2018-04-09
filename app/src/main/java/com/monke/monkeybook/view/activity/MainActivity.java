@@ -406,10 +406,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     private void fistOpenRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
-//            BookSourceManage.saveBookSourceToDb();
-//            if (!MApplication.DEBUG) {
-//                moProgressHUD.showInfo(getString(R.string.update_log));
-//            }
             //书源为空时加载默认书源
             BookSourceManage.initDefaultBookSource(this);
             //保存版本号
