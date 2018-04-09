@@ -372,7 +372,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             }
             content = contentBuilder.toString();
             for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                if (replaceRule.getRegex().contains("\r\n")) {
+                if (replaceRule.getRegex().contains("\\n")) {
                     try {
                         content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
                     } catch (Exception e1) {
