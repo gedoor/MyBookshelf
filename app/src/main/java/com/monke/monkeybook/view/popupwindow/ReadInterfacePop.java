@@ -325,13 +325,11 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateBg(int index) {
-        //civBgCustom.setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         civBgWhite.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgYellow.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgGreen.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgBlack.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         civBgBlue.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
-        //civBgCustom.setBorderColor(activity.getResources().getColor(R.color.tv_text_default));
         switch (index) {
             case 0:
                 civBgWhite.setBorderColor(Color.parseColor("#F3B63F"));
