@@ -49,6 +49,8 @@ public class ReadAdjustPop extends PopupWindow {
 
     public interface OnAdjustListener {
         void changeSpeechRate(int speechRate);
+
+        void speechRateFollowSys();
     }
 
     public ReadAdjustPop(Context context, OnAdjustListener adjustListener) {
@@ -165,8 +167,9 @@ public class ReadAdjustPop extends PopupWindow {
                 //跟随系统
                 hpbTtsSpeechRate.setCanTouch(false);
                 readBookControl.setSpeechRateFollowSys(true);
-                ReadAloudService.stop(mContext);
-
+                if (adjustListener != null) {
+                    adjustListener.speechRateFollowSys();
+                }
             }
         });
         hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate() - 5);
