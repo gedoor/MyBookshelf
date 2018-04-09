@@ -22,6 +22,7 @@ public class ReadBookControl {
     private List<Map<String, Integer>> textDrawable;
 
     private int speechRate;
+    private boolean speechRateFollowSys;
     private int textSize;
     private int textExtra;
     private int textColor;
@@ -82,6 +83,7 @@ public class ReadBookControl {
         this.textConvert = preference.getBoolean("textConvert",false);
         this.textBold = preference.getBoolean("textBold", false);
         this.speechRate = preference.getInt("speechRate", 10);
+        this.speechRateFollowSys = preference.getBoolean("speechRateFollowSys", true);
     }
 
     //字体大小
@@ -337,6 +339,17 @@ public class ReadBookControl {
         this.speechRate = speechRate;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("speechRate", speechRate);
+        editor.apply();
+    }
+
+    public boolean isSpeechRateFollowSys() {
+        return speechRateFollowSys;
+    }
+
+    public void setSpeechRateFollowSys(boolean speechRateFollowSys) {
+        this.speechRateFollowSys = speechRateFollowSys;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("speechRateFollowSys", speechRateFollowSys);
         editor.apply();
     }
 }
