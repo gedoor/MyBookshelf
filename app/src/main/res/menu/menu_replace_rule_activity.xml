@@ -27,4 +27,10 @@
         android:title="@string/import_replace_rule_on_line"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_del_all"
+        android:icon="@drawable/ic_delete_forever_black_24dp"
+        android:title="@string/del_all"
+        app:showAsAction="never" />
+
 </menu>

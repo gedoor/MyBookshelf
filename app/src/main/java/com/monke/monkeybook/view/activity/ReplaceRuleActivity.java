@@ -206,6 +206,9 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
                 moProgressHUD.showInputBox("输入替换规则网址", "",
                         inputText -> mPresenter.importDataS(inputText));
                 break;
+            case R.id.action_del_all:
+                mPresenter.delData(adapter.getDataList());
+                break;
             case android.R.id.home:
                 finish();
                 break;
