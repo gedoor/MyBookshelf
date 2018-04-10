@@ -29,27 +29,24 @@
                 android:singleLine="true"
                 android:textSize="16sp"
                 app:minTextSize="14sp"
-                android:gravity="center|start" />
+                android:gravity="center|start"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/btn_bg_press" />
+            android:background="@color/btn_bg_press"/>
 
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshLayout"
+        <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
+            android:id="@+id/rf_rv_change_source"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:bg_color="#00000000"
+            app:font_color="#767676"
+            app:second_color="#c1c1c1"
+            app:second_max_progress="80dp"
+            app:speed="2dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rf_rv_change_source"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:background="#fff" />
-
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

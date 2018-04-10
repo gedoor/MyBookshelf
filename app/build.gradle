@@ -135,9 +135,7 @@ dependencies {
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
 
-    //下拉刷新
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-3'
-    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-3'
+
 }
 
 greendao {
