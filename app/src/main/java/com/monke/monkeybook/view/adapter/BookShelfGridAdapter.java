@@ -78,32 +78,18 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemcount() {
-        //如果mData.size()为0的话，只引入一个布局，就是emptyView
-        //那么，这个recyclerView的itemCount为1
-        if (books.size() == 0) {
-            return 1;
-        }
         //如果不为0，按正常的流程跑
         return books.size();
     }
 
     @Override
     public int getItemViewtype(int position) {
-        //在这里进行判断，如果我们的集合的长度为0时，我们就使用emptyView的布局
-        if (books.size() == 0) {
-            return VIEW_TYPE_EMPTY;
-        }
         //如果有数据，则使用ITEM的布局
         return VIEW_TYPE_ITEM;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        if (viewType == VIEW_TYPE_EMPTY) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_empty, parent, false);
-            return new RecyclerView.ViewHolder(view) {
-            };
-        }
         return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_grid, parent, false));
     }
 
