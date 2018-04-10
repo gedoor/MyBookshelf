@@ -199,12 +199,14 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void firstRequest() {
         super.firstRequest();
+        mPresenter.querySearchHistory();
         Intent intent = this.getIntent();
         String searchKey = intent.getStringExtra("searchKey");
         if (!TextUtils.isEmpty(searchKey)) {
             edtContent.setText(searchKey);
-        } else {
-            mPresenter.querySearchHistory();
+            new Handler().postDelayed(() -> {
+                toSearch();
+            }, 600);
         }
     }
 
