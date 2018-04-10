@@ -41,6 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
     private int threadsNum = 6;
     private int refreshIndex;
+    private List<BookShelfBean> bookShelfBeans;
 
     @Override
     public void queryBookShelf(final Boolean needRefresh) {
@@ -58,9 +59,10 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         if (null != value) {
-                            mView.refreshBookShelf(value);
+                            bookShelfBeans = value;
+                            mView.refreshBookShelf(bookShelfBeans);
                             if (needRefresh) {
-                                startRefreshBook(value);
+                                startRefreshBook();
                             } else {
                                 mView.refreshFinish();
                             }
@@ -204,19 +206,19 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         return threadsNum;
     }
 
-    private void startRefreshBook(List<BookShelfBean> value) {
-        if (value != null && value.size() > 0) {
-            mView.setRecyclerMaxProgress(value.size());
+    private void startRefreshBook() {
+        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
+            mView.setRecyclerMaxProgress(bookShelfBeans.size());
             refreshIndex = -1;
             for (int i = 1; i <= getThreadsNum(); i++) {
-                refreshBookshelf(value);
+                refreshBookshelf();
             }
         } else {
             mView.refreshFinish();
         }
     }
 
-    private synchronized void refreshBookshelf(final List<BookShelfBean> bookShelfBeans) {
+    private synchronized void refreshBookshelf() {
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
@@ -234,19 +236,19 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                     bookShelfBean.setErrorMsg(null);
                                 }
                                 mView.refreshRecyclerViewItemAdd();
-                                refreshBookshelf(bookShelfBeans);
+                                refreshBookshelf();
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
                                 mView.refreshRecyclerViewItemAdd();
-                                refreshBookshelf(bookShelfBeans);
+                                refreshBookshelf();
                             }
                         });
             } else {
                 mView.refreshRecyclerViewItemAdd();
-                refreshBookshelf(bookShelfBeans);
+                refreshBookshelf();
             }
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
