@@ -204,9 +204,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         String searchKey = intent.getStringExtra("searchKey");
         if (!TextUtils.isEmpty(searchKey)) {
             edtContent.setText(searchKey);
-            new Handler().postDelayed(() -> {
-                toSearch();
-            }, 600);
+            new Handler().postDelayed(this::toSearch, 700);
         }
     }
 
