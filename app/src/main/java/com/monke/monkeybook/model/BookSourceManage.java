@@ -108,7 +108,7 @@ public class BookSourceManage extends BaseModelImpl {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
-                BookSourceManage.addBookSource(bookSourceBeans);
+                addBookSource(bookSourceBeans);
                 e.onNext(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
