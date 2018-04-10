@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +15,11 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.model.SearchBook;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
-import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
+import com.scwang.smartrefresh.header.MaterialHeader;
+import com.scwang.smartrefresh.header.WaveSwipeHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +37,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ChangeSourceView {
     private TextView atvTitle;
-    private RefreshRecyclerView rvSource;
+    private SmartRefreshLayout refreshLayout;
+    private RecyclerView rvSource;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -54,7 +60,8 @@ public class ChangeSourceView {
         this.context = moProgressView.getContext();
         bindView();
         adapter = new ChangeSourceAdapter(context, false);
-        rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
+        rvSource.setLayoutManager(new LinearLayoutManager(context));
+        rvSource.setAdapter(adapter);
         adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();
             onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
@@ -64,8 +71,6 @@ public class ChangeSourceView {
             //刷新失败 ，重试
             reSearchBook();
         });
-        rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
-                viewRefreshError);
         searchBook = new SearchBook(new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
@@ -75,20 +80,21 @@ public class ChangeSourceView {
             @Override
             public void refreshFinish(Boolean value) {
                 saveSearchBook();
-                rvSource.finishRefresh(true,true);
+                refreshLayout.finishRefresh(true);
             }
 
             @Override
             public void loadMoreFinish(Boolean value) {
                 saveSearchBook();
-                rvSource.finishRefresh(true);
+                refreshLayout.finishRefresh(true);
             }
 
             @Override
             public Boolean checkIsExist(SearchBookBean searchBookBean) {
                 Boolean result = false;
                 for (int i = 0; i < adapter.getItemcount(); i++) {
-                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
+                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl())
+                            && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
                         result = true;
                         break;
                     }
@@ -104,7 +110,7 @@ public class ChangeSourceView {
             @Override
             public void searchBookError(Boolean value) {
                 saveSearchBook();
-                rvSource.finishRefresh(true);
+                refreshLayout.finishRefresh(true);
             }
 
             @Override
@@ -122,7 +128,6 @@ public class ChangeSourceView {
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
         atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
-        rvSource.startRefresh();
         getSearchBookInDb(bookShelf);
     }
 
@@ -146,7 +151,6 @@ public class ChangeSourceView {
                                 }
                             }
                             adapter.addAllSourceAdapter(searchBookBeans);
-                            rvSource.finishRefresh(true, true);
                         } else {
                             reSearchBook();
                         }
@@ -160,7 +164,7 @@ public class ChangeSourceView {
     }
 
     private void reSearchBook() {
-        rvSource.startRefresh();
+        refreshLayout.autoRefresh();
         DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().deleteInTx(adapter.getSearchBookBeans());
         adapter.reSetSourceAdapter();
         long startThisSearchTime = System.currentTimeMillis();
@@ -194,9 +198,11 @@ public class ChangeSourceView {
         View llContent = moProgressView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
         atvTitle = moProgressView.findViewById(R.id.atv_title);
+        refreshLayout = moProgressView.findViewById(R.id.refreshLayout);
         rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
 
-        rvSource.setBaseRefreshListener(this::reSearchBook);
+        refreshLayout.setRefreshHeader(new MaterialHeader(context));
+        refreshLayout.setOnRefreshListener(refreshLayout -> reSearchBook());
 
     }
 
