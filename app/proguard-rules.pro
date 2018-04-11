@@ -205,3 +205,6 @@ public static java.lang.String TABLENAME;
 
 ##百度自动更新
 -keep class com.baidu.**{*;}
+##BugLy
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
