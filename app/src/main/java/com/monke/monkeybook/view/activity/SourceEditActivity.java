@@ -223,7 +223,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     private void scanBookSource() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);
-        integrator.setCaptureActivity(ScanActivity.class);
+        integrator.setCaptureActivity(QRCodeScanActivity.class);
         integrator.initiateScan();
     }
 
