@@ -110,11 +110,7 @@ public class ContentTextView extends AppCompatTextView {
 
 
     private boolean needScale(String line) {
-        if (line == null || line.length() == 0) {
-            return false;
-        } else {
-            return line.charAt(line.length() - 1) != '\n';
-        }
+        return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
 
     }
 
