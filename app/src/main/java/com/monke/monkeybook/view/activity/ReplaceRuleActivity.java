@@ -13,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -29,8 +30,11 @@ import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
+import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.impl.IReplaceRulePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
+import com.monke.monkeybook.view.impl.IReplaceRuleView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.io.File;
@@ -54,7 +58,7 @@ import static com.monke.monkeybook.view.activity.BookSourceActivity.RESULT_IMPOR
  * 书源管理
  */
 
-public class ReplaceRuleActivity extends MBaseActivity {
+public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> implements IReplaceRuleView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -67,6 +71,7 @@ public class ReplaceRuleActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
     private Animation animIn;
     private ReplaceRuleAdapter adapter;
+    private boolean selectAll = true;
 
     @Override
     protected void onCreateActivity() {
@@ -131,64 +136,30 @@ public class ReplaceRuleActivity extends MBaseActivity {
         });
     }
 
-    public void delData(ReplaceRuleBean replaceRuleBean) {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManage.delData(replaceRuleBean);
-            e.onNext(ReplaceRuleManage.getAll());
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
-                    @Override
-                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
-                        adapter.resetDataS(replaceRuleBeans);
-                        Snackbar.make(llContent, replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
-                                .setAction("恢复", view -> {
-                                    restoreData(replaceRuleBean);
-                                })
-                                .show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+    public void upDateSelectAll() {
+        selectAll = true;
+        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+            if (!replaceRuleBean.getEnable()) {
+                selectAll = false;
+                break;
+            }
+        }
     }
 
-    private void restoreData(ReplaceRuleBean replaceRuleBean) {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManage.saveData(replaceRuleBean);
-            e.onNext(ReplaceRuleManage.getAll());
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<ReplaceRuleBean>>() {
-                    @Override
-                    public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
-                        adapter.resetDataS(replaceRuleBeans);
-                    }
+    private void selectAllDataS() {
+        for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
+            replaceRuleBean.setEnable(!selectAll);
+        }
+        adapter.notifyDataSetChanged();
+        selectAll = !selectAll;
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+    public void delData(ReplaceRuleBean replaceRuleBean) {
+        mPresenter.delData(replaceRuleBean);
     }
 
     public void saveDataS() {
-        Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            int i = 0;
-            for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
-                i++;
-                replaceRuleBean.setSerialNumber(i);
-            }
-            ReplaceRuleManage.addDataS(adapter.getDataList());
-            e.onNext(ReplaceRuleManage.getAll());
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        mPresenter.saveData(adapter.getDataList());
     }
 
     @Override
@@ -197,8 +168,8 @@ public class ReplaceRuleActivity extends MBaseActivity {
     }
 
     @Override
-    protected IBookSourcePresenter initInjector() {
-        return new BookSourcePresenterImpl();
+    protected IReplaceRulePresenter initInjector() {
+        return new ReplaceRulePresenterImpl();
     }
 
     //设置ToolBar
@@ -225,8 +196,18 @@ public class ReplaceRuleActivity extends MBaseActivity {
             case R.id.action_add_replace_rule:
                 editReplaceRule(null);
                 break;
+            case R.id.action_select_all:
+                selectAllDataS();
+                break;
             case R.id.action_import:
                 selectReplaceRuleFile();
+                break;
+            case R.id.action_import_onLine:
+                moProgressHUD.showInputBox("输入替换规则网址", "",
+                        inputText -> mPresenter.importDataS(inputText));
+                break;
+            case R.id.action_del_all:
+                mPresenter.delData(adapter.getDataList());
                 break;
             case android.R.id.home:
                 finish();
@@ -252,29 +233,6 @@ public class ReplaceRuleActivity extends MBaseActivity {
         selectReplaceRuleFile();
     }
 
-    private void importBookSource(Uri uri) {
-        String json;
-        if (uri.toString().startsWith("content://")) {
-            json = FileHelper.readString(uri);
-        } else {
-            String path = uri.getPath();
-            DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = FileHelper.readString(file);
-        }
-        if (!isEmpty(json)) {
-            try {
-                List<ReplaceRuleBean> dataS = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
-                }.getType());
-                ReplaceRuleManage.addDataS(dataS);
-                adapter.resetDataS(ReplaceRuleManage.getAll());
-                Toast.makeText(this, "导入成功", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "格式不对", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "文件读取失败", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -297,10 +255,20 @@ public class ReplaceRuleActivity extends MBaseActivity {
             switch (requestCode) {
                 case IMPORT_SOURCE:
                     if (data != null) {
-                        importBookSource(data.getData());
+                        mPresenter.importDataS(data.getData());
                     }
                     break;
             }
         }
+    }
+
+    @Override
+    public void refresh() {
+        adapter.resetDataS(ReplaceRuleManage.getAll());
+    }
+
+    @Override
+    public View getView() {
+        return llContent;
     }
 }

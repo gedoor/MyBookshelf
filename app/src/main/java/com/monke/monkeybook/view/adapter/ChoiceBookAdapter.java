@@ -88,17 +88,13 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvLasted.setText("");
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
-            myViewHolder.tvOrigin.setText("来源:" + searchBooks.get(position).getOrigin());
+            myViewHolder.tvOrigin.setText(String.format("来源:%s", searchBooks.get(position).getOrigin()));
         } else {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         }
-        if (searchBooks.get(position).getIsAdd()) {
-            myViewHolder.tvAddShelf.setText("已添加");
-            myViewHolder.tvAddShelf.setEnabled(false);
-        } else {
-            myViewHolder.tvAddShelf.setText("+添加");
-            myViewHolder.tvAddShelf.setEnabled(true);
-        }
+
+        myViewHolder.tvAddShelf.setText("搜索");
+        myViewHolder.tvAddShelf.setEnabled(true);
 
         myViewHolder.flContent.setOnClickListener(v -> {
             if (itemClickListener != null)

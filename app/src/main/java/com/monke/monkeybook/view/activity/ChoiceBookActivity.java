@@ -109,7 +109,9 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
         searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
             @Override
             public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
-                mPresenter.addBookToShelf(searchBookBean);
+                Intent intent = new Intent(ChoiceBookActivity.this, SearchActivity.class);
+                intent.putExtra("searchKey", searchBookBean.getName());
+                startActivityByAnim(intent, toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
             }
 
             @Override

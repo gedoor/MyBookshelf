@@ -122,6 +122,7 @@ public class AnalyzeRule {
         }
         String regex = null;
         String result = "";
+        //分离正则表达式
         String[] ruleStrS = ruleStr.split("#");
         if (ruleStrS.length > 1) {
             regex = ruleStrS[1];

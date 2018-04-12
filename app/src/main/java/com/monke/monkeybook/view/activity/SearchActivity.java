@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -199,6 +200,12 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     protected void firstRequest() {
         super.firstRequest();
         mPresenter.querySearchHistory();
+        Intent intent = this.getIntent();
+        String searchKey = intent.getStringExtra("searchKey");
+        if (!TextUtils.isEmpty(searchKey)) {
+            edtContent.setText(searchKey);
+            new Handler().postDelayed(this::toSearch, 700);
+        }
     }
 
     //开始搜索

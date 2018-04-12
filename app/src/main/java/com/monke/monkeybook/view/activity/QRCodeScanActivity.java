@@ -8,7 +8,7 @@ import com.journeyapps.barcodescanner.CaptureActivity;
  * Created by GKF on 2018/1/29.
  */
 
-public class ScanActivity extends CaptureActivity {
+public class QRCodeScanActivity extends CaptureActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

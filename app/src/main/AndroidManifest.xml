@@ -51,7 +51,7 @@
             android:name=".view.activity.SearchActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustUnspecified" />
         <activity
             android:name=".view.activity.FindBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
@@ -103,7 +103,7 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity
-            android:name=".view.activity.ScanActivity"
+            android:name=".view.activity.QRCodeScanActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"

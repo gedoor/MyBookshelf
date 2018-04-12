@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.monke.immerselayout.ImmerseLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +19,9 @@
             android:layout_weight="1"
             android:layout_height="30dp"
             android:transitionName="to_search"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="10dp"
+            tools:ignore="RtlHardcoded">
+
             <EditText
                 android:id="@+id/edt_content"
                 android:layout_width="match_parent"
@@ -33,7 +36,8 @@
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:textColor="#767676"
                 android:cursorVisible="false"
-                android:textCursorDrawable="@drawable/shape_text_cursor"/>
+                android:textCursorDrawable="@drawable/shape_text_cursor"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:layout_width="15dp"
@@ -53,7 +57,8 @@
             android:textColor="@drawable/selector_tv_black"
             android:gravity="center"
             android:clickable="true"
-            android:background="@drawable/bg_ib_pre"/>
+            android:background="@drawable/bg_ib_pre"
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"

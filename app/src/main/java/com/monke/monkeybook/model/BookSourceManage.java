@@ -1,8 +1,14 @@
 package com.monke.monkeybook.model;
 
+import android.content.Context;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.monke.basemvplib.BaseModelImpl;
+import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
@@ -102,7 +108,7 @@ public class BookSourceManage extends BaseModelImpl {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
-                BookSourceManage.addBookSource(bookSourceBeans);
+                addBookSource(bookSourceBeans);
                 e.onNext(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -110,6 +116,36 @@ public class BookSourceManage extends BaseModelImpl {
             }
             e.onComplete();
         });
+    }
+
+    public static void initDefaultBookSource(Context context) {
+        if (getAllBookSource() == null || getAllBookSource().size() == 0) {
+            new AlertDialog.Builder(context)
+                    .setTitle("加载默认书源")
+                    .setMessage("当前书源为空,是否加载默认书源?")
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        try {
+                            URL url = new URL(context.getString(R.string.default_source_url));
+                            BookSourceManage.importSourceFromWww(url)
+                                    .subscribe(new SimpleObserver<Boolean>() {
+                                        @Override
+                                        public void onNext(Boolean aBoolean) {
+                                            Toast.makeText(context, "默认书源加载成功.", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            Toast.makeText(context, "默认书源加载失败.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
+                    .show();
+        }
     }
 
     //获取book source class

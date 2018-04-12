@@ -28,6 +28,7 @@ import com.monke.monkeybook.help.RunMediaPlayer;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -172,7 +173,7 @@ public class ReadAloudService extends Service {
     }
 
     private void initSpeechRate() {
-        if (speechRate != preference.getInt("speechRate", 10)) {
+        if (speechRate != preference.getInt("speechRate", 10) && !preference.getBoolean("speechRateFollowSys", true)) {
             speechRate = preference.getInt("speechRate", 10);
             float speechRateF = (float) speechRate / 10;
             textToSpeech.setSpeechRate(speechRateF);
@@ -452,9 +453,14 @@ public class ReadAloudService extends Service {
         @Override
         public void onInit(int i) {
             if (i == TextToSpeech.SUCCESS) {
-                textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
-                ttsInitSuccess = true;
-                playTTS();
+                int result = textToSpeech.setLanguage(Locale.CHINA);
+                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                    aloudServiceListener.showMassage("LANG_MISSING_DATA  or LANG_NOT_SUPPORTED!");
+                } else {
+                    textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
+                    ttsInitSuccess = true;
+                    playTTS();
+                }
             } else {
                 if (aloudServiceListener != null) {
                     aloudServiceListener.showMassage("TTS初始化失败");

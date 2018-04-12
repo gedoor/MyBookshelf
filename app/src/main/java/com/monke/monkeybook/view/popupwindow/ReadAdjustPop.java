@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -37,6 +38,8 @@ public class ReadAdjustPop extends PopupWindow {
     LinearLayout llTtsSpeechRate;
     @BindView(R.id.hpb_tts_SpeechRate)
     MHorProgressBar hpbTtsSpeechRate;
+    @BindView(R.id.scb_tts_follow_sys)
+    SmoothCheckBox scbTtsFollowSys;
 
     private Context mContext;
     private Boolean isFollowSys;
@@ -46,6 +49,8 @@ public class ReadAdjustPop extends PopupWindow {
 
     public interface OnAdjustListener {
         void changeSpeechRate(int speechRate);
+
+        void speechRateFollowSys();
     }
 
     public ReadAdjustPop(Context context, OnAdjustListener adjustListener) {
@@ -73,6 +78,7 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private void bindEvent() {
+        //亮度调节
         llFollowSys.setOnClickListener(v -> {
             if (scbFollowSys.isChecked()) {
                 scbFollowSys.setChecked(false, true);
@@ -92,7 +98,6 @@ public class ReadAdjustPop extends PopupWindow {
                 hpbLight.setDurProgress(light);
             }
         });
-        //亮度调节
         hpbLight.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -117,6 +122,7 @@ public class ReadAdjustPop extends PopupWindow {
 
             }
         });
+
         //点击灵敏度调节
         hpbClick.setMaxProgress(100);
         hpbClick.setDurProgress(readBookControl.getClickSensitivity());
@@ -141,8 +147,32 @@ public class ReadAdjustPop extends PopupWindow {
 
             }
         });
+
         //朗读语速调节
-        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate()-5);
+        scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
+        if (readBookControl.isSpeechRateFollowSys()) {
+            hpbTtsSpeechRate.setCanTouch(false);
+        }
+        llTtsSpeechRate.setOnClickListener(v -> {
+            if (scbTtsFollowSys.isChecked()) {
+                scbTtsFollowSys.setChecked(false, true);
+                //不跟随系统
+                hpbTtsSpeechRate.setCanTouch(true);
+                readBookControl.setSpeechRateFollowSys(false);
+                if (adjustListener != null) {
+                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
+                }
+            } else {
+                scbTtsFollowSys.setChecked(true, true);
+                //跟随系统
+                hpbTtsSpeechRate.setCanTouch(false);
+                readBookControl.setSpeechRateFollowSys(true);
+                if (adjustListener != null) {
+                    adjustListener.speechRateFollowSys();
+                }
+            }
+        });
+        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate() - 5);
         hpbTtsSpeechRate.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -156,7 +186,7 @@ public class ReadAdjustPop extends PopupWindow {
 
             @Override
             public void moveStopProgress(float dur) {
-                readBookControl.setSpeechRate((int)dur + 5);
+                readBookControl.setSpeechRate((int) dur + 5);
                 if (adjustListener != null) {
                     adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
                 }

@@ -2,12 +2,16 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +22,8 @@ import android.widget.LinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
@@ -26,7 +32,9 @@ import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,22 +57,28 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     LinearLayout llContent;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.searchView)
+    SearchView searchView;
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean selectAll = true;
     private Animation animIn;
     private BookSourceAdapter adapter;
     private MoProgressHUD moProgressHUD;
+    private SearchView.SearchAutoComplete mSearchAutoComplete;
+    private boolean isSearch;
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_recycler_vew);
+        setContentView(R.layout.activity_recycler_serach_vew);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        saveDate(adapter.getDataList());
+        if (!isSearch) {
+            saveDate(adapter.getDataList());
+        }
     }
 
     @Override
@@ -72,6 +86,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
+        initSearchView();
         initRecyclerView();
         moProgressHUD = new MoProgressHUD(this);
     }
@@ -79,6 +94,35 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void initData() {
         animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
+    }
+
+    private void initSearchView() {
+        mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
+        searchView.setQueryHint("搜索书源");
+        searchView.onActionViewExpanded();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    isSearch = false;
+                    adapter.resetDataS(BookSourceManage.getAllBookSource());
+                } else {
+                    isSearch = true;
+                    List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.BookSourceName.like("%" + newText + "%"))
+                            .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                            .list();
+                    adapter.resetDataS(sourceBeanList);
+                }
+                return false;
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -143,7 +187,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(false);
             actionBar.setTitle(R.string.book_source_manage);
         }
     }
@@ -231,4 +275,21 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             }
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isSearch){
+                try {
+                    //如果搜索框中有文字，则会先清空文字.
+                    mSearchAutoComplete.setText("");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

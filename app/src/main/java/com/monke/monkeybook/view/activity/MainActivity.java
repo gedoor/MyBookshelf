@@ -381,7 +381,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @AfterPermissionGranted(FILESELECT_RESULT)
-    private void fileselectResult() {
+    private void fileSelectResult() {
         startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
     }
 
@@ -406,20 +406,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     private void fistOpenRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
-//            BookSourceManage.saveBookSourceToDb();
-//            if (!MApplication.DEBUG) {
-//                moProgressHUD.showInfo(getString(R.string.update_log));
-//            }
             //书源为空时加载默认书源
-            if (BookSourceManage.getAllBookSource() == null || BookSourceManage.getAllBookSource().size() == 0) {
-                try {
-                    URL url = new URL(getString(R.string.default_source_url));
-                    BookSourceManage.importSourceFromWww(url)
-                            .subscribe();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            BookSourceManage.initDefaultBookSource(this);
+            //保存版本号
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();

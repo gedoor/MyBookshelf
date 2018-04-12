@@ -22,12 +22,12 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
-import com.monke.monkeybook.utils.BlurTransformation;
 import com.monke.monkeybook.view.impl.IBookDetailView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.monke.monkeybook.presenter.BookDetailPresenterImpl.FROM_BOOKSHELF;
 
@@ -220,8 +220,8 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                     .apply(new RequestOptions()
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default))
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 6)))
+                            .placeholder(R.drawable.img_cover_gs))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
                     .into(ivBlurCover);
         }
         tvName.setText(name);

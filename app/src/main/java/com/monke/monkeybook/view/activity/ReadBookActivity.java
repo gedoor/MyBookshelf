@@ -66,6 +66,7 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
+import static com.monke.monkeybook.service.ReadAloudService.stop;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
@@ -376,6 +377,30 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         };
     }
 
+    /**
+     * 开始朗读
+     */
+    private void startReadAloud() {
+        if (!ReadAloudService.running) {
+            aloudStatus = ReadAloudService.STOP;
+        }
+        switch (aloudStatus) {
+            case PAUSE:
+                ReadAloudService.resume(this);
+                break;
+            case PLAY:
+                ReadAloudService.pause(this);
+                break;
+            default:
+                ReadBookActivity.this.popMenuOut();
+                if (mPresenter.getBookShelf() != null) {
+                    aloudButton = true;
+                    csvBook.readAloudStart();
+                    isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+                }
+        }
+    }
+
     @Override
     protected void initData() {
         initServiceConn();
@@ -453,6 +478,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void setFont(String path) {
                 csvBook.setFont();
+                csvBook.changeTextSize();
             }
 
             @Override
@@ -489,8 +515,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
             @Override
             public void changeSpeechRate(int speechRate) {
-                ReadAloudService.pause(ReadBookActivity.this);
-                ReadAloudService.resume(ReadBookActivity.this);
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void speechRateFollowSys() {
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
+                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         readAdjustPop.initLight();
@@ -649,24 +685,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ibReadAloud.getDrawable().mutate();
         ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibReadAloud.setOnClickListener(view -> {
-            if (!ReadAloudService.running) {
-                aloudStatus = ReadAloudService.STOP;
-            }
-            switch (aloudStatus) {
-                case PAUSE:
-                    ReadAloudService.resume(this);
-                    break;
-                case PLAY:
-                    ReadAloudService.pause(this);
-                    break;
-                default:
-                    ReadBookActivity.this.popMenuOut();
-                    if (mPresenter.getBookShelf() != null) {
-                        aloudButton = true;
-                        csvBook.readAloudStart();
-                        isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
-                    }
-            }
+            startReadAloud();
         });
 
         //替换
@@ -880,11 +899,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
         }
 
-        /*if (requestCode == ResultReplace) {
-            recreate();
-        } else if (requestCode == ResultSelectBg && resultCode == RESULT_OK && null != data) {
-            readInterfacePop.setCustomBg(data.getData());
-        }*/
     }
 
     @Override

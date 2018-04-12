@@ -55,6 +55,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         this.dataList.clear();
         this.dataList.addAll(dataList);
         notifyDataSetChanged();
+        activity.upDateSelectAll();
     }
 
     public List<ReplaceRuleBean> getDataList() {
@@ -74,6 +75,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         holder.checkBox.setChecked(dataList.get(position).getEnable());
         holder.checkBox.setOnClickListener((View view) -> {
             dataList.get(position).setEnable(holder.checkBox.isChecked());
+            activity.upDateSelectAll();
             activity.saveDataS();
         });
         holder.editView.getDrawable().mutate();
