@@ -5,9 +5,12 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -60,6 +63,8 @@ public class BookContentView extends FrameLayout {
     LinearLayout llError;
 
     private SharedPreferences preferences;
+
+    private Integer textHeigth = 0;
 
     private String title;
     private String content;
@@ -259,6 +264,14 @@ public class BookContentView extends FrameLayout {
         this.setDataListener = setDataListener;
     }
 
+    public Integer getTextHeigth() {
+        return textHeigth;
+    }
+
+    public void setTextHeigth(Integer textHeigth) {
+        this.textHeigth = textHeigth;
+    }
+
     public long getQTag() {
         return qTag;
     }
@@ -276,9 +289,19 @@ public class BookContentView extends FrameLayout {
     }
 
     //显示行数
-    public int getLineCount(int height, int lineNum) {
-        return (int) (height * 1.0f / tvContent.getLineHeight() + lineNum);
+    public int getLineCount(int height, int lineNum, ReadBookControl readBookControl) {
+        Paint mTextPaint = tvContent.getPaint();
+        //字体高度
+        int textHeight = (int) (Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent));
+        textHeight = (int) (textHeight * readBookControl.getLineMultiplier() + readBookControl.getTextExtra());
+
+        readBookControl.setTextHeight(textHeight);
+        this.textHeigth = textHeight;
+
+        //行间距
+        return (int) (height * 1.0f / textHeight + lineNum);
     }
+
 
     public void setReadBookControl(ReadBookControl readBookControl) {
         setFont(readBookControl);
@@ -315,6 +338,7 @@ public class BookContentView extends FrameLayout {
                 Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
                 tvContent.setTypeface(typeface);
                 tvTitle.setTypeface(typeface);
+                tvContent.setFont();
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
                 tvTitle.setTypeface(Typeface.SANS_SERIF);
@@ -359,4 +383,6 @@ public class BookContentView extends FrameLayout {
         tvContent.setTextSize(readBookControl.getTextSize());
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
+
+
 }

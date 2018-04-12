@@ -28,7 +28,7 @@ public class ReadBookControl {
     private int textColor;
     private int textBackground;
     private float lineMultiplier;
-    private int lineNum;
+    private int lineNum;//缩进行
 
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
@@ -44,6 +44,8 @@ public class ReadBookControl {
     private Boolean clickAllNext;
     private Boolean clickAnim;
     private int textColorCustom;
+
+    private Integer textHeight;//行高
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -340,6 +342,14 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("speechRate", speechRate);
         editor.apply();
+    }
+
+    public Integer getTextHeight() {
+        return textHeight;
+    }
+
+    public void setTextHeight(Integer textHeight) {
+        this.textHeight = textHeight;
     }
 
     public boolean isSpeechRateFollowSys() {

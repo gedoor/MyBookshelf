@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 
 
 import android.graphics.Paint;
+import android.util.Log;
 
 /**
  * 解决文字排版混乱参差不齐的问题
@@ -19,6 +20,13 @@ public class ContentTextView extends AppCompatTextView {
 
     private int mLineY;
     private int mViewWidth;
+    private String fontPath;
+    private TextPaint paint;
+    private getLineString getString;
+
+    public ContentTextView(Context context) {
+        super(context);
+    }
 
     public ContentTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,7 +39,9 @@ public class ContentTextView extends AppCompatTextView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        TextPaint paint = getPaint();
+        if (paint==null){
+            paint = getPaint();
+        }
         paint.setColor(getCurrentTextColor());
         paint.drawableState = getDrawableState();
         mViewWidth = getMeasuredWidth();
@@ -54,6 +64,10 @@ public class ContentTextView extends AppCompatTextView {
             int lineEnd = layout.getLineEnd(i);
             float width = StaticLayout.getDesiredWidth(text, lineStart, lineEnd, getPaint());
             String line = text.substring(lineStart, lineEnd);
+
+            if (getString!=null){
+                getString.getLineString(line);
+            }
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
@@ -104,6 +118,19 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
+    public void getLine(getLineString getString){
+        this.getString = getString;
+    }
+
+    public void setFont(){
+        invalidate();
+    }
+
+    public void setPaint(TextPaint paint){
+        this.paint = paint;
+        invalidate();
+    }
+
     private boolean isFirstLineOfParagraph(String line) {
         return line.length() > 3 && line.charAt(0) == ' ' && line.charAt(1) == ' ';
     }
@@ -114,4 +141,7 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
+    public static interface getLineString{
+         void getLineString(String lintString);
+    }
 }
