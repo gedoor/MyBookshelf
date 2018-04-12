@@ -45,8 +45,6 @@ public class ReadBookControl {
     private Boolean clickAnim;
     private int textColorCustom;
 
-    private Integer textHeight;//行高
-
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
 
@@ -342,14 +340,6 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("speechRate", speechRate);
         editor.apply();
-    }
-
-    public Integer getTextHeight() {
-        return textHeight;
-    }
-
-    public void setTextHeight(Integer textHeight) {
-        this.textHeight = textHeight;
     }
 
     public boolean isSpeechRateFollowSys() {

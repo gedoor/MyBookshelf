@@ -59,7 +59,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private ViewTreeObserver.OnGlobalLayoutListener layoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-            int height = durPageView.getTvContent().getHeight();
+            int height = durPageView.getTvContent().getMeasuredHeight();
             layout = durPageView.getTvContent().getLayout();
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
@@ -564,8 +564,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             item.setFont(readBookControl);
         }
         loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
-        //durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl);
-        //loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
     public void setTextConvert() {

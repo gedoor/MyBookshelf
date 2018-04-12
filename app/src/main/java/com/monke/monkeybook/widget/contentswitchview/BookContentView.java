@@ -4,19 +4,12 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.Layout;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,7 +23,9 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -64,7 +59,7 @@ public class BookContentView extends FrameLayout {
 
     private SharedPreferences preferences;
 
-    private Integer textHeigth = 0;
+    private double textHeigth = 0;
 
     private String title;
     private String content;
@@ -167,16 +162,16 @@ public class BookContentView extends FrameLayout {
             this.pageAll = durPageAll;
 
             //显示之前先判断简 繁体
-            if (convert&&this.content!=null) {
+            if (convert && this.content != null) {
                 this.content = ChineseUtils.toTraditional(this.content);
             }
 
             tvTitle.setText(this.title);
 
-            if (this.durPageIndex==0){
+            if (this.durPageIndex == 0) {
                 TitleSize = contentLines.get(0).length();
-            }else{
-                TitleSize=0;
+            } else {
+                TitleSize = 0;
             }
 
             /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
@@ -264,11 +259,11 @@ public class BookContentView extends FrameLayout {
         this.setDataListener = setDataListener;
     }
 
-    public Integer getTextHeigth() {
+    public double getTextHeigth() {
         return textHeigth;
     }
 
-    public void setTextHeigth(Integer textHeigth) {
+    public void setTextHeigth(double textHeigth) {
         this.textHeigth = textHeigth;
     }
 
@@ -292,14 +287,16 @@ public class BookContentView extends FrameLayout {
     public int getLineCount(int height, int lineNum, ReadBookControl readBookControl) {
         Paint mTextPaint = tvContent.getPaint();
         //字体高度
-        int textHeight = (int) (Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent));
-        textHeight = (int) (textHeight * readBookControl.getLineMultiplier() + readBookControl.getTextExtra());
+        double textHeight = Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent) * 1.0f;
+        textHeight = textHeight * readBookControl.getLineMultiplier() + readBookControl.getTextExtra();
 
-        readBookControl.setTextHeight(textHeight);
         this.textHeigth = textHeight;
 
+        //计算TextView高度
+        //Log.e("LineHeight>>",tvContent.getLineHeight()+"---"+textHeight);
         //行间距
-        return (int) (height * 1.0f / textHeight + lineNum);
+        return (int) (height * 1.0f / tvContent.getLineHeight() + lineNum);
+        //return (int) (height * 1.0f / textHeigth + lineNum);
     }
 
 
@@ -355,9 +352,9 @@ public class BookContentView extends FrameLayout {
      * 简繁转换
      */
     public void setFontConvert(ReadBookControl readBookControl) {
-        if (readBookControl.getTextConvert()){
+        if (readBookControl.getTextConvert()) {
             tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
-        }else{
+        } else {
             tvContent.setText(ChineseUtils.toSimplified(tvContent.getText().toString()));
         }
 
@@ -368,10 +365,10 @@ public class BookContentView extends FrameLayout {
      */
     public void setTextBold(ReadBookControl readBookControl) {
         TextPaint tp = tvContent.getPaint();
-        if (readBookControl.getTextBold()){
+        if (readBookControl.getTextBold()) {
             tp.setFakeBoldText(true);
             tvContent.setText(tvContent.getText());
-        }else{
+        } else {
             tp.setFakeBoldText(false);
             tvContent.setText(tvContent.getText());
         }
