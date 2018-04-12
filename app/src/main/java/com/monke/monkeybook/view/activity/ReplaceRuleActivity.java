@@ -203,7 +203,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
                 selectReplaceRuleFile();
                 break;
             case R.id.action_import_onLine:
-                moProgressHUD.showInputBox("输入替换规则网址", "",
+                moProgressHUD.showInputBox("输入替换规则网址", getString(R.string.default_replace_url),
                         inputText -> mPresenter.importDataS(inputText));
                 break;
             case R.id.action_del_all:
