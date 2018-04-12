@@ -6,12 +6,14 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -38,6 +40,7 @@ import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.impl.IReadBookView;
+import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -60,6 +63,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
+    private Integer textHeight=0;//行高
 
     private int numberOfRetries = 0;
 
@@ -109,9 +113,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             if (null != bookShelf.getChapterList(chapterIndex).getBookContentBean()
                     && null != bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent()) {
-                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()
-                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null
-                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0) {
+                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()//字体大小改变
+                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null//行内容不为空
+                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0
+                        && textHeight == bookContentView.getTextHeigth()) {//行内容Size>0
                     //已有数据
                     int tempCount = (int) Math.ceil(bookShelf.getChapterList(chapterIndex)
                             .getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
@@ -126,7 +131,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     }
                     int start = pageIndex * pageLineCount;
-                    Log.e("pageLineCount", pageLineCount + "");
                     int end = pageIndex == tempCount ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
@@ -150,6 +154,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 @Override
                                 public void onNext(List<String> value) {
                                     bookShelf.getChapterList(chapterIndex).getBookContentBean().setLineContent(value);
+                                    textHeight = bookContentView.getTextHeigth();
                                     loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
                                 }
 
@@ -339,6 +344,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             content = replaceContent(content);
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
+
             Layout tempLayout = new StaticLayout(content, mPaint, pageWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
             List<String> linesData = new ArrayList<>();
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
@@ -392,7 +398,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      */
     @Override
     public void setPageLineCount(int pageLineCount) {
-        Log.e("pageLineCount>>>", pageLineCount + "");
         this.pageLineCount = pageLineCount;
     }
 

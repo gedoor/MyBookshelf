@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -44,6 +45,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private OnBookReadInitListener bookReadInitListener;
     private float startX = -1;
     private LoadDataListener loadDataListener;
+    private Layout layout;
     private ViewTreeObserver.OnGlobalLayoutListener layoutInitListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
@@ -58,10 +60,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         @Override
         public void onGlobalLayout() {
             int height = durPageView.getTvContent().getHeight();
+            layout = durPageView.getTvContent().getLayout();
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
-                    loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum()));
+                    loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum(),readBookControl));
                 }
             }
         }
@@ -88,6 +91,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         init();
     }
 
+    //初始化
     private void init() {
         readBookControl = ReadBookControl.getInstance();
 
@@ -111,7 +115,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (height > 0) {
             if (loadDataListener != null && durHeight != height) {
                 durHeight = height;
-                loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum()));
+                loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum(),readBookControl));
             }
         }
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
@@ -559,6 +563,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         for (BookContentView item : viewContents) {
             item.setFont(readBookControl);
         }
+        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
+        //durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl);
+        //loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
     public void setTextConvert() {
@@ -577,14 +584,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum()));
+        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
     public void changeLineSize() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum()));
+        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
 

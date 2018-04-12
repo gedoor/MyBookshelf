@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.impl;
 import android.graphics.Paint;
 
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 
 public interface IReadBookView extends IView {
@@ -12,6 +13,7 @@ public interface IReadBookView extends IView {
      * @return 获取当前阅读界面UI画笔
      */
     Paint getPaint();
+
 
     /**
      * @return Book标志
