@@ -165,9 +165,6 @@ public class RecyclerViewBar extends LinearLayout {
         //判断listView一页显示多少条
         View listItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findViewByPosition(position);
 
-        Log.e("height",recyclerView.getMeasuredHeight()+"");
-        Log.e("heightItem",listItem.getMeasuredHeight()+"");
-
         int onePageCount = recyclerView.getMeasuredHeight()/listItem.getMeasuredHeight();//一页显示多少项
         int lastCount = recyclerView.getAdapter().getItemCount()-onePageCount;
         int posi = 0;

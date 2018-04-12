@@ -63,7 +63,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
-    private Integer textHeight=0;//行高
+    private double textHeight=0;//行高
 
     private int numberOfRetries = 0;
 

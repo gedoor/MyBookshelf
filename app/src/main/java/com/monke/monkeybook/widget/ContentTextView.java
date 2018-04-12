@@ -22,7 +22,6 @@ public class ContentTextView extends AppCompatTextView {
     private int mViewWidth;
     private String fontPath;
     private TextPaint paint;
-    private getLineString getString;
 
     public ContentTextView(Context context) {
         super(context);
@@ -64,10 +63,6 @@ public class ContentTextView extends AppCompatTextView {
             int lineEnd = layout.getLineEnd(i);
             float width = StaticLayout.getDesiredWidth(text, lineStart, lineEnd, getPaint());
             String line = text.substring(lineStart, lineEnd);
-
-            if (getString!=null){
-                getString.getLineString(line);
-            }
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
@@ -118,9 +113,6 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-    public void getLine(getLineString getString){
-        this.getString = getString;
-    }
 
     public void setFont(){
         invalidate();
@@ -141,7 +133,4 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-    public static interface getLineString{
-         void getLineString(String lintString);
-    }
 }
