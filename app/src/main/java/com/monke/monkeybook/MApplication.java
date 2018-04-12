@@ -19,7 +19,6 @@ public class MApplication extends Application {
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
-    public static Context context;
 
     public static MApplication getInstance() {
         return instance;
@@ -36,7 +35,6 @@ public class MApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        context = this;
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;

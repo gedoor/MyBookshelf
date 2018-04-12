@@ -129,7 +129,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                             .centerCrop().placeholder(R.drawable.img_cover_default))
                     .into(holder.ivCover);
         }
-        holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), books.get(index).getBookInfoBean().getName()));
+        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),

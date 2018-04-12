@@ -183,8 +183,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             Boolean changed = false;
             for (SearchBookBean temp : searchBookBeansAdd) {
                 if (temp.getName().equals(bookName)) {
-                    searchBooks.add(0, temp);
-                    changed = true;
+                    for (int i = 0; i < searchBooks.size(); i++) {
+                        if (!Objects.equals(temp.getName(), searchBooks.get(i).getName())) {
+                            searchBooks.add(i, temp);
+                            changed = true;
+                            break;
+                        }
+                    }
                 } else {
                     searchBooks.add(temp);
                 }
