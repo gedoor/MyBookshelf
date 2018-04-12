@@ -66,6 +66,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private BookSourceAdapter adapter;
     private MoProgressHUD moProgressHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
+    private boolean isSearch;
 
     @Override
     protected void onCreateActivity() {
@@ -75,7 +76,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onPause() {
         super.onPause();
-        saveDate(adapter.getDataList());
+        if (!isSearch) {
+            saveDate(adapter.getDataList());
+        }
     }
 
     @Override
@@ -107,8 +110,10 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (TextUtils.isEmpty(newText)) {
+                    isSearch = false;
                     adapter.resetDataS(BookSourceManage.getAllBookSource());
                 } else {
+                    isSearch = true;
                     List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                             .where(BookSourceBeanDao.Properties.BookSourceName.like("%" + newText + "%"))
                             .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
@@ -274,7 +279,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (!Objects.equals(mSearchAutoComplete.getText().toString(), "")){
+            if (isSearch){
                 try {
                     //如果搜索框中有文字，则会先清空文字.
                     mSearchAutoComplete.setText("");
