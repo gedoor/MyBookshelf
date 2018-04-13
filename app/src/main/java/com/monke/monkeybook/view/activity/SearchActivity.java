@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,7 @@ import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,19 +72,16 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     RefreshRecyclerView rfRvSearchBooks;
 
     private SearchHistoryAdapter searchHistoryAdapter;
-    private Animation animHistory;
-    private Animator animHistory5;
     private ExplosionField explosionField;
 
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
-    private boolean isSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getWindow() .getDecorView() .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+            getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
     }
 
@@ -178,13 +177,11 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         searchView.setQueryHint("搜索书名、作者");
         searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
-        searchView.setOnSearchClickListener(view -> {
-            toSearch();
-        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 toSearch();
+                searchView.clearFocus();
                 return false;
             }
 
@@ -196,11 +193,15 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         });
         searchView.setOnQueryTextFocusChangeListener((view, b) -> {
             if (b) {
-                if (llSearchHistory.getVisibility() != View.VISIBLE)
+                if (llSearchHistory.getVisibility() != View.VISIBLE) {
                     openOrCloseHistory(true);
+                }
             } else {
-                if (llSearchHistory.getVisibility() == View.VISIBLE)
+                if (searchView.getQuery().toString().trim().equals("")) {
+                    finish();
+                } else if (llSearchHistory.getVisibility() == View.VISIBLE) {
                     openOrCloseHistory(false);
+                }
             }
         });
     }
@@ -253,7 +254,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             final String key = searchView.getQuery().toString().trim();
             mPresenter.setHasSearch(true);
             mPresenter.insertSearchHistory();
-            closeKeyBoard();
             //执行搜索请求
             new Handler().postDelayed(() -> {
                 mPresenter.initPage();
@@ -264,124 +264,10 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     }
 
     private void openOrCloseHistory(Boolean open) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (null != animHistory5) {
-                animHistory5.cancel();
-            }
-            if (open) {
-                animHistory5 = ViewAnimationUtils.createCircularReveal(
-                        llSearchHistory,
-                        0, 0, 0,
-                        (float) Math.hypot(llSearchHistory.getWidth(), llSearchHistory.getHeight()));
-                animHistory5.setInterpolator(new AccelerateDecelerateInterpolator());
-                animHistory5.setDuration(700);
-                animHistory5.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        llSearchHistory.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (rfRvSearchBooks.getVisibility() != View.VISIBLE)
-                            rfRvSearchBooks.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                animHistory5.start();
-            } else {
-                animHistory5 = ViewAnimationUtils.createCircularReveal(
-                        llSearchHistory,
-                        0, 0, (float) Math.hypot(llSearchHistory.getHeight(), llSearchHistory.getHeight()),
-                        0);
-                animHistory5.setInterpolator(new AccelerateDecelerateInterpolator());
-                animHistory5.setDuration(300);
-                animHistory5.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        llSearchHistory.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                animHistory5.start();
-            }
+        if (open) {
+            llSearchHistory.setVisibility(View.VISIBLE);
         } else {
-            if (null != animHistory) {
-                animHistory.cancel();
-            }
-            if (open) {
-                animHistory = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-                animHistory.setInterpolator(new AccelerateDecelerateInterpolator());
-                animHistory.setDuration(700);
-                animHistory.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        llSearchHistory.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (rfRvSearchBooks.getVisibility() != View.VISIBLE)
-                            rfRvSearchBooks.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                llSearchHistory.startAnimation(animHistory);
-            } else {
-                animHistory = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
-                animHistory.setInterpolator(new AccelerateDecelerateInterpolator());
-                animHistory.setDuration(300);
-                animHistory.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        llSearchHistory.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                llSearchHistory.startAnimation(animHistory);
-            }
-        }
-    }
-
-    private void closeKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(mSearchAutoComplete.getWindowToken(), 0);
+            llSearchHistory.setVisibility(View.GONE);
         }
     }
 
