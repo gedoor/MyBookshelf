@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.MainActivity">
+
+    <item
+        android:id="@+id/action_book_source_manage"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:title="@string/book_source_manage"
+        app:showAsAction="never" />
+
+</menu>

@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
@@ -86,10 +89,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     protected void initData() {
-
         explosionField = ExplosionField.attach2Window(this);
         searchHistoryAdapter = new SearchHistoryAdapter();
-
         searchBookAdapter = new SearchBookAdapter();
     }
 
@@ -97,6 +98,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         initSearchView();
         tflSearchHistory.setAdapter(searchHistoryAdapter);
 
@@ -128,6 +131,37 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         });
     }
 
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setTitle(R.string.action_search);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_book_source_manage:
+                startActivity(new Intent(this, BookSourceActivity.class));
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
         searchView.setQueryHint("搜索书名、作者");
@@ -154,7 +188,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     protected void bindEvent() {
-
         tvSearchHistoryClean.setOnClickListener(v -> {
             for (int i = 0; i < tflSearchHistory.getChildCount(); i++) {
                 explosionField.explode(tflSearchHistory.getChildAt(i));
@@ -207,8 +240,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 mPresenter.toSearchBooks(key, false);
                 rfRvSearchBooks.startRefresh();
             }, 300);
-        } else {
-            YoYo.with(Techniques.Shake).playOn(mSearchAutoComplete);
         }
     }
 
@@ -230,13 +261,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 }
             } else {
                 if (layoutParams.bottomMargin != 0) {
-                    if (!mPresenter.getHasSearch()) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            finishAfterTransition();
-                        } else {
-                            finish();
-                        }
-                    } else {
+                    if (mPresenter.getHasSearch()) {
                         layoutParams.setMargins(0, 0, 0, 0);
                         llSearchHistory.setLayoutParams(layoutParams);
                         //关闭输入
@@ -393,7 +418,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     public void insertSearchHistorySuccess(SearchHistoryBean searchHistoryBean) {
         //搜索历史插入或者修改成功
-        mPresenter.querySearchHistory(mSearchAutoComplete.getText().toString().trim());
+        mPresenter.querySearchHistory(searchView.getQuery().toString().trim());
     }
 
     @Override
