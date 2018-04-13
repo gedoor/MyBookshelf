@@ -242,8 +242,9 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             mSearchAutoComplete.setText(searchKey);
             searchView.clearFocus();
             toSearch();
+            openOrCloseHistory(false);
         } else {
-            llSearchHistory.setVisibility(View.VISIBLE);
+            openOrCloseHistory(true);
             mPresenter.querySearchHistory("");
         }
     }
