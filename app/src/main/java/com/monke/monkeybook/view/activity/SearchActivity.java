@@ -101,6 +101,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initSearchView();
+        llSearchHistory.setOnClickListener(null);
+
         tflSearchHistory.setAdapter(searchHistoryAdapter);
 
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
@@ -167,7 +169,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         searchView.setQueryHint("搜索书名、作者");
         searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
-        searchView.clearFocus();
         searchView.setOnSearchClickListener(view -> {
             toSearch();
         });
@@ -184,6 +185,15 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 return false;
             }
         });
+        searchView.setOnQueryTextFocusChangeListener((view, b) -> {
+            if (b) {
+                if (llSearchHistory.getVisibility() != View.VISIBLE)
+                    openOrCloseHistory(true);
+            } else {
+                if (llSearchHistory.getVisibility() == View.VISIBLE)
+                    openOrCloseHistory(false);
+            }
+        });
     }
 
     @Override
@@ -196,11 +206,9 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         });
 
         searchHistoryAdapter.setOnItemClickListener(searchHistoryBean -> {
-            mSearchAutoComplete.setText(searchHistoryBean.getContent());
-            toSearch();
+            searchView.setQuery(searchHistoryBean.getContent(), true);
+            searchView.clearFocus();
         });
-
-        bindKeyBoardEvent();
 
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -218,12 +226,15 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        mPresenter.querySearchHistory("");
         Intent intent = this.getIntent();
         String searchKey = intent.getStringExtra("searchKey");
         if (!TextUtils.isEmpty(searchKey)) {
             mSearchAutoComplete.setText(searchKey);
-            new Handler().postDelayed(this::toSearch, 700);
+            searchView.clearFocus();
+            toSearch();
+        } else {
+            llSearchHistory.setVisibility(View.VISIBLE);
+            mPresenter.querySearchHistory("");
         }
     }
 
@@ -243,44 +254,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         }
     }
 
-    private void bindKeyBoardEvent() {
-        llSearchHistory.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            Rect r = new Rect();
-            llSearchHistory.getWindowVisibleDisplayFrame(r);
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) llSearchHistory.getLayoutParams();
-
-            int height = llSearchHistory.getContext().getResources().getDisplayMetrics().heightPixels;
-            int diff = height - r.bottom;
-            if (diff != 0 && Math.abs(diff) != StatusBarUtils.getNavi_height()) {
-                if (layoutParams.bottomMargin != diff) {
-                    layoutParams.setMargins(0, 0, 0, Math.abs(diff));
-                    llSearchHistory.setLayoutParams(layoutParams);
-                    //打开输入
-                    if (llSearchHistory.getVisibility() != View.VISIBLE)
-                        openOrCloseHistory(true);
-                }
-            } else {
-                if (layoutParams.bottomMargin != 0) {
-                    if (mPresenter.getHasSearch()) {
-                        layoutParams.setMargins(0, 0, 0, 0);
-                        llSearchHistory.setLayoutParams(layoutParams);
-                        //关闭输入
-                        if (llSearchHistory.getVisibility() == View.VISIBLE)
-                            openOrCloseHistory(false);
-                    }
-                }
-            }
-        });
-
-        getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                new Handler().postDelayed(() -> openKeyBoard(), 100);
-                getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
-    }
-
     private void openOrCloseHistory(Boolean open) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (null != animHistory5) {
@@ -297,7 +270,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationStart(Animator animation) {
                         llSearchHistory.setVisibility(View.VISIBLE);
-                        mSearchAutoComplete.setCursorVisible(true);
                     }
 
                     @Override
@@ -333,7 +305,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         llSearchHistory.setVisibility(View.GONE);
-                        mSearchAutoComplete.setCursorVisible(false);
                     }
 
                     @Override
@@ -360,7 +331,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationStart(Animation animation) {
                         llSearchHistory.setVisibility(View.VISIBLE);
-                        mSearchAutoComplete.setCursorVisible(true);
                     }
 
                     @Override
@@ -387,7 +357,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         llSearchHistory.setVisibility(View.GONE);
-                        mSearchAutoComplete.setCursorVisible(false);
                     }
 
                     @Override
@@ -404,14 +373,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.hideSoftInputFromWindow(mSearchAutoComplete.getWindowToken(), 0);
-        }
-    }
-
-    private void openKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mSearchAutoComplete.requestFocus();
-        if (imm != null) {
-            imm.showSoftInput(mSearchAutoComplete, InputMethodManager.RESULT_UNCHANGED_SHOWN);
         }
     }
 
