@@ -1,11 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,49 +11,37 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.monke.immerselayout.StatusBarUtils;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.SearchPresenterImpl;
-import com.monke.monkeybook.presenter.impl.ISearchPresenter;
+import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
+import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
-import com.monke.monkeybook.view.impl.ISearchView;
+import com.monke.monkeybook.view.impl.ISearchBookView;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import tyrantgit.explosionfield.ExplosionField;
 
-public class SearchActivity extends MBaseActivity<ISearchPresenter> implements ISearchView {
-    public final static int CHANGE_SOURCE = 1;
+public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> implements ISearchBookView {
+    public final static int BookSource = 1;
 
     @BindView(R.id.searchView)
     SearchView searchView;
@@ -86,8 +71,8 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     }
 
     @Override
-    protected ISearchPresenter initInjector() {
-        return new SearchPresenterImpl();
+    protected ISearchBookPresenter initInjector() {
+        return new SearchBookPresenterImpl();
     }
 
     @Override
@@ -133,7 +118,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
             @Override
             public void clickItem(View animView, int position, SearchBookBean searchBookBean) {
-                Intent intent = new Intent(SearchActivity.this, BookDetailActivity.class);
+                Intent intent = new Intent(SearchBookActivity.this, BookDetailActivity.class);
                 intent.putExtra("from", BookDetailPresenterImpl.FROM_SEARCH);
                 intent.putExtra("data", searchBookBean);
                 startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
@@ -163,7 +148,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         int id = item.getItemId();
         switch (id) {
             case R.id.action_book_source_manage:
-                startActivity(new Intent(this, BookSourceActivity.class));
+                startActivityForResult(new Intent(this, BookSourceActivity.class), BookSource);
                 break;
             case android.R.id.home:
                 finish();
@@ -367,4 +352,11 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         return result;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BookSource) {
+            mPresenter.upSearchEngineS();
+        }
+    }
 }

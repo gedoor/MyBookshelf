@@ -46,6 +46,16 @@ public class SearchBook {
         }
     }
 
+    public void refreshSearchEngineS() {
+        searchEngineS.clear();
+        for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
+            SearchEngine se = new SearchEngine();
+            se.setTag(bookSourceBean.getBookSourceUrl());
+            se.setHasMore(true);
+            searchEngineS.add(se);
+        }
+    }
+
     public void searchReNew() {
         page = 0;
         for (SearchEngine searchEngine : searchEngineS) {

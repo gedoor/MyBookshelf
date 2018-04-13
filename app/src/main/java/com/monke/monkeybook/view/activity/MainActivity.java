@@ -50,7 +50,6 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
-import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
@@ -208,7 +207,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         switch (id) {
             case R.id.action_search:
                 //点击搜索
-                startActivityByAnim(new Intent(this, SearchActivity.class),
+                startActivityByAnim(new Intent(this, SearchBookActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_url:

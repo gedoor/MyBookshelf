@@ -10,7 +10,7 @@ import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 
 import java.util.List;
 
-public interface ISearchView extends IView{
+public interface ISearchBookView extends IView{
 
     /**
      * 成功 新增查询记录
