@@ -38,6 +38,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
             notifyItemMoved(srcPosition, targetPosition);
             notifyItemChanged(srcPosition);
             notifyItemChanged(targetPosition);
+            activity.saveDataS();
             return true;
         }
     };
