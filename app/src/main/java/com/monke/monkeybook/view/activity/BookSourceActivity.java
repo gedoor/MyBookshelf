@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -67,6 +68,14 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private MoProgressHUD moProgressHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow() .getDecorView() .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        }
+    }
 
     @Override
     protected void onCreateActivity() {
