@@ -178,8 +178,7 @@ public class SearchPresenterImpl extends BasePresenterImpl<ISearchView> implemen
     }
 
     @Override
-    public void querySearchHistory() {
-        final String content = mView.getEdtContent().getText().toString().trim();
+    public void querySearchHistory(String content) {
         Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
             List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()

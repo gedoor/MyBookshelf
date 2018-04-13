@@ -287,8 +287,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
             int chapterSize = bookShelfBean.getChapterListSize();
-            WebChapterBean<List<ChapterListBean>> temp = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl());
-            bookShelfBean.getBookInfoBean().setChapterList(temp.getData());
+            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl());
+            bookShelfBean.getBookInfoBean().setChapterList(chapterList.getData());
             if (chapterSize < bookShelfBean.getChapterListSize()) {
                 bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());

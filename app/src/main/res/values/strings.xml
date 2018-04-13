@@ -165,6 +165,8 @@
     <string name="find_source_manage">发现管理</string>
     <string name="find_empty">没有内容,去书源里自定义吧!</string>
     <string name="del_all">删除所有</string>
+    <string name="searchHistory">搜索历史</string>
+    <string name="clear">清除</string>
 
 
 </resources>

@@ -9,10 +9,9 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Editable;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -20,7 +19,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -53,19 +51,11 @@ import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchActivity extends MBaseActivity<ISearchPresenter> implements ISearchView {
     public final static int CHANGE_SOURCE = 1;
-    private SearchHistoryAdapter searchHistoryAdapter;
-    private Animation animHistory;
-    private Animator animHistory5;
-    private ExplosionField explosionField;
 
-    private SearchBookAdapter searchBookAdapter;
-
-    @BindView(R.id.fl_search_content)
-    FrameLayout flSearchContent;
-    @BindView(R.id.edt_content)
-    EditText edtContent;
-    @BindView(R.id.tv_tosearch)
-    TextView tvToSearch;
+    @BindView(R.id.searchView)
+    SearchView searchView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.ll_search_history)
     LinearLayout llSearchHistory;
     @BindView(R.id.tv_search_history_clean)
@@ -75,6 +65,15 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @BindView(R.id.rfRv_search_books)
     RefreshRecyclerView rfRvSearchBooks;
 
+    private SearchHistoryAdapter searchHistoryAdapter;
+    private Animation animHistory;
+    private Animator animHistory5;
+    private ExplosionField explosionField;
+
+    private SearchBookAdapter searchBookAdapter;
+    private SearchView.SearchAutoComplete mSearchAutoComplete;
+    private boolean isSearch;
+
     @Override
     protected ISearchPresenter initInjector() {
         return new SearchPresenterImpl();
@@ -82,7 +81,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_search_book);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
-
+        initSearchView();
         tflSearchHistory.setAdapter(searchHistoryAdapter);
 
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
@@ -107,7 +106,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             mPresenter.initPage();
-            mPresenter.toSearchBooks(null,true);
+            mPresenter.toSearchBooks(null, true);
             rfRvSearchBooks.startRefresh();
         });
         rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
@@ -129,6 +128,30 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         });
     }
 
+    private void initSearchView() {
+        mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
+        searchView.setQueryHint("搜索书名、作者");
+        searchView.onActionViewExpanded();
+        searchView.setSubmitButtonEnabled(true);
+        searchView.clearFocus();
+        searchView.setOnSearchClickListener(view -> {
+            toSearch();
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                toSearch();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mPresenter.querySearchHistory(newText);
+                return false;
+            }
+        });
+    }
+
     @Override
     protected void bindEvent() {
 
@@ -138,46 +161,9 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
             }
             mPresenter.cleanSearchHistory();
         });
-        edtContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                edtContent.setSelection(edtContent.length());
-                checkTvToSearch();
-                mPresenter.querySearchHistory();
-            }
-        });
-        edtContent.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
-                toSearch();
-                return true;
-            } else
-                return false;
-        });
-        tvToSearch.setOnClickListener(v -> {
-            if (!mPresenter.getInput()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    finishAfterTransition();
-                } else {
-                    finish();
-                }
-            } else {
-                //搜索
-                toSearch();
-            }
-        });
 
         searchHistoryAdapter.setOnItemClickListener(searchHistoryBean -> {
-            edtContent.setText(searchHistoryBean.getContent());
+            mSearchAutoComplete.setText(searchHistoryBean.getContent());
             toSearch();
         });
 
@@ -199,19 +185,19 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        mPresenter.querySearchHistory();
+        mPresenter.querySearchHistory("");
         Intent intent = this.getIntent();
         String searchKey = intent.getStringExtra("searchKey");
         if (!TextUtils.isEmpty(searchKey)) {
-            edtContent.setText(searchKey);
+            mSearchAutoComplete.setText(searchKey);
             new Handler().postDelayed(this::toSearch, 700);
         }
     }
 
     //开始搜索
     private void toSearch() {
-        if (edtContent.getText().toString().trim().length() > 0) {
-            final String key = edtContent.getText().toString().trim();
+        if (searchView.getQuery().toString().trim().length() > 0) {
+            final String key = searchView.getQuery().toString().trim();
             mPresenter.setHasSearch(true);
             mPresenter.insertSearchHistory();
             closeKeyBoard();
@@ -222,7 +208,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                 rfRvSearchBooks.startRefresh();
             }, 300);
         } else {
-            YoYo.with(Techniques.Shake).playOn(flSearchContent);
+            YoYo.with(Techniques.Shake).playOn(mSearchAutoComplete);
         }
     }
 
@@ -270,16 +256,6 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         });
     }
 
-    private void checkTvToSearch() {
-        if (llSearchHistory.getVisibility() == View.VISIBLE) {
-            tvToSearch.setText("搜索");
-            mPresenter.setInput(true);
-        } else {
-            tvToSearch.setText("返回");
-            mPresenter.setInput(false);
-        }
-    }
-
     private void openOrCloseHistory(Boolean open) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (null != animHistory5) {
@@ -296,8 +272,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationStart(Animator animation) {
                         llSearchHistory.setVisibility(View.VISIBLE);
-                        edtContent.setCursorVisible(true);
-                        checkTvToSearch();
+                        mSearchAutoComplete.setCursorVisible(true);
                     }
 
                     @Override
@@ -333,8 +308,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         llSearchHistory.setVisibility(View.GONE);
-                        edtContent.setCursorVisible(false);
-                        checkTvToSearch();
+                        mSearchAutoComplete.setCursorVisible(false);
                     }
 
                     @Override
@@ -361,8 +335,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationStart(Animation animation) {
                         llSearchHistory.setVisibility(View.VISIBLE);
-                        edtContent.setCursorVisible(true);
-                        checkTvToSearch();
+                        mSearchAutoComplete.setCursorVisible(true);
                     }
 
                     @Override
@@ -389,8 +362,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         llSearchHistory.setVisibility(View.GONE);
-                        edtContent.setCursorVisible(false);
-                        checkTvToSearch();
+                        mSearchAutoComplete.setCursorVisible(false);
                     }
 
                     @Override
@@ -406,22 +378,22 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
     private void closeKeyBoard() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(edtContent.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mSearchAutoComplete.getWindowToken(), 0);
         }
     }
 
     private void openKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        edtContent.requestFocus();
+        mSearchAutoComplete.requestFocus();
         if (imm != null) {
-            imm.showSoftInput(edtContent, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            imm.showSoftInput(mSearchAutoComplete, InputMethodManager.RESULT_UNCHANGED_SHOWN);
         }
     }
 
     @Override
     public void insertSearchHistorySuccess(SearchHistoryBean searchHistoryBean) {
         //搜索历史插入或者修改成功
-        mPresenter.querySearchHistory();
+        mPresenter.querySearchHistory(mSearchAutoComplete.getText().toString().trim());
     }
 
     @Override
@@ -460,7 +432,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     public void loadMoreSearchBook(final List<SearchBookBean> books) {
-        searchBookAdapter.addAll(books, edtContent.getText().toString().trim());
+        searchBookAdapter.addAll(books, mSearchAutoComplete.getText().toString().trim());
     }
 
     @Override
@@ -471,7 +443,7 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
 
     @Override
     public EditText getEdtContent() {
-        return edtContent;
+        return mSearchAutoComplete;
     }
 
     @Override
@@ -512,4 +484,5 @@ public class SearchActivity extends MBaseActivity<ISearchPresenter> implements I
         }
         return result;
     }
+
 }

@@ -12,7 +12,7 @@ public interface ISearchPresenter extends IPresenter{
 
     void insertSearchHistory();
 
-    void querySearchHistory();
+    void querySearchHistory(String content);
 
     void cleanSearchHistory();
 
