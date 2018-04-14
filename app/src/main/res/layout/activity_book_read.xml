@@ -280,12 +280,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivCList"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/table_of_contents"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_catalog"
+                            android:src="@drawable/ic_list_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -294,7 +294,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/table_of_contents"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--调节按钮-->
@@ -310,12 +310,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivAdjust"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_light"
+                            android:src="@drawable/ic_adjust"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -324,7 +324,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/adjust"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--界面按钮-->
@@ -340,6 +340,7 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivInterface"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -354,7 +355,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/interface_setting"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--设置按钮-->
@@ -370,12 +371,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivSetting"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/setting"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_setting"
+                            android:src="@drawable/ic_settings_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -384,7 +385,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/setting"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
