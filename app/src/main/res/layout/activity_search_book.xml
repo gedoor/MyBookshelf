@@ -1,65 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.monke.immerselayout.ImmerseLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <LinearLayout
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:paddingBottom="13dp"
-        android:paddingTop="13dp"
-        android:orientation="horizontal">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <FrameLayout
-            android:id="@+id/fl_search_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="30dp"
-            android:transitionName="to_search"
-            android:layout_marginLeft="10dp"
-            tools:ignore="RtlHardcoded">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <EditText
-                android:id="@+id/edt_content"
+            <android.support.v7.widget.SearchView
+                android:id="@+id/searchView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_search_content"
-                android:gravity="center_vertical|left"
-                android:paddingLeft="28dp"
-                android:hint="搜书名、作者"
-                android:textColorHint="#6f6f6f"
-                android:textSize="13sp"
-                android:singleLine="true"
-                android:imeOptions="actionSearch|flagNoExtractUi"
-                android:textColor="#767676"
-                android:cursorVisible="false"
-                android:textCursorDrawable="@drawable/shape_text_cursor"
-                tools:ignore="RtlSymmetry" />
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                app:defaultQueryHint="搜索" />
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_search_black_24dp" />
-        </FrameLayout>
-        <TextView
-            android:id="@+id/tv_tosearch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="15dp"
-            android:text="返回"
-            android:textSize="16sp"
-            android:textColor="@drawable/selector_tv_black"
-            android:gravity="center"
-            android:clickable="true"
-            android:background="@drawable/bg_ib_pre"
-            tools:ignore="RtlHardcoded" />
-    </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -72,8 +41,7 @@
             app:font_color="#767676"
             app:second_color="#c1c1c1"
             app:second_max_progress="80dp"
-            app:speed="2dp"
-            android:visibility="invisible"/>
+            app:speed="2dp" />
         <LinearLayout
             android:id="@+id/ll_search_history"
             android:layout_width="match_parent"
@@ -91,11 +59,12 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:textColor="#767676"
-                    android:text="搜索历史"
+                    android:text="@string/searchHistory"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="5dp"
+                    tools:ignore="RtlHardcoded" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -113,24 +82,21 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:paddingTop="5dp"
-                    android:text="清除"
+                    android:text="@string/clear"
                     android:textColor="@drawable/selector_tv_black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:focusable="true" />
             </LinearLayout>
             <com.monke.monkeybook.widget.flowlayout.TagFlowLayout
                 android:id="@+id/tfl_search_history"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:clickable="false">
             </com.monke.monkeybook.widget.flowlayout.TagFlowLayout>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@drawable/bg_shadow_top"
-            android:layout_gravity="top"/>
+
     </FrameLayout>
-</com.monke.immerselayout.ImmerseLinearLayout>
+</LinearLayout>

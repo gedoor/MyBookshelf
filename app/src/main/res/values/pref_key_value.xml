@@ -7,10 +7,12 @@
     <string name="pk_user_agent">user_agent</string>
     <string name="pk_bookshelf_px">bookshelf_px</string>
     <string name="pk_read_type">read_type</string>
+    <string name="pk_find_expand_group">expandGroupFind</string>
 
     <string name="pv_user_agent">Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3</string>
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 
-    <string name="default_source_url">http://ab52.cn/books.txt</string>
+    <string name="default_source_url">http://read.hostfans.cn/books.txt</string>
+    <string name="default_replace_url">http://read.hostfans.cn/rules.txt</string>
 </resources>

@@ -4,7 +4,7 @@ package com.monke.monkeybook.presenter.impl;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.SearchBookBean;
 
-public interface ISearchPresenter extends IPresenter{
+public interface ISearchBookPresenter extends IPresenter{
 
     Boolean getHasSearch();
 
@@ -12,7 +12,7 @@ public interface ISearchPresenter extends IPresenter{
 
     void insertSearchHistory();
 
-    void querySearchHistory();
+    void querySearchHistory(String content);
 
     void cleanSearchHistory();
 
@@ -26,5 +26,5 @@ public interface ISearchPresenter extends IPresenter{
 
     Boolean getInput();
 
-    void setInput(Boolean input);
+    void upSearchEngineS();
 }

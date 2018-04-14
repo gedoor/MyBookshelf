@@ -24,7 +24,7 @@ public class FormatWebText {
 
     public static String getAuthor(String str) {
         if (str == null) {
-            return null;
+            return "";
         }
         return str
                 .replace(" ", "")

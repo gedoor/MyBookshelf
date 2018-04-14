@@ -187,7 +187,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             }
             holder.flLastEstTip.setVisibility(View.VISIBLE);
 
-            holder.tvName.setText(String.format(holder.tvName.getContext().getString(R.string.tv_book_name), bookShelfBean.getBookInfoBean().getName()));
+            holder.tvName.setText(bookShelfBean.getBookInfoBean().getName());
 
             if (null != bookShelfBean.getBookInfoBean() && null != bookShelfBean.getChapterList()
                     && bookShelfBean.getChapterListSize() > bookShelfBean.getDurChapter()) {

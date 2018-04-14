@@ -4,14 +4,12 @@ package com.monke.monkeybook.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +25,7 @@ import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,7 +108,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
         searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
             @Override
             public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
-                Intent intent = new Intent(ChoiceBookActivity.this, SearchActivity.class);
+                Intent intent = new Intent(ChoiceBookActivity.this, SearchBookActivity.class);
                 intent.putExtra("searchKey", searchBookBean.getName());
                 startActivityByAnim(intent, toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
             }
@@ -163,7 +162,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
             return;
         }
         for (SearchBookBean searchBook : searchBookAdapter.getSearchBooks()) {
-            if (books.get(0).getName().equals(searchBook.getName()) && books.get(0).getAuthor().equals(searchBook.getAuthor())) {
+            if (Objects.equals(books.get(0).getName(), searchBook.getName()) && Objects.equals(books.get(0).getAuthor(), searchBook.getAuthor())) {
                 loadMoreFinish(true);
                 return;
             }

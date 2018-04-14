@@ -3,6 +3,8 @@ package com.monke.monkeybook.view.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
 import android.support.v7.app.ActionBar;
@@ -72,6 +74,14 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     private Animation animIn;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow() .getDecorView() .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        }
+    }
 
     @Override
     protected void onCreateActivity() {
@@ -203,7 +213,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
                 selectReplaceRuleFile();
                 break;
             case R.id.action_import_onLine:
-                moProgressHUD.showInputBox("输入替换规则网址", "",
+                moProgressHUD.showInputBox("输入替换规则网址", getString(R.string.default_replace_url),
                         inputText -> mPresenter.importDataS(inputText));
                 break;
             case R.id.action_del_all:
