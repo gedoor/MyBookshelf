@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchbook_item, parent, false));
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
@@ -162,36 +164,43 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             int oldCount = getItemcount();
-            for (SearchBookBean temp : newDataS) {
-                Boolean hasSame = false;
-                for (int i = 0; i < searchBooks.size(); i++) {
-                    SearchBookBean searchBook = searchBooks.get(i);
-                    if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
-                        if (temp.getIsAdd()) {
-                            searchBook.setIsAdd(true);
-                        }
-                        hasSame = true;
-                        searchBook.originNumAdd();
-                        notifyItemChanged(i);
-                        break;
-                    }
-                }
-                if (!hasSame) {
-                    searchBookBeansAdd.add(temp);
-                }
-            }
             Boolean changed = false;
-            for (SearchBookBean temp : searchBookBeansAdd) {
-                if (temp.getName().equals(bookName)) {
+            if (searchBooks.size() == 0) {
+                searchBooks.addAll(newDataS);
+                changed = true;
+            } else {
+                //已有
+                for (SearchBookBean temp : newDataS) {
+                    Boolean hasSame = false;
                     for (int i = 0; i < searchBooks.size(); i++) {
-                        if (!Objects.equals(temp.getName(), searchBooks.get(i).getName())) {
-                            searchBooks.add(i, temp);
-                            changed = true;
+                        SearchBookBean searchBook = searchBooks.get(i);
+                        if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
+                            if (temp.getIsAdd()) {
+                                searchBook.setIsAdd(true);
+                            }
+                            hasSame = true;
+                            searchBook.originNumAdd();
+                            notifyItemChanged(i);
                             break;
                         }
                     }
-                } else {
-                    searchBooks.add(temp);
+                    if (!hasSame) {
+                        searchBookBeansAdd.add(temp);
+                    }
+                }
+                //添加
+                for (SearchBookBean temp : searchBookBeansAdd) {
+                    if (temp.getName().equals(bookName)) {
+                        for (int i = 0; i < searchBooks.size(); i++) {
+                            if (!Objects.equals(temp.getName(), searchBooks.get(i).getName())) {
+                                searchBooks.add(i, temp);
+                                changed = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        searchBooks.add(temp);
+                    }
                 }
             }
             if (changed) {

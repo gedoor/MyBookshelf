@@ -24,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBook {
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS;
-    private int threadsNum = 6;
+    private int threadsNum;
     private int page = 0;
     private int searchEngineIndex;
     private int searchSuccessNum;
@@ -100,9 +100,7 @@ public class SearchBook {
                             @Override
                             public void onNext(List<SearchBookBean> value) {
                                 searchSuccessNum++;
-                                if (value.size() == 0) {
-                                    searchEngine.setHasMore(false);
-                                } else {
+                                if (value.size() > 0) {
                                     for (SearchBookBean temp : value) {
                                         for (BookShelfBean bookShelfBean : bookShelfS) {
                                             if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
@@ -114,6 +112,8 @@ public class SearchBook {
                                     if (!searchListener.checkIsExist(value.get(0))) {
                                         searchListener.loadMoreSearchBook(value);
                                     }
+                                } else {
+                                    searchEngine.setHasMore(false);
                                 }
                                 searchOnEngine(content, bookShelfS);
                             }
