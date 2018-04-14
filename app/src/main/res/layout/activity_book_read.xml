@@ -315,7 +315,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
-                            android:src="@drawable/ic_adjust"
+                            android:src="@drawable/ic_tune_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -345,8 +345,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/interface_setting"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_font"
+                            android:src="@drawable/ic_font_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -376,7 +375,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/setting"
-                            android:src="@drawable/ic_settings_black_24dp"
+                            android:src="@drawable/ic_setting_hollow_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
