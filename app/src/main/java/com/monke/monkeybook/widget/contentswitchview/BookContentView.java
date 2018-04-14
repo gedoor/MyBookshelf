@@ -8,10 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,9 +169,9 @@ public class BookContentView extends FrameLayout {
             tvTitle.setText(this.title);
 
             if (this.durPageIndex == 0) {
-                tvContent.isTitle(true);
+                TitleSize = contentLines.get(0).length();
             } else {
-                tvContent.isTitle(false);
+                TitleSize = 0;
             }
 
             /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
