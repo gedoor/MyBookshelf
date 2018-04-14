@@ -67,7 +67,6 @@ public class BookContentView extends FrameLayout {
     private int chapterAll;
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
-    private int TitleSize = 0;//标题长度（取第一行长度）
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -167,12 +166,6 @@ public class BookContentView extends FrameLayout {
             }
 
             tvTitle.setText(this.title);
-
-            if (this.durPageIndex == 0) {
-                TitleSize = contentLines.get(0).length();
-            } else {
-                TitleSize = 0;
-            }
 
             /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
             spanBuilder.setSpan(new TextAppearanceSpan(null, 0, (int)tvContent.getTextSize()+10, null, null),
