@@ -25,6 +25,7 @@ import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -161,7 +162,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
             return;
         }
         for (SearchBookBean searchBook : searchBookAdapter.getSearchBooks()) {
-            if (books.get(0).getName().equals(searchBook.getName()) && books.get(0).getAuthor().equals(searchBook.getAuthor())) {
+            if (Objects.equals(books.get(0).getName(), searchBook.getName()) && Objects.equals(books.get(0).getAuthor(), searchBook.getAuthor())) {
                 loadMoreFinish(true);
                 return;
             }
