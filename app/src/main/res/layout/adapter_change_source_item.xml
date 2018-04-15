@@ -10,15 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tv_source_name"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:singleLine="true"
-            android:layout_gravity="center" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_source_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/tv_lastChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_checked"

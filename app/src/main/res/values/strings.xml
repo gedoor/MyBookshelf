@@ -169,6 +169,7 @@
     <string name="clear">清除</string>
     <string name="showTitle">正文显示标题</string>
     <string name="refresh_default">刷新默认书源</string>
+    <string name="no_last_chapter">无最新章节信息</string>
 
 
 </resources>

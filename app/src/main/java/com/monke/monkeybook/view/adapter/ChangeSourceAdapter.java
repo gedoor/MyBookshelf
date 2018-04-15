@@ -17,6 +17,8 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.text.TextUtils.isEmpty;
+
 /**
  * Created by GKF on 2017/12/22.
  * 书源Adapter
@@ -63,12 +65,14 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     class MyViewHolder extends RecyclerView.ViewHolder{
         LinearLayout llContent;
         TextView tvBookSource;
+        TextView tvLastChapter;
         ImageView ivChecked;
 
         MyViewHolder(View itemView) {
             super(itemView);
             llContent = itemView.findViewById(R.id.ll_content);
             tvBookSource = itemView.findViewById(R.id.tv_source_name);
+            tvLastChapter = itemView.findViewById(R.id.tv_lastChapter);
             ivChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
@@ -83,6 +87,11 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         holder.itemView.setTag(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
+        if (isEmpty(searchBookBeans.get(position).getLastChapter())) {
+            myViewHolder.tvLastChapter.setText(R.string.no_last_chapter);
+        } else {
+            myViewHolder.tvLastChapter.setText(searchBookBeans.get(position).getLastChapter());
+        }
         myViewHolder.ivChecked.getDrawable().mutate();
         myViewHolder.ivChecked.setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (searchBookBeans.get(position).getIsAdd()) {
