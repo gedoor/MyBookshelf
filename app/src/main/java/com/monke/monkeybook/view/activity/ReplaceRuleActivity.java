@@ -162,6 +162,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
+        ReplaceRuleManage.addDataS(adapter.getDataList());
     }
 
     public void delData(ReplaceRuleBean replaceRuleBean) {
