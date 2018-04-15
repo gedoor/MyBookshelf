@@ -8,10 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.style.TextAppearanceSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +67,6 @@ public class BookContentView extends FrameLayout {
     private int chapterAll;
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
-    private int TitleSize = 0;//标题长度（取第一行长度）
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -146,7 +142,7 @@ public class BookContentView extends FrameLayout {
         finishLoading();
     }
 
-    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll, boolean convert) {
+    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
 
             if (contentLines == null) {
@@ -164,18 +160,7 @@ public class BookContentView extends FrameLayout {
             this.durPageIndex = durPageIndex;
             this.pageAll = durPageAll;
 
-            //显示之前先判断简 繁体
-            if (convert && this.content != null) {
-                this.content = ChineseUtils.toTraditional(this.content);
-            }
-
             tvTitle.setText(this.title);
-
-            if (this.durPageIndex == 0) {
-                tvContent.isTitle(true);
-            } else {
-                tvContent.isTitle(false);
-            }
 
             /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
             spanBuilder.setSpan(new TextAppearanceSpan(null, 0, (int)tvContent.getTextSize()+10, null, null),
@@ -349,18 +334,6 @@ public class BookContentView extends FrameLayout {
             tvContent.setTypeface(Typeface.SANS_SERIF);
             tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
-    }
-
-    /**
-     * 简繁转换
-     */
-    public void setFontConvert(ReadBookControl readBookControl) {
-        if (readBookControl.getTextConvert()) {
-            tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
-        } else {
-            tvContent.setText(ChineseUtils.toSimplified(tvContent.getText().toString()));
-        }
-
     }
 
     /**

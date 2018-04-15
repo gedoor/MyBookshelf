@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -24,9 +22,6 @@ public class ContentTextView extends AppCompatTextView {
     private int mViewWidth;
     private String fontPath;
     private TextPaint paint;
-    private int height;
-    private boolean isTitle;
-    private Layout layout;
 
     public ContentTextView(Context context) {
         super(context);
@@ -52,7 +47,7 @@ public class ContentTextView extends AppCompatTextView {
         String text = getText().toString();
         mLineY = 0;
         mLineY += getTextSize();
-        layout = getLayout();
+        Layout layout = getLayout();
 
         if (layout == null) {
             return;
@@ -62,20 +57,9 @@ public class ContentTextView extends AppCompatTextView {
         int textHeight = (int) (Math.ceil(fm.descent - fm.ascent));
         textHeight = (int) (textHeight * layout.getSpacingMultiplier() + layout.getSpacingAdd());
 
-        float textSize = getPaint().getTextSize();
-
+        //解决了最后一行文字间距过大的问题
         for (int i = 0; i < layout.getLineCount(); i++) {
-
-            if (i==0&&isTitle){
-                getPaint().setTextSize(textSize+10);
-                layout = new StaticLayout(text, getPaint(), mViewWidth,
-                        Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-            }else {
-                getPaint().setTextSize(textSize);
-                layout = getLayout();
-            }
-
-            int lineStart =layout.getLineStart(i);
+            int lineStart = layout.getLineStart(i);
             int lineEnd = layout.getLineEnd(i);
             float width = StaticLayout.getDesiredWidth(text, lineStart, lineEnd, getPaint());
             String line = text.substring(lineStart, lineEnd);
@@ -91,13 +75,8 @@ public class ContentTextView extends AppCompatTextView {
             }
 
             mLineY += textHeight;
-            Log.e("textHeight",textHeight+"");
         }
 
-    }
-
-    public void isTitle(Boolean isTitle){
-        this.isTitle = isTitle;
     }
 
     private void drawScaledText(Canvas canvas, String line, float lineWidth) {

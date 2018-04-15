@@ -61,6 +61,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
 
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
+    private boolean showHishtory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,17 +178,11 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
             }
         });
         searchView.setOnQueryTextFocusChangeListener((view, b) -> {
-            if (b) {
-                if (llSearchHistory.getVisibility() != View.VISIBLE) {
-                    openOrCloseHistory(true);
-                }
-            } else {
-                if (searchView.getQuery().toString().trim().equals("")) {
-                    finish();
-                } else if (llSearchHistory.getVisibility() == View.VISIBLE) {
-                    openOrCloseHistory(false);
-                }
+            showHishtory = b;
+            if (!b && searchView.getQuery().toString().trim().equals("")) {
+                finish();
             }
+            openOrCloseHistory(showHishtory);
         });
     }
 
@@ -227,11 +222,24 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
             mSearchAutoComplete.setText(searchKey);
             searchView.clearFocus();
             toSearch();
-            openOrCloseHistory(false);
+            showHishtory = false;
         } else {
-            openOrCloseHistory(true);
+            showHishtory = true;
             mPresenter.querySearchHistory("");
         }
+        openOrCloseHistory(showHishtory);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        showHishtory = llSearchHistory.getVisibility() == View.VISIBLE;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        openOrCloseHistory(showHishtory);
     }
 
     //开始搜索
@@ -251,9 +259,13 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
 
     private void openOrCloseHistory(Boolean open) {
         if (open) {
-            llSearchHistory.setVisibility(View.VISIBLE);
+            if (llSearchHistory.getVisibility() != View.VISIBLE) {
+                llSearchHistory.setVisibility(View.VISIBLE);
+            }
         } else {
-            llSearchHistory.setVisibility(View.GONE);
+            if (llSearchHistory.getVisibility() == View.VISIBLE) {
+                llSearchHistory.setVisibility(View.GONE);
+            }
         }
     }
 

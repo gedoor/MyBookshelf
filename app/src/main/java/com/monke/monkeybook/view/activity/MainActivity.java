@@ -34,6 +34,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -225,7 +226,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 LauncherIcon.Change();
                 break;
             case R.id.action_clear_content:
-                clearContent();
+                BookshelfHelp.clearLineContent();
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
@@ -237,16 +238,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void clearContent() {
-        moProgressHUD.showTwoButton(getString(R.string.clear_all_content),
-                getString(R.string.cancel), view -> moProgressHUD.dismiss(),
-                getString(R.string.ok), view -> {
-                    moProgressHUD.dismiss();
-                    mPresenter.clearAllContent();
-                }
-        );
     }
 
     //设置ToolBar

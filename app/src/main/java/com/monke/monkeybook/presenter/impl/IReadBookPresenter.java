@@ -6,6 +6,7 @@ import android.app.Activity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
 
