@@ -168,6 +168,7 @@
     <string name="searchHistory">搜索历史</string>
     <string name="clear">清除</string>
     <string name="showTitle">正文显示标题</string>
+    <string name="refresh_default">刷新默认书源</string>
 
 
 </resources>
