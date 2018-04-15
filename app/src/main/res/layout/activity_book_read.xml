@@ -48,10 +48,11 @@
 
                     <ImageButton
                         android:id="@+id/iv_return"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/text_return"
                         android:focusable="true"
@@ -72,10 +73,11 @@
 
                     <ImageButton
                         android:id="@+id/iv_refresh"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/refresh"
                         android:focusable="true"
@@ -84,10 +86,11 @@
 
                     <ImageButton
                         android:id="@+id/iv_more"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/menu"
                         android:focusable="true"
@@ -123,8 +126,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:clickable="true"
-            android:focusable="true"
             android:orientation="vertical">
 
             <LinearLayout
