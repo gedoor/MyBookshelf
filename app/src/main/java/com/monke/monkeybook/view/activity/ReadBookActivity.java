@@ -110,7 +110,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
     LinearLayout llSetting;
-    @BindView(R.id.clp_chapterlist)
+    @BindView(R.id.clp_chapterList)
     ChapterListView chapterListView;
     @BindView(R.id.ib_read_aloud)
     CircleButton ibReadAloud;

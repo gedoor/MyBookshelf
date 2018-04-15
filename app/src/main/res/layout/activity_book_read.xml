@@ -230,7 +230,7 @@
                         android:focusable="true"
                         android:padding="10dp"
                         android:text="@string/previous_chapter"
-                        android:textColor="@drawable/selector_tv_black"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
 
                     <com.monke.mprogressbar.MHorProgressBar
@@ -257,7 +257,7 @@
                         android:focusable="true"
                         android:padding="10dp"
                         android:text="@string/next_chapter"
-                        android:textColor="@drawable/selector_tv_black"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -393,7 +393,7 @@
     </FrameLayout>
 
     <com.monke.monkeybook.widget.ChapterListView
-        android:id="@+id/clp_chapterlist"
+        android:id="@+id/clp_chapterList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>
