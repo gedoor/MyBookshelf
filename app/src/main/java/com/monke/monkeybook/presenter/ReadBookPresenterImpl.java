@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
+import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.BitIntentDataManager;
@@ -139,7 +140,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
                                 pageIndex,
-                                tempCount + 1, convert);
+                                tempCount + 1);
                     }
                 } else {
                     //有元数据  重新分行
@@ -340,6 +341,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             String content = paragraphStr;
             content = addTitle(content, bookShelf.getChapterList(chapterIndex).getDurChapterName());
             content = replaceContent(content);
+            content = toTraditional(content);
+
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
 
@@ -351,6 +354,16 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             e.onNext(linesData);
             e.onComplete();
         });
+    }
+
+    /**
+     * 转繁体
+     */
+    private String toTraditional(String content) {
+        if (MApplication.getInstance().getSharedPreferences("CONFIG", 0).getBoolean("textConvert", false)) {
+            content = ChineseUtils.toTraditional(content);
+        }
+        return content;
     }
 
     /**

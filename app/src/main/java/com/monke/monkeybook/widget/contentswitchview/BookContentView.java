@@ -142,7 +142,7 @@ public class BookContentView extends FrameLayout {
         finishLoading();
     }
 
-    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll, boolean convert) {
+    public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
 
             if (contentLines == null) {
@@ -159,11 +159,6 @@ public class BookContentView extends FrameLayout {
             this.chapterAll = chapterAll;
             this.durPageIndex = durPageIndex;
             this.pageAll = durPageAll;
-
-            //显示之前先判断简 繁体
-            if (convert && this.content != null) {
-                this.content = ChineseUtils.toTraditional(this.content);
-            }
 
             tvTitle.setText(this.title);
 
@@ -339,18 +334,6 @@ public class BookContentView extends FrameLayout {
             tvContent.setTypeface(Typeface.SANS_SERIF);
             tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
-    }
-
-    /**
-     * 简繁转换
-     */
-    public void setFontConvert(ReadBookControl readBookControl) {
-        if (readBookControl.getTextConvert()) {
-            tvContent.setText(ChineseUtils.toTraditional(tvContent.getText().toString()));
-        } else {
-            tvContent.setText(ChineseUtils.toSimplified(tvContent.getText().toString()));
-        }
-
     }
 
     /**

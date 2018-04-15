@@ -489,7 +489,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
             updateOtherPage(durChapterIndex, chapterAll, durPageIndex, pageAll);
         }
-        bookContentView.setFontConvert(readBookControl);
     }
 
     private void readAloud() {
@@ -564,12 +563,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             item.setFont(readBookControl);
         }
         loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
-    }
-
-    public void setTextConvert() {
-        for (BookContentView item : viewContents) {
-            item.setFontConvert(readBookControl);
-        }
     }
 
     public void setTextBold() {

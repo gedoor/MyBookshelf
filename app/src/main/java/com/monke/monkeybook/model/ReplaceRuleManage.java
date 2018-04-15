@@ -84,15 +84,7 @@ public class ReplaceRuleManage extends BaseModelImpl {
                 .getReplaceRuleBeanDao().queryBuilder()
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        BookContentBean bookContentBean;
-        for (BookShelfBean bookShelfBean : BookshelfHelp.getAllBook()) {
-            for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
-                bookContentBean = chapterListBean.getBookContentBean();
-                if (bookContentBean != null) {
-                    bookContentBean.setLineContent(null);
-                }
-            }
-        }
+        BookshelfHelp.clearLineContent();
     }
 
     public static Observable<Boolean> importReplaceRuleFromWww(URL url) {

@@ -33,6 +33,7 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -498,7 +499,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setConvert() {
-                csvBook.setTextConvert();
+                BookshelfHelp.clearLineContent();
+                recreate();
             }
 
             @Override

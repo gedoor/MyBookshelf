@@ -75,15 +75,7 @@ public class MoreSettingPop extends PopupWindow {
         });
         sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            BookContentBean bookContentBean;
-            for (BookShelfBean bookShelfBean : BookshelfHelp.getAllBook()) {
-                for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
-                    bookContentBean = chapterListBean.getBookContentBean();
-                    if (bookContentBean != null) {
-                        bookContentBean.setLineContent(null);
-                    }
-                }
-            }
+            BookshelfHelp.clearLineContent();
             changeProListener.showTitle(isChecked);
         });
     }
