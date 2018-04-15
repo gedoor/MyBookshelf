@@ -90,7 +90,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.iv_refresh)
     ImageButton ivRefresh;
     @BindView(R.id.iv_more)
-    ImageView ivMenuMore;
+    ImageButton ivMenuMore;
     @BindView(R.id.atv_title)
     AutofitTextView atvTitle;
     @BindView(R.id.atv_url)

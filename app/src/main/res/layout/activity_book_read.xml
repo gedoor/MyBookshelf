@@ -42,19 +42,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:gravity="center_vertical"
                     android:background="@color/background"
                     android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/iv_return"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:contentDescription="@string/text_return"
                         android:focusable="true"
-                        android:src="@drawable/selector_icon_return" />
+                        android:src="@drawable/ic_arrow_back_black_24dp" />
 
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/atv_title"
@@ -71,8 +72,8 @@
 
                     <ImageButton
                         android:id="@+id/iv_refresh"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
@@ -81,18 +82,16 @@
                         android:src="@drawable/ic_refresh_black_24dp"
                         android:visibility="invisible" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/iv_more"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:contentDescription="@string/menu"
                         android:focusable="true"
-                        android:paddingBottom="7dp"
-                        android:paddingTop="7dp"
-                        android:src="@drawable/selector_icon_more"
+                        android:src="@drawable/ic_more_vert_black_24dp"
                         android:visibility="invisible" />
                 </LinearLayout>
             </com.monke.immerselayout.ImmerseFrameLayout>
@@ -153,7 +152,7 @@
                     android:padding="10dp"
                     android:text="@string/read_aloud_timer"
                     app:textNormalSolidColor="@color/background"
-                    app:textRadius="5dp"/>
+                    app:textRadius="5dp" />
 
             </LinearLayout>
 
