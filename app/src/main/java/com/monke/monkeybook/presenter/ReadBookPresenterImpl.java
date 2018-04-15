@@ -338,6 +338,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private Observable<List<String>> SeparateParagraphToLines(String paragraphStr, int chapterIndex) {
         return Observable.create(e -> {
             String content = paragraphStr;
+            content = addTitle(content, bookShelf.getChapterList(chapterIndex).getDurChapterName());
             content = replaceContent(content);
             TextPaint mPaint = (TextPaint) mView.getPaint();
             mPaint.setSubpixelText(true);
@@ -350,6 +351,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             e.onNext(linesData);
             e.onComplete();
         });
+    }
+
+    /**
+     * 添加标题
+     */
+    private String addTitle(String content, String chapterName) {
+        if (MApplication.getInstance().getSharedPreferences("CONFIG", 0).getBoolean("showTitle", true)) {
+            if (!content.startsWith(String.format("\u3000\u3000%s", chapterName))
+                    && !content.startsWith(chapterName)) {
+                content = String.format("%s\r\n%s", chapterName, content);
+            }
+        }
+        return content;
     }
 
     /**

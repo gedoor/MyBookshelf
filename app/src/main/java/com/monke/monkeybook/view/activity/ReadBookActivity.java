@@ -519,11 +519,19 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         //其它设置
-        moreSettingPop = new MoreSettingPop(this, keepScreenOn -> {
-            if (keepScreenOn) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
+            @Override
+            public void keepScreenOnChange(Boolean keepScreenOn) {
+                if (keepScreenOn) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+
+            @Override
+            public void showTitle(Boolean showTitle) {
+                recreate();
             }
         });
         //调节
