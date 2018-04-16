@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model.content;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -14,6 +15,7 @@ import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IHttpPostApi;
@@ -368,6 +370,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
                     chapterListBean.setHasCache(true);
                     DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
+                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
                 }
             }
             e.onNext(bookContentBean);
