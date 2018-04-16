@@ -11,6 +11,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
@@ -332,7 +333,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
-                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
+                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
+                .flatMap(this::upChapterList);
     }
 
     private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
@@ -351,6 +353,22 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
                 bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
                 bookContentBean.setRight(false);
+            }
+            e.onNext(bookContentBean);
+            e.onComplete();
+        });
+    }
+
+    private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
+        return Observable.create(e -> {
+            if (bookContentBean.getRight()) {
+                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
+                if (chapterListBean != null) {
+                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
+                    chapterListBean.setHasCache(true);
+                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
+                }
             }
             e.onNext(bookContentBean);
             e.onComplete();

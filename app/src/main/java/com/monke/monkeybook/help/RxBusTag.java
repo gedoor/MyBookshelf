@@ -22,4 +22,6 @@ public class RxBusTag {
     public final static String CANCEL_DOWNLOAD = "rxbus_cancel_download";
 
     public final static String ADD_DOWNLOAD_TASK = "rxbus_add_download_task";
+
+    public final static String CHAPTER_CHANGE = "rxbus_chapter_change";
 }

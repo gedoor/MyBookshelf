@@ -232,8 +232,6 @@ public class DownloadService extends Service {
                                 if (bookContentBean1.getRight()) {
                                     bookContentBean1.setNoteUrl(data.getNoteUrl());
                                     DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplace(bookContentBean1);
-                                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao()
-                                            .update(new ChapterListBean(data.getNoteUrl(), data.getDurChapterIndex(), data.getDurChapterUrl(), data.getDurChapterName(), data.getTag(), true));
                                 }
                                 return bookContentBean1;
                             });

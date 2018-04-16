@@ -141,9 +141,9 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         if (TextUtils.isEmpty(bookUrl.trim())) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             URL url = new URL(bookUrl);
-            List<BookInfoBean> temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().list();
-            if (temp != null && temp.size() > 0) {
+            BookInfoBean temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
+            if (temp != null) {
                 e.onNext(null);
             } else {
                 BookShelfBean bookShelfBean = new BookShelfBean();
