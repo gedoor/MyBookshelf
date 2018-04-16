@@ -22,6 +22,7 @@ import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
 import butterknife.BindView;
@@ -169,6 +170,10 @@ public class ChapterListView extends FrameLayout {
         });
         rvList.setAdapter(chapterListAdapter);
         rvbSlider.setRecyclerView(rvList);
+    }
+
+    public void upChapterList(ChapterListBean chapterListBean) {
+        chapterListAdapter.upChapterList(chapterListBean);
     }
 
     public Boolean dismissChapterList() {

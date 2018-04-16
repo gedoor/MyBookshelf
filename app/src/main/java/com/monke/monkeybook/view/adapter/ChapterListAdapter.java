@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,17 +12,22 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.widget.ChapterListView;
 
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
     private int index = 0;
-    private Boolean isAsc = true;
 
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull ChapterListView.OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
+    }
+
+    public void upChapterList(ChapterListBean chapterListBean) {
+        bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
+        notifyItemChanged(chapterListBean.getDurChapterIndex());
     }
 
     @Override
@@ -30,19 +36,19 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ThisViewHolder holder, final int posiTion) {
-        if (posiTion == getItemCount() - 1) {
+    public void onBindViewHolder(ThisViewHolder holder, final int position) {
+        if (position == getItemCount() - 1) {
             holder.vLine.setVisibility(View.INVISIBLE);
-        } else
-            holder.vLine.setVisibility(View.VISIBLE);
-
-        final int position;
-        if (isAsc) {
-            position = posiTion;
         } else {
-            position = getItemCount() - 1 - posiTion;
+            holder.vLine.setVisibility(View.VISIBLE);
         }
+
         holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
+        if (bookShelfBean.getChapterList(position).getHasCache()) {
+            holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        } else {
+            holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        }
         holder.flContent.setOnClickListener(v -> {
             setIndex(position);
             itemClickListener.itemClick(position);

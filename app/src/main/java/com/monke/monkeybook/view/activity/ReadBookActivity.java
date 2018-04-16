@@ -885,7 +885,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void chapterChange(ChapterListBean chapterListBean) {
-
+        chapterListView.upChapterList(chapterListBean);
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)

@@ -193,12 +193,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                     final int finalPageIndex1 = tempList.getPageIndex();
                                     //网络获取正文
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(chapterIndex).getDurChapterUrl(), chapterIndex, bookShelf.getTag())
-                                            .map(bookContentBean -> {
-                                                if (bookContentBean.getRight()) {
-                                                    DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().rx().insertOrReplace(bookContentBean);
-                                                }
-                                                return bookContentBean;
-                                            })
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribeOn(Schedulers.newThread())
                                             .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
@@ -269,12 +263,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         public void onNext(Boolean aBoolean) {
                             if (aBoolean) {
                                 WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(nextIndex).getDurChapterUrl(), nextIndex, bookShelf.getTag())
-                                        .map(bookContentBean -> {
-                                            if (bookContentBean.getRight()) {
-                                                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().rx().insertOrReplace(bookContentBean);
-                                            }
-                                            return bookContentBean;
-                                        }).observeOn(AndroidSchedulers.mainThread())
+                                        .observeOn(AndroidSchedulers.mainThread())
                                         .subscribeOn(Schedulers.newThread())
                                         .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                                         .subscribe();
@@ -702,6 +691,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
     public void chapterChange(ChapterListBean chapterListBean) {
-        mView.chapterChange(chapterListBean);
+        if (bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
+            mView.chapterChange(chapterListBean);
+        }
     }
 }
