@@ -48,7 +48,7 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".view.activity.SearchActivity"
+            android:name=".view.activity.SearchBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustUnspecified" />

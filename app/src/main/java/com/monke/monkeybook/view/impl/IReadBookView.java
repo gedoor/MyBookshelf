@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.impl;
 import android.graphics.Paint;
 
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
 
@@ -14,7 +15,6 @@ public interface IReadBookView extends IView {
      */
     Paint getPaint();
 
-
     /**
      * @return Book标志
      */
@@ -24,6 +24,7 @@ public interface IReadBookView extends IView {
      * @return 控制view
      */
     ContentSwitchView getCsvBook();
+
     /**
      * 小说数据初始化成功
      * @param durChapterIndex 当前章节

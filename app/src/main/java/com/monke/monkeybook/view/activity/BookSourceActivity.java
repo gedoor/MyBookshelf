@@ -230,7 +230,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 mPresenter.delData(adapter.getSelectDataList());
                 break;
             case R.id.action_reset_book_source:
-                refreshBookSource();
+                mPresenter.importBookSource(getString(R.string.default_source_url));
                 break;
             case android.R.id.home:
                 finish();

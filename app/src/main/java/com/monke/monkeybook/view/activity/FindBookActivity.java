@@ -129,7 +129,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
         switch (id) {
             case R.id.action_search:
                 //点击搜索
-                startActivityByAnim(new Intent(this, SearchActivity.class),
+                startActivityByAnim(new Intent(this, SearchBookActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 return true;
             case android.R.id.home:

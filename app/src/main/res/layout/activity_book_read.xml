@@ -42,19 +42,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:gravity="center_vertical"
                     android:background="@color/background"
                     android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/iv_return"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/text_return"
                         android:focusable="true"
-                        android:src="@drawable/selector_icon_return" />
+                        android:src="@drawable/ic_arrow_back_black_24dp" />
 
                     <me.grantland.widget.AutofitTextView
                         android:id="@+id/atv_title"
@@ -71,28 +73,28 @@
 
                     <ImageButton
                         android:id="@+id/iv_refresh"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/refresh"
                         android:focusable="true"
                         android:src="@drawable/ic_refresh_black_24dp"
                         android:visibility="invisible" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/iv_more"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:background="@drawable/bg_ib_pre"
+                        android:layout_margin="10dp"
                         android:clickable="true"
                         android:contentDescription="@string/menu"
                         android:focusable="true"
-                        android:paddingBottom="7dp"
-                        android:paddingTop="7dp"
-                        android:src="@drawable/selector_icon_more"
+                        android:src="@drawable/ic_more_vert_black_24dp"
                         android:visibility="invisible" />
                 </LinearLayout>
             </com.monke.immerselayout.ImmerseFrameLayout>
@@ -124,8 +126,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:clickable="true"
-            android:focusable="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -153,7 +153,7 @@
                     android:padding="10dp"
                     android:text="@string/read_aloud_timer"
                     app:textNormalSolidColor="@color/background"
-                    app:textRadius="5dp"/>
+                    app:textRadius="5dp" />
 
             </LinearLayout>
 
@@ -230,7 +230,7 @@
                         android:focusable="true"
                         android:padding="10dp"
                         android:text="@string/previous_chapter"
-                        android:textColor="@drawable/selector_tv_black"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
 
                     <com.monke.mprogressbar.MHorProgressBar
@@ -257,7 +257,7 @@
                         android:focusable="true"
                         android:padding="10dp"
                         android:text="@string/next_chapter"
-                        android:textColor="@drawable/selector_tv_black"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -280,12 +280,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivCList"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/table_of_contents"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_catalog"
+                            android:src="@drawable/ic_list_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -294,7 +294,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/table_of_contents"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--调节按钮-->
@@ -310,12 +310,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivAdjust"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_light"
+                            android:src="@drawable/ic_tune_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -324,7 +324,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/adjust"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--界面按钮-->
@@ -340,12 +340,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivInterface"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/interface_setting"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_font"
+                            android:src="@drawable/ic_font_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -354,7 +354,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/interface_setting"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <!--设置按钮-->
@@ -370,12 +370,12 @@
                         android:paddingBottom="7dp">
 
                         <ImageView
+                            android:id="@+id/ivSetting"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/setting"
-                            android:padding="3dp"
-                            android:src="@drawable/selector_icon_setting"
+                            android:src="@drawable/ic_setting_hollow_black_24dp"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -384,7 +384,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="3dp"
                             android:text="@string/setting"
-                            android:textColor="#767676"
+                            android:textColor="@color/tv_text_default"
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -393,7 +393,7 @@
     </FrameLayout>
 
     <com.monke.monkeybook.widget.ChapterListView
-        android:id="@+id/clp_chapterlist"
+        android:id="@+id/clp_chapterList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

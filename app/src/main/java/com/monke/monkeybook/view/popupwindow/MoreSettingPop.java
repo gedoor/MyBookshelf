@@ -11,6 +11,10 @@ import android.widget.PopupWindow;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookContentBean;
+import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 
 import butterknife.BindView;
@@ -28,6 +32,8 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbClick;
     @BindView(R.id.sb_keep_screen_on)
     SwitchButton sbKeepScreenOn;
+    @BindView(R.id.sb_show_title)
+    SwitchButton sbShowTitle;
 
     private Context mContext;
     private View view;
@@ -35,6 +41,8 @@ public class MoreSettingPop extends PopupWindow {
 
     public interface OnChangeProListener {
         void keepScreenOnChange(Boolean keepScreenOn);
+
+        void showTitle(Boolean showTitle);
     }
 
     private OnChangeProListener changeProListener;
@@ -66,6 +74,11 @@ public class MoreSettingPop extends PopupWindow {
             changeProListener.keepScreenOnChange(isChecked);
         });
         sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
+        sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setShowTitle(isChecked);
+            BookshelfHelp.clearLineContent();
+            changeProListener.showTitle(isChecked);
+        });
     }
 
     private void initData() {
@@ -76,5 +89,6 @@ public class MoreSettingPop extends PopupWindow {
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
         sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
+        sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
     }
 }

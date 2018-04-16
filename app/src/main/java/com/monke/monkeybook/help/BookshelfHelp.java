@@ -1,7 +1,9 @@
 package com.monke.monkeybook.help;
 
+import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -135,6 +137,21 @@ public class BookshelfHelp {
             case "2":
                 Collections.sort(books, (o1, o2) -> o1.getSerialNumber() - o2.getSerialNumber());
                 break;
+        }
+    }
+
+    /**
+     * 清除分页缓存
+     */
+    public static void clearLineContent() {
+        BookContentBean bookContentBean;
+        for (BookShelfBean bookShelfBean : getAllBook()) {
+            for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
+                bookContentBean = chapterListBean.getBookContentBean();
+                if (bookContentBean != null) {
+                    bookContentBean.setLineContent(null);
+                }
+            }
         }
     }
 }

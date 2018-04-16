@@ -33,6 +33,7 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -66,7 +67,6 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
-import static com.monke.monkeybook.service.ReadAloudService.stop;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
@@ -91,7 +91,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.iv_refresh)
     ImageButton ivRefresh;
     @BindView(R.id.iv_more)
-    ImageView ivMenuMore;
+    ImageButton ivMenuMore;
     @BindView(R.id.atv_title)
     AutofitTextView atvTitle;
     @BindView(R.id.atv_url)
@@ -110,7 +110,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
     LinearLayout llSetting;
-    @BindView(R.id.clp_chapterlist)
+    @BindView(R.id.clp_chapterList)
     ChapterListView chapterListView;
     @BindView(R.id.ib_read_aloud)
     CircleButton ibReadAloud;
@@ -124,6 +124,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     TextView tvReadAloudTimer;
     @BindView(R.id.ll_read_aloud_timer)
     LinearLayout llReadAloudTimer;
+    @BindView(R.id.ivCList)
+    ImageView ivCList;
+    @BindView(R.id.ivAdjust)
+    ImageView ivAdjust;
+    @BindView(R.id.ivInterface)
+    ImageView ivInterface;
+    @BindView(R.id.ivSetting)
+    ImageView ivSetting;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -451,6 +459,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void bindView() {
         ButterKnife.bind(this);
         initCsvBook();
+        ivCList.getDrawable().mutate();
+        ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivAdjust.getDrawable().mutate();
+        ivAdjust.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivInterface.getDrawable().mutate();
+        ivInterface.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivSetting.getDrawable().mutate();
+        ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (preferences.getBoolean("nightTheme", false)) {
             ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
         } else {
@@ -483,7 +499,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setConvert() {
-                csvBook.setTextConvert();
+                BookshelfHelp.clearLineContent();
+                recreate();
             }
 
             @Override
@@ -504,11 +521,19 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         //其它设置
-        moreSettingPop = new MoreSettingPop(this, keepScreenOn -> {
-            if (keepScreenOn) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            } else {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
+            @Override
+            public void keepScreenOnChange(Boolean keepScreenOn) {
+                if (keepScreenOn) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+
+            @Override
+            public void showTitle(Boolean showTitle) {
+                recreate();
             }
         });
         //调节
@@ -876,24 +901,24 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case ResultReplace:
                 recreate();
                 break;
             case ResultSelectBg:
-                if (resultCode == RESULT_OK && null != data){
+                if (resultCode == RESULT_OK && null != data) {
                     readInterfacePop.setCustomBg(data.getData());
                 }
                 break;
             case ResultSelectFont:
-                if (resultCode == RESULT_OK && null != data){
-                    String path = FileUtil.getPath(this,data.getData());
-                    try{
+                if (resultCode == RESULT_OK && null != data) {
+                    String path = FileUtil.getPath(this, data.getData());
+                    try {
                         //判断是否字体文件或字体是否损坏
                         Typeface typeface = Typeface.createFromFile(path);
                         readInterfacePop.setReadFonts(path);
-                    }catch (Exception e){
-                        Toast.makeText(this,"不是字体文件",Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(this, "不是字体文件", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

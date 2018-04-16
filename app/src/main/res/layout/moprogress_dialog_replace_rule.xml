@@ -46,6 +46,11 @@
                 android:maxLines="3"/>
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" .代表任意一个字符.*代表任意多个字符"/>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_replace_to"
             android:layout_width="match_parent"
