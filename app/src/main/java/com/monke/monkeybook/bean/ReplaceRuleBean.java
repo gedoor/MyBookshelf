@@ -15,10 +15,11 @@ import org.greenrobot.greendao.annotation.Transient;
  */
 @Entity
 public class ReplaceRuleBean implements Parcelable {
+    @Id(autoincrement = true)
+    private Long id;
     //描述
     private String replaceSummary;
     //替换规则
-    @Id
     private String regex;
     //替换为
     private String replacement;
@@ -28,6 +29,7 @@ public class ReplaceRuleBean implements Parcelable {
     private int serialNumber;
 
     private ReplaceRuleBean(Parcel in) {
+        id  = in.readLong();
         regex = in.readString();
         replacement = in.readString();
         replaceSummary = in.readString();
@@ -35,9 +37,10 @@ public class ReplaceRuleBean implements Parcelable {
         serialNumber = in.readInt();
     }
 
-    @Generated(hash = 956114041)
-    public ReplaceRuleBean(String replaceSummary, String regex, String replacement,
-                           Boolean enable, int serialNumber) {
+    @Generated(hash = 298152313)
+    public ReplaceRuleBean(Long id, String replaceSummary, String regex, String replacement,
+            Boolean enable, int serialNumber) {
+        this.id = id;
         this.replaceSummary = replaceSummary;
         this.regex = regex;
         this.replacement = replacement;
@@ -51,6 +54,7 @@ public class ReplaceRuleBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
         parcel.writeString(regex);
         parcel.writeString(replacement);
         parcel.writeString(replaceSummary);
@@ -101,6 +105,9 @@ public class ReplaceRuleBean implements Parcelable {
     }
 
     public Boolean getEnable() {
+        if (enable == null) {
+            return false;
+        }
         return this.enable;
     }
 
@@ -114,6 +121,14 @@ public class ReplaceRuleBean implements Parcelable {
 
     public void setSerialNumber(int serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }

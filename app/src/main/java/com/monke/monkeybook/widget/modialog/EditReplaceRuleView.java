@@ -25,6 +25,7 @@ public class EditReplaceRuleView {
     private MoProgressView moProgressView;
     private OnSaveReplaceRule saveReplaceRule;
     private Context context;
+    private ReplaceRuleBean replaceRuleBean;
 
     public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
         return new EditReplaceRuleView(moProgressView);
@@ -41,9 +42,13 @@ public class EditReplaceRuleView {
         this.saveReplaceRule = saveReplaceRule;
 
         if (replaceRuleBean != null) {
+            this.replaceRuleBean = replaceRuleBean;
             tieReplaceSummary.setText(replaceRuleBean.getReplaceSummary());
             tieReplaceTo.setText(replaceRuleBean.getReplacement());
             tieReplaceRule.setText(replaceRuleBean.getRegex());
+        } else {
+            this.replaceRuleBean = new ReplaceRuleBean();
+            this.replaceRuleBean.setEnable(true);
         }
     }
 
@@ -66,8 +71,6 @@ public class EditReplaceRuleView {
 
         View tvOk = moProgressView.findViewById(R.id.tv_ok);
         tvOk.setOnClickListener(view -> {
-            ReplaceRuleBean replaceRuleBean = new ReplaceRuleBean();
-            replaceRuleBean.setEnable(true);
             replaceRuleBean.setReplaceSummary(tieReplaceSummary.getText().toString());
             replaceRuleBean.setRegex(tieReplaceRule.getText().toString());
             replaceRuleBean.setReplacement(tieReplaceTo.getText().toString());

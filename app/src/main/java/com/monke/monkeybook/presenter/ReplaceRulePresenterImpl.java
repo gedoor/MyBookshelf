@@ -49,7 +49,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView
             int i = 0;
             for (ReplaceRuleBean replaceRuleBean : replaceRuleBeans) {
                 i++;
-                replaceRuleBean.setSerialNumber(i);
+                replaceRuleBean.setSerialNumber(i + 1);
             }
             ReplaceRuleManage.addDataS(replaceRuleBeans);
             e.onNext(ReplaceRuleManage.getAll());

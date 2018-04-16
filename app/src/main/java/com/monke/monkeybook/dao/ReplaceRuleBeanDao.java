@@ -15,7 +15,7 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 /** 
  * DAO for table "REPLACE_RULE_BEAN".
 */
-public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
+public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
 
     public static final String TABLENAME = "REPLACE_RULE_BEAN";
 
@@ -24,11 +24,12 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property ReplaceSummary = new Property(0, String.class, "replaceSummary", false, "REPLACE_SUMMARY");
-        public final static Property Regex = new Property(1, String.class, "regex", true, "REGEX");
-        public final static Property Replacement = new Property(2, String.class, "replacement", false, "REPLACEMENT");
-        public final static Property Enable = new Property(3, Boolean.class, "enable", false, "ENABLE");
-        public final static Property SerialNumber = new Property(4, int.class, "serialNumber", false, "SERIAL_NUMBER");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property ReplaceSummary = new Property(1, String.class, "replaceSummary", false, "REPLACE_SUMMARY");
+        public final static Property Regex = new Property(2, String.class, "regex", false, "REGEX");
+        public final static Property Replacement = new Property(3, String.class, "replacement", false, "REPLACEMENT");
+        public final static Property Enable = new Property(4, Boolean.class, "enable", false, "ENABLE");
+        public final static Property SerialNumber = new Property(5, int.class, "serialNumber", false, "SERIAL_NUMBER");
     }
 
 
@@ -44,11 +45,12 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"REPLACE_RULE_BEAN\" (" + //
-                "\"REPLACE_SUMMARY\" TEXT," + // 0: replaceSummary
-                "\"REGEX\" TEXT PRIMARY KEY NOT NULL ," + // 1: regex
-                "\"REPLACEMENT\" TEXT," + // 2: replacement
-                "\"ENABLE\" INTEGER," + // 3: enable
-                "\"SERIAL_NUMBER\" INTEGER NOT NULL );"); // 4: serialNumber
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"REPLACE_SUMMARY\" TEXT," + // 1: replaceSummary
+                "\"REGEX\" TEXT," + // 2: regex
+                "\"REPLACEMENT\" TEXT," + // 3: replacement
+                "\"ENABLE\" INTEGER," + // 4: enable
+                "\"SERIAL_NUMBER\" INTEGER NOT NULL );"); // 5: serialNumber
     }
 
     /** Drops the underlying database table. */
@@ -61,89 +63,102 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
     protected final void bindValues(DatabaseStatement stmt, ReplaceRuleBean entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String replaceSummary = entity.getReplaceSummary();
         if (replaceSummary != null) {
-            stmt.bindString(1, replaceSummary);
+            stmt.bindString(2, replaceSummary);
         }
  
         String regex = entity.getRegex();
         if (regex != null) {
-            stmt.bindString(2, regex);
+            stmt.bindString(3, regex);
         }
  
         String replacement = entity.getReplacement();
         if (replacement != null) {
-            stmt.bindString(3, replacement);
+            stmt.bindString(4, replacement);
         }
  
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(4, enable ? 1L: 0L);
+            stmt.bindLong(5, enable ? 1L: 0L);
         }
-        stmt.bindLong(5, entity.getSerialNumber());
+        stmt.bindLong(6, entity.getSerialNumber());
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, ReplaceRuleBean entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String replaceSummary = entity.getReplaceSummary();
         if (replaceSummary != null) {
-            stmt.bindString(1, replaceSummary);
+            stmt.bindString(2, replaceSummary);
         }
  
         String regex = entity.getRegex();
         if (regex != null) {
-            stmt.bindString(2, regex);
+            stmt.bindString(3, regex);
         }
  
         String replacement = entity.getReplacement();
         if (replacement != null) {
-            stmt.bindString(3, replacement);
+            stmt.bindString(4, replacement);
         }
  
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(4, enable ? 1L: 0L);
+            stmt.bindLong(5, enable ? 1L: 0L);
         }
-        stmt.bindLong(5, entity.getSerialNumber());
+        stmt.bindLong(6, entity.getSerialNumber());
     }
 
     @Override
-    public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1);
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public ReplaceRuleBean readEntity(Cursor cursor, int offset) {
         ReplaceRuleBean entity = new ReplaceRuleBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // replaceSummary
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // regex
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // replacement
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0, // enable
-            cursor.getInt(offset + 4) // serialNumber
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // replaceSummary
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // regex
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // replacement
+            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // enable
+            cursor.getInt(offset + 5) // serialNumber
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, ReplaceRuleBean entity, int offset) {
-        entity.setReplaceSummary(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setRegex(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setReplacement(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setEnable(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0);
-        entity.setSerialNumber(cursor.getInt(offset + 4));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setReplaceSummary(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setRegex(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setReplacement(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setEnable(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
+        entity.setSerialNumber(cursor.getInt(offset + 5));
      }
     
     @Override
-    protected final String updateKeyAfterInsert(ReplaceRuleBean entity, long rowId) {
-        return entity.getRegex();
+    protected final Long updateKeyAfterInsert(ReplaceRuleBean entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public String getKey(ReplaceRuleBean entity) {
+    public Long getKey(ReplaceRuleBean entity) {
         if(entity != null) {
-            return entity.getRegex();
+            return entity.getId();
         } else {
             return null;
         }
@@ -151,7 +166,7 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, String> {
 
     @Override
     public boolean hasKey(ReplaceRuleBean entity) {
-        return entity.getRegex() != null;
+        return entity.getId() != null;
     }
 
     @Override

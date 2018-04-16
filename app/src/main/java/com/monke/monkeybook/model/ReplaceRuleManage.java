@@ -51,6 +51,9 @@ public class ReplaceRuleManage extends BaseModelImpl {
     }
 
     public static void saveData(ReplaceRuleBean replaceRuleBean) {
+        if (replaceRuleBean.getSerialNumber() == 0) {
+            replaceRuleBean.setSerialNumber(replaceRuleBeansAll.size() + 1);
+        }
         DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao().insertOrReplace(replaceRuleBean);
         refreshDataS();
     }
