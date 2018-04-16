@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
