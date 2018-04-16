@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -880,6 +881,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             EasyPermissions.requestPermissions(this, getString(R.string.open_from_other),
                     RESULT_OPEN_OTHER_PERMS, perms);
         }
+    }
+
+    @Override
+    public void chapterChange(ChapterListBean chapterListBean) {
+
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)

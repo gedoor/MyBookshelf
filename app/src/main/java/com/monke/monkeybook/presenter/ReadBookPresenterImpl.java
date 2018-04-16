@@ -702,6 +702,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
     public void chapterChange(ChapterListBean chapterListBean) {
-
+        mView.chapterChange(chapterListBean);
     }
 }
