@@ -225,6 +225,7 @@ public class DownloadService extends Service {
                 } else {
                     return Observable.create(e -> {
                         DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
+                        e.onNext(new BookContentBean());
                         e.onComplete();
                     });
                 }
