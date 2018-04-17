@@ -59,8 +59,8 @@ public class DownloadService extends Service {
                 .setContentTitle(getString(R.string.download_offline_t))
                 .setContentText(getString(R.string.download_offline_s));
         //发送通知
-        Notification notification = builder.build();
-        startForeground(notificationId, notification);
+        startForeground(notificationId, builder.build());
+        RxBus.get().register(this);
     }
 
     @Override
@@ -68,15 +68,10 @@ public class DownloadService extends Service {
         stopForeground(true);
         super.onDestroy();
         RxBus.get().unregister(this);
-        isInit = true;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!isInit) {
-            isInit = true;
-            RxBus.get().register(this);
-        }
         String action = intent.getAction();
         if (action == null) {
             stopSelf();

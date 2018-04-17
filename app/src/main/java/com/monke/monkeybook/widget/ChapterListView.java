@@ -131,7 +131,6 @@ public class ChapterListView extends FrameLayout {
 
     /**
      * 显示章节列表，并定位当前阅读章节
-     * @param durChapter
      */
     public void show(int durChapter) {
         chapterListAdapter.setIndex(durChapter);
@@ -173,7 +172,9 @@ public class ChapterListView extends FrameLayout {
     }
 
     public void upChapterList(ChapterListBean chapterListBean) {
-        chapterListAdapter.upChapterList(chapterListBean);
+        if (chapterListAdapter != null) {
+            chapterListAdapter.upChapterList(chapterListBean);
+        }
     }
 
     public Boolean dismissChapterList() {
