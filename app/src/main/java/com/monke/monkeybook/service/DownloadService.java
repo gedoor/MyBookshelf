@@ -4,9 +4,11 @@ package com.monke.monkeybook.service;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
@@ -45,8 +47,12 @@ public class DownloadService extends Service {
     public static final int reTryTimes = 1;
     private final int notificationId = 19931118;
 
+    private SharedPreferences preferences;
+
     private Boolean isStartDownload = false;
     private Boolean isDownloading = false;
+
+    private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -60,6 +66,7 @@ public class DownloadService extends Service {
         //发送通知
         startForeground(notificationId, builder.build());
         RxBus.get().register(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     @Override
@@ -106,15 +113,17 @@ public class DownloadService extends Service {
             if (!(bookShelf == null)) {
                 List<DownloadChapterBean> chapterBeans = new ArrayList<>();
                 for (int i = start; i <= end; i++) {
-                    DownloadChapterBean item = new DownloadChapterBean();
-                    item.setNoteUrl(bookShelf.getNoteUrl());
-                    item.setDurChapterIndex(bookShelf.getChapterList(i).getDurChapterIndex());
-                    item.setDurChapterName(bookShelf.getChapterList(i).getDurChapterName());
-                    item.setDurChapterUrl(bookShelf.getChapterList(i).getDurChapterUrl());
-                    item.setTag(bookShelf.getTag());
-                    item.setBookName(bookShelf.getBookInfoBean().getName());
-                    item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
-                    chapterBeans.add(item);
+                    if (!bookShelf.getChapterList(i).getHasCache()) {
+                        DownloadChapterBean item = new DownloadChapterBean();
+                        item.setNoteUrl(bookShelf.getNoteUrl());
+                        item.setDurChapterIndex(bookShelf.getChapterList(i).getDurChapterIndex());
+                        item.setDurChapterName(bookShelf.getChapterList(i).getDurChapterName());
+                        item.setDurChapterUrl(bookShelf.getChapterList(i).getDurChapterUrl());
+                        item.setTag(bookShelf.getTag());
+                        item.setBookName(bookShelf.getBookInfoBean().getName());
+                        item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+                        chapterBeans.add(item);
+                    }
                 }
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplaceInTx(chapterBeans);
                 e.onNext(true);
@@ -127,7 +136,9 @@ public class DownloadService extends Service {
                     @Override
                     public void onNext(Boolean value) {
                         if (!isDownloading) {
-                            toDownload();
+//                            for (int i = 1; i <= preferences.getInt(getString(R.string.pk_threads_num), 6); i++) {
+                                toDownload();
+//                            }
                         }
                     }
 
