@@ -29,6 +29,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -103,6 +104,7 @@ public class DownloadService extends Service {
             BookShelfBean bookShelf = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
                     .where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().unique();
             if (!(bookShelf == null)) {
+                List<DownloadChapterBean> chapterBeans = new ArrayList<>();
                 for (int i = start; i <= end; i++) {
                     DownloadChapterBean item = new DownloadChapterBean();
                     item.setNoteUrl(bookShelf.getNoteUrl());
@@ -112,8 +114,9 @@ public class DownloadService extends Service {
                     item.setTag(bookShelf.getTag());
                     item.setBookName(bookShelf.getBookInfoBean().getName());
                     item.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplace(item);
+                    chapterBeans.add(item);
                 }
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().insertOrReplaceInTx(chapterBeans);
                 e.onNext(true);
             }
             e.onComplete();
@@ -332,7 +335,9 @@ public class DownloadService extends Service {
                     .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
             if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
                 for (BookShelfBean bookItem : bookShelfBeanList) {
-                    List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl())).orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
+                    List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder()
+                            .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl()))
+                            .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
                     if (downloadChapterList != null && downloadChapterList.size() > 0) {
                         e.onNext(downloadChapterList.get(0));
                         e.onComplete();
