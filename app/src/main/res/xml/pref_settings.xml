@@ -34,12 +34,12 @@
         android:summary="@string/ps_hide_navigation_bar"
         android:title="@string/pt_hide_navigation_bar" />
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/read_type_title"
-        android:entryValues="@array/read_type_value"
-        android:key="@string/pk_read_type"
-        android:title="@string/read_type" />
+    <!--<ListPreference-->
+        <!--android:defaultValue="0"-->
+        <!--android:entries="@array/read_type_title"-->
+        <!--android:entryValues="@array/read_type_value"-->
+        <!--android:key="@string/pk_read_type"-->
+        <!--android:title="@string/read_type" />-->
 
     <com.monke.monkeybook.widget.NumberPickerPreference
         android:defaultValue="6"

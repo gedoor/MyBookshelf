@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.service;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -44,9 +42,9 @@ public class DownloadService extends Service {
     public static final String doneAction = "doneAction";
     public static final String addDownloadAction = "addDownload";
     public static final int reTryTimes = 1;
-    private int notificationId = 19931118;
+    private final int notificationId = 19931118;
+
     private Boolean isStartDownload = false;
-    private Boolean isInit = false;
     private Boolean isDownloading = false;
 
     @Override
