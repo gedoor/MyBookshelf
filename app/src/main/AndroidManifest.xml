@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-
     <application
         android:name=".MApplication"
         android:allowBackup="true"
@@ -21,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CAppTheme"
-        tools:replace="android:theme">
+        tools:replace="android:theme"
+        tools:ignore="AllowBackup">
         <activity android:name=".view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
