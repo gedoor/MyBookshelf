@@ -107,10 +107,9 @@ public class DownloadService extends Service {
     private void addNewTask(final String noteUrl, final int start, final int end) {
         isStartDownload = true;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                    .where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().list();
-            if (!(temp == null || temp.size() == 0)) {
-                BookShelfBean bookShelf = temp.get(0);
+            BookShelfBean bookShelf = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                    .where(BookShelfBeanDao.Properties.NoteUrl.eq(noteUrl)).build().unique();
+            if (!(bookShelf == null)) {
                 for (int i = start; i <= end; i++) {
                     DownloadChapterBean item = new DownloadChapterBean();
                     item.setNoteUrl(bookShelf.getNoteUrl());
