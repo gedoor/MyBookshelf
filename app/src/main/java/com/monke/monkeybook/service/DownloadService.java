@@ -44,7 +44,6 @@ import io.reactivex.schedulers.Schedulers;
 public class DownloadService extends Service {
     public static final String doneAction = "doneAction";
     public static final String addDownloadAction = "addDownload";
-    public static final int reTryTimes = 1;
     private final int notificationId = 19931118;
 
     private SharedPreferences preferences;
@@ -136,9 +135,9 @@ public class DownloadService extends Service {
                     @Override
                     public void onNext(Boolean value) {
                         if (!isDownloading) {
-//                            for (int i = 1; i <= preferences.getInt(getString(R.string.pk_threads_num), 6); i++) {
+                            for (int i = 1; i <= preferences.getInt(getString(R.string.pk_threads_num), 6); i++) {
                                 toDownload();
-//                            }
+                            }
                         }
                     }
 
@@ -149,7 +148,7 @@ public class DownloadService extends Service {
                 });
     }
 
-    private void toDownload() {
+    private synchronized void toDownload() {
         isDownloading = true;
         if (isStartDownload) {
             Observable.create((ObservableOnSubscribe<DownloadChapterBean>) e -> {
@@ -160,11 +159,16 @@ public class DownloadService extends Service {
                     for (BookShelfBean bookItem : bookShelfBeanList) {
                         List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder()
                                 .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl()))
-                                .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).limit(1).list();
+                                .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
                         if (downloadChapterList != null && downloadChapterList.size() > 0) {
-                            e.onNext(downloadChapterList.get(0));
-                            e.onComplete();
-                            return;
+                            for (int i = 0; i < downloadChapterList.size(); i++) {
+                                if (!checkInDownloadList(downloadChapterList.get(i))) {
+                                    downloadingChapter.add(downloadChapterList.get(i));
+                                    e.onNext(downloadChapterList.get(i));
+                                    e.onComplete();
+                                    return;
+                                }
+                            }
                         }
                     }
                     DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
@@ -181,7 +185,7 @@ public class DownloadService extends Service {
                         @Override
                         public void onNext(DownloadChapterBean value) {
                             if (value.getNoteUrl() != null && value.getNoteUrl().length() > 0) {
-                                downloading(value, 0);
+                                downloading(value);
                             } else {
                                 Observable.create(e -> {
                                     DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
@@ -217,8 +221,8 @@ public class DownloadService extends Service {
         }
     }
 
-    private void downloading(final DownloadChapterBean data, final int durTime) {
-        if (durTime < reTryTimes && isStartDownload) {
+    private synchronized void downloading(final DownloadChapterBean data) {
+        if (isStartDownload) {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 BookContentBean result = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
@@ -241,6 +245,8 @@ public class DownloadService extends Service {
                     .subscribe(new SimpleObserver<BookContentBean>() {
                         @Override
                         public void onNext(BookContentBean value) {
+                            DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
+                            removeFromDownloadList(data);
                             if (isStartDownload) {
                                 new Handler().postDelayed(() -> {
                                     if (isStartDownload) {
@@ -257,45 +263,31 @@ public class DownloadService extends Service {
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
-                            int time = durTime + 1;
-                            downloading(data, time);
+                            toDownload();
                         }
                     });
-        } else {
-            if (isStartDownload) {
-                Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                    DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
-                    e.onNext(true);
-                    e.onComplete();
-                })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(new SimpleObserver<Boolean>() {
-                            @Override
-                            public void onNext(Boolean value) {
-                                if (isStartDownload) {
-                                    new Handler().postDelayed(() -> {
-                                        if (isStartDownload) {
-                                            toDownload();
-                                        } else {
-                                            isPause();
-                                        }
-                                    }, 800);
-                                } else {
-                                    isPause();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                                if (!isStartDownload)
-                                    isPause();
-                            }
-                        });
-            } else
-                isPause();
         }
+    }
+
+    private synchronized boolean checkInDownloadList(DownloadChapterBean value) {
+        boolean inDownloadList = false;
+        for (DownloadChapterBean chapterBean : downloadingChapter) {
+            if (chapterBean.getDurChapterUrl().equals(value.getDurChapterUrl())) {
+                inDownloadList = true;
+            }
+        }
+        return inDownloadList;
+    }
+
+    private synchronized void removeFromDownloadList(DownloadChapterBean value) {
+        int i = 0;
+        for (DownloadChapterBean chapterBean : downloadingChapter) {
+            if (chapterBean.getDurChapterUrl().equals(value.getDurChapterUrl())) {
+                break;
+            }
+            i = i + 1;
+        }
+        downloadingChapter.remove(i);
     }
 
     public void startDownload() {
