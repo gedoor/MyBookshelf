@@ -2,9 +2,11 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
@@ -55,6 +57,9 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 import at.markushi.ui.CircleButton;
@@ -123,6 +128,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     CircleButton ibReadAloudTimer;
     @BindView(R.id.tv_read_aloud_timer)
     TextView tvReadAloudTimer;
+    @BindView(R.id.time_Txt)
+    TextView timeTxt;
+    @BindView(R.id.battery_Txt)
+    TextView batteryTxt;
     @BindView(R.id.ll_read_aloud_timer)
     LinearLayout llReadAloudTimer;
     @BindView(R.id.ivCList)
@@ -170,7 +179,62 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
+        //hideStatusBar = preferences.getBoolean("hide_status_bar", false);
+        if (!hideStatusBar) {
+            timeTxt.setVisibility(View.INVISIBLE);
+            batteryTxt.setVisibility(View.INVISIBLE);
+        }
+
+        //显示时间开始
+        Thread myThread;
+
+        Runnable runnable = new CountDownRunner();
+        myThread= new Thread(runnable);
+        myThread.start();
+
+        //txtCurrentBattery = this.findViewById(R.id.battery_Txt);
+        this.registerReceiver(this.mBatInfoReceiver,
+                new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
+
+    public void doWork() {
+        runOnUiThread(() -> {
+            try{
+                //TextView txtCurrentTime= findViewById(R.id.time_Txt);
+                DateFormat dfTime = new SimpleDateFormat("HH:mm");
+                String curTime = dfTime.format(Calendar.getInstance().getTime());
+                //String curTime = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+                timeTxt.setText(curTime);
+            }catch (Exception e) {}
+        });
+    }
+
+
+    class CountDownRunner implements Runnable{
+        // @Override
+        public void run() {
+            while(!Thread.currentThread().isInterrupted()){
+                try {
+                    doWork();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }catch(Exception e){
+                }
+            }
+        }
+    }//显示时间结束
+
+    //显示电量
+    //private TextView txtCurrentBattery;
+    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+            // TODO Auto-generated method stub
+            int level = intent.getIntExtra("level", 0);
+            batteryTxt.setText(String.valueOf(level) + "%");
+        }
+    };
 
     @Override
     protected void onCreateActivity() {

@@ -12,7 +12,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true">
+
+    </com.monke.monkeybook.widget.contentswitchview.ContentSwitchView>
+
+    <TextView
+        android:id="@+id/time_Txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:paddingBottom="2dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="8dp"
+        android:textColor="#FF737373"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/battery_Txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:paddingBottom="2dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp"
+        android:textColor="#FF737373"
+        android:textSize="12sp" />
 
     <FrameLayout
         android:id="@+id/fl_menu"
@@ -42,8 +66,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:gravity="center_vertical"
                     android:background="@color/background"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -51,8 +75,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/bg_ib_pre"
                         android:layout_margin="10dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:contentDescription="@string/text_return"
                         android:focusable="true"
@@ -76,8 +100,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/bg_ib_pre"
                         android:layout_margin="10dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:contentDescription="@string/refresh"
                         android:focusable="true"
@@ -89,8 +113,8 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/bg_ib_pre"
                         android:layout_margin="10dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:clickable="true"
                         android:contentDescription="@string/menu"
                         android:focusable="true"
@@ -395,5 +419,7 @@
     <com.monke.monkeybook.widget.ChapterListView
         android:id="@+id/clp_chapterList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </com.monke.monkeybook.widget.ChapterListView>
 </FrameLayout>
