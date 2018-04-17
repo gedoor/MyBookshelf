@@ -94,6 +94,7 @@ public class ReadAloudService extends Service {
             initFocusRequest();
         }
         initMediaSession();
+        initBroadcastReceiver();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
@@ -357,6 +358,7 @@ public class ReadAloudService extends Service {
         running = false;
         clearTTS();
         unRegisterMediaButton();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void clearTTS() {
@@ -374,7 +376,6 @@ public class ReadAloudService extends Service {
             mediaSessionCompat.release();
         }
         audioManager.abandonAudioFocus(audioFocusChangeListener);
-        unregisterReceiver(broadcastReceiver);
     }
 
     /**
@@ -424,14 +425,10 @@ public class ReadAloudService extends Service {
             }
         });
         mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
-        IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        initBroadcastReceiver();
-        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void initBroadcastReceiver() {
         broadcastReceiver = new BroadcastReceiver() {
-
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
@@ -440,6 +437,8 @@ public class ReadAloudService extends Service {
                 }
             }
         };
+        IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void updateMediaSessionPlaybackState() {
