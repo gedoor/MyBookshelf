@@ -154,11 +154,11 @@ public class AboutActivity extends MBaseActivity {
         });
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
-        vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL"));
-        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/sourcerule.html"));
-        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/disclaimer.html"));
-        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/releases"));
-        vwSourceShare.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MONKOVEL/tree/master/docs/book_source"));
+        vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf"));
+        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/sourcerule.html"));
+        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/disclaimer.html"));
+        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/releases"));
+        vwSourceShare.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/tree/master/docs/book_source"));
         tvQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, qq);
