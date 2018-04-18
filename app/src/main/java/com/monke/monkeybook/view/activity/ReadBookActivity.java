@@ -610,7 +610,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(batInfoReceiver);
         mPresenter.saveProgress();
     }
 
