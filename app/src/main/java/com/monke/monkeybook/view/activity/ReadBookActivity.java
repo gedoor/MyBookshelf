@@ -523,9 +523,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //朗读
         ibReadAloud.getDrawable().mutate();
         ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloud.setOnClickListener(view -> {
-            startReadAloud();
-        });
+        ibReadAloud.setOnClickListener(view -> startReadAloud());
 
         //替换
         ibReplaceRule.getDrawable().mutate();
@@ -980,11 +978,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     class ThisBatInfoReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            @SuppressLint("SimpleDateFormat") DateFormat dfTime = new SimpleDateFormat("HH:mm");
-            tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
-
-            int level = intent.getIntExtra("level", 0);
-            tvBattery.setText(String.format("%s%%", String.valueOf(level)));
+            if(Intent.ACTION_TIME_TICK.equals(intent.getAction())){
+                @SuppressLint("SimpleDateFormat") DateFormat dfTime = new SimpleDateFormat("HH:mm");
+                tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
+            } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+                int level = intent.getIntExtra("level", 0);
+                tvBattery.setText(String.format("%s%%", String.valueOf(level)));
+            }
         }
     }
 
