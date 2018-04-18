@@ -37,12 +37,6 @@ public class BookContentView extends FrameLayout {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;
-    @BindView(R.id.tv_title)
-    AutofitTextView tvTitle;
-    @BindView(R.id.tv_page)
-    TextView tvPage;
-    @BindView(R.id.v_bottom)
-    View vBottom;
     @BindView(R.id.tv_content)
     ContentTextView tvContent;
     @BindView(R.id.ll_content)
@@ -97,11 +91,7 @@ public class BookContentView extends FrameLayout {
 
     public void init() {
         View view;
-        if (preferences.getBoolean("hide_status_bar", false)) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_hide_status_bar, this, false);
-        } else {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_show_status_bar, this, false);
-        }
+        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal, this, false);
         addView(view);
         ButterKnife.bind(this, view);
 
@@ -137,7 +127,6 @@ public class BookContentView extends FrameLayout {
     @SuppressLint("DefaultLocale")
     public void setNoData(String contentLines) {
         this.content = contentLines;
-        tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
         finishLoading();
     }
 
@@ -159,14 +148,7 @@ public class BookContentView extends FrameLayout {
             this.durPageIndex = durPageIndex;
             this.pageAll = durPageAll;
 
-            tvTitle.setText(this.title);
-
-            /*SpannableStringBuilder spanBuilder = new SpannableStringBuilder(this.content);
-            spanBuilder.setSpan(new TextAppearanceSpan(null, 0, (int)tvContent.getTextSize()+10, null, null),
-                    0, TitleSize, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-            tvContent.setText(spanBuilder);*/
             tvContent.setText(this.content);
-            tvPage.setText(String.format("%d/%d", this.durPageIndex + 1, this.pageAll));
 
             if (setDataListener != null) {
                 setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
@@ -180,11 +162,8 @@ public class BookContentView extends FrameLayout {
         this.durChapterIndex = durChapterIndex;
         this.chapterAll = chapterAll;
         this.durPageIndex = durPageIndex;
-        tvTitle.setText(title);
-        tvPage.setText("");
 
         loading();
-
     }
 
     public ContentSwitchView.LoadDataListener getLoadDataListener() {
@@ -297,19 +276,13 @@ public class BookContentView extends FrameLayout {
     public void setBg(ReadBookControl readBookControl) {
         if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
             ivBg.setImageResource(readBookControl.getTextBackground());
-            tvTitle.setTextColor(readBookControl.getTextColor());
             tvContent.setTextColor(readBookControl.getTextColor());
-            tvPage.setTextColor(readBookControl.getTextColor());
-            vBottom.setBackgroundColor(readBookControl.getTextColor());
             tvLoading.setTextColor(readBookControl.getTextColor());
             tvErrorInfo.setTextColor(readBookControl.getTextColor());
         } else {
             ACache aCache = ACache.get(this.getContext());
             ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
-            tvTitle.setTextColor(readBookControl.getTextColorCustom());
             tvContent.setTextColor(readBookControl.getTextColorCustom());
-            tvPage.setTextColor(readBookControl.getTextColorCustom());
-            vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
         }
@@ -321,17 +294,14 @@ public class BookContentView extends FrameLayout {
             if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
                 Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
                 tvContent.setTypeface(typeface);
-                tvTitle.setTypeface(typeface);
                 tvContent.setFont();
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
-                tvTitle.setTypeface(Typeface.SANS_SERIF);
             }
         } catch (Exception e) {
             Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
-            tvTitle.setTypeface(Typeface.SANS_SERIF);
         }
     }
 

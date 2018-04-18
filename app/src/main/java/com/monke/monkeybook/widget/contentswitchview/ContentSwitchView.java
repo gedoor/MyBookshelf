@@ -154,9 +154,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             }
                         } else if (durX < 0 && (state == PRE_AND_NEXT || state == ONLY_NEXT)) {
                             int tempX = durX;
-                            if (tempX > 0)
-                                tempX = 0;
-                            else if (tempX < -getWidth())
+                            if (tempX < -getWidth())
                                 tempX = -getWidth();
                             int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
                             if (readBookControl.getClickAnim()) {
@@ -235,7 +233,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (viewContents.size() > 0) {
-            if (state == NONE && viewContents.size() >= 1) {
+            if (state == NONE) {
                 viewContents.get(0).layout(0, top, getWidth(), bottom);
             } else if (state == PRE_AND_NEXT && viewContents.size() >= 3) {
                 viewContents.get(0).layout(-getWidth(), top, 0, bottom);
@@ -619,6 +617,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     public interface OnBookReadInitListener {
         void success();
+    }
+
+    public int getPageAll() {
+        return durPageView.getPageAll();
     }
 
     public interface LoadDataListener {
