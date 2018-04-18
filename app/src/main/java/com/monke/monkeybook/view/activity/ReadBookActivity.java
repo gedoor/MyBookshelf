@@ -168,7 +168,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ServiceConnection conn;
     private ContentSwitchView.LoadDataListener loadDataListener;
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
-    private BatteryManager batteryManager = (BatteryManager)getSystemService(BATTERY_SERVICE);
 
     private Boolean showCheckPermission = false;
 
