@@ -17,7 +17,7 @@
         android:title="@string/bookshelf_px" />
 
     <SwitchPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="@string/pk_auto_refresh"
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
