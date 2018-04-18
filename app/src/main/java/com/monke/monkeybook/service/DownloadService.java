@@ -385,7 +385,7 @@ public class DownloadService extends Service {
         startForeground(notificationId, builder.build());
     }
 
-    private void finishDownload() {
+    private synchronized void finishDownload() {
         if (downloadingChapter.size() == 0) {
             RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
             stopSelf();
