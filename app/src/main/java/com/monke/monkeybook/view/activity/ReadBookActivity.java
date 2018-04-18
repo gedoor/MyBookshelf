@@ -43,6 +43,7 @@ import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.ReadAloudService;
+import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
@@ -957,9 +958,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onResume() {
         super.onResume();
         tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            tvBattery.setText(String.format("%d%%", batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)));
-        }
+        tvBattery.setText(String.format("%d%%", BatteryUtil.getLevel(this)));
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             showCheckPermission = true;
@@ -989,7 +988,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if(Intent.ACTION_TIME_TICK.equals(intent.getAction())){
                 tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
             } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-                int level = intent.getIntExtra("level", 0);
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                 tvBattery.setText(String.format("%d%%", level));
             }
         }
