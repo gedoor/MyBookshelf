@@ -17,27 +17,27 @@
     </com.monke.monkeybook.widget.contentswitchview.ContentSwitchView>
 
     <TextView
-        android:id="@+id/time_Txt"
+        android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:paddingBottom="8dp"
         android:paddingEnd="0dp"
         android:paddingStart="8dp"
-        android:textAlignment="viewStart"
         android:textColor="#FF737373"
+        android:visibility="invisible"
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/battery_Txt"
+        android:id="@+id/tv_battery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:paddingBottom="8dp"
         android:paddingEnd="8dp"
         android:paddingStart="0dp"
-        android:textAlignment="viewStart"
         android:textColor="#FF737373"
+        android:visibility="invisible"
         android:textSize="12sp" />
 
     <FrameLayout
