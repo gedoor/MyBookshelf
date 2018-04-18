@@ -182,7 +182,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         super.onCreate(savedInstanceState);
         batInfoReceiver = new ThisBatInfoReceiver();
-        registerReceiver(batInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_TIME_TICK);
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(batInfoReceiver, filter);
     }
 
     @Override
