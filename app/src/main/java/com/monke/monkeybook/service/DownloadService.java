@@ -50,6 +50,7 @@ public class DownloadService extends Service {
 
     private Boolean isStartDownload = false;
     private Boolean isDownloading = false;
+    private Boolean isFinish = false;
 
     private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
 
@@ -386,7 +387,8 @@ public class DownloadService extends Service {
     }
 
     private synchronized void finishDownload() {
-        if (downloadingChapter.size() == 0) {
+        if (downloadingChapter.size() == 0 && !isFinish) {
+            isFinish = true;
             RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
             stopSelf();
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "全部离线章节下载完成", Toast.LENGTH_SHORT).show());
