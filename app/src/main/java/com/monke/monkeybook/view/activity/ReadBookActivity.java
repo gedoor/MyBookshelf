@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -165,7 +166,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private Intent readAloudIntent;
     private ServiceConnection conn;
     private ContentSwitchView.LoadDataListener loadDataListener;
-    private ThisBatInfoReceiver batInfoReceiver;
+    private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
 
@@ -181,7 +182,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
-        batInfoReceiver = new ThisBatInfoReceiver();
+        ThisBatInfoReceiver batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -953,6 +954,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onResume() {
         super.onResume();
+        tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             showCheckPermission = true;
@@ -976,14 +978,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     class ThisBatInfoReceiver extends BroadcastReceiver {
+        @SuppressLint("DefaultLocale")
         @Override
         public void onReceive(Context context, Intent intent) {
             if(Intent.ACTION_TIME_TICK.equals(intent.getAction())){
-                @SuppressLint("SimpleDateFormat") DateFormat dfTime = new SimpleDateFormat("HH:mm");
                 tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
             } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                 int level = intent.getIntExtra("level", 0);
-                tvBattery.setText(String.format("%s%%", String.valueOf(level)));
+                tvBattery.setText(String.format("%d%%", level));
             }
         }
     }

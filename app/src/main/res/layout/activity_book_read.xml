@@ -23,7 +23,7 @@
         android:layout_gravity="bottom|start"
         android:paddingBottom="8dp"
         android:paddingEnd="0dp"
-        android:paddingStart="8dp"
+        android:paddingStart="16dp"
         android:textColor="#FF737373"
         android:visibility="invisible"
         android:textSize="12sp" />
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:paddingBottom="8dp"
-        android:paddingEnd="8dp"
+        android:paddingEnd="16dp"
         android:paddingStart="0dp"
         android:textColor="#FF737373"
         android:visibility="invisible"
