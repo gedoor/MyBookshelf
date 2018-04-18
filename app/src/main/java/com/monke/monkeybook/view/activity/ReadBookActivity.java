@@ -167,6 +167,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ServiceConnection conn;
     private ContentSwitchView.LoadDataListener loadDataListener;
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
+    private BatteryManager batteryManager = (BatteryManager)getSystemService(BATTERY_SERVICE);
 
     private Boolean showCheckPermission = false;
 
@@ -940,7 +941,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     String path = FileUtil.getPath(this, data.getData());
                     try {
                         //判断是否字体文件或字体是否损坏
-                        Typeface typeface = Typeface.createFromFile(path);
+                        Typeface.createFromFile(path);
                         readInterfacePop.setReadFonts(path);
                     } catch (Exception e) {
                         Toast.makeText(this, "不是字体文件", Toast.LENGTH_SHORT).show();
@@ -951,10 +952,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onResume() {
         super.onResume();
         tvTime.setText(dfTime.format(Calendar.getInstance().getTime()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tvBattery.setText(String.format("%d%%", batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)));
+        }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             showCheckPermission = true;
