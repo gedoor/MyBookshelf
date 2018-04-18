@@ -79,6 +79,12 @@
                     android:lineSpacingMultiplier="1"
                     android:textSize="19sp" />
 
+                <TextView
+                    android:id="@+id/tb_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="18dp"
+                    android:layout_gravity="bottom|start|end" />
+
             </LinearLayout>
 
             <TextView
