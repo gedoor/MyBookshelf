@@ -121,30 +121,31 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()//字体大小改变
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null//行内容不为空
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0
+                        && bookContentView != null
                         && textHeight == bookContentView.getTextHeigth()) {//行内容Size>0
                     //已有数据
-                    int tempCount = (int) Math.ceil(bookShelf.getChapterList(chapterIndex)
-                            .getBookContentBean().getLineContent().size() * 1.0 / pageLineCount) - 1;
+                    int pageAll = (int) Math.ceil(bookShelf.getChapterList(chapterIndex)
+                            .getBookContentBean().getLineContent().size() * 1.0 / pageLineCount);
 
                     if (pageIndex == BookContentView.DurPageIndexBegin) {
                         pageIndex = 0;
                     } else if (pageIndex == BookContentView.DurPageIndexEnd) {
-                        pageIndex = tempCount;
+                        pageIndex = pageAll - 1;
                     } else {
-                        if (pageIndex >= tempCount) {
-                            pageIndex = tempCount;
+                        if (pageIndex > pageAll - 1) {
+                            pageIndex = pageAll - 1;
                         }
                     }
                     int start = pageIndex * pageLineCount;
-                    int end = pageIndex == tempCount ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
-                    if (bookContentView != null && bookTag == bookContentView.getQTag()) {
+                    int end = pageIndex == pageAll - 1 ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
+                    if (bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
                                 bookShelf.getChapterList(chapterIndex).getDurChapterName(),
                                 bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end),
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
                                 pageIndex,
-                                tempCount + 1);
+                                pageAll);
                     }
                 } else {
                     //有元数据  重新分行
@@ -158,9 +159,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             .subscribe(new SimpleObserver<List<String>>() {
                                 @Override
                                 public void onNext(List<String> value) {
-                                    bookShelf.getChapterList(chapterIndex).getBookContentBean().setLineContent(value);
-                                    textHeight = bookContentView.getTextHeigth();
-                                    loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
+                                    if (bookContentView != null) {
+                                        bookShelf.getChapterList(chapterIndex).getBookContentBean().setLineContent(value);
+                                        textHeight = bookContentView.getTextHeigth();
+                                        loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
+                                    }
                                 }
 
                                 @Override

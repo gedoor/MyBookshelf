@@ -816,10 +816,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                     if (hideStatusBar) {
                         tvTopLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                        tvTopRight.setText(String.format("%d/%d", pageIndex + 1, csvBook.getPageAll()));
                     } else {
                         tvBottomLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                        tvBottomRight.setText(String.format("%d/%d", pageIndex + 1, csvBook.getPageAll()));
                     }
                 } else {
                     atvTitle.setText("无章节");
@@ -865,11 +863,17 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 popMenuIn();
             }
 
+            @SuppressLint("DefaultLocale")
             @Override
             public void setHpbReadProgress(int pageIndex, int pageAll) {
                 hpbReadProgress.setMaxProgress(pageAll - 1);
                 if (hpbReadProgress.getDurProgress() != pageIndex)
                     hpbReadProgress.setDurProgress(pageIndex);
+                if (hideStatusBar) {
+                    tvTopRight.setText(String.format("%d/%d", pageIndex + 1, pageAll));
+                } else {
+                    tvBottomRight.setText(String.format("%d/%d", pageIndex + 1, pageAll));
+                }
             }
 
             @Override
