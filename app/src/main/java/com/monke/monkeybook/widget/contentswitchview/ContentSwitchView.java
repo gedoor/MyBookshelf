@@ -628,8 +628,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         void success();
     }
 
-    public int getPageAll() {
-        return durPageView.getPageAll();
+    public void openChapterList() {
+        loadDataListener.openChapterList();
     }
 
     public interface LoadDataListener {
@@ -647,6 +647,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
         void readAloud(String content);
 
+        void openChapterList();
     }
 
 }

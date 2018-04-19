@@ -159,7 +159,6 @@ public class BookContentView extends FrameLayout {
     @SuppressLint("DefaultLocale")
     public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
-
             if (contentLines == null) {
                 this.content = "";
             } else {
@@ -183,9 +182,17 @@ public class BookContentView extends FrameLayout {
                 DateFormat dfTime = new SimpleDateFormat("HH:mm");
                 tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
                 tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+                tvTopLeft.setOnClickListener(view -> {
+                    ContentSwitchView csv = (ContentSwitchView) getParent();
+                    csv.openChapterList();
+                });
             } else {
                 tvBottomLeft.setText(title);
                 tvBottomRight.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
+                tvBottomLeft.setOnClickListener(view -> {
+                    ContentSwitchView csv = (ContentSwitchView) getParent();
+                    csv.openChapterList();
+                });
             }
 
             if (setDataListener != null) {

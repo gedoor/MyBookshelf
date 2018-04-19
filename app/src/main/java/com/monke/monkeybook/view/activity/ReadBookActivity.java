@@ -809,6 +809,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 aloudButton = false;
             }
 
+            @Override
+            public void openChapterList() {
+                if (chapterListView.hasData()) {
+                    new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+                }
+            }
+
         };
     }
 
