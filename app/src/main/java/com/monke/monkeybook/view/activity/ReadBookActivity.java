@@ -20,14 +20,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,14 +47,12 @@ import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
-import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
-import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
@@ -91,20 +92,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
     View vMenuBg;
-    @BindView(R.id.ll_menu_top)
-    LinearLayout llMenuTop;
+
     @BindView(R.id.ll_menu_bottom)
     LinearLayout llMenuBottom;
-    @BindView(R.id.iv_return)
-    ImageButton ivReturn;
-    @BindView(R.id.iv_refresh)
-    ImageButton ivRefresh;
-    @BindView(R.id.iv_more)
-    ImageButton ivMenuMore;
-    @BindView(R.id.atv_title)
-    AutofitTextView atvTitle;
-    @BindView(R.id.atv_url)
-    AutofitTextView atvUrl;
+
     @BindView(R.id.tv_pre)
     TextView tvPre;
     @BindView(R.id.tv_next)
@@ -157,11 +148,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     TextView tvBottomRight;
     @BindView(R.id.llBottom)
     LinearLayout llBottom;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.atv_url)
+    AutofitTextView atvUrl;
+    @BindView(R.id.ll_menu_top)
+    LinearLayout llMenuTop;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
     private Animation menuBottomIn;
     private Animation menuBottomOut;
+    private ActionBar actionBar;
 
     private boolean aloudButton;
     private boolean hideStatusBar;
@@ -172,7 +170,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
     private ReadAdjustPop readAdjustPop;
-    private ReadBookMenuMorePop readBookMenuMorePop;
     private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
@@ -284,6 +281,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         if (hideStatusBar) {
             llTop.setVisibility(View.VISIBLE);
             vTop.setVisibility(View.VISIBLE);
@@ -390,7 +389,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         readAdjustPop.initLight();
-        readBookMenuMorePop = new ReadBookMenuMorePop(this);
     }
 
     @Override
@@ -463,65 +461,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
 
-        //菜单
-        ivMenuMore.getDrawable().mutate();
-        ivMenuMore.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivMenuMore.setOnClickListener(view -> readBookMenuMorePop
-                .showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
-
         //正文
         csvBook.setLoadDataListener(loadDataListener);
-
-        //返回按钮
-        ivReturn.getDrawable().mutate();
-        ivReturn.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivReturn.setOnClickListener(view -> finish());
-
-        //离线下载
-        readBookMenuMorePop.setOnClickDownload(view -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                //弹出离线下载界面
-                int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
-                moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        (start, end) -> {
-                            moProgressHUD.dismiss();
-                            mPresenter.addDownload(start, end);
-                        });
-            }
-        });
-
-        //换源
-        readBookMenuMorePop.setOnClickChangeSource(view -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
-                    if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
-                        mPresenter.changeBookSource(searchBookBean);
-                        csvBook.showLoading();
-                    }
-                });
-            }
-        });
-
-        //刷新按钮
-        ivRefresh.getDrawable().mutate();
-        ivRefresh.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivRefresh.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                        .getDurChapterListBean().getDurChapterUrl());
-                mPresenter.getBookShelf().getDurChapterListBean()
-                        .setBookContentBean(null);
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin);
-            }
-        });
 
         //打开URL
         atvUrl.setOnClickListener(view -> {
@@ -645,6 +586,42 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mPresenter.saveProgress();
     }
 
+    //设置ToolBar
+    private void setupActionBar() {
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_change_source:
+                changeSource();
+                break;
+            case R.id.action_refresh:
+                refresh();
+                break;
+            case R.id.action_download:
+                download();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setBg() {
         if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
             tvTopLeft.setTextColor(readBookControl.getTextColor());
@@ -682,6 +659,47 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             tvTopRight.setTypeface(Typeface.SANS_SERIF);
             tvBottomLeft.setTypeface(Typeface.SANS_SERIF);
             tvBottomRight.setTypeface(Typeface.SANS_SERIF);
+        }
+    }
+
+    private void refresh() {
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
+                    .getDurChapterListBean().getDurChapterUrl());
+            mPresenter.getBookShelf().getDurChapterListBean()
+                    .setBookContentBean(null);
+            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                    mPresenter.getBookShelf().getChapterListSize(),
+                    BookContentView.DurPageIndexBegin);
+        }
+    }
+
+    private void changeSource() {
+
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
+                if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                    mPresenter.changeBookSource(searchBookBean);
+                    csvBook.showLoading();
+                }
+            });
+        }
+    }
+
+    private void download() {
+
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            //弹出离线下载界面
+            int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
+            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
+                    mPresenter.getBookShelf().getChapterListSize(),
+                    (start, end) -> {
+                        moProgressHUD.dismiss();
+                        mPresenter.addDownload(start, end);
+                    });
         }
     }
 
@@ -812,7 +830,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
+                    actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                     if (hideStatusBar) {
                         tvTopLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
@@ -820,7 +838,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         tvBottomLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     }
                 } else {
-                    atvTitle.setText("无章节");
+//                    atvTitle.setText("无章节");
                     if (hideStatusBar) {
                         tvTopLeft.setText("");
                         tvTopRight.setText("");
@@ -959,8 +977,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void showOnLineView() {
-        ivMenuMore.setVisibility(View.VISIBLE);
-        ivRefresh.setVisibility(View.VISIBLE);
+//        ivMenuMore.setVisibility(View.VISIBLE);
+//        ivRefresh.setVisibility(View.VISIBLE);
         atvUrl.setVisibility(View.VISIBLE);
     }
 
