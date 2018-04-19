@@ -45,7 +45,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private OnBookReadInitListener bookReadInitListener;
     private float startX = -1;
     private LoadDataListener loadDataListener;
-    private Layout layout;
     private ViewTreeObserver.OnGlobalLayoutListener layoutInitListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
@@ -60,7 +59,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         @Override
         public void onGlobalLayout() {
             int height = durPageView.getTvContent().getMeasuredHeight();
-            layout = durPageView.getTvContent().getLayout();
+            Layout layout = durPageView.getTvContent().getLayout();
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
@@ -583,7 +582,17 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
+    public void upTime(String time) {
+        for (BookContentView item : viewContents) {
+            item.setTime(time);
+        }
+    }
 
+    public void upBattery(String battery) {
+        for (BookContentView item : viewContents) {
+            item.setBattery(battery);
+        }
+    }
 
     /**
      * 音量键翻页

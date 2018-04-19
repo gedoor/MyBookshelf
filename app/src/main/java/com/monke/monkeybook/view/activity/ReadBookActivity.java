@@ -132,22 +132,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     ImageView ivInterface;
     @BindView(R.id.ivSetting)
     ImageView ivSetting;
-    @BindView(R.id.tvTopLeft)
-    TextView tvTopLeft;
-    @BindView(R.id.tvTopRight)
-    TextView tvTopRight;
-    @BindView(R.id.llTop)
-    LinearLayout llTop;
-    @BindView(R.id.v_top)
-    View vTop;
-    @BindView(R.id.v_bottom)
-    View vBottom;
-    @BindView(R.id.tvBottomLeft)
-    TextView tvBottomLeft;
-    @BindView(R.id.tvBottomRight)
-    TextView tvBottomRight;
-    @BindView(R.id.llBottom)
-    LinearLayout llBottom;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.atv_url)
@@ -284,13 +268,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        if (hideStatusBar) {
-            llTop.setVisibility(View.VISIBLE);
-            vTop.setVisibility(View.VISIBLE);
-            vBottom.setVisibility(View.GONE);
-        }
         initCsvBook();
-        setBg();
         //图标眷色
         ivCList.getDrawable().mutate();
         ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -322,14 +300,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange(int index) {
                 csvBook.changeBg();
-                ReadBookActivity.this.setBg();
             }
 
             @Override
             public void setFont(String path) {
                 csvBook.setFont();
                 csvBook.changeTextSize();
-                ReadBookActivity.this.setFont();
             }
 
             @Override
@@ -532,19 +508,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
             }
         });
-        if (hideStatusBar) {
-            tvTopLeft.setOnClickListener(view -> {
-                if (chapterListView.hasData()) {
-                    new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
-                }
-            });
-        } else {
-            tvBottomLeft.setOnClickListener(view -> {
-                if (chapterListView.hasData()) {
-                    new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
-                }
-            });
-        }
 
         //亮度
         llLight.setOnClickListener(view -> {
@@ -621,46 +584,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setBg() {
-        if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
-            tvTopLeft.setTextColor(readBookControl.getTextColor());
-            tvTopRight.setTextColor(readBookControl.getTextColor());
-            vTop.setBackgroundColor(readBookControl.getTextColor());
-            vBottom.setBackgroundColor(readBookControl.getTextColor());
-            tvBottomLeft.setTextColor(readBookControl.getTextColor());
-            tvBottomRight.setTextColor(readBookControl.getTextColor());
-        } else {
-            tvTopLeft.setTextColor(readBookControl.getTextColorCustom());
-            tvTopRight.setTextColor(readBookControl.getTextColorCustom());
-            vTop.setBackgroundColor(readBookControl.getTextColorCustom());
-            vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
-            tvBottomLeft.setTextColor(readBookControl.getTextColorCustom());
-            tvBottomRight.setTextColor(readBookControl.getTextColorCustom());
-        }
-    }
-
-    private void setFont() {
-        try {
-            if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
-                Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
-                tvTopLeft.setTypeface(typeface);
-                tvTopRight.setTypeface(typeface);
-                tvBottomLeft.setTypeface(typeface);
-                tvBottomRight.setTypeface(typeface);
-            } else {
-                tvTopLeft.setTypeface(Typeface.SANS_SERIF);
-                tvTopRight.setTypeface(Typeface.SANS_SERIF);
-                tvBottomLeft.setTypeface(Typeface.SANS_SERIF);
-                tvBottomRight.setTypeface(Typeface.SANS_SERIF);
-            }
-        } catch (Exception e) {
-            tvTopLeft.setTypeface(Typeface.SANS_SERIF);
-            tvTopRight.setTypeface(Typeface.SANS_SERIF);
-            tvBottomLeft.setTypeface(Typeface.SANS_SERIF);
-            tvBottomRight.setTypeface(Typeface.SANS_SERIF);
-        }
     }
 
     private void refresh() {
@@ -831,21 +754,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                     actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
-                    if (hideStatusBar) {
-                        tvTopLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                    } else {
-                        tvBottomLeft.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
-                    }
                 } else {
-//                    atvTitle.setText("无章节");
-                    if (hideStatusBar) {
-                        tvTopLeft.setText("");
-                        tvTopRight.setText("");
-                    } else {
-                        tvBottomLeft.setText("");
-                        tvBottomRight.setText("");
-                    }
+                    actionBar.setTitle("没有目录");
+                    atvUrl.setText("");
                 }
+
                 if (mPresenter.getBookShelf().getChapterListSize() == 1) {
                     tvPre.setEnabled(false);
                     tvNext.setEnabled(false);
@@ -886,11 +799,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 hpbReadProgress.setMaxProgress(pageAll - 1);
                 if (hpbReadProgress.getDurProgress() != pageIndex)
                     hpbReadProgress.setDurProgress(pageIndex);
-                if (hideStatusBar) {
-                    tvTopRight.setText(String.format("%d/%d", pageIndex + 1, pageAll));
-                } else {
-                    tvBottomRight.setText(String.format("%d/%d", pageIndex + 1, pageAll));
-                }
             }
 
             @Override
@@ -1065,8 +973,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onResume() {
         super.onResume();
         if (hideStatusBar) {
-            tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
-            tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(this)));
+            csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
+            csvBook.upBattery(String.format("%d%%", BatteryUtil.getLevel(this)));
         }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
@@ -1097,10 +1005,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         public void onReceive(Context context, Intent intent) {
             if (hideStatusBar) {
                 if (Intent.ACTION_TIME_TICK.equals(intent.getAction())) {
-                    tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
+                    csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                    tvBottomRight.setText(String.format("%d%%", level));
+                    csvBook.upBattery(String.format("%d%%", level));
                 }
             }
         }

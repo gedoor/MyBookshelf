@@ -10,7 +10,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -22,13 +21,16 @@ import android.widget.Toast;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.widget.ContentTextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.grantland.widget.AutofitTextView;
 
 public class BookContentView extends FrameLayout {
     public long qTag = System.currentTimeMillis();
@@ -50,6 +52,22 @@ public class BookContentView extends FrameLayout {
     TextView tvLoadAgain;
     @BindView(R.id.ll_error)
     LinearLayout llError;
+    @BindView(R.id.tvTopLeft)
+    TextView tvTopLeft;
+    @BindView(R.id.tvTopRight)
+    TextView tvTopRight;
+    @BindView(R.id.llTop)
+    LinearLayout llTop;
+    @BindView(R.id.v_top)
+    View vTop;
+    @BindView(R.id.v_bottom)
+    View vBottom;
+    @BindView(R.id.tvBottomLeft)
+    TextView tvBottomLeft;
+    @BindView(R.id.tvBottomRight)
+    TextView tvBottomRight;
+    @BindView(R.id.llBottom)
+    LinearLayout llBottom;
 
     private String title;
     private String content;
@@ -57,6 +75,7 @@ public class BookContentView extends FrameLayout {
     private int chapterAll;
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
+    private boolean hideStatusBar;
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -76,21 +95,32 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        init(preferences.getBoolean("hide_status_bar", false));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        init(preferences.getBoolean("hide_status_bar", false));
     }
 
-    public void init() {
+    public void init(boolean hideStatus) {
+        this.hideStatusBar = hideStatus;
         View view;
-        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal, this, false);
+        if (hideStatus) {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal2, this, false);
+        } else {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal1, this, false);
+        }
         addView(view);
         ButterKnife.bind(this, view);
-
+        if (hideStatus) {
+            llTop.setVisibility(VISIBLE);
+            vTop.setVisibility(VISIBLE);
+            vBottom.setVisibility(GONE);
+        }
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)
                 loading();
@@ -126,6 +156,7 @@ public class BookContentView extends FrameLayout {
         finishLoading();
     }
 
+    @SuppressLint("DefaultLocale")
     public void updateData(long tag, String title, List<String> contentLines, int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
         if (tag == qTag) {
 
@@ -145,6 +176,17 @@ public class BookContentView extends FrameLayout {
             this.pageAll = durPageAll;
 
             tvContent.setText(this.content);
+            if (hideStatusBar) {
+                tvTopLeft.setText(title);
+                tvTopRight.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
+                @SuppressLint("SimpleDateFormat")
+                DateFormat dfTime = new SimpleDateFormat("HH:mm");
+                tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
+                tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+            } else {
+                tvBottomLeft.setText(title);
+                tvBottomRight.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
+            }
 
             if (setDataListener != null) {
                 setDataListener.setDataFinish(this, durChapterIndex, chapterAll, durPageIndex, durPageAll, this.durPageIndex);
@@ -258,12 +300,24 @@ public class BookContentView extends FrameLayout {
             tvContent.setTextColor(readBookControl.getTextColor());
             tvLoading.setTextColor(readBookControl.getTextColor());
             tvErrorInfo.setTextColor(readBookControl.getTextColor());
+            tvTopLeft.setTextColor(readBookControl.getTextColor());
+            tvTopRight.setTextColor(readBookControl.getTextColor());
+            vTop.setBackgroundColor(readBookControl.getTextColor());
+            vBottom.setBackgroundColor(readBookControl.getTextColor());
+            tvBottomLeft.setTextColor(readBookControl.getTextColor());
+            tvBottomRight.setTextColor(readBookControl.getTextColor());
         } else {
             ACache aCache = ACache.get(this.getContext());
             ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
             tvContent.setTextColor(readBookControl.getTextColorCustom());
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
+            tvTopLeft.setTextColor(readBookControl.getTextColorCustom());
+            tvTopRight.setTextColor(readBookControl.getTextColorCustom());
+            vTop.setBackgroundColor(readBookControl.getTextColorCustom());
+            vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
+            tvBottomLeft.setTextColor(readBookControl.getTextColorCustom());
+            tvBottomRight.setTextColor(readBookControl.getTextColorCustom());
         }
     }
 
@@ -274,13 +328,25 @@ public class BookContentView extends FrameLayout {
                 Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
                 tvContent.setTypeface(typeface);
                 tvContent.setFont();
+                tvTopLeft.setTypeface(typeface);
+                tvTopRight.setTypeface(typeface);
+                tvBottomLeft.setTypeface(typeface);
+                tvBottomRight.setTypeface(typeface);
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
+                tvTopLeft.setTypeface(Typeface.SANS_SERIF);
+                tvTopRight.setTypeface(Typeface.SANS_SERIF);
+                tvBottomLeft.setTypeface(Typeface.SANS_SERIF);
+                tvBottomRight.setTypeface(Typeface.SANS_SERIF);
             }
         } catch (Exception e) {
             Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
+            tvTopLeft.setTypeface(Typeface.SANS_SERIF);
+            tvTopRight.setTypeface(Typeface.SANS_SERIF);
+            tvBottomLeft.setTypeface(Typeface.SANS_SERIF);
+            tvBottomRight.setTypeface(Typeface.SANS_SERIF);
         }
     }
 
@@ -305,5 +371,11 @@ public class BookContentView extends FrameLayout {
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
 
+    public void setTime(String time) {
+        tvBottomLeft.setText(time);
+    }
 
+    public void setBattery(String battery) {
+        tvBottomRight.setText(battery);
+    }
 }
