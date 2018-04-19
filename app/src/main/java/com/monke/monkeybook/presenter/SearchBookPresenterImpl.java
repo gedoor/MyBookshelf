@@ -1,5 +1,6 @@
 package com.monke.monkeybook.presenter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
@@ -45,7 +46,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     private Boolean isInput = false;
     private SearchBook searchBook;
 
-    public SearchBookPresenterImpl() {
+    public SearchBookPresenterImpl(Context context) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
             if (temp == null)
@@ -105,7 +106,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         };
 
         //搜索引擎初始化
-        searchBook = new SearchBook((BaseActivity) mView.getContext(), onSearchListener);
+        searchBook = new SearchBook((BaseActivity) context, onSearchListener);
     }
 
     @Override
