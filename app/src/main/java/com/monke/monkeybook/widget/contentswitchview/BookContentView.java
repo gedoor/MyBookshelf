@@ -10,6 +10,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -50,10 +51,6 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.ll_error)
     LinearLayout llError;
 
-    private SharedPreferences preferences;
-
-    private double textHeigth = 0;
-
     private String title;
     private String content;
     private int durChapterIndex;
@@ -79,7 +76,6 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        preferences = PreferenceManager.getDefaultSharedPreferences(context);
         init();
     }
 
@@ -189,16 +185,8 @@ public class BookContentView extends FrameLayout {
         return pageAll;
     }
 
-    public void setPageAll(int pageAll) {
-        this.pageAll = pageAll;
-    }
-
     public int getDurPageIndex() {
         return durPageIndex;
-    }
-
-    public void setDurPageIndex(int durPageIndex) {
-        this.durPageIndex = durPageIndex;
     }
 
     public int getDurChapterIndex() {
@@ -225,14 +213,6 @@ public class BookContentView extends FrameLayout {
         this.setDataListener = setDataListener;
     }
 
-    public double getTextHeigth() {
-        return textHeigth;
-    }
-
-    public void setTextHeigth(double textHeigth) {
-        this.textHeigth = textHeigth;
-    }
-
     public long getQTag() {
         return qTag;
     }
@@ -254,15 +234,14 @@ public class BookContentView extends FrameLayout {
         Paint mTextPaint = tvContent.getPaint();
         //字体高度
         double textHeight = Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent) * 1.0f;
-        textHeight = textHeight * readBookControl.getLineMultiplier() + readBookControl.getTextExtra();
-
-        this.textHeigth = textHeight;
-
-        //计算TextView高度
-        //Log.e("LineHeight>>",tvContent.getLineHeight()+"---"+textHeight);
         //行间距
-        return (int) (height * 1.0f / tvContent.getLineHeight() + lineNum);
-        //return (int) (height * 1.0f / textHeigth + lineNum);
+        double textSpacing = textHeight * readBookControl.getLineMultiplier() - textHeight + readBookControl.getTextExtra();
+
+//        Log.e("LineHeight>>",tvContent.getLineHeight() + " " + textHeight + " " + textSpacing + "  " + height);
+        //行数
+        double lineCount = (height) * 1.0f / tvContent.getLineHeight() + lineNum;
+//        Log.e("LineCount>>", String.valueOf(lineCount));
+        return (int) lineCount;
     }
 
 

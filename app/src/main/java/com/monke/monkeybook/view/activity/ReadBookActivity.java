@@ -175,6 +175,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private MoProgressHUD moProgressHUD;
     private Intent readAloudIntent;
     private ServiceConnection conn;
+    private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
     private ReadBookControl readBookControl;
     @SuppressLint("SimpleDateFormat")
@@ -194,7 +195,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
-        ThisBatInfoReceiver batInfoReceiver = new ThisBatInfoReceiver();
+        batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
@@ -1077,6 +1078,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(batInfoReceiver);
         ReadAloudService.stop(this);
     }
 

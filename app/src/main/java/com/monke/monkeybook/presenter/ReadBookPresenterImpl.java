@@ -72,7 +72,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
-    private double textHeight = 0;//行高
 
     private int numberOfRetries = 0;
 
@@ -121,8 +120,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()//字体大小改变
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null//行内容不为空
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0
-                        && bookContentView != null
-                        && textHeight == bookContentView.getTextHeigth()) {//行内容Size>0
+                        && bookContentView != null) {//行内容Size>0
                     //已有数据
                     int pageAll = (int) Math.ceil(bookShelf.getChapterList(chapterIndex)
                             .getBookContentBean().getLineContent().size() * 1.0 / pageLineCount);
@@ -161,7 +159,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 public void onNext(List<String> value) {
                                     if (bookContentView != null) {
                                         bookShelf.getChapterList(chapterIndex).getBookContentBean().setLineContent(value);
-                                        textHeight = bookContentView.getTextHeigth();
                                         loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
                                     }
                                 }
