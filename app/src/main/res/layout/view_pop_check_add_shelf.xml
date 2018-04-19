@@ -10,7 +10,7 @@
         android:paddingLeft="10.5dp"
         android:paddingRight="10.5dp"
         android:paddingBottom="16.5dp"
-        android:background="@drawable/bg_search"
+        android:background="@color/background"
         android:gravity="center_horizontal">
         <TextView
             android:id="@+id/tv_book_name"

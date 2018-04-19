@@ -11,7 +11,7 @@
         android:paddingTop="3.5dp"
         android:paddingLeft="9.5dp"
         android:paddingRight="10.5dp"
-        android:background="@drawable/bg_search"
+        android:background="@color/background"
         tools:ignore="RtlHardcoded">
         <LinearLayout
             android:background="@color/background"

@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:background="@drawable/bg_search"
+        android:background="@color/background"
         android:clickable="true"
         android:focusable="true"
         android:paddingBottom="16.5dp"
