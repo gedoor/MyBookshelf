@@ -119,7 +119,8 @@
         <com.monke.immerselayout.ImmerseLinearLayout
             android:id="@+id/ll_menu_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
@@ -150,6 +151,11 @@
                     android:visibility="gone" />
 
             </android.support.design.widget.AppBarLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bg_shadow_top" />
 
         </com.monke.immerselayout.ImmerseLinearLayout>
 
