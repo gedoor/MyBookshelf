@@ -6,6 +6,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
@@ -104,7 +105,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         };
 
         //搜索引擎初始化
-        searchBook = new SearchBook(onSearchListener);
+        searchBook = new SearchBook((BaseActivity) mView.getContext(), onSearchListener);
     }
 
     @Override

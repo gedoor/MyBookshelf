@@ -676,10 +676,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void changeSource() {
-
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
+            moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
                 if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
                     mPresenter.changeBookSource(searchBookBean);
                     csvBook.showLoading();
@@ -689,7 +688,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void download() {
-
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
             //弹出离线下载界面

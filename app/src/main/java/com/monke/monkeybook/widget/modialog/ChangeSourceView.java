@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -41,15 +42,15 @@ public class ChangeSourceView {
     private ChangeSourceAdapter adapter;
     private SearchBook searchBook;
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
-    private String thisTag;
+    private String bookTag;
     private String bookName;
     private String bookAuthor;
 
-    public static ChangeSourceView getInstance(MoProgressView moProgressView) {
-        return new ChangeSourceView(moProgressView);
+    public static ChangeSourceView getInstance(BaseActivity activity, MoProgressView moProgressView) {
+        return new ChangeSourceView(activity, moProgressView);
     }
 
-    private ChangeSourceView(MoProgressView moProgressView) {
+    private ChangeSourceView(BaseActivity activity, MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
@@ -66,7 +67,7 @@ public class ChangeSourceView {
         });
         rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
-        searchBook = new SearchBook(new SearchBook.OnSearchListener() {
+        searchBook = new SearchBook(activity, new SearchBook.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
                 adapter.reSetSourceAdapter();
@@ -118,7 +119,7 @@ public class ChangeSourceView {
         this.moProgressHUD = moProgressHUD;
         this.onClickSource = onClickSource;
         bookShelfS.add(bookShelf);
-        thisTag = bookShelf.getTag();
+        bookTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
         atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
@@ -173,7 +174,7 @@ public class ChangeSourceView {
         if (value.size() > 0) {
             for (SearchBookBean searchBookBean : value) {
                 if (Objects.equals(searchBookBean.getName(), bookName) && Objects.equals(searchBookBean.getAuthor(), bookAuthor)) {
-                    if (Objects.equals(searchBookBean.getTag(), thisTag)) {
+                    if (Objects.equals(searchBookBean.getTag(), bookTag)) {
                         searchBookBean.setIsAdd(true);
                     } else {
                         searchBookBean.setIsAdd(false);
