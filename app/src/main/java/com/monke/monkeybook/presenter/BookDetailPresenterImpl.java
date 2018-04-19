@@ -50,6 +50,10 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
             String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
             BitIntentDataManager.getInstance().cleanData(key);
+            if (bookShelf == null) {
+                mView.finish();
+                return;
+            }
             inBookShelf = true;
             searchBook = new SearchBookBean();
             searchBook.setNoteUrl(bookShelf.getNoteUrl());
