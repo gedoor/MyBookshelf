@@ -14,15 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@color/background"
+        android:layout_margin="40dp"
         android:clickable="true"
-        android:focusable="true"
-        android:paddingBottom="16.5dp"
-        android:paddingLeft="10.5dp"
-        android:paddingRight="10.5dp"
-        android:paddingTop="3.5dp">
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/iv_blur_cover"
@@ -209,7 +203,7 @@
                     android:id="@+id/tv_loading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_ib_pre3"
+                    android:background="@color/tv_text_button_nor"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
