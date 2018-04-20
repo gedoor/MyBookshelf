@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">阅读</string>
+    <string name="read_summary">让阅读成为一种习惯。</string>
     <string name="update_log">
     更新日志\n
         解决了一些说了你也不懂的bug\n
@@ -168,8 +169,7 @@
     <string name="searchHistory">搜索历史</string>
     <string name="clear">清除</string>
     <string name="showTitle">正文显示标题</string>
-        <string name="refresh_default">书源同步</string>
+    <string name="refresh_default">书源同步</string>
     <string name="no_last_chapter">无最新章节信息</string>
-
 
 </resources>
