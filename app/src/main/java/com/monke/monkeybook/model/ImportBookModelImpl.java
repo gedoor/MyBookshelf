@@ -77,9 +77,10 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
     }
 
     private void saveChapter(File book, String md5) throws IOException {
-        String regex = "^第.+[章节回]";
-        Pattern p = Pattern.compile(regex);
+        String regex = "第.{1,7}章.{0,}";
+
         String encoding;
+
         FileInputStream fis = new FileInputStream(book);
         byte[] buf = new byte[4096];
         UniversalDetector detector = new UniversalDetector(null);
@@ -100,11 +101,15 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         InputStreamReader inputreader = new InputStreamReader(fis, encoding);
         BufferedReader buffreader = new BufferedReader(inputreader);
         String line;
-        int number = 0;
         while ((line = buffreader.readLine()) != null) {
-            Matcher m = p.matcher(line.trim());
+            line = FormatWebText.getContent(line);
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(line);
             if (m.find()) {
-                number = 0;
+                String temp = line.trim().substring(0, line.trim().indexOf("第"));
+                if (temp.trim().length() > 0) {
+                    contentBuilder.append(temp);
+                }
                 if (contentBuilder.toString().length() > 0) {
                     if (contentBuilder.toString().replaceAll("　", "").trim().length() > 0) {
                         saveDurChapterContent(md5, chapterPageIndex, title, contentBuilder.toString());
@@ -115,31 +120,22 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 title = line.trim().substring(line.trim().indexOf("第"));
             } else {
                 if (contentBuilder.length() > 0) {
-                    contentBuilder.append("\r\n");
+                    contentBuilder.append("\r\n\u3000\u3000").append(line);
                 } else {
-                    contentBuilder.append("\r");
+                    contentBuilder.append("\r\u3000\u3000").append(line);
                 }
-                number++;
-                if (number > 100) {
-                    title = "第" + (chapterPageIndex + 1) + "节";
-                    saveDurChapterContent(md5, chapterPageIndex, title, contentBuilder.toString());
-                    contentBuilder.delete(0, contentBuilder.length());
-                    chapterPageIndex++;
-                    number = 0;
-                } else {
-                    contentBuilder.append(line);
+                if (title == null) {
+                    title = line;
                 }
             }
         }
         if (contentBuilder.length() > 0) {
             saveDurChapterContent(md5, chapterPageIndex, title, contentBuilder.toString());
             contentBuilder.delete(0, contentBuilder.length());
-            title = null;
         }
         buffreader.close();
         inputreader.close();
         fis.close();
-
     }
 
     private void saveDurChapterContent(String md5, int chapterPageIndex, String name, String content) {

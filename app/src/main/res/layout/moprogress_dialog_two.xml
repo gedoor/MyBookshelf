@@ -1,7 +1,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="260dp"
     android:layout_height="180dp"
-    android:background="@drawable/bg_search">
+    android:background="@color/background">
 
     <LinearLayout
         android:id="@+id/ll_content"

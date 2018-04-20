@@ -3,12 +3,14 @@ package com.monke.monkeybook.model;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SearchBook {
+    private BaseActivity activity;
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS;
     private int threadsNum;
@@ -31,7 +34,8 @@ public class SearchBook {
 
     private OnSearchListener searchListener;
 
-    public SearchBook(OnSearchListener searchListener) {
+    public SearchBook(BaseActivity activity, OnSearchListener searchListener) {
+        this.activity = activity;
         this.searchListener = searchListener;
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         threadsNum = preference.getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
@@ -96,6 +100,7 @@ public class SearchBook {
                         .searchOtherBook(content, page, searchEngine.getTag())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
+                        .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new SimpleObserver<List<SearchBookBean>>() {
                             @Override
                             public void onNext(List<SearchBookBean> value) {

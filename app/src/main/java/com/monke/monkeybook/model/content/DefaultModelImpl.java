@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model.content;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -11,8 +12,10 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FormatWebText;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IHttpPostApi;
@@ -332,7 +335,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         return getRetrofitString(TAG)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
-                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
+                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
+                .flatMap(this::upChapterList);
     }
 
     private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
@@ -349,8 +353,26 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
+                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + ex.getMessage());
                 bookContentBean.setRight(false);
+            }
+            e.onNext(bookContentBean);
+            e.onComplete();
+        });
+    }
+
+    private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
+        return Observable.create(e -> {
+            if (bookContentBean.getRight()) {
+                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplaceInTx(bookContentBean);
+                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
+                if (chapterListBean != null) {
+                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
+                    chapterListBean.setHasCache(true);
+                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
+                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
+                }
             }
             e.onNext(bookContentBean);
             e.onComplete();

@@ -145,7 +145,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void bindEvent() {
         bindRvShelfEvent();
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
-        itemTouchHelpCallback.setDragEnable(true);
+        if (bookPx.equals("2")) {
+            itemTouchHelpCallback.setDragEnable(true);
+        }
         if (viewIsList) {
             bookShelfListAdapter.setItemClickListener(getAdapterListener());
             itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfListAdapter.getItemTouchCallbackListener());

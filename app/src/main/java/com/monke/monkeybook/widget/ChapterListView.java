@@ -22,6 +22,7 @@ import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
 import butterknife.BindView;
@@ -130,7 +131,6 @@ public class ChapterListView extends FrameLayout {
 
     /**
      * 显示章节列表，并定位当前阅读章节
-     * @param durChapter
      */
     public void show(int durChapter) {
         chapterListAdapter.setIndex(durChapter);
@@ -169,6 +169,12 @@ public class ChapterListView extends FrameLayout {
         });
         rvList.setAdapter(chapterListAdapter);
         rvbSlider.setRecyclerView(rvList);
+    }
+
+    public void upChapterList(ChapterListBean chapterListBean) {
+        if (chapterListAdapter != null) {
+            chapterListAdapter.upChapterList(chapterListBean);
+        }
     }
 
     public Boolean dismissChapterList() {

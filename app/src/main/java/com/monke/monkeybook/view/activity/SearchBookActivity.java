@@ -73,7 +73,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
 
     @Override
     protected ISearchBookPresenter initInjector() {
-        return new SearchBookPresenterImpl();
+        return new SearchBookPresenterImpl(this);
     }
 
     @Override

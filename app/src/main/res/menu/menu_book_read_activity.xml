@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.activity.MainActivity">
+
+    <item
+        android:id="@+id/action_change_source"
+        android:icon="@drawable/ic_exchange_black_24dp"
+        android:title="@string/change_origin"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh_black_24dp"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_download_black_24dp"
+        android:title="@string/download_offline"
+        app:showAsAction="ifRoom" />
+
+</menu>

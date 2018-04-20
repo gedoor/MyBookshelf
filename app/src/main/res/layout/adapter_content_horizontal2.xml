@@ -15,7 +15,7 @@
         android:src="#000000"
         tools:ignore="ContentDescription" />
 
-    <com.monke.immerselayout.ImmerseLinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -26,9 +26,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/ll_content"
@@ -36,6 +34,44 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="invisible">
+
+                <LinearLayout
+                    android:id="@+id/llTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvTopLeft"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:lines="1"
+                        android:text=""
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTopRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lines="1"
+                        android:text=""
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/v_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="#ffffff"
+                    android:visibility="gone" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
 
                 <com.monke.monkeybook.widget.ContentTextView
                     android:id="@+id/tv_content"
@@ -51,26 +87,26 @@
                     android:id="@+id/v_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
                     android:background="#ffffff" />
 
                 <LinearLayout
+                    android:id="@+id/llBottom"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <me.grantland.widget.AutofitTextView
-                        android:id="@+id/tv_title"
+                    <TextView
+                        android:id="@+id/tvBottomLeft"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:singleLine="true"
+                        android:lines="1"
+                        android:text=""
                         android:textColor="#ffffff"
-                        android:textSize="14sp"
-                        app:minTextSize="14sp" />
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tv_page"
+                        android:id="@+id/tvBottomRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
@@ -126,5 +162,5 @@
                     android:textSize="16sp" />
             </LinearLayout>
         </FrameLayout>
-    </com.monke.immerselayout.ImmerseLinearLayout>
+    </LinearLayout>
 </FrameLayout>

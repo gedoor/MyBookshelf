@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:id="@+id/fl_content"
     android:clickable="true"
-    android:background="@drawable/bg_ib_pre2"
+    android:background="@drawable/bg_ib_pre"
     android:focusable="true">
     <TextView
         android:id="@+id/tv_name"

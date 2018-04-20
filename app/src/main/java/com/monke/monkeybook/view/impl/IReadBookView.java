@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.impl;
 import android.graphics.Paint;
 
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.contentswitchview.ContentSwitchView;
@@ -44,7 +45,7 @@ public interface IReadBookView extends IView {
 
     void initChapterList();
 
-    void loadLocationBookError();
+    void loadLocationBookError(String errorMsg);
 
     void showOnLineView();
 
@@ -55,4 +56,6 @@ public interface IReadBookView extends IView {
     void dismissLoading();
 
     void openBookFromOther();
+
+    void chapterChange(ChapterListBean chapterListBean);
 }

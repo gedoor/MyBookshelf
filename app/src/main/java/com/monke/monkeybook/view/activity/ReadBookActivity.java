@@ -2,28 +2,35 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,20 +39,21 @@ import android.widget.Toast;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.ReadAloudService;
-import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
-import com.monke.monkeybook.view.popupwindow.ReadBookMenuMorePop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentswitchview.BookContentView;
@@ -54,6 +62,9 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 import at.markushi.ui.CircleButton;
@@ -63,6 +74,7 @@ import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -82,20 +94,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
     View vMenuBg;
-    @BindView(R.id.ll_menu_top)
-    LinearLayout llMenuTop;
+
     @BindView(R.id.ll_menu_bottom)
     LinearLayout llMenuBottom;
-    @BindView(R.id.iv_return)
-    ImageButton ivReturn;
-    @BindView(R.id.iv_refresh)
-    ImageButton ivRefresh;
-    @BindView(R.id.iv_more)
-    ImageButton ivMenuMore;
-    @BindView(R.id.atv_title)
-    AutofitTextView atvTitle;
-    @BindView(R.id.atv_url)
-    AutofitTextView atvUrl;
+
     @BindView(R.id.tv_pre)
     TextView tvPre;
     @BindView(R.id.tv_next)
@@ -110,7 +112,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
     LinearLayout llSetting;
-    @BindView(R.id.clp_chapterlist)
+    @BindView(R.id.clp_chapterList)
     ChapterListView chapterListView;
     @BindView(R.id.ib_read_aloud)
     CircleButton ibReadAloud;
@@ -132,11 +134,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     ImageView ivInterface;
     @BindView(R.id.ivSetting)
     ImageView ivSetting;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.atv_url)
+    AutofitTextView atvUrl;
+    @BindView(R.id.ll_menu_top)
+    LinearLayout llMenuTop;
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
     private Animation menuBottomIn;
     private Animation menuBottomOut;
+    private ActionBar actionBar;
 
     private boolean aloudButton;
     private boolean hideStatusBar;
@@ -144,16 +153,20 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String noteUrl;
     private int aloudStatus;
 
+    private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
     private ReadAdjustPop readAdjustPop;
-    private ReadBookMenuMorePop readBookMenuMorePop;
     private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
     private Intent readAloudIntent;
     private ServiceConnection conn;
+    private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
+    private ReadBookControl readBookControl;
+    @SuppressLint("SimpleDateFormat")
+    private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
 
@@ -169,6 +182,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         super.onCreate(savedInstanceState);
+        batInfoReceiver = new ThisBatInfoReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_TIME_TICK);
+        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        registerReceiver(batInfoReceiver, filter);
     }
 
     @Override
@@ -178,7 +196,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hideStatusBar = preferences.getBoolean("hide_status_bar", false);
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
-        ReadBookControl readBookControl = ReadBookControl.getInstance();
+        readBookControl = ReadBookControl.getInstance();
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -199,6 +217,421 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideNavigationBar();
+        }
+    }
+
+    @Override
+    protected void initData() {
+        initServiceConn();
+        initLoadDataListener();
+        mPresenter.saveProgress();
+        //显示菜单
+        menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
+        menuTopIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                hideStatusBar(false);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                vMenuBg.setOnClickListener(v -> popMenuOut());
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
+        //隐藏菜单
+        menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
+        menuTopOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                vMenuBg.setOnClickListener(null);
+                hideStatusBar(hideStatusBar);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                flMenu.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
+    }
+
+    @Override
+    protected void bindView() {
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
+        initCsvBook();
+        //图标眷色
+        ivCList.getDrawable().mutate();
+        ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivAdjust.getDrawable().mutate();
+        ivAdjust.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivInterface.getDrawable().mutate();
+        ivInterface.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ivSetting.getDrawable().mutate();
+        ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        if (preferences.getBoolean("nightTheme", false)) {
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
+        } else {
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
+        }
+        //弹窗
+        moProgressHUD = new MoProgressHUD(this);
+        //界面设置
+        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
+            @Override
+            public void textSizeChange(int index) {
+                csvBook.changeTextSize();
+            }
+
+            @Override
+            public void lineSizeChange(float lineMultiplier) {
+                csvBook.changeLineSize();
+            }
+
+            @Override
+            public void bgChange(int index) {
+                csvBook.changeBg();
+            }
+
+            @Override
+            public void setFont(String path) {
+                csvBook.setFont();
+                csvBook.changeTextSize();
+            }
+
+            @Override
+            public void setConvert() {
+                BookshelfHelp.clearLineContent();
+                recreate();
+            }
+
+            @Override
+            public void setBold() {
+                csvBook.setTextBold();
+            }
+        });
+        //目录初始化
+        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
+            @Override
+            public void animIn() {
+                hideStatusBar(false);
+            }
+
+            @Override
+            public void animOut() {
+                hideStatusBar(hideStatusBar);
+            }
+        });
+        //其它设置
+        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
+            @Override
+            public void keepScreenOnChange(Boolean keepScreenOn) {
+                if (keepScreenOn) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+
+            @Override
+            public void showTitle(Boolean showTitle) {
+                recreate();
+            }
+        });
+        //调节
+        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
+            @Override
+            public void changeSpeechRate(int speechRate) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
+            }
+
+            @Override
+            public void speechRateFollowSys() {
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
+                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        readAdjustPop.initLight();
+    }
+
+    @Override
+    public void setHpbReadProgressMax(int count) {
+        hpbReadProgress.setMaxProgress(count);
+    }
+
+    private void initCsvBook() {
+        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
+    }
+
+    @Override
+    public void initPop() {
+        //是否添加书架
+        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
+                new CheckAddShelfPop.OnItemClickListener() {
+                    @Override
+                    public void clickExit() {
+                        mPresenter.removeFromShelf();
+                    }
+
+                    @Override
+                    public void clickAddShelf() {
+                        mPresenter.addToShelf(null);
+                        checkAddShelfPop.dismiss();
+                    }
+                });
+        initChapterList();
+    }
+
+    /**
+     * 初始化目录列表
+     */
+    @Override
+    public void initChapterList() {
+        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
+                .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
+                        BookContentView.DurPageIndexBegin));
+    }
+
+    @Override
+    protected void bindEvent() {
+        //阅读进度
+        hpbReadProgress.setProgressListener(new OnProgressListener() {
+            @Override
+            public void moveStartProgress(float dur) {
+
+            }
+
+            @Override
+            public void durProgressChange(float dur) {
+
+            }
+
+            @Override
+            public void moveStopProgress(float dur) {
+                int realDur = (int) Math.ceil(dur);
+                if ((realDur) != csvBook.getDurContentView().getDurPageIndex()) {
+                    csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                            mPresenter.getBookShelf().getChapterListSize(),
+                            realDur);
+                }
+                if (hpbReadProgress.getDurProgress() != realDur)
+                    hpbReadProgress.setDurProgress(realDur);
+            }
+
+            @Override
+            public void setDurProgress(float dur) {
+
+            }
+        });
+
+        //正文
+        csvBook.setLoadDataListener(loadDataListener);
+
+        //打开URL
+        atvUrl.setOnClickListener(view -> {
+            try {
+                String url = atvUrl.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //朗读定时
+        ibReadAloudTimer.getDrawable().mutate();
+        ibReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ibReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
+
+        //朗读
+        ibReadAloud.getDrawable().mutate();
+        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ibReadAloud.setOnClickListener(view -> startReadAloud());
+
+        //替换
+        ibReplaceRule.getDrawable().mutate();
+        ibReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ibReplaceRule.setOnClickListener(view -> {
+            popMenuOut();
+            Intent intent = new Intent(this, ReplaceRuleActivity.class);
+            startActivityForResult(intent, ResultReplace);
+        });
+
+        //夜间模式
+        ibNightTheme.getDrawable().mutate();
+        ibNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        ibNightTheme.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));
+            editor.apply();
+            setNightTheme();
+        });
+
+        //上一章
+        tvPre.setOnClickListener(view -> {
+            if (mPresenter.getBookShelf() != null) {
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
+                        mPresenter.getBookShelf().getChapterListSize(),
+                        BookContentView.DurPageIndexBegin);
+            }
+        });
+
+        //下一章
+        tvNext.setOnClickListener(view -> {
+            if (mPresenter.getBookShelf() != null) {
+                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
+                        mPresenter.getBookShelf().getChapterListSize(),
+                        BookContentView.DurPageIndexBegin);
+            }
+        });
+
+        //目录
+        llCatalog.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
+            if (chapterListView.hasData()) {
+                new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+            }
+        });
+
+        //亮度
+        llLight.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
+            new Handler().postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+        });
+
+        //界面
+        llFont.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
+            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+        });
+
+        //设置
+        llSetting.setOnClickListener(view -> {
+            ReadBookActivity.this.popMenuOut();
+            new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+        });
+
+    }
+
+    @Override
+    public Paint getPaint() {
+        return csvBook.getTextPaint();
+    }
+
+    @Override
+    public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex) {
+        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex);
+    }
+
+    @Override
+    public void startLoadingBook() {
+        csvBook.startLoading();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.saveProgress();
+    }
+
+    //设置ToolBar
+    private void setupActionBar() {
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        this.menu = menu;
+        showOnLineView();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_change_source:
+                changeSource();
+                break;
+            case R.id.action_refresh:
+                refresh();
+                break;
+            case R.id.action_download:
+                download();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void refresh() {
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
+                    .getDurChapterListBean().getDurChapterUrl());
+            mPresenter.getBookShelf().getDurChapterListBean()
+                    .setBookContentBean(null);
+            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
+                    mPresenter.getBookShelf().getChapterListSize(),
+                    BookContentView.DurPageIndexBegin);
+        }
+    }
+
+    private void changeSource() {
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
+                if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                    mPresenter.changeBookSource(searchBookBean);
+                    csvBook.showLoading();
+                }
+            });
+        }
+    }
+
+    private void download() {
+        ReadBookActivity.this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            //弹出离线下载界面
+            int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
+            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
+                    mPresenter.getBookShelf().getChapterListSize(),
+                    (start, end) -> {
+                        moProgressHUD.dismiss();
+                        mPresenter.addDownload(start, end);
+                    });
         }
     }
 
@@ -324,15 +757,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
             }
 
+            @SuppressLint("DefaultLocale")
             @Override
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    atvTitle.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
+                    actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                 } else {
-                    atvTitle.setText("无章节");
+                    actionBar.setTitle("没有目录");
+                    atvUrl.setText("");
                 }
+
                 if (mPresenter.getBookShelf().getChapterListSize() == 1) {
                     tvPre.setEnabled(false);
                     tvNext.setEnabled(false);
@@ -367,6 +803,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 popMenuIn();
             }
 
+            @SuppressLint("DefaultLocale")
             @Override
             public void setHpbReadProgress(int pageIndex, int pageAll) {
                 hpbReadProgress.setMaxProgress(pageAll - 1);
@@ -380,6 +817,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 readAloudIntent.putExtra("content", content);
                 startService(readAloudIntent);
                 aloudButton = false;
+            }
+
+            @Override
+            public void openChapterList() {
+                if (chapterListView.hasData()) {
+                    new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+                }
             }
 
         };
@@ -410,393 +854,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    protected void initData() {
-        initServiceConn();
-        initLoadDataListener();
-        mPresenter.saveProgress();
-        //显示菜单
-        menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
-        menuTopIn.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                hideStatusBar(false);
-            }
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+        int action = event.getAction();
+        boolean isDown = action == 0;
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                vMenuBg.setOnClickListener(v -> popMenuOut());
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
-        //隐藏菜单
-        menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
-        menuTopOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                vMenuBg.setOnClickListener(null);
-                hideStatusBar(hideStatusBar);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                flMenu.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
-    }
-
-    @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-        initCsvBook();
-        ivCList.getDrawable().mutate();
-        ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivAdjust.getDrawable().mutate();
-        ivAdjust.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivInterface.getDrawable().mutate();
-        ivInterface.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivSetting.getDrawable().mutate();
-        ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        if (preferences.getBoolean("nightTheme", false)) {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
-        } else {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return isDown ? this.onKeyDown(keyCode, event) : this.onKeyUp(keyCode, event);
         }
-        //弹窗
-        moProgressHUD = new MoProgressHUD(this);
-        //界面设置
-        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
-            @Override
-            public void textSizeChange(int index) {
-                csvBook.changeTextSize();
-            }
-
-            @Override
-            public void lineSizeChange(float lineMultiplier) {
-                csvBook.changeLineSize();
-            }
-
-            @Override
-            public void bgChange(int index) {
-                csvBook.changeBg();
-            }
-
-            @Override
-            public void setFont(String path) {
-                csvBook.setFont();
-                csvBook.changeTextSize();
-            }
-
-            @Override
-            public void setConvert() {
-                BookshelfHelp.clearLineContent();
-                recreate();
-            }
-
-            @Override
-            public void setBold() {
-                csvBook.setTextBold();
-            }
-        });
-        //目录
-        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
-            @Override
-            public void animIn() {
-                hideStatusBar(false);
-            }
-
-            @Override
-            public void animOut() {
-                hideStatusBar(hideStatusBar);
-            }
-        });
-        //其它设置
-        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
-            @Override
-            public void keepScreenOnChange(Boolean keepScreenOn) {
-                if (keepScreenOn) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                } else {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
-            }
-
-            @Override
-            public void showTitle(Boolean showTitle) {
-                recreate();
-            }
-        });
-        //调节
-        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
-            @Override
-            public void changeSpeechRate(int speechRate) {
-                if (ReadAloudService.running) {
-                    ReadAloudService.pause(ReadBookActivity.this);
-                    ReadAloudService.resume(ReadBookActivity.this);
-                }
-            }
-
-            @Override
-            public void speechRateFollowSys() {
-                if (ReadAloudService.running) {
-                    ReadAloudService.stop(ReadBookActivity.this);
-                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        readAdjustPop.initLight();
-        readBookMenuMorePop = new ReadBookMenuMorePop(this);
-    }
-
-    @Override
-    public void setHpbReadProgressMax(int count) {
-        hpbReadProgress.setMaxProgress(count);
-    }
-
-    private void initCsvBook() {
-        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
-    }
-
-    @Override
-    public void initPop() {
-        //是否添加书架
-        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
-                new CheckAddShelfPop.OnItemClickListener() {
-                    @Override
-                    public void clickExit() {
-                        mPresenter.removeFromShelf();
-                    }
-
-                    @Override
-                    public void clickAddShelf() {
-                        mPresenter.addToShelf(null);
-                        checkAddShelfPop.dismiss();
-                    }
-                });
-        initChapterList();
-    }
-
-    /**
-     * 初始化目录列表
-     */
-    @Override
-    public void initChapterList() {
-        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
-                .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin));
-    }
-
-    @Override
-    protected void bindEvent() {
-        //阅读进度
-        hpbReadProgress.setProgressListener(new OnProgressListener() {
-            @Override
-            public void moveStartProgress(float dur) {
-
-            }
-
-            @Override
-            public void durProgressChange(float dur) {
-
-            }
-
-            @Override
-            public void moveStopProgress(float dur) {
-                int realDur = (int) Math.ceil(dur);
-                if ((realDur) != csvBook.getDurContentView().getDurPageIndex()) {
-                    csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                            mPresenter.getBookShelf().getChapterListSize(),
-                            realDur);
-                }
-                if (hpbReadProgress.getDurProgress() != realDur)
-                    hpbReadProgress.setDurProgress(realDur);
-            }
-
-            @Override
-            public void setDurProgress(float dur) {
-
-            }
-        });
-
-        //菜单
-        ivMenuMore.getDrawable().mutate();
-        ivMenuMore.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivMenuMore.setOnClickListener(view -> readBookMenuMorePop
-                .showAsDropDown(ivMenuMore, 0, DensityUtil.dp2px(ReadBookActivity.this, -3.5f)));
-
-        //正文
-        csvBook.setLoadDataListener(loadDataListener);
-
-        //返回按钮
-        ivReturn.getDrawable().mutate();
-        ivReturn.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivReturn.setOnClickListener(view -> finish());
-
-        //离线下载
-        readBookMenuMorePop.setOnClickDownload(view -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                //弹出离线下载界面
-                int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
-                moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        (start, end) -> {
-                            moProgressHUD.dismiss();
-                            mPresenter.addDownload(start, end);
-                        });
-            }
-        });
-
-        //换源
-        readBookMenuMorePop.setOnClickChangeSource(view -> {
-            readBookMenuMorePop.dismiss();
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
-                    if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
-                        mPresenter.changeBookSource(searchBookBean);
-                        csvBook.showLoading();
-                    }
-                });
-            }
-        });
-
-        //刷新按钮
-        ivRefresh.getDrawable().mutate();
-        ivRefresh.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivRefresh.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            if (mPresenter.getBookShelf() != null) {
-                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                        .getDurChapterListBean().getDurChapterUrl());
-                mPresenter.getBookShelf().getDurChapterListBean()
-                        .setBookContentBean(null);
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin);
-            }
-        });
-
-        //打开URL
-        atvUrl.setOnClickListener(view -> {
-            try {
-                String url = atvUrl.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //朗读定时
-        ibReadAloudTimer.getDrawable().mutate();
-        ibReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
-
-        //朗读
-        ibReadAloud.getDrawable().mutate();
-        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloud.setOnClickListener(view -> {
-            startReadAloud();
-        });
-
-        //替换
-        ibReplaceRule.getDrawable().mutate();
-        ibReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReplaceRule.setOnClickListener(view -> {
-            popMenuOut();
-            Intent intent = new Intent(this, ReplaceRuleActivity.class);
-            startActivityForResult(intent, ResultReplace);
-        });
-
-        //夜间模式
-        ibNightTheme.getDrawable().mutate();
-        ibNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibNightTheme.setOnClickListener(view -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));
-            editor.apply();
-            setNightTheme();
-        });
-
-        //上一章
-        tvPre.setOnClickListener(view -> {
-            if (mPresenter.getBookShelf() != null) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin);
-            }
-        });
-
-        //下一章
-        tvNext.setOnClickListener(view -> {
-            if (mPresenter.getBookShelf() != null) {
-                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
-                        mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin);
-            }
-        });
-
-        //目录
-        llCatalog.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            if (chapterListView.hasData()) {
-                new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
-            }
-        });
-
-        //亮度
-        llLight.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
-        });
-
-        //界面
-        llFont.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
-        });
-
-        //设置
-        llSetting.setOnClickListener(view -> {
-            ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
-        });
-
-    }
-
-    @Override
-    public Paint getPaint() {
-        return csvBook.getTextPaint();
-    }
-
-    @Override
-    public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex) {
-        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex);
-    }
-
-    @Override
-    public void startLoadingBook() {
-        csvBook.startLoading();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mPresenter.saveProgress();
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
@@ -823,7 +889,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     return true;
                 }
             } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-                popMenuIn();
+                if (flMenu.getVisibility() == View.VISIBLE) {
+                    popMenuOut();
+                } else {
+                    popMenuIn();
+                }
+                return true;
             } else {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
                 if (temp) {
@@ -841,15 +912,29 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public void loadLocationBookError() {
-        csvBook.loadError();
+    public void loadLocationBookError(String errMsg) {
+        csvBook.loadError(errMsg);
     }
 
     @Override
     public void showOnLineView() {
-        ivMenuMore.setVisibility(View.VISIBLE);
-        ivRefresh.setVisibility(View.VISIBLE);
-        atvUrl.setVisibility(View.VISIBLE);
+        if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            atvUrl.setVisibility(View.VISIBLE);
+            if (menu != null) {
+                for (int i = 0; i < menu.size(); i++){
+                    menu.getItem(i).setVisible(true);
+                    menu.getItem(i).setEnabled(true);
+                }
+            }
+        } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            atvUrl.setVisibility(View.GONE);
+            if (menu != null) {
+                for (int i = 0; i < menu.size(); i++){
+                    menu.getItem(i).setVisible(false);
+                    menu.getItem(i).setEnabled(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -880,6 +965,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             EasyPermissions.requestPermissions(this, getString(R.string.open_from_other),
                     RESULT_OPEN_OTHER_PERMS, perms);
         }
+    }
+
+    @Override
+    public void chapterChange(ChapterListBean chapterListBean) {
+        chapterListView.upChapterList(chapterListBean);
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
@@ -915,7 +1005,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     String path = FileUtil.getPath(this, data.getData());
                     try {
                         //判断是否字体文件或字体是否损坏
-                        Typeface typeface = Typeface.createFromFile(path);
+                        Typeface.createFromFile(path);
                         readInterfacePop.setReadFonts(path);
                     } catch (Exception e) {
                         Toast.makeText(this, "不是字体文件", Toast.LENGTH_SHORT).show();
@@ -926,9 +1016,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onResume() {
         super.onResume();
+        if (hideStatusBar) {
+            csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
+            csvBook.upBattery(String.format("%d%%", BatteryUtil.getLevel(this)));
+        }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
             showCheckPermission = true;
@@ -939,6 +1034,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(batInfoReceiver);
         ReadAloudService.stop(this);
     }
 
@@ -949,6 +1045,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             startActivity(intent);
         }
         super.finish();
+    }
+
+    class ThisBatInfoReceiver extends BroadcastReceiver {
+        @SuppressLint("DefaultLocale")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (hideStatusBar) {
+                if (Intent.ACTION_TIME_TICK.equals(intent.getAction())) {
+                    csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
+                } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
+                    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                    csvBook.upBattery(String.format("%d%%", level));
+                }
+            }
+        }
     }
 
 }

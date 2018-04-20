@@ -13,4 +13,6 @@ public interface IBookDetailView extends IView{
      * 数据获取失败
      */
     void getBookShelfError();
+
+    void finish();
 }

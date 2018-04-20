@@ -82,11 +82,11 @@ public class BookSourceManage extends BaseModelImpl {
         if (bookSourceBean.getBookSourceUrl().endsWith("/")) {
             bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().substring(0, bookSourceBean.getBookSourceUrl().lastIndexOf("/")));
         }
-        List<BookSourceBean> temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).list();
-        if (temp != null && temp.size() > 0) {
-            bookSourceBean.setSerialNumber(temp.get(0).getSerialNumber());
-            bookSourceBean.setEnable(temp.get(0).getEnable());
+        BookSourceBean temp = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).unique();
+        if (temp != null) {
+            bookSourceBean.setSerialNumber(temp.getSerialNumber());
+            bookSourceBean.setEnable(temp.getEnable());
         }
         if (bookSourceBean.getSerialNumber() == 0) {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);

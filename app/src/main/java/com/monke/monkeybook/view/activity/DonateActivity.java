@@ -69,8 +69,8 @@ public class DonateActivity extends MBaseActivity {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
         vwZfbHb.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW,
                 "https://render.alipay.com/p/f/fd-j6lzqrgm/guiderofmklvtvw.html?shareId=2088002567472225&campStr=p1j%2BdzkZl018zOczaHT4Z5CLdPVCgrEXq89JsWOx1gdt05SIDMPg3PTxZbdPw9dL&sign=OqN%2FEToAWmYOBperSICGSOtBs36JILq1%2BshguP6l51U%3D&scene=offlinePaymentNewSns"));
-        vwZfbRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MONKOVEL/wxskrwm.jpg"));
+        vwZfbRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
+        vwWxRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
     }
 
     @Override

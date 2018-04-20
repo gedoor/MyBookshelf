@@ -100,6 +100,15 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return 0;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        BookShelfBean bookShelfBean = (BookShelfBean) super.clone();
+        bookShelfBean.noteUrl = noteUrl;
+        bookShelfBean.tag = tag;
+        bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
+        return bookShelfBean;
+    }
+
     public String getNoteUrl() {
         return noteUrl;
     }
@@ -203,15 +212,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        BookShelfBean bookShelfBean = (BookShelfBean) super.clone();
-        bookShelfBean.noteUrl = noteUrl;
-        bookShelfBean.tag = tag;
-        bookShelfBean.bookInfoBean = (BookInfoBean) bookInfoBean.clone();
-        return bookShelfBean;
     }
 
     public int getSerialNumber() {

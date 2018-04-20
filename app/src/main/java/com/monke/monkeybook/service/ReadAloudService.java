@@ -3,9 +3,11 @@ package com.monke.monkeybook.service;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
@@ -76,6 +78,7 @@ public class ReadAloudService extends Service {
     private AudioFocusChangeListener audioFocusChangeListener;
     private AudioFocusRequest mFocusRequest;
     private AloudServiceListener aloudServiceListener;
+    private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
     private int speechRate;
 
@@ -91,6 +94,7 @@ public class ReadAloudService extends Service {
             initFocusRequest();
         }
         initMediaSession();
+        initBroadcastReceiver();
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
@@ -354,6 +358,7 @@ public class ReadAloudService extends Service {
         running = false;
         clearTTS();
         unRegisterMediaButton();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void clearTTS() {
@@ -420,6 +425,20 @@ public class ReadAloudService extends Service {
             }
         });
         mediaSessionCompat.setMediaButtonReceiver(mediaButtonReceiverPendingIntent);
+    }
+
+    private void initBroadcastReceiver() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(action)) {
+                    pauseReadAloud(true);
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void updateMediaSessionPlaybackState() {

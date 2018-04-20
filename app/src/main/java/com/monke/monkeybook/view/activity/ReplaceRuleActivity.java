@@ -119,14 +119,6 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
         moProgressHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
             Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-                if (replaceRuleBean != null) {
-                    DbHelper.getInstance().getmDaoSession().getReplaceRuleBeanDao()
-                            .delete(replaceRuleBean);
-                    ruleBean.setSerialNumber(replaceRuleBean.getSerialNumber());
-                } else {
-                    ruleBean.setSerialNumber(adapter.getItemCount() + 1);
-                }
-                ruleBean.setEnable(true);
                 ReplaceRuleManage.saveData(ruleBean);
                 e.onNext(ReplaceRuleManage.getAll());
                 e.onComplete();
@@ -149,7 +141,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     public void upDateSelectAll() {
         selectAll = true;
         for (ReplaceRuleBean replaceRuleBean : adapter.getDataList()) {
-            if (!replaceRuleBean.getEnable()) {
+            if (replaceRuleBean.getEnable() == null || !replaceRuleBean.getEnable()) {
                 selectAll = false;
                 break;
             }

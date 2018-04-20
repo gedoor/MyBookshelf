@@ -244,7 +244,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             }
         });
 
-        tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
+        tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(),
                 searchBookBean -> {
                     tvOrigin.setText(String.format("来源:%s", searchBookBean.getOrigin()));
                     tvLoading.setVisibility(View.VISIBLE);

@@ -45,7 +45,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private OnBookReadInitListener bookReadInitListener;
     private float startX = -1;
     private LoadDataListener loadDataListener;
-    private Layout layout;
     private ViewTreeObserver.OnGlobalLayoutListener layoutInitListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
@@ -60,7 +59,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         @Override
         public void onGlobalLayout() {
             int height = durPageView.getTvContent().getMeasuredHeight();
-            layout = durPageView.getTvContent().getLayout();
+            Layout layout = durPageView.getTvContent().getLayout();
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
@@ -154,9 +153,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                             }
                         } else if (durX < 0 && (state == PRE_AND_NEXT || state == ONLY_NEXT)) {
                             int tempX = durX;
-                            if (tempX > 0)
-                                tempX = 0;
-                            else if (tempX < -getWidth())
+                            if (tempX < -getWidth())
                                 tempX = -getWidth();
                             int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
                             if (readBookControl.getClickAnim()) {
@@ -235,7 +232,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (viewContents.size() > 0) {
-            if (state == NONE && viewContents.size() >= 1) {
+            if (state == NONE) {
                 viewContents.get(0).layout(0, top, getWidth(), bottom);
             } else if (state == PRE_AND_NEXT && viewContents.size() >= 3) {
                 viewContents.get(0).layout(-getWidth(), top, 0, bottom);
@@ -585,7 +582,17 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
     }
 
+    public void upTime(String time) {
+        for (BookContentView item : viewContents) {
+            item.setTime(time);
+        }
+    }
 
+    public void upBattery(String battery) {
+        for (BookContentView item : viewContents) {
+            item.setBattery(battery);
+        }
+    }
 
     /**
      * 音量键翻页
@@ -611,14 +618,18 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    public void loadError() {
+    public void loadError(String errMsg) {
         if (durPageView != null) {
-            durPageView.loadError();
+            durPageView.loadError(errMsg);
         }
     }
 
     public interface OnBookReadInitListener {
         void success();
+    }
+
+    public void openChapterList() {
+        loadDataListener.openChapterList();
     }
 
     public interface LoadDataListener {
@@ -636,6 +647,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
         void readAloud(String content);
 
+        void openChapterList();
     }
 
 }

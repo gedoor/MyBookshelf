@@ -20,12 +20,11 @@ public class SearchBookBean implements Parcelable{
     private String kind;
     private String origin;
     private String desc;
+    private String lastChapter;
     @Transient
     private long words;
     @Transient
     private String state;
-    @Transient
-    private String lastChapter;
     @Transient
     private Boolean isAdd = false;
     @Transient
@@ -51,9 +50,9 @@ public class SearchBookBean implements Parcelable{
         originNum = in.readInt();
     }
 
-    @Generated(hash = 1994889042)
+    @Generated(hash = 1315866286)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-            String tag, String kind, String origin, String desc) {
+            String tag, String kind, String origin, String desc, String lastChapter) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -62,6 +61,7 @@ public class SearchBookBean implements Parcelable{
         this.kind = kind;
         this.origin = origin;
         this.desc = desc;
+        this.lastChapter = lastChapter;
     }
 
     @Override
