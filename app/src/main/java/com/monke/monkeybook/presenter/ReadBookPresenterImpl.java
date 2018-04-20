@@ -93,13 +93,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 mView.finish();
                 return;
             }
-            if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
-                mView.showOnLineView();
-            }
             checkInShelf();
         } else {
             mView.openBookFromOther();
         }
+        mView.showOnLineView();
     }
 
     @Override

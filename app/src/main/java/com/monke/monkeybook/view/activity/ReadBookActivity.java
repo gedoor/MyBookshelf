@@ -74,6 +74,7 @@ import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -152,6 +153,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String noteUrl;
     private int aloudStatus;
 
+    private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
     private ReadAdjustPop readAdjustPop;
@@ -562,10 +564,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
-            getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
-        }
+        getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        this.menu = menu;
+        showOnLineView();
+        return super.onPrepareOptionsMenu(menu);
     }
 
     //菜单
@@ -894,7 +901,23 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void showOnLineView() {
-        atvUrl.setVisibility(View.VISIBLE);
+        if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            atvUrl.setVisibility(View.VISIBLE);
+            if (menu != null) {
+                for (int i = 0; i < menu.size(); i++){
+                    menu.getItem(i).setVisible(true);
+                    menu.getItem(i).setEnabled(true);
+                }
+            }
+        } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            atvUrl.setVisibility(View.GONE);
+            if (menu != null) {
+                for (int i = 0; i < menu.size(); i++){
+                    menu.getItem(i).setVisible(false);
+                    menu.getItem(i).setEnabled(false);
+                }
+            }
+        }
     }
 
     @Override
