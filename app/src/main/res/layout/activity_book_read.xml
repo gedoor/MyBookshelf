@@ -28,48 +28,54 @@
             android:clickable="true"
             android:focusable="true" />
 
-        <com.monke.immerselayout.ImmerseLinearLayout
+        <LinearLayout
             android:id="@+id/ll_menu_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <android.support.design.widget.AppBarLayout
+            <com.monke.immerselayout.ImmerseLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:background="#767676"
+                android:orientation="vertical">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <android.support.design.widget.AppBarLayout
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.AppBarOverlay">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/btn_bg_press" />
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="?attr/colorPrimary"
+                        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/atv_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="22dp"
-                    android:background="@color/background"
-                    android:paddingEnd="10dp"
-                    android:paddingStart="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/tv_text_default"
-                    android:visibility="gone" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/btn_bg_press" />
 
-            </android.support.design.widget.AppBarLayout>
+                    <me.grantland.widget.AutofitTextView
+                        android:id="@+id/atv_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:background="@color/background"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/tv_text_default"
+                        android:visibility="gone" />
+
+                </android.support.design.widget.AppBarLayout>
+
+            </com.monke.immerselayout.ImmerseLinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:background="@drawable/bg_shadow_top" />
-
-        </com.monke.immerselayout.ImmerseLinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_menu_bottom"
