@@ -112,9 +112,6 @@ public class AboutActivity extends MBaseActivity {
         tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
         tvQq.setText(String.format("QQ讨论群:%s", qq));
 
-        tvAppSummary.getCompoundDrawablesRelative()[1].mutate();
-        tvAppSummary.getCompoundDrawablesRelative()[1].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-
         tvDonate.getCompoundDrawablesRelative()[0].mutate();
         tvDonate.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
 

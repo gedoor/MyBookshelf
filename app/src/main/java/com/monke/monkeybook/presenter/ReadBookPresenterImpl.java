@@ -192,7 +192,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                             .subscribe(new SimpleObserver<BookContentBean>() {
                                                 @Override
                                                 public void onNext(BookContentBean value) {
-                                                    downloadingChapterList.remove(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                                    removeDownloading(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                                     numberOfRetries = 0;
                                                     if (value.getRight()) {
                                                         bookShelf.getChapterList(chapterIndex).setBookContentBean(value);
@@ -206,7 +206,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                                                 @Override
                                                 public void onError(Throwable e) {
-                                                    downloadingChapterList.remove(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                                    removeDownloading(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                                     e.printStackTrace();
                                                     if (bookContentView != null && bookTag == bookContentView.getQTag())
                                                         //重试3次

@@ -854,6 +854,18 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+        int action = event.getAction();
+        boolean isDown = action == 0;
+
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            return isDown ? this.onKeyDown(keyCode, event) : this.onKeyUp(keyCode, event);
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
         if (mo) {
@@ -877,7 +889,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     return true;
                 }
             } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-                popMenuIn();
+                if (flMenu.getVisibility() == View.VISIBLE) {
+                    popMenuOut();
+                } else {
+                    popMenuIn();
+                }
+                return true;
             } else {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
                 if (temp) {
