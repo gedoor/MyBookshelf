@@ -19,6 +19,6 @@
         android:id="@+id/action_download"
         android:icon="@drawable/ic_download_black_24dp"
         android:title="@string/download_offline"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
 </menu>

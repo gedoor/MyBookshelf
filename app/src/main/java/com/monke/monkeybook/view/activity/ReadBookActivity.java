@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -561,7 +562,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
+        if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            getMenuInflater().inflate(R.menu.menu_book_read_activity, menu);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -885,14 +888,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public void loadLocationBookError() {
-        csvBook.loadError();
+    public void loadLocationBookError(String errMsg) {
+        csvBook.loadError(errMsg);
     }
 
     @Override
     public void showOnLineView() {
-//        ivMenuMore.setVisibility(View.VISIBLE);
-//        ivRefresh.setVisibility(View.VISIBLE);
         atvUrl.setVisibility(View.VISIBLE);
     }
 

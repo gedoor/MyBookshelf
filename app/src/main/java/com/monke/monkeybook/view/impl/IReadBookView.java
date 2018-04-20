@@ -45,7 +45,7 @@ public interface IReadBookView extends IView {
 
     void initChapterList();
 
-    void loadLocationBookError();
+    void loadLocationBookError(String errorMsg);
 
     void showOnLineView();
 

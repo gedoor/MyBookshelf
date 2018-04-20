@@ -69,7 +69,6 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.llBottom)
     LinearLayout llBottom;
 
-    private String title;
     private String content;
     private int durChapterIndex;
     private int chapterAll;
@@ -168,7 +167,7 @@ public class BookContentView extends FrameLayout {
                 }
                 this.content = s.toString();
             }
-            this.title = title;
+
             this.durChapterIndex = durChapterIndex;
             this.chapterAll = chapterAll;
             this.durPageIndex = durPageIndex;
@@ -203,7 +202,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void loadData(String title, int durChapterIndex, int chapterAll, int durPageIndex) {
-        this.title = title;
+
         this.durChapterIndex = durChapterIndex;
         this.chapterAll = chapterAll;
         this.durPageIndex = durPageIndex;
@@ -211,20 +210,15 @@ public class BookContentView extends FrameLayout {
         loading();
     }
 
-    public ContentSwitchView.LoadDataListener getLoadDataListener() {
-        return loadDataListener;
-    }
-
     public void setLoadDataListener(ContentSwitchView.LoadDataListener loadDataListener, SetDataListener setDataListener) {
         this.loadDataListener = loadDataListener;
         this.setDataListener = setDataListener;
     }
 
-    public void setLoadDataListener(ContentSwitchView.LoadDataListener loadDataListener) {
-        this.loadDataListener = loadDataListener;
-    }
-
-    public void loadError() {
+    public void loadError(String errorMsg) {
+        if (errorMsg != null) {
+            tvErrorInfo.setText(errorMsg);
+        }
         llError.setVisibility(VISIBLE);
         tvLoading.setVisibility(GONE);
         llContent.setVisibility(INVISIBLE);
@@ -250,24 +244,8 @@ public class BookContentView extends FrameLayout {
         return chapterAll;
     }
 
-    public void setChapterAll(int chapterAll) {
-        this.chapterAll = chapterAll;
-    }
-
-    public SetDataListener getSetDataListener() {
-        return setDataListener;
-    }
-
-    public void setSetDataListener(SetDataListener setDataListener) {
-        this.setDataListener = setDataListener;
-    }
-
     public long getQTag() {
         return qTag;
-    }
-
-    public void setQTag(long qTag) {
-        this.qTag = qTag;
     }
 
     public TextView getTvContent() {

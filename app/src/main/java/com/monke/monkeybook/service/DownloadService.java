@@ -32,6 +32,7 @@ import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.MainActivity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -270,14 +271,13 @@ public class DownloadService extends Service {
 
     private synchronized void removeFromDownloadList(DownloadChapterBean value) {
         DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(value);
-        int i = 0;
-        for (DownloadChapterBean chapterBean : downloadingChapter) {
-            if (chapterBean.getDurChapterUrl().equals(value.getDurChapterUrl())) {
-                break;
+        Iterator<DownloadChapterBean> iterator = downloadingChapter.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getDurChapterUrl().equals(value.getDurChapterUrl())) {
+                iterator.remove();
+                return;
             }
-            i = i + 1;
         }
-        downloadingChapter.remove(i);
     }
 
     public void startDownload() {

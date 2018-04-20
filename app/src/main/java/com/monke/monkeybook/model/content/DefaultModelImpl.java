@@ -353,7 +353,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             } catch (Exception ex) {
                 ex.printStackTrace();
                 ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + MApplication.getInstance().getString(R.string.analyze_error));
+                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + ex.getMessage());
                 bookContentBean.setRight(false);
             }
             e.onNext(bookContentBean);

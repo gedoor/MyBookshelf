@@ -618,9 +618,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    public void loadError() {
+    public void loadError(String errMsg) {
         if (durPageView != null) {
-            durPageView.loadError();
+            durPageView.loadError(errMsg);
         }
     }
 
