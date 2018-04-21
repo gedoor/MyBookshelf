@@ -6,9 +6,53 @@
     android:orientation="vertical">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="@drawable/bg_shadow_bottom" />
+
+    <LinearLayout
+        android:id="@+id/sb_TB"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/background"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/showTimeBattery"
+                android:textColor="@color/tv_text_default" />
+
+            <com.kyleduo.switchbutton.SwitchButton
+                android:id="@+id/sb_show_timebattery"
+                android:layout_width="47dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/volume_open_page"
+                app:kswBackColor="@drawable/selector_switch_button"
+                app:kswThumbColor="@color/background" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/btn_bg_press"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,12 +88,12 @@
 
     </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.8dp"
-            android:background="@color/btn_bg_press"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/btn_bg_press"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

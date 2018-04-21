@@ -3,6 +3,10 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +20,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,15 +39,21 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbKeepScreenOn;
     @BindView(R.id.sb_show_title)
     SwitchButton sbShowTitle;
+    @BindView(R.id.sb_show_timebattery)
+    SwitchButton sbShowTimeBattery;
+
 
     private Context mContext;
     private View view;
     private ReadBookControl readBookControl;
+    private boolean hideStatusBar;
 
     public interface OnChangeProListener {
         void keepScreenOnChange(Boolean keepScreenOn);
 
         void showTitle(Boolean showTitle);
+
+        void showTimeBattery(Boolean showTimeBattery);
     }
 
     private OnChangeProListener changeProListener;
@@ -55,6 +66,12 @@ public class MoreSettingPop extends PopupWindow {
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
         this.setContentView(view);
+        View sbTB = view.findViewById(R.id.sb_TB);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
+        if (hideStatusBar){
+            sbTB.setVisibility(View.VISIBLE);
+        }
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
@@ -79,6 +96,11 @@ public class MoreSettingPop extends PopupWindow {
             BookshelfHelp.clearLineContent();
             changeProListener.showTitle(isChecked);
         });
+        sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setShowTimeBattery(isChecked);
+            BookshelfHelp.clearLineContent();
+            changeProListener.showTimeBattery(isChecked);
+        });
     }
 
     private void initData() {
@@ -90,5 +112,6 @@ public class MoreSettingPop extends PopupWindow {
         sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
         sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
+        sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
     }
 }
