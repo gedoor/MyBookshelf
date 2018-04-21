@@ -3,9 +3,7 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -15,12 +13,8 @@ import android.widget.PopupWindow;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -184,8 +184,6 @@ public class BookContentView extends FrameLayout {
                 tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
                 readBookControl = ReadBookControl.getInstance();
                 if (!readBookControl.getShowTimeBattery()) {
-                    tvBottomLeft.setVisibility(GONE);
-                    tvBottomRight.setVisibility(GONE);
                     llBottom.setVisibility(GONE);
                     vBottom.setVisibility(GONE);
                 }
