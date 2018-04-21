@@ -45,6 +45,7 @@ public class ReadBookControl {
     private Boolean clickAnim;
     private int textColorCustom;
     private Boolean showTitle;
+    private Boolean showTimeBattery;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -86,6 +87,7 @@ public class ReadBookControl {
         this.speechRate = preference.getInt("speechRate", 10);
         this.speechRateFollowSys = preference.getBoolean("speechRateFollowSys", true);
         this.showTitle = preference.getBoolean("showTitle", true);
+        this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
     }
 
     //字体大小
@@ -363,6 +365,17 @@ public class ReadBookControl {
         this.showTitle = showTitle;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("showTitle", showTitle);
+        editor.apply();
+    }
+
+    public Boolean getShowTimeBattery() {
+        return showTimeBattery;
+    }
+
+    public void setShowTimeBattery(Boolean showTimeBattery) {
+        this.showTimeBattery = showTimeBattery;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("showTimeBattery", showTimeBattery);
         editor.apply();
     }
 }

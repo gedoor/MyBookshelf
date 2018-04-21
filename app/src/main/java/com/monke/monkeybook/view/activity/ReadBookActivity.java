@@ -349,6 +349,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void showTitle(Boolean showTitle) {
                 recreate();
             }
+
+            @Override
+            public void showTimeBattery(Boolean showTimeBattery) {
+                recreate();
+            }
         });
         //调节
         readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {

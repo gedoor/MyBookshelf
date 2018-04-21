@@ -75,6 +75,7 @@ public class BookContentView extends FrameLayout {
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
     private boolean hideStatusBar;
+    private ReadBookControl readBookControl;
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -181,6 +182,13 @@ public class BookContentView extends FrameLayout {
                 DateFormat dfTime = new SimpleDateFormat("HH:mm");
                 tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
                 tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+                readBookControl = ReadBookControl.getInstance();
+                if (!readBookControl.getShowTimeBattery()) {
+                    tvBottomLeft.setVisibility(GONE);
+                    tvBottomRight.setVisibility(GONE);
+                    llBottom.setVisibility(GONE);
+                    vBottom.setVisibility(GONE);
+                }
                 tvTopLeft.setOnClickListener(view -> {
                     ContentSwitchView csv = (ContentSwitchView) getParent();
                     csv.openChapterList();
