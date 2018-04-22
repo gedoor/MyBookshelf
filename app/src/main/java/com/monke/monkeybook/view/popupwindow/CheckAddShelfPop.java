@@ -30,7 +30,7 @@ public class CheckAddShelfPop extends PopupWindow{
         mContext = context;
         this.bookName = bookName;
         this.itemClick = itemClick;
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_check_add_shelf,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.moprogress_dialog_two,null);
         this.setContentView(view);
 
         initView();
@@ -41,14 +41,16 @@ public class CheckAddShelfPop extends PopupWindow{
     }
 
     private void initView() {
-        tvBookName = view.findViewById(R.id.tv_book_name);
+        tvBookName = view.findViewById(R.id.tv_msg);
         tvBookName.setText(String.format(mContext.getString(R.string.check_add_bookshelf),bookName));
-        tvExit = view.findViewById(R.id.tv_exit);
+        tvExit = view.findViewById(R.id.tv_cancel);
+        tvExit.setText("退出阅读");
         tvExit.setOnClickListener(v -> {
             dismiss();
             itemClick.clickExit();
         });
-        tvAddShelf = view.findViewById(R.id.tv_add_shelf);
+        tvAddShelf = view.findViewById(R.id.tv_done);
+        tvAddShelf.setText("放入书架");
         tvAddShelf.setOnClickListener(v -> itemClick.clickAddShelf());
     }
 }

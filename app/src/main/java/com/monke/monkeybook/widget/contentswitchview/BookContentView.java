@@ -23,6 +23,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.widget.ContentTextView;
+import com.monke.monkeybook.widget.CustomTextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -65,7 +66,7 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.tvBottomLeft)
     TextView tvBottomLeft;
     @BindView(R.id.tvBottomRight)
-    TextView tvBottomRight;
+    CustomTextView tvBottomRight;
     @BindView(R.id.llBottom)
     LinearLayout llBottom;
 
@@ -75,6 +76,7 @@ public class BookContentView extends FrameLayout {
     private int durPageIndex;      //如果durPageIndex = -1 则是从头开始  -2则是从尾开始
     private int pageAll;
     private boolean hideStatusBar;
+    private ReadBookControl readBookControl;
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -94,28 +96,27 @@ public class BookContentView extends FrameLayout {
 
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        init(preferences.getBoolean("hide_status_bar", false));
+        init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public BookContentView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        init(preferences.getBoolean("hide_status_bar", false));
+        init();
     }
 
-    public void init(boolean hideStatus) {
-        this.hideStatusBar = hideStatus;
+    public void init() {
+        readBookControl = ReadBookControl.getInstance();
+        hideStatusBar = readBookControl.getHideStatusBar();
         View view;
-        if (hideStatus) {
+        if (hideStatusBar) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal2, this, false);
         } else {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal1, this, false);
         }
         addView(view);
         ButterKnife.bind(this, view);
-        if (hideStatus) {
+        if (hideStatusBar) {
             llTop.setVisibility(VISIBLE);
             vTop.setVisibility(VISIBLE);
             vBottom.setVisibility(GONE);
@@ -180,7 +181,12 @@ public class BookContentView extends FrameLayout {
                 @SuppressLint("SimpleDateFormat")
                 DateFormat dfTime = new SimpleDateFormat("HH:mm");
                 tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
+//                tvBottomRight.setStrokeColorAndWidth(2, readBookControl.getTextColor());
                 tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+                if (!readBookControl.getShowTimeBattery()) {
+                    llBottom.setVisibility(GONE);
+                    vBottom.setVisibility(GONE);
+                }
                 tvTopLeft.setOnClickListener(view -> {
                     ContentSwitchView csv = (ContentSwitchView) getParent();
                     csv.openChapterList();
