@@ -105,14 +105,17 @@
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
-                    <TextView
+                    <com.monke.monkeybook.widget.CustomTextView
                         android:id="@+id/tvBottomRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text=""
                         android:textColor="@color/tv_text_default"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp"
+                        app:textRadius="5dp" />
                 </LinearLayout>
 
             </LinearLayout>
