@@ -9,6 +9,8 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.Objects;
+
 /**
  * 章节列表
  */
@@ -149,5 +151,15 @@ public class ChapterListBean implements Parcelable,Cloneable{
         chapterListBean.hasCache = hasCache;
         chapterListBean.bookContentBean = new BookContentBean();
         return chapterListBean;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ChapterListBean) {
+            ChapterListBean chapterListBean = (ChapterListBean) obj;
+            return Objects.equals(chapterListBean.durChapterUrl, durChapterUrl);
+        } else {
+            return false;
+        }
     }
 }

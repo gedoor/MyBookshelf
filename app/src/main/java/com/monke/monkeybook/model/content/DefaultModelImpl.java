@@ -289,23 +289,23 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            int chapterSize = bookShelfBean.getChapterListSize();
-            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl());
-            bookShelfBean.getBookInfoBean().setChapterList(chapterList.getData());
-            if (chapterSize < bookShelfBean.getChapterListSize()) {
+            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean(). getChapterUrl(),bookShelfBean.getChapterList());
+            if (bookShelfBean.getChapterListSize() < chapterList.getData().size()) {
                 bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
+            bookShelfBean.getBookInfoBean().setChapterList(chapterList.getData());
             e.onNext(bookShelfBean);
             e.onComplete();
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl) {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld) {
         Document doc = Jsoup.parse(s);
         Elements chapterList = AnalyzeRule.getElements(doc, bookSourceBean.getRuleChapterList());
         List<ChapterListBean> chapterBeans = new ArrayList<>();
+        int x;
         for (int i = 0; i < chapterList.size(); i++) {
             AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i), chapterUrl);
             ChapterListBean temp = new ChapterListBean();
@@ -315,6 +315,10 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
             if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
+                x = chapterListBeansOld.indexOf(temp);
+                if (x != -1) {
+                    temp.setHasCache(chapterListBeansOld.get(x).getHasCache());
+                }
                 chapterBeans.add(temp);
             }
         }
