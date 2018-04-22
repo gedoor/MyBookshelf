@@ -145,6 +145,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
         chapterListBean.setTag(BookShelfBean.LOCAL_TAG);
         chapterListBean.setDurChapterUrl(md5 + "_" + chapterPageIndex);
         chapterListBean.setDurChapterName(name);
+        chapterListBean.setHasCache(true);
         chapterListBean.getBookContentBean().setDurChapterUrl(chapterListBean.getDurChapterUrl());
         chapterListBean.getBookContentBean().setTag(BookShelfBean.LOCAL_TAG);
         chapterListBean.getBookContentBean().setNoteUrl(md5);
