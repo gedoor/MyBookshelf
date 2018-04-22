@@ -87,11 +87,14 @@ public class SearchBook {
         searchSuccessNum = 0;
         searchEngineIndex = -1;
         for (int i = 1; i <= threadsNum; i++) {
-            searchOnEngine(content, bookShelfS);
+            searchOnEngine(content, bookShelfS, searchTime);
         }
     }
 
-    private void searchOnEngine(final String content, List<BookShelfBean> bookShelfS) {
+    private void searchOnEngine(final String content, List<BookShelfBean> bookShelfS, final long searchTime) {
+        if (searchTime != startThisSearchTime) {
+            return;
+        }
         searchEngineIndex++;
         if (searchEngineIndex < searchEngineS.size()) {
             SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
@@ -104,33 +107,35 @@ public class SearchBook {
                         .subscribe(new SimpleObserver<List<SearchBookBean>>() {
                             @Override
                             public void onNext(List<SearchBookBean> value) {
-                                searchSuccessNum++;
-                                if (value.size() > 0) {
-                                    for (SearchBookBean temp : value) {
-                                        for (BookShelfBean bookShelfBean : bookShelfS) {
-                                            if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                                                temp.setIsAdd(true);
-                                                break;
+                                if (searchTime == startThisSearchTime) {
+                                    searchSuccessNum++;
+                                    if (value.size() > 0) {
+                                        for (SearchBookBean temp : value) {
+                                            for (BookShelfBean bookShelfBean : bookShelfS) {
+                                                if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
+                                                    temp.setIsAdd(true);
+                                                    break;
+                                                }
                                             }
                                         }
+                                        if (!searchListener.checkIsExist(value.get(0))) {
+                                            searchListener.loadMoreSearchBook(value);
+                                        }
+                                    } else {
+                                        searchEngine.setHasMore(false);
                                     }
-                                    if (!searchListener.checkIsExist(value.get(0))) {
-                                        searchListener.loadMoreSearchBook(value);
-                                    }
-                                } else {
-                                    searchEngine.setHasMore(false);
+                                    searchOnEngine(content, bookShelfS, searchTime);
                                 }
-                                searchOnEngine(content, bookShelfS);
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 e.printStackTrace();
-                                searchOnEngine(content, bookShelfS);
+                                searchOnEngine(content, bookShelfS, searchTime);
                             }
                         });
             } else {
-                searchOnEngine(content, bookShelfS);
+                searchOnEngine(content, bookShelfS, searchTime);
             }
         } else {
             if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
