@@ -16,6 +16,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -27,6 +29,8 @@ import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.net.URL;
 import java.util.ArrayList;
