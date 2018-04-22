@@ -156,9 +156,6 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             enable = savedInstanceState.getBoolean("enable");
         }
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getWindow() .getDecorView() .setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
-        }
     }
 
     @Override
