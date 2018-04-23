@@ -3,8 +3,6 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +40,10 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideStatusBar;
     @BindView(R.id.ll_showTimeBattery)
     LinearLayout llShowTimeBattery;
+    @BindView(R.id.sb_hideNavigationBar)
+    SwitchButton sbHideNavigationBar;
+    @BindView(R.id.ll_hideNavigationBar)
+    LinearLayout llHideNavigationBar;
 
 
     private Context mContext;
@@ -64,13 +66,10 @@ public class MoreSettingPop extends PopupWindow {
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
         this.setContentView(view);
-
-
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
 
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
         setAnimationStyle(R.style.anim_pop_windowlight);
@@ -79,6 +78,12 @@ public class MoreSettingPop extends PopupWindow {
     private void bindEvent() {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setHideStatusBar(isChecked);
+            initData();
+            changeProListener.reLoad();
+        });
+        sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setHideNavigationBar(isChecked);
+            initData();
             changeProListener.reLoad();
         });
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
@@ -105,6 +110,7 @@ public class MoreSettingPop extends PopupWindow {
         readBookControl = ReadBookControl.getInstance();
 
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
+        sbHideNavigationBar.setCheckedImmediatelyNoEvent(readBookControl.getHideNavigationBar());
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
@@ -114,6 +120,8 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
+        } else {
+            llShowTimeBattery.setVisibility(View.GONE);
         }
     }
 }

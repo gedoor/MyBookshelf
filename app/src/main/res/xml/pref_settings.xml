@@ -22,12 +22,6 @@
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="hide_navigation_bar"
-        android:summary="@string/ps_hide_navigation_bar"
-        android:title="@string/pt_hide_navigation_bar" />
-
     <com.monke.monkeybook.widget.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"

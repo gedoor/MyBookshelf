@@ -34,6 +34,7 @@ public class ReadBookControl {
     private int textDrawableIndex = DEFAULT_BG;
 
     private Boolean hideStatusBar;
+    private Boolean hideNavigationBar;
     private String fontPath;
     private Boolean textConvert;
     private Boolean textBold;
@@ -69,6 +70,7 @@ public class ReadBookControl {
         preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
         defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
+        this.hideNavigationBar = defaultPreference.getBoolean("hide_navigation_bar", false);
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
@@ -380,6 +382,10 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public Boolean getHideStatusBar() {
+        return hideStatusBar;
+    }
+
     public void setHideStatusBar(Boolean hideStatusBar) {
         this.hideStatusBar = hideStatusBar;
         SharedPreferences.Editor editor = defaultPreference.edit();
@@ -387,7 +393,14 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public Boolean getHideStatusBar() {
-        return hideStatusBar;
+    public Boolean getHideNavigationBar() {
+        return hideNavigationBar;
+    }
+
+    public void setHideNavigationBar(Boolean hideNavigationBar) {
+        this.hideNavigationBar = hideNavigationBar;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("hide_navigation_bar", hideStatusBar);
+        editor.apply();
     }
 }
