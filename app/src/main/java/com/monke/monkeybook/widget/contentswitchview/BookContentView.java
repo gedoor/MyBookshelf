@@ -57,10 +57,6 @@ public class BookContentView extends FrameLayout {
     TextView tvTopRight;
     @BindView(R.id.llTop)
     LinearLayout llTop;
-    @BindView(R.id.v_top)
-    View vTop;
-    @BindView(R.id.v_bottom)
-    View vBottom;
     @BindView(R.id.tvBottomLeft)
     TextView tvBottomLeft;
     @BindView(R.id.tvBottomRight)
@@ -118,8 +114,6 @@ public class BookContentView extends FrameLayout {
         ButterKnife.bind(this, view);
         if (hideStatusBar) {
             llTop.setVisibility(VISIBLE);
-            vTop.setVisibility(VISIBLE);
-            vBottom.setVisibility(GONE);
         }
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)
@@ -186,7 +180,6 @@ public class BookContentView extends FrameLayout {
                 horizontalBattery.setPower(BatteryUtil.getLevel(getContext()));
                 if (!readBookControl.getShowTimeBattery()) {
                     llBottom.setVisibility(GONE);
-                    vBottom.setVisibility(GONE);
                 }
                 tvTopLeft.setOnClickListener(view -> {
                     ContentSwitchView csv = (ContentSwitchView) getParent();
@@ -294,8 +287,6 @@ public class BookContentView extends FrameLayout {
             tvErrorInfo.setTextColor(readBookControl.getTextColor());
             tvTopLeft.setTextColor(readBookControl.getTextColor());
             tvTopRight.setTextColor(readBookControl.getTextColor());
-            vTop.setBackgroundColor(readBookControl.getTextColor());
-            vBottom.setBackgroundColor(readBookControl.getTextColor());
             tvBottomLeft.setTextColor(readBookControl.getTextColor());
             tvBottomRight.setTextColor(readBookControl.getTextColor());
             horizontalBattery.setColor(readBookControl.getTextColor());
@@ -307,8 +298,6 @@ public class BookContentView extends FrameLayout {
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
             tvTopLeft.setTextColor(readBookControl.getTextColorCustom());
             tvTopRight.setTextColor(readBookControl.getTextColorCustom());
-            vTop.setBackgroundColor(readBookControl.getTextColorCustom());
-            vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
             tvBottomLeft.setTextColor(readBookControl.getTextColorCustom());
             tvBottomRight.setTextColor(readBookControl.getTextColorCustom());
             horizontalBattery.setColor(readBookControl.getTextColorCustom());

@@ -73,13 +73,6 @@
                         app:batteryOrientation="horizontal" />
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/v_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#ffffff"
-                    android:visibility="gone" />
-
                 <com.monke.monkeybook.widget.ContentTextView
                     android:id="@+id/tv_content"
                     android:layout_width="match_parent"
@@ -89,12 +82,6 @@
                     android:lineSpacingExtra="5dp"
                     android:lineSpacingMultiplier="1"
                     android:textSize="19sp" />
-
-                <View
-                    android:id="@+id/v_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#ffffff" />
 
                 <LinearLayout
                     android:id="@+id/llBottom"
@@ -112,7 +99,7 @@
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
-                    <com.monke.monkeybook.widget.CustomTextView
+                    <TextView
                         android:id="@+id/tvBottomRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,8 +108,7 @@
                         android:textColor="@color/tv_text_default"
                         android:textSize="14sp"
                         android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        app:textRadius="5dp" />
+                        android:paddingEnd="5dp" />
                 </LinearLayout>
 
             </LinearLayout>

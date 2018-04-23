@@ -40,6 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
                     android:visibility="gone">
 
                     <TextView
@@ -62,17 +63,6 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/v_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#ffffff"
-                    android:visibility="gone" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-
                 <com.monke.monkeybook.widget.ContentTextView
                     android:id="@+id/tv_content"
                     android:layout_width="match_parent"
@@ -82,12 +72,6 @@
                     android:lineSpacingExtra="5dp"
                     android:lineSpacingMultiplier="1"
                     android:textSize="19sp" />
-
-                <View
-                    android:id="@+id/v_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#ffffff" />
 
                 <LinearLayout
                     android:id="@+id/llBottom"
