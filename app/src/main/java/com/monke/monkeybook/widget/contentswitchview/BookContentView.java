@@ -3,11 +3,9 @@ package com.monke.monkeybook.widget.contentswitchview;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -22,8 +20,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BatteryUtil;
+import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentTextView;
-import com.monke.monkeybook.widget.CustomTextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -66,9 +64,11 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.tvBottomLeft)
     TextView tvBottomLeft;
     @BindView(R.id.tvBottomRight)
-    CustomTextView tvBottomRight;
+    TextView tvBottomRight;
     @BindView(R.id.llBottom)
     LinearLayout llBottom;
+    @BindView(R.id.horizontalBattery)
+    BatteryView horizontalBattery;
 
     private String content;
     private int durChapterIndex;
@@ -181,8 +181,9 @@ public class BookContentView extends FrameLayout {
                 @SuppressLint("SimpleDateFormat")
                 DateFormat dfTime = new SimpleDateFormat("HH:mm");
                 tvBottomLeft.setText(dfTime.format(Calendar.getInstance().getTime()));
-//                tvBottomRight.setStrokeColorAndWidth(2, readBookControl.getTextColor());
-                tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+//                tvBottomRight.setText(String.format("%d%%", BatteryUtil.getLevel(getContext())));
+                horizontalBattery.setVisibility(VISIBLE);
+                horizontalBattery.setPower(BatteryUtil.getLevel(getContext()));
                 if (!readBookControl.getShowTimeBattery()) {
                     llBottom.setVisibility(GONE);
                     vBottom.setVisibility(GONE);
@@ -297,6 +298,7 @@ public class BookContentView extends FrameLayout {
             vBottom.setBackgroundColor(readBookControl.getTextColor());
             tvBottomLeft.setTextColor(readBookControl.getTextColor());
             tvBottomRight.setTextColor(readBookControl.getTextColor());
+            horizontalBattery.setColor(readBookControl.getTextColor());
         } else {
             ACache aCache = ACache.get(this.getContext());
             ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
@@ -309,6 +311,7 @@ public class BookContentView extends FrameLayout {
             vBottom.setBackgroundColor(readBookControl.getTextColorCustom());
             tvBottomLeft.setTextColor(readBookControl.getTextColorCustom());
             tvBottomRight.setTextColor(readBookControl.getTextColorCustom());
+            horizontalBattery.setColor(readBookControl.getTextColorCustom());
         }
     }
 
@@ -366,7 +369,7 @@ public class BookContentView extends FrameLayout {
         tvBottomLeft.setText(time);
     }
 
-    public void setBattery(String battery) {
-        tvBottomRight.setText(battery);
+    public void setBattery(Integer battery) {
+        horizontalBattery.setPower(battery);
     }
 }

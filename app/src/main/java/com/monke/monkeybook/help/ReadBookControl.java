@@ -46,7 +46,6 @@ public class ReadBookControl {
     private int textColorCustom;
     private Boolean showTitle;
     private Boolean showTimeBattery;
-    private Boolean hideStatusBar;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -89,7 +88,6 @@ public class ReadBookControl {
         this.speechRateFollowSys = preference.getBoolean("speechRateFollowSys", true);
         this.showTitle = preference.getBoolean("showTitle", true);
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
-        this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
     }
 
     //字体大小
@@ -382,6 +380,6 @@ public class ReadBookControl {
     }
 
     public Boolean getHideStatusBar() {
-        return hideStatusBar;
+        return defaultPreference.getBoolean("hide_status_bar", false);
     }
 }

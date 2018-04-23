@@ -282,10 +282,10 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
      * 设置边框颜色及宽度
      *
      * @param strokeWidth      边框宽度
-     * @param colorId          边框颜色 id
+     * @param color          边框颜色
      */
-    public void setStrokeColorAndWidth(int strokeWidth,int colorId){
-        normalGD.setStroke(strokeWidth, getResources().getColor(colorId));
+    public void setStrokeColorAndWidth(int strokeWidth,int color){
+        normalGD.setStroke(strokeWidth, color);
     }
 
 

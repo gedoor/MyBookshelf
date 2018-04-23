@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="#000000"
+        android:src="@drawable/bg_readbook_yellow"
         tools:ignore="ContentDescription" />
 
     <com.monke.immerselayout.ImmerseLinearLayout
@@ -61,6 +61,16 @@
                         android:text=""
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
+
+                    <com.monke.monkeybook.widget.BatteryView
+                        android:id="@+id/horizontalBattery"
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        app:batteryColor="@color/background"
+                        app:batteryOrientation="horizontal" />
                 </LinearLayout>
 
                 <View
@@ -125,7 +135,7 @@
                 android:text="@string/is_loading"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/ll_error"

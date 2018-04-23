@@ -1027,7 +1027,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onResume();
         if (hideStatusBar) {
             csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
-            csvBook.upBattery(String.format("%d%%", BatteryUtil.getLevel(this)));
+            csvBook.upBattery(BatteryUtil.getLevel(this));
         }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
@@ -1061,7 +1061,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                    csvBook.upBattery(String.format("%d%%", level));
+                    csvBook.upBattery(level);
                 }
             }
         }

@@ -105,7 +105,7 @@
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
-                    <com.monke.monkeybook.widget.CustomTextView
+                    <TextView
                         android:id="@+id/tvBottomRight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -114,8 +114,17 @@
                         android:textColor="@color/tv_text_default"
                         android:textSize="14sp"
                         android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        app:textRadius="5dp" />
+                        android:paddingEnd="5dp" />
+                    
+                    <com.monke.monkeybook.widget.BatteryView
+                        android:id="@+id/horizontalBattery"
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        app:batteryColor="@color/background"
+                        app:batteryOrientation="horizontal" />
                 </LinearLayout>
 
             </LinearLayout>

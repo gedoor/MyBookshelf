@@ -1,5 +1,7 @@
 package com.monke.basemvplib;
 
+import android.annotation.SuppressLint;
+
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -32,11 +34,13 @@ class SSLSocketClient {
         X509TrustManager tm = null;
         try {
             tm =   new X509TrustManager() {
+                @SuppressLint("TrustAllX509TrustManager")
                 public void checkClientTrusted(X509Certificate[] chain, String authType)
                         throws CertificateException {
                     //do nothing，接受任意客户端证书
                 }
 
+                @SuppressLint("TrustAllX509TrustManager")
                 public void checkServerTrusted(X509Certificate[] chain, String authType)
                         throws CertificateException {
                     //do nothing，接受任意服务端证书
