@@ -44,6 +44,8 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbHideNavigationBar;
     @BindView(R.id.ll_hideNavigationBar)
     LinearLayout llHideNavigationBar;
+    @BindView(R.id.sb_showLine)
+    SwitchButton sbShowLine;
 
 
     private Context mContext;
@@ -104,6 +106,11 @@ public class MoreSettingPop extends PopupWindow {
             BookshelfHelp.clearLineContent();
             changeProListener.reLoad();
         });
+        sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setShowLine(isChecked);
+            BookshelfHelp.clearLineContent();
+            changeProListener.reLoad();
+        });
     }
 
     private void initData() {
@@ -118,6 +125,7 @@ public class MoreSettingPop extends PopupWindow {
         sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
+        sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
         } else {

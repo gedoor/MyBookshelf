@@ -27,7 +27,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="6dp">
 
             <LinearLayout
                 android:id="@+id/ll_content"
@@ -44,7 +44,7 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/tvTopLeft"
+                        android:id="@+id/tvTime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -54,16 +54,18 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tvTopRight"
+                        android:id="@+id/tvProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text=""
-                        android:textColor="#ffffff"
-                        android:textSize="14sp" />
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="14sp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp" />
 
                     <com.monke.monkeybook.widget.BatteryView
-                        android:id="@+id/horizontalBattery"
+                        android:id="@+id/vwBattery"
                         android:layout_width="20dp"
                         android:layout_height="10dp"
                         android:layout_gravity="center"
@@ -83,6 +85,14 @@
                     android:lineSpacingMultiplier="1"
                     android:textSize="19sp" />
 
+                <View
+                    android:id="@+id/vwLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="#ffffff" />
+
                 <LinearLayout
                     android:id="@+id/llBottom"
                     android:layout_width="match_parent"
@@ -90,7 +100,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvBottomLeft"
+                        android:id="@+id/tvTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -100,15 +110,13 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tvBottomRight"
+                        android:id="@+id/tvPage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text=""
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="14sp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp" />
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
