@@ -33,8 +33,8 @@ public class ReadBookControl {
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
 
+    private Boolean hideStatusBar;
     private String fontPath;
-
     private Boolean textConvert;
     private Boolean textBold;
     private Boolean canClickTurn;
@@ -68,6 +68,7 @@ public class ReadBookControl {
         initTextDrawable();
         preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
         defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
@@ -379,7 +380,14 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public void setHideStatusBar(Boolean hideStatusBar) {
+        this.hideStatusBar = hideStatusBar;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("hide_status_bar", hideStatusBar);
+        editor.apply();
+    }
+
     public Boolean getHideStatusBar() {
-        return defaultPreference.getBoolean("hide_status_bar", false);
+        return hideStatusBar;
     }
 }

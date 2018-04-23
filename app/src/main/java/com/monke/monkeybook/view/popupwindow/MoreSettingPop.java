@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.kyleduo.switchbutton.SwitchButton;
@@ -33,21 +34,24 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbKeepScreenOn;
     @BindView(R.id.sb_show_title)
     SwitchButton sbShowTitle;
-    @BindView(R.id.sb_show_timebattery)
+    @BindView(R.id.sb_showTimeBattery)
     SwitchButton sbShowTimeBattery;
+    @BindView(R.id.sb_hideStatusBar)
+    SwitchButton sbHideStatusBar;
+    @BindView(R.id.ll_hideStatusBar)
+    LinearLayout llHideStatusBar;
+    @BindView(R.id.ll_showTimeBattery)
+    LinearLayout llShowTimeBattery;
 
 
     private Context mContext;
     private View view;
     private ReadBookControl readBookControl;
-    private boolean hideStatusBar;
 
     public interface OnChangeProListener {
         void keepScreenOnChange(Boolean keepScreenOn);
 
-        void showTitle(Boolean showTitle);
-
-        void showTimeBattery(Boolean showTimeBattery);
+        void reLoad();
     }
 
     private OnChangeProListener changeProListener;
@@ -60,12 +64,8 @@ public class MoreSettingPop extends PopupWindow {
 
         view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
         this.setContentView(view);
-        View sbTB = view.findViewById(R.id.sb_TB);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
-        if (hideStatusBar){
-            sbTB.setVisibility(View.VISIBLE);
-        }
+
+
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
@@ -77,6 +77,10 @@ public class MoreSettingPop extends PopupWindow {
     }
 
     private void bindEvent() {
+        sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setHideStatusBar(isChecked);
+            changeProListener.reLoad();
+        });
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
         sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
@@ -88,18 +92,19 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTitle(isChecked);
             BookshelfHelp.clearLineContent();
-            changeProListener.showTitle(isChecked);
+            changeProListener.reLoad();
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTimeBattery(isChecked);
             BookshelfHelp.clearLineContent();
-            changeProListener.showTimeBattery(isChecked);
+            changeProListener.reLoad();
         });
     }
 
     private void initData() {
         readBookControl = ReadBookControl.getInstance();
 
+        sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
@@ -107,5 +112,8 @@ public class MoreSettingPop extends PopupWindow {
         sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
+        if (readBookControl.getHideStatusBar()) {
+            llShowTimeBattery.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -193,10 +193,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
-        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
+        readBookControl = ReadBookControl.getInstance();
+        hideStatusBar = readBookControl.getHideStatusBar();
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
-        readBookControl = ReadBookControl.getInstance();
+
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -346,12 +347,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void showTitle(Boolean showTitle) {
-                recreate();
-            }
-
-            @Override
-            public void showTimeBattery(Boolean showTimeBattery) {
+            public void reLoad() {
+                BookshelfHelp.clearLineContent();
                 recreate();
             }
         });
