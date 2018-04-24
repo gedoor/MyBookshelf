@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -37,9 +38,16 @@ public class DonateActivity extends MBaseActivity {
     CardView vwWxRwm;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+    @BindView(R.id.vw_qq_rwm)
+    CardView vwQqRwm;
 
     private Animation animIn;
     private Animation animOut;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected IPresenter initInjector() {
@@ -71,6 +79,7 @@ public class DonateActivity extends MBaseActivity {
                 "https://render.alipay.com/p/f/fd-j6lzqrgm/guiderofmklvtvw.html?shareId=2088002567472225&campStr=p1j%2BdzkZl018zOczaHT4Z5CLdPVCgrEXq89JsWOx1gdt05SIDMPg3PTxZbdPw9dL&sign=OqN%2FEToAWmYOBperSICGSOtBs36JILq1%2BshguP6l51U%3D&scene=offlinePaymentNewSns"));
         vwZfbRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
         vwWxRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
+        vwQqRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
     }
 
     @Override
