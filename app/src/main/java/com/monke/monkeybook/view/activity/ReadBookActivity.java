@@ -193,10 +193,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
-        hideStatusBar = preferences.getBoolean("hide_status_bar", false);
+        readBookControl = ReadBookControl.getInstance();
+        hideStatusBar = readBookControl.getHideStatusBar();
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
-        readBookControl = ReadBookControl.getInstance();
+
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -346,12 +347,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void showTitle(Boolean showTitle) {
-                recreate();
-            }
-
-            @Override
-            public void showTimeBattery(Boolean showTimeBattery) {
+            public void reLoad() {
+                BookshelfHelp.clearLineContent();
                 recreate();
             }
         });
@@ -1027,7 +1024,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onResume();
         if (hideStatusBar) {
             csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
-            csvBook.upBattery(String.format("%d%%", BatteryUtil.getLevel(this)));
+            csvBook.upBattery(BatteryUtil.getLevel(this));
         }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
@@ -1061,7 +1058,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                    csvBook.upBattery(String.format("%d%%", level));
+                    csvBook.upBattery(level);
                 }
             }
         }

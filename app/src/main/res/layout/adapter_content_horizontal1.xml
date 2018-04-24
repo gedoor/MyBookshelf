@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="#000000"
+        android:src="@drawable/bg_readbook_yellow"
         tools:ignore="ContentDescription" />
 
     <com.monke.immerselayout.ImmerseLinearLayout
@@ -27,7 +27,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="6dp">
 
             <LinearLayout
                 android:id="@+id/ll_content"
@@ -44,7 +44,7 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/tvTopLeft"
+                        android:id="@+id/tvTime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -54,21 +54,26 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/tvTopRight"
+                        android:id="@+id/tvProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text=""
-                        android:textColor="#ffffff"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:textColor="@color/tv_text_default"
+                        android:textSize="14sp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="5dp" />
 
-                <View
-                    android:id="@+id/v_top"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.3dp"
-                    android:background="#ffffff"
-                    android:visibility="gone" />
+                    <com.monke.monkeybook.widget.BatteryView
+                        android:id="@+id/vwBattery"
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        app:batteryColor="@color/background"
+                        app:batteryOrientation="horizontal" />
+                </LinearLayout>
 
                 <com.monke.monkeybook.widget.ContentTextView
                     android:id="@+id/tv_content"
@@ -81,9 +86,11 @@
                     android:textSize="19sp" />
 
                 <View
-                    android:id="@+id/v_bottom"
+                    android:id="@+id/vwLine"
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:background="#ffffff" />
 
                 <LinearLayout
@@ -93,7 +100,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvBottomLeft"
+                        android:id="@+id/tvTitle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -102,17 +109,14 @@
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
 
-                    <com.monke.monkeybook.widget.CustomTextView
-                        android:id="@+id/tvBottomRight"
+                    <TextView
+                        android:id="@+id/tvPage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
                         android:text=""
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="14sp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        app:textRadius="5dp" />
+                        android:textColor="#ffffff"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -125,7 +129,7 @@
                 android:text="@string/is_loading"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/ll_error"

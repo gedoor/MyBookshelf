@@ -33,8 +33,9 @@ public class ReadBookControl {
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
 
+    private Boolean hideStatusBar;
+    private Boolean hideNavigationBar;
     private String fontPath;
-
     private Boolean textConvert;
     private Boolean textBold;
     private Boolean canClickTurn;
@@ -46,7 +47,7 @@ public class ReadBookControl {
     private int textColorCustom;
     private Boolean showTitle;
     private Boolean showTimeBattery;
-    private Boolean hideStatusBar;
+    private Boolean showLine;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -69,6 +70,8 @@ public class ReadBookControl {
         initTextDrawable();
         preference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
         defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
+        this.hideNavigationBar = defaultPreference.getBoolean("hide_navigation_bar", false);
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
@@ -89,7 +92,7 @@ public class ReadBookControl {
         this.speechRateFollowSys = preference.getBoolean("speechRateFollowSys", true);
         this.showTitle = preference.getBoolean("showTitle", true);
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
-        this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
+        this.showLine = preference.getBoolean("showLine", true);
     }
 
     //字体大小
@@ -383,5 +386,34 @@ public class ReadBookControl {
 
     public Boolean getHideStatusBar() {
         return hideStatusBar;
+    }
+
+    public void setHideStatusBar(Boolean hideStatusBar) {
+        this.hideStatusBar = hideStatusBar;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("hide_status_bar", hideStatusBar);
+        editor.apply();
+    }
+
+    public Boolean getHideNavigationBar() {
+        return hideNavigationBar;
+    }
+
+    public void setHideNavigationBar(Boolean hideNavigationBar) {
+        this.hideNavigationBar = hideNavigationBar;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("hide_navigation_bar", hideStatusBar);
+        editor.apply();
+    }
+
+    public Boolean getShowLine() {
+        return showLine;
+    }
+
+    public void setShowLine(Boolean showLine) {
+        this.showLine = showLine;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putBoolean("showLine", showLine);
+        editor.apply();
     }
 }

@@ -172,5 +172,6 @@
     <string name="refresh_default">书源同步</string>
     <string name="no_last_chapter">无最新章节信息</string>
     <string name="showTimeBattery">显示时间和电量</string>
+    <string name="showLine">显示分隔线</string>
 
 </resources>

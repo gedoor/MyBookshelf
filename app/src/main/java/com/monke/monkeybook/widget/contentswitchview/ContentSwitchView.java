@@ -588,7 +588,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    public void upBattery(String battery) {
+    public void upBattery(Integer battery) {
         for (BookContentView item : viewContents) {
             item.setBattery(battery);
         }

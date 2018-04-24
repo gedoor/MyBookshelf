@@ -28,6 +28,8 @@ import org.jsoup.select.Elements;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -289,7 +291,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(TAG);
-            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean(). getChapterUrl(),bookShelfBean.getChapterList());
+            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList());
             if (bookShelfBean.getChapterListSize() < chapterList.getData().size()) {
                 bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
@@ -303,7 +305,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld) {
         Document doc = Jsoup.parse(s);
-        Elements chapterList = AnalyzeRule.getElements(doc, bookSourceBean.getRuleChapterList());
+        boolean dx = false;
+        String ruleChapterList = bookSourceBean.getRuleChapterList();
+        if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
+            dx = true;
+            ruleChapterList = ruleChapterList.substring(1);
+        }
+        Elements chapterList = AnalyzeRule.getElements(doc, ruleChapterList);
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         int x;
         for (int i = 0; i < chapterList.size(); i++) {
@@ -321,6 +329,9 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 }
                 chapterBeans.add(temp);
             }
+        }
+        if (dx) {
+            Collections.reverse(chapterBeans);
         }
         return new WebChapterBean<>(chapterBeans, false);
     }
