@@ -26,7 +26,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
     public static class Properties {
         public final static Property BookSourceUrl = new Property(0, String.class, "bookSourceUrl", true, "BOOK_SOURCE_URL");
         public final static Property BookSourceName = new Property(1, String.class, "bookSourceName", false, "BOOK_SOURCE_NAME");
-        public final static Property Group = new Property(2, String.class, "group", false, "GROUP");
+        public final static Property BookSourceGroup = new Property(2, String.class, "bookSourceGroup", false, "BOOK_SOURCE_GROUP");
         public final static Property SerialNumber = new Property(3, int.class, "serialNumber", false, "SERIAL_NUMBER");
         public final static Property Enable = new Property(4, boolean.class, "enable", false, "ENABLE");
         public final static Property RuleFindUrl = new Property(5, String.class, "ruleFindUrl", false, "RULE_FIND_URL");
@@ -65,7 +65,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         db.execSQL("CREATE TABLE " + constraint + "\"BOOK_SOURCE_BEAN\" (" + //
                 "\"BOOK_SOURCE_URL\" TEXT PRIMARY KEY NOT NULL ," + // 0: bookSourceUrl
                 "\"BOOK_SOURCE_NAME\" TEXT," + // 1: bookSourceName
-                "\"GROUP\" TEXT," + // 2: group
+                "\"BOOK_SOURCE_GROUP\" TEXT," + // 2: bookSourceGroup
                 "\"SERIAL_NUMBER\" INTEGER NOT NULL ," + // 3: serialNumber
                 "\"ENABLE\" INTEGER NOT NULL ," + // 4: enable
                 "\"RULE_FIND_URL\" TEXT," + // 5: ruleFindUrl
@@ -109,9 +109,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(2, bookSourceName);
         }
  
-        String group = entity.getGroup();
-        if (group != null) {
-            stmt.bindString(3, group);
+        String bookSourceGroup = entity.getBookSourceGroup();
+        if (bookSourceGroup != null) {
+            stmt.bindString(3, bookSourceGroup);
         }
         stmt.bindLong(4, entity.getSerialNumber());
         stmt.bindLong(5, entity.getEnable() ? 1L: 0L);
@@ -226,9 +226,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(2, bookSourceName);
         }
  
-        String group = entity.getGroup();
-        if (group != null) {
-            stmt.bindString(3, group);
+        String bookSourceGroup = entity.getBookSourceGroup();
+        if (bookSourceGroup != null) {
+            stmt.bindString(3, bookSourceGroup);
         }
         stmt.bindLong(4, entity.getSerialNumber());
         stmt.bindLong(5, entity.getEnable() ? 1L: 0L);
@@ -339,7 +339,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         BookSourceBean entity = new BookSourceBean( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // bookSourceUrl
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // bookSourceName
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // group
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // bookSourceGroup
             cursor.getInt(offset + 3), // serialNumber
             cursor.getShort(offset + 4) != 0, // enable
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ruleFindUrl
@@ -369,7 +369,7 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
     public void readEntity(Cursor cursor, BookSourceBean entity, int offset) {
         entity.setBookSourceUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setBookSourceName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setGroup(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setBookSourceGroup(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setSerialNumber(cursor.getInt(offset + 3));
         entity.setEnable(cursor.getShort(offset + 4) != 0);
         entity.setRuleFindUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));

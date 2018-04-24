@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -16,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -137,6 +135,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieRuleFindUrl;
     @BindView(R.id.til_ruleFindUrl)
     TextInputLayout tilRuleFindUrl;
+    @BindView(R.id.tie_bookSourceGroup)
+    TextInputEditText tieBookSourceGroup;
+    @BindView(R.id.til_bookSourceGroup)
+    TextInputLayout tilBookSourceGroup;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -240,6 +242,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         BookSourceBean bookSourceBeanN = new BookSourceBean();
         bookSourceBeanN.setBookSourceName(trim(tieBookSourceName.getText().toString()));
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText().toString()));
+        bookSourceBeanN.setBookSourceGroup(trim(tieBookSourceGroup.getText().toString()));
         bookSourceBeanN.setRuleBookAuthor(trim(tieRuleBookAuthor.getText().toString()));
         bookSourceBeanN.setRuleBookContent(trim(tieRuleBookContent.getText().toString()));
         bookSourceBeanN.setRuleBookName(trim(tieRuleBookName.getText().toString().trim()));
@@ -271,6 +274,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         }
         tieBookSourceName.setText(trim(bookSourceBean.getBookSourceName()));
         tieBookSourceUrl.setText(trim(bookSourceBean.getBookSourceUrl()));
+        tieBookSourceGroup.setText(trim(bookSourceBean.getBookSourceGroup()));
         tieRuleBookAuthor.setText(trim(bookSourceBean.getRuleBookAuthor()));
         tieRuleBookContent.setText(trim(bookSourceBean.getRuleBookContent()));
         tieRuleBookName.setText(trim(bookSourceBean.getRuleBookName()));
@@ -295,6 +299,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     private void setHint() {
         tilBookSourceName.setHint("BookSourceName");
         tilBookSourceUrl.setHint("BookSourceUrl");
+        tilBookSourceGroup.setHint("BookSourceGroup");
         tilRuleBookAuthor.setHint("RuleBookAuthor");
         tilRuleBookContent.setHint("RuleBookContent");
         tilRuleBookName.setHint("RuleBookName");
