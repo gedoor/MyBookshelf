@@ -16,7 +16,7 @@ public class DbHelper {
     private DaoSession mDaoSession;
 
     public class DaoOpenHelper extends DaoMaster.OpenHelper {
-        public DaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+        DaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
             super(context, name, factory);
         }
         @Override
@@ -32,9 +32,8 @@ public class DbHelper {
                             DaoMaster.dropAllTables(db, ifExists);
                         }
                     },
-                    BookContentBeanDao.class, BookInfoBeanDao.class, BookShelfBeanDao.class,
-                    ChapterListBeanDao.class, DownloadChapterBeanDao.class,
-                    SearchHistoryBeanDao.class, BookSourceBeanDao.class);
+                    BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class, BookContentBeanDao.class,
+                    DownloadChapterBeanDao.class, SearchHistoryBeanDao.class, BookSourceBeanDao.class, ReplaceRuleBeanDao.class);
         }
     }
 
