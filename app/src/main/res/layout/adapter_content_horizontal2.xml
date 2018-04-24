@@ -80,7 +80,7 @@
                     android:lineSpacingMultiplier="1"
                     android:textSize="19sp" />
 
-                <LinearLayout
+                <FrameLayout
                     android:id="@+id/llBottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,18 +88,20 @@
 
                     <TextView
                         android:id="@+id/tvTime"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_gravity="left|center_vertical"
                         android:lines="1"
                         android:text=""
                         android:textColor="#ffffff"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tvProgress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:lines="1"
                         android:text=""
                         android:textColor="@color/tv_text_default"
@@ -111,12 +113,13 @@
                         android:id="@+id/vwBattery"
                         android:layout_width="20dp"
                         android:layout_height="10dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="right|center_vertical"
                         android:gravity="center"
                         android:visibility="gone"
                         app:batteryColor="@color/background"
-                        app:batteryOrientation="horizontal" />
-                </LinearLayout>
+                        app:batteryOrientation="horizontal"
+                        tools:ignore="RtlHardcoded" />
+                </FrameLayout>
 
             </LinearLayout>
 

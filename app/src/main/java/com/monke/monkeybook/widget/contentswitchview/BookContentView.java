@@ -24,6 +24,7 @@ import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentTextView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -66,8 +67,7 @@ public class BookContentView extends FrameLayout {
     @BindView(R.id.tvPage)
     TextView tvPage;
     @BindView(R.id.llBottom)
-    LinearLayout llBottom;
-
+    View llBottom;
 
     private String content;
     private int durChapterIndex;
@@ -174,6 +174,10 @@ public class BookContentView extends FrameLayout {
             tvContent.setText(this.content);
             tvTitle.setText(title);
             tvPage.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
+            if (chapterAll > 0) {
+                DecimalFormat df = new DecimalFormat("0.00%");
+                tvProgress.setText(df.format(durChapterIndex*1.0f/chapterAll + 1.0f/chapterAll*(durPageIndex+1)/durPageAll));
+            }
             tvTitle.setOnClickListener(view -> {
                 ContentSwitchView csv = (ContentSwitchView) getParent();
                 csv.openChapterList();
