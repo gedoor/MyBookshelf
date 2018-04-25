@@ -155,16 +155,17 @@ public class ReadInterfacePop extends PopupWindow {
         tvBackgroundColor.setOnClickListener(view1 -> ColorPickerDialogBuilder
                 .with(activity)
                 .setTitle("选择背景颜色")
-                .initialColor(readBookControl.getTextColorCustom())
+                .initialColor(readBookControl.getBackgroundColorCustom())
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
                 .setOnColorSelectedListener(selectedColor -> {
 
                 })
                 .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
+                    updateBg(-1);
                     readBookControl.setBackgroundColorCustom(selectedColor);
-                    //upTextColor(selectedColor);
-                    changeProListener.bgChange(selectedColor);
+                    readBookControl.setBackgroundIsColor(true);
+                    changeProListener.bgChange(-1);
                 })
                 .setNegativeButton("cancel", (dialog, which) -> {
 
@@ -254,6 +255,7 @@ public class ReadInterfacePop extends PopupWindow {
             ACache aCache = ACache.get(activity);
             aCache.put("customBg", bitmap);
             updateBg(-1);
+            readBookControl.setBackgroundIsColor(false);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         } catch (IOException e) {
             e.printStackTrace();
