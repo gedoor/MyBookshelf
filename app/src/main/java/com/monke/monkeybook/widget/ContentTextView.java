@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.graphics.Paint;
 import android.util.Log;
 
+import java.math.BigDecimal;
+
 /**
  * 解决文字排版混乱参差不齐的问题
  */
@@ -20,7 +22,6 @@ public class ContentTextView extends AppCompatTextView {
 
     private int mLineY;
     private int mViewWidth;
-    private String fontPath;
     private TextPaint paint;
 
     public ContentTextView(Context context) {
@@ -54,8 +55,15 @@ public class ContentTextView extends AppCompatTextView {
         }
 
         Paint.FontMetrics fm = paint.getFontMetrics();
-        int textHeight = (int) (Math.ceil(fm.descent - fm.ascent));
-        textHeight = (int) (textHeight * layout.getSpacingMultiplier() + layout.getSpacingAdd());
+        int textHeight = getLineHeight();
+
+        //计算行数
+
+        //计算扩大数据
+        double lineCount = ((getMeasuredHeight()) * 1.0f /  textHeight);
+        double oneLineAdd = ((getMeasuredHeight()) * 1.0f % textHeight)/((int)lineCount);
+
+        textHeight+=oneLineAdd;
 
         //解决了最后一行文字间距过大的问题
         for (int i = 0; i < layout.getLineCount(); i++) {
@@ -66,7 +74,7 @@ public class ContentTextView extends AppCompatTextView {
 
             if (i < layout.getLineCount() - 1) {
                 if (needScale(line)) {
-                    drawScaledText(canvas, line, width);
+                    drawScaledText(canvas, line, width,i);
                 } else {
                     canvas.drawText(line, 0, mLineY, paint);
                 }
@@ -79,8 +87,10 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-    private void drawScaledText(Canvas canvas, String line, float lineWidth) {
+
+    private void drawScaledText(Canvas canvas, String line, float lineWidth,int xuhao) {
         float x = 0;
+
         if (isFirstLineOfParagraph(line)) {
             String blanks = " ";
             canvas.drawText(blanks, x, mLineY, getPaint());
@@ -95,6 +105,7 @@ public class ContentTextView extends AppCompatTextView {
 
         int i = 0;
 
+        //字长度大于2&&第一个字符和第二个字符都是空格
         if (line.length() > 2 && line.charAt(0) == 12288 && line.charAt(1) == 12288) {
             String substring = line.substring(0, 2);
             float cw = StaticLayout.getDesiredWidth(substring, getPaint());
@@ -113,7 +124,6 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-
     public void setFont(){
         invalidate();
     }
@@ -123,12 +133,12 @@ public class ContentTextView extends AppCompatTextView {
         invalidate();
     }
 
-    private boolean isFirstLineOfParagraph(String line) {
+    private boolean isFirstLineOfParagraph(String line) {//字长度大于3&&第一个字符和第二个字符都是空格
         return line.length() > 3 && line.charAt(0) == ' ' && line.charAt(1) == ' ';
     }
 
 
-    private boolean needScale(String line) {
+    private boolean needScale(String line) {//判断不是空行
         return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
 
     }
