@@ -45,6 +45,7 @@ public class ReadBookControl {
     private Boolean clickAllNext;
     private Boolean clickAnim;
     private int textColorCustom;
+    private int backgroundColorCustom;
     private Boolean showTitle;
     private Boolean showTimeBattery;
     private Boolean showLine;
@@ -85,6 +86,7 @@ public class ReadBookControl {
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
         this.textColorCustom = preference.getInt("textColorCustom", Color.parseColor("#383838"));
+        this.backgroundColorCustom = preference.getInt("backgroundColorCustom", Color.parseColor("#1e1e1e"));
         this.fontPath = preference.getString("fontPath",null);
         this.textConvert = preference.getBoolean("textConvert",false);
         this.textBold = preference.getBoolean("textBold", false);
@@ -241,6 +243,17 @@ public class ReadBookControl {
         this.textColorCustom = textColorCustom;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textColorCustom", textColorCustom);
+        editor.apply();
+    }
+
+    public int getBackgroundColorCustom() {
+        return backgroundColorCustom;
+    }
+
+    public void setBackgroundColorCustom(int backgroundColorCustom) {
+        this.backgroundColorCustom = backgroundColorCustom;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putInt("backgroundColorCustom", backgroundColorCustom);
         editor.apply();
     }
 

@@ -63,7 +63,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
-                    loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum(),readBookControl));
+                    loadDataListener.initData(durPageView.getLineCount(height));
                 }
             }
         }
@@ -114,7 +114,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         if (height > 0) {
             if (loadDataListener != null && durHeight != height) {
                 durHeight = height;
-                loadDataListener.initData(durPageView.getLineCount(height, readBookControl.getLineNum(),readBookControl));
+                loadDataListener.initData(durPageView.getLineCount(height));
             }
         }
         durPageView.getTvContent().getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
@@ -559,7 +559,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         for (BookContentView item : viewContents) {
             item.setFont(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
+        loadDataListener.initData(durPageView.getLineCount(durHeight));
     }
 
     public void setTextBold() {
@@ -572,14 +572,14 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
+        loadDataListener.initData(durPageView.getLineCount(durHeight));
     }
 
     public void changeLineSize() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }
-        loadDataListener.initData(durPageView.getLineCount(durHeight, readBookControl.getLineNum(),readBookControl));
+        loadDataListener.initData(durPageView.getLineCount(durHeight));
     }
 
     public void upTime(String time) {

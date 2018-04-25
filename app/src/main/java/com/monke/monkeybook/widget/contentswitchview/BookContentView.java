@@ -261,16 +261,9 @@ public class BookContentView extends FrameLayout {
     }
 
     //显示行数
-    public int getLineCount(int height, int lineNum, ReadBookControl readBookControl) {
-        Paint mTextPaint = tvContent.getPaint();
-        //字体高度
-        double textHeight = Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent) * 1.0f;
-        //行间距
-        double textSpacing = textHeight * readBookControl.getLineMultiplier() - textHeight + readBookControl.getTextExtra();
-
-//        Log.e("LineHeight>>",tvContent.getLineHeight() + " " + textHeight + " " + textSpacing + "  " + height);
+    public int getLineCount(int height) {
         //行数
-        double lineCount = (height) * 1.0f / tvContent.getLineHeight() + lineNum;
+        double lineCount = (height) * 1.0f / tvContent.getLineHeight();
 //        Log.e("LineCount>>", String.valueOf(lineCount));
         return (int) lineCount;
     }
