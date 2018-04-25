@@ -5,37 +5,37 @@
 
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search_black_24dp_new"
         android:title="@string/action_search"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_add_url"
         android:title="@string/add_book_url"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:icon="@drawable/ic_add_black_24dp_new"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_download"
-        android:icon="@drawable/ic_download_black_24dp"
+        android:icon="@drawable/ic_download_black_24dp_new"
         android:title="@string/action_download"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_list_grid"
-        android:icon="@drawable/ic_view_quilt_black_24dp"
+        android:icon="@drawable/ic_view_quilt_black_24dp_new"
         android:title="@string/action_list_grid"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_change_icon"
-        android:icon="@drawable/ic_face_black_24dp"
+        android:icon="@drawable/ic_face_black_24dp_new"
         android:title="@string/change_icon"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_clear_content"
-        android:icon="@drawable/ic_clear_all_black_24dp"
+        android:icon="@drawable/ic_clear_all_black_24dp_new"
         android:title="@string/clear_content"
         app:showAsAction="never"/>
 

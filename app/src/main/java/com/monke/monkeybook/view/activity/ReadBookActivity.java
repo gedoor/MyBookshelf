@@ -283,9 +283,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ivSetting.getDrawable().mutate();
         ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (preferences.getBoolean("nightTheme", false)) {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp_new);
         } else {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp_new);
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
@@ -309,7 +309,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void setFont(String path) {
                 csvBook.setFont();
-                csvBook.changeTextSize();
+                //csvBook.changeTextSize();
+                BookshelfHelp.clearLineContent();
+                recreate();
             }
 
             @Override
@@ -725,15 +727,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         aloudStatus = status;
                         switch (status) {
                             case PLAY:
-                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             case PAUSE:
-                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             default:
-                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.INVISIBLE);
                         }
                         ibReadAloud.getDrawable().mutate();

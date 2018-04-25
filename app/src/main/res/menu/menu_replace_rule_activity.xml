@@ -5,13 +5,13 @@
 
     <item
         android:id="@+id/action_add_replace_rule"
-        android:icon="@drawable/ic_add_black_24dp"
+        android:icon="@drawable/ic_add_black_24dp_new"
         android:title="@string/add"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black_24dp"
+        android:icon="@drawable/ic_done_all_black_24dp_new"
         android:title="@string/select_all"
         app:showAsAction="ifRoom" />
 
@@ -29,7 +29,7 @@
 
     <item
         android:id="@+id/action_del_all"
-        android:icon="@drawable/ic_delete_forever_black_24dp"
+        android:icon="@drawable/ic_clear_all_black_24dp_new"
         android:title="@string/del_all"
         app:showAsAction="never" />
 

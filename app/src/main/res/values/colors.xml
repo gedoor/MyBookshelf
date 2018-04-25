@@ -20,6 +20,9 @@
 
     <color name="tv_text_default">#1e1e1e</color>
 
+    <color name="menu_color_default">#383838</color>
+
+
     <color name="tv_text_button_nor">#ffffff</color>
     <color name="tv_text_button_pre">#7891A5</color>
     <color name="tv_text_button_disable">#7891A5</color>

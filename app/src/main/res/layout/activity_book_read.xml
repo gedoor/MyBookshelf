@@ -98,7 +98,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/read_aloud"
-                    android:src="@drawable/ic_timer_black_24dp"
+                    android:src="@drawable/ic_timer_black_24dp_new"
                     app:cb_color="@color/background" />
 
                 <com.monke.monkeybook.widget.CustomTextView
@@ -125,7 +125,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/read_aloud"
-                    android:src="@drawable/ic_volume_up_black_24dp"
+                    android:src="@drawable/ic_volume_up_black_24dp_new"
                     app:cb_color="@color/background" />
 
                 <View
@@ -138,7 +138,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/replace_rule_title"
-                    android:src="@drawable/ic_find_replace_black_24dp"
+                    android:src="@drawable/ic_find_replace_black_24dp_new"
                     app:cb_color="@color/background" />
 
                 <View
@@ -151,7 +151,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/night_theme"
-                    android:src="@drawable/ic_brightness_2_black_24dp"
+                    android:src="@drawable/ic_brightness_2_black_24dp_new"
                     app:cb_color="@color/background" />
 
             </LinearLayout>
@@ -217,7 +217,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="58dp"
+                    android:layout_height="50dp"
                     android:baselineAligned="false"
                     android:orientation="horizontal">
 
@@ -238,7 +238,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/table_of_contents"
-                            android:src="@drawable/ic_list_black_24dp"
+                            android:src="@drawable/ic_list_black_24dp_new_read"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -267,7 +267,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
-                            android:src="@drawable/ic_tune_black_24dp"
+                            android:src="@drawable/ic_tune_black_24dp_new"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -296,7 +296,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/interface_setting"
-                            android:src="@drawable/ic_font_black_24dp"
+                            android:src="@drawable/ic_font_black_24dp_new"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -325,7 +325,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/setting"
-                            android:src="@drawable/ic_setting_hollow_black_24dp"
+                            android:src="@drawable/ic_setting_hollow_black_24dp_new"
                             tools:ignore="NestedWeights" />
 
                         <TextView
