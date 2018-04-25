@@ -3,100 +3,128 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=unicode">
     <title>源规则说明</title>
-
-
-    <style id="wiz_custom_css">
-        html, body {font-size: 12pt;}body {font-family: Helvetica, 'Hiragino Sans GB', '微软雅黑', 'Microsoft YaHei UI', SimSun, SimHei, arial, sans-serif;line-height: 1.6;margin: 0 auto;padding: 20px 16px;padding: 1.25rem 1rem;}h1, h2, h3, h4, h5, h6 {margin:20px 0 10px;margin:1.25rem 0 0.625rem;padding: 0;font-weight: bold;}h1 {font-size:20pt;font-size:1.67rem;}h2 {font-size:18pt;font-size:1.5rem;}h3 {font-size:15pt;font-size:1.25rem;}h4 {font-size:14pt;font-size:1.17rem;}h5 {font-size:12pt;font-size:1rem;}h6 {font-size:12pt;font-size:1rem;color: #777777;margin: 1rem 0;}div, p, ul, ol, dl, li {margin:0;}blockquote, table, pre, code {margin:8px 0;}ul, ol {padding-left:32px;padding-left:2rem;}ol.wiz-list-level1 > li {list-style-type:decimal;}ol.wiz-list-level2 > li {list-style-type:lower-latin;}ol.wiz-list-level3 > li {list-style-type:lower-roman;}blockquote {padding:0 12px;padding:0 0.75rem;}blockquote > :first-child {margin-top:0;}blockquote > :last-child {margin-bottom:0;}img {border:0;max-width:100%;height:auto !important;margin:2px 0;}table {border-collapse:collapse;border:1px solid #bbbbbb;}td, th {padding:4px 8px;border-collapse:collapse;border:1px solid #bbbbbb;min-height:28px;word-break:break-all;box-sizing: border-box;}.wiz-hide {display:none !important;}
-    </style>
 </head>
 
 <body spellcheck="false" class="">
-<div><h1>源规则说明</h1>
-    <div>@为分隔符,</div>
-    <div>每段是查找内容的规则,用点分开,</div>
-    <div>第一段是类型,如class,id,tag等</div>
-    <div>第二段是名称,</div>
-    <div>第三段是位置,class,tag会获取到多个,所以要加位置,id类型不要加</div>
-    <div>如不加位置会获取所有,</div>
-    <div>!是排除,有些位置不符合需要排除用!,后面的序号用:隔开,%为最后一个</div>
-    <div>@的最后一段为获取内容,如text,textNodes,href,src等</div>
-    <div>如有不同规则可以写多个规则用 | 分隔开,如</div>
-    <div>如需要正则替换在最后加上 #正则表达式</div>
-    <div>
-        <pre style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><span
-                style="color:rgb(0, 128, 0);font-weight:bold;">class.col-xs-2.0@text|</span><span
-                style="color: rgb(0, 128, 0); font-weight: bold; font-size: 0.75rem; line-height: 1.6;">class.col-xs-1.0@text</span></pre>
-    </div>
-    <div>因为有些网站同一页面规则也不一至,多个规则会以第一个取到值的为准</div>
-    <div>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;">bookSourceBean.setBookSourceUrl(<span
-                style="color:#008000;font-weight:bold;">"http://www.gxwztv.com"</span>);<br>bookSourceBean.setBookSourceName(<span
-                style="color:#008000;font-weight:bold;">"梧州中文台"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">搜索规则searchKey为关键字标识,运行时会替换为搜索关键字,searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1</pre><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">要添加转码编码在最后加 |char=gbk</pre>bookSourceBean.setRuleSearchUrl(<span
-                style="color:#008000;font-weight:bold;">"</span><a
-                href="http://www.gxwztv.com/search.htm?keyword=searchKey&amp;pn=searchPage-1&quot;);">http://www.gxwztv.com/search.htm?keyword=searchKey&amp;pn=searchPage-1");</a></pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">发现规则分为两段,名称和url用::分开 如 起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage url规则和搜索规则一样</pre><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">多个规则用&&分开如</pre>"起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&&原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&page=searchPage</a></pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取类型为class名称为list-group-item的搜索列表并排除第1个和最后一个</pre>bookSourceBean.setRuleSearchList(<span
-                style="color:#008000;font-weight:bold;">"class.list-group-item!0:%"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的作者</pre>bookSourceBean.setRuleSearchAuthor(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-2.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的类型</pre>bookSourceBean.setRuleSearchKind(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-1.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的最新章节</pre>bookSourceBean.setRuleSearchLastChapter(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-4.0@tag.a.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的书名</pre>bookSourceBean.setRuleSearchName(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-3.0@tag.a.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的书链接</pre>bookSourceBean.setRuleSearchNoteUrl(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-3.0@tag.a.0@href"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取搜索里的书封面</pre>bookSourceBean.setRuleSearchCoverUrl(<span
-                style="color:#008000;font-weight:bold;">""</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取书籍页面里的书名称</pre>bookSourceBean.setRuleBookName(<span
-                style="color:#008000;font-weight:bold;">"class.active.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取书籍页面里的作者</pre>bookSourceBean.setRuleBookAuthor(<span
-                style="color:#008000;font-weight:bold;">"class.col-xs-12 list-group-item no-border.0@tag.small.0@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取书籍页面里的简介</pre></pre>bookSourceBean.setRuleIntroduce(<span
-                style="color:#008000;font-weight:bold;">"class.panel panel-default mt20.0@id.shot@text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取书籍页面里的封面</pre></pre>bookSourceBean.setRuleCoverUrl(<span
-                style="color:#008000;font-weight:bold;">"class.panel-body.0@class.img-thumbnail.0@src"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取书籍页面里的目录地址</pre></pre>bookSourceBean.setRuleChapterUrl(<span
-                style="color:#008000;font-weight:bold;">"class.list-group-item tac.0@tag.a.0@href"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取目录页面的目录列表,前面加 - 号倒序排列</pre></pre>bookSourceBean.setRuleChapterList(<span
-                style="color:#008000;font-weight:bold;">"id.chapters-list@tag.a"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);">获取目录列表的章节名称</pre></pre>bookSourceBean.setRuleChapterName(<span
-                style="color:#008000;font-weight:bold;">"text"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-size:0.75rem;font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;background-color:rgb(255, 255, 255);"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取目录列表的章节链接</pre></pre></pre>bookSourceBean.setRuleContentUrl(<span
-                style="color:#008000;font-weight:bold;">"href"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><pre
-                style="margin:8px 0px;color:rgb(0, 0, 0);font-style:normal;font-weight:normal;text-align:start;text-indent:0px;font-family:宋体;font-size:0.75rem;background-color:rgb(255, 255, 255);">获取章节内容</pre>bookSourceBean.setRuleBookContent(<span
-                style="color:#008000;font-weight:bold;">"id.txtContent@textNodes"</span>);</pre>
-        <pre style="background-color:#ffffff;color:#000000;font-family:'宋体';font-size:0.75rem;"><br></pre>
-        <br></div>
-</div>
+<h1>书源规则说明</h1>
+
+<h4>书源规则基于HTML标记,如class,id,tag等</h4>
+
+<p>想要写规则先要打开网页原代码,在里面找到想要获取内容对应的标签,
+    Chrome可以在网页上右击点击检查可以方便的查看标签</p>
+
+<h2>基本写法</h2>
+
+<h4>@为分隔符,用来分隔获取规则</h4>
+
+<h4>每段规则可分为3段</h4>
+
+<p>第一段是类型,如class,id,tag等</p>
+
+<p>第二段是名称,</p>
+
+<p>第三段是位置,class,tag会获取到多个,所以要加位置,id类型不要加</p>
+
+<p>如不加位置会获取所有</p>
+
+<h5>!是排除,有些位置不符合需要排除用!,后面的序号用:隔开,%为最后一个</h5>
+
+<p>@的最后一段为获取内容,如text,textNodes,href,src等</p>
+
+<h5>如果有不同网页的规则可以用 | 分隔,多个规则会以第一个取到值的为准</h5>
+
+<h5>如需要正则替换在最后加上 #正则表达式</h5>
+
+<h5>例:</h5>
+
+<p>class.odd.0@tag.a.0@text|tag.dd.0@tag.h1@text#全文阅读</p>
+
+<h3>BookSourceUrl 书源网址</h3>
+
+<h3>BookSourceName 书源名称</h3>
+
+<h3>BookSourceGroup 书源分组</h3>
+
+<h3>RuleSearchUrl 搜索网址</h3>
+
+<p>例:http://www.gxwztv.com/search.htm?keyword=searchKey&amp;pn=searchPage-1</p>
+
+<p>searchKey为关键字标识,运行时会替换为搜索关键字,
+    searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,
+    要添加转码编码在最后加 |char=gbk</p>
+
+<h4>ruleFindUrl 发现规则</h4>
+
+<p>发现规则分为两段,名称和url用::分开,如</p>
+
+<p>起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage</p>
+
+<p>url规则和搜索规则一样,多个规则用&amp;&amp;分开,如</p>
+
+<p>起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&amp;&amp;原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&amp;page=searchPage</p>
+
+<h4>RuleSearchList 搜索列表</h4>
+
+<p>例:class.list-group-item!0:%</p>
+
+<h4>RuleSearchAuthor 搜索里的作者</h4>
+
+<p>例:class.col-xs-2.0@text</p>
+
+<h4>RuleSearchKind 搜索里的类型</h4>
+
+<p>例:class.col-xs-1.0@text</p>
+
+<h4>RuleSearchLastChapter 搜索里的最新章节</h4>
+
+<p>例:class.col-xs-4.0@tag.a.0@text</p>
+
+<h4>RuleSearchName 获取搜索里的书名</h4>
+
+<p>例:class.col-xs-3.0@tag.a.0@text</p>
+
+<h4>RuleSearchNoteUrl 搜索里的书链接</h4>
+
+<p>例:class.col-xs-3.0@tag.a.0@href</p>
+
+<h4>RuleSearchCoverUrl 搜索里的书封面</h4>
+
+<p>例:tag.img.0@src</p>
+
+<h4>RuleBookName 书籍页面里的书名称</h4>
+
+<p>例:class.active.0@text</p>
+
+<h4>RuleBookAuthor 书籍页面里的作者</h4>
+
+<p>例:class.col-xs-12.0@tag.small.0@text</p>
+
+<h4>RuleIntroduce 书籍页面里的简介</h4>
+
+<p>例:class.panel panel-default mt20.0@id.shot@text</p>
+
+<h4>RuleCoverUrl 书籍页面里的封面</h4>
+
+<p>例:class.panel-body.0@class.img-thumbnail.0@src</p>
+
+<h4>RuleChapterUrl 书籍页面里的目录地址</h4>
+
+<p>例:class.list-group-item tac.0@tag.a.0@href</p>
+
+<h4>RuleChapterList 目录页面的目录列表,前面加 - 号倒序排列</h4>
+
+<p>例:id.chapters-list@tag.a</p>
+
+<h4>RuleChapterName 目录列表的章节名称</h4>
+
+<p>例:text</p>
+
+<h4>RuleContentUrl 目录列表的章节链接</h4>
+
+<p>例:href</p>
+
+<h4>RuleBookContent 章节内容</h4>
+
+<p>例:id.txtContent@textNodes</p>
 </body>
 </html>

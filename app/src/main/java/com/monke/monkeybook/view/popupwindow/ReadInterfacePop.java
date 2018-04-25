@@ -44,11 +44,6 @@ public class ReadInterfacePop extends PopupWindow {
     TextView flTextConvert;
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
-
-    @BindView(R.id.tv_dur_line_num)
-    TextView tvDurLineNum;//增减行数字
-    @BindView(R.id.fl_line_num)
-    TextView flLineNum;//增减行
     @BindView(R.id.fl_text_smaller)
     TextView flTextSmaller;//字号小
     @BindView(R.id.tv_dur_text_size)
@@ -73,11 +68,13 @@ public class ReadInterfacePop extends PopupWindow {
     TextView civBgCustom;
     @BindView(R.id.civ_text_color)
     TextView civTextColor;
+    @BindView(R.id.tv_background_color)
+    TextView tvBackgroundColor;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl;
 
-    public static final int RESULT_CHOOSEFONT_PERMS =  106;
+    public static final int RESULT_CHOOSEFONT_PERMS = 106;
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
@@ -155,11 +152,26 @@ public class ReadInterfacePop extends PopupWindow {
             updateBoldText(readBookControl.getTextBold());
             changeProListener.setBold();
         });
-        flLineNum.setOnClickListener(view1 -> {
-            updateLineNum(readBookControl.getLineNum() + 1);
-            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
-        });
+        tvBackgroundColor.setOnClickListener(view1 -> ColorPickerDialogBuilder
+                .with(activity)
+                .setTitle("选择背景颜色")
+                .initialColor(readBookControl.getBackgroundColorCustom())
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(selectedColor -> {
 
+                })
+                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
+                    updateBg(-1);
+                    readBookControl.setBackgroundColorCustom(selectedColor);
+                    readBookControl.setBackgroundIsColor(true);
+                    changeProListener.bgChange(-1);
+                })
+                .setNegativeButton("cancel", (dialog, which) -> {
+
+                })
+                .build()
+                .show());
 
         civBgWhite.setOnClickListener(v -> {
             updateBg(0);
@@ -189,7 +201,7 @@ public class ReadInterfacePop extends PopupWindow {
         //长按清除字体
         fl_text_font.setOnLongClickListener(view -> {
             clearFontPath();
-            Toast.makeText(activity,R.string.clear_font,Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.clear_font, Toast.LENGTH_SHORT).show();
             return true;
         });
 
@@ -199,36 +211,34 @@ public class ReadInterfacePop extends PopupWindow {
             intent.setType("image/*");
             activity.startActivityForResult(intent, activity.ResultSelectBg);
         });
-        civTextColor.setOnClickListener(view -> {
-            ColorPickerDialogBuilder
-                    .with(activity)
-                    .setTitle("选择文字颜色")
-                    .initialColor(readBookControl.getTextColorCustom())
-                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                    .density(12)
-                    .setOnColorSelectedListener(selectedColor -> {
+        civTextColor.setOnClickListener(view -> ColorPickerDialogBuilder
+                .with(activity)
+                .setTitle("选择文字颜色")
+                .initialColor(readBookControl.getTextColorCustom())
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .setOnColorSelectedListener(selectedColor -> {
 
-                    })
-                    .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
-                        readBookControl.setTextColorCustom(selectedColor);
-                        //upTextColor(selectedColor);
-                        changeProListener.bgChange(selectedColor);
-                    })
-                    .setNegativeButton("cancel", (dialog, which) -> {
+                })
+                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
+                    readBookControl.setTextColorCustom(selectedColor);
+                    //upTextColor(selectedColor);
+                    changeProListener.bgChange(selectedColor);
+                })
+                .setNegativeButton("cancel", (dialog, which) -> {
 
-                    })
-                    .build()
-                    .show();
-        });
+                })
+                .build()
+                .show());
     }
 
-    private void chooseReadBookFont(){
+    private void chooseReadBookFont() {
         if (EasyPermissions.hasPermissions(activity, perms)) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
             activity.startActivityForResult(intent, activity.ResultSelectFont);
-        }else{
+        } else {
             EasyPermissions.requestPermissions(activity, "选择字体",
                     RESULT_CHOOSEFONT_PERMS, perms);
         }
@@ -245,6 +255,7 @@ public class ReadInterfacePop extends PopupWindow {
             ACache aCache = ACache.get(activity);
             aCache.put("customBg", bitmap);
             updateBg(-1);
+            readBookControl.setBackgroundIsColor(false);
             changeProListener.bgChange(readBookControl.getTextDrawableIndex());
         } catch (IOException e) {
             e.printStackTrace();
@@ -252,8 +263,8 @@ public class ReadInterfacePop extends PopupWindow {
         }
     }
 
-    private Bitmap getSmallerBitmap(Bitmap bitmap){
-        int size = bitmap.getWidth()*bitmap.getHeight() / 360000;
+    private Bitmap getSmallerBitmap(Bitmap bitmap) {
+        int size = bitmap.getWidth() * bitmap.getHeight() / 360000;
         if (size <= 1) return bitmap; // 如果小于
         else {
             Matrix matrix = new Matrix();
@@ -263,11 +274,11 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     //设置字体
-    public void setReadFonts(String path){
+    public void setReadFonts(String path) {
         changeProListener.setFont(readBookControl.setReadBookFont(path));
     }
 
-    private void clearFontPath(){
+    private void clearFontPath() {
         changeProListener.setFont(readBookControl.setReadBookFont(null));
     }
 
@@ -304,22 +315,22 @@ public class ReadInterfacePop extends PopupWindow {
         if (lineNum > 3) {
             lineNum = -1;
         }
-        tvDurLineNum.setText(String.format("%d", lineNum));
+//        tvDurLineNum.setText(String.format("%d", lineNum));
         readBookControl.setLineNum(lineNum);
     }
 
-    private void updateConvertText(Boolean convent){
-        if (convent){
+    private void updateConvertText(Boolean convent) {
+        if (convent) {
             flTextConvert.setText("简");
-        }else {
+        } else {
             flTextConvert.setText("繁");
         }
     }
 
-    private void updateBoldText(Boolean convent){
-        if (convent){
+    private void updateBoldText(Boolean convent) {
+        if (convent) {
             flTextBold.setText("细");
-        }else {
+        } else {
             flTextBold.setText("粗");
         }
     }

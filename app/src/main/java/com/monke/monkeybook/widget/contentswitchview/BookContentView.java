@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -261,16 +262,9 @@ public class BookContentView extends FrameLayout {
     }
 
     //显示行数
-    public int getLineCount(int height, int lineNum, ReadBookControl readBookControl) {
-        Paint mTextPaint = tvContent.getPaint();
-        //字体高度
-        double textHeight = Math.ceil(mTextPaint.getFontMetrics().descent - mTextPaint.getFontMetrics().ascent) * 1.0f;
-        //行间距
-        double textSpacing = textHeight * readBookControl.getLineMultiplier() - textHeight + readBookControl.getTextExtra();
-
-//        Log.e("LineHeight>>",tvContent.getLineHeight() + " " + textHeight + " " + textSpacing + "  " + height);
+    public int getLineCount(int height) {
         //行数
-        double lineCount = (height) * 1.0f / tvContent.getLineHeight() + lineNum;
+        double lineCount = (height) * 1.0f / tvContent.getLineHeight();
 //        Log.e("LineCount>>", String.valueOf(lineCount));
         return (int) lineCount;
     }
@@ -296,8 +290,12 @@ public class BookContentView extends FrameLayout {
             vwLine.setBackgroundColor(readBookControl.getTextColor());
             vwBattery.setColor(readBookControl.getTextColor());
         } else {
-            ACache aCache = ACache.get(this.getContext());
-            ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
+            if (readBookControl.getBackgroundIsColor()) {
+                ivBg.setImageDrawable(new ColorDrawable(readBookControl.getBackgroundColorCustom()));
+            } else {
+                ACache aCache = ACache.get(this.getContext());
+                ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
+            }
             tvContent.setTextColor(readBookControl.getTextColorCustom());
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
             tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
