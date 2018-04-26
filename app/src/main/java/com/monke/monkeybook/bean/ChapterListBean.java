@@ -101,7 +101,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
     }
 
     public void setDurChapterName(String durChapterName) {
-        this.durChapterName = durChapterName.replaceAll("^(第[\\d零〇一二两三四五六七八九十百千万\\s]+[章节篇回集])[、，。　：:\\s]*", "$1 ");
+        this.durChapterName = durChapterName.replaceAll("^(第[\\d零〇一二两三四五六七八九十百千万\\s]+[章节篇回集])[、，。　：:.\\s]*", "$1 ");
     }
 
     public String getDurChapterUrl() {
