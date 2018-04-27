@@ -164,7 +164,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ServiceConnection conn;
     private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
-    private ReadBookControl readBookControl;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     @SuppressLint("SimpleDateFormat")
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -193,8 +193,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
-        readBookControl = ReadBookControl.getInstance();
-        readBookControl.setLineChange(System.currentTimeMillis());
         hideStatusBar = readBookControl.getHideStatusBar();
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
