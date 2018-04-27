@@ -279,6 +279,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
+        ACache aCache = ACache.get(this.getContext());
         if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
             ivBg.setImageResource(readBookControl.getTextBackground());
             tvContent.setTextColor(readBookControl.getTextColor());
@@ -293,8 +294,7 @@ public class BookContentView extends FrameLayout {
         } else {
             if (readBookControl.getBackgroundIsColor()) {
                 ivBg.setImageDrawable(new ColorDrawable(readBookControl.getBackgroundColorCustom()));
-            } else {
-                ACache aCache = ACache.get(this.getContext());
+            } else if (aCache.getAsBitmap("customBg")!=null){
                 ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
             }
             tvContent.setTextColor(readBookControl.getTextColorCustom());
