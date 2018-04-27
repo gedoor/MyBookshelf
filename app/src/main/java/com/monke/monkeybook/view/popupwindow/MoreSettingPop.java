@@ -98,17 +98,17 @@ public class MoreSettingPop extends PopupWindow {
         sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTitle(isChecked);
-            BookshelfHelp.clearLineContent();
+            readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTimeBattery(isChecked);
-            BookshelfHelp.clearLineContent();
+            readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowLine(isChecked);
-            BookshelfHelp.clearLineContent();
+            readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
     }

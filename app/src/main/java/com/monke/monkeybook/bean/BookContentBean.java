@@ -35,18 +35,18 @@ public class BookContentBean implements Parcelable{
     private List<String> lineContent = new ArrayList<>();
 
     @Transient
-    private float lineSize;
+    private long lineChange;
 
     public BookContentBean(){
 
     }
 
-    public float getLineSize() {
-        return lineSize;
+    public long getLineChange() {
+        return lineChange;
     }
 
-    public void setLineSize(float lineSize) {
-        this.lineSize = lineSize;
+    public void setLineChange(long lineChange) {
+        this.lineChange = lineChange;
     }
 
     protected BookContentBean(Parcel in) {

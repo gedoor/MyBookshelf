@@ -225,9 +225,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case R.id.action_change_icon:
                 LauncherIcon.Change();
                 break;
-            case R.id.action_clear_content:
-                BookshelfHelp.clearLineContent();
-                break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
                         ) {
