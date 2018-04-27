@@ -111,8 +111,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             if (null != bookShelf.getChapterList(chapterIndex).getBookContentBean()
                     && null != bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent()) {
-                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineSize() == mView.getPaint().getTextSize()//字体大小改变
-                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null//行内容不为空
+                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null //行内容不为空
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0
                         && bookContentView != null) {//行内容Size>0
                     //已有数据

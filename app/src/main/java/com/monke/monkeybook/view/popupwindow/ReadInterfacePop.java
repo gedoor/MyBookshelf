@@ -79,13 +79,13 @@ public class ReadInterfacePop extends PopupWindow {
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public interface OnChangeProListener {
-        void textSizeChange(int index);
+        void textSizeChange();
 
-        void lineSizeChange(float lineMultiplier);
+        void lineSizeChange();
 
-        void bgChange(int index);
+        void bgChange();
 
-        void setFont(String path);
+        void setFont();
 
         void setConvert();
 
@@ -125,19 +125,19 @@ public class ReadInterfacePop extends PopupWindow {
     private void bindEvent() {
         flTextSmaller.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() - 1);
-            changeProListener.textSizeChange(readBookControl.getTextKindIndex());
+            changeProListener.textSizeChange();
         });
         flTextBigger.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() + 1);
-            changeProListener.textSizeChange(readBookControl.getTextKindIndex());
+            changeProListener.textSizeChange();
         });
         flLineSmaller.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1));
-            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
+            changeProListener.lineSizeChange();
         });
         flLineBigger.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
-            changeProListener.lineSizeChange(readBookControl.getLineMultiplier());
+            changeProListener.lineSizeChange();
         });
 
         //繁简切换
@@ -165,7 +165,7 @@ public class ReadInterfacePop extends PopupWindow {
                     updateBg(-1);
                     readBookControl.setBackgroundColorCustom(selectedColor);
                     readBookControl.setBackgroundIsColor(true);
-                    changeProListener.bgChange(-1);
+                    changeProListener.bgChange();
                 })
                 .setNegativeButton("cancel", (dialog, which) -> {
 
@@ -175,24 +175,24 @@ public class ReadInterfacePop extends PopupWindow {
 
         civBgWhite.setOnClickListener(v -> {
             updateBg(0);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         });
         civBgYellow.setOnClickListener(v -> {
             updateBg(1);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         });
         civBgGreen.setOnClickListener(v -> {
             updateBg(2);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         });
         civBgBlue.setOnClickListener(v -> {
             updateBg(3);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         });
 
         civBgBlack.setOnClickListener(v -> {
             updateBg(4);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         });
         //选择字体
         fl_text_font.setOnClickListener(view -> {
@@ -223,7 +223,7 @@ public class ReadInterfacePop extends PopupWindow {
                 .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
                     readBookControl.setTextColorCustom(selectedColor);
                     //upTextColor(selectedColor);
-                    changeProListener.bgChange(selectedColor);
+                    changeProListener.bgChange();
                 })
                 .setNegativeButton("cancel", (dialog, which) -> {
 
@@ -256,7 +256,7 @@ public class ReadInterfacePop extends PopupWindow {
             aCache.put("customBg", bitmap);
             updateBg(-1);
             readBookControl.setBackgroundIsColor(false);
-            changeProListener.bgChange(readBookControl.getTextDrawableIndex());
+            changeProListener.bgChange();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -275,11 +275,13 @@ public class ReadInterfacePop extends PopupWindow {
 
     //设置字体
     public void setReadFonts(String path) {
-        changeProListener.setFont(readBookControl.setReadBookFont(path));
+        readBookControl.setReadBookFont(path);
+        changeProListener.setFont();
     }
 
     private void clearFontPath() {
-        changeProListener.setFont(readBookControl.setReadBookFont(null));
+        readBookControl.setReadBookFont(null);
+        changeProListener.setFont();
     }
 
     private void updateText(int textKindIndex) {
