@@ -190,7 +190,7 @@ public class ReadBookControl {
 
     public void setTextDrawableIndex(int textDrawableIndex) {
         ACache aCache = ACache.get(MApplication.getInstance());
-        if (textDrawableIndex == -1 && aCache.getAsBitmap("customBg") == null) {
+        if (textDrawableIndex == -1 && !backgroundIsColor && aCache.getAsBitmap("customBg") == null) {
             textDrawableIndex = DEFAULT_BG;
         }
         this.textDrawableIndex = textDrawableIndex;
