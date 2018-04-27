@@ -269,7 +269,6 @@ public class BookContentView extends FrameLayout {
         return (int) lineCount;
     }
 
-
     public void setReadBookControl(ReadBookControl readBookControl) {
         setFont(readBookControl);
         setTextBold(readBookControl);
@@ -321,6 +320,7 @@ public class BookContentView extends FrameLayout {
                 tvTime.setTypeface(typeface);
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
+                tvContent.setFont();
                 tvTitle.setTypeface(Typeface.SANS_SERIF);
                 tvTime.setTypeface(Typeface.SANS_SERIF);
                 tvPage.setTypeface(Typeface.SANS_SERIF);
@@ -330,7 +330,7 @@ public class BookContentView extends FrameLayout {
             Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
-            tvContent.setTypeface(Typeface.SANS_SERIF);
+            tvContent.setFont();
             tvTitle.setTypeface(Typeface.SANS_SERIF);
             tvTime.setTypeface(Typeface.SANS_SERIF);
             tvPage.setTypeface(Typeface.SANS_SERIF);
