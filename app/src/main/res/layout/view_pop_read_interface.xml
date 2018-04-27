@@ -39,7 +39,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="A-"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -59,7 +58,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="A+"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -72,7 +70,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="繁"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -85,7 +82,6 @@
                 android:gravity="center"
                 android:text="粗"
                 android:layout_marginLeft="10dp"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -98,7 +94,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="自定义字体\n(长按恢复默认)"
-                android:textColor="#767676"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText" />
 
@@ -124,7 +119,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="L-"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -144,7 +138,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="L+"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -157,7 +150,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="文字颜色"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -170,7 +162,6 @@
                 android:gravity="center"
                 android:text="背景颜色"
                 android:layout_marginLeft="10dp"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -278,7 +269,6 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="自定义背景"
-                android:textColor="#767676"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 

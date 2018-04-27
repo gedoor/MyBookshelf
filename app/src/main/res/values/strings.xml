@@ -29,9 +29,9 @@
     <string name="net_error_10002">网络连接超时</string>
     <string name="net_error_10003">数据解析失败</string>
 
-    <string name="read_dur_progress">观看至:%s</string>
+    <string name="read_dur_progress">最近阅读: %s</string>
     <string name="tv_book_name">《%s》</string>
-    <string name="book_search_last">最新章节:%s</string>
+    <string name="book_search_last">最新章节: %s</string>
     <string name="check_add_bookshelf">是否将《%s》放入书架？</string>
     <string name="import_books_count">共%s个Text文件</string>
     <string name="is_loading">加载中…</string>
