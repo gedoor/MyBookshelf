@@ -317,7 +317,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void setConvert() {
                 readBookControl.setLineChange(System.currentTimeMillis());
-                recreate();
+                csvBook.changeTextSize();
             }
 
             @Override

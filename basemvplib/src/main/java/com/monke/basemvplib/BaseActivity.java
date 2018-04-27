@@ -83,8 +83,6 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
 
     /**
      * P层绑定   若无则返回null;
-     *
-     * @return
      */
     protected abstract T initInjector();
 
