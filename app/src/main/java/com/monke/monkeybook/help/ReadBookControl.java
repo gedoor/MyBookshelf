@@ -28,7 +28,6 @@ public class ReadBookControl {
     private int textColor;
     private int textBackground;
     private float lineMultiplier;
-    private int lineNum;//缩进行
 
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
@@ -83,7 +82,6 @@ public class ReadBookControl {
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
-        this.lineNum = preference.getInt("lineNum", 0);
         this.clickSensitivity = preference.getInt("clickSensitivity", 10);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
@@ -321,17 +319,6 @@ public class ReadBookControl {
         this.lineMultiplier = lineMultiplier;
         SharedPreferences.Editor editor = preference.edit();
         editor.putFloat("lineMultiplier", lineMultiplier);
-        editor.apply();
-    }
-
-    public int getLineNum() {
-        return lineNum;
-    }
-
-    public void setLineNum(int lineNum) {
-        this.lineNum = lineNum;
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putInt("lineNum", lineNum);
         editor.apply();
     }
 
