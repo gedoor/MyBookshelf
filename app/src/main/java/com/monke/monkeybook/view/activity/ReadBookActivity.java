@@ -746,6 +746,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void upTimer(String text) {
+                        ibReadAloud.setContentDescription(text);
                         tvReadAloudTimer.setText(text);
                     }
                 });

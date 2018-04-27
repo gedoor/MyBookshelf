@@ -97,7 +97,7 @@
                     android:id="@+id/ib_read_aloud_timer"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:contentDescription="@string/read_aloud"
+                    android:contentDescription="@string/set_timer"
                     android:src="@drawable/ic_timer_black_24dp"
                     app:cb_color="@color/background" />
 
