@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -181,6 +182,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             noteUrl = savedInstanceState.getString("noteUrl");
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
+        readBookControl.setLineChange(System.currentTimeMillis());
         super.onCreate(savedInstanceState);
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
