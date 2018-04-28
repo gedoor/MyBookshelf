@@ -313,8 +313,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void setFont() {
                 readBookControl.setLineChange(System.currentTimeMillis());
                 csvBook.setFont();
-                //csvBook.changeTextSize();
-                BookshelfHelp.clearLineContent();
                 recreate();
             }
 
