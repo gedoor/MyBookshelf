@@ -201,6 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:textColor="#3E3D3B"
                         android:text="白练"
                         android:textSize="10sp" />
 
@@ -226,6 +227,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:textColor="#5E432E"
                         android:text="老茶"
                         android:textSize="10sp" />
 
@@ -250,6 +252,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:textColor="#22482C"
                         android:text="浅叶"
                         android:textSize="10sp" />
 
@@ -275,7 +278,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="格调"
-                        android:textColor="#ffffff"
+                        android:textColor="#FFFFFF"
                         android:textSize="10sp" />
 
                 </FrameLayout>
@@ -300,7 +303,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="藏墨"
-                        android:textColor="#666"
+                        android:textColor="#808080"
                         android:textSize="10sp" />
 
                 </FrameLayout>
