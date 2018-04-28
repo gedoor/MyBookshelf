@@ -581,7 +581,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //菜单
+    /**
+     * 菜单事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -594,6 +596,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             case R.id.action_download:
                 download();
+                break;
+            case R.id.action_copy_text:
+                popMenuOut();
+                moProgressHUD.showText(csvBook.getDurContentView().getContent());
                 break;
             case android.R.id.home:
                 finish();
@@ -768,11 +774,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
+                actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                 } else {
-                    actionBar.setTitle("没有目录");
                     atvUrl.setText("");
                 }
 
