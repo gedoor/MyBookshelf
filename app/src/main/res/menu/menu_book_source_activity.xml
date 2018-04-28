@@ -17,13 +17,13 @@
 
     <item
         android:id="@+id/action_import_book_source_local"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
         android:title="@string/import_book_source_local"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_onLine"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
         android:title="@string/import_book_source_on_line"
         app:showAsAction="never" />
 
