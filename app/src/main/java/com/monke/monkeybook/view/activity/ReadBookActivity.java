@@ -608,6 +608,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 刷新
+     */
     private void refresh() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -621,6 +624,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 换源
+     */
     private void changeSource() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -633,6 +639,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 下载
+     */
     private void download() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -979,9 +988,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 更新目录
+     */
     @Override
     public void chapterChange(ChapterListBean chapterListBean) {
-        chapterListView.upChapterList(chapterListBean);
+        if (chapterListView.hasData()) {
+            chapterListView.upChapterList(chapterListBean);
+        }
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
@@ -1050,6 +1064,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ReadAloudService.stop(this);
     }
 
+    /**
+     * 结束
+     */
     @Override
     public void finish() {
         if (!AppActivityManager.getInstance().isExist(MainActivity.class)) {
@@ -1059,6 +1076,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.finish();
     }
 
+    /**
+     * 时间和电量广播
+     */
     class ThisBatInfoReceiver extends BroadcastReceiver {
         @SuppressLint("DefaultLocale")
         @Override
