@@ -126,7 +126,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_local_cafe_black_24dp"
+                    android:drawableStart="@drawable/ic_local_cafe_black_24dp_new"
                     android:gravity="center_vertical"
                     android:text="@string/donate" />
 
