@@ -78,10 +78,10 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="粗"
-                android:layout_marginLeft="10dp"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -103,11 +103,11 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_marginTop="5dp"
             android:paddingTop="5dp">
 
             <TextView
@@ -158,10 +158,10 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="背景颜色"
-                android:layout_marginLeft="10dp"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -177,84 +177,133 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_bg_white"
+                <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
                     android:layout_height="35dp"
-                    android:contentDescription="白色背景"
-                    android:src="@drawable/icon_readbook_white"
-                    app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
-
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_bg_yellow"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="35dp"
-                    android:contentDescription="古铜色背景"
-                    android:src="@drawable/icon_readbook_yellow"
-                    app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
-
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_bg_green"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="35dp"
-                    android:contentDescription="淡绿色背景"
-                    android:src="@drawable/icon_readbook_green"
-                    app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_bg_blue"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="35dp"
-                    android:contentDescription="蓝色背景"
-                    android:src="@drawable/icon_readbook_blue"
-                    app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_bg_black"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="35dp"
-                    android:contentDescription="黑色背景"
-                    android:src="@drawable/icon_readbook_black"
-                    app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
-
-                <!--<FrameLayout
-                    android:id="@+id/civ_bg_custom"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp">
+                    android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_bg_white"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:contentDescription="黑色背景"
-                        android:src="@color/bg_library"
+                        android:layout_gravity="center"
+                        android:contentDescription="白色背景"
+                        android:src="@drawable/icon_readbook_white"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="自"/>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="白练"
+                        android:textSize="10sp" />
 
-                </FrameLayout>-->
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_bg_yellow"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="古铜色背景"
+                        android:src="@drawable/icon_readbook_yellow"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="老茶"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_bg_green"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:contentDescription="淡绿色背景"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_readbook_green"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="浅叶"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_bg_blue"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:contentDescription="蓝色背景"
+                        android:layout_gravity="center"
+                        android:src="@drawable/icon_readbook_blue"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="格调"
+                        android:textColor="#ffffff"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_bg_black"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="黑色背景"
+                        android:src="@drawable/icon_readbook_black"
+                        app:civ_border_color="@color/tv_text_default"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="藏墨"
+                        android:textColor="#666"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
 
 
             </LinearLayout>
