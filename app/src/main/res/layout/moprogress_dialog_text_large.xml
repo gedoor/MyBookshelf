@@ -11,6 +11,7 @@
             android:id="@+id/tv_can_copy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
             android:padding="10dp"
             android:textIsSelectable="true"/>
     </ScrollView>

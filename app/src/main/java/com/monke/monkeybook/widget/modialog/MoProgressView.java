@@ -87,7 +87,7 @@ public class MoProgressView extends LinearLayout {
      */
     public void showText(String text) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_copy_text, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_text_large, this, true);
         TextView textView = findViewById(R.id.tv_can_copy);
         textView.setText(text);
     }
