@@ -28,7 +28,6 @@ public class ReadBookControl {
     private int textColor;
     private int textBackground;
     private float lineMultiplier;
-    private int lineNum;//缩进行
 
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
@@ -50,6 +49,7 @@ public class ReadBookControl {
     private Boolean showTitle;
     private Boolean showTimeBattery;
     private Boolean showLine;
+    private long lineChange;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -82,7 +82,6 @@ public class ReadBookControl {
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
-        this.lineNum = preference.getInt("lineNum", 0);
         this.clickSensitivity = preference.getInt("clickSensitivity", 10);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
@@ -97,6 +96,7 @@ public class ReadBookControl {
         this.showTitle = preference.getBoolean("showTitle", true);
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
         this.showLine = preference.getBoolean("showLine", true);
+        this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
     }
 
     //字体大小
@@ -189,7 +189,6 @@ public class ReadBookControl {
     }
 
     public void setTextDrawableIndex(int textDrawableIndex) {
-        ACache aCache = ACache.get(MApplication.getInstance());
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
@@ -214,12 +213,11 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public String setReadBookFont(String fontPath) {
+    public void setReadBookFont(String fontPath) {
         this.fontPath = fontPath;
         SharedPreferences.Editor editor = preference.edit();
         editor.putString("fontPath", fontPath);
         editor.apply();
-        return fontPath;
     }
 
     public String getFontPath() {
@@ -316,17 +314,6 @@ public class ReadBookControl {
         this.lineMultiplier = lineMultiplier;
         SharedPreferences.Editor editor = preference.edit();
         editor.putFloat("lineMultiplier", lineMultiplier);
-        editor.apply();
-    }
-
-    public int getLineNum() {
-        return lineNum;
-    }
-
-    public void setLineNum(int lineNum) {
-        this.lineNum = lineNum;
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putInt("lineNum", lineNum);
         editor.apply();
     }
 
@@ -437,6 +424,17 @@ public class ReadBookControl {
         this.showLine = showLine;
         SharedPreferences.Editor editor = preference.edit();
         editor.putBoolean("showLine", showLine);
+        editor.apply();
+    }
+
+    public long getLineChange() {
+        return lineChange;
+    }
+
+    public void setLineChange(long lineChange) {
+        this.lineChange = lineChange;
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putLong("lineChange", lineChange);
         editor.apply();
     }
 }

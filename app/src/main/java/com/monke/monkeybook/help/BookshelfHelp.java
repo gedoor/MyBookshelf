@@ -139,18 +139,4 @@ public class BookshelfHelp {
         }
     }
 
-    /**
-     * 清除分页缓存
-     */
-    public static void clearLineContent() {
-        BookContentBean bookContentBean;
-        for (BookShelfBean bookShelfBean : getAllBook()) {
-            for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
-                bookContentBean = chapterListBean.getBookContentBean();
-                if (bookContentBean != null) {
-                    bookContentBean.setLineContent(null);
-                }
-            }
-        }
-    }
 }

@@ -66,7 +66,7 @@
             android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ReadBookActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:configChanges="locale|keyboardHidden"
             android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />

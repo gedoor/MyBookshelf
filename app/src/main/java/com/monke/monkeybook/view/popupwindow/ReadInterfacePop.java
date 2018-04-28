@@ -116,7 +116,6 @@ public class ReadInterfacePop extends PopupWindow {
         updateText(readBookControl.getTextKindIndex());
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
-        updateLineNum(readBookControl.getLineNum());
         updateBoldText(readBookControl.getTextBold());
         updateConvertText(readBookControl.getTextConvert());
         //upTextColor(readBookControl.getTextColorCustom());
@@ -310,15 +309,6 @@ public class ReadInterfacePop extends PopupWindow {
         }
         tvDurLineSize.setText(String.format("%.1f", lineSize));
         readBookControl.setLineMultiplier(lineSize);
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void updateLineNum(int lineNum) {
-        if (lineNum > 3) {
-            lineNum = -1;
-        }
-//        tvDurLineNum.setText(String.format("%d", lineNum));
-        readBookControl.setLineNum(lineNum);
     }
 
     private void updateConvertText(Boolean convent) {

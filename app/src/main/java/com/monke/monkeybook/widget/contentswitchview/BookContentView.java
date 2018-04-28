@@ -3,6 +3,7 @@ package com.monke.monkeybook.widget.contentswitchview;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -270,7 +271,6 @@ public class BookContentView extends FrameLayout {
         return (int) lineCount;
     }
 
-
     public void setReadBookControl(ReadBookControl readBookControl) {
         setFont(readBookControl);
         setTextBold(readBookControl);
@@ -279,7 +279,6 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
-        ACache aCache = ACache.get(this.getContext());
         if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
             ivBg.setImageResource(readBookControl.getTextBackground());
             tvContent.setTextColor(readBookControl.getTextColor());
@@ -294,8 +293,12 @@ public class BookContentView extends FrameLayout {
         } else {
             if (readBookControl.getBackgroundIsColor()) {
                 ivBg.setImageDrawable(new ColorDrawable(readBookControl.getBackgroundColorCustom()));
-            } else if (aCache.getAsBitmap("customBg")!=null){
-                ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
+            } else {
+                ACache aCache = ACache.get(this.getContext());
+                Bitmap bitmap = aCache.getAsBitmap("customBg");
+                if (bitmap != null) {
+                    ivBg.setImageBitmap(bitmap);
+                }
             }
             tvContent.setTextColor(readBookControl.getTextColorCustom());
             tvLoading.setTextColor(readBookControl.getTextColorCustom());
@@ -322,6 +325,7 @@ public class BookContentView extends FrameLayout {
                 tvTime.setTypeface(typeface);
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
+                tvContent.setFont();
                 tvTitle.setTypeface(Typeface.SANS_SERIF);
                 tvTime.setTypeface(Typeface.SANS_SERIF);
                 tvPage.setTypeface(Typeface.SANS_SERIF);
@@ -331,7 +335,7 @@ public class BookContentView extends FrameLayout {
             Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
-            tvContent.setTypeface(Typeface.SANS_SERIF);
+            tvContent.setFont();
             tvTitle.setTypeface(Typeface.SANS_SERIF);
             tvTime.setTypeface(Typeface.SANS_SERIF);
             tvPage.setTypeface(Typeface.SANS_SERIF);

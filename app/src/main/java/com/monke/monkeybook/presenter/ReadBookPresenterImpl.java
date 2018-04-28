@@ -36,6 +36,7 @@ import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.ReplaceRuleManage;
@@ -60,6 +61,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int open_from;
     private BookShelfBean bookShelf;
@@ -111,7 +113,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             if (null != bookShelf.getChapterList(chapterIndex).getBookContentBean()
                     && null != bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent()) {
-                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null //行内容不为空
+                if (bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineChange() == readBookControl.getLineChange()
+                        && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent() != null //行内容不为空
                         && bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() > 0
                         && bookContentView != null) {//行内容Size>0
                     //已有数据
@@ -131,7 +134,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     int end = pageIndex == pageAll - 1 ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
-                                bookShelf.getChapterList(chapterIndex).getDurChapterName(),
+                                replaceContent(getChapterTitle(chapterIndex)),
                                 bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end),
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),
@@ -143,7 +146,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 } else {
                     //有元数据  重新分行
                     bookShelf.getChapterList(chapterIndex).getBookContentBean()
-                            .setLineSize(mView.getPaint().getTextSize());
+                            .setLineChange(readBookControl.getLineChange());
                     final int finalPageIndex = pageIndex;
                     SeparateParagraphToLines(bookShelf.getChapterList(chapterIndex).getBookContentBean().getDurChapterContent(), chapterIndex)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -350,7 +353,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      * 转繁体
      */
     private String toTraditional(String content) {
-        if (MApplication.getInstance().getSharedPreferences("CONFIG", 0).getBoolean("textConvert", false)) {
+        if (readBookControl.getTextConvert()) {
             content = ChineseUtils.toTraditional(content);
         }
         return content;
@@ -360,7 +363,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      * 添加标题
      */
     private String addTitle(String content, String chapterName) {
-        if (MApplication.getInstance().getSharedPreferences("CONFIG", 0).getBoolean("showTitle", true)) {
+        if (readBookControl.getShowTitle()) {
             if (!content.startsWith(String.format("\u3000\u3000%s", chapterName))
                     && !content.startsWith(chapterName)) {
                 content = String.format("%s\r\n%s", chapterName, content);

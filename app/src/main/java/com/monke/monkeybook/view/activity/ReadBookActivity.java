@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -164,7 +165,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ServiceConnection conn;
     private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
-    private ReadBookControl readBookControl;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     @SuppressLint("SimpleDateFormat")
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -181,6 +182,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             noteUrl = savedInstanceState.getString("noteUrl");
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
+        readBookControl.setLineChange(System.currentTimeMillis());
         super.onCreate(savedInstanceState);
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
@@ -193,7 +195,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
-        readBookControl = ReadBookControl.getInstance();
         hideStatusBar = readBookControl.getHideStatusBar();
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
@@ -293,13 +294,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
             @Override
             public void textSizeChange() {
-                BookshelfHelp.clearLineContent();
+                readBookControl.setLineChange(System.currentTimeMillis());
                 csvBook.changeTextSize();
             }
 
             @Override
             public void lineSizeChange() {
-                BookshelfHelp.clearLineContent();
+                readBookControl.setLineChange(System.currentTimeMillis());
                 csvBook.changeLineSize();
             }
 
@@ -310,7 +311,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setFont() {
-                BookshelfHelp.clearLineContent();
+                readBookControl.setLineChange(System.currentTimeMillis());
                 csvBook.setFont();
                 //csvBook.changeTextSize();
                 BookshelfHelp.clearLineContent();
@@ -319,8 +320,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setConvert() {
-                BookshelfHelp.clearLineContent();
-                recreate();
+                readBookControl.setLineChange(System.currentTimeMillis());
+                csvBook.changeTextSize();
             }
 
             @Override
@@ -353,7 +354,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void reLoad() {
-                BookshelfHelp.clearLineContent();
+                readBookControl.setLineChange(System.currentTimeMillis());
                 recreate();
             }
         });
@@ -747,6 +748,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void upTimer(String text) {
+                        ibReadAloud.setContentDescription(text);
                         tvReadAloudTimer.setText(text);
                     }
                 });

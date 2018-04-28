@@ -10,6 +10,7 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.ReplaceRuleBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.model.content.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
@@ -87,7 +88,7 @@ public class ReplaceRuleManage extends BaseModelImpl {
                 .getReplaceRuleBeanDao().queryBuilder()
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        BookshelfHelp.clearLineContent();
+        ReadBookControl.getInstance().setLineChange(System.currentTimeMillis());
     }
 
     public static Observable<Boolean> importReplaceRuleFromWww(URL url) {
