@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -43,7 +42,6 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -51,6 +49,7 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
@@ -75,7 +74,6 @@ import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -189,7 +187,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(batInfoReceiver, filter);
+        immersionStatusBarDetect();
     }
+
+
+
 
     @Override
     protected void onCreateActivity() {
@@ -307,6 +309,22 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange() {
                 csvBook.changeBg();
+                int bgIndex = readBookControl.getTextDrawableIndex();
+                if (readBookControl.getTextDrawableIndex() == 4){
+                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
+                    }else {
+                        View decorView = getWindow().getDecorView();
+                        decorView.setSystemUiVisibility(0);
+                    }
+                }else{
+                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
+                    }else {
+                        View decorView = getWindow().getDecorView();
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    }
+                }
             }
 
             @Override
@@ -1055,6 +1073,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
+        immersionStatusBarDetect();
     }
 
     @Override
@@ -1089,6 +1108,24 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
                     csvBook.upBattery(level);
+                }
+            }
+        }
+    }
+
+    private void immersionStatusBarDetect(){
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                StatusBarCompat.MIUISetStatusBarLightMode(this, true);
+            }else {
+                StatusBarCompat.compat(this);
+            }
+            if (preferences.getBoolean("nightTheme", false)) {
+                if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                    StatusBarCompat.MIUISetStatusBarLightMode(this, false);
+                }else {
+                    View decorView = getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(0);
                 }
             }
         }
