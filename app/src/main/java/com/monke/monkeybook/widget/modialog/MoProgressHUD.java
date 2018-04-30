@@ -175,66 +175,6 @@ public class MoProgressHUD {
         isFinishing = false;
     }
 
-    //隐藏输入法
-    private void hideIMM(View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    //同上
-    public void showLoading(String msg) {
-        initCenter();
-        initAnimation();
-        canBack = false;
-        rootView.setOnClickListener(null);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.showLoading(msg);
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    //单个按钮的提示信息
-    public void showInfo(String msg) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(null);
-        mSharedView.showInfo(msg, v -> dismiss());
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    //单个按钮的提示信息
-    public void showInfo(String msg, String btnText, View.OnClickListener listener) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(null);
-        mSharedView.showInfo(msg, btnText, listener);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
-    //////////////////////两个不同等级的按钮//////////////////////
-    public void showTwoButton(String msg, String b_f, View.OnClickListener c_f, String b_s, View.OnClickListener c_s) {
-        initCenter();
-        initAnimation();
-        canBack = true;
-        rootView.setOnClickListener(null);
-        mSharedView.showTwoButton(msg, b_f, c_f, b_s, c_s);
-        if (!isShowing()) {
-            onAttached();
-        }
-        mSharedView.getChildAt(0).startAnimation(inAnim);
-    }
-
     /**
      * 返回键事件
      */
@@ -248,6 +188,89 @@ public class MoProgressHUD {
             }
         }
         return false;
+    }
+
+    //隐藏输入法
+    private void hideIMM(View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * 加载动画
+     */
+    public void showLoading(String msg) {
+        initCenter();
+        initAnimation();
+        canBack = false;
+        rootView.setOnClickListener(null);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.showLoading(msg);
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
+     * 单个按钮的提示信息
+     */
+    public void showInfo(String msg) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(null);
+        mSharedView.showInfo(msg, v -> dismiss());
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
+     * 单个按钮的提示信息
+     */
+    public void showInfo(String msg, String btnText, View.OnClickListener listener) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(null);
+        mSharedView.showInfo(msg, btnText, listener);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
+     * 两个不同等级的按钮
+     */
+    public void showTwoButton(String msg, String b_f, View.OnClickListener c_f, String b_s, View.OnClickListener c_s) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(null);
+        mSharedView.showTwoButton(msg, b_f, c_f, b_s, c_s);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
+     * 显示一段文本
+     */
+    public void showText(String text) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        mSharedView.showText(text);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
     /**

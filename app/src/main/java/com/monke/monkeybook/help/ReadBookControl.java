@@ -191,10 +191,6 @@ public class ReadBookControl {
     }
 
     public void setTextDrawableIndex(int textDrawableIndex) {
-        ACache aCache = ACache.get(MApplication.getInstance());
-        if (textDrawableIndex == -1 && !backgroundIsColor && aCache.getAsBitmap("customBg") == null) {
-            textDrawableIndex = DEFAULT_BG;
-        }
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("textDrawableIndex", textDrawableIndex);
@@ -219,12 +215,11 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public String setReadBookFont(String fontPath) {
+    public void setReadBookFont(String fontPath) {
         this.fontPath = fontPath;
         SharedPreferences.Editor editor = preference.edit();
         editor.putString("fontPath", fontPath);
         editor.apply();
-        return fontPath;
     }
 
     public String getFontPath() {

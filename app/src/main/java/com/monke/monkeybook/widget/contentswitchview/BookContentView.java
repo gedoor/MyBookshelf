@@ -3,12 +3,14 @@ package com.monke.monkeybook.widget.contentswitchview;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -293,7 +295,10 @@ public class BookContentView extends FrameLayout {
                 ivBg.setImageDrawable(new ColorDrawable(readBookControl.getBackgroundColorCustom()));
             } else {
                 ACache aCache = ACache.get(this.getContext());
-                ivBg.setImageBitmap(aCache.getAsBitmap("customBg"));
+                Bitmap bitmap = aCache.getAsBitmap("customBg");
+                if (bitmap != null) {
+                    ivBg.setImageBitmap(bitmap);
+                }
             }
             tvContent.setTextColor(readBookControl.getTextColorCustom());
             tvLoading.setTextColor(readBookControl.getTextColorCustom());

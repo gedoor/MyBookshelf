@@ -134,7 +134,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     int end = pageIndex == pageAll - 1 ? bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().size() : start + pageLineCount;
                     if (bookTag == bookContentView.getQTag()) {
                         bookContentView.updateData(bookTag,
-                                bookShelf.getChapterList(chapterIndex).getDurChapterName(),
+                                replaceContent(getChapterTitle(chapterIndex)),
                                 bookShelf.getChapterList(chapterIndex).getBookContentBean().getLineContent().subList(start, end),
                                 chapterIndex,
                                 bookShelf.getChapterListSize(),

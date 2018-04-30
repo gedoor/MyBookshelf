@@ -174,5 +174,6 @@
     <string name="showTimeBattery">显示时间和电量</string>
     <string name="showLine">显示分隔线</string>
     <string name="immersionStatusBar">沉浸式状态栏</string>
+    <string name="copy_text">拷贝内容</string>
 
 </resources>

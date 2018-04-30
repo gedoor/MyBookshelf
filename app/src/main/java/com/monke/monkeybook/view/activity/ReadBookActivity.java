@@ -286,9 +286,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ivSetting.getDrawable().mutate();
         ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (preferences.getBoolean("nightTheme", false)) {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp_new);
         } else {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp_new);
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
@@ -331,7 +331,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void setFont() {
                 readBookControl.setLineChange(System.currentTimeMillis());
                 csvBook.setFont();
-                csvBook.changeTextSize();
+                recreate();
             }
 
             @Override
@@ -599,7 +599,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //菜单
+    /**
+     * 菜单事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -613,6 +615,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case R.id.action_download:
                 download();
                 break;
+            case R.id.action_copy_text:
+                popMenuOut();
+                moProgressHUD.showText(csvBook.getDurContentView().getContent());
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -620,6 +626,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 刷新
+     */
     private void refresh() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -633,6 +642,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 换源
+     */
     private void changeSource() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -645,6 +657,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 下载
+     */
     private void download() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -747,15 +762,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         aloudStatus = status;
                         switch (status) {
                             case PLAY:
-                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             case PAUSE:
-                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             default:
-                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp);
+                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp_new);
                                 llReadAloudTimer.setVisibility(View.INVISIBLE);
                         }
                         ibReadAloud.getDrawable().mutate();
@@ -786,11 +801,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
+                actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                 } else {
-                    actionBar.setTitle("没有目录");
                     atvUrl.setText("");
                 }
 
@@ -992,9 +1006,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 更新目录
+     */
     @Override
     public void chapterChange(ChapterListBean chapterListBean) {
-        chapterListView.upChapterList(chapterListBean);
+        if (chapterListView.hasData()) {
+            chapterListView.upChapterList(chapterListBean);
+        }
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
@@ -1064,6 +1083,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ReadAloudService.stop(this);
     }
 
+    /**
+     * 结束
+     */
     @Override
     public void finish() {
         if (!AppActivityManager.getInstance().isExist(MainActivity.class)) {
@@ -1073,6 +1095,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.finish();
     }
 
+    /**
+     * 时间和电量广播
+     */
     class ThisBatInfoReceiver extends BroadcastReceiver {
         @SuppressLint("DefaultLocale")
         @Override
