@@ -187,11 +187,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         filter.addAction(Intent.ACTION_TIME_TICK);
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         registerReceiver(batInfoReceiver, filter);
-        immersionStatusBarDetect();
     }
-
-
-
 
     @Override
     protected void onCreateActivity() {
@@ -205,6 +201,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
         hideStatusBar(hideStatusBar);
+        immersionStatusBarDetect();
     }
 
     @Override
@@ -686,6 +683,27 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
+     * 沉浸状态栏
+     */
+    private void immersionStatusBarDetect(){
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                StatusBarCompat.MIUISetStatusBarLightMode(this, true);
+            }else {
+                StatusBarCompat.compat(this);
+            }
+            if (preferences.getBoolean("nightTheme", false)) {
+                if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                    StatusBarCompat.MIUISetStatusBarLightMode(this, false);
+                }else {
+                    View decorView = getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(0);
+                }
+            }
+        }
+    }
+
+    /**
      * 隐藏虚拟按键
      */
     private void hideNavigationBar() {
@@ -1113,22 +1131,5 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
-    private void immersionStatusBarDetect(){
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            if (StatusBarCompat.getSystem().equals("sys_miui")) {
-                StatusBarCompat.MIUISetStatusBarLightMode(this, true);
-            }else {
-                StatusBarCompat.compat(this);
-            }
-            if (preferences.getBoolean("nightTheme", false)) {
-                if (StatusBarCompat.getSystem().equals("sys_miui")) {
-                    StatusBarCompat.MIUISetStatusBarLightMode(this, false);
-                }else {
-                    View decorView = getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(0);
-                }
-            }
-        }
-    }
 
 }
