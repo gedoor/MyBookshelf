@@ -50,6 +50,7 @@ public class ReadBookControl {
     private Boolean showTimeBattery;
     private Boolean showLine;
     private long lineChange;
+    private Boolean immersionStatusBar;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -97,6 +98,7 @@ public class ReadBookControl {
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
         this.showLine = preference.getBoolean("showLine", true);
         this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
+        this.immersionStatusBar = defaultPreference.getBoolean("immersionStatusBar", false);
     }
 
     //字体大小
@@ -440,6 +442,15 @@ public class ReadBookControl {
         this.lineChange = lineChange;
         SharedPreferences.Editor editor = preference.edit();
         editor.putLong("lineChange", lineChange);
+        editor.apply();
+    }
+
+    public Boolean getImmersionStatusBar(){return immersionStatusBar;}
+
+    public void setImmersionStatusBar(Boolean immersionStatusBar){
+        this.immersionStatusBar = immersionStatusBar;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("immersionStatusBar", immersionStatusBar);
         editor.apply();
     }
 }
