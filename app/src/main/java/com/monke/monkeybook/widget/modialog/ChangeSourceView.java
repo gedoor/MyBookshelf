@@ -173,7 +173,8 @@ public class ChangeSourceView {
     private void addSearchBook(List<SearchBookBean> value) {
         if (value.size() > 0) {
             for (SearchBookBean searchBookBean : value) {
-                if (Objects.equals(searchBookBean.getName(), bookName) && Objects.equals(searchBookBean.getAuthor(), bookAuthor)) {
+                if (Objects.equals(searchBookBean.getName(), bookName)
+                        && (Objects.equals(searchBookBean.getAuthor(), bookAuthor) || Objects.equals(searchBookBean.getAuthor(), "") || Objects.equals(bookAuthor, ""))) {
                     if (Objects.equals(searchBookBean.getTag(), bookTag)) {
                         searchBookBean.setIsAdd(true);
                     } else {
@@ -184,7 +185,6 @@ public class ChangeSourceView {
                     break;
                 }
             }
-
         }
     }
 
