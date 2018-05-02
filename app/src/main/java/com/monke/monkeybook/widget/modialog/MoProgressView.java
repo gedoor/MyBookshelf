@@ -82,4 +82,13 @@ public class MoProgressView extends LinearLayout {
         tvDone.setOnClickListener(c_s);
     }
 
+    /**
+     * 显示一段文本
+     */
+    public void showText(String text) {
+        removeAllViews();
+        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_text_large, this, true);
+        TextView textView = findViewById(R.id.tv_can_copy);
+        textView.setText(text);
+    }
 }

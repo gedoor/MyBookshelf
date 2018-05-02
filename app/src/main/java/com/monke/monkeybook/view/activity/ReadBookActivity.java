@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -43,7 +42,6 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -51,6 +49,7 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
@@ -75,7 +74,6 @@ import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -203,6 +201,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
         hideStatusBar(hideStatusBar);
+        immersionStatusBarDetect();
     }
 
     @Override
@@ -307,6 +306,22 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange() {
                 csvBook.changeBg();
+                int bgIndex = readBookControl.getTextDrawableIndex();
+                if (readBookControl.getTextDrawableIndex() == 4){
+                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
+                    }else {
+                        View decorView = getWindow().getDecorView();
+                        decorView.setSystemUiVisibility(0);
+                    }
+                }else{
+                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
+                    }else {
+                        View decorView = getWindow().getDecorView();
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    }
+                }
             }
 
             @Override
@@ -581,7 +596,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //菜单
+    /**
+     * 菜单事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -595,6 +612,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case R.id.action_download:
                 download();
                 break;
+            case R.id.action_copy_text:
+                popMenuOut();
+                moProgressHUD.showText(csvBook.getDurContentView().getContent());
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -602,6 +623,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 刷新
+     */
     private void refresh() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -615,6 +639,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 换源
+     */
     private void changeSource() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -627,6 +654,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 下载
+     */
     private void download() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
@@ -649,6 +679,27 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+    }
+
+    /**
+     * 沉浸状态栏
+     */
+    private void immersionStatusBarDetect(){
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                StatusBarCompat.MIUISetStatusBarLightMode(this, true);
+            }else {
+                StatusBarCompat.compat(this);
+            }
+            if (preferences.getBoolean("nightTheme", false)) {
+                if (StatusBarCompat.getSystem().equals("sys_miui")) {
+                    StatusBarCompat.MIUISetStatusBarLightMode(this, false);
+                }else {
+                    View decorView = getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(0);
+                }
+            }
         }
     }
 
@@ -768,11 +819,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void updateProgress(int chapterIndex, int pageIndex) {
                 mPresenter.updateProgress(chapterIndex, pageIndex);
+                actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    actionBar.setTitle(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterName());
                     atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
                 } else {
-                    actionBar.setTitle("没有目录");
                     atvUrl.setText("");
                 }
 
@@ -974,9 +1024,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 更新目录
+     */
     @Override
     public void chapterChange(ChapterListBean chapterListBean) {
-        chapterListView.upChapterList(chapterListBean);
+        if (chapterListView.hasData()) {
+            chapterListView.upChapterList(chapterListBean);
+        }
     }
 
     @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
@@ -1036,6 +1091,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
+        immersionStatusBarDetect();
     }
 
     @Override
@@ -1045,6 +1101,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ReadAloudService.stop(this);
     }
 
+    /**
+     * 结束
+     */
     @Override
     public void finish() {
         if (!AppActivityManager.getInstance().isExist(MainActivity.class)) {
@@ -1054,6 +1113,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.finish();
     }
 
+    /**
+     * 时间和电量广播
+     */
     class ThisBatInfoReceiver extends BroadcastReceiver {
         @SuppressLint("DefaultLocale")
         @Override
@@ -1068,5 +1130,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         }
     }
+
 
 }

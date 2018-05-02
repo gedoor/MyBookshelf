@@ -26,8 +26,10 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public void upChapterList(ChapterListBean chapterListBean) {
-        bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
-        notifyItemChanged(chapterListBean.getDurChapterIndex());
+        if (bookShelfBean.getChapterListSize() > chapterListBean.getDurChapterIndex()) {
+            bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
+            notifyItemChanged(chapterListBean.getDurChapterIndex());
+        }
     }
 
     @Override

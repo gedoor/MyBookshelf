@@ -46,6 +46,10 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     SwitchButton sbShowLine;
+    @BindView(R.id.ll_immersionStatusBar)
+    LinearLayout llImmersionStatusBar;
+    @BindView(R.id.sb_immersionStatusBar)
+    SwitchButton sbImmersionStatusBar;
 
 
     private Context mContext;
@@ -111,6 +115,10 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
+        sbImmersionStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setImmersionStatusBar(isChecked);
+            changeProListener.reLoad();
+        });
     }
 
     private void initData() {
@@ -126,10 +134,13 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
         sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
+        sbImmersionStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getImmersionStatusBar());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
+            llImmersionStatusBar.setVisibility(View.GONE);
         } else {
             llShowTimeBattery.setVisibility(View.GONE);
+            llImmersionStatusBar.setVisibility(View.VISIBLE);
         }
     }
 }
