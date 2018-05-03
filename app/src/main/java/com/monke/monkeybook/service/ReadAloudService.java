@@ -330,9 +330,9 @@ public class ReadAloudService extends Service {
                 .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         if (pause) {
-            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
+            builder.addAction(R.drawable.ic_play1, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
         } else {
-            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(ActionPauseService));
+            builder.addAction(R.drawable.ic_pause1, getString(R.string.pause), getThisServicePendingIntent(ActionPauseService));
         }
         builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(ActionSetTimer));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()

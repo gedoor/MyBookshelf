@@ -551,6 +551,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
+        tvReadAloudTimer.setOnClickListener(null);
     }
 
     @Override
@@ -780,15 +781,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         aloudStatus = status;
                         switch (status) {
                             case PLAY:
-                                ibReadAloud.setImageResource(R.drawable.ic_pause_black_24dp_new);
+                                ibReadAloud.setImageResource(R.drawable.ic_pause2);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             case PAUSE:
-                                ibReadAloud.setImageResource(R.drawable.ic_play_arrow_black_24dp_new);
+                                ibReadAloud.setImageResource(R.drawable.ic_play2);
                                 llReadAloudTimer.setVisibility(View.VISIBLE);
                                 break;
                             default:
-                                ibReadAloud.setImageResource(R.drawable.ic_volume_up_black_24dp_new);
+                                ibReadAloud.setImageResource(R.drawable.ic_read_aloud);
                                 llReadAloudTimer.setVisibility(View.INVISIBLE);
                         }
                         ibReadAloud.getDrawable().mutate();
