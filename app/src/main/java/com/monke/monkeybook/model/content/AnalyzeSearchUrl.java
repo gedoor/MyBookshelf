@@ -4,6 +4,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -27,6 +29,7 @@ class AnalyzeSearchUrl {
         if (ruleUrlS.length > 1) {
             analyzeQt(ruleUrlS[1]);
         }
+        ruleUrlS[0] = setPage(ruleUrlS[0]);
         ruleUrlS = ruleUrlS[0].split("@");
         if (ruleUrlS.length == 1) {
             ruleUrlS = ruleUrlS[0].split("\\?");
@@ -40,6 +43,20 @@ class AnalyzeSearchUrl {
         }
         generateUrlPath(ruleUrlS[0]);
         queryMap = getQueryMap(ruleUrlS[1]);
+    }
+
+    private String setPage(String urlStr) {
+        Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+        Matcher matcher = pattern.matcher(urlStr);
+        if (matcher.find()) {
+            String[] pages = matcher.group(0).split(",");
+            if (searchPage <= pages.length) {
+                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[searchPage-1].trim());
+            } else {
+                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[pages.length-1].trim());
+            }
+        }
+        return urlStr;
     }
 
     private void analyzeQt(final String qtRule) throws Exception {
