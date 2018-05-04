@@ -306,20 +306,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange() {
                 csvBook.changeBg();
-                int bgIndex = readBookControl.getTextDrawableIndex();
                 if (readBookControl.getTextDrawableIndex() == 4){
-                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                    if ("sys_miui".equals(StatusBarCompat.getSystem())) {
                         StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
                     }else {
                         View decorView = getWindow().getDecorView();
                         decorView.setSystemUiVisibility(0);
                     }
                 }else{
-                    if ("sys_miui" == StatusBarCompat.getSystem()) {
+                    if ("sys_miui".equals(StatusBarCompat.getSystem())) {
                         StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
                     }else {
                         View decorView = getWindow().getDecorView();
-                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                        }
                     }
                 }
             }
