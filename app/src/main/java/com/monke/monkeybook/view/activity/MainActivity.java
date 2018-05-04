@@ -124,8 +124,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
         } else {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter.setHeaderView(rfRvShelf.getHeader()),
-                    bookShelfGridAdapter, new GridLayoutManager(this, 3));
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter, new GridLayoutManager(this, 3));
         }
     }
 
