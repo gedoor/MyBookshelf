@@ -27,7 +27,11 @@ class.odd.0@tag.a.0@text|tag.dd.0@tag.h1@text#全文阅读
 例:http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1
 
 searchKey为关键字标识,运行时会替换为搜索关键字,
+
 searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,
+
+page规则还可以写成{index,index2,index3}
+
 要添加转码编码在最后加 |char=gbk
 
 #### ruleFindUrl 发现规则
