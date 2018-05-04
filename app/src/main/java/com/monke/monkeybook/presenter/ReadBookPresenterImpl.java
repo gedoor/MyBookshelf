@@ -469,6 +469,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 });
     }
 
+    /**
+     * 下载
+     */
     @Override
     public void addDownload(int start, int end) {
         addToShelf(() -> {

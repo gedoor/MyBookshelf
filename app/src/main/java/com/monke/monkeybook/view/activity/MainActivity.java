@@ -217,6 +217,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case R.id.action_download:
                 downloadListPop.showAsDropDown(toolbar);
                 break;
+            case R.id.action_download_all:
+                mPresenter.downloadAll();
+                break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
