@@ -414,7 +414,7 @@ public class ReadBookControl {
     public void setHideNavigationBar(Boolean hideNavigationBar) {
         this.hideNavigationBar = hideNavigationBar;
         SharedPreferences.Editor editor = defaultPreference.edit();
-        editor.putBoolean("hide_navigation_bar", hideStatusBar);
+        editor.putBoolean("hide_navigation_bar", hideNavigationBar);
         editor.apply();
     }
 
