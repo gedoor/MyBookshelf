@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.MApplication.DEBUG;
 
 /**
@@ -145,8 +146,8 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (content == null) {
-            stopSelf();
+        if (isEmpty(content)) {
+            aloudServiceListener.readAloudNext();
             return;
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
