@@ -33,13 +33,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <com.monke.immerselayout.ImmerseLinearLayout
+                android:id="@+id/ll_ISB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#767676"
                 android:orientation="vertical">
 
                 <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme.AppBarOverlay">
