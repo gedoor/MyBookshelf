@@ -156,21 +156,24 @@ public class ReadAloudService extends Service {
             updateNotification();
             initSpeechRate();
             String[] splitSpeech = content.split("\r\n");
-            allSpeak = splitSpeech.length;
             HashMap<String, String> map = new HashMap<>();
             map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "content");
-            for (int i = nowSpeak; i < allSpeak; i++) {
-                if (i == 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
+            allSpeak = 0;
+            for (int i = nowSpeak; i < splitSpeech.length; i++) {
+                if (!isEmpty(splitSpeech[i])) {
+                    allSpeak = allSpeak + 1;
+                    if (i == 0) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
+                        } else {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
+                        }
                     } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
-                    } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
+                        } else {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
+                        }
                     }
                 }
             }
