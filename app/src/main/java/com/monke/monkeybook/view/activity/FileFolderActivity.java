@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -24,14 +22,12 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
-import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.MyFile;
-import com.monke.monkeybook.bean.SelectedFiles;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.utils.fileselectorutil.EmptyFileFilter;
 import com.monke.monkeybook.utils.fileselectorutil.FileComparator;
 import com.monke.monkeybook.utils.fileselectorutil.SDCardScanner;
@@ -70,7 +66,7 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 	protected void onCreateActivity() {
 		setContentView(R.layout.activity_file_folder);
 		if (preferences.getBoolean("immersionStatusBar", false)) {
-			StatusBarCompat.setFitsSystem(this);
+			StatusBarUtil.setFitsSystem(this);
 		}
 	}
 

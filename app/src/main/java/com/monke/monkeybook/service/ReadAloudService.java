@@ -326,7 +326,7 @@ public class ReadAloudService extends Service {
         if (aloudServiceListener != null) {
             aloudServiceListener.upTimer(title);
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIReadAloud)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
                 .setContentTitle(title)

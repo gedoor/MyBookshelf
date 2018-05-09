@@ -3,7 +3,6 @@ package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -27,7 +26,7 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
 import com.monke.monkeybook.view.impl.ISearchBookView;
@@ -78,7 +77,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     protected void onCreateActivity() {
         setContentView(R.layout.activity_search_book);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

@@ -29,8 +29,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -54,7 +52,7 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
@@ -67,7 +65,6 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -84,8 +81,7 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
-import static com.monke.monkeybook.utils.StatusBarCompat.getStatusBarHeight;
-import static com.monke.monkeybook.utils.StatusBarCompat.hasSoftKeys;
+import static com.monke.monkeybook.utils.StatusBarUtil.hasSoftKeys;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
@@ -211,7 +207,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hideStatusBar(hideStatusBar);
         readBookImmersionDetect();
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.compat(this, 0);
+            StatusBarUtil.compat(this, 0);
         }
     }
 
@@ -230,14 +226,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (hasFocus) {
             hideNavigationBar();
             if (flMenu.getVisibility() == View.VISIBLE) {
-                StatusBarCompat.showNavigationBar(this,true);
+                StatusBarUtil.showNavigationBar(this,true);
             }else {
-                StatusBarCompat.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+                StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
             }
             if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
-                StatusBarCompat.setDarkStatusIcon(this,false);
+                StatusBarUtil.setDarkStatusIcon(this,false);
             }else {
-                StatusBarCompat.setDarkStatusIcon(this,true);
+                StatusBarUtil.setDarkStatusIcon(this,true);
             }
         }
     }
@@ -336,15 +332,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void bgChange() {
                 csvBook.changeBg();
                 if (readBookControl.getTextDrawableIndex() == 4){
-                    if ("sys_miui".equals(StatusBarCompat.getSystem())) {
-                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
+                    if ("sys_miui".equals(StatusBarUtil.getSystem())) {
+                        StatusBarUtil.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
                     }else {
                         View decorView = getWindow().getDecorView();
                         decorView.setSystemUiVisibility(0);
                     }
                 }else{
-                    if ("sys_miui".equals(StatusBarCompat.getSystem())) {
-                        StatusBarCompat.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
+                    if ("sys_miui".equals(StatusBarUtil.getSystem())) {
+                        StatusBarUtil.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
                     }else {
                         View decorView = getWindow().getDecorView();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -718,14 +714,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     private void readBookImmersionDetect(){
         if (preferences.getBoolean("readBookImmersion", false)) {
-            if (StatusBarCompat.getSystem().equals("sys_miui")) {
-                StatusBarCompat.MIUISetStatusBarLightMode(this, true);
+            if (StatusBarUtil.getSystem().equals("sys_miui")) {
+                StatusBarUtil.MIUISetStatusBarLightMode(this, true);
             }else {
-                StatusBarCompat.compat(this, Color.TRANSPARENT);
+                StatusBarUtil.compat(this, Color.TRANSPARENT);
             }
             if (preferences.getBoolean("nightTheme", false)) {
-                if (StatusBarCompat.getSystem().equals("sys_miui")) {
-                    StatusBarCompat.MIUISetStatusBarLightMode(this, false);
+                if (StatusBarUtil.getSystem().equals("sys_miui")) {
+                    StatusBarUtil.MIUISetStatusBarLightMode(this, false);
                 }else {
                     View decorView = getWindow().getDecorView();
                     decorView.setSystemUiVisibility(0);
@@ -752,7 +748,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 隐藏菜单
      */
     private void popMenuOut() {
-        StatusBarCompat.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+        StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
@@ -763,20 +759,20 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 显示菜单
      */
     private void popMenuIn() {
-        StatusBarCompat.showNavigationBar(this,true);
+        StatusBarUtil.showNavigationBar(this,true);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         if (hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
-            llMenuBottom.setPadding(0,0,0,StatusBarCompat.getNavigationBarHeight(this));
+            llMenuBottom.setPadding(0,0,0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
         hideStatusBar(false);
         //hideNavigationBar();
 
         if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
-            StatusBarCompat.setDarkStatusIcon(this,false);
+            StatusBarUtil.setDarkStatusIcon(this,false);
         }else {
-            StatusBarCompat.setDarkStatusIcon(this,true);
+            StatusBarUtil.setDarkStatusIcon(this,true);
         }
     }
 

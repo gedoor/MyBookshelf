@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Build;
@@ -19,18 +18,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.monke.monkeybook.service.ReadAloudService.ActionDoneService;
 
 public class ContentSwitchView extends FrameLayout implements BookContentView.SetDataListener {
     public final static int NONE = -1;
@@ -314,7 +310,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
         afterOpenPage();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        StatusBarCompat.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
+        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void gotoNextPage() {
@@ -337,7 +333,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
         afterOpenPage();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        StatusBarCompat.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
+        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void afterOpenPage() {
@@ -539,7 +535,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有上一页
      */
     private void noPre() {
-        StatusBarCompat.showNavigationBar(activity,true);
+        StatusBarUtil.showNavigationBar(activity,true);
         Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT)
                 .show();
     }
@@ -548,7 +544,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有下一页
      */
     private void noNext() {
-        StatusBarCompat.showNavigationBar(activity,true);
+        StatusBarUtil.showNavigationBar(activity,true);
         Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
                 .show();
         ReadAloudService.stop(getContext());
