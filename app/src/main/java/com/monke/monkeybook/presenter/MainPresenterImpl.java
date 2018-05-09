@@ -52,7 +52,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void queryBookShelf(final Boolean needRefresh) {
-        if (needRefresh) {
+        if (needRefresh&&NetworkUtil.isNetWorkAvailable()) {
             mView.activityRefreshView();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
@@ -68,7 +68,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         if (null != value) {
                             bookShelfBeans = value;
                             mView.refreshBookShelf(bookShelfBeans);
-                            if (needRefresh) {
+                            if (needRefresh&&NetworkUtil.isNetWorkAvailable()) {
                                 startRefreshBook();
                             } else {
                                 mView.refreshFinish();
