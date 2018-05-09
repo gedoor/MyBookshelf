@@ -3,8 +3,10 @@ package com.monke.monkeybook.widget.modialog;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -22,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
@@ -99,7 +102,10 @@ public class EditReplaceRuleView {
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
-        resetBoxPosition();
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        if (preference.getBoolean("immersionStatusBar", false)) {
+            resetBoxPosition();
+        }
     }
 
     private void resetBoxPosition(){
@@ -114,7 +120,7 @@ public class EditReplaceRuleView {
                 int heightDifference = screenHeight - rect.bottom;//计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
                 CardView cardView = moProgressView.findViewById(R.id.cv_root);
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cardView.getLayoutParams();
-                layoutParams.setMargins(TagFlowLayout.dip2px(((Activity) context),30),0,TagFlowLayout.dip2px(((Activity) context),30),heightDifference);//设置rlContent的marginBottom的值为软键盘占有的高度即可
+                layoutParams.setMargins(TagFlowLayout.dip2px(((Activity) context),20),0,TagFlowLayout.dip2px(((Activity) context),20),heightDifference);//设置rlContent的marginBottom的值为软键盘占有的高度即可
                 cardView.setLayoutParams(layoutParams);
                 cardView.requestLayout();
             }
