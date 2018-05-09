@@ -2,11 +2,14 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -138,6 +141,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         } else {
             bookShelfGridAdapter = new BookShelfGridAdapter();
         }
+    }
+
+    private boolean isNetworkAvailable(Context context) {
+        ConnectivityManager manager = (ConnectivityManager) context
+                .getApplicationContext().getSystemService(
+                        Context.CONNECTIVITY_SERVICE);
+        if (manager == null) {
+            return false;
+        }
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable();
     }
 
     @Override
@@ -291,6 +305,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+
     }
 
     //侧边栏按钮
@@ -417,7 +432,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
             @Override
             public void startRefresh() {
-                mPresenter.queryBookShelf(true);
+                mPresenter.queryBookShelf(isNetworkAvailable(MainActivity.this));
+                if (!isNetworkAvailable(MainActivity.this)){
+                    Toast.makeText(MainActivity.this,"无网络，请打开网络后再试。",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -436,7 +454,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void firstRequest() {
         fistOpenRun();
-        mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
+        if (isNetworkAvailable(this)) {
+            mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
+        }else {
+            mPresenter.queryBookShelf(false);
+            Toast.makeText(this,"无网络，自动刷新失败！",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
