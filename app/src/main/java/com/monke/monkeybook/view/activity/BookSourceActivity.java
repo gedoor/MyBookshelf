@@ -29,6 +29,7 @@ import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -77,6 +78,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_serach_vew);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override

@@ -22,6 +22,7 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.utils.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,6 +97,9 @@ public class AboutActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_about);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override

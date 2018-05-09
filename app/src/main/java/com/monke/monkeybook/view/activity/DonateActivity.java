@@ -16,6 +16,7 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.Donate;
+import com.monke.monkeybook.utils.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +58,9 @@ public class DonateActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_donate);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override

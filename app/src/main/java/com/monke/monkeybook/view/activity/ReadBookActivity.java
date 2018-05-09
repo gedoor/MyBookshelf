@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -22,11 +23,14 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -37,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
+import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -62,6 +67,7 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,6 +84,8 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
+import static com.monke.monkeybook.utils.StatusBarCompat.getStatusBarHeight;
+import static com.monke.monkeybook.utils.StatusBarCompat.hasSoftKeys;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
@@ -201,7 +209,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
         hideStatusBar(hideStatusBar);
-        immersionStatusBarDetect();
+        readBookImmersionDetect();
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.compat(this, 0);
+        }
     }
 
     @Override
@@ -218,6 +229,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideNavigationBar();
+            if (flMenu.getVisibility() == View.VISIBLE) {
+                StatusBarCompat.showNavigationBar(this,true);
+            }else {
+                StatusBarCompat.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+            }
+            if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
+                StatusBarCompat.setDarkStatusIcon(this,false);
+            }else {
+                StatusBarCompat.setDarkStatusIcon(this,true);
+            }
         }
     }
 
@@ -265,6 +286,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
         menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
+
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            TypedValue typedValue = new TypedValue();
+            this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            final  int color = typedValue.data;
+            ImmerseLinearLayout immerseLinearLayout = findViewById(R.id.ll_ISB);
+            immerseLinearLayout.setBackgroundColor(color);
+        }
     }
 
     @Override
@@ -685,14 +714,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 沉浸状态栏
+     * 仅阅读界面沉浸状态栏
      */
-    private void immersionStatusBarDetect(){
-        if (preferences.getBoolean("immersionStatusBar", false)) {
+    private void readBookImmersionDetect(){
+        if (preferences.getBoolean("readBookImmersion", false)) {
             if (StatusBarCompat.getSystem().equals("sys_miui")) {
                 StatusBarCompat.MIUISetStatusBarLightMode(this, true);
             }else {
-                StatusBarCompat.compat(this);
+                StatusBarCompat.compat(this, Color.TRANSPARENT);
             }
             if (preferences.getBoolean("nightTheme", false)) {
                 if (StatusBarCompat.getSystem().equals("sys_miui")) {
@@ -723,6 +752,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 隐藏菜单
      */
     private void popMenuOut() {
+        StatusBarCompat.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
@@ -733,11 +763,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 显示菜单
      */
     private void popMenuIn() {
+        StatusBarCompat.showNavigationBar(this,true);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
+        if (hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
+            llMenuBottom.setPadding(0,0,0,StatusBarCompat.getNavigationBarHeight(this));
+        }
         llMenuBottom.startAnimation(menuBottomIn);
         hideStatusBar(false);
-        hideNavigationBar();
+        //hideNavigationBar();
+
+        if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
+            StatusBarCompat.setDarkStatusIcon(this,false);
+        }else {
+            StatusBarCompat.setDarkStatusIcon(this,true);
+        }
     }
 
     private void toast(String msg) {
@@ -1093,7 +1133,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
-        immersionStatusBarDetect();
+        readBookImmersionDetect();
     }
 
     @Override

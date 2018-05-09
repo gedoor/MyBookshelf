@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ public class SettingActivity extends MBaseActivity {
     private Animation animOut;
 
     private String bookPx;
+    private Preference immersionPreference;
 
     @Override
     protected IPresenter initInjector() {
@@ -47,6 +50,9 @@ public class SettingActivity extends MBaseActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.settingsFrameLayout, settingsFragment)
                 .commit();
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override
@@ -91,4 +97,6 @@ public class SettingActivity extends MBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    protected void immersionStatusBar(){recreate();}
 }

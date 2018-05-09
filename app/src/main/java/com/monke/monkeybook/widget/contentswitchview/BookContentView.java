@@ -2,12 +2,15 @@ package com.monke.monkeybook.widget.contentswitchview;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -19,10 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BatteryUtil;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentTextView;
 
@@ -79,6 +84,7 @@ public class BookContentView extends FrameLayout {
     private int pageAll;
     private boolean hideStatusBar;
     private ReadBookControl readBookControl;
+    private Activity activity;
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
@@ -110,6 +116,7 @@ public class BookContentView extends FrameLayout {
     public void init() {
         readBookControl = ReadBookControl.getInstance();
         hideStatusBar = readBookControl.getHideStatusBar();
+        activity = (Activity)getContext();
         View view;
         if (hideStatusBar) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal2, this, false);

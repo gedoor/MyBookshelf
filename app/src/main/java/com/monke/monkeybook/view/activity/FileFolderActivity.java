@@ -31,6 +31,7 @@ import com.monke.monkeybook.bean.MyFile;
 import com.monke.monkeybook.bean.SelectedFiles;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.utils.fileselectorutil.EmptyFileFilter;
 import com.monke.monkeybook.utils.fileselectorutil.FileComparator;
 import com.monke.monkeybook.utils.fileselectorutil.SDCardScanner;
@@ -68,6 +69,9 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 	@Override
 	protected void onCreateActivity() {
 		setContentView(R.layout.activity_file_folder);
+		if (preferences.getBoolean("immersionStatusBar", false)) {
+			StatusBarCompat.setFitsSystem(this);
+		}
 	}
 
 

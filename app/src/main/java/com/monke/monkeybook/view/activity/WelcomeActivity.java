@@ -4,12 +4,20 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatDelegate;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.utils.StatusBarCompat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +37,10 @@ public class WelcomeActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
+
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.compat(this, 0);
+        }
     }
 
     @Override

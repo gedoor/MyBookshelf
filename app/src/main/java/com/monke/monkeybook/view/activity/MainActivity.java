@@ -5,7 +5,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -19,12 +21,18 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -42,6 +50,9 @@ import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.utils.AndroidBug5497Workaround;
+import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.impl.IMainView;
@@ -51,12 +62,17 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.monke.monkeybook.utils.StatusBarCompat.getNavigationBarHeight;
+import static com.monke.monkeybook.utils.StatusBarCompat.getStatusBarHeight;
+import static com.monke.monkeybook.utils.StatusBarCompat.hasSoftKeys;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
     private static final int REQUEST_SETTING = 210;
@@ -94,6 +110,23 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.compat(this, 0);
+            DrawerLayout drawerLayout = findViewById(R.id.drawer);
+            ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
+
+            // 内容布局不是 LinearLayout 时,设置padding top
+            if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
+                contentLayout.getChildAt(1).setPadding(0, getStatusBarHeight(this), 0, 0);
+            }
+
+            // 设置属性
+            drawerLayout.setFitsSystemWindows(false);
+            contentLayout.setFitsSystemWindows(true);
+
+            ViewGroup mContentView = this.findViewById(R.id.id_left_menu);
+            mContentView.setPadding(0, getStatusBarHeight(this),0,0);
+        }
     }
 
     @Override

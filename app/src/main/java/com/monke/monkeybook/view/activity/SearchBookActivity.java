@@ -27,6 +27,7 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
 import com.monke.monkeybook.view.impl.ISearchBookView;
@@ -76,6 +77,9 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_search_book);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override
