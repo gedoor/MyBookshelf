@@ -1,9 +1,12 @@
 package com.monke.monkeybook.widget;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,17 +15,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
 import butterknife.BindView;
@@ -52,6 +59,7 @@ public class ChapterListView extends FrameLayout {
     private Animation animIn;
     private Animation animOut;
     private OnChangeListener changeListener;
+    public SharedPreferences preferences;
 
     public ChapterListView(@NonNull Context context) {
         this(context, null);
@@ -81,6 +89,11 @@ public class ChapterListView extends FrameLayout {
     private void init() {
         setVisibility(INVISIBLE);
         LayoutInflater.from(getContext()).inflate(R.layout.view_chapterlist, this, true);
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        if (preference.getBoolean("immersionStatusBar", false)) {
+            ImmerseLinearLayout immerseLinearLayout = findViewById(R.id.ll_content);
+            immerseLinearLayout.setBackgroundColor(getResources().getColor(R.color.bg_chapter));
+        }
         initData();
         initView();
     }
@@ -128,6 +141,7 @@ public class ChapterListView extends FrameLayout {
             }
         });
     }
+
 
     /**
      * 显示章节列表，并定位当前阅读章节

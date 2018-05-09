@@ -33,13 +33,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <com.monke.immerselayout.ImmerseLinearLayout
+                android:id="@+id/ll_ISB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#767676"
                 android:orientation="vertical">
 
                 <android.support.design.widget.AppBarLayout
+                    android:id="@+id/appBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/AppTheme.AppBarOverlay">
@@ -125,7 +128,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/read_aloud"
-                    android:src="@drawable/ic_volume_up_black_24dp_new"
+                    android:src="@drawable/ic_read_aloud"
                     app:cb_color="@color/background" />
 
                 <View

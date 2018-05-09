@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.MApplication.DEBUG;
 
 /**
@@ -145,8 +146,8 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (content == null) {
-            stopSelf();
+        if (isEmpty(content)) {
+            aloudServiceListener.readAloudNext();
             return;
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
@@ -155,21 +156,24 @@ public class ReadAloudService extends Service {
             updateNotification();
             initSpeechRate();
             String[] splitSpeech = content.split("\r\n");
-            allSpeak = splitSpeech.length;
             HashMap<String, String> map = new HashMap<>();
             map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "content");
-            for (int i = nowSpeak; i < allSpeak; i++) {
-                if (i == 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
+            allSpeak = 0;
+            for (int i = nowSpeak; i < splitSpeech.length; i++) {
+                if (!isEmpty(splitSpeech[i])) {
+                    allSpeak = allSpeak + 1;
+                    if (i == 0) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
+                        } else {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
+                        }
                     } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
-                    }
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
-                    } else {
-                        textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
+                        } else {
+                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
+                        }
                     }
                 }
             }
@@ -330,9 +334,9 @@ public class ReadAloudService extends Service {
                 .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         if (pause) {
-            builder.addAction(R.drawable.ic_play_arrow_black_24dp, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
+            builder.addAction(R.drawable.ic_play1, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
         } else {
-            builder.addAction(R.drawable.ic_pause_black_24dp, getString(R.string.pause), getThisServicePendingIntent(ActionPauseService));
+            builder.addAction(R.drawable.ic_pause1, getString(R.string.pause), getThisServicePendingIntent(ActionPauseService));
         }
         builder.addAction(R.drawable.ic_timer_black_24dp, getString(R.string.set_timer), getThisServicePendingIntent(ActionSetTimer));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()

@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
@@ -26,6 +28,7 @@ import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -118,26 +121,24 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     }
 
     @Override
-    public void clearAllContent() {
+    public void downloadAll() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
+            for (BookShelfBean bookShelfBean : bookShelfBeans) {
+                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+                    Intent intent = new Intent(mView.getContext(), DownloadService.class);
+                    intent.setAction("addDownload");
+                    intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
+                    intent.putExtra("start", bookShelfBean.getDurChapter());
+                    intent.putExtra("end", bookShelfBean.getChapterListSize() - 1);
+                    mView.getContext().startService(intent);
+                }
+            }
             e.onNext(true);
             e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        Toast.makeText(mView.getContext(), "删除成功", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_LONG).show();
-                    }
-                });
+                .subscribe();
     }
 
     @Override

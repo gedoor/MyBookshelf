@@ -22,6 +22,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
+import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.view.impl.IBookDetailView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
@@ -71,6 +72,9 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_detail);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarCompat.setFitsSystem(this);
+        }
     }
 
     @Override

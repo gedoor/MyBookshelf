@@ -146,15 +146,25 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             json = FileHelper.readString(file);
         }
         if (!isEmpty(json)) {
-            try {
-                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
-                }.getType());
-                BookSourceManage.addBookSource(bookSourceBeans);
-                mView.refreshBookSource();
-                Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
-            }
+            BookSourceManage.importBookSourceO(json)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean aBoolean) {
+                            if (aBoolean) {
+                                mView.refreshBookSource();
+                                Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         } else {
             Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
         }

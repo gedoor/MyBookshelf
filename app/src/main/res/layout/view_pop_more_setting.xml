@@ -62,7 +62,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_immersionStatusBar"
+                android:id="@+id/ll_readBookImmersion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background"
@@ -87,15 +87,15 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="@string/immersionStatusBar"
+                        android:text="@string/readBookImmersion"
                         android:textColor="@color/tv_text_default" />
 
                     <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_immersionStatusBar"
+                        android:id="@+id/sb_readBookImmersion"
                         android:layout_width="47dp"
                         android:layout_height="26dp"
                         android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/immersionStatusBar"
+                        android:contentDescription="@string/readBookImmersion"
                         app:kswBackColor="@drawable/selector_switch_button"
                         app:kswThumbColor="@color/background" />
                 </LinearLayout>

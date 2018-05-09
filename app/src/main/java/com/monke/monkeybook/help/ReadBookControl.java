@@ -50,7 +50,7 @@ public class ReadBookControl {
     private Boolean showTimeBattery;
     private Boolean showLine;
     private long lineChange;
-    private Boolean immersionStatusBar;
+    private Boolean readBookImmersion;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -98,7 +98,7 @@ public class ReadBookControl {
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
         this.showLine = preference.getBoolean("showLine", true);
         this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
-        this.immersionStatusBar = defaultPreference.getBoolean("immersionStatusBar", false);
+        this.readBookImmersion = defaultPreference.getBoolean("readBookImmersion", false);
     }
 
     //字体大小
@@ -414,7 +414,7 @@ public class ReadBookControl {
     public void setHideNavigationBar(Boolean hideNavigationBar) {
         this.hideNavigationBar = hideNavigationBar;
         SharedPreferences.Editor editor = defaultPreference.edit();
-        editor.putBoolean("hide_navigation_bar", hideStatusBar);
+        editor.putBoolean("hide_navigation_bar", hideNavigationBar);
         editor.apply();
     }
 
@@ -440,12 +440,12 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public Boolean getImmersionStatusBar(){return immersionStatusBar;}
+    public Boolean getReadBookImmersion(){return readBookImmersion;}
 
-    public void setImmersionStatusBar(Boolean immersionStatusBar){
-        this.immersionStatusBar = immersionStatusBar;
+    public void setReadBookImmersion(Boolean readBookImmersion){
+        this.readBookImmersion = readBookImmersion;
         SharedPreferences.Editor editor = defaultPreference.edit();
-        editor.putBoolean("immersionStatusBar", immersionStatusBar);
+        editor.putBoolean("readBookImmersion", readBookImmersion);
         editor.apply();
     }
 }

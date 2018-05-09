@@ -1,15 +1,36 @@
 package com.monke.monkeybook.widget.modialog;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.CardView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.utils.AndroidBug5497Workaround;
+import com.monke.monkeybook.utils.KeyboardUtil;
+import com.monke.monkeybook.utils.SoftHideKeyBoardUtil;
+import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
+import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -26,6 +47,10 @@ public class EditReplaceRuleView {
     private OnSaveReplaceRule saveReplaceRule;
     private Context context;
     private ReplaceRuleBean replaceRuleBean;
+
+    private int usableHeightPrevious;
+    private FrameLayout.LayoutParams frameLayoutParams;
+    private View mChildOfContent;
 
     public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
         return new EditReplaceRuleView(moProgressView);
@@ -77,6 +102,34 @@ public class EditReplaceRuleView {
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
+        resetBoxPosition();
+    }
+
+    private void resetBoxPosition(){
+
+        final View decorView=((Activity) context).getWindow().getDecorView();
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect rect=new Rect();
+                decorView.getWindowVisibleDisplayFrame(rect);
+                int screenHeight = getScreenHeight();
+                int heightDifference = screenHeight - rect.bottom;//计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
+                CardView cardView = moProgressView.findViewById(R.id.cv_root);
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cardView.getLayoutParams();
+                layoutParams.setMargins(TagFlowLayout.dip2px(((Activity) context),30),0,TagFlowLayout.dip2px(((Activity) context),30),heightDifference);//设置rlContent的marginBottom的值为软键盘占有的高度即可
+                cardView.setLayoutParams(layoutParams);
+                cardView.requestLayout();
+            }
+        });
+    }
+
+    private int getScreenHeight(){
+        WindowManager manager = ((Activity) context).getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        //int height = outMetrics.heightPixels;
+        return  outMetrics.heightPixels;
     }
 
     /**

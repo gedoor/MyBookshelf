@@ -469,6 +469,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 });
     }
 
+    /**
+     * 下载
+     */
     @Override
     public void addDownload(int start, int end) {
         addToShelf(() -> {
@@ -694,10 +697,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
     public void chapterChange(ChapterListBean chapterListBean) {
-        if (bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
+        if (bookShelf != null && bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
             mView.chapterChange(chapterListBean);
         }
     }

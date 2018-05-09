@@ -11,8 +11,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,8 +21,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
-import com.monke.mprogressbar.MHorProgressBar;
-import com.monke.mprogressbar.OnProgressListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +39,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     private Boolean needAnim = true;
     private OnItemClickListener itemClickListener;
-    private LastViewHolder lastViewHolder;
     private String bookshelfPx;
 
     private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
@@ -155,87 +150,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    public View setHeaderView(LinearLayout parent) {
-        View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_bookshelf_lastest, parent, false);
-        lastViewHolder = new LastViewHolder(headerView);
-        return headerView;
-    }
-
-    //最近阅读
-    private void bindLastViewHolder(final LastViewHolder holder, BookShelfBean bookShelfBean) {
-        if (books.size() == 0) {
-            holder.tvWatch.setOnClickListener(v -> {
-                if (null != itemClickListener) {
-                    itemClickListener.toSearch();
-                }
-            });
-            holder.ivCover.setImageResource(R.drawable.img_cover_default);
-            holder.flLastEstTip.setVisibility(View.INVISIBLE);
-            holder.tvName.setText("最近阅读的书在这里");
-            holder.tvDurProgress.setText("");
-            holder.llDurCursor.setVisibility(View.INVISIBLE);
-            holder.mpbDurProgress.setVisibility(View.INVISIBLE);
-            holder.mpbDurProgress.setProgressListener(null);
-            holder.tvWatch.setText("去选书");
-        } else {
-            if (holder.ivCover.getContext() != null) {
-                Glide.with(holder.ivCover.getContext())
-                        .load(bookShelfBean.getBookInfoBean().getCoverUrl())
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                                .centerCrop().placeholder(R.drawable.img_cover_default))
-                        .into(holder.ivCover);
-            }
-            holder.flLastEstTip.setVisibility(View.VISIBLE);
-
-            holder.tvName.setText(bookShelfBean.getBookInfoBean().getName());
-
-            if (null != bookShelfBean.getBookInfoBean() && null != bookShelfBean.getChapterList()
-                    && bookShelfBean.getChapterListSize() > bookShelfBean.getDurChapter()) {
-                holder.tvDurProgress.setText(String.format(holder.tvDurProgress.getContext().getString(R.string.read_dur_progress),
-                        bookShelfBean.getDurChapterListBean().getDurChapterName()));
-            }
-            holder.llDurCursor.setVisibility(View.VISIBLE);
-            holder.mpbDurProgress.setVisibility(View.VISIBLE);
-            holder.mpbDurProgress.setMaxProgress(bookShelfBean.getChapterListSize());
-            float speed = bookShelfBean.getChapterListSize() * 1.0f / 100;
-
-            holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
-            holder.mpbDurProgress.setProgressListener(new OnProgressListener() {
-                @Override
-                public void moveStartProgress(float dur) {
-
-                }
-
-                @Override
-                public void durProgressChange(float dur) {
-                    float rate = dur / holder.mpbDurProgress.getMaxProgress();
-                    holder.llDurCursor.setPadding((int) (holder.mpbDurProgress.getMeasuredWidth() * rate), 0, 0, 0);
-                }
-
-                @Override
-                public void moveStopProgress(float dur) {
-
-                }
-
-                @Override
-                public void setDurProgress(float dur) {
-
-                }
-            });
-            if (needAnim) {
-                holder.mpbDurProgress.setDurProgressWithAnim(bookShelfBean.getDurChapter());
-            } else {
-                holder.mpbDurProgress.setDurProgress(bookShelfBean.getDurChapter());
-            }
-            holder.tvWatch.setText("继续阅读");
-            holder.tvWatch.setOnClickListener(v -> {
-                if (null != itemClickListener) {
-                    itemClickListener.onClick(bookShelfBean, 0);
-                }
-            });
-        }
-    }
-
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -245,9 +159,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         books.clear();
         if (null != newDataS && newDataS.size() > 0) {
             books.addAll(newDataS);
-            bindLastViewHolder(lastViewHolder, books.get(0));
-        } else {
-            bindLastViewHolder(lastViewHolder, null);
         }
         BookshelfHelp.order(books, bookshelfPx);
         notifyDataSetChanged();
@@ -255,26 +166,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     public List<BookShelfBean> getBooks() {
         return books;
-    }
-
-    class LastViewHolder {
-        ImageView ivCover;
-        FrameLayout flLastEstTip;
-        AutofitTextView tvName;
-        AutofitTextView tvDurProgress;
-        LinearLayout llDurCursor;
-        MHorProgressBar mpbDurProgress;
-        TextView tvWatch;
-
-        LastViewHolder(View itemView) {
-            ivCover = itemView.findViewById(R.id.iv_cover);
-            flLastEstTip = itemView.findViewById(R.id.fl_lastest_tip);
-            tvName = itemView.findViewById(R.id.tv_name);
-            tvDurProgress = itemView.findViewById(R.id.tv_durprogress);
-            llDurCursor = itemView.findViewById(R.id.ll_durcursor);
-            mpbDurProgress = itemView.findViewById(R.id.mpb_durprogress);
-            tvWatch = itemView.findViewById(R.id.tv_watch);
-        }
     }
 
     class OtherViewHolder extends RecyclerView.ViewHolder {

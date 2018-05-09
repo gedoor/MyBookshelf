@@ -35,5 +35,11 @@
         android:key="@string/pk_find_expand_group"
         android:summary="默认展开第一组发现"
         android:title="自动展开发现" />
+    <SwitchPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="false"
+        android:key="@string/pk_ImmersionStatusBar"
+        android:title="沉浸式状态栏" />
 
 </PreferenceScreen>

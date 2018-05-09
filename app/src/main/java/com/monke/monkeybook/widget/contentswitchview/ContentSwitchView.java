@@ -4,10 +4,13 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.Layout;
 import android.util.AttributeSet;
@@ -16,11 +19,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.utils.StatusBarCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +43,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private int scrollX;
     private Boolean isMoving = false;
     private Boolean readAloud = false;
+
+    private Activity activity;
 
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
@@ -93,10 +100,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     //初始化
     private void init() {
         readBookControl = ReadBookControl.getInstance();
-
         scrollX = DensityUtil.dp2px(getContext(), 30f);
         durPageView = new BookContentView(getContext());
         durPageView.setReadBookControl(readBookControl);
+        activity = (Activity)getContext();
 
         viewContents = new ArrayList<>();
         viewContents.add(durPageView);
@@ -306,6 +313,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             else state = PRE_AND_NEXT;
         }
         afterOpenPage();
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        StatusBarCompat.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void gotoNextPage() {
@@ -327,6 +336,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             else state = PRE_AND_NEXT;
         }
         afterOpenPage();
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
+        StatusBarCompat.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void afterOpenPage() {
@@ -528,6 +539,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有上一页
      */
     private void noPre() {
+        StatusBarCompat.showNavigationBar(activity,true);
         Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT)
                 .show();
     }
@@ -536,6 +548,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有下一页
      */
     private void noNext() {
+        StatusBarCompat.showNavigationBar(activity,true);
         Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
                 .show();
         ReadAloudService.stop(getContext());

@@ -10,7 +10,7 @@ public interface IMainPresenter extends IPresenter{
 
     void restoreData();
 
-    void clearAllContent();
+    void downloadAll();
 
     void addBookUrl(String bookUrl);
 }
