@@ -2,7 +2,6 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -29,14 +28,12 @@ import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,7 +76,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_serach_vew);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.activity;
 
-import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,7 @@ import android.widget.LinearLayout;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 
 import butterknife.BindView;
@@ -51,7 +50,7 @@ public class SettingActivity extends MBaseActivity {
                 .replace(R.id.settingsFrameLayout, settingsFragment)
                 .commit();
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

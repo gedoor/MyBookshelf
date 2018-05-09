@@ -24,17 +24,12 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -45,7 +40,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -53,8 +47,6 @@ import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
-import com.monke.monkeybook.utils.AndroidBug5497Workaround;
-import com.monke.monkeybook.utils.StatusBarCompat;
 import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
@@ -65,7 +57,6 @@ import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,9 +64,7 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.monke.monkeybook.utils.StatusBarCompat.getNavigationBarHeight;
-import static com.monke.monkeybook.utils.StatusBarCompat.getStatusBarHeight;
-import static com.monke.monkeybook.utils.StatusBarCompat.hasSoftKeys;
+import static com.monke.monkeybook.utils.StatusBarUtil.getStatusBarHeight;
 
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
     private static final int REQUEST_SETTING = 210;
@@ -114,7 +103,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.compat(this, 0);
+            StatusBarUtil.compat(this, 0);
             DrawerLayout drawerLayout = findViewById(R.id.drawer);
             ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
 
@@ -171,8 +160,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
         } else {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter.setHeaderView(rfRvShelf.getHeader()),
-                    bookShelfGridAdapter, new GridLayoutManager(this, 3));
+            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter, new GridLayoutManager(this, 3));
         }
     }
 
@@ -205,12 +193,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
         return new RefreshRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void toSearch() {
-                //点击去选书
-                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
-            }
-
             @Override
             public void onClick(BookShelfBean bookShelfBean, int index) {
                 bookShelfBean.setHasUpdate(false);
@@ -263,6 +245,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 break;
             case R.id.action_download:
                 downloadListPop.showAsDropDown(toolbar);
+                break;
+            case R.id.action_download_all:
+                mPresenter.downloadAll();
                 break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);

@@ -19,7 +19,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ChoiceBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
@@ -56,7 +56,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_choice);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

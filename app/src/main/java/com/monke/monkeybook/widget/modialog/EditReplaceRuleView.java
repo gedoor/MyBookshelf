@@ -27,9 +27,6 @@ import android.widget.Toast;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.utils.AndroidBug5497Workaround;
-import com.monke.monkeybook.utils.KeyboardUtil;
-import com.monke.monkeybook.utils.SoftHideKeyBoardUtil;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 

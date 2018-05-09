@@ -103,11 +103,14 @@ public class BookSourceManage extends BaseModelImpl {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private static Observable<Boolean> importBookSourceO(String json) {
+    public static Observable<Boolean> importBookSourceO(String json) {
         return Observable.create(e -> {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
+                for (int i = 0; i < bookSourceBeans.size(); i++) {
+                    bookSourceBeans.get(i).setSerialNumber(i+1);
+                }
                 addBookSource(bookSourceBeans);
                 e.onNext(true);
             } catch (Exception e1) {

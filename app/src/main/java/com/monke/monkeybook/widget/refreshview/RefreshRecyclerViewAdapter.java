@@ -28,7 +28,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickListener {
-        void toSearch();
 
         void onClick(BookShelfBean bookShelfBean, int index);
 

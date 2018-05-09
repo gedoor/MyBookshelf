@@ -20,13 +20,13 @@ import java.util.List;
  * 数据恢复
  */
 
-public class DataRestore  {
+public class DataRestore {
 
     public static DataRestore getInstance() {
         return new DataRestore();
     }
 
-    public Boolean run() throws Exception{
+    public Boolean run() throws Exception {
         File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         if (file != null) {
             restoreBookSource(file);
@@ -38,7 +38,7 @@ public class DataRestore  {
         return false;
     }
 
-    private void restoreBookShelf(File file) throws Exception{
+    private void restoreBookShelf(File file) throws Exception {
         String json = FileHelper.readString("myBookShelf.xml", file.getPath());
         if (json != null) {
             List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {
@@ -50,16 +50,19 @@ public class DataRestore  {
         }
     }
 
-    private void restoreBookSource(File file) throws Exception{
+    private void restoreBookSource(File file) throws Exception {
         String json = FileHelper.readString("myBookSource.xml", file.getPath());
         if (json != null) {
             List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
             }.getType());
+            for (int i = 0; i < bookSourceBeans.size(); i++) {
+                bookSourceBeans.get(i).setSerialNumber(i + 1);
+            }
             BookSourceManage.addBookSource(bookSourceBeans);
         }
     }
 
-    private void restoreSearchHistory(File file) throws Exception{
+    private void restoreSearchHistory(File file) throws Exception {
         String json = FileHelper.readString("myBookSearchHistory.xml", file.getPath());
         if (json != null) {
             List<SearchHistoryBean> searchHistoryBeans = new Gson().fromJson(json, new TypeToken<List<SearchHistoryBean>>() {
