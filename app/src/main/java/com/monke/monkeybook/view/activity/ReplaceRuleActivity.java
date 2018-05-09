@@ -2,55 +2,33 @@ package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Rect;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.provider.DocumentFile;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
-import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
-import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
-import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.presenter.impl.IReplaceRulePresenter;
-import com.monke.monkeybook.utils.AndroidBug5497Workaround;
-import com.monke.monkeybook.utils.SoftHideKeyBoardUtil;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.view.impl.IReplaceRuleView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,7 +40,6 @@ import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.view.activity.BookSourceActivity.IMPORT_SOURCE;
 import static com.monke.monkeybook.view.activity.BookSourceActivity.RESULT_IMPORT_PERMS;
 
@@ -95,7 +72,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_vew);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

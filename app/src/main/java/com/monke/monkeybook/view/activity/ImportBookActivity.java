@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
@@ -31,7 +30,7 @@ import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.ImportBookAdapter;
 import com.monke.monkeybook.view.impl.IImportBookView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -79,7 +78,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_import);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

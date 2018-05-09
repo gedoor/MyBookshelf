@@ -18,7 +18,7 @@ import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.presenter.FindBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
-import com.monke.monkeybook.utils.StatusBarCompat;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
 import com.monke.monkeybook.view.impl.IFindBookView;
 
@@ -51,7 +51,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     protected void onCreateActivity() {
         setContentView(R.layout.activity_expandable_list_vew);
         if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarCompat.setFitsSystem(this);
+            StatusBarUtil.setFitsSystem(this);
         }
     }
 

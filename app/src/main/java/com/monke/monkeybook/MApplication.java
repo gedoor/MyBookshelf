@@ -5,17 +5,14 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatDelegate;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
     public final static String channelIdDownload = "channel_download";
-    public final static String channelIReadAloud = "channel_read_aloud";
+    public final static String channelIdReadAloud = "channel_read_aloud";
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
@@ -72,7 +69,7 @@ public class MApplication extends Application {
     @RequiresApi(Build.VERSION_CODES.O)
     private void createChannelIdReadAloud() {
         //用唯一的ID创建渠道对象
-        NotificationChannel firstChannel = new NotificationChannel(channelIReadAloud,
+        NotificationChannel firstChannel = new NotificationChannel(channelIdReadAloud,
                 getString(R.string.read_aloud),
                 NotificationManager.IMPORTANCE_LOW);
         //初始化channel
