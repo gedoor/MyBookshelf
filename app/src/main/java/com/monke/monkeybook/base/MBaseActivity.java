@@ -26,15 +26,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
-
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-        }
-        if (preferences.getBoolean("nightTheme", false)){
-            StatusBarUtil.setDarkStatusIcon(this,false);
-        }else {
-            StatusBarUtil.setDarkStatusIcon(this,true);
-        }
+        setStatusBar();
         setNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
@@ -98,6 +90,17 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    public void setStatusBar() {
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarUtil.compat(this, 0);
+        }
+        if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
+            StatusBarUtil.setDarkStatusIcon(this,false);
+        }else {
+            StatusBarUtil.setDarkStatusIcon(this,true);
         }
     }
 }

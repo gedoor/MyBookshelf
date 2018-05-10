@@ -50,7 +50,6 @@ public class ReadBookControl {
     private Boolean showTimeBattery;
     private Boolean showLine;
     private long lineChange;
-    private Boolean readBookImmersion;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -99,7 +98,6 @@ public class ReadBookControl {
         this.showTimeBattery = preference.getBoolean("showTimeBattery", true);
         this.showLine = preference.getBoolean("showLine", true);
         this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
-        this.readBookImmersion = defaultPreference.getBoolean("readBookImmersion", false);
     }
 
     //字体大小
@@ -441,12 +439,4 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public Boolean getReadBookImmersion(){return readBookImmersion;}
-
-    public void setReadBookImmersion(Boolean readBookImmersion){
-        this.readBookImmersion = readBookImmersion;
-        SharedPreferences.Editor editor = defaultPreference.edit();
-        editor.putBoolean("readBookImmersion", readBookImmersion);
-        editor.apply();
-    }
 }

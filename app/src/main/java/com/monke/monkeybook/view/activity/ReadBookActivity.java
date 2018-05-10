@@ -201,14 +201,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
 
-        if (readBookControl.getKeepScreenOn()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-        hideStatusBar(hideStatusBar);
-        readBookImmersionDetect();
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-        }
     }
 
     @Override
@@ -225,16 +217,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideNavigationBar();
-            if (flMenu.getVisibility() == View.VISIBLE) {
-                StatusBarUtil.showNavigationBar(this,true);
-            }else {
-                StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
-            }
-            if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
-                StatusBarUtil.setDarkStatusIcon(this,false);
-            }else {
-                StatusBarUtil.setDarkStatusIcon(this,true);
-            }
         }
     }
 
@@ -298,6 +280,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initCsvBook();
+        if (readBookControl.getKeepScreenOn()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        hideStatusBar(hideStatusBar);
         //图标眷色
         ivCList.getDrawable().mutate();
         ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -331,23 +317,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange() {
                 csvBook.changeBg();
-                if (readBookControl.getTextDrawableIndex() == 4){
-                    if ("sys_miui".equals(StatusBarUtil.getSystem())) {
-                        StatusBarUtil.MIUISetStatusBarLightMode(ReadBookActivity.this, false);
-                    }else {
-                        View decorView = getWindow().getDecorView();
-                        decorView.setSystemUiVisibility(0);
-                    }
-                }else{
-                    if ("sys_miui".equals(StatusBarUtil.getSystem())) {
-                        StatusBarUtil.MIUISetStatusBarLightMode(ReadBookActivity.this, true);
-                    }else {
-                        View decorView = getWindow().getDecorView();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                        }
-                    }
-                }
             }
 
             @Override
@@ -710,27 +679,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 仅阅读界面沉浸状态栏
-     */
-    private void readBookImmersionDetect(){
-        if (preferences.getBoolean("readBookImmersion", false)) {
-            if (StatusBarUtil.getSystem().equals("sys_miui")) {
-                StatusBarUtil.MIUISetStatusBarLightMode(this, true);
-            }else {
-                StatusBarUtil.compat(this, Color.TRANSPARENT);
-            }
-            if (preferences.getBoolean("nightTheme", false)) {
-                if (StatusBarUtil.getSystem().equals("sys_miui")) {
-                    StatusBarUtil.MIUISetStatusBarLightMode(this, false);
-                }else {
-                    View decorView = getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(0);
-                }
-            }
-        }
-    }
-
-    /**
      * 隐藏虚拟按键
      */
     private void hideNavigationBar() {
@@ -753,6 +701,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
         }
+
     }
 
     /**
@@ -767,13 +716,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         llMenuBottom.startAnimation(menuBottomIn);
         hideStatusBar(false);
-        //hideNavigationBar();
 
-        if (readBookControl.getTextDrawableIndex() == 4 | preferences.getBoolean("nightTheme", false)){
-            StatusBarUtil.setDarkStatusIcon(this,false);
-        }else {
-            StatusBarUtil.setDarkStatusIcon(this,true);
-        }
     }
 
     private void toast(String msg) {
@@ -1129,7 +1072,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
-        readBookImmersionDetect();
     }
 
     @Override

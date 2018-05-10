@@ -38,4 +38,6 @@
     <color name="bg_white">#FFFFFFFF</color>
     <!-- 分格线背景色 -->
     <color name="bg_divider_line">#FFD4D4D4</color>
+    <!--statusBarBackground-->
+    <color name="status_bar_bag">#a5000000</color>
 </resources>

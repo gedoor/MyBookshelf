@@ -49,10 +49,6 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     SwitchButton sbShowLine;
-    @BindView(R.id.ll_readBookImmersion)
-    LinearLayout llReadBookImmersion;
-    @BindView(R.id.sb_readBookImmersion)
-    SwitchButton sbReadBookImmersion;
 
 
     private Context mContext;
@@ -118,10 +114,6 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
-        sbReadBookImmersion.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setReadBookImmersion(isChecked);
-            changeProListener.reLoad();
-        });
     }
 
     private void initData() {
@@ -137,18 +129,11 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
         sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
-        sbReadBookImmersion.setCheckedImmediatelyNoEvent(readBookControl.getReadBookImmersion());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
         } else {
             llShowTimeBattery.setVisibility(View.GONE);
         }
 
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        if (readBookControl.getHideStatusBar() | preference.getBoolean("immersionStatusBar", false)){
-            llReadBookImmersion.setVisibility(View.GONE);
-        }else {
-            llReadBookImmersion.setVisibility(View.VISIBLE);
-        }
     }
 }
