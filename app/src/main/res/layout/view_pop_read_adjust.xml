@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/tv_text_default"
-                android:text="点击灵敏度"
+                android:text="滑动灵敏度"
                 android:layout_gravity="center" />
 
         </LinearLayout>
@@ -113,7 +113,7 @@
             app:cantouch="true"
             app:bgdrawable="@color/btn_bg_press"
             app:progresswidth="2dp"
-            app:maxprogress="100"
+            app:maxprogress="300"
             app:cursordrawable="@drawable/shape_progress_cursor_read"
             app:cursordrawable_width="13dp"
             app:cursordrawable_height="13dp" />
