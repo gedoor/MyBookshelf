@@ -31,9 +31,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             StatusBarUtil.compat(this, 0);
         }
         if (preferences.getBoolean("nightTheme", false)){
-            StatusBarCompat.setDarkStatusIcon(this,false);
+            StatusBarUtil.setDarkStatusIcon(this,false);
         }else {
-            StatusBarCompat.setDarkStatusIcon(this,true);
+            StatusBarUtil.setDarkStatusIcon(this,true);
         }
         setNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
