@@ -30,7 +30,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         if (preferences.getBoolean("immersionStatusBar", false)) {
             StatusBarUtil.compat(this, 0);
         }
-
+        if (preferences.getBoolean("nightTheme", false)){
+            StatusBarUtil.setDarkStatusIcon(this,false);
+        }else {
+            StatusBarUtil.setDarkStatusIcon(this,true);
+        }
         setNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);

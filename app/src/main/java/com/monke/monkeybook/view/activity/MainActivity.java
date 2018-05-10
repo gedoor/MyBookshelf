@@ -41,6 +41,7 @@ import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
@@ -273,6 +274,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+
     }
 
     //侧边栏按钮
@@ -399,7 +401,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
             @Override
             public void startRefresh() {
-                mPresenter.queryBookShelf(true);
+                mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
+                if (!NetworkUtil.isNetWorkAvailable()){
+                    Toast.makeText(MainActivity.this,"无网络，请打开网络后再试。",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -418,7 +423,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void firstRequest() {
         fistOpenRun();
-        mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
+        if (NetworkUtil.isNetWorkAvailable()) {
+            mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
+        }else {
+            mPresenter.queryBookShelf(false);
+            Toast.makeText(this,"无网络，自动刷新失败！",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
