@@ -125,6 +125,7 @@ public class ReadAdjustPop extends PopupWindow {
 
         //点击灵敏度调节
         hpbClick.setMaxProgress(100);
+
         hpbClick.setDurProgress(readBookControl.getClickSensitivity());
         hpbClick.setProgressListener(new OnProgressListener() {
             @Override
@@ -134,7 +135,7 @@ public class ReadAdjustPop extends PopupWindow {
 
             @Override
             public void durProgressChange(float dur) {
-                readBookControl.setClickSensitivity((int) dur);
+                readBookControl.setClickSensitivity((int)dur);
             }
 
             @Override

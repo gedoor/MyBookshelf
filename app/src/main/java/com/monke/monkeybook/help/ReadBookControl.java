@@ -83,7 +83,8 @@ public class ReadBookControl {
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = preference.getFloat("lineMultiplier", 1);
-        this.clickSensitivity = preference.getInt("clickSensitivity", 10);
+        this.clickSensitivity = preference.getInt("clickSensitivity", 50)>100
+                ?50:preference.getInt("clickSensitivity", 50);
         this.clickAllNext = preference.getBoolean("clickAllNext", false);
         this.clickAnim = preference.getBoolean("clickAnim", true);
         this.textColorCustom = preference.getInt("textColorCustom", Color.parseColor("#383838"));
