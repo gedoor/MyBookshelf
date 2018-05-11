@@ -29,7 +29,9 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.RunMediaPlayer;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,7 +68,7 @@ public class ReadAloudService extends Service {
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
     private Boolean pause = false;
-    private String content;
+    private List<String> contentList = new ArrayList<>();
     private int nowSpeak;
     private int allSpeak;
     private int timeMinute = 0;
@@ -81,6 +83,9 @@ public class ReadAloudService extends Service {
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
     private int speechRate;
+
+    public ReadAloudService() {
+    }
 
     @Override
     public void onCreate() {
@@ -132,7 +137,14 @@ public class ReadAloudService extends Service {
             return;
         }
         nowSpeak = 0;
-        this.content = content.replaceAll("……", "");
+        contentList.clear();
+        String[] splitSpeech = content.replaceAll("……", "").split("\r\n");
+        for (String aSplitSpeech : splitSpeech) {
+            if (!isEmpty(aSplitSpeech)) {
+                contentList.add(aSplitSpeech);
+            }
+        }
+        allSpeak = contentList.size() - 1;
         running = true;
         if (aloudButton || speak) {
             speak = false;
@@ -142,7 +154,7 @@ public class ReadAloudService extends Service {
     }
 
     public void playTTS() {
-        if (isEmpty(content)) {
+        if (contentList.size() < 1) {
             aloudServiceListener.readAloudNext();
             return;
         }
@@ -151,25 +163,20 @@ public class ReadAloudService extends Service {
             aloudServiceListener.setStatus(PLAY);
             updateNotification();
             initSpeechRate();
-            String[] splitSpeech = content.split("\r\n");
             HashMap<String, String> map = new HashMap<>();
             map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "content");
-            allSpeak = 0;
-            for (int i = nowSpeak; i < splitSpeech.length; i++) {
-                if (!isEmpty(splitSpeech[i])) {
-                    allSpeak = allSpeak + 1;
-                    if (i == 0) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, null, "content");
-                        } else {
-                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_FLUSH, map);
-                        }
+            for (int i = nowSpeak; i < contentList.size(); i++) {
+                if (i == 0) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_FLUSH, null, "content");
                     } else {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, null, "content");
-                        } else {
-                            textToSpeech.speak(splitSpeech[i], TextToSpeech.QUEUE_ADD, map);
-                        }
+                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_FLUSH, map);
+                    }
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_ADD, null, "content");
+                    } else {
+                        textToSpeech.speak(contentList.get(i), TextToSpeech.QUEUE_ADD, map);
                     }
                 }
             }
