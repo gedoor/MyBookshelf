@@ -70,7 +70,6 @@ public class ReadAloudService extends Service {
     private Boolean pause = false;
     private List<String> contentList = new ArrayList<>();
     private int nowSpeak;
-    private int allSpeak;
     private int timeMinute = 0;
     private final int maxTimeMinute = 60;
     private boolean timerEnable = false;
@@ -144,7 +143,6 @@ public class ReadAloudService extends Service {
                 contentList.add(aSplitSpeech);
             }
         }
-        allSpeak = contentList.size() - 1;
         running = true;
         if (aloudButton || speak) {
             speak = false;
@@ -498,7 +496,7 @@ public class ReadAloudService extends Service {
         @Override
         public void onDone(String s) {
             nowSpeak = nowSpeak + 1;
-            if (nowSpeak == allSpeak) {
+            if (nowSpeak >= contentList.size()) {
                 aloudServiceListener.readAloudNext();
             }
         }
