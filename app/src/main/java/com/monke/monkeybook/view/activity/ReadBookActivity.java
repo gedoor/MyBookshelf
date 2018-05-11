@@ -155,7 +155,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private boolean isBind;
     private String noteUrl;
     private int aloudStatus;
-    private boolean aloud = false;
+    private boolean fromMediaButton = false;
 
     private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -203,7 +203,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         Intent intent = this.getIntent();
-        aloud = intent.getBooleanExtra("readAloud", false);
+        fromMediaButton = intent.getBooleanExtra("readAloud", false);
     }
 
     @Override
@@ -869,8 +869,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void curPageFinish() {
-                if (aloud) {
-                    aloud = false;
+                if (fromMediaButton) {
+                    fromMediaButton = false;
                     onMediaButton();
                 }
             }
