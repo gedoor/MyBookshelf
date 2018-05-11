@@ -32,6 +32,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
 
             String command = null;
             switch (keycode) {
+                case KeyEvent.KEYCODE_MEDIA_STOP:
                 case KeyEvent.KEYCODE_MEDIA_PAUSE:
                 case KeyEvent.KEYCODE_MEDIA_PLAY:
                 case KeyEvent.KEYCODE_HEADSETHOOK:

@@ -251,9 +251,9 @@ public class ReadAloudService extends Service {
 
     private void aloudControl() {
         if (pause) {
-            resumeReadAloud();
+            ReadAloudService.resume(this);
         } else {
-            pauseReadAloud(true);
+            ReadAloudService.pause(this);
         }
     }
 
