@@ -58,4 +58,6 @@ public interface IReadBookView extends IView {
     void openBookFromOther();
 
     void chapterChange(ChapterListBean chapterListBean);
+
+    void onMediaButton();
 }

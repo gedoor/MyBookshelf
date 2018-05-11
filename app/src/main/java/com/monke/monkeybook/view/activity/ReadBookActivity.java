@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -481,7 +480,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //朗读
         ibReadAloud.getDrawable().mutate();
         ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloud.setOnClickListener(view -> startReadAloud());
+        ibReadAloud.setOnClickListener(view -> onMediaButton());
 
         //替换
         ibReplaceRule.getDrawable().mutate();
@@ -867,30 +866,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         };
     }
 
-    /**
-     * 开始朗读
-     */
-    private void startReadAloud() {
-        if (!ReadAloudService.running) {
-            aloudStatus = ReadAloudService.STOP;
-        }
-        switch (aloudStatus) {
-            case PAUSE:
-                ReadAloudService.resume(this);
-                break;
-            case PLAY:
-                ReadAloudService.pause(this);
-                break;
-            default:
-                ReadBookActivity.this.popMenuOut();
-                if (mPresenter.getBookShelf() != null) {
-                    aloudButton = true;
-                    csvBook.readAloudStart();
-                    isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
-                }
-        }
-    }
-
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
@@ -1012,6 +987,28 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void chapterChange(ChapterListBean chapterListBean) {
         if (chapterListView.hasData()) {
             chapterListView.upChapterList(chapterListBean);
+        }
+    }
+
+    @Override
+    public void onMediaButton() {
+        if (!ReadAloudService.running) {
+            aloudStatus = ReadAloudService.STOP;
+        }
+        switch (aloudStatus) {
+            case PAUSE:
+                ReadAloudService.resume(this);
+                break;
+            case PLAY:
+                ReadAloudService.pause(this);
+                break;
+            default:
+                ReadBookActivity.this.popMenuOut();
+                if (mPresenter.getBookShelf() != null) {
+                    aloudButton = true;
+                    csvBook.readAloudStart();
+                    isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+                }
         }
     }
 

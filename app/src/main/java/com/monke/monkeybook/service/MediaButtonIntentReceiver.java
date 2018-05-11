@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.BuildConfig;
+import com.monke.monkeybook.help.RxBusTag;
 
 /**
  * Created by GKF on 2018/1/6.
@@ -44,20 +46,12 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             }
             if (command != null) {
                 if (action == KeyEvent.ACTION_DOWN) {
-                    startService(context, command);
+                    RxBus.get().post(RxBusTag.MEDIA_BUTTON, command);
                     return true;
                 }
             }
         }
         return false;
-    }
-
-    private static void startService(Context context, String command) {
-        if (ReadAloudService.running) {
-            final Intent intent = new Intent(context, ReadAloudService.class);
-            intent.setAction(command);
-            context.startService(intent);
-        }
     }
 
     @Override

@@ -41,7 +41,6 @@ import static com.monke.monkeybook.MApplication.DEBUG;
  * Created by GKF on 2018/1/2.
  * 朗读服务
  */
-
 public class ReadAloudService extends Service {
     public static final int PLAY = 1;
     public static final int STOP = 0;
@@ -114,9 +113,6 @@ public class ReadAloudService extends Service {
                 break;
             case ActionResumeService:
                 resumeReadAloud();
-                break;
-            case ActionMediaButton:
-                aloudControl();
                 break;
             case ActionSetTimer:
                 updateTimer(intent.getIntExtra("minute", 10));
@@ -247,14 +243,6 @@ public class ReadAloudService extends Service {
         updateTimer(0);
         pause = false;
         playTTS();
-    }
-
-    private void aloudControl() {
-        if (pause) {
-            ReadAloudService.resume(this);
-        } else {
-            ReadAloudService.pause(this);
-        }
     }
 
     private void updateTimer(int minute) {

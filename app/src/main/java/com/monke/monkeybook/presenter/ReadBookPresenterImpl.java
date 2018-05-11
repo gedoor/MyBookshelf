@@ -703,4 +703,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             mView.chapterChange(chapterListBean);
         }
     }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.MEDIA_BUTTON)})
+    public void onMediaButton(String command) {
+        if (bookShelf != null) {
+            mView.onMediaButton();
+        }
+    }
 }
