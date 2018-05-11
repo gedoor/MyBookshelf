@@ -76,6 +76,7 @@ import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -154,6 +155,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private boolean isBind;
     private String noteUrl;
     private int aloudStatus;
+    private boolean aloud = false;
 
     private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -167,6 +169,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
+
     @SuppressLint("SimpleDateFormat")
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -199,7 +202,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hideStatusBar = readBookControl.getHideStatusBar();
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
-
+        Intent intent = this.getIntent();
+        aloud = intent.getBooleanExtra("readAloud", false);
     }
 
     @Override
@@ -863,6 +867,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 }
             }
 
+            @Override
+            public void curPageFinish() {
+                if (aloud) {
+                    aloud = false;
+                    onMediaButton();
+                }
+            }
+
         };
     }
 
@@ -952,6 +964,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public String getNoteUrl() {
+        if (isEmpty(noteUrl)) {
+            noteUrl = readBookControl.getLastNoteUrl();
+        }
         return noteUrl;
     }
 
@@ -990,6 +1005,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
+    /**
+     * 朗读按钮
+     */
     @Override
     public void onMediaButton() {
         if (!ReadAloudService.running) {

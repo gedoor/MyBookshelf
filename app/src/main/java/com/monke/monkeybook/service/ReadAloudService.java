@@ -158,7 +158,9 @@ public class ReadAloudService extends Service {
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
             speak = !speak;
-            aloudServiceListener.setStatus(PLAY);
+            if (aloudServiceListener != null) {
+                aloudServiceListener.setStatus(PLAY);
+            }
             updateNotification();
             initSpeechRate();
             HashMap<String, String> map = new HashMap<>();

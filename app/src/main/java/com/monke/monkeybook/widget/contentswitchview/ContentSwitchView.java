@@ -510,6 +510,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             readAloud();
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
             updateOtherPage(durChapterIndex, chapterAll, durPageIndex, pageAll);
+            loadDataListener.curPageFinish();
         }
     }
 
@@ -539,6 +540,10 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     public void readAloudStop() {
         readAloud = false;
+    }
+
+    public void setReadAloud(boolean readAloud) {
+        this.readAloud = readAloud;
     }
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {
@@ -675,6 +680,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         void readAloud(String content);
 
         void openChapterList();
+
+        void curPageFinish();
     }
 
 }

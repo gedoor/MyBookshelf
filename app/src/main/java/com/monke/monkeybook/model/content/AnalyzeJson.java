@@ -31,6 +31,10 @@ public class AnalyzeJson {
 
         String[] rs = rule.split("@");
 
+
+
+
+
         return jsonArray;
     }
 

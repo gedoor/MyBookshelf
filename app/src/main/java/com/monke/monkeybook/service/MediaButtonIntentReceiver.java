@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 /**
  * Created by GKF on 2018/1/6.
@@ -46,12 +49,23 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             }
             if (command != null) {
                 if (action == KeyEvent.ACTION_DOWN) {
-                    RxBus.get().post(RxBusTag.MEDIA_BUTTON, command);
+                    readAloud(context, command);
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private static void readAloud(final Context context, String command) {
+        if (!AppActivityManager.getInstance().isExist(ReadBookActivity.class)) {
+            Intent intent = new Intent(context, ReadBookActivity.class);
+            intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+            intent.putExtra("readAloud", true);
+            context.startActivity(intent);
+        } else {
+            RxBus.get().post(RxBusTag.MEDIA_BUTTON, command);
+        }
     }
 
     @Override

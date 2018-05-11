@@ -57,6 +57,8 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.text.TextUtils.isEmpty;
+
 public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
@@ -82,19 +84,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         Intent intent = activity.getIntent();
         open_from = intent.getIntExtra("from", OPEN_FROM_OTHER);
         if (open_from == OPEN_FROM_APP) {
-            String noteUrl = mView.getNoteUrl();
-            if (noteUrl != null && !noteUrl.isEmpty()) {
-                bookShelf = BookshelfHelp.getBook(noteUrl);
-            }
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
                 BitIntentDataManager.getInstance().cleanData(key);
             }
             if (bookShelf == null) {
+                bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());
+            }
+            if (bookShelf == null) {
                 mView.finish();
                 return;
             }
+            readBookControl.setLastNoteUrl(bookShelf.getNoteUrl());
             checkInShelf();
         } else {
             mView.openBookFromOther();
