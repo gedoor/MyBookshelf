@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.BatteryManager;
@@ -140,7 +141,9 @@ public class StatusBarUtil {
     //获取导航栏高度
     public static int getNavigationBarHeight(Context context) {
         int navigationBarHeight = 0;
-        int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        int resourceId = context.getResources().getIdentifier(
+                context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? "navigation_bar_height" : "navigation_bar_height_landscape",
+                "dimen", "android");
         if (resourceId > 0) {
             navigationBarHeight = context.getResources().getDimensionPixelOffset(resourceId);
         }
@@ -148,7 +151,8 @@ public class StatusBarUtil {
         return navigationBarHeight;
     }
 
-    public static void setDarkStatusIcon(Activity activity, Boolean Dark) {
+    //设置深色状态栏图标
+    public static void setStatusBarIcon(Activity activity, Boolean Dark) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             View decorView = activity.getWindow().getDecorView();
             if(decorView != null){

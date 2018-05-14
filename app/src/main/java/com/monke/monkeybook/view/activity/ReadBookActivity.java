@@ -204,6 +204,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAloudIntent.setAction(ActionNewReadAloud);
         Intent intent = this.getIntent();
         fromMediaButton = intent.getBooleanExtra("readAloud", false);
+        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
     }
 
     @Override
@@ -220,6 +221,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideNavigationBar();
+            if (flMenu.getVisibility() == View.VISIBLE) {
+                 StatusBarUtil.showNavigationBar(this,true);
+            }else {
+                 StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+            }
+            if (preferences.getBoolean("nightTheme", false)){
+                StatusBarUtil.setStatusBarIcon(this,false);
+            }else {
+                StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
+            }
         }
     }
 
@@ -704,7 +715,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
         }
-
+        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
     }
 
     /**
@@ -719,6 +730,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         llMenuBottom.startAnimation(menuBottomIn);
         hideStatusBar(false);
+        StatusBarUtil.setStatusBarIcon(this,true);
 
     }
 
@@ -898,7 +910,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
-                    popMenuOut();
+                    finish();
                     return true;
                 } else if (chapterListView.dismissChapterList()) {
                     return true;
@@ -1087,6 +1099,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
+        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
     }
 
     @Override

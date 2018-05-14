@@ -18,8 +18,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
@@ -41,6 +43,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private Boolean readAloud = false;
 
     private Activity activity;
+    private Snackbar snackbar;
+    private SharedPreferences preference;
 
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
@@ -100,6 +104,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         durPageView = new BookContentView(getContext());
         durPageView.setReadBookControl(readBookControl);
         activity = (Activity)getContext();
+        preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
 
         viewContents = new ArrayList<>();
         viewContents.add(durPageView);
@@ -327,8 +332,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             else state = PRE_AND_NEXT;
         }
         afterOpenPage();
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void gotoNextPage() {
@@ -350,8 +353,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             else state = PRE_AND_NEXT;
         }
         afterOpenPage();
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
     }
 
     private void afterOpenPage() {
@@ -559,8 +560,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     private void noPre() {
         StatusBarUtil.showNavigationBar(activity,true);
-        Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT)
-                .show();
+        snackbar = Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT);
+        snackbar.show();
+        snackbarDismissed();
     }
 
     /**
@@ -568,9 +570,23 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     private void noNext() {
         StatusBarUtil.showNavigationBar(activity,true);
-        Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT)
-                .show();
+        snackbar = Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT);
+        snackbar.show();
+        snackbarDismissed();
         ReadAloudService.stop(getContext());
+    }
+
+    private void snackbarDismissed(){
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                    if (activity.findViewById(R.id.ll_menu_bottom).getVisibility() != View.VISIBLE){
+                        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
+                    }
+                }
+            }
+        });
     }
 
     public Paint getTextPaint() {
