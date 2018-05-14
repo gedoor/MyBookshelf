@@ -51,6 +51,7 @@ public class ReadBookControl {
     private Boolean showLine;
     private long lineChange;
     private String lastNoteUrl;
+    private Boolean darkStatusIcon;
 
     private SharedPreferences preference;
     private SharedPreferences defaultPreference;
@@ -100,6 +101,7 @@ public class ReadBookControl {
         this.showLine = preference.getBoolean("showLine", true);
         this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
         this.lastNoteUrl = preference.getString("lastNoteUrl", "");
+        this.darkStatusIcon = defaultPreference.getBoolean("darkStatusIcon", false);
     }
 
     public String getLastNoteUrl() {
@@ -449,6 +451,17 @@ public class ReadBookControl {
         this.lineChange = lineChange;
         SharedPreferences.Editor editor = preference.edit();
         editor.putLong("lineChange", lineChange);
+        editor.apply();
+    }
+
+    public Boolean getDarkStatusIcon() {
+        return darkStatusIcon;
+    }
+
+    public void setDarkStatusIcon(Boolean darkStatusIcon) {
+        this.darkStatusIcon = darkStatusIcon;
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("darkStatusIcon", darkStatusIcon);
         editor.apply();
     }
 

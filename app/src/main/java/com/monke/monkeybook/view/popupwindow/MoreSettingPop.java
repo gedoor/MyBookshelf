@@ -49,6 +49,8 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     SwitchButton sbShowLine;
+    @BindView(R.id.sb_darkStatusIcon)
+    SwitchButton sbDarkStatusIcon;
 
 
     private Context mContext;
@@ -114,6 +116,11 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
+        sbDarkStatusIcon.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setDarkStatusIcon(isChecked);
+            readBookControl.setLineChange(System.currentTimeMillis());
+            changeProListener.reLoad();
+        });
     }
 
     private void initData() {
@@ -129,6 +136,7 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
         sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
+        sbDarkStatusIcon.setCheckedImmediatelyNoEvent(readBookControl.getDarkStatusIcon());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
         } else {

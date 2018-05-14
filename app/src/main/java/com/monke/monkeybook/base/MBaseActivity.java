@@ -98,9 +98,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             StatusBarUtil.compat(this, 0);
         }
         if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
-            StatusBarUtil.setDarkStatusIcon(this,false);
+            StatusBarUtil.setStatusBarIcon(this,false);
         }else {
-            StatusBarUtil.setDarkStatusIcon(this,true);
+            StatusBarUtil.setStatusBarIcon(this,true);
         }
     }
 }
