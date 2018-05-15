@@ -63,9 +63,17 @@ public class EncodeConverter extends Converter.Factory {
                         }
                     }
                     if (http_equiv.toLowerCase().equals("content-type")) {
-                        charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
+                        if (content.toLowerCase().contains("charset")) {
+                            charsetStr = content.substring(content.toLowerCase().indexOf("charset") + "charset=".length());
+                        } else {
+                            charsetStr = content.substring(content.toLowerCase().indexOf(";") + 1);
+                        }
                         if (!isEmpty(charsetStr)) {
-                            return new String(responseBytes, Charset.forName(charsetStr));
+                            try {
+                                return new String(responseBytes, Charset.forName(charsetStr));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
