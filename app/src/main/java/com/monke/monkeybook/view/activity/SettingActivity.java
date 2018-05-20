@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.activity;
 
-import android.preference.Preference;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -32,7 +31,6 @@ public class SettingActivity extends MBaseActivity {
     private Animation animOut;
 
     private String bookPx;
-    private Preference immersionPreference;
 
     @Override
     protected IPresenter initInjector() {
@@ -96,6 +94,4 @@ public class SettingActivity extends MBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-    protected void immersionStatusBar(){recreate();}
 }

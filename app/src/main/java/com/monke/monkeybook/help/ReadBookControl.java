@@ -156,8 +156,6 @@ public class ReadBookControl {
             temp5.put("textColor", Color.parseColor("#808080"));
             temp5.put("textBackground", R.drawable.bg_readbook_black);
             textDrawable.add(temp5);
-
-
         }
     }
 
