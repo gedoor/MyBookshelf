@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -559,7 +558,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有上一页
      */
     private void noPre() {
-        StatusBarUtil.showNavigationBar(activity,true);
+        StatusBarUtil.hideNavigationBar(activity,false,false);
         snackbar = Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT);
         snackbar.show();
         snackbarDismissed();
@@ -569,7 +568,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有下一页
      */
     private void noNext() {
-        StatusBarUtil.showNavigationBar(activity,true);
+        StatusBarUtil.hideNavigationBar(activity,false,false);
         snackbar = Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT);
         snackbar.show();
         snackbarDismissed();
@@ -581,8 +580,8 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                    if (activity.findViewById(R.id.ll_menu_bottom).getVisibility() != View.VISIBLE){
-                        StatusBarUtil.showNavigationBar(activity,!preference.getBoolean("hide_navigation_bar", false));
+                    if (activity.findViewById(R.id.fl_menu).getVisibility() != View.VISIBLE){
+                        StatusBarUtil.hideNavigationBar(activity,preference.getBoolean("hide_navigation_bar", false),false);
                     }
                 }
             }

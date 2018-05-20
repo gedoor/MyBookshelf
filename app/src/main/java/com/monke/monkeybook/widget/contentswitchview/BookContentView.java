@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -22,6 +24,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BatteryUtil;
+import com.monke.monkeybook.utils.StatusBarUtil;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentTextView;
 
@@ -83,6 +87,7 @@ public class BookContentView extends FrameLayout {
     private ContentSwitchView.LoadDataListener loadDataListener;
 
     private SetDataListener setDataListener;
+    private SharedPreferences preferences;
 
     public interface SetDataListener {
         void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
@@ -111,6 +116,7 @@ public class BookContentView extends FrameLayout {
         readBookControl = ReadBookControl.getInstance();
         hideStatusBar = readBookControl.getHideStatusBar();
         activity = (Activity)getContext();
+        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         View view;
         if (hideStatusBar) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal2, this, false);
@@ -126,6 +132,21 @@ public class BookContentView extends FrameLayout {
             if (loadDataListener != null)
                 loading();
         });
+
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarUtil.compat(activity, 0);
+        }
+        if (preferences.getBoolean("nightTheme", false)) {
+            StatusBarUtil.setStatusBarIcon(activity, false);
+        }else {
+            StatusBarUtil.setStatusBarIcon(activity, preferences.getBoolean("darkStatusIcon", false));
+        }
+
+        if (ReadBookActivity.moreSetting) {
+            StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), false);
+        }else {
+            StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), true);
+        }
     }
 
     public void showLoading() {

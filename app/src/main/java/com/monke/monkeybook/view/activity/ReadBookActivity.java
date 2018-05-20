@@ -81,7 +81,6 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
-import static com.monke.monkeybook.utils.StatusBarUtil.hasSoftKeys;
 
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
@@ -174,6 +173,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
+    public static Boolean moreSetting = false;
 
     @Override
     protected IReadBookPresenter initInjector() {
@@ -204,7 +204,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAloudIntent.setAction(ActionNewReadAloud);
         Intent intent = this.getIntent();
         fromMediaButton = intent.getBooleanExtra("readAloud", false);
-        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
+        if (preferences.getBoolean("nightTheme", false)){
+            StatusBarUtil.setStatusBarIcon(this,false);
+        }else {
+            StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
+        }
     }
 
     @Override
@@ -220,17 +224,19 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            hideNavigationBar();
+            if (preferences.getBoolean("nightTheme", false)) {
+                StatusBarUtil.setStatusBarIcon(this, false);
+            }else if (flMenu.getVisibility() == View.VISIBLE){
+                StatusBarUtil.setStatusBarIcon(this, true);
+            }else {
+                StatusBarUtil.setStatusBarIcon(this, preferences.getBoolean("darkStatusIcon", false));
+            }
             if (flMenu.getVisibility() == View.VISIBLE) {
-                 StatusBarUtil.showNavigationBar(this,true);
+                StatusBarUtil.hideNavigationBar(this,false,false);
             }else {
-                 StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+                StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
             }
-            if (preferences.getBoolean("nightTheme", false)){
-                StatusBarUtil.setStatusBarIcon(this,false);
-            }else {
-                StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
-            }
+            moreSetting = false;
         }
     }
 
@@ -557,6 +563,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //设置
         llSetting.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
+            moreSetting = true;
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
@@ -710,28 +717,31 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 隐藏菜单
      */
     private void popMenuOut() {
-        StatusBarUtil.showNavigationBar(this,!preferences.getBoolean("hide_navigation_bar", false));
+        if (preferences.getBoolean("nightTheme", false)){
+            StatusBarUtil.setStatusBarIcon(this,false);
+        }else {
+            StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
+        }
+        StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
         }
-        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
     }
 
     /**
      * 显示菜单
      */
     private void popMenuIn() {
-        StatusBarUtil.showNavigationBar(this,true);
+        StatusBarUtil.setStatusBarIcon(this,!preferences.getBoolean("nightTheme", false));
+        StatusBarUtil.hideNavigationBar(this,false,false);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
-        if (hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
+        if (StatusBarUtil.hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
             llMenuBottom.setPadding(0,0,0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
         hideStatusBar(false);
-        StatusBarUtil.setStatusBarIcon(this,true);
-
     }
 
     private void toast(String msg) {
@@ -1099,7 +1109,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
-        StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
     }
 
     @Override

@@ -2,7 +2,11 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -45,6 +49,7 @@ import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
+import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.monke.monkeybook.view.popupwindow.DownloadListPop;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -53,6 +58,7 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -88,6 +94,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private long exitTime = 0;
     private boolean onRestore = false;
     private String bookPx;
+    private ImmersionReceiver immersionReceiver;
+
 
     @Override
     protected IMainPresenter initInjector() {
@@ -97,22 +105,15 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-            DrawerLayout drawerLayout = findViewById(R.id.drawer);
-            ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
+        IntentFilter filter = new IntentFilter(SettingsFragment.action);
+        immersionReceiver = new ImmersionReceiver();
+        registerReceiver(immersionReceiver, filter);
 
-            // 内容布局不是 LinearLayout 时,设置padding top
-            if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
-                contentLayout.getChildAt(1).setPadding(0, getStatusBarHeight(this), 0, 0);
-            }
-
-            // 设置属性
-            drawerLayout.setFitsSystemWindows(false);
-            contentLayout.setFitsSystemWindows(true);
-
-            ViewGroup mContentView = this.findViewById(R.id.id_left_menu);
-            mContentView.setPadding(0, getStatusBarHeight(this),0,0);
+        immersionStatusBarFits();
+        if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
+            StatusBarUtil.setStatusBarIcon(this,false);
+        }else {
+            StatusBarUtil.setStatusBarIcon(this,true);
         }
     }
 
@@ -515,6 +516,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onDestroy() {
         super.onDestroy();
         downloadListPop.onDestroy();
+        unregisterReceiver(immersionReceiver);
     }
 
     public void exit() {
@@ -534,5 +536,47 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 recreate();
             }
         }
+    }
+
+    protected void immersionStatusBarFits(){
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarUtil.compat(this, 0);
+
+            DrawerLayout drawerLayout = findViewById(R.id.drawer);
+            ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
+
+            // 内容布局不是 LinearLayout 时,设置padding top
+            if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
+                contentLayout.getChildAt(1).setPadding(0, getStatusBarHeight(this), 0, 0);
+            }
+
+            // 设置属性
+            drawerLayout.setFitsSystemWindows(false);
+            contentLayout.setFitsSystemWindows(true);
+
+            ViewGroup mContentView = this.findViewById(R.id.id_left_menu);
+            mContentView.setPadding(0, getStatusBarHeight(this),0,0);
+        }
+    }
+
+    /**
+     * 沉浸状态栏广播
+     */
+    class ImmersionReceiver extends BroadcastReceiver {
+        @SuppressLint("DefaultLocale")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")){
+                recreate();
+                if (!preferences.getBoolean("immersionStatusBar", false)) {
+                    clearStatusBar();
+                }
+            }
+        }
+    }
+
+    protected void clearStatusBar(){
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(0);
     }
 }

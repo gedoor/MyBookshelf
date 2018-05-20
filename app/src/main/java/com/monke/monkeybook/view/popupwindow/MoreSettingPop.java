@@ -3,8 +3,6 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.kyleduo.switchbutton.SwitchButton;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 
 import butterknife.BindView;
