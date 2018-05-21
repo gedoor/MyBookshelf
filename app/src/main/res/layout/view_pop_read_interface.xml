@@ -68,14 +68,14 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/fl_text_convert"
+                android:id="@+id/fl_text_Bold"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="繁"
+                android:text="粗"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -85,14 +85,14 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/fl_text_Bold"
+                android:id="@+id/fl_text_convert"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="粗"
+                android:text="不转"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 

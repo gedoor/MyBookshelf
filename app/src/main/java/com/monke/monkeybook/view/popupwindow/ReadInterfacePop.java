@@ -141,7 +141,17 @@ public class ReadInterfacePop extends PopupWindow {
 
         //繁简切换
         flTextConvert.setOnClickListener(v -> {
-            readBookControl.setTextConvert(!readBookControl.getTextConvert());
+            switch (readBookControl.getTextConvert()) {
+                case 0:
+                    readBookControl.setTextConvert(1);
+                    break;
+                case 1:
+                    readBookControl.setTextConvert(-1);
+                    break;
+                case -1:
+                    readBookControl.setTextConvert(0);
+                    break;
+            }
             updateConvertText(readBookControl.getTextConvert());
             changeProListener.setConvert();
         });
@@ -311,11 +321,16 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl.setLineMultiplier(lineSize);
     }
 
-    private void updateConvertText(Boolean convent) {
-        if (convent) {
-            flTextConvert.setText("简");
-        } else {
-            flTextConvert.setText("繁");
+    private void updateConvertText(int convent) {
+        switch (convent) {
+            case 0:
+                flTextConvert.setText("不转换");
+                break;
+            case 1:
+                flTextConvert.setText("简转繁");
+                break;
+            case -1:
+                flTextConvert.setText("繁转简");
         }
     }
 

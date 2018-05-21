@@ -135,7 +135,6 @@ dependencies {
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
 
-
 }
 
 greendao {

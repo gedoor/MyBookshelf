@@ -35,7 +35,7 @@ public class ReadBookControl {
     private Boolean hideStatusBar;
     private Boolean hideNavigationBar;
     private String fontPath;
-    private Boolean textConvert;
+    private int textConvert;
     private Boolean textBold;
     private Boolean canClickTurn;
     private Boolean canKeyTurn;
@@ -92,7 +92,7 @@ public class ReadBookControl {
         this.backgroundColorCustom = preference.getInt("backgroundColorCustom", Color.parseColor("#1e1e1e"));
         this.backgroundIsColor = preference.getBoolean("backgroundIsColor", true);
         this.fontPath = preference.getString("fontPath",null);
-        this.textConvert = preference.getBoolean("textConvert",false);
+        this.textConvert = preference.getInt("textConvertInt",0);
         this.textBold = preference.getBoolean("textBold", false);
         this.speechRate = preference.getInt("speechRate", 10);
         this.speechRateFollowSys = preference.getBoolean("speechRateFollowSys", true);
@@ -213,10 +213,10 @@ public class ReadBookControl {
         }
     }
 
-    public void setTextConvert(boolean textConvert) {
+    public void setTextConvert(int textConvert) {
         this.textConvert = textConvert;
         SharedPreferences.Editor editor = preference.edit();
-        editor.putBoolean("textConvert", textConvert);
+        editor.putInt("textConvertInt", textConvert);
         editor.apply();
     }
 
@@ -238,7 +238,7 @@ public class ReadBookControl {
         return fontPath;
     }
 
-    public Boolean getTextConvert() {
+    public int getTextConvert() {
         return textConvert;
     }
 
