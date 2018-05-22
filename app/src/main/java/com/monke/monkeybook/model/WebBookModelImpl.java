@@ -26,7 +26,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
-        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(bookShelfBean.getTag());
+        IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             return bookModel.getBookInfo(bookShelfBean);
         } else {
@@ -42,7 +42,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
-        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(bookShelfBean.getTag());
+        IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             return bookModel.getChapterList(bookShelfBean);
         } else {
@@ -57,7 +57,7 @@ public class WebBookModelImpl implements IWebBookModel {
      */
     @Override
     public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex, String tag) {
-        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
+        IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(durChapterUrl, durChapterIndex);
         } else
@@ -73,7 +73,7 @@ public class WebBookModelImpl implements IWebBookModel {
     @Override
     public Observable<List<SearchBookBean>> searchOtherBook(String content, int page, String tag) {
         //获取所有书源类
-        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
+        IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.searchBook(content, page);
         } else {
@@ -84,9 +84,12 @@ public class WebBookModelImpl implements IWebBookModel {
         }
     }
 
+    /**
+     * 发现页
+     */
     @Override
     public Observable<List<SearchBookBean>> findBook(String url, int page, String tag) {
-        IStationBookModel bookModel = BookSourceManage.getBookSourceModel(tag);
+        IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.findBook(url, page);
         } else {
@@ -97,4 +100,13 @@ public class WebBookModelImpl implements IWebBookModel {
         }
     }
 
+    //获取book source class
+    private IStationBookModel getBookSourceModel(String tag) {
+        switch (tag) {
+            case BookShelfBean.LOCAL_TAG:
+                return null;
+            default:
+                return DefaultModelImpl.getInstance(tag);
+        }
+    }
 }

@@ -151,13 +151,5 @@ public class BookSourceManage extends BaseModelImpl {
         }
     }
 
-    //获取book source class
-    static IStationBookModel getBookSourceModel(String tag) {
-        switch (tag) {
-            case BookShelfBean.LOCAL_TAG:
-                return null;
-            default:
-                return DefaultModelImpl.getInstance(tag);
-        }
-    }
+
 }
