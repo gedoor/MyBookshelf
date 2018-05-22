@@ -3,15 +3,11 @@ package com.monke.monkeybook.model;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.monke.basemvplib.BaseModelImpl;
-import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.ReplaceRuleBeanDao;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.model.content.AnalyzeHeaders;
+import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.monke.monkeybook.model.content;
+package com.monke.monkeybook.model.AnalyzeRule;
 
 import java.net.URL;
 import java.net.URLEncoder;
