@@ -2,8 +2,6 @@ package com.monke.monkeybook.model.content;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
-import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -28,7 +26,6 @@ import org.jsoup.select.Elements;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +34,6 @@ import io.reactivex.Observable;
 import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
-import static android.text.TextUtils.stringOrSpannedString;
 
 /**
  * 默认检索规则
@@ -189,23 +185,23 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                     baseURI = response.raw().request().url().toString();
                 }
                 Document doc = Jsoup.parse(response.body());
-                Elements booksE = AnalyzeRule.getElements(doc, bookSourceBean.getRuleSearchList());
+                Elements booksE = AnalyzeElement.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(TAG);
                         item.setOrigin(name);
-                        AnalyzeRule analyzeRule = new AnalyzeRule(booksE.get(i), baseURI);
-                        item.setAuthor(FormatWebText.getAuthor(analyzeRule.getResult(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(analyzeRule.getResult(bookSourceBean.getRuleSearchKind()));
-                        item.setLastChapter(analyzeRule.getResult(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setName(analyzeRule.getResult(bookSourceBean.getRuleSearchName()));
-                        item.setNoteUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchNoteUrl()));
+                        AnalyzeElement analyzeElement = new AnalyzeElement(booksE.get(i), baseURI);
+                        item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
+                        item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
+                        item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter()));
+                        item.setName(analyzeElement.getResult(bookSourceBean.getRuleSearchName()));
+                        item.setNoteUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchNoteUrl()));
                         if (isEmpty(item.getNoteUrl())) {
                             item.setNoteUrl(baseURI);
                         }
-                        item.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleSearchCoverUrl()));
+                        item.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchCoverUrl()));
                         if (!isEmpty(item.getName())) {
                             books.add(item);
                         }
@@ -246,18 +242,18 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(TAG);
             Document doc = Jsoup.parse(s);
-            AnalyzeRule analyzeRule = new AnalyzeRule(doc, bookShelfBean.getNoteUrl());
+            AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
             if (isEmpty(bookInfoBean.getCoverUrl())) {
-                bookInfoBean.setCoverUrl(analyzeRule.getResult(bookSourceBean.getRuleCoverUrl()));
+                bookInfoBean.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleCoverUrl()));
             }
             if (isEmpty(bookInfoBean.getName())) {
-                bookInfoBean.setName(analyzeRule.getResult(bookSourceBean.getRuleBookName()));
+                bookInfoBean.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
             }
             if (isEmpty(bookInfoBean.getAuthor())) {
-                bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeRule.getResult(bookSourceBean.getRuleBookAuthor())));
+                bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
             }
-            bookInfoBean.setIntroduce(analyzeRule.getResult(bookSourceBean.getRuleIntroduce()));
-            String chapterUrl = analyzeRule.getResult(bookSourceBean.getRuleChapterUrl());
+            bookInfoBean.setIntroduce(analyzeElement.getResult(bookSourceBean.getRuleIntroduce()));
+            String chapterUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrl());
             if (isEmpty(chapterUrl)) {
                 bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
             } else {
@@ -311,15 +307,15 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             dx = true;
             ruleChapterList = ruleChapterList.substring(1);
         }
-        Elements chapterList = AnalyzeRule.getElements(doc, ruleChapterList);
+        Elements chapterList = AnalyzeElement.getElements(doc, ruleChapterList);
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         int x;
         for (int i = 0; i < chapterList.size(); i++) {
-            AnalyzeRule analyzeRule = new AnalyzeRule(chapterList.get(i), chapterUrl);
+            AnalyzeElement analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterIndex(i);
-            temp.setDurChapterUrl(analyzeRule.getResult(bookSourceBean.getRuleContentUrl()));   //id
-            temp.setDurChapterName(analyzeRule.getResult(bookSourceBean.getRuleChapterName()));
+            temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
+            temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
             temp.setNoteUrl(novelUrl);
             temp.setTag(TAG);
             if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
@@ -362,8 +358,8 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             bookContentBean.setTag(TAG);
             try {
                 Document doc = Jsoup.parse(s);
-                AnalyzeRule analyzeRule = new AnalyzeRule(doc, durChapterUrl);
-                bookContentBean.setDurChapterContent(analyzeRule.getResult(bookSourceBean.getRuleBookContent()));
+                AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
+                bookContentBean.setDurChapterContent(analyzeElement.getResult(bookSourceBean.getRuleBookContent()));
                 bookContentBean.setRight(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
