@@ -29,7 +29,7 @@ public class AnalyzeJson {
         this.baseURI = baseURI;
     }
 
-    static List<JSONObject> getJsonObjects(JSONObject temp, String rule) {
+    public static List<JSONObject> getJsonObjects(JSONObject temp, String rule) {
         List<JSONObject> jsonObjects = new ArrayList<>();
         if (temp == null || isEmpty(rule)) {
             return jsonObjects;
@@ -44,7 +44,7 @@ public class AnalyzeJson {
         return jsonObjects;
     }
 
-    static List<JSONObject> getJsonObjectsSingle(JSONObject temp, String rule) {
+    private static List<JSONObject> getJsonObjectsSingle(JSONObject temp, String rule) {
         List<JSONObject> jsonObjects = new ArrayList<>();
         try {
             String[] rs = rule.split("@");
@@ -96,7 +96,7 @@ public class AnalyzeJson {
     /**
      * 合并内容列表,得到内容
      */
-    String getResult(String ruleStr) {
+    public String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
         }
