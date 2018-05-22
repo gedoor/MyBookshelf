@@ -23,7 +23,7 @@ public class AnalyzeElement {
     private String baseURI;
     private Element element;
 
-    AnalyzeElement(Element element, String baseURI) {
+    public AnalyzeElement(Element element, String baseURI) {
         this.element = element;
         this.baseURI = baseURI;
     }
@@ -31,7 +31,7 @@ public class AnalyzeElement {
     /**
      * 获取Elements
      */
-    static Elements getElements(Element temp, String rule) {
+    public static Elements getElements(Element temp, String rule) {
         Elements elements = new Elements();
         if (temp == null || isEmpty(rule)) {
             return elements;
@@ -109,7 +109,7 @@ public class AnalyzeElement {
     /**
      * 合并内容列表,得到内容
      */
-    String getResult(String ruleStr) {
+    public String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
         }
