@@ -73,6 +73,7 @@ public class MoreSettingPop extends PopupWindow {
         initData();
         bindEvent();
 
+        setBackgroundDrawable(context.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
         setAnimationStyle(R.style.anim_pop_windowlight);
