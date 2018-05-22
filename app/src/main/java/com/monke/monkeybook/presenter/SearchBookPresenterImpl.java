@@ -19,7 +19,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.SearchBook;
+import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
 import com.monke.monkeybook.view.impl.ISearchBookView;
@@ -44,7 +44,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
 
     private Boolean isInput = false;
-    private SearchBook searchBook;
+    private SearchBookModel searchBookModel;
 
     public SearchBookPresenterImpl(Context context) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
@@ -68,7 +68,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
                 });
 
         //搜索监听
-        SearchBook.OnSearchListener onSearchListener = new SearchBook.OnSearchListener() {
+        SearchBookModel.OnSearchListener onSearchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
                 mView.refreshSearchBook();
@@ -106,7 +106,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         };
 
         //搜索引擎初始化
-        searchBook = new SearchBook((BaseActivity) context, onSearchListener);
+        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener);
     }
 
     @Override
@@ -207,12 +207,12 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     @Override
     public int getPage() {
-        return searchBook.getPage();
+        return searchBookModel.getPage();
     }
 
     @Override
     public void initPage() {
-        searchBook.setPage(0);
+        searchBookModel.setPage(0);
     }
 
     @Override
@@ -220,10 +220,10 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         if (key != null) {
             durSearchKey = key;
             startThisSearchTime = System.currentTimeMillis();
-            searchBook.setSearchTime(startThisSearchTime);
-            searchBook.searchReNew();
+            searchBookModel.setSearchTime(startThisSearchTime);
+            searchBookModel.searchReNew();
         }
-        searchBook.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
+        searchBookModel.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -348,7 +348,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     @Override
     public void upSearchEngineS() {
-        searchBook.refreshSearchEngineS();
+        searchBookModel.refreshSearchEngineS();
     }
 
 

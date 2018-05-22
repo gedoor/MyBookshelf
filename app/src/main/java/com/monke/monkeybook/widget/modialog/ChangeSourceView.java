@@ -13,7 +13,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
-import com.monke.monkeybook.model.SearchBook;
+import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -40,7 +40,7 @@ public class ChangeSourceView {
     private OnClickSource onClickSource;
     private Context context;
     private ChangeSourceAdapter adapter;
-    private SearchBook searchBook;
+    private SearchBookModel searchBookModel;
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
     private String bookTag;
     private String bookName;
@@ -67,7 +67,7 @@ public class ChangeSourceView {
         });
         rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
-        searchBook = new SearchBook(activity, new SearchBook.OnSearchListener() {
+        searchBookModel = new SearchBookModel(activity, new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
                 adapter.reSetSourceAdapter();
@@ -165,9 +165,9 @@ public class ChangeSourceView {
         DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().deleteInTx(adapter.getSearchBookBeans());
         adapter.reSetSourceAdapter();
         long startThisSearchTime = System.currentTimeMillis();
-        searchBook.setSearchTime(startThisSearchTime);
-        searchBook.searchReNew();
-        searchBook.search(bookName, startThisSearchTime, bookShelfS, false);
+        searchBookModel.setSearchTime(startThisSearchTime);
+        searchBookModel.searchReNew();
+        searchBookModel.search(bookName, startThisSearchTime, bookShelfS, false);
     }
 
     private void addSearchBook(List<SearchBookBean> value) {

@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
  * 搜索
  */
 
-public class SearchBook {
+public class SearchBookModel {
     private BaseActivity activity;
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS;
@@ -34,7 +34,7 @@ public class SearchBook {
 
     private OnSearchListener searchListener;
 
-    public SearchBook(BaseActivity activity, OnSearchListener searchListener) {
+    public SearchBookModel(BaseActivity activity, OnSearchListener searchListener) {
         this.activity = activity;
         this.searchListener = searchListener;
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
