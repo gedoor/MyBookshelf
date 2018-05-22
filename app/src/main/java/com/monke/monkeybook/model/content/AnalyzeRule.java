@@ -2,22 +2,15 @@ package com.monke.monkeybook.model.content;
 
 import android.util.Log;
 
-import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.utils.NetworkUtil;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -211,7 +204,7 @@ public class AnalyzeRule {
                     }
                     break;
                 default:
-                    String absURL = getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
+                    String absURL = NetworkUtil.getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
                     textS.add(absURL);
             }
             return textS;
@@ -220,22 +213,6 @@ public class AnalyzeRule {
             Log.e("getResultList", e.getMessage());
             return null;
         }
-    }
-
-    /**
-     * 获取绝对地址
-     */
-    private static String getAbsoluteURL(String baseURI, String relativePath) {
-        String abURL = relativePath;
-        try {
-            URI base = new URI(baseURI);//基本网页URI
-            URI abs = base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
-            URL absURL = abs.toURL();//转成URL
-            abURL = absURL.toString();
-        } catch (MalformedURLException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return abURL;
     }
 
 }
