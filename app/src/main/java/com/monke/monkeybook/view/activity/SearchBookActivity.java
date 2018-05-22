@@ -339,15 +339,19 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     public void updateSearchItem(int index) {
         if (index < searchBookAdapter.getItemcount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
-            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
-            if (tvAddShelf != null) {
-                if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
-                    tvAddShelf.setText("已添加");
-                    tvAddShelf.setEnabled(false);
-                } else {
-                    tvAddShelf.setText("+添加");
-                    tvAddShelf.setEnabled(true);
+            try {
+                TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
+                if (tvAddShelf != null) {
+                    if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
+                        tvAddShelf.setText("已添加");
+                        tvAddShelf.setEnabled(false);
+                    } else {
+                        tvAddShelf.setText("+添加");
+                        tvAddShelf.setEnabled(true);
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
