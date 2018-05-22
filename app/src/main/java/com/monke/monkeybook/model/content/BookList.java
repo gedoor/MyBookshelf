@@ -18,9 +18,18 @@ import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
-public class SearchBook {
+public class BookList {
+    private String tag;
+    private String name;
+    private BookSourceBean bookSourceBean;
 
-    public Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response, String TAG, String name, BookSourceBean bookSourceBean) {
+    BookList(String tag, String name, BookSourceBean bookSourceBean) {
+        this.tag = tag;
+        this.name = name;
+        this.bookSourceBean = bookSourceBean;
+    }
+
+    public Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             try {
                 String baseURI;
@@ -36,7 +45,7 @@ public class SearchBook {
                     List<SearchBookBean> books = new ArrayList<>();
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
-                        item.setTag(TAG);
+                        item.setTag(tag);
                         item.setOrigin(name);
                         AnalyzeElement analyzeElement = new AnalyzeElement(booksE.get(i), baseURI);
                         item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));

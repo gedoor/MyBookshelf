@@ -1,40 +1,25 @@
 package com.monke.monkeybook.model.content;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.bean.BookContentBean;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeSearchUrl;
-import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IHttpPostApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -42,13 +27,13 @@ import static android.text.TextUtils.isEmpty;
  * 默认检索规则
  */
 public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel {
-    private String TAG;
+    private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
     private Map<String, String> headerMap = AnalyzeHeaders.getMap(null);
 
     private DefaultModelImpl(String tag) {
-        TAG = tag;
+        this.tag = tag;
         try {
             URL url = new URL(tag);
             name = url.getHost();
@@ -65,7 +50,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     private Boolean initBookSourceBean() {
         if (bookSourceBean == null) {
             List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(TAG)).build().list();
+                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).build().list();
             if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
                 bookSourceBean = bookSourceBeans.get(0);
                 name = bookSourceBean.getBookSourceName();
@@ -90,6 +75,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
+        BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(url, "", page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
@@ -104,20 +90,20 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             } else if (url.contains("?")) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             } else {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .getWebContent(analyzeSearchUrl.getSearchPath(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,6 +125,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
+        BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(bookSourceBean.getRuleSearchUrl(), content, page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
@@ -153,20 +140,20 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             } else if (bookSourceBean.getRuleSearchUrl().contains("?")) {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .searchBook(analyzeSearchUrl.getSearchPath(),
                                 analyzeSearchUrl.getQueryMap(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             } else {
                 return getRetrofitString(analyzeSearchUrl.getSearchUrl())
                         .create(IHttpGetApi.class)
                         .getWebContent(analyzeSearchUrl.getSearchPath(),
                                 headerMap)
-                        .flatMap(response -> new SearchBook().analyzeSearchBook(response, TAG, name, bookSourceBean));
+                        .flatMap(bookList::analyzeSearchBook);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,47 +170,16 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
     @Override
     public Observable<BookShelfBean> getBookInfo(final BookShelfBean bookShelfBean) {
         if (!initBookSourceBean()) {
-            return Observable.error(new Throwable(String.format("无法找到源%s", TAG)));
+            return Observable.error(new Throwable(String.format("无法找到源%s", tag)));
         }
-        return getRetrofitString(TAG)
+        BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
+        return getRetrofitString(tag)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
-                .flatMap(response -> analyzeBookInfo(response.body(), bookShelfBean));
+                .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
-        return Observable.create(e -> {
-            bookShelfBean.setTag(TAG);
-            BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-            if (bookInfoBean == null) {
-                bookInfoBean = new BookInfoBean();
-            }
-            bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
-            bookInfoBean.setTag(TAG);
-            Document doc = Jsoup.parse(s);
-            AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
-            if (isEmpty(bookInfoBean.getCoverUrl())) {
-                bookInfoBean.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleCoverUrl()));
-            }
-            if (isEmpty(bookInfoBean.getName())) {
-                bookInfoBean.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
-            }
-            if (isEmpty(bookInfoBean.getAuthor())) {
-                bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
-            }
-            bookInfoBean.setIntroduce(analyzeElement.getResult(bookSourceBean.getRuleIntroduce()));
-            String chapterUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrl());
-            if (isEmpty(chapterUrl)) {
-                bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
-            } else {
-                bookInfoBean.setChapterUrl(chapterUrl);
-            }
-            bookInfoBean.setOrigin(name);
-            bookShelfBean.setBookInfoBean(bookInfoBean);
-            e.onNext(bookShelfBean);
-            e.onComplete();
-        });
-    }
+
 
     /**
      * 获取目录
@@ -237,58 +193,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(TAG)
+        ChapterList chapterList = new ChapterList(tag, name, bookSourceBean);
+        return getRetrofitString(tag)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
-                .flatMap(response -> analyzeChapterList(response.body(), bookShelfBean));
-    }
-
-    private Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
-        return Observable.create(e -> {
-            bookShelfBean.setTag(TAG);
-            WebChapterBean<List<ChapterListBean>> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList());
-            if (bookShelfBean.getChapterListSize() < chapterList.getData().size()) {
-                bookShelfBean.setHasUpdate(true);
-                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
-            }
-            bookShelfBean.getBookInfoBean().setChapterList(chapterList.getData());
-            e.onNext(bookShelfBean);
-            e.onComplete();
-        });
-    }
-
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld) {
-        Document doc = Jsoup.parse(s);
-        boolean dx = false;
-        String ruleChapterList = bookSourceBean.getRuleChapterList();
-        if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
-            dx = true;
-            ruleChapterList = ruleChapterList.substring(1);
-        }
-        Elements chapterList = AnalyzeElement.getElements(doc, ruleChapterList);
-        List<ChapterListBean> chapterBeans = new ArrayList<>();
-        int x;
-        for (int i = 0; i < chapterList.size(); i++) {
-            AnalyzeElement analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
-            ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterIndex(i);
-            temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
-            temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
-            temp.setNoteUrl(novelUrl);
-            temp.setTag(TAG);
-            if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
-                x = chapterListBeansOld.indexOf(temp);
-                if (x != -1) {
-                    temp.setHasCache(chapterListBeansOld.get(x).getHasCache());
-                }
-                chapterBeans.add(temp);
-            }
-        }
-        if (dx) {
-            Collections.reverse(chapterBeans);
-        }
-        return new WebChapterBean<>(chapterBeans, false);
+                .flatMap(response -> chapterList.analyzeChapterList(response.body(), bookShelfBean));
     }
 
     /**
@@ -302,52 +211,12 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        return getRetrofitString(TAG)
+        BookContent bookContent = new BookContent(tag, name, bookSourceBean);
+        return getRetrofitString(tag)
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, headerMap)
-                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
-                .flatMap(this::upChapterList);
+                .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
+                .flatMap(bookContent::upChapterList);
     }
 
-    private Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
-        return Observable.create(e -> {
-            BookContentBean bookContentBean = new BookContentBean();
-            bookContentBean.setDurChapterIndex(durChapterIndex);
-            bookContentBean.setDurChapterUrl(durChapterUrl);
-            bookContentBean.setTag(TAG);
-            try {
-                Document doc = Jsoup.parse(s);
-                AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
-                bookContentBean.setDurChapterContent(analyzeElement.getResult(bookSourceBean.getRuleBookContent()));
-                bookContentBean.setRight(true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + ex.getMessage());
-                bookContentBean.setRight(false);
-            }
-            e.onNext(bookContentBean);
-            e.onComplete();
-        });
-    }
-
-    private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
-        return Observable.create(e -> {
-            if (bookContentBean.getRight()) {
-                DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().insertOrReplaceInTx(bookContentBean);
-                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
-                if (chapterListBean != null) {
-                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    chapterListBean.setHasCache(true);
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
-                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
-                }
-            }
-            e.onNext(bookContentBean);
-            e.onComplete();
-        });
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
