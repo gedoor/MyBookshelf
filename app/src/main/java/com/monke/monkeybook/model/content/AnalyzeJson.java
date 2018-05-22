@@ -1,15 +1,25 @@
 package com.monke.monkeybook.model.content;
 
+import android.util.Log;
+
+import com.monke.monkeybook.help.FormatWebText;
+import com.monke.monkeybook.utils.NetworkUtil;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
 
+/**
+ * 书源规则解析
+ */
 public class AnalyzeJson {
     private JSONObject jsonObject;
     private String baseURI;
@@ -83,5 +93,96 @@ public class AnalyzeJson {
     }
 
 
+    /**
+     * 合并内容列表,得到内容
+     */
+    String getResult(String ruleStr) {
+        if (isEmpty(ruleStr)) {
+            return null;
+        }
+        String regex = null;
+        String result = "";
+        //分离正则表达式
+        String[] ruleStrS = ruleStr.split("#");
+        if (ruleStrS.length > 1) {
+            regex = ruleStrS[1];
+        }
+        if (isEmpty(ruleStrS[0])) {
+            result = jsonObject.toString();
+        } else {
+            ruleStrS = ruleStrS[0].split("\\|");
+            List<String> textS = null;
+            for (String ruleStrX : ruleStrS) {
+                textS = getResultList(ruleStrX);
+                if (textS != null) {
+                    break;
+                }
+            }
+            if (textS == null) {
+                return null;
+            }
+            StringBuilder content = new StringBuilder();
+            for (String text : textS) {
+                text = FormatWebText.getContent(text);
+                if (textS.size() > 1) {
+                    if (text.length() > 0) {
+                        if (content.length() > 0) {
+                            content.append("\r\n");
+                        }
+                        content.append("\u3000\u3000").append(text);
+                    }
+                } else {
+                    content.append(text);
+                }
+                result = content.toString();
+            }
+        }
+        if (!isEmpty(regex)) {
+            result = result.replaceAll(regex, "");
+        }
+        return result;
+    }
+
+    /**
+     * 获取内容列表
+     */
+    private List<String> getResultList(String ruleStr) {
+        if (isEmpty(ruleStr)) {
+            return null;
+        }
+        List<JSONObject> elements = new ArrayList<>();
+        elements.add(jsonObject);
+        String[] rules = ruleStr.split("@");
+        for (int i = 0; i < rules.length - 1; i++) {
+            List<JSONObject> es = new ArrayList<>();
+            for (JSONObject elt : elements) {
+                es.addAll(getJsonObjectsSingle(elt, rules[i]));
+            }
+            elements.clear();
+            elements = es;
+        }
+        if (elements.isEmpty()) {
+            return null;
+        }
+        return getResultLast(elements, rules[rules.length - 1]);
+    }
+
+    /**
+     * 根据最后一个规则获取内容
+     */
+    private List<String> getResultLast(List<JSONObject> elements, String lastRule) {
+        try {
+            List<String> textS = new ArrayList<>();
+            for (JSONObject element : elements) {
+                String text = element.getString(lastRule);
+                textS.add(text);
+            }
+            return textS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("getResultList", e.getMessage());
+            return null;
+        }
+    }
 
 }
