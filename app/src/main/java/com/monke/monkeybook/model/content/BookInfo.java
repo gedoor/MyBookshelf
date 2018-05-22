@@ -5,7 +5,9 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.AnalyzeRule.AnalyzeJson;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -33,27 +35,51 @@ public class BookInfo {
             }
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(tag);
-            Document doc = Jsoup.parse(s);
-            AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
-            if (isEmpty(bookInfoBean.getCoverUrl())) {
-                bookInfoBean.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleCoverUrl()));
-            }
-            if (isEmpty(bookInfoBean.getName())) {
-                bookInfoBean.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
-            }
-            if (isEmpty(bookInfoBean.getAuthor())) {
-                bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
-            }
-            bookInfoBean.setIntroduce(analyzeElement.getResult(bookSourceBean.getRuleIntroduce()));
-            String chapterUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrl());
-            if (isEmpty(chapterUrl)) {
-                bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
+            if (bookSourceBean.getRuleBookName().contains("JSON") || bookSourceBean.getRuleBookAuthor().contains("JSON") || bookSourceBean.getRuleChapterUrl().contains("JSON")) {
+                JSONObject jsonObject = new JSONObject(s);
+                AnalyzeJson analyzeJson = new AnalyzeJson(jsonObject);
+                if (isEmpty(bookInfoBean.getCoverUrl())) {
+                    bookInfoBean.setCoverUrl(analyzeJson.getResult(bookSourceBean.getRuleCoverUrl()));
+                }
+                if (isEmpty(bookInfoBean.getName())) {
+                    bookInfoBean.setName(analyzeJson.getResult(bookSourceBean.getRuleBookName()));
+                }
+                if (isEmpty(bookInfoBean.getAuthor())) {
+                    bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeJson.getResult(bookSourceBean.getRuleBookAuthor())));
+                }
+                bookInfoBean.setIntroduce(analyzeJson.getResult(bookSourceBean.getRuleIntroduce()));
+                String chapterUrl = analyzeJson.getResult(bookSourceBean.getRuleChapterUrl());
+                if (isEmpty(chapterUrl)) {
+                    bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
+                } else {
+                    bookInfoBean.setChapterUrl(chapterUrl);
+                }
+                bookInfoBean.setOrigin(name);
+                bookShelfBean.setBookInfoBean(bookInfoBean);
+                e.onNext(bookShelfBean);
             } else {
-                bookInfoBean.setChapterUrl(chapterUrl);
+                Document doc = Jsoup.parse(s);
+                AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
+                if (isEmpty(bookInfoBean.getCoverUrl())) {
+                    bookInfoBean.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleCoverUrl()));
+                }
+                if (isEmpty(bookInfoBean.getName())) {
+                    bookInfoBean.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
+                }
+                if (isEmpty(bookInfoBean.getAuthor())) {
+                    bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
+                }
+                bookInfoBean.setIntroduce(analyzeElement.getResult(bookSourceBean.getRuleIntroduce()));
+                String chapterUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrl());
+                if (isEmpty(chapterUrl)) {
+                    bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
+                } else {
+                    bookInfoBean.setChapterUrl(chapterUrl);
+                }
+                bookInfoBean.setOrigin(name);
+                bookShelfBean.setBookInfoBean(bookInfoBean);
+                e.onNext(bookShelfBean);
             }
-            bookInfoBean.setOrigin(name);
-            bookShelfBean.setBookInfoBean(bookInfoBean);
-            e.onNext(bookShelfBean);
             e.onComplete();
         });
     }

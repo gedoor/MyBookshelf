@@ -22,11 +22,9 @@ import static android.text.TextUtils.isEmpty;
  */
 public class AnalyzeJson {
     private JSONObject jsonObject;
-    private String baseURI;
 
-    AnalyzeJson(JSONObject jsonObject, String baseURI) {
+    public AnalyzeJson(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
-        this.baseURI = baseURI;
     }
 
     public static List<JSONObject> getJsonObjects(JSONObject temp, String rule) {

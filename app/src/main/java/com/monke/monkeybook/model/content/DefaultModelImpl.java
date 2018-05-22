@@ -193,11 +193,11 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        ChapterList chapterList = new ChapterList(tag, name, bookSourceBean);
+        BookChapter bookChapter = new BookChapter(tag, name, bookSourceBean);
         return getRetrofitString(tag)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
-                .flatMap(response -> chapterList.analyzeChapterList(response.body(), bookShelfBean));
+                .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean));
     }
 
     /**
