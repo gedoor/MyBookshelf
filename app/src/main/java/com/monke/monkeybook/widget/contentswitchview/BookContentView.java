@@ -115,7 +115,7 @@ public class BookContentView extends FrameLayout {
     public void init() {
         readBookControl = ReadBookControl.getInstance();
         hideStatusBar = readBookControl.getHideStatusBar();
-        activity = (Activity)getContext();
+        activity = (Activity) getContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(activity);
         View view;
         if (hideStatusBar) {
@@ -138,13 +138,13 @@ public class BookContentView extends FrameLayout {
         }
         if (preferences.getBoolean("nightTheme", false)) {
             StatusBarUtil.setStatusBarIcon(activity, false);
-        }else {
+        } else {
             StatusBarUtil.setStatusBarIcon(activity, preferences.getBoolean("darkStatusIcon", false));
         }
 
         if (ReadBookActivity.moreSetting) {
             StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), false);
-        }else {
+        } else {
             StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), true);
         }
     }
@@ -201,7 +201,7 @@ public class BookContentView extends FrameLayout {
             tvPage.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
             if (chapterAll > 0) {
                 DecimalFormat df = new DecimalFormat("0.00%");
-                tvProgress.setText(df.format(durChapterIndex*1.0f/chapterAll + 1.0f/chapterAll*(durPageIndex+1)/durPageAll));
+                tvProgress.setText(df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll));
             }
             tvTitle.setOnClickListener(view -> {
                 ContentSwitchView csv = (ContentSwitchView) getParent();
@@ -301,37 +301,16 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setBg(ReadBookControl readBookControl) {
-        if (readBookControl.getTextDrawableIndex() != -1 || readBookControl.getIsNightTheme()) {
-            ivBg.setImageResource(readBookControl.getTextBackground());
-            tvContent.setTextColor(readBookControl.getTextColor());
-            tvLoading.setTextColor(readBookControl.getTextColor());
-            tvErrorInfo.setTextColor(readBookControl.getTextColor());
-            tvTitle.setTextColor(readBookControl.getTextColor());
-            tvTime.setTextColor(readBookControl.getTextColor());
-            tvPage.setTextColor(readBookControl.getTextColor());
-            tvProgress.setTextColor(readBookControl.getTextColor());
-            vwLine.setBackgroundColor(readBookControl.getTextColor());
-            vwBattery.setColor(readBookControl.getTextColor());
-        } else {
-            if (readBookControl.getBackgroundIsColor()) {
-                ivBg.setImageDrawable(new ColorDrawable(readBookControl.getBackgroundColorCustom()));
-            } else {
-                ACache aCache = ACache.get(this.getContext());
-                Bitmap bitmap = aCache.getAsBitmap("customBg");
-                if (bitmap != null) {
-                    ivBg.setImageBitmap(bitmap);
-                }
-            }
-            tvContent.setTextColor(readBookControl.getTextColorCustom());
-            tvLoading.setTextColor(readBookControl.getTextColorCustom());
-            tvErrorInfo.setTextColor(readBookControl.getTextColorCustom());
-            tvTime.setTextColor(readBookControl.getTextColorCustom());
-            tvTitle.setTextColor(readBookControl.getTextColorCustom());
-            tvProgress.setTextColor(readBookControl.getTextColorCustom());
-            tvPage.setTextColor(readBookControl.getTextColorCustom());
-            vwLine.setBackgroundColor(readBookControl.getTextColorCustom());
-            vwBattery.setColor(readBookControl.getTextColorCustom());
-        }
+        ivBg.setImageDrawable(readBookControl.getTextBackground());
+        tvContent.setTextColor(readBookControl.getTextColor());
+        tvLoading.setTextColor(readBookControl.getTextColor());
+        tvErrorInfo.setTextColor(readBookControl.getTextColor());
+        tvTitle.setTextColor(readBookControl.getTextColor());
+        tvTime.setTextColor(readBookControl.getTextColor());
+        tvPage.setTextColor(readBookControl.getTextColor());
+        tvProgress.setTextColor(readBookControl.getTextColor());
+        vwLine.setBackgroundColor(readBookControl.getTextColor());
+        vwBattery.setColor(readBookControl.getTextColor());
     }
 
     public void setFont(ReadBookControl readBookControl) {

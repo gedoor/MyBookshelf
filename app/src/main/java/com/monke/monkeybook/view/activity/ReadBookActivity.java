@@ -187,6 +187,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             aloudStatus = savedInstanceState.getInt("aloudStatus");
         }
         readBookControl.setLineChange(System.currentTimeMillis());
+        readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();

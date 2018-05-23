@@ -1,8 +1,13 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.help;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 
 import com.monke.monkeybook.MApplication;
@@ -26,7 +31,7 @@ public class ReadBookControl {
     private int textSize;
     private int textExtra;
     private int textColor;
-    private int textBackground;
+    private Drawable textBackground;
     private float lineMultiplier;
 
     private int textKindIndex;
@@ -79,7 +84,6 @@ public class ReadBookControl {
         this.textKindIndex = preference.getInt("textKindIndex", DEFAULT_TEXT);
         this.textSize = textKind.get(textKindIndex).get("textSize");
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
-        setTextDrawableIndex(preference.getInt("textDrawableIndex", DEFAULT_BG));
         this.canClickTurn = preference.getBoolean("canClickTurn", true);
         this.canKeyTurn = preference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = preference.getBoolean("keepScreenOn", false);
@@ -102,6 +106,50 @@ public class ReadBookControl {
         this.lineChange = preference.getLong("lineChange", System.currentTimeMillis());
         this.lastNoteUrl = preference.getString("lastNoteUrl", "");
         this.darkStatusIcon = defaultPreference.getBoolean("darkStatusIcon", false);
+
+        initTextDrawableIndex();
+    }
+
+    public void initTextDrawableIndex() {
+        if (getIsNightTheme()) {
+            this.textDrawableIndex = preference.getInt("textDrawableIndexNight", 4);
+        } else {
+            this.textDrawableIndex = preference.getInt("textDrawableIndex", DEFAULT_BG);
+        }
+        setTextDrawable(MApplication.getInstance());
+    }
+
+    private void setTextDrawable(Context context) {
+        ACache aCache = ACache.get(context);
+        if (textDrawableIndex != -1) {
+            this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
+            switch (preference.getInt("bgCustom" + textDrawableIndex, 0)) {
+                case 2:
+                    Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                    if (bitmap != null) {
+                        this.textBackground = new BitmapDrawable(context.getResources(), bitmap);
+                    } else {
+                        this.textBackground = context.getResources().getDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
+                    }
+                    break;
+                case 1:
+                    this.textBackground = new ColorDrawable(preference.getInt("bgColor" + textDrawableIndex, Color.parseColor("#1e1e1e")));
+                default:
+                    this.textBackground = context.getResources().getDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
+            }
+        } else {
+            this.textColor = preference.getInt("textColorCustom", Color.parseColor("#383838"));
+            if (backgroundIsColor) {
+                this.textBackground = new ColorDrawable(backgroundColorCustom);
+            } else {
+                Bitmap bitmap = aCache.getAsBitmap("customBg");
+                if (bitmap != null) {
+                    this.textBackground = new BitmapDrawable(context.getResources(), bitmap);
+                } else {
+                    this.textBackground = context.getResources().getDrawable(textDrawable.get(1).get("textBackground"));
+                }
+            }
+        }
     }
 
     public String getLastNoteUrl() {
@@ -168,9 +216,6 @@ public class ReadBookControl {
     }
 
     public int getTextColor() {
-        if (defaultPreference.getBoolean("nightTheme", false)) {
-            return textDrawable.get(4).get("textColor");
-        }
         return textColor;
     }
 
@@ -178,10 +223,7 @@ public class ReadBookControl {
         return defaultPreference.getBoolean("nightTheme", false);
     }
 
-    public int getTextBackground() {
-        if (getIsNightTheme()) {
-            return textDrawable.get(4).get("textBackground");
-        }
+    public Drawable getTextBackground() {
         return textBackground;
     }
 
@@ -205,12 +247,13 @@ public class ReadBookControl {
     public void setTextDrawableIndex(int textDrawableIndex) {
         this.textDrawableIndex = textDrawableIndex;
         SharedPreferences.Editor editor = preference.edit();
-        editor.putInt("textDrawableIndex", textDrawableIndex);
-        editor.apply();
-        if (textDrawableIndex != -1) {
-            this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
-            this.textBackground = textDrawable.get(textDrawableIndex).get("textBackground");
+        if (getIsNightTheme()) {
+            editor.putInt("textDrawableIndexNight", textDrawableIndex);
+        } else {
+            editor.putInt("textDrawableIndex", textDrawableIndex);
         }
+        editor.apply();
+        setTextDrawable(MApplication.getInstance());
     }
 
     public void setTextConvert(int textConvert) {
@@ -266,10 +309,6 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("backgroundColorCustom", backgroundColorCustom);
         editor.apply();
-    }
-
-    public Boolean getBackgroundIsColor() {
-        return backgroundIsColor;
     }
 
     public void setBackgroundIsColor(Boolean backgroundIsColor) {
