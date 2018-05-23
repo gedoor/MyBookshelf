@@ -24,6 +24,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
+import com.monke.monkeybook.view.activity.ReadStyleActivity;
 
 import java.io.IOException;
 
@@ -203,6 +204,37 @@ public class ReadInterfacePop extends PopupWindow {
             updateBg(4);
             changeProListener.bgChange();
         });
+        civBgWhite.setOnLongClickListener(view -> {
+            Intent intent = new Intent(activity, ReadStyleActivity.class);
+            intent.putExtra("index", 0);
+            activity.startActivityForResult(intent, activity.ResultStyleSet);
+            return false;
+        });
+        civBgYellow.setOnLongClickListener(view -> {
+            Intent intent = new Intent(activity, ReadStyleActivity.class);
+            intent.putExtra("index", 1);
+            activity.startActivityForResult(intent, activity.ResultStyleSet);
+            return false;
+        });
+        civBgGreen.setOnLongClickListener(view -> {
+            Intent intent = new Intent(activity, ReadStyleActivity.class);
+            intent.putExtra("index", 2);
+            activity.startActivityForResult(intent, activity.ResultStyleSet);
+            return false;
+        });
+        civBgBlue.setOnLongClickListener(view -> {
+            Intent intent = new Intent(activity, ReadStyleActivity.class);
+            intent.putExtra("index", 3);
+            activity.startActivityForResult(intent, activity.ResultStyleSet);
+            return false;
+        });
+        civBgBlack.setOnLongClickListener(view -> {
+            Intent intent = new Intent(activity, ReadStyleActivity.class);
+            intent.putExtra("index", 4);
+            activity.startActivityForResult(intent, activity.ResultStyleSet);
+            return false;
+        });
+
         //选择字体
         fl_text_font.setOnClickListener(view -> {
             chooseReadBookFont();

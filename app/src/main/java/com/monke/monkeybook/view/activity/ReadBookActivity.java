@@ -87,6 +87,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private final int RESULT_OPEN_OTHER_PERMS = 102;
     public final int ResultSelectBg = 103;
     public final int ResultSelectFont = 104;
+    public final int ResultStyleSet = 105;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -1091,6 +1092,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     } catch (Exception e) {
                         Toast.makeText(this, "不是字体文件", Toast.LENGTH_SHORT).show();
                     }
+                }
+                break;
+            case ResultStyleSet:
+                if (resultCode == RESULT_OK) {
+                    csvBook.changeBg();
                 }
                 break;
         }

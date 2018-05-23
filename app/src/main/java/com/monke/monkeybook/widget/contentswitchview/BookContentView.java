@@ -82,12 +82,10 @@ public class BookContentView extends FrameLayout {
     private int pageAll;
     private boolean hideStatusBar;
     private ReadBookControl readBookControl;
-    private Activity activity;
 
     private ContentSwitchView.LoadDataListener loadDataListener;
 
     private SetDataListener setDataListener;
-    private SharedPreferences preferences;
 
     public interface SetDataListener {
         void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex);
@@ -115,8 +113,7 @@ public class BookContentView extends FrameLayout {
     public void init() {
         readBookControl = ReadBookControl.getInstance();
         hideStatusBar = readBookControl.getHideStatusBar();
-        activity = (Activity) getContext();
-        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        Activity activity = (Activity) getContext();
         View view;
         if (hideStatusBar) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_horizontal2, this, false);
@@ -133,19 +130,19 @@ public class BookContentView extends FrameLayout {
                 loading();
         });
 
-        if (preferences.getBoolean("immersionStatusBar", false)) {
+        if (readBookControl.getImmersionStatusBar()) {
             StatusBarUtil.compat(activity, 0);
         }
-        if (preferences.getBoolean("nightTheme", false)) {
+        if (readBookControl.getIsNightTheme()) {
             StatusBarUtil.setStatusBarIcon(activity, false);
         } else {
-            StatusBarUtil.setStatusBarIcon(activity, preferences.getBoolean("darkStatusIcon", false));
+            StatusBarUtil.setStatusBarIcon(activity, readBookControl.getDarkStatusIcon());
         }
 
         if (ReadBookActivity.moreSetting) {
-            StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), false);
+            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), false);
         } else {
-            StatusBarUtil.hideNavigationBar(activity, preferences.getBoolean("hide_navigation_bar", false), true);
+            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), true);
         }
     }
 
