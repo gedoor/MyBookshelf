@@ -122,7 +122,7 @@
         <activity
             android:name=".view.activity.FileFolderActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme"></activity>
+            android:theme="@style/CAppTransparentTheme" />
         <activity android:name=".view.activity.WelcomeToReadActivity" />
 
         <service android:name=".service.DownloadService" />
@@ -144,7 +144,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".view.activity.ReadStyleActivity"></activity>
     </application>
 
 </manifest>
