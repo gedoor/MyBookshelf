@@ -75,9 +75,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_serach_vew);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

@@ -109,7 +109,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         immersionReceiver = new ImmersionReceiver();
         registerReceiver(immersionReceiver, filter);
 
-        immersionStatusBarFits();
         if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
             StatusBarUtil.setStatusBarIcon(this,false);
         }else {
@@ -535,27 +534,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
                 recreate();
             }
-        }
-    }
-
-    protected void immersionStatusBarFits(){
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-
-            DrawerLayout drawerLayout = findViewById(R.id.drawer);
-            ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
-
-            // 内容布局不是 LinearLayout 时,设置padding top
-            if (!(contentLayout instanceof LinearLayout) && contentLayout.getChildAt(1) != null) {
-                contentLayout.getChildAt(1).setPadding(0, getStatusBarHeight(this), 0, 0);
-            }
-
-            // 设置属性
-            drawerLayout.setFitsSystemWindows(false);
-            contentLayout.setFitsSystemWindows(true);
-
-            ViewGroup mContentView = this.findViewById(R.id.id_left_menu);
-            mContentView.setPadding(0, getStatusBarHeight(this),0,0);
         }
     }
 

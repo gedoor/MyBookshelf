@@ -79,9 +79,6 @@ public class ReadStyleActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_read_style);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();

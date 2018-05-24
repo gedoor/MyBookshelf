@@ -31,9 +31,6 @@ public class WelcomeToReadActivity extends MBaseActivity {
     protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
 
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-        }
     }
 
     @Override

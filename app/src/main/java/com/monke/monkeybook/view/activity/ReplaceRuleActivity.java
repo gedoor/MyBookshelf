@@ -71,9 +71,6 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_recycler_vew);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

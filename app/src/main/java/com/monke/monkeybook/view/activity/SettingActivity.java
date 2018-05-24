@@ -47,9 +47,7 @@ public class SettingActivity extends MBaseActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.settingsFrameLayout, settingsFragment)
                 .commit();
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
+
     }
 
     @Override

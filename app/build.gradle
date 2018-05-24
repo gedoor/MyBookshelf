@@ -86,7 +86,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.11'
 
     //沉浸式状态栏
-    implementation 'com.zhangmonke:ImmerseLayout:1.1.1'
+    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
 
     //ProgressBar
     implementation 'com.zhangmonke:MProgressBar:1.0.1'

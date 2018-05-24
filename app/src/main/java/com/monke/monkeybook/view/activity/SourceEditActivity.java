@@ -172,9 +172,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_source_edit);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
+
     }
 
     @Override

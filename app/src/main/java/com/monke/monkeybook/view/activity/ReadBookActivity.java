@@ -38,7 +38,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
-import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -286,13 +285,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
         menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
 
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            TypedValue typedValue = new TypedValue();
-            this.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-            final  int color = typedValue.data;
-            ImmerseLinearLayout immerseLinearLayout = findViewById(R.id.ll_ISB);
-            immerseLinearLayout.setBackgroundColor(color);
-        }
     }
 
     @Override

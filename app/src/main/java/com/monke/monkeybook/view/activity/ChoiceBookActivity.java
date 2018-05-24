@@ -55,9 +55,6 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_choice);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

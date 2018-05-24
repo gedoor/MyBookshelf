@@ -50,9 +50,6 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_expandable_list_vew);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

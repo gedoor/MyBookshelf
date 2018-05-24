@@ -18,9 +18,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.monke.immerselayout.ImmerseLinearLayout;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -40,7 +40,7 @@ public class ChapterListView extends FrameLayout {
     @BindView(R.id.rvb_slider)
     RecyclerViewBar rvbSlider;
     @BindView(R.id.ll_content)
-    ImmerseLinearLayout llContent;
+    LinearLayout llContent;
     @BindView(R.id.fl_bg)
     FrameLayout flBg;
     @BindView(R.id.iv_back)
@@ -86,8 +86,8 @@ public class ChapterListView extends FrameLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.view_chapterlist, this, true);
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         if (preference.getBoolean("immersionStatusBar", false)) {
-            ImmerseLinearLayout immerseLinearLayout = findViewById(R.id.ll_content);
-            immerseLinearLayout.setBackgroundColor(getResources().getColor(R.color.bg_chapter));
+            LinearLayout llISB = findViewById(R.id.ll_content);
+            llISB.setBackgroundColor(getResources().getColor(R.color.bg_chapter));
         }
         initData();
         initView();

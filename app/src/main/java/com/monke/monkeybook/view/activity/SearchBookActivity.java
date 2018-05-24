@@ -76,9 +76,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_search_book);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
+
     }
 
     @Override

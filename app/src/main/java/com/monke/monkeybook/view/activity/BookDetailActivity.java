@@ -72,9 +72,6 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_detail);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

@@ -96,9 +96,6 @@ public class AboutActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_about);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override

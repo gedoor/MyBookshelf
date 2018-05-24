@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.base;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
@@ -48,6 +49,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         if (menu != null) {
             if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
+                    @SuppressLint("PrivateApi")
                     Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
                     method.setAccessible(true);
                     method.invoke(menu, true);
@@ -94,9 +96,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     public void setStatusBar() {
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.compat(this, 0);
-        }
         if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
             StatusBarUtil.setStatusBarIcon(this,false);
         }else {

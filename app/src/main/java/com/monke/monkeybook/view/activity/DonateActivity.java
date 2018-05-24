@@ -58,9 +58,6 @@ public class DonateActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_donate);
-        if (preferences.getBoolean("immersionStatusBar", false)) {
-            StatusBarUtil.setFitsSystem(this);
-        }
     }
 
     @Override
