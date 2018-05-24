@@ -194,22 +194,32 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/text_bg_style"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp">
 
                 <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_bg_white"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景1"
                         android:src="@color/background"
@@ -230,13 +240,13 @@
 
                 <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_bg_yellow"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景2"
                         android:src="@color/background"
@@ -256,13 +266,13 @@
 
                 <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_bg_green"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景3"
                         android:src="@color/background"
@@ -282,13 +292,13 @@
 
                 <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_bg_blue"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景4"
                         android:src="@color/background"
@@ -308,13 +318,13 @@
 
                 <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_weight="1">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_bg_black"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景5"
                         android:src="@color/background"
