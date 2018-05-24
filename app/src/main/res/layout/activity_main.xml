@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_content"
+    android:background="@color/background"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:layout_width="match_parent">
 
-    <include layout="@layout/content_main" />
-
-    <LinearLayout
-        android:id="@+id/id_left_menu"
-        android:layout_width="220dp"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/background"
-        android:clickable="true"
         android:orientation="vertical"
-        tools:ignore="KeyboardInaccessibleWidget">
+        android:background="@color/background">
 
-        <include layout="@layout/drawer_main" />
+        <include layout="@layout/content_main" />
 
-    </LinearLayout>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/menu_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>
+

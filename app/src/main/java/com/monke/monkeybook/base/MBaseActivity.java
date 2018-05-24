@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.View;
 
+
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
@@ -22,15 +24,26 @@ import java.lang.reflect.Method;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     public SharedPreferences preferences;
+    protected ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
-        setStatusBar();
         setNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        }
+        if (isImmersionBarEnabled()) {
+            initImmersionBar();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mImmersionBar != null) {
+            mImmersionBar.destroy();  //在BaseActivity里销毁}
         }
     }
 
@@ -73,6 +86,22 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return true;
     }
 
+    protected void initImmersionBar() {
+        mImmersionBar = ImmersionBar.with(this);
+        if (isImmersionBarEnabled() && !isNightTheme()) {
+            mImmersionBar.statusBarDarkFont(true);
+        }
+        mImmersionBar.init();
+    }
+
+    protected boolean isImmersionBarEnabled() {
+        return preferences.getBoolean("immersionStatusBar", false);
+    }
+
+    protected boolean isNightTheme() {
+        return preferences.getBoolean("nightTheme", false);
+    }
+
     public void setOrientation() {
         switch (preferences.getString(getString(R.string.pk_screen_direction), "0")) {
             case "0":
@@ -88,18 +117,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     public void setNightTheme() {
-        if (preferences.getBoolean("nightTheme", false)) {
+        if (isNightTheme()) {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
-    public void setStatusBar() {
-        if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
-            StatusBarUtil.setStatusBarIcon(this,false);
-        }else {
-            StatusBarUtil.setStatusBarIcon(this,true);
-        }
-    }
 }

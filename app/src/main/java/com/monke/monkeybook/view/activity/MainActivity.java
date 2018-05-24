@@ -23,11 +23,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -46,7 +46,6 @@ import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
@@ -65,14 +64,12 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.monke.monkeybook.utils.StatusBarUtil.getStatusBarHeight;
-
 public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
     private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILESELECT_RESULT = 13;
-    private static final int REQUESTCODE_FROM_ACTIVITY = 110;
+
     @BindView(R.id.drawer)
     DrawerLayout drawer;
     @BindView(R.id.navigation_view)
@@ -81,6 +78,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     Toolbar toolbar;
     @BindView(R.id.rf_rv_shelf)
     RefreshRecyclerView rfRvShelf;
+    @BindView(R.id.main_view)
+    LinearLayout mainView;
 
     private Switch swNightTheme;
 
@@ -103,17 +102,24 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
         IntentFilter filter = new IntentFilter(SettingsFragment.action);
         immersionReceiver = new ImmersionReceiver();
         registerReceiver(immersionReceiver, filter);
 
-        if (preferences.getBoolean("nightTheme", false) || !preferences.getBoolean("immersionStatusBar", false)){
-            StatusBarUtil.setStatusBarIcon(this,false);
-        }else {
-            StatusBarUtil.setStatusBarIcon(this,true);
-        }
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.titleBar(R.id.ll_content).init();
     }
 
     @Override
@@ -279,6 +285,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     //侧边栏按钮
     private void setUpNavigationView() {
+        View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
@@ -305,7 +313,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivityByAnim(new Intent(MainActivity.this, ReplaceRuleActivity.class), 0, 0);
                     break;
                 case R.id.action_setting:
-                    startActivityForResultByAnim(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING,0, 0);
+                    startActivityForResultByAnim(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING, 0, 0);
                     break;
                 case R.id.action_about:
                     startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
@@ -402,8 +410,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             @Override
             public void startRefresh() {
                 mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
-                if (!NetworkUtil.isNetWorkAvailable()){
-                    Toast.makeText(MainActivity.this,"无网络，请打开网络后再试。",Toast.LENGTH_SHORT).show();
+                if (!NetworkUtil.isNetWorkAvailable()) {
+                    Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -425,9 +433,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         fistOpenRun();
         if (NetworkUtil.isNetWorkAvailable()) {
             mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
-        }else {
+        } else {
             mPresenter.queryBookShelf(false);
-            Toast.makeText(this,"无网络，自动刷新失败！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -544,7 +552,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         @SuppressLint("DefaultLocale")
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")){
+            if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")) {
                 recreate();
                 if (!preferences.getBoolean("immersionStatusBar", false)) {
                     clearStatusBar();
@@ -553,7 +561,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
     }
 
-    protected void clearStatusBar(){
+    protected void clearStatusBar() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(0);
     }
