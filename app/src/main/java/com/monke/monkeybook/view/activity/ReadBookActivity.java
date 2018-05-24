@@ -85,7 +85,6 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
     private final int ResultReplace = 101;
     private final int RESULT_OPEN_OTHER_PERMS = 102;
-    public final int ResultSelectBg = 103;
     public final int ResultSelectFont = 104;
     public final int ResultStyleSet = 105;
 
@@ -1077,11 +1076,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case ResultReplace:
                 recreate();
                 break;
-            case ResultSelectBg:
-                if (resultCode == RESULT_OK && null != data) {
-                    readInterfacePop.setCustomBg(data.getData());
-                }
-                break;
             case ResultSelectFont:
                 if (resultCode == RESULT_OK && null != data) {
                     String path = FileUtil.getPath(this, data.getData());
@@ -1096,7 +1090,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             case ResultStyleSet:
                 if (resultCode == RESULT_OK) {
+                    readBookControl.initTextDrawableIndex();
                     csvBook.changeBg();
+                    readInterfacePop.setBg();
                 }
                 break;
         }

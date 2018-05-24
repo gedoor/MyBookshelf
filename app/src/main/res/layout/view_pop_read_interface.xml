@@ -201,14 +201,6 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="19"
-                android:gravity="center"
-                android:orientation="horizontal">
-
                 <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="35dp"
@@ -219,16 +211,16 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:contentDescription="白色背景"
-                        android:src="@drawable/icon_readbook_white"
+                        android:contentDescription="背景1"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
+                        android:id="@+id/tv0"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="白练"
+                        android:text="文字"
                         android:textColor="#3E3D3B"
                         android:textSize="10sp" />
 
@@ -245,16 +237,16 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:contentDescription="古铜色背景"
-                        android:src="@drawable/icon_readbook_yellow"
+                        android:contentDescription="背景2"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
+                        android:id="@+id/tv1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="老茶"
+                        android:text="文字"
                         android:textColor="#5E432E"
                         android:textSize="10sp" />
 
@@ -270,16 +262,16 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:contentDescription="淡绿色背景"
-                        android:src="@drawable/icon_readbook_green"
+                        android:contentDescription="背景3"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
+                        android:id="@+id/tv2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="浅叶"
+                        android:text="文字"
                         android:textColor="#22482C"
                         android:textSize="10sp" />
 
@@ -295,16 +287,16 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:contentDescription="蓝色背景"
-                        android:src="@drawable/icon_readbook_blue"
+                        android:contentDescription="背景4"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
+                        android:id="@+id/tv3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="格调"
+                        android:text="文字"
                         android:textColor="#FFFFFF"
                         android:textSize="10sp" />
 
@@ -320,40 +312,20 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:contentDescription="黑色背景"
-                        android:src="@drawable/icon_readbook_black"
+                        android:contentDescription="背景5"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
                     <TextView
+                        android:id="@+id/tv4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="藏墨"
+                        android:text="文字"
                         android:textColor="#808080"
                         android:textSize="10sp" />
 
                 </FrameLayout>
-
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/civ_bg_custom"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="7"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="自定义背景"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 

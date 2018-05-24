@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_content"
     android:background="@drawable/bg_readbook_yellow"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -32,7 +33,9 @@
             android:layout_height="match_parent"
             android:includeFontPadding="false"
             android:lineSpacingExtra="5dp"
+            android:layout_margin="16dp"
             android:lineSpacingMultiplier="1"
+            android:text="@string/content_sl"
             android:textSize="19sp" />
 
     </LinearLayout>
@@ -52,10 +55,11 @@
             android:layout_gravity="center"
             android:layout_margin="6dp"
             android:layout_weight="1"
+            android:singleLine="true"
             android:background="@drawable/selector_pop_font_bg"
             android:gravity="center"
             android:padding="6dp"
-            android:text="选择文字颜色"
+            android:text="文字颜色"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
 
@@ -66,10 +70,11 @@
             android:layout_gravity="center"
             android:layout_margin="6dp"
             android:layout_weight="1"
+            android:singleLine="true"
             android:background="@drawable/selector_pop_font_bg"
             android:gravity="center"
             android:padding="6dp"
-            android:text="选择背景颜色"
+            android:text="背景颜色"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
 
@@ -80,10 +85,26 @@
             android:layout_gravity="center"
             android:layout_margin="6dp"
             android:layout_weight="1"
+            android:singleLine="true"
             android:background="@drawable/selector_pop_font_bg"
             android:gravity="center"
             android:padding="6dp"
-            android:text="选择背景图片"
+            android:text="背景图片"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvDefault"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:background="@drawable/selector_pop_font_bg"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="恢复默认"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
     </LinearLayout>

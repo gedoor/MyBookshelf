@@ -22,6 +22,7 @@
     <string name="donate">捐赠</string>
     <string name="exit">退出</string>
     <string name="exit_no_save">还未保存,是否继续编辑</string>
+    <string name="read_style">阅读样式设置</string>
 
     <string name="navigation_drawer_open">打开侧边栏</string>
     <string name="navigation_drawer_close">关闭侧边栏</string>
@@ -177,5 +178,6 @@
     <string name="darkStatusIcon">深色状态栏图标</string>
     <string name="copy_text">拷贝内容</string>
     <string name="download_all">一键缓存</string>
+    <string name="content_sl">这是一段测试文字\n\u3000\u3000只是让你看看效果的</string>
 
 </resources>

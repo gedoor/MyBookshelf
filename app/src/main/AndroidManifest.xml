@@ -124,6 +124,9 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity android:name=".view.activity.WelcomeToReadActivity" />
+        <activity android:name=".view.activity.ReadStyleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />

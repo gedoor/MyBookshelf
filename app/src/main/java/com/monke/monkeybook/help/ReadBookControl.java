@@ -48,9 +48,6 @@ public class ReadBookControl {
     private int clickSensitivity;
     private Boolean clickAllNext;
     private Boolean clickAnim;
-    private int textColorCustom;
-    private int backgroundColorCustom;
-    private Boolean backgroundIsColor;
     private Boolean showTitle;
     private Boolean showTimeBattery;
     private Boolean showLine;
@@ -88,15 +85,12 @@ public class ReadBookControl {
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
         this.keepScreenOn = readPreference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
-        this.clickSensitivity = readPreference.getInt("clickSensitivity", 50)>100
-                ?50: readPreference.getInt("clickSensitivity", 50);
+        this.clickSensitivity = readPreference.getInt("clickSensitivity", 50) > 100
+                ? 50 : readPreference.getInt("clickSensitivity", 50);
         this.clickAllNext = readPreference.getBoolean("clickAllNext", false);
         this.clickAnim = readPreference.getBoolean("clickAnim", true);
-        this.textColorCustom = readPreference.getInt("textColorCustom", Color.parseColor("#383838"));
-        this.backgroundColorCustom = readPreference.getInt("backgroundColorCustom", Color.parseColor("#1e1e1e"));
-        this.backgroundIsColor = readPreference.getBoolean("backgroundIsColor", true);
-        this.fontPath = readPreference.getString("fontPath",null);
-        this.textConvert = readPreference.getInt("textConvertInt",0);
+        this.fontPath = readPreference.getString("fontPath", null);
+        this.textConvert = readPreference.getInt("textConvertInt", 0);
         this.textBold = readPreference.getBoolean("textBold", false);
         this.speechRate = readPreference.getInt("speechRate", 10);
         this.speechRateFollowSys = readPreference.getBoolean("speechRateFollowSys", true);
@@ -112,44 +106,82 @@ public class ReadBookControl {
 
     public void initTextDrawableIndex() {
         if (getIsNightTheme()) {
-            this.textDrawableIndex = readPreference.getInt("textDrawableIndexNight", 4);
+            textDrawableIndex = readPreference.getInt("textDrawableIndexNight", 4);
         } else {
-            this.textDrawableIndex = readPreference.getInt("textDrawableIndex", DEFAULT_BG);
+            textDrawableIndex = readPreference.getInt("textDrawableIndex", DEFAULT_BG);
+        }
+        if (textDrawableIndex == -1) {
+            textDrawableIndex = DEFAULT_BG;
         }
         setTextDrawable(MApplication.getInstance());
     }
 
     private void setTextDrawable(Context context) {
-        ACache aCache = ACache.get(context);
-        if (textDrawableIndex != -1) {
-            this.textColor = textDrawable.get(textDrawableIndex).get("textColor");
-            switch (readPreference.getInt("bgCustom" + textDrawableIndex, 0)) {
-                case 2:
-                    Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
-                    if (bitmap != null) {
-                        this.textBackground = new BitmapDrawable(context.getResources(), bitmap);
-                    } else {
-                        this.textBackground = context.getResources().getDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
-                    }
-                    break;
-                case 1:
-                    this.textBackground = new ColorDrawable(readPreference.getInt("bgColor" + textDrawableIndex, Color.parseColor("#1e1e1e")));
-                default:
-                    this.textBackground = context.getResources().getDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
-            }
+        textColor = getTextColor(textDrawableIndex);
+        textBackground = getBgDrawable(textDrawableIndex, context);
+    }
+
+    public int getTextColor(int textDrawableIndex) {
+        if (readPreference.getInt("textColor" + textDrawableIndex, 0) != 0) {
+            return readPreference.getInt("textColor" + textDrawableIndex, 0);
         } else {
-            this.textColor = readPreference.getInt("textColorCustom", Color.parseColor("#383838"));
-            if (backgroundIsColor) {
-                this.textBackground = new ColorDrawable(backgroundColorCustom);
-            } else {
-                Bitmap bitmap = aCache.getAsBitmap("customBg");
-                if (bitmap != null) {
-                    this.textBackground = new BitmapDrawable(context.getResources(), bitmap);
-                } else {
-                    this.textBackground = context.getResources().getDrawable(textDrawable.get(1).get("textBackground"));
-                }
-            }
+            return getDefaultTextColor(textDrawableIndex);
         }
+    }
+
+    public void setTextColor(int textDrawableIndex, int textColor) {
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("textColor" + textDrawableIndex, textColor);
+        editor.apply();
+    }
+
+    public Drawable getBgDrawable(int textDrawableIndex, Context context) {
+        ACache aCache = ACache.get(context);
+        switch (getBgCustom(textDrawableIndex)) {
+            case 2:
+                Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                if (bitmap != null) {
+                    return new BitmapDrawable(context.getResources(), bitmap);
+                } else {
+                    return getDefaultBgDrawable(textDrawableIndex, context);
+                }
+            case 1:
+                return new ColorDrawable(getBgColor(textDrawableIndex));
+            default:
+                return getDefaultBgDrawable(textDrawableIndex, context);
+        }
+    }
+
+    public Drawable getDefaultBgDrawable(int textDrawableIndex, Context context) {
+        return context.getResources().getDrawable(getDefaultBg(textDrawableIndex));
+    }
+
+    public int getBgCustom(int textDrawableIndex) {
+        return readPreference.getInt("bgCustom" + textDrawableIndex, 0);
+    }
+
+    public void setBgCustom(int textDrawableIndex, int bgCustom) {
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("bgCustom" + textDrawableIndex, bgCustom);
+        editor.apply();
+    }
+
+    public int getDefaultTextColor(int textDrawableIndex) {
+        return textDrawable.get(textDrawableIndex).get("textColor");
+    }
+
+    private int getDefaultBg(int textDrawableIndex) {
+        return textDrawable.get(textDrawableIndex).get("textBackground");
+    }
+
+    public int getBgColor(int index) {
+        return readPreference.getInt("bgColor" + index, Color.parseColor("#1e1e1e"));
+    }
+
+    public void setBgColor(int index, int bgColor) {
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("bgColor" + index, bgColor);
+        editor.apply();
     }
 
     public boolean getIsNightTheme() {
@@ -175,10 +207,10 @@ public class ReadBookControl {
     private void initTextKind() {
         if (null == textKind) {
             textKind = new ArrayList<>();
-            for (int i = 14; i<=30; i++) {
+            for (int i = 14; i <= 30; i++) {
                 Map<String, Integer> temp = new HashMap<>();
                 temp.put("textSize", i);
-                temp.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), i/2));
+                temp.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), i / 2));
                 textKind.add(temp);
             }
         }
@@ -190,7 +222,7 @@ public class ReadBookControl {
             textDrawable = new ArrayList<>();
             Map<String, Integer> temp1 = new HashMap<>();
             temp1.put("textColor", Color.parseColor("#3E3D3B"));
-            temp1.put("textBackground", R.drawable.shape_bg_readbook_white);
+            temp1.put("textBackground", R.drawable.bg_readbook_white);
             textDrawable.add(temp1);
 
             Map<String, Integer> temp2 = new HashMap<>();
@@ -291,35 +323,6 @@ public class ReadBookControl {
 
     public Boolean getTextBold() {
         return textBold;
-    }
-
-    public int getTextColorCustom() {
-        return textColorCustom;
-    }
-
-    public void setTextColorCustom(int textColorCustom) {
-        this.textColorCustom = textColorCustom;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("textColorCustom", textColorCustom);
-        editor.apply();
-    }
-
-    public int getBackgroundColorCustom() {
-        return backgroundColorCustom;
-    }
-
-    public void setBackgroundColorCustom(int backgroundColorCustom) {
-        this.backgroundColorCustom = backgroundColorCustom;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("backgroundColorCustom", backgroundColorCustom);
-        editor.apply();
-    }
-
-    public void setBackgroundIsColor(Boolean backgroundIsColor) {
-        this.backgroundIsColor = backgroundIsColor;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("backgroundIsColor", backgroundIsColor);
-        editor.apply();
     }
 
     public List<Map<String, Integer>> getTextKind() {
