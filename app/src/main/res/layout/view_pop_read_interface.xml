@@ -72,27 +72,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="2"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="粗"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/fl_text_convert"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
                 android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="不转"
+                android:text="粗"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -164,31 +147,48 @@
                 android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/civ_text_color"
+                android:id="@+id/tv_convert_j"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="7"
+                android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="文字颜色"
+                android:text="简转繁"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="0.5" />
 
             <TextView
-                android:id="@+id/tv_background_color"
+                android:id="@+id/tv_convert_o"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="背景颜色"
+                android:text="关闭"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:id="@+id/tv_convert_f"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="4"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="繁转简"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
@@ -212,6 +212,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景1"
+                        android:src="@color/background"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
@@ -221,7 +222,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="文字"
-                        android:textColor="#3E3D3B"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="10sp" />
 
                 </FrameLayout>
@@ -238,6 +239,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景2"
+                        android:src="@color/background"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
@@ -247,7 +249,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="文字"
-                        android:textColor="#5E432E"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="10sp" />
 
                 </FrameLayout>
@@ -263,6 +265,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景3"
+                        android:src="@color/background"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
@@ -272,7 +275,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="文字"
-                        android:textColor="#22482C"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="10sp" />
 
                 </FrameLayout>
@@ -288,6 +291,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景4"
+                        android:src="@color/background"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
@@ -297,7 +301,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="文字"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="10sp" />
 
                 </FrameLayout>
@@ -313,6 +317,7 @@
                         android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:contentDescription="背景5"
+                        android:src="@color/background"
                         app:civ_border_color="@color/tv_text_default"
                         app:civ_border_width="1dp" />
 
@@ -322,7 +327,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="文字"
-                        android:textColor="#808080"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="10sp" />
 
                 </FrameLayout>

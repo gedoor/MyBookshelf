@@ -31,8 +31,12 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tvDurLineSize;//行间距数字
     @BindView(R.id.fl_line_bigger)
     TextView flLineBigger;//行间距大
-    @BindView(R.id.fl_text_convert)
-    TextView flTextConvert;
+    @BindView(R.id.tv_convert_j)
+    TextView tvConvertJ;
+    @BindView(R.id.tv_convert_o)
+    TextView tvConvertO;
+    @BindView(R.id.tv_convert_f)
+    TextView tvConvertF;
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
     @BindView(R.id.fl_text_smaller)
@@ -55,10 +59,6 @@ public class ReadInterfacePop extends PopupWindow {
     @BindView(R.id.civ_bg_blue)
     CircleImageView civBgBlue;
 
-    @BindView(R.id.civ_text_color)
-    TextView civTextColor;
-    @BindView(R.id.tv_background_color)
-    TextView tvBackgroundColor;
     @BindView(R.id.tv0)
     TextView tv0;
     @BindView(R.id.tv1)
@@ -140,18 +140,18 @@ public class ReadInterfacePop extends PopupWindow {
         });
 
         //繁简切换
-        flTextConvert.setOnClickListener(v -> {
-            switch (readBookControl.getTextConvert()) {
-                case 0:
-                    readBookControl.setTextConvert(1);
-                    break;
-                case 1:
-                    readBookControl.setTextConvert(-1);
-                    break;
-                case -1:
-                    readBookControl.setTextConvert(0);
-                    break;
-            }
+        tvConvertF.setOnClickListener(view -> {
+            readBookControl.setTextConvert(-1);
+            updateConvertText(readBookControl.getTextConvert());
+            changeProListener.setConvert();
+        });
+        tvConvertO.setOnClickListener(view -> {
+            readBookControl.setTextConvert(0);
+            updateConvertText(readBookControl.getTextConvert());
+            changeProListener.setConvert();
+        });
+        tvConvertJ.setOnClickListener(view -> {
+            readBookControl.setTextConvert(1);
             updateConvertText(readBookControl.getTextConvert());
             changeProListener.setConvert();
         });
@@ -277,16 +277,7 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateConvertText(int convent) {
-        switch (convent) {
-            case 0:
-                flTextConvert.setText("不转换");
-                break;
-            case 1:
-                flTextConvert.setText("简转繁");
-                break;
-            case -1:
-                flTextConvert.setText("繁转简");
-        }
+
     }
 
     private void updateBoldText(Boolean convent) {
