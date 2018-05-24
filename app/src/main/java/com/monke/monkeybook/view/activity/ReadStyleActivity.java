@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.widget.ContentTextView;
 
 import java.io.IOException;
@@ -35,8 +37,8 @@ import butterknife.ButterKnife;
 public class ReadStyleActivity extends MBaseActivity {
     private final int ResultSelectBg = 103;
 
-    @BindView(R.id.fl_content)
-    FrameLayout flContent;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_content)
@@ -77,6 +79,9 @@ public class ReadStyleActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_read_style);
+        if (preferences.getBoolean("immersionStatusBar", false)) {
+            StatusBarUtil.setFitsSystem(this);
+        }
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
@@ -214,7 +219,7 @@ public class ReadStyleActivity extends MBaseActivity {
     }
 
     private void upBg() {
-        flContent.setBackground(bgDrawable);
+        llContent.setBackground(bgDrawable);
     }
 
     /**
