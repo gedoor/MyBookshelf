@@ -9,7 +9,7 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <com.monke.immerselayout.ImmerseLinearLayout
+    <LinearLayout
         android:id="@+id/ll_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -79,5 +79,5 @@
                 app:slider_height="32dp"
                 app:slider_paddingLeft="7dp" />
         </FrameLayout>
-    </com.monke.immerselayout.ImmerseLinearLayout>
+    </LinearLayout>
 </FrameLayout>
