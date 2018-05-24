@@ -228,6 +228,7 @@ public class ReadStyleActivity extends MBaseActivity {
             ACache aCache = ACache.get(this);
             aCache.put("customBg", bitmap);
             bgCustom = 2;
+            bgBitmap = bitmap;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
             upBg();
         } catch (IOException e) {
