@@ -209,7 +209,8 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="10dp">
+            android:paddingBottom="10dp"
+            android:baselineAligned="false">
 
                 <FrameLayout
                     android:layout_width="0dp"
