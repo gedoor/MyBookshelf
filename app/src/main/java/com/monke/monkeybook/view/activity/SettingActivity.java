@@ -92,4 +92,9 @@ public class SettingActivity extends MBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    @Override
+    public void initImmersionBar() {
+        super.initImmersionBar();
+    }
 }

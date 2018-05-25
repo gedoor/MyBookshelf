@@ -18,6 +18,7 @@ import com.monke.monkeybook.view.activity.SettingActivity;
  */
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private SettingActivity settingActivity;
     private Context mContext;
     public static final String action = "immersion.broadcast.action";
 
@@ -26,6 +27,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_settings);
         mContext = this.getActivity();
+        settingActivity = (SettingActivity) this.getActivity();
 
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_screen_direction)));
         bindPreferenceSummaryToValue(findPreference(mContext.getString(R.string.pk_bookshelf_px)));
@@ -73,10 +75,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         Preference preference = findPreference(getString(R.string.pk_ImmersionStatusBar));
         preference.setOnPreferenceClickListener(preference1 -> {
-            startActivity(new Intent(getActivity().getApplicationContext(),SettingActivity.class));
-            //getActivity().overridePendingTransition(R.anim.anim_start_anim, R.anim.anim_out_anim);
-            getActivity().finish();
-
+            settingActivity.initImmersionBar();
             Intent intent = new Intent(action);
             intent.putExtra("data", "Immersion_Change");
             mContext.sendBroadcast(intent);

@@ -547,16 +547,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")) {
-                recreate();
-                if (!preferences.getBoolean("immersionStatusBar", false)) {
-                    clearStatusBar();
-                }
+                initImmersionBar();
             }
         }
     }
 
-    protected void clearStatusBar() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(0);
-    }
 }
