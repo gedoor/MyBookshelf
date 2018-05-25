@@ -187,6 +187,7 @@ public static java.lang.String TABLENAME;
 -keep class tyrant.explosionfield.**{*;}
 -keep class tyrantgit.explosionfield.**{*;}
 -keep class freemarker.**{*;}
+-keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
 -keep class org.jsoup.**{ *; }
 -keep class com.monke.mprogressbar.**{ *; }

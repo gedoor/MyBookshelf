@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyf.barlibrary.BarHide;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -172,7 +173,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
-    public static Boolean moreSetting = false;
+
 
     @Override
     protected IReadBookPresenter initInjector() {
@@ -209,11 +210,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        if (!readBookControl.getHideStatusBar()) {
-            mImmersionBar.fitsSystemWindows(true)  //使用该属性,必须指定状态栏颜色
-                    .statusBarColor(R.color.transparent)
-                    .init();
-        }
+
     }
 
     @Override
@@ -229,19 +226,22 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            if (preferences.getBoolean("nightTheme", false)) {
-                StatusBarUtil.setStatusBarIcon(this, false);
-            }else if (flMenu.getVisibility() == View.VISIBLE){
-                StatusBarUtil.setStatusBarIcon(this, true);
-            }else {
-                StatusBarUtil.setStatusBarIcon(this, preferences.getBoolean("darkStatusIcon", false));
-            }
+            upStatusBarIcon();
             if (flMenu.getVisibility() == View.VISIBLE) {
                 StatusBarUtil.hideNavigationBar(this,false,false);
             }else {
                 StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
             }
-            moreSetting = false;
+        }
+    }
+
+    public void upStatusBarIcon() {
+        if (preferences.getBoolean("nightTheme", false)) {
+            StatusBarUtil.setStatusBarIcon(this, false);
+        }else if (flMenu.getVisibility() == View.VISIBLE || chapterListView.getVisibility() == View.VISIBLE){
+            StatusBarUtil.setStatusBarIcon(this, true);
+        }else {
+            StatusBarUtil.setStatusBarIcon(this, preferences.getBoolean("darkStatusIcon", false));
         }
     }
 
@@ -281,6 +281,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
+                upStatusBarIcon();
             }
 
             @Override
@@ -359,11 +360,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
             @Override
             public void animIn() {
+                initImmersionBar();
                 hideStatusBar(false);
+
             }
 
             @Override
             public void animOut() {
+                upStatusBarIcon();
                 hideStatusBar(hideStatusBar);
             }
         });
@@ -561,7 +565,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //设置
         llSetting.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            moreSetting = true;
             new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
@@ -698,28 +701,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 隐藏虚拟按键
-     */
-    private void hideNavigationBar() {
-        if (preferences.getBoolean("hide_navigation_bar", false)) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        }
-    }
-
-    /**
      * 隐藏菜单
      */
     private void popMenuOut() {
-        if (preferences.getBoolean("nightTheme", false)){
-            StatusBarUtil.setStatusBarIcon(this,false);
-        }else {
-            StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
-        }
         StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
@@ -731,15 +715,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 显示菜单
      */
     private void popMenuIn() {
-        StatusBarUtil.setStatusBarIcon(this,!preferences.getBoolean("nightTheme", false));
-        StatusBarUtil.hideNavigationBar(this,false,false);
+        initImmersionBar();
+        mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         if (StatusBarUtil.hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
             llMenuBottom.setPadding(0,0,0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
-        hideStatusBar(false);
     }
 
     private void toast(String msg) {
