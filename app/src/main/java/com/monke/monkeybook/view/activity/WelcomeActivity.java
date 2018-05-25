@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.utils.StatusBarUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

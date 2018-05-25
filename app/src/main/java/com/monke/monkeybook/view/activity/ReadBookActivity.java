@@ -52,7 +52,6 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
-import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
@@ -280,6 +279,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 vMenuBg.setOnClickListener(v -> popMenuOut());
+                initImmersionBar();
             }
 
             @Override
@@ -301,7 +301,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
-                llMenuBottom.setPadding(0, 0, 0, 0);
+                initImmersionBar();
             }
 
             @Override
@@ -728,6 +728,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         llMenuBottom.startAnimation(menuBottomIn);
+        initImmersionBar();
     }
 
     private void toast(String msg) {
@@ -1078,11 +1079,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     readBookControl.initTextDrawableIndex();
                     csvBook.changeBg();
                     readInterfacePop.setBg();
-                    initImmersionBar();
                 }
                 break;
         }
-
+        initImmersionBar();
     }
 
     @SuppressLint("DefaultLocale")

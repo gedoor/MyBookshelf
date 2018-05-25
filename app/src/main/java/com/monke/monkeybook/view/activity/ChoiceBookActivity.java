@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +18,6 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ChoiceBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
-import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;

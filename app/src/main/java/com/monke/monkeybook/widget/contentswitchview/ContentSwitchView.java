@@ -20,11 +20,9 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -558,34 +556,17 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 没有上一页
      */
     private void noPre() {
-        StatusBarUtil.hideNavigationBar(activity,false,false);
         snackbar = Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT);
         snackbar.show();
-        snackbarDismissed();
     }
 
     /**
      * 没有下一页
      */
     private void noNext() {
-        StatusBarUtil.hideNavigationBar(activity,false,false);
         snackbar = Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT);
         snackbar.show();
-        snackbarDismissed();
         ReadAloudService.stop(getContext());
-    }
-
-    private void snackbarDismissed(){
-        snackbar.addCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                    if (activity.findViewById(R.id.fl_menu).getVisibility() != View.VISIBLE){
-                        StatusBarUtil.hideNavigationBar(activity,preference.getBoolean("hide_navigation_bar", false),false);
-                    }
-                }
-            }
-        });
     }
 
     public Paint getTextPaint() {
