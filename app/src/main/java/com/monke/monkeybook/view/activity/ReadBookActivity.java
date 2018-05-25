@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -96,10 +97,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
     View vMenuBg;
-
     @BindView(R.id.ll_menu_bottom)
     LinearLayout llMenuBottom;
-
     @BindView(R.id.tv_pre)
     TextView tvPre;
     @BindView(R.id.tv_next)
@@ -142,6 +141,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     AutofitTextView atvUrl;
     @BindView(R.id.ll_menu_top)
     LinearLayout llMenuTop;
+    @BindView(R.id.appBar)
+    AppBarLayout appBar;
+    @BindView(R.id.ll_ISB)
+    LinearLayout llISB;
+
     //主菜单动画
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -190,6 +194,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         mImmersionBar = ImmersionBar.with(this);
+        upStatusBar();
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -223,14 +228,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (hasFocus) {
             upStatusBar();
             if (flMenu.getVisibility() == View.VISIBLE) {
-                StatusBarUtil.hideNavigationBar(this,false,false);
-            }else {
-                StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
+                StatusBarUtil.hideNavigationBar(this, false, false);
+            } else {
+                StatusBarUtil.hideNavigationBar(this, preferences.getBoolean("hide_navigation_bar", false), true);
             }
         }
     }
 
     public void upStatusBar() {
+        if (mImmersionBar == null) {
+            return;
+        }
+        if (!isImmersionBarEnabled()) {
+            mImmersionBar.statusBarColor(R.color.black);
+            mImmersionBar.statusBarAlpha(0.3f);
+        }
         if (flMenu.getVisibility() == View.VISIBLE || chapterListView.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true);
@@ -238,7 +250,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 mImmersionBar.statusBarDarkFont(false);
             }
         } else {
-            if (preferences.getBoolean("darkStatusIcon", false)) {
+            if (!isImmersionBarEnabled()) {
+                mImmersionBar.statusBarDarkFont(false);
+            } else if (preferences.getBoolean("darkStatusIcon", false)) {
                 mImmersionBar.statusBarDarkFont(true);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
@@ -301,6 +315,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initCsvBook();
+        llISB.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
         if (readBookControl.getKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -610,7 +625,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
         showOnLineView();
         return super.onPrepareOptionsMenu(menu);
@@ -706,7 +721,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 隐藏菜单
      */
     private void popMenuOut() {
-        StatusBarUtil.hideNavigationBar(this,preferences.getBoolean("hide_navigation_bar", false),true);
+        StatusBarUtil.hideNavigationBar(this, preferences.getBoolean("hide_navigation_bar", false), true);
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
@@ -720,8 +735,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
-        if (StatusBarUtil.hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)){
-            llMenuBottom.setPadding(0,0,0, StatusBarUtil.getNavigationBarHeight(this));
+        if (StatusBarUtil.hasSoftKeys(this.getWindowManager()) & preferences.getBoolean("hide_navigation_bar", false)) {
+            llMenuBottom.setPadding(0, 0, 0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
         upStatusBar();
@@ -951,7 +966,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
             atvUrl.setVisibility(View.VISIBLE);
             if (menu != null) {
-                for (int i = 0; i < menu.size(); i++){
+                for (int i = 0; i < menu.size(); i++) {
                     menu.getItem(i).setVisible(true);
                     menu.getItem(i).setEnabled(true);
                 }
@@ -959,7 +974,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
             atvUrl.setVisibility(View.GONE);
             if (menu != null) {
-                for (int i = 0; i < menu.size(); i++){
+                for (int i = 0; i < menu.size(); i++) {
                     menu.getItem(i).setVisible(false);
                     menu.getItem(i).setEnabled(false);
                 }

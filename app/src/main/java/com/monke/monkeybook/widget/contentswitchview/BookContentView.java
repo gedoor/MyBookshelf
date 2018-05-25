@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -124,6 +125,8 @@ public class BookContentView extends FrameLayout {
         ButterKnife.bind(this, view);
         if (hideStatusBar) {
             llTop.setVisibility(VISIBLE);
+        } else {
+            llTop.setPadding(0, ImmersionBar.getStatusBarHeight(activity), 0, 0);
         }
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)

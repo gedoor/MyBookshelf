@@ -38,7 +38,7 @@
                 android:id="@+id/ll_ISB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#767676"
+                android:background="@color/background"
                 android:orientation="vertical">
 
                 <android.support.design.widget.AppBarLayout

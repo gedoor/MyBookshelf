@@ -1,6 +1,7 @@
 package com.monke.monkeybook.widget;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -21,10 +22,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
 import butterknife.BindView;
@@ -84,11 +87,6 @@ public class ChapterListView extends FrameLayout {
     private void init() {
         setVisibility(INVISIBLE);
         LayoutInflater.from(getContext()).inflate(R.layout.view_chapterlist, this, true);
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        if (preference.getBoolean("immersionStatusBar", false)) {
-            LinearLayout llISB = findViewById(R.id.ll_content);
-            llISB.setBackgroundColor(getResources().getColor(R.color.bg_chapter));
-        }
         initData();
         initView();
     }
@@ -159,6 +157,7 @@ public class ChapterListView extends FrameLayout {
 
     private void initView() {
         ButterKnife.bind(this);
+        llContent.setPadding(0, ImmersionBar.getStatusBarHeight((Activity) mContext), 0, 0);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setItemAnimator(null);
     }

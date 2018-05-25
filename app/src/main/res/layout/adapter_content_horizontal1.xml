@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/tvTime"
@@ -49,6 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:lines="1"
+                        android:visibility="gone"
                         android:text=""
                         android:textColor="#ffffff"
                         android:textSize="14sp" />
@@ -58,6 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lines="1"
+                        android:visibility="gone"
                         android:text=""
                         android:textColor="@color/tv_text_default"
                         android:textSize="14sp"
