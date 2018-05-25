@@ -34,6 +34,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
+        mImmersionBar = ImmersionBar.with(this);
         initImmersionBar();
     }
 
@@ -85,13 +86,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     protected void initImmersionBar() {
-        mImmersionBar = ImmersionBar.with(this);
         if (isImmersionBarEnabled()) {
             mImmersionBar.transparentStatusBar();
         } else {
-            mImmersionBar.statusBarColor(R.color.black);
+            mImmersionBar.statusBarColor(R.color.status_bar_bag);
         }
-
         if (isImmersionBarEnabled() && !isNightTheme()) {
             mImmersionBar.statusBarDarkFont(true);
         } else {

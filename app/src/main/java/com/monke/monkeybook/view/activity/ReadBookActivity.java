@@ -193,8 +193,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
-        mImmersionBar = ImmersionBar.with(this);
-        upStatusBar();
+//        mImmersionBar = ImmersionBar.with(this);
+//        upStatusBar();
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -226,7 +226,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            upStatusBar();
+            initImmersionBar();
             if (flMenu.getVisibility() == View.VISIBLE) {
                 StatusBarUtil.hideNavigationBar(this, false, false);
             } else {
@@ -235,14 +235,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
-    public void upStatusBar() {
-        if (mImmersionBar == null) {
-            return;
-        }
-        if (!isImmersionBarEnabled()) {
-            mImmersionBar.statusBarColor(R.color.black);
-            mImmersionBar.statusBarAlpha(0.3f);
-        }
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
         if (flMenu.getVisibility() == View.VISIBLE || chapterListView.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true);
@@ -297,7 +292,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
-                upStatusBar();
+                initImmersionBar();
             }
 
             @Override
@@ -377,14 +372,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
             @Override
             public void animIn() {
-                upStatusBar();
+                initImmersionBar();
                 hideStatusBar(false);
 
             }
 
             @Override
             public void animOut() {
-                upStatusBar();
+                initImmersionBar();
                 hideStatusBar(hideStatusBar);
             }
         });
@@ -739,7 +734,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuBottom.setPadding(0, 0, 0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
-        upStatusBar();
+        initImmersionBar();
     }
 
     private void toast(String msg) {

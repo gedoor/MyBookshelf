@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.monke.monkeybook.view.activity.ReadStyleActivity">
@@ -13,20 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </android.support.design.widget.AppBarLayout>
 
         <com.monke.monkeybook.widget.ContentTextView
             android:id="@+id/tv_content"
@@ -46,67 +31,86 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
-        android:padding="6dp">
-
-        <TextView
-            android:id="@+id/tvSelectTextColor"
-            android:layout_width="0dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:background="@drawable/selector_pop_font_bg"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="文字颜色"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            android:orientation="horizontal"
+            android:padding="6dp">
 
-        <TextView
-            android:id="@+id/tvSelectBgColor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:background="@drawable/selector_pop_font_bg"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="背景颜色"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/tvSelectTextColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="文字颜色"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/tvSelectBgImage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:background="@drawable/selector_pop_font_bg"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="背景图片"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            <TextView
+                android:id="@+id/tvSelectBgColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="背景颜色"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/tvDefault"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/tvSelectBgImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="背景图片"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/tvDefault"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="恢复默认"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:background="@drawable/selector_pop_font_bg"
-            android:gravity="center"
-            android:padding="6dp"
-            android:text="恢复默认"
-            android:textSize="14sp"
-            tools:ignore="HardcodedText" />
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
     </LinearLayout>
 </FrameLayout>

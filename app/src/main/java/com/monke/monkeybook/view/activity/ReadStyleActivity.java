@@ -85,6 +85,19 @@ public class ReadStyleActivity extends MBaseActivity {
         setTextKind(readBookControl);
     }
 
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        if (!isImmersionBarEnabled()) {
+            mImmersionBar.statusBarDarkFont(false);
+        } else if (preferences.getBoolean("darkStatusIcon", false)) {
+            mImmersionBar.statusBarDarkFont(true);
+        } else {
+            mImmersionBar.statusBarDarkFont(false);
+        }
+        mImmersionBar.init();
+    }
+
     /**
      * 数据初始化
      */
