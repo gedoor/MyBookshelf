@@ -79,8 +79,6 @@ public class AboutActivity extends MBaseActivity {
     @BindView(R.id.tv_source_share)
     TextView tvSourceShare;
 
-    private Animation animIn;
-
     private String qq = "701903217";
 
     @Override
@@ -100,8 +98,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        Animation animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+
     }
 
     @Override
@@ -168,7 +165,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void firstRequest() {
-        llContent.startAnimation(animIn);
+
     }
 
     void openIntent(String intentName, String address) {

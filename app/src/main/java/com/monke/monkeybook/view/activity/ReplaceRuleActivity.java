@@ -59,7 +59,6 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private MoProgressHUD moProgressHUD;
-    private Animation animIn;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;
 
@@ -84,8 +83,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
 
     @Override
     protected void initData() {
-        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        Animation animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+
     }
 
     private void initRecyclerView() {
@@ -152,7 +150,7 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
 
     @Override
     protected void firstRequest() {
-        llContent.startAnimation(animIn);
+
     }
 
     @Override

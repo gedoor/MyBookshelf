@@ -225,11 +225,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_library:
-                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
+                startActivity(new Intent(MainActivity.this, FindBookActivity.class));
                 break;
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, perms)) {
-                    startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
+                    startActivity(new Intent(MainActivity.this, FileFolderActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                             FILESELECT_RESULT, perms);

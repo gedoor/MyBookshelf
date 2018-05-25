@@ -38,8 +38,6 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
 
-    private Animation animIn;
-    private Animation animOut;
     private FindKindAdapter adapter;
 
     @Override
@@ -54,13 +52,12 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
 
     @Override
     protected void firstRequest() {
-        llContent.startAnimation(animIn);
+
     }
 
     @Override
     protected void initData() {
-        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+
     }
 
     @Override

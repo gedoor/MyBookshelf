@@ -57,7 +57,6 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 	@BindView(R.id.ll_content)
 	RelativeLayout llContent;
 
-	private Animation animIn;
 	private MoProgressHUD moProgressHUD;
 
 	private Menu aMenu;//获取菜单
@@ -70,7 +69,7 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 
 	@Override
 	protected void initData() {
-		animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
+
 	}
 
 	@Override
@@ -268,7 +267,7 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
 	protected void firstRequest() {
-		llContent.startAnimation(animIn);
+
 	}
 
 

@@ -27,10 +27,6 @@ public class SettingActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
-    private Animation animIn;
-    private Animation animOut;
-
-    private String bookPx;
 
     @Override
     protected IPresenter initInjector() {
@@ -52,14 +48,12 @@ public class SettingActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        animIn = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_in);
-        animOut = AnimationUtils.loadAnimation(this, R.anim.anim_act_importbook_out);
+
     }
 
     @Override
     protected void firstRequest() {
-        llContent.startAnimation(animIn);
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
+
     }
 
     //设置ToolBar

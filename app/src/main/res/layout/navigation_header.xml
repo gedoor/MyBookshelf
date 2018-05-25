@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="vertical"
-        android:background="@drawable/bg_readbook_yellow"
+        android:background="@drawable/bg_readbook_blue"
         android:padding="16dp">
 
         <TextView
@@ -17,10 +17,12 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="@string/read_summary"/>
 
     </LinearLayout>
