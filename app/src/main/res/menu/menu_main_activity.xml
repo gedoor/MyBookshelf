@@ -7,7 +7,19 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp_new"
         android:title="@string/action_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_library"
+        android:icon="@drawable/ic_track_changes_black_24dp_new"
+        android:title="@string/find_on_www"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_add_local"
+        android:icon="@drawable/ic_add_black_24dp_new"
+        android:title="@string/book_local"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_add_url"

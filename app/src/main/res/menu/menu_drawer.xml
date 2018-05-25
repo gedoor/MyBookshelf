@@ -1,18 +1,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/drawer_menu_library">
-        <item
-            android:id="@+id/action_library"
-            android:icon="@drawable/ic_track_changes_black_24dp_new"
-            android:title="@string/find_on_www" />
-
-        <item
-            android:id="@+id/action_add_local"
-            android:icon="@drawable/ic_add_black_24dp_new"
-            android:title="@string/book_local" />
-    </group>
-
     <group android:id="@+id/drawer_menu_book_source">
         <item
             android:id="@+id/action_book_source_manage"

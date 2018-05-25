@@ -224,6 +224,18 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 startActivityByAnim(new Intent(this, SearchBookActivity.class),
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
+            case R.id.action_library:
+                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
+                break;
+            case R.id.action_add_local:
+                if (EasyPermissions.hasPermissions(this, perms)) {
+                    startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
+                } else {
+                    EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
+                            FILESELECT_RESULT, perms);
+                }
+                //startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
+                break;
             case R.id.action_add_url:
                 moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
                 break;
@@ -288,18 +300,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
-                case R.id.action_library:
-                    startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class), 0, 0);
-                    break;
-                case R.id.action_add_local:
-                    if (EasyPermissions.hasPermissions(this, perms)) {
-                        startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
-                    } else {
-                        EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                                FILESELECT_RESULT, perms);
-                    }
-                    //startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
-                    break;
                 case R.id.action_book_source_manage:
                     startActivityByAnim(new Intent(MainActivity.this, BookSourceActivity.class), 0, 0);
                     break;
