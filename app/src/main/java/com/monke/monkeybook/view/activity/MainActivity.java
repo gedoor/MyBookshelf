@@ -299,7 +299,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
         swNightTheme.setOnClickListener(view -> saveNightTheme(swNightTheme.isChecked()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
-            drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
                     startActivity(new Intent(MainActivity.this, BookSourceActivity.class));
@@ -327,6 +326,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     saveNightTheme(swNightTheme.isChecked());
                     break;
             }
+            drawer.closeDrawers();
             return true;
         });
     }
