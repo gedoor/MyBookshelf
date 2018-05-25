@@ -9,6 +9,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.SettingActivity;
 
@@ -20,7 +21,7 @@ import com.monke.monkeybook.view.activity.SettingActivity;
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SettingActivity settingActivity;
     private Context mContext;
-    public static final String action = "immersion.broadcast.action";
+    public static final String ImmersionAction = "immersion.broadcast.action";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         Preference preference = findPreference(getString(R.string.pk_ImmersionStatusBar));
         preference.setOnPreferenceClickListener(preference1 -> {
             settingActivity.initImmersionBar();
-            Intent intent = new Intent(action);
+            Intent intent = new Intent(ImmersionAction);
             intent.putExtra("data", "Immersion_Change");
             mContext.sendBroadcast(intent);
             return true;

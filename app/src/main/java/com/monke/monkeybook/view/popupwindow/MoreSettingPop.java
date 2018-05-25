@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.monke.monkeybook.help.ReadBookControl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.monke.monkeybook.view.fragment.SettingsFragment.ImmersionAction;
 
 public class MoreSettingPop extends PopupWindow {
 
@@ -45,8 +48,8 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     SwitchButton sbShowLine;
-    @BindView(R.id.sb_darkStatusIcon)
-    SwitchButton sbDarkStatusIcon;
+    @BindView(R.id.sbImmersionBar)
+    SwitchButton sbImmersionBar;
 
 
     private Context mContext;
@@ -113,9 +116,12 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
-        sbDarkStatusIcon.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setDarkStatusIcon(isChecked);
+        sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setImmersionStatusBar(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
+            Intent intent = new Intent(ImmersionAction);
+            intent.putExtra("data", "Immersion_Change");
+            mContext.sendBroadcast(intent);
             changeProListener.reLoad();
         });
     }
@@ -133,7 +139,7 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
         sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
-        sbDarkStatusIcon.setCheckedImmediatelyNoEvent(readBookControl.getDarkStatusIcon());
+        sbImmersionBar.setCheckedImmediatelyNoEvent(readBookControl.getImmersionStatusBar());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
         } else {

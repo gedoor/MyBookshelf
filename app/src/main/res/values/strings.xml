@@ -180,5 +180,6 @@
     <string name="download_all">一键缓存</string>
     <string name="content_sl">这是一段测试文字\n\u3000\u3000只是让你看看效果的</string>
     <string name="text_bg_style">文字颜色和背景(长按自定义)</string>
+    <string name="immersion_status_bar">沉浸式状态栏</string>
 
 </resources>

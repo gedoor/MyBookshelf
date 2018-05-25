@@ -192,6 +192,12 @@ public class ReadBookControl {
         return defaultPreference.getBoolean("immersionStatusBar", false);
     }
 
+    public void setImmersionStatusBar(boolean immersionStatusBar) {
+        SharedPreferences.Editor editor = defaultPreference.edit();
+        editor.putBoolean("immersionStatusBar", immersionStatusBar);
+        editor.apply();
+    }
+
     public String getLastNoteUrl() {
         return lastNoteUrl;
     }

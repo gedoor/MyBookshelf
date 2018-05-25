@@ -110,7 +110,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
-        IntentFilter filter = new IntentFilter(SettingsFragment.action);
+        IntentFilter filter = new IntentFilter(SettingsFragment.ImmersionAction);
         immersionReceiver = new ImmersionReceiver();
         registerReceiver(immersionReceiver, filter);
 

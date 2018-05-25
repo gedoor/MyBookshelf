@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -80,6 +81,7 @@ public class ReadStyleActivity extends MBaseActivity {
     protected void onCreateActivity() {
         setContentView(R.layout.activity_read_style);
         ButterKnife.bind(this);
+        llContent.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
         this.setSupportActionBar(toolbar);
         setupActionBar();
         setTextKind(readBookControl);

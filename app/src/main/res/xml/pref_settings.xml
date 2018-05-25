@@ -40,6 +40,6 @@
         android:layout_height="wrap_content"
         android:defaultValue="false"
         android:key="@string/pk_ImmersionStatusBar"
-        android:title="沉浸式状态栏" />
+        android:title="@string/immersion_status_bar" />
 
 </PreferenceScreen>
