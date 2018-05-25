@@ -22,7 +22,6 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -38,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gyf.barlibrary.BarHide;
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -189,6 +189,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
+        mImmersionBar = ImmersionBar.with(this);
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -208,12 +209,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    protected void initImmersionBar() {
-        super.initImmersionBar();
-
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mPresenter.getBookShelf() != null) {
@@ -226,7 +221,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            upStatusBarIcon();
+            upStatusBar();
             if (flMenu.getVisibility() == View.VISIBLE) {
                 StatusBarUtil.hideNavigationBar(this,false,false);
             }else {
@@ -235,14 +230,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
-    public void upStatusBarIcon() {
-        if (preferences.getBoolean("nightTheme", false)) {
-            StatusBarUtil.setStatusBarIcon(this, false);
-        }else if (flMenu.getVisibility() == View.VISIBLE || chapterListView.getVisibility() == View.VISIBLE){
-            StatusBarUtil.setStatusBarIcon(this, true);
-        }else {
-            StatusBarUtil.setStatusBarIcon(this, preferences.getBoolean("darkStatusIcon", false));
+    public void upStatusBar() {
+        if (flMenu.getVisibility() == View.VISIBLE || chapterListView.getVisibility() == View.VISIBLE) {
+            if (isImmersionBarEnabled() && !isNightTheme()) {
+                mImmersionBar.statusBarDarkFont(true);
+            } else {
+                mImmersionBar.statusBarDarkFont(false);
+            }
+        } else {
+            if (preferences.getBoolean("darkStatusIcon", false)) {
+                mImmersionBar.statusBarDarkFont(true);
+            } else {
+                mImmersionBar.statusBarDarkFont(false);
+            }
         }
+        mImmersionBar.init();
     }
 
     @Override
@@ -281,7 +283,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
-                upStatusBarIcon();
+                upStatusBar();
             }
 
             @Override
@@ -360,14 +362,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
             @Override
             public void animIn() {
-                initImmersionBar();
+                upStatusBar();
                 hideStatusBar(false);
 
             }
 
             @Override
             public void animOut() {
-                upStatusBarIcon();
+                upStatusBar();
                 hideStatusBar(hideStatusBar);
             }
         });
@@ -715,7 +717,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 显示菜单
      */
     private void popMenuIn() {
-        initImmersionBar();
         mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
@@ -723,6 +724,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             llMenuBottom.setPadding(0,0,0, StatusBarUtil.getNavigationBarHeight(this));
         }
         llMenuBottom.startAnimation(menuBottomIn);
+        upStatusBar();
     }
 
     private void toast(String msg) {
