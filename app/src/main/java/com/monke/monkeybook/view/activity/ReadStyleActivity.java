@@ -14,8 +14,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +29,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.StatusBarUtil;
 import com.monke.monkeybook.widget.ContentTextView;
 
 import java.io.IOException;
@@ -52,6 +53,8 @@ public class ReadStyleActivity extends MBaseActivity {
     TextView tvSelectBgImage;
     @BindView(R.id.tvDefault)
     TextView tvDefault;
+    @BindView(R.id.sw_darkStatusIcon)
+    Switch swDarkStatusIcon;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private int textDrawableIndex;
@@ -60,6 +63,7 @@ public class ReadStyleActivity extends MBaseActivity {
     private Drawable bgDrawable;
     private int bgCustom;
     private Bitmap bgBitmap;
+    private boolean darkStatusIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,7 @@ public class ReadStyleActivity extends MBaseActivity {
         super.initImmersionBar();
         if (!isImmersionBarEnabled()) {
             mImmersionBar.statusBarDarkFont(false);
-        } else if (preferences.getBoolean("darkStatusIcon", false)) {
+        } else if (darkStatusIcon) {
             mImmersionBar.statusBarDarkFont(true);
         } else {
             mImmersionBar.statusBarDarkFont(false);
@@ -111,6 +115,7 @@ public class ReadStyleActivity extends MBaseActivity {
         textColor = readBookControl.getTextColor(textDrawableIndex);
         bgDrawable = readBookControl.getBgDrawable(textDrawableIndex, getContext());
         bgColor = readBookControl.getBgColor(textDrawableIndex);
+        darkStatusIcon = readBookControl.getDarkStatusIcon(textDrawableIndex);
         upText();
         upBg();
     }
@@ -120,6 +125,11 @@ public class ReadStyleActivity extends MBaseActivity {
      */
     @Override
     protected void bindEvent() {
+        swDarkStatusIcon.setChecked(darkStatusIcon);
+        swDarkStatusIcon.setOnCheckedChangeListener((compoundButton, b) -> {
+            darkStatusIcon = b;
+            initImmersionBar();
+        });
         //选择文字颜色
         tvSelectTextColor.setOnClickListener(view -> ColorPickerDialogBuilder
                 .with(this)
@@ -208,10 +218,14 @@ public class ReadStyleActivity extends MBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 保存配置
+     */
     private void saveStyle() {
         readBookControl.setTextColor(textDrawableIndex, textColor);
         readBookControl.setBgCustom(textDrawableIndex, bgCustom);
         readBookControl.setBgColor(textDrawableIndex, bgColor);
+        readBookControl.setDarkStatusIcon(textDrawableIndex, darkStatusIcon);
         if (bgCustom == 2 && bgBitmap != null) {
             ACache aCache = ACache.get(this);
             aCache.put("customBg" + textDrawableIndex, bgBitmap);

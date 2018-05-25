@@ -99,7 +99,6 @@ public class ReadBookControl {
         this.showLine = readPreference.getBoolean("showLine", true);
         this.lineChange = readPreference.getLong("lineChange", System.currentTimeMillis());
         this.lastNoteUrl = readPreference.getString("lastNoteUrl", "");
-        this.darkStatusIcon = defaultPreference.getBoolean("darkStatusIcon", false);
 
         initTextDrawableIndex();
     }
@@ -117,6 +116,7 @@ public class ReadBookControl {
     }
 
     private void setTextDrawable(Context context) {
+        darkStatusIcon = getDarkStatusIcon(textDrawableIndex);
         textColor = getTextColor(textDrawableIndex);
         textBackground = getBgDrawable(textDrawableIndex, context);
     }
@@ -229,26 +229,31 @@ public class ReadBookControl {
             Map<String, Integer> temp1 = new HashMap<>();
             temp1.put("textColor", Color.parseColor("#3E3D3B"));
             temp1.put("textBackground", R.drawable.bg_readbook_white);
+            temp1.put("darkStatusIcon", 1);
             textDrawable.add(temp1);
 
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
             temp2.put("textBackground", R.drawable.bg_readbook_yellow);
+            temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
             Map<String, Integer> temp3 = new HashMap<>();
             temp3.put("textColor", Color.parseColor("#22482C"));
             temp3.put("textBackground", R.drawable.bg_readbook_green);
+            temp3.put("darkStatusIcon", 1);
             textDrawable.add(temp3);
 
             Map<String, Integer> temp4 = new HashMap<>();
             temp4.put("textColor", Color.parseColor("#FFFFFF"));
             temp4.put("textBackground", R.drawable.bg_readbook_blue);
+            temp4.put("darkStatusIcon", 0);
             textDrawable.add(temp4);
 
             Map<String, Integer> temp5 = new HashMap<>();
             temp5.put("textColor", Color.parseColor("#808080"));
             temp5.put("textBackground", R.drawable.bg_readbook_black);
+            temp5.put("darkStatusIcon", 0);
             textDrawable.add(temp5);
         }
     }
@@ -504,14 +509,17 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public Boolean getDarkStatusIcon() {
+    public boolean getDarkStatusIcon() {
         return darkStatusIcon;
     }
 
-    public void setDarkStatusIcon(Boolean darkStatusIcon) {
-        this.darkStatusIcon = darkStatusIcon;
+    public boolean getDarkStatusIcon(int textDrawableIndex) {
+        return defaultPreference.getBoolean("darkStatusIcon" + textDrawableIndex,  textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0 );
+    }
+
+    public void setDarkStatusIcon(int textDrawableIndex, Boolean darkStatusIcon) {
         SharedPreferences.Editor editor = defaultPreference.edit();
-        editor.putBoolean("darkStatusIcon", darkStatusIcon);
+        editor.putBoolean("darkStatusIcon" + textDrawableIndex, darkStatusIcon);
         editor.apply();
     }
 

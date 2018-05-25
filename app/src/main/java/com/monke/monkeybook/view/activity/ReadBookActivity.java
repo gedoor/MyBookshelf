@@ -247,7 +247,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         } else {
             if (!isImmersionBarEnabled()) {
                 mImmersionBar.statusBarDarkFont(false);
-            } else if (preferences.getBoolean("darkStatusIcon", false)) {
+            } else if (readBookControl.getDarkStatusIcon()) {
                 mImmersionBar.statusBarDarkFont(true);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
@@ -348,6 +348,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void bgChange() {
                 csvBook.changeBg();
+                readBookControl.initTextDrawableIndex();
+                initImmersionBar();
             }
 
             @Override
