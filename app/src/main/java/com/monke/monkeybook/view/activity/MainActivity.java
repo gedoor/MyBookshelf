@@ -117,12 +117,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
-    protected void initImmersionBar() {
-        super.initImmersionBar();
-        mImmersionBar.titleBar(R.id.ll_content).init();
-    }
-
-    @Override
     protected void initData() {
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         viewIsList = preferences.getBoolean("bookshelfIsList", true);

@@ -8,6 +8,7 @@
     android:background="#77000000"
     android:clickable="true"
     android:focusable="true"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <FrameLayout

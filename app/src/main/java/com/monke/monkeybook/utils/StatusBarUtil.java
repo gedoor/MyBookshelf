@@ -35,19 +35,6 @@ public class StatusBarUtil {
             {
                 window.setStatusBarColor(statusColor);
             }
-            /*if (!hasSoftKeys(activity.getWindowManager()))
-            {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            }*/
-
-            /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                View decorView = activity.getWindow().getDecorView();
-                if(decorView != null){
-                    int ui = decorView.getSystemUiVisibility();
-                    ui |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                    decorView.setSystemUiVisibility(ui);
-                }
-            }*/
 
             //解决7.0沉浸式状态栏蒙灰问题
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

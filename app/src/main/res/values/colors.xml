@@ -2,6 +2,7 @@
 <resources>
     <color name="background">#f4f4f4</color>
     <color name="background_menu">#fcfcfc</color>
+    <color name="transparent">#00000000</color>
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>

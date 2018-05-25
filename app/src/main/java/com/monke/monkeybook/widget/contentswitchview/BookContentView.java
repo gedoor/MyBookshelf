@@ -130,20 +130,20 @@ public class BookContentView extends FrameLayout {
                 loading();
         });
 
-        if (readBookControl.getImmersionStatusBar()) {
-            StatusBarUtil.compat(activity, 0);
-        }
+//        if (readBookControl.getImmersionStatusBar()) {
+//            StatusBarUtil.compat(activity, 0);
+//        }
         if (readBookControl.getIsNightTheme()) {
             StatusBarUtil.setStatusBarIcon(activity, false);
         } else {
             StatusBarUtil.setStatusBarIcon(activity, readBookControl.getDarkStatusIcon());
         }
 
-        if (ReadBookActivity.moreSetting) {
-            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), false);
-        } else {
-            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), true);
-        }
+//        if (ReadBookActivity.moreSetting) {
+//            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), false);
+//        } else {
+//            StatusBarUtil.hideNavigationBar(activity, readBookControl.getHideNavigationBar(), true);
+//        }
     }
 
     public void showLoading() {

@@ -204,10 +204,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readAloudIntent.setAction(ActionNewReadAloud);
         Intent intent = this.getIntent();
         fromMediaButton = intent.getBooleanExtra("readAloud", false);
-        if (preferences.getBoolean("nightTheme", false)){
-            StatusBarUtil.setStatusBarIcon(this,false);
-        }else {
-            StatusBarUtil.setStatusBarIcon(this,preferences.getBoolean("darkStatusIcon", false));
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        if (!readBookControl.getHideStatusBar()) {
+            mImmersionBar.fitsSystemWindows(true)  //使用该属性,必须指定状态栏颜色
+                    .statusBarColor(R.color.transparent)
+                    .init();
         }
     }
 
