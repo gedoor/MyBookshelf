@@ -24,7 +24,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
-                app:defaultQueryHint="搜索" />
+                android:transitionName = "to_search"
+                app:defaultQueryHint="搜索"
+                tools:ignore="UnusedAttribute" />
 
         </android.support.v7.widget.Toolbar>
 

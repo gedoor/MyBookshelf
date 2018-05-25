@@ -225,7 +225,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_library:
-                startActivity(new Intent(MainActivity.this, FindBookActivity.class));
+                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class),
+                        toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, perms)) {
@@ -301,19 +302,19 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
-                    startActivityByAnim(new Intent(MainActivity.this, BookSourceActivity.class), 0, 0);
+                    startActivity(new Intent(MainActivity.this, BookSourceActivity.class));
                     break;
                 case R.id.action_replace_rule:
-                    startActivityByAnim(new Intent(MainActivity.this, ReplaceRuleActivity.class), 0, 0);
+                    startActivity(new Intent(MainActivity.this, ReplaceRuleActivity.class));
                     break;
                 case R.id.action_setting:
-                    startActivityForResultByAnim(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING, 0, 0);
+                    startActivityForResult(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING);
                     break;
                 case R.id.action_about:
-                    startActivityByAnim(new Intent(MainActivity.this, AboutActivity.class), 0, 0);
+                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
                     break;
                 case R.id.action_donate:
-                    startActivityByAnim(new Intent(MainActivity.this, DonateActivity.class), 0, 0);
+                    startActivity(new Intent(MainActivity.this, DonateActivity.class));
                     break;
                 case R.id.action_backup:
                     backup();
