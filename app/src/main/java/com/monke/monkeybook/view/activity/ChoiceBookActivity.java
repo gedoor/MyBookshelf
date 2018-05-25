@@ -39,14 +39,6 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
 
     private ChoiceBookAdapter searchBookAdapter;
 
-    public static void startChoiceBookActivity(Context context, String title, String url, String tag) {
-        Intent intent = new Intent(context, ChoiceBookActivity.class);
-        intent.putExtra("url", url);
-        intent.putExtra("title", title);
-        intent.putExtra("tag", tag);
-        context.startActivity(intent);
-    }
-
     @Override
     protected IChoiceBookPresenter initInjector() {
         return new ChoiceBookPresenterImpl(getIntent());

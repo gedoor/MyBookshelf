@@ -86,7 +86,13 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
         //  设置子选项点击监听事件
         expandableList.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
             FindKindBean kindBean = adapter.getDataList().get(groupPosition).getChildren().get(childPosition);
-            ChoiceBookActivity.startChoiceBookActivity(this, kindBean.getKindName(), kindBean.getKindUrl(), kindBean.getTag());
+
+            Intent intent = new Intent(this, ChoiceBookActivity.class);
+            intent.putExtra("url", kindBean.getKindUrl());
+            intent.putExtra("title", kindBean.getKindName());
+            intent.putExtra("tag", kindBean.getTag());
+            startActivityByAnim(intent, v, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
+
             return true;
         });
 

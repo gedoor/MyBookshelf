@@ -55,7 +55,7 @@ public class FileFolderListAdapter extends BaseAdapter {
 		View view  = null;
 		ViewHolder holder = null;
 		if (convertView == null) {
-			view = inflater.inflate(R.layout.activity_file_folder_item, null);
+			view = inflater.inflate(R.layout.adapter_file_folder_item, null);
 			holder = new ViewHolder();
 			holder.rlFolder = (RelativeLayout) view.findViewById(R.id.rl_file_folder_item_folder);
 			holder.tvFolderName = (TextView) view.findViewById(R.id.tv_file_folder_item_folder);

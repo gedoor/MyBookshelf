@@ -222,11 +222,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case R.id.action_search:
                 //点击搜索
                 startActivityByAnim(new Intent(this, SearchBookActivity.class),
-                        toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                        toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_library:
                 startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class),
-                        toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                        toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, perms)) {
