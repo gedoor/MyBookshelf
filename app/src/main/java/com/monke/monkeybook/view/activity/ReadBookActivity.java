@@ -727,9 +727,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
-        if (ImmersionBar.hasNavigationBar(this) && readBookControl.getHideNavigationBar()) {
-            llMenuBottom.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(this));
-        }
         llMenuBottom.startAnimation(menuBottomIn);
     }
 

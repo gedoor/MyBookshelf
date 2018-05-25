@@ -13,12 +13,10 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.View;
 
-
 import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.utils.StatusBarUtil;
 
 import java.lang.reflect.Method;
 
