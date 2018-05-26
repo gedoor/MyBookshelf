@@ -1,1 +1,1 @@
-include ':app', ':basemvplib'
+include ':app', ':basemvplib', ':barlibrary'

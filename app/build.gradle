@@ -60,6 +60,7 @@ ext {
 }
 dependencies {
     api project(':basemvplib')
+    api project(':barlibrary')
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
 
@@ -86,7 +87,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.11'
 
     //沉浸式状态栏
-    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+//    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
 
     //ProgressBar
     implementation 'com.zhangmonke:MProgressBar:1.0.1'
