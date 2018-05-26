@@ -1,4 +1,4 @@
-package com.gyf.barlibrary;
+package com.monke.monkeybook.utils.barUtil;
 
 import android.app.Activity;
 import android.os.Build;

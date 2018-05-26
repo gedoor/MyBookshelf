@@ -1,4 +1,4 @@
-package com.gyf.barlibrary;
+package com.monke.monkeybook.utils.barUtil;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

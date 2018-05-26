@@ -1,4 +1,4 @@
-package com.gyf.barlibrary;
+package com.monke.monkeybook.utils.barUtil;
 
 /**
  * 软键盘监听

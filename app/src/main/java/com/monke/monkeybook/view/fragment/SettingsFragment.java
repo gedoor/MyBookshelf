@@ -9,7 +9,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
-import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.view.activity.SettingActivity;
 

@@ -1,4 +1,4 @@
-package com.gyf.barlibrary;
+package com.monke.monkeybook.utils.barUtil;
 
 /**
  * Created by geyifeng on 2017/4/25.
