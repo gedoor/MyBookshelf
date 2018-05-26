@@ -1,4 +1,4 @@
-package com.monke.monkeybook.utils.fileselectorutil;
+package com.monke.monkeybook.utils.fileSelectorUtil;
 
 import java.text.DecimalFormat;
 
