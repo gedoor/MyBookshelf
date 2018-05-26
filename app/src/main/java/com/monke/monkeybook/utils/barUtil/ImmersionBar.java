@@ -1360,20 +1360,6 @@ public class ImmersionBar {
     }
 
     /**
-     * 当xml里使用android:fitsSystemWindows="true"属性时，
-     * 解决4.4和emui3.1手机底部有时会出现多余空白的问题 ，已过时，代码中没用的此处
-     * Fix margin atbottom immersion bar.
-     *
-     * @param fixMarginAtBottom the fix margin atbottom
-     * @return the immersion bar
-     */
-    @Deprecated
-    public ImmersionBar fixMarginAtBottom(boolean fixMarginAtBottom) {
-        mBarParams.fixMarginAtBottom = fixMarginAtBottom;
-        return this;
-    }
-
-    /**
      * 通过上面配置后初始化后方可成功调用
      */
     public void init() {
@@ -1436,6 +1422,7 @@ public class ImmersionBar {
             }
             uiFlags = hideBar(uiFlags);  //隐藏状态栏或者导航栏
             mWindow.getDecorView().setSystemUiVisibility(uiFlags);
+            hideStatusBar(mBarParams.barHide == BarHide.FLAG_HIDE_STATUS_BAR || mBarParams.barHide == BarHide.FLAG_HIDE_BAR);
         }
         if (OSUtils.isMIUI6Later())
             setMIUIStatusBarDarkFont(mWindow, mBarParams.darkFont);         //修改miui状态栏字体颜色
@@ -1446,6 +1433,18 @@ public class ImmersionBar {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
                     FlymeOSStatusBarFontUtils.setStatusBarDarkIcon(mActivity, mBarParams.darkFont);
             }
+        }
+    }
+
+    private void hideStatusBar(boolean enable) {
+        if (enable) {//隐藏状态栏
+            WindowManager.LayoutParams lp = mWindow.getAttributes();
+            lp.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+            mWindow.setAttributes(lp);
+        } else {//显示状态栏
+            WindowManager.LayoutParams attr = mWindow.getAttributes();
+            attr.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mWindow.setAttributes(attr);
         }
     }
 
