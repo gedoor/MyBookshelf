@@ -90,10 +90,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             mImmersionBar.statusBarColor(R.color.status_bar_bag);
         }
         if (isImmersionBarEnabled() && !isNightTheme()) {
-            mImmersionBar.statusBarDarkFont(true);
+            mImmersionBar.statusBarDarkFont(true, 0.2f);
         } else {
             mImmersionBar.statusBarDarkFont(false);
         }
+//        mImmersionBar.navigationBarColor(R.color.status_bar_bag);
         mImmersionBar.init();
 
     }

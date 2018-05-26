@@ -236,7 +236,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.initImmersionBar();
         if (isMenuShow) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
-                mImmersionBar.statusBarDarkFont(true);
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
@@ -245,7 +245,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if (!isImmersionBarEnabled()) {
                 mImmersionBar.statusBarDarkFont(false);
             } else if (readBookControl.getDarkStatusIcon()) {
-                mImmersionBar.statusBarDarkFont(true);
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
