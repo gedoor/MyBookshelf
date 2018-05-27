@@ -234,6 +234,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
+        if (readBookControl.getHideNavigationBar()) {
+            mImmersionBar.fullScreen(true);
+            if (ImmersionBar.hasNavigationBar(this)) {
+                llMenuBottom.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(this));
+            }
+        }
         if (isMenuShow) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
@@ -249,16 +255,19 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
-            if (hideStatusBar && readBookControl.getHideNavigationBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
-            } else if (hideStatusBar){
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
-            } else if (readBookControl.getHideNavigationBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
-            } else {
-                mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-            }
+
+                if (hideStatusBar && readBookControl.getHideNavigationBar()) {
+                    mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
+                } else if (hideStatusBar){
+                    mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
+                } else if (readBookControl.getHideNavigationBar()) {
+                    mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
+                } else {
+                    mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
+                }
+
         }
+
         mImmersionBar.init();
     }
 
@@ -336,6 +345,20 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
+        //目录初始化
+        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
+            @Override
+            public void animIn() {
+                isMenuShow = true;
+                initImmersionBar();
+            }
+
+            @Override
+            public void animOut() {
+                isMenuShow = false;
+                initImmersionBar();
+            }
+        });
         //界面设置
         readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
             @Override
@@ -374,20 +397,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void setBold() {
                 csvBook.setTextBold();
             }
-        });
-        //目录初始化
-        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
-            @Override
-            public void animIn() {
-                isMenuShow = true;
-                initImmersionBar();
-            }
 
-            @Override
-            public void animOut() {
-                isMenuShow = false;
-                initImmersionBar();
-            }
         });
         //其它设置
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
@@ -424,7 +434,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 }
             }
         });
-        readAdjustPop.initLight();
+
     }
 
     @Override

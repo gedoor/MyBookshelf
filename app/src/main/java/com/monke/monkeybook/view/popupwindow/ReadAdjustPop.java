@@ -63,6 +63,7 @@ public class ReadAdjustPop extends PopupWindow {
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
+        initLight();
 
         setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
