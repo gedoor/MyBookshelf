@@ -2112,6 +2112,12 @@ public class ImmersionBar {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    public static void navigationBarPadding(Activity activity, View view) {
+        if (hasNavigationBar(activity)) {
+            view.setPadding(0, 0, 0, getNavigationBarHeight(activity));
+        }
+    }
+
     /**
      * Gets bar params.
      *
