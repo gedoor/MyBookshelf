@@ -959,6 +959,35 @@ public class ImmersionBar {
     }
 
     /**
+     * 导航栏字体深色或亮色
+     * Status bar dark font immersion bar.
+     *
+     * @param isDarkFont  the is dark font
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarDarkFont(boolean isDarkFont) {
+        return navigationBarDarkFont(isDarkFont, 0f);
+    }
+
+    /**
+     * 导航栏字体深色或亮色，判断设备支不支持状态栏变色来设置状态栏透明度
+     * Status bar dark font immersion bar.
+     *
+     * @param isDarkFont  the is dark font
+     * @param statusAlpha the status alpha 如果不支持状态栏字体变色可以使用statusAlpha来指定状态栏透明度，比如白色状态栏的时候可以用到
+     * @return the immersion bar
+     */
+    public ImmersionBar navigationBarDarkFont(boolean isDarkFont, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
+        mBarParams.navigationBardarkFont = isDarkFont;
+        if (isSupportStatusBarDarkFont()) {
+            mBarParams.navigationBarAlpha = 0;
+        } else {
+            mBarParams.navigationBarAlpha = statusAlpha;
+        }
+        return this;
+    }
+
+    /**
      * 隐藏导航栏或状态栏
      *
      * @param barHide the bar hide
@@ -1415,6 +1444,7 @@ public class ImmersionBar {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !OSUtils.isEMUI3_1()) {
                 uiFlags = initBarAboveLOLLIPOP(uiFlags); //初始化5.0以上，包含5.0
                 uiFlags = setStatusBarDarkFont(uiFlags); //android 6.0以上设置状态栏字体为暗色
+                uiFlags = setNavigationBarLightFont(uiFlags);
                 supportActionBar();
             } else {
                 initBarBelowLOLLIPOP(); //初始化5.0以下，4.4以上沉浸式
@@ -1723,6 +1753,14 @@ public class ImmersionBar {
     private int setStatusBarDarkFont(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mBarParams.darkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            return uiFlags;
+        }
+    }
+
+    private int setNavigationBarLightFont(int uiFlags) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBarParams.navigationBardarkFont) {
+            return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         } else {
             return uiFlags;
         }

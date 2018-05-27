@@ -27,6 +27,7 @@ public class BarParams implements Cloneable {
     public boolean fullScreenTemp = fullScreen;
     public BarHide barHide = BarHide.FLAG_SHOW_BAR;  //隐藏Bar
     public boolean darkFont = false;                 //状态栏字体深色与亮色标志位
+    public boolean navigationBardarkFont = false;    //导航栏字体深色与亮色标志位
     public boolean statusBarFlag = true;            //是否可以修改状态栏颜色
     @ColorInt
     public int statusBarColorTransform = Color.BLACK;  //状态栏变换后的颜色
