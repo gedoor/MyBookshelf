@@ -14,6 +14,8 @@ import android.widget.PopupWindow;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,10 +53,8 @@ public class MoreSettingPop extends PopupWindow {
     @BindView(R.id.sbImmersionBar)
     SwitchButton sbImmersionBar;
 
-
-    private Context mContext;
-    private View view;
-    private ReadBookControl readBookControl;
+    private ReadBookActivity activity;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     public interface OnChangeProListener {
         void keepScreenOnChange(Boolean keepScreenOn);
@@ -65,20 +65,24 @@ public class MoreSettingPop extends PopupWindow {
     private OnChangeProListener changeProListener;
 
     @SuppressLint("InflateParams")
-    public MoreSettingPop(Context context, @NonNull OnChangeProListener changeProListener) {
+    public MoreSettingPop(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mContext = context;
+        this.activity = readBookActivity;
         this.changeProListener = changeProListener;
 
-        view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_more_setting, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.view_pop_more_setting, null);
+        if (ImmersionBar.hasNavigationBar(activity) && readBookControl.getHideNavigationBar()) {
+            view.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(activity));
+        }
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
 
-        setBackgroundDrawable(context.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
+        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
+        setClippingEnabled(false);
         setAnimationStyle(R.style.anim_pop_windowlight);
     }
 
@@ -121,14 +125,12 @@ public class MoreSettingPop extends PopupWindow {
             readBookControl.setLineChange(System.currentTimeMillis());
             Intent intent = new Intent(ImmersionAction);
             intent.putExtra("data", "Immersion_Change");
-            mContext.sendBroadcast(intent);
+            activity.sendBroadcast(intent);
             changeProListener.reLoad();
         });
     }
 
     private void initData() {
-        readBookControl = ReadBookControl.getInstance();
-
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setCheckedImmediatelyNoEvent(readBookControl.getHideNavigationBar());
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());

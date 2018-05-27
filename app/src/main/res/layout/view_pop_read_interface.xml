@@ -3,13 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/bg_shadow_bottom" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -197,151 +193,151 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/text_bg_style"/>
+            android:paddingStart="10dp"
+            android:text="@string/text_bg_style" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="center"
+            android:baselineAligned="false"
             android:orientation="horizontal"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="5dp"
             android:paddingBottom="10dp"
-            android:baselineAligned="false">
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp">
 
-                <FrameLayout
-                    android:layout_width="0dp"
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_white"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:contentDescription="背景1"
+                    android:src="@color/background"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_bg_white"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="背景1"
-                        android:src="@color/background"
-                        app:civ_border_color="@color/tv_text_default"
-                        app:civ_border_width="1dp" />
+                <TextView
+                    android:id="@+id/tv0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/tv0"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="文字"
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
+            </FrameLayout>
 
 
-                <FrameLayout
-                    android:layout_width="0dp"
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_yellow"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:contentDescription="背景2"
+                    android:src="@color/background"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_bg_yellow"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="背景2"
-                        android:src="@color/background"
-                        app:civ_border_color="@color/tv_text_default"
-                        app:civ_border_width="1dp" />
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/tv1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="文字"
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="10sp" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
 
-                <FrameLayout
-                    android:layout_width="0dp"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_green"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:contentDescription="背景3"
+                    android:src="@color/background"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_bg_green"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="背景3"
-                        android:src="@color/background"
-                        app:civ_border_color="@color/tv_text_default"
-                        app:civ_border_width="1dp" />
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/tv2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="文字"
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="10sp" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
 
-                <FrameLayout
-                    android:layout_width="0dp"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_blue"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:contentDescription="背景4"
+                    android:src="@color/background"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_bg_blue"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="背景4"
-                        android:src="@color/background"
-                        app:civ_border_color="@color/tv_text_default"
-                        app:civ_border_width="1dp" />
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/tv3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="文字"
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="10sp" />
+            </FrameLayout>
 
-                </FrameLayout>
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1">
 
-                <FrameLayout
-                    android:layout_width="0dp"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_bg_black"
+                    android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:contentDescription="背景5"
+                    android:src="@color/background"
+                    app:civ_border_color="@color/tv_text_default"
+                    app:civ_border_width="1dp" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/civ_bg_black"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="背景5"
-                        android:src="@color/background"
-                        app:civ_border_color="@color/tv_text_default"
-                        app:civ_border_width="1dp" />
+                <TextView
+                    android:id="@+id/tv4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="文字"
+                    android:textColor="@color/tv_text_default"
+                    android:textSize="10sp" />
 
-                    <TextView
-                        android:id="@+id/tv4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="文字"
-                        android:textColor="@color/tv_text_default"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

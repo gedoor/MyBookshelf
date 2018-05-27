@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/bg_shadow_bottom" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:background="@color/background"
         android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@color/background">
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:id="@+id/ll_follow_sys"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="@color/tv_text_default"
                 android:text="@string/brightness"
-                android:layout_gravity="center" />
+                android:textColor="@color/tv_text_default"
+                android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/tv_text_default"
-                android:text="@string/flow_sys"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_marginLeft="7dp" />
+                android:text="@string/flow_sys"
+                android:textColor="@color/tv_text_default"
+                android:textSize="14sp" />
+
             <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
                 android:id="@+id/scb_follow_sys"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:color_unchecked="#ffffff"
-                app:color_unchecked_stroke="#c1c1c1"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
                 app:color_checked="#767676"
                 app:color_tick="#ffffff"
-                app:duration="150"
-                android:clickable="false"
-                android:layout_gravity="center_vertical"/>
+                app:color_unchecked="#ffffff"
+                app:color_unchecked_stroke="#c1c1c1"
+                app:duration="150" />
         </LinearLayout>
 
         <com.monke.mprogressbar.MHorProgressBar
@@ -59,46 +59,47 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:fontdrawable="@color/btn_bg_press_2"
-            app:cantouch="true"
+            android:layout_marginStart="30dp"
             app:bgdrawable="@color/btn_bg_press"
-            app:progresswidth="2dp"
-            app:maxprogress="255"
+            app:cantouch="true"
             app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_height="13dp"
             app:cursordrawable_width="13dp"
-            app:cursordrawable_height="13dp" />
+            app:fontdrawable="@color/btn_bg_press_2"
+            app:maxprogress="255"
+            app:progresswidth="2dp" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/btn_bg_press"/>
+        android:background="@color/btn_bg_press" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:background="@color/background"
         android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@color/background">
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:id="@+id/ll_click"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/tv_text_default"
+                android:layout_gravity="center"
                 android:text="滑动灵敏度"
-                android:layout_gravity="center" />
+                android:textColor="@color/tv_text_default"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -107,68 +108,70 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:fontdrawable="@color/btn_bg_press_2"
-            app:cantouch="true"
+            android:layout_marginStart="30dp"
             app:bgdrawable="@color/btn_bg_press"
-            app:progresswidth="2dp"
-            app:maxprogress="300"
+            app:cantouch="true"
             app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_height="13dp"
             app:cursordrawable_width="13dp"
-            app:cursordrawable_height="13dp" />
+            app:fontdrawable="@color/btn_bg_press_2"
+            app:maxprogress="300"
+            app:progresswidth="2dp" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/btn_bg_press"/>
+        android:background="@color/btn_bg_press" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:background="@color/background"
         android:orientation="vertical"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@color/background">
+        android:paddingRight="10dp">
 
         <LinearLayout
             android:id="@+id/ll_tts_SpeechRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:padding="10dp">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="@color/tv_text_default"
                 android:text="朗读语速"
-                android:layout_gravity="center" />
+                android:textColor="@color/tv_text_default"
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/tv_text_default"
-                android:text="@string/flow_sys"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
-                android:layout_marginLeft="7dp" />
+                android:text="@string/flow_sys"
+                android:textColor="@color/tv_text_default"
+                android:textSize="14sp" />
+
             <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
                 android:id="@+id/scb_tts_follow_sys"
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                app:color_unchecked="#ffffff"
-                app:color_unchecked_stroke="#c1c1c1"
+                android:layout_gravity="center_vertical"
+                android:clickable="false"
                 app:color_checked="#767676"
                 app:color_tick="#ffffff"
-                app:duration="150"
-                android:clickable="false"
-                android:layout_gravity="center_vertical"/>
+                app:color_unchecked="#ffffff"
+                app:color_unchecked_stroke="#c1c1c1"
+                app:duration="150" />
         </LinearLayout>
 
         <com.monke.mprogressbar.MHorProgressBar
@@ -176,16 +179,16 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
-            app:fontdrawable="@color/btn_bg_press_2"
-            app:cantouch="true"
+            android:layout_marginStart="30dp"
             app:bgdrawable="@color/btn_bg_press"
-            app:progresswidth="2dp"
-            app:maxprogress="20"
+            app:cantouch="true"
             app:cursordrawable="@drawable/shape_progress_cursor_read"
+            app:cursordrawable_height="13dp"
             app:cursordrawable_width="13dp"
-            app:cursordrawable_height="13dp" />
+            app:fontdrawable="@color/btn_bg_press_2"
+            app:maxprogress="20"
+            app:progresswidth="2dp" />
 
     </LinearLayout>
 

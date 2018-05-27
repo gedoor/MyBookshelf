@@ -587,7 +587,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //界面
         llFont.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            new Handler().postDelayed(() -> {
+                readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0);
+            }, menuTopOut.getDuration());
         });
 
         //设置

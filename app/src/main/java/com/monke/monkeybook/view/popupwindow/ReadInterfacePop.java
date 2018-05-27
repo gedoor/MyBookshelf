@@ -72,7 +72,7 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tv4;
 
     private ReadBookActivity activity;
-    private ReadBookControl readBookControl;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     public static final int RESULT_CHOOSEFONT_PERMS = 106;
 
@@ -100,6 +100,9 @@ public class ReadInterfacePop extends PopupWindow {
         this.changeProListener = changeProListener;
 
         View view = LayoutInflater.from(readBookActivity).inflate(R.layout.view_pop_read_interface, null);
+        if (ImmersionBar.hasNavigationBar(activity) && readBookControl.getHideNavigationBar()) {
+            view.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(activity));
+        }
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
@@ -113,7 +116,6 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void initData() {
-        readBookControl = ReadBookControl.getInstance();
         setBg();
         updateText(readBookControl.getTextKindIndex());
         updateBg(readBookControl.getTextDrawableIndex());

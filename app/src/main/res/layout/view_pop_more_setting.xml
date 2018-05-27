@@ -3,12 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/background"
     android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/bg_shadow_bottom" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -67,10 +63,12 @@
                 android:background="@color/background"
                 android:orientation="vertical"
                 android:visibility="visible">
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.8dp"
                     android:background="@color/btn_bg_press" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -78,6 +76,7 @@
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

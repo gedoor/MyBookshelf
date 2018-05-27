@@ -16,6 +16,8 @@ import android.widget.PopupWindow;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -41,10 +43,10 @@ public class ReadAdjustPop extends PopupWindow {
     @BindView(R.id.scb_tts_follow_sys)
     SmoothCheckBox scbTtsFollowSys;
 
-    private Context mContext;
+    private ReadBookActivity activity;
     private Boolean isFollowSys;
     private int light;
-    private ReadBookControl readBookControl;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnAdjustListener adjustListener;
 
     public interface OnAdjustListener {
@@ -53,26 +55,29 @@ public class ReadAdjustPop extends PopupWindow {
         void speechRateFollowSys();
     }
 
-    public ReadAdjustPop(Context context, OnAdjustListener adjustListener) {
+    public ReadAdjustPop(ReadBookActivity readBookActivity, OnAdjustListener adjustListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.mContext = context;
+        this.activity = readBookActivity;
         this.adjustListener = adjustListener;
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.view_pop_read_adjust, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.view_pop_read_adjust, null);
+        if (ImmersionBar.hasNavigationBar(activity) && readBookControl.getHideNavigationBar()) {
+            view.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(activity));
+        }
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
         bindEvent();
         initLight();
 
-        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
+        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
+        setClippingEnabled(false);
         setAnimationStyle(R.style.anim_pop_windowlight);
     }
 
     private void initData() {
-        readBookControl = ReadBookControl.getInstance();
         isFollowSys = getIsFollowSys();
         light = getLight();
 
@@ -202,20 +207,20 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     public void setScreenBrightness(int value) {
-        WindowManager.LayoutParams params = ((Activity) mContext).getWindow().getAttributes();
+        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
         params.screenBrightness = value * 1.0f / 255f;
-        ((Activity) mContext).getWindow().setAttributes(params);
+        (activity).getWindow().setAttributes(params);
     }
 
     public void setScreenBrightness() {
-        WindowManager.LayoutParams params = ((Activity) mContext).getWindow().getAttributes();
+        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-        ((Activity) mContext).getWindow().setAttributes(params);
+        (activity).getWindow().setAttributes(params);
     }
 
     public int getScreenBrightness() {
         int value = 0;
-        ContentResolver cr = mContext.getContentResolver();
+        ContentResolver cr = activity.getContentResolver();
         try {
             value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
         } catch (Settings.SettingNotFoundException e) {
@@ -225,7 +230,7 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private void saveLight() {
-        SharedPreferences preference = mContext.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
+        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("light", light);
         editor.putBoolean("isfollowsys", isFollowSys);
@@ -233,12 +238,12 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private int getLight() {
-        SharedPreferences preference = mContext.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
+        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getInt("light", getScreenBrightness());
     }
 
     private Boolean getIsFollowSys() {
-        SharedPreferences preference = mContext.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
+        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getBoolean("isfollowsys", true);
     }
 
