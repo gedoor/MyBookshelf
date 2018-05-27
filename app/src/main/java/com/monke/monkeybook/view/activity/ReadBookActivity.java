@@ -272,7 +272,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         menuTopIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                isMenuShow = true;
                 initImmersionBar();
             }
 
@@ -294,14 +293,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void onAnimationStart(Animation animation) {
                 vMenuBg.setOnClickListener(null);
-                isMenuShow = false;
                 initImmersionBar();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
-                initImmersionBar();
             }
 
             @Override
@@ -714,6 +711,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 隐藏菜单
      */
     private void popMenuOut() {
+        isMenuShow = false;
         if (flMenu.getVisibility() == View.VISIBLE) {
             llMenuTop.startAnimation(menuTopOut);
             llMenuBottom.startAnimation(menuBottomOut);
@@ -724,10 +722,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 显示菜单
      */
     private void popMenuIn() {
+        isMenuShow = true;
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         llMenuBottom.startAnimation(menuBottomIn);
-        initImmersionBar();
     }
 
     private void toast(String msg) {
