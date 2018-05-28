@@ -26,4 +26,6 @@ public class RxBusTag {
     public final static String CHAPTER_CHANGE = "rxbus_chapter_change";
 
     public final static String MEDIA_BUTTON = "rxbus_media_button";
+
+    public final static String ALOUD_STRING = "rxbus_aloud_string";
 }

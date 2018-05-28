@@ -23,6 +23,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -802,6 +803,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         ibReadAloud.setContentDescription(text);
                         tvReadAloudTimer.setText(text);
                     }
+
                 });
             }
         };

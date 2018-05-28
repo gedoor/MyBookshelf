@@ -22,11 +22,16 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.RunMediaPlayer;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import java.util.ArrayList;
@@ -449,6 +454,9 @@ public class ReadAloudService extends Service {
                         .build());
     }
 
+    /**
+     * 服务监听
+     */
     public interface AloudServiceListener {
         void stopService();
 
@@ -459,6 +467,7 @@ public class ReadAloudService extends Service {
         void setStatus(int status);
 
         void upTimer(String text);
+
     }
 
     public class MyBinder extends Binder {
@@ -488,10 +497,14 @@ public class ReadAloudService extends Service {
         }
     }
 
+    /**
+     * 朗读监听
+     */
     private class ttsUtteranceListener extends UtteranceProgressListener {
 
         @Override
         public void onStart(String s) {
+            RxBus.get().post(RxBusTag.ALOUD_STRING, s);
             updateMediaSessionPlaybackState();
         }
 
