@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/action_library"
-        android:icon="@drawable/ic_track_changes_black_24dp_new"
+        android:icon="@drawable/ic_track_changes_black_24dp"
         android:title="@string/find_on_www"
         app:showAsAction="always" />
 
