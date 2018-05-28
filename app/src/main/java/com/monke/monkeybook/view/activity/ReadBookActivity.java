@@ -339,7 +339,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ivSetting.getDrawable().mutate();
         ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (preferences.getBoolean("nightTheme", false)) {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_high_black_24dp_new);
+            ibNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
         } else {
             ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp_new);
         }
