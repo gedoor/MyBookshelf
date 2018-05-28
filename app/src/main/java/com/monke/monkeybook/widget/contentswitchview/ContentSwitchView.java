@@ -6,12 +6,13 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.Layout;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
@@ -41,8 +41,7 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     private Activity activity;
     private Snackbar snackbar;
-    private SharedPreferences preference;
-
+    private int speakStart;
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
     private ReadBookControl readBookControl;
@@ -101,7 +100,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         durPageView = new BookContentView(getContext());
         durPageView.setReadBookControl(readBookControl);
         activity = (Activity)getContext();
-        preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
 
         viewContents = new ArrayList<>();
         viewContents.add(durPageView);
@@ -523,7 +521,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     public void readAloudStart() {
         readAloud = true;
+        speakStart = 0;
         loadDataListener.readAloud(durPageView.getContent());
+
     }
 
     /**
@@ -540,8 +540,16 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         readAloud = false;
     }
 
-    public void setReadAloud(boolean readAloud) {
-        this.readAloud = readAloud;
+    /**
+     * 开始朗读speakIndex段
+     */
+    public void speakStart(int speakIndex) {
+        int speakEnd = durPageView.getContent().indexOf("\n", speakStart);
+        SpannableString ssContent = new SpannableString(durPageView.getContent());
+        ssContent.setSpan(new UnderlineSpan(), speakStart, speakEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        durPageView.upSpeak(ssContent);
+        speakStart = speakEnd + 1;
     }
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {

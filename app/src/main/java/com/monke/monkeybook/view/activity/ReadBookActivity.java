@@ -804,6 +804,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         tvReadAloudTimer.setText(text);
                     }
 
+                    @Override
+                    public void speakStart(int speakIndex) {
+                        runOnUiThread(() -> csvBook.speakStart(speakIndex));
+                    }
+
                 });
             }
         };

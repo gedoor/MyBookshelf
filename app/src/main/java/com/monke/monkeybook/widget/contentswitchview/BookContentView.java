@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.text.SpannableString;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -350,5 +351,9 @@ public class BookContentView extends FrameLayout {
 
     public void setBattery(Integer battery) {
         vwBattery.setPower(battery);
+    }
+
+    public void upSpeak(SpannableString ssContent) {
+        tvContent.setText(ssContent);
     }
 }

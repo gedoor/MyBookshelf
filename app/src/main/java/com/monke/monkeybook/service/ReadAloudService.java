@@ -22,16 +22,11 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.RunMediaPlayer;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import java.util.ArrayList;
@@ -142,7 +137,7 @@ public class ReadAloudService extends Service {
         }
         nowSpeak = 0;
         contentList.clear();
-        String[] splitSpeech = content.replaceAll("……", "").split("\r\n");
+        String[] splitSpeech = content.split("\r\n");
         for (String aSplitSpeech : splitSpeech) {
             if (!isEmpty(aSplitSpeech)) {
                 contentList.add(aSplitSpeech);
@@ -468,6 +463,8 @@ public class ReadAloudService extends Service {
 
         void upTimer(String text);
 
+        void speakStart(int speakIndex);
+
     }
 
     public class MyBinder extends Binder {
@@ -504,7 +501,9 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onStart(String s) {
-            RxBus.get().post(RxBusTag.ALOUD_STRING, s);
+            if (aloudServiceListener != null) {
+                aloudServiceListener.speakStart(nowSpeak);
+            }
             updateMediaSessionPlaybackState();
         }
 
