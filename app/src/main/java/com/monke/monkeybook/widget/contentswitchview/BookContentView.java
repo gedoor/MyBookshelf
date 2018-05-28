@@ -299,14 +299,14 @@ public class BookContentView extends FrameLayout {
             if (readBookControl.getFontPath() != null || "".equals(readBookControl.getFontPath())) {
                 Typeface typeface = Typeface.createFromFile(readBookControl.getFontPath());
                 tvContent.setTypeface(typeface);
-                tvContent.setFont();
+                tvContent.invalidate();
                 tvPage.setTypeface(typeface);
                 tvProgress.setTypeface(typeface);
                 tvTitle.setTypeface(typeface);
                 tvTime.setTypeface(typeface);
             } else {
                 tvContent.setTypeface(Typeface.SANS_SERIF);
-                tvContent.setFont();
+                tvContent.invalidate();
                 tvTitle.setTypeface(Typeface.SANS_SERIF);
                 tvTime.setTypeface(Typeface.SANS_SERIF);
                 tvPage.setTypeface(Typeface.SANS_SERIF);
@@ -316,7 +316,7 @@ public class BookContentView extends FrameLayout {
             Toast.makeText(this.getContext(), "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             readBookControl.setReadBookFont(null);
             tvContent.setTypeface(Typeface.SANS_SERIF);
-            tvContent.setFont();
+            tvContent.invalidate();
             tvTitle.setTypeface(Typeface.SANS_SERIF);
             tvTime.setTypeface(Typeface.SANS_SERIF);
             tvPage.setTypeface(Typeface.SANS_SERIF);
@@ -355,5 +355,9 @@ public class BookContentView extends FrameLayout {
 
     public void upSpeak(SpannableString ssContent) {
         tvContent.setText(ssContent);
+    }
+
+    public void resetContent() {
+        tvContent.setText(content);
     }
 }

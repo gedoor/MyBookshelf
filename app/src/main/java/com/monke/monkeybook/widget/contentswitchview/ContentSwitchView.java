@@ -312,8 +312,26 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
+    /**
+     * 翻上页是否带动画
+     */
+    private void gotoPrePage(Boolean anim) {
+        if (state == PRE_AND_NEXT || state == ONLY_PRE) {
+            if (anim) {
+                initMoveSuccessAnim(viewContents.get(0), 0);
+            } else {
+                gotoPrePage();
+            }
+        } else {
+            noPre();
+        }
+    }
+
+    /**
+     * 上一页
+     */
     private void gotoPrePage() {
-        //翻向前一页
+        durPageView.resetContent();
         durPageView = viewContents.get(0);
         if (state == PRE_AND_NEXT) {
             ContentSwitchView.this.removeView(viewContents.get(viewContents.size() - 1));
@@ -329,8 +347,27 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         afterOpenPage();
     }
 
+    /**
+     * 翻下页是否带动画
+     */
+    private void gotoNextPage(Boolean anim) {
+        if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
+            if (anim) {
+                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
+                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
+            } else {
+                gotoNextPage();
+            }
+        } else {
+            noNext();
+        }
+    }
+
+    /**
+     * 下一页
+     */
     private void gotoNextPage() {
-        //翻向后一页
+        durPageView.resetContent();
         if (state == ONLY_NEXT) {
             durPageView = viewContents.get(1);
         } else {
@@ -350,7 +387,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         afterOpenPage();
     }
 
+    /**
+     * 翻页完成
+     */
     private void afterOpenPage() {
+        speakStart = 0;
         if (loadDataListener != null) {
             loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
@@ -469,37 +510,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         }
     }
 
-    /**
-     * 翻下页
-     */
-    private void gotoNextPage(Boolean anim) {
-        if (state == PRE_AND_NEXT || state == ONLY_NEXT) {
-            if (anim) {
-                int tempIndex = (state == PRE_AND_NEXT ? 1 : 0);
-                initMoveSuccessAnim(viewContents.get(tempIndex), -getWidth());
-            } else {
-                gotoNextPage();
-            }
-        } else {
-            noNext();
-        }
-    }
-
-    /**
-     * 翻上页
-     */
-    private void gotoPrePage(Boolean anim) {
-        if (state == PRE_AND_NEXT || state == ONLY_PRE) {
-            if (anim) {
-                initMoveSuccessAnim(viewContents.get(0), 0);
-            } else {
-                gotoPrePage();
-            }
-        } else {
-            noPre();
-        }
-    }
-
     @Override
     public void setDataFinish(BookContentView bookContentView, int durChapterIndex, int chapterAll, int durPageIndex, int pageAll, int fromPageIndex) {
         if (null != getDurContentView() && bookContentView == getDurContentView() && chapterAll > 0 && pageAll > 0) {
@@ -538,18 +548,27 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      */
     public void readAloudStop() {
         readAloud = false;
+        durPageView.resetContent();
     }
 
     /**
      * 开始朗读speakIndex段
      */
     public void speakStart(int speakIndex) {
+        if (speakIndex == 0) {
+            if (durPageView.getContent().startsWith("\u3000")) {
+                speakStart = 2;
+            }
+        }
         int speakEnd = durPageView.getContent().indexOf("\n", speakStart);
+        if (speakEnd == -1) {
+            speakEnd = durPageView.getContent().length();
+        }
         SpannableString ssContent = new SpannableString(durPageView.getContent());
         ssContent.setSpan(new UnderlineSpan(), speakStart, speakEnd,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         durPageView.upSpeak(ssContent);
-        speakStart = speakEnd + 1;
+        speakStart = speakEnd + 3;
     }
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {

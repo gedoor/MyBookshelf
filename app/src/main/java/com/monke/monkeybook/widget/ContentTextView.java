@@ -87,7 +87,6 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-
     private void drawScaledText(Canvas canvas, String line, float lineWidth,int xuhao) {
         float x = 0;
 
@@ -124,19 +123,9 @@ public class ContentTextView extends AppCompatTextView {
 
     }
 
-    public void setFont(){
-        invalidate();
-    }
-
-    public void setPaint(TextPaint paint){
-        this.paint = paint;
-        invalidate();
-    }
-
     private boolean isFirstLineOfParagraph(String line) {//字长度大于3&&第一个字符和第二个字符都是空格
         return line.length() > 3 && line.charAt(0) == ' ' && line.charAt(1) == ' ';
     }
-
 
     private boolean needScale(String line) {//判断不是空行
         return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
