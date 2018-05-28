@@ -54,10 +54,7 @@ public class ContentTextView extends AppCompatTextView {
             return;
         }
 
-        Paint.FontMetrics fm = paint.getFontMetrics();
         int textHeight = getLineHeight();
-
-        //计算行数
 
         //计算扩大数据
         double lineCount = ((getMeasuredHeight()) * 1.0f /  textHeight);
