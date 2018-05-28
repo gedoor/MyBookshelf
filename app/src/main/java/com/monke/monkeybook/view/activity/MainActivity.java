@@ -46,6 +46,7 @@ import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IMainPresenter;
 import com.monke.monkeybook.utils.NetworkUtil;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
@@ -293,6 +294,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     //侧边栏按钮
     private void setUpNavigationView() {
         View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        headerView.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
         navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
