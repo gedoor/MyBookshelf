@@ -555,6 +555,9 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
                 speakStart = 2;
             }
         }
+        if (speakStart > durPageView.getContent().length()) {
+            return;
+        }
         int speakEnd = durPageView.getContent().indexOf("\n", speakStart);
         if (speakEnd == -1) {
             speakEnd = durPageView.getContent().length();

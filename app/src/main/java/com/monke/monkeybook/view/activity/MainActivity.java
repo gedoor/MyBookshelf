@@ -293,7 +293,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     //侧边栏按钮
     private void setUpNavigationView() {
-        View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
