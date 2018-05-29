@@ -550,13 +550,13 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
      * 开始朗读speakIndex段
      */
     public void speakStart(int speakIndex) {
+        if (durPageView.getContent() == null | speakStart > durPageView.getContent().length()) {
+            return;
+        }
         if (speakIndex == 0) {
             if (durPageView.getContent().startsWith("\u3000")) {
                 speakStart = 2;
             }
-        }
-        if (speakStart > durPageView.getContent().length()) {
-            return;
         }
         int speakEnd = durPageView.getContent().indexOf("\n", speakStart);
         if (speakEnd == -1) {
