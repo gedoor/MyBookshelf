@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -230,12 +231,14 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     @Override
     public void onPause() {
         super.onPause();
+        Glide.with(this).pauseRequests();
         showHishtory = llSearchHistory.getVisibility() == View.VISIBLE;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Glide.with(this).pauseRequests();
         openOrCloseHistory(showHishtory);
     }
 

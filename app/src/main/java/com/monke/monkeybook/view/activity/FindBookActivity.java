@@ -10,6 +10,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.FindKindBean;
@@ -45,11 +46,6 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_expandable_list_vew);
-    }
-
-    @Override
-    protected void firstRequest() {
-
     }
 
     @Override
@@ -138,11 +134,6 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void bindEvent() {
-
     }
 
     @Override

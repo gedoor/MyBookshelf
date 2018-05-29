@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -496,6 +497,18 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Glide.with(this).resumeRequests();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Glide.with(this).pauseRequests();
     }
 
     @Override

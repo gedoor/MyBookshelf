@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -45,6 +46,18 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_book_choice);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Glide.with(this).resumeRequests();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Glide.with(this).pauseRequests();
     }
 
     @Override
