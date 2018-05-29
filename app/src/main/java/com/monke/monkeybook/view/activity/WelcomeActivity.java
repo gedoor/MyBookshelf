@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.monke.basemvplib.impl.IPresenter;
@@ -26,9 +27,18 @@ public class WelcomeActivity extends MBaseActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 避免从桌面启动程序后，会重新实例化入口类的activity
+        if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
+            finish();
+            return;
+        }
+    }
+
+    @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
-
     }
 
     @Override
