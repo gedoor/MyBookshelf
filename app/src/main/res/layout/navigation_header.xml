@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/background"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -17,13 +17,13 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textSize="20sp"
-            android:textColor="@color/tv_text_default"
+            android:textColor="@color/tv_btn_black"
             android:textStyle="bold"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/tv_text_default"
+            android:textColor="@color/tv_btn_black"
             android:text="@string/read_summary"/>
 
     </LinearLayout>

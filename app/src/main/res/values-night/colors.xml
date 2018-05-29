@@ -3,10 +3,6 @@
     <color name="background">#464646</color>
     <color name="background_menu">#282828</color>
 
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
     <color name="btn_bg_press">#545454</color>
     <color name="btn_bg_press_2">#363636</color>
     <color name="btn_bg_press_tp">#884e4e4e</color>
