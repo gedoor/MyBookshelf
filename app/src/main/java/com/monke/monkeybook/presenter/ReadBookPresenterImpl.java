@@ -62,6 +62,8 @@ import static android.text.TextUtils.isEmpty;
 public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
+    private final static int ADD = 1;
+    private final static int REMOVE = 2;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private Boolean isAdd = false; //判断是否已经添加进书架
@@ -187,7 +189,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                     bookShelf.getChapterList(chapterIndex).setBookContentBean(value);
                                     loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
                                 } else {
-                                    downloadingChapterList.add(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                    editDownloading(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                     //网络获取正文
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(chapterIndex).getDurChapterUrl(), chapterIndex, bookShelf.getTag())
                                             .observeOn(AndroidSchedulers.mainThread())
@@ -196,7 +198,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                             .subscribe(new SimpleObserver<BookContentBean>() {
                                                 @Override
                                                 public void onNext(BookContentBean value) {
-                                                    removeDownloading(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                                    editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                                     numberOfRetries = 0;
                                                     if (value.getRight()) {
                                                         bookShelf.getChapterList(chapterIndex).setBookContentBean(value);
@@ -210,7 +212,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                                                 @Override
                                                 public void onError(Throwable e) {
-                                                    removeDownloading(bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                                    editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                                     e.printStackTrace();
                                                     if (bookContentView != null && bookTag == bookContentView.getQTag())
                                                         //重试3次
@@ -256,7 +258,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(index).getDurChapterUrl()))
                             .build().unique();
                     if (bookContentBean == null) {
-                        downloadingChapterList.add(bookShelf.getChapterList(index).getDurChapterUrl());
+                        editDownloading(ADD, bookShelf.getChapterList(index).getDurChapterUrl());
                         e.onNext(index);
                     }
                     e.onComplete();
@@ -268,7 +270,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .subscribe(new SimpleObserver<BookContentBean>() {
                     @Override
                     public void onNext(BookContentBean bookContentBean) {
-                        removeDownloading(bookContentBean.getDurChapterUrl());
+                        editDownloading(REMOVE, bookContentBean.getDurChapterUrl());
                     }
 
                     @Override
@@ -278,17 +280,20 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 });
     }
 
+    /**
+     * 编辑下载列表
+     */
     private synchronized void editDownloading(int editType, String value) {
-
-    }
-
-    private synchronized void removeDownloading(String value) {
-        Iterator<String> iterator = downloadingChapterList.iterator();
-        while (iterator.hasNext()) {
-            String str = iterator.next();
-            if (str.equals(value)) {
-                iterator.remove();
-                return;
+        if (editType == ADD) {
+            downloadingChapterList.add(value);
+        } else if (editType == REMOVE) {
+            Iterator<String> iterator = downloadingChapterList.iterator();
+            while (iterator.hasNext()) {
+                String str = iterator.next();
+                if (str.equals(value)) {
+                    iterator.remove();
+                    return;
+                }
             }
         }
     }
