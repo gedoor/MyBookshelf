@@ -83,6 +83,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return true;
     }
 
+    /**
+     * 沉浸状态栏
+     */
     protected void initImmersionBar() {
         if (isImmersionBarEnabled()) {
             mImmersionBar.transparentStatusBar();
@@ -106,10 +109,16 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     }
 
+    /**
+     * @return 是否沉浸
+     */
     protected boolean isImmersionBarEnabled() {
         return preferences.getBoolean("immersionStatusBar", false);
     }
 
+    /**
+     * @return 是否夜间模式
+     */
     protected boolean isNightTheme() {
         return preferences.getBoolean("nightTheme", false);
     }
