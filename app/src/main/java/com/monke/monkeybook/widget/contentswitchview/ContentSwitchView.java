@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
@@ -39,7 +38,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
     private Boolean isMoving = false;
     private Boolean readAloud = false;
 
-    private Activity activity;
     private Snackbar snackbar;
     private int speakStart;
     private BookContentView durPageView;
@@ -99,7 +97,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         scrollX = DensityUtil.dp2px(getContext(), 30f);
         durPageView = new BookContentView(getContext());
         durPageView.setReadBookControl(readBookControl);
-        activity = (Activity)getContext();
 
         viewContents = new ArrayList<>();
         viewContents.add(durPageView);
