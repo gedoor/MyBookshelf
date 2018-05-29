@@ -19,40 +19,22 @@ public class WelcomeActivity extends MBaseActivity {
     @BindView(R.id.iv_bg)
     ImageView ivBg;
 
-    private ValueAnimator welAnimator;
-
     @Override
     protected IPresenter initInjector() {
         return null;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateActivity() {
         // 避免从桌面启动程序后，会重新实例化入口类的activity
         if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
             finish();
+            return;
         }
-    }
-
-    @Override
-    protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
-    }
-
-    @Override
-    protected void initData() {
-        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
-        welAnimator.setStartDelay(500);
-    }
-
-    @Override
-    protected void bindView() {
         ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void bindEvent() {
+        ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
+        welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {
             float alpha = (Float) animation.getAnimatedValue();
             ivBg.setAlpha(alpha);
@@ -79,11 +61,12 @@ public class WelcomeActivity extends MBaseActivity {
 
             }
         });
+        welAnimator.start();
     }
 
     @Override
-    protected void firstRequest() {
-        welAnimator.start();
+    protected void initData() {
+
     }
 
 }
