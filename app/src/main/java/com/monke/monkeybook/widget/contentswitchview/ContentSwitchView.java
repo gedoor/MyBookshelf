@@ -8,7 +8,6 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.text.Layout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.UnderlineSpan;
@@ -60,7 +59,6 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
         @Override
         public void onGlobalLayout() {
             int height = durPageView.getTvContent().getMeasuredHeight();
-            Layout layout = durPageView.getTvContent().getLayout();
             if (height > 0) {
                 if (loadDataListener != null && durHeight != height) {
                     durHeight = height;
