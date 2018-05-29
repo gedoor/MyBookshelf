@@ -51,6 +51,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -73,7 +74,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
 
-    private List<String> downloadingChapterList = new ArrayList<>();
+    private CopyOnWriteArrayList<String> downloadingChapterList = new CopyOnWriteArrayList<>();
 
     private int numberOfRetries = 0;
 
@@ -287,14 +288,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (editType == ADD) {
             downloadingChapterList.add(value);
         } else if (editType == REMOVE) {
-            Iterator<String> iterator = downloadingChapterList.iterator();
-            while (iterator.hasNext()) {
-                String str = iterator.next();
-                if (str.equals(value)) {
-                    iterator.remove();
-                    return;
-                }
-            }
+            downloadingChapterList.remove(value);
         }
     }
 

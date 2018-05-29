@@ -34,6 +34,7 @@ import com.monke.monkeybook.view.activity.MainActivity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -52,8 +53,10 @@ public class DownloadService extends Service {
     private Boolean isStartDownload = false;
     private Boolean isDownloading = false;
     private Boolean isFinish = false;
+    private final static int ADD = 1;
+    private final static int REMOVE = 2;
 
-    private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
+    private CopyOnWriteArrayList<DownloadChapterBean> downloadingChapter = new CopyOnWriteArrayList<>();
 
     @Override
     public void onCreate() {
@@ -192,7 +195,7 @@ public class DownloadService extends Service {
                     if (downloadChapterList != null && downloadChapterList.size() > 0) {
                         for (int i = 0; i < downloadChapterList.size(); i++) {
                             if (!checkInDownloadList(downloadChapterList.get(i))) {
-                                downloadingChapter.add(downloadChapterList.get(i));
+                                editDownloadList(ADD, downloadChapterList.get(i));
                                 e.onNext(downloadChapterList.get(i));
                                 e.onComplete();
                                 return;
@@ -228,7 +231,7 @@ public class DownloadService extends Service {
                     });
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                removeFromDownloadList(data);
+                editDownloadList(REMOVE, data);
                 e.onNext(true);
                 e.onComplete();
             }))
@@ -269,14 +272,11 @@ public class DownloadService extends Service {
         return inDownloadList;
     }
 
-    private synchronized void removeFromDownloadList(DownloadChapterBean value) {
-        DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(value);
-        Iterator<DownloadChapterBean> iterator = downloadingChapter.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getDurChapterUrl().equals(value.getDurChapterUrl())) {
-                iterator.remove();
-                return;
-            }
+    private synchronized void editDownloadList(int editType, DownloadChapterBean value) {
+        if (editType == ADD) {
+            downloadingChapter.add(value);
+        } else if (editType == REMOVE) {
+            downloadingChapter.remove(value);
         }
     }
 
