@@ -32,7 +32,6 @@ public class WelcomeActivity extends MBaseActivity {
         // 避免从桌面启动程序后，会重新实例化入口类的activity
         if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
             finish();
-            return;
         }
     }
 
