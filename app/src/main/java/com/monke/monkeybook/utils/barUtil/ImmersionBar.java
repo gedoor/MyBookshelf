@@ -966,7 +966,7 @@ public class ImmersionBar {
      * @return the immersion bar
      */
     public ImmersionBar navigationBarDarkFont(boolean isDarkFont) {
-        return navigationBarDarkFont(isDarkFont, 0f);
+        return navigationBarDarkFont(isDarkFont, 0.3f);
     }
 
     /**
@@ -979,7 +979,7 @@ public class ImmersionBar {
      */
     public ImmersionBar navigationBarDarkFont(boolean isDarkFont, @FloatRange(from = 0f, to = 1f) float statusAlpha) {
         mBarParams.navigationBardarkFont = isDarkFont;
-        if (isSupportStatusBarDarkFont()) {
+        if (canNavigationBarDarkFont()) {
             mBarParams.navigationBarAlpha = 0;
         } else {
             mBarParams.navigationBarAlpha = statusAlpha;
@@ -1758,12 +1758,22 @@ public class ImmersionBar {
         }
     }
 
+    /**
+     * 设置暗色导航栏按钮
+     */
     private int setNavigationBarLightFont(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBarParams.navigationBardarkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         } else {
             return uiFlags;
         }
+    }
+
+    /**
+     * 是否可以设置暗色导航栏按钮
+     */
+    public static boolean canNavigationBarDarkFont() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
     /**

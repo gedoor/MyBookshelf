@@ -94,11 +94,13 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         } else {
             mImmersionBar.statusBarDarkFont(false);
         }
-        mImmersionBar.navigationBarColor(R.color.background);
-        if (isNightTheme()) {
-            mImmersionBar.navigationBarDarkFont(false);
-        } else {
-            mImmersionBar.navigationBarDarkFont(true);
+        if (ImmersionBar.canNavigationBarDarkFont()) {
+            mImmersionBar.navigationBarColor(R.color.background);
+            if (isNightTheme()) {
+                mImmersionBar.navigationBarDarkFont(false);
+            } else {
+                mImmersionBar.navigationBarDarkFont(true);
+            }
         }
         mImmersionBar.init();
 
