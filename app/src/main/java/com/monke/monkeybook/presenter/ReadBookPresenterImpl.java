@@ -278,6 +278,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 });
     }
 
+    private synchronized void editDownloading(int editType, String value) {
+
+    }
+
     private synchronized void removeDownloading(String value) {
         Iterator<String> iterator = downloadingChapterList.iterator();
         while (iterator.hasNext()) {
