@@ -23,7 +23,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -588,9 +587,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //界面
         llFont.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> {
-                readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0);
-            }, menuTopOut.getDuration());
+            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置
