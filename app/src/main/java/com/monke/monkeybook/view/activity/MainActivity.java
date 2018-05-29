@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -297,7 +298,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
-        swNightTheme.setOnClickListener(view -> saveNightTheme(swNightTheme.isChecked()));
+        swNightTheme.setOnCheckedChangeListener((compoundButton, b) -> {
+            saveNightTheme(b);
+        });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
@@ -323,7 +326,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     break;
                 case R.id.action_night_theme:
                     swNightTheme.setChecked(!swNightTheme.isChecked());
-                    saveNightTheme(swNightTheme.isChecked());
                     break;
             }
             drawer.closeDrawers();
