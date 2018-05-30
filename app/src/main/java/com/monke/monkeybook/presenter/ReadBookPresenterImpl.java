@@ -636,6 +636,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         @Override
                         public void onNext(Boolean aBoolean) {
                             RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                            mView.setAdd(true);
                             mView.finish();
                         }
 

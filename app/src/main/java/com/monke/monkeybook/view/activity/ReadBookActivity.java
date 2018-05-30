@@ -883,6 +883,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         };
     }
 
+    /**
+     * 是否加入书架
+     */
     public void initCheckAddShelfPop() {
         checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
                 new CheckAddShelfPop.OnItemClickListener() {
@@ -927,14 +930,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 } else if (ReadAloudService.running && aloudStatus == PLAY) {
                     ReadAloudService.pause(this);
                     Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (!isAdd) {
-                    if (checkAddShelfPop == null) {
-                        initCheckAddShelfPop();
-                    }
-                    if (!checkAddShelfPop.isShowing()) {
-                        checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
-                    }
                     return true;
                 } else {
                     finish();
@@ -1141,6 +1136,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     @Override
     public void finish() {
+        if (!isAdd) {
+            if (checkAddShelfPop == null) {
+                initCheckAddShelfPop();
+            }
+            if (!checkAddShelfPop.isShowing()) {
+                checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+            }
+            return;
+        }
         if (!AppActivityManager.getInstance().isExist(MainActivity.class)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
