@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     private Boolean needAnim = true;
     private OnItemClickListener itemClickListener;
     private String bookshelfPx;
+    private Activity activity;
 
     private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
         @Override
@@ -66,8 +68,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfGridAdapter() {
+    public BookShelfGridAdapter(Activity activity) {
         super(false);
+        this.activity = activity;
         books = new ArrayList<>();
     }
 
@@ -109,8 +112,8 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
-        if (holder.ivCover.getContext() != null) {
-            Glide.with(holder.ivCover.getContext())
+        if (!activity.isFinishing()) {
+            Glide.with(activity)
                     .load(books.get(index).getBookInfoBean().getCoverUrl())
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop().placeholder(R.drawable.img_cover_default))

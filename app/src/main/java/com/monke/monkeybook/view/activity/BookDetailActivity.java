@@ -300,15 +300,4 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Glide.with(this).resumeRequests();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Glide.with(this).pauseRequests();
-    }
 }

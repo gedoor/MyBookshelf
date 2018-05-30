@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
+    private Activity activity;
     private List<SearchBookBean> searchBooks;
 
     public interface OnItemClickListener {
@@ -31,8 +33,9 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     private OnItemClickListener itemClickListener;
 
-    public ChoiceBookAdapter() {
+    public ChoiceBookAdapter(Activity activity) {
         super(true);
+        this.activity = activity;
         searchBooks = new ArrayList<>();
     }
 
@@ -44,8 +47,8 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        if (myViewHolder.ivCover.getContext() != null) {
-            Glide.with(myViewHolder.ivCover.getContext())
+        if (!activity.isFinishing()) {
+            Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
                     .apply(new RequestOptions()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

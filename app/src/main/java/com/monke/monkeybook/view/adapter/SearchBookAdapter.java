@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
+    private Activity activity;
     private List<SearchBookBean> searchBooks;
 
     public interface OnItemClickListener {
@@ -38,8 +40,9 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     private OnItemClickListener itemClickListener;
 
-    public SearchBookAdapter() {
+    public SearchBookAdapter(Activity activity) {
         super(true);
+        this.activity = activity;
         searchBooks = new ArrayList<>();
     }
 
@@ -52,8 +55,8 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
-        if (myViewHolder.ivCover.getContext() != null) {
-            Glide.with(myViewHolder.ivCover.getContext())
+        if (!activity.isFinishing()) {
+            Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
                     .apply(new RequestOptions()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
@@ -212,6 +215,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public void clearAll() {
+        if (searchBooks.size() > 0) {
+            try {
+                Glide.with(activity).onDestroy();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         searchBooks.clear();
         notifyDataSetChanged();
     }

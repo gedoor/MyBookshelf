@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 
+    private Activity activity;
     private List<BookShelfBean> books;
     private Boolean needAnim = true;
     private OnItemClickListener itemClickListener;
@@ -63,8 +65,9 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfListAdapter() {
+    public BookShelfListAdapter(Activity activity) {
         super(false);
+        this.activity = activity;
         books = new ArrayList<>();
     }
 
@@ -123,8 +126,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
                 books.get(index).getBookInfoBean().getName(),
                 books.get(index).getLastChapterListBean().getDurChapterName()));
-        if (holder.ivCover.getContext() != null) {
-            Glide.with(holder.ivCover.getContext()).load(books.get(index).getBookInfoBean().getCoverUrl())
+        if (!activity.isFinishing()) {
+            Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .centerCrop().placeholder(R.drawable.img_cover_default))
                     .into(holder.ivCover);
