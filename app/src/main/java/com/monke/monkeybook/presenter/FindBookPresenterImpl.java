@@ -32,7 +32,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<IFindBookView> impl
     @Override
     public void initData() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            for (BookSourceBean sourceBean : BookSourceManage.getSelectedBookSource()) {
+            for (BookSourceBean sourceBean : BookSourceManage.getAllBookSource()) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
                     List<FindKindBean> children = new ArrayList<>();
