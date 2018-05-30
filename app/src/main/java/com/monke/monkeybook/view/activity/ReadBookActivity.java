@@ -157,6 +157,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private boolean hideStatusBar;
     private boolean isBind;
     private String noteUrl;
+    private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
     private boolean fromMediaButton = false;
 
@@ -189,6 +190,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (savedInstanceState != null) {
             noteUrl = savedInstanceState.getString("noteUrl");
             aloudStatus = savedInstanceState.getInt("aloudStatus");
+            isAdd = savedInstanceState.getBoolean("isAdd");
         }
         readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
@@ -217,6 +219,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (mPresenter.getBookShelf() != null) {
             outState.putString("noteUrl", mPresenter.getBookShelf().getNoteUrl());
             outState.putInt("aloudStatus", aloudStatus);
+            outState.putBoolean("isAdd", isAdd);
         }
     }
 
@@ -446,25 +449,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
     }
 
-    @Override
-    public void initPop() {
-        //是否添加书架
-        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
-                new CheckAddShelfPop.OnItemClickListener() {
-                    @Override
-                    public void clickExit() {
-                        mPresenter.removeFromShelf();
-                    }
-
-                    @Override
-                    public void clickAddShelf() {
-                        mPresenter.addToShelf(null);
-                        checkAddShelfPop.dismiss();
-                    }
-                });
-        initChapterList();
-    }
-
     /**
      * 初始化目录列表
      */
@@ -617,7 +601,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onPause() {
         super.onPause();
-        mPresenter.saveProgress();
     }
 
     //设置ToolBar
@@ -900,6 +883,23 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         };
     }
 
+    public void initCheckAddShelfPop() {
+        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
+                new CheckAddShelfPop.OnItemClickListener() {
+                    @Override
+                    public void clickExit() {
+                        mPresenter.removeFromShelf();
+                    }
+
+                    @Override
+                    public void clickAddShelf() {
+                        mPresenter.addToShelf(null);
+                        checkAddShelfPop.dismiss();
+                    }
+                });
+        initChapterList();
+    }
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
@@ -928,8 +928,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     ReadAloudService.pause(this);
                     Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
                     return true;
-                } else if (!mPresenter.getAdd() && checkAddShelfPop != null && !checkAddShelfPop.isShowing()) {
-                    checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+                } else if (!isAdd) {
+                    if (checkAddShelfPop == null) {
+                        initCheckAddShelfPop();
+                    }
+                    if (!checkAddShelfPop.isShowing()) {
+                        checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+                    }
                     return true;
                 } else {
                     finish();
@@ -991,6 +996,17 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         return noteUrl;
     }
+
+    @Override
+    public Boolean getAdd() {
+        return isAdd;
+    }
+
+    @Override
+    public void setAdd(Boolean isAdd) {
+        this.isAdd = isAdd;
+    }
+
 
     @Override
     public ContentSwitchView getCsvBook() {

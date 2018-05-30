@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.View;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -67,7 +68,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private final static int REMOVE = 2;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private Boolean isAdd = false; //判断是否已经添加进书架
     private int open_from;
     private BookShelfBean bookShelf;
 
@@ -301,7 +301,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
     @Override
     public void saveProgress() {
-        if (bookShelf != null && isAdd) {
+        if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 BookshelfHelp.saveBookToShelf(bookShelf);
@@ -570,16 +570,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         return bookShelf;
     }
 
-    @Override
-    public void setBookshelf(BookShelfBean bookshelf) {
-        this.bookShelf = bookshelf;
-    }
-
     private void checkInShelf() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-            isAdd = !(temp == null || temp.size() == 0);
-            e.onNext(isAdd);
+            e.onNext(!(temp == null || temp.size() == 0));
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
@@ -587,7 +581,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
-                        mView.initPop();
+                        mView.setAdd(value);
+                        mView.initChapterList();
                         mView.setHpbReadProgressMax(0);
                         mView.startLoadingBook();
                     }
@@ -608,7 +603,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 //网络数据获取成功  存入BookShelf表数据库
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
-                isAdd = true;
+                mView.setAdd(true);
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
@@ -650,10 +645,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     });
         }
-    }
-
-    public Boolean getAdd() {
-        return isAdd;
     }
 
     private Observable<String> getRealFilePath(final Context context, final Uri uri) {

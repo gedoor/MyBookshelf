@@ -21,6 +21,10 @@ public interface IReadBookView extends IView {
      */
     String getNoteUrl();
 
+    Boolean getAdd();
+
+    void setAdd(Boolean isAdd);
+
     /**
      * @return 控制view
      */
@@ -40,8 +44,6 @@ public interface IReadBookView extends IView {
     void startLoadingBook();
 
     void setHpbReadProgressMax(int count);
-
-    void initPop();
 
     void initChapterList();
 

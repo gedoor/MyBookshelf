@@ -16,8 +16,6 @@ public interface IReadBookPresenter extends IPresenter {
 
     BookShelfBean getBookShelf();
 
-    void setBookshelf(BookShelfBean bookshelf);
-
     void initContent();
 
     void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);
@@ -35,8 +33,6 @@ public interface IReadBookPresenter extends IPresenter {
     void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 
     void removeFromShelf();
-
-    Boolean getAdd();
 
     void initData(Activity activity);
 
