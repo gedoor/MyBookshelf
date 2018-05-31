@@ -36,6 +36,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.crypto.spec.DHGenParameterSpec;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
@@ -55,8 +57,9 @@ public class DownloadService extends Service {
     private Boolean isFinish = false;
     private final static int ADD = 1;
     private final static int REMOVE = 2;
+    private final static int CHECK = 3;
 
-    private CopyOnWriteArrayList<DownloadChapterBean> downloadingChapter = new CopyOnWriteArrayList<>();
+    private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -194,7 +197,7 @@ public class DownloadService extends Service {
                             .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
                     if (downloadChapterList != null && downloadChapterList.size() > 0) {
                         for (int i = 0; i < downloadChapterList.size(); i++) {
-                            if (!checkInDownloadList(downloadChapterList.get(i))) {
+                            if (!editDownloadList(CHECK, downloadChapterList.get(i))) {
                                 editDownloadList(ADD, downloadChapterList.get(i));
                                 e.onNext(downloadChapterList.get(i));
                                 e.onComplete();
@@ -231,8 +234,8 @@ public class DownloadService extends Service {
                     });
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                editDownloadList(REMOVE, data);
-                e.onNext(true);
+                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
+                e.onNext(editDownloadList(REMOVE, data));
                 e.onComplete();
             }))
                     .observeOn(AndroidSchedulers.mainThread())
@@ -262,21 +265,21 @@ public class DownloadService extends Service {
         }
     }
 
-    private synchronized boolean checkInDownloadList(DownloadChapterBean value) {
-        boolean inDownloadList = false;
-        for (DownloadChapterBean chapterBean : downloadingChapter) {
-            if (chapterBean.getDurChapterUrl().equals(value.getDurChapterUrl())) {
-                inDownloadList = true;
-            }
-        }
-        return inDownloadList;
-    }
-
-    private synchronized void editDownloadList(int editType, DownloadChapterBean value) {
+    private synchronized boolean editDownloadList(int editType, DownloadChapterBean value) {
         if (editType == ADD) {
             downloadingChapter.add(value);
+            return true;
         } else if (editType == REMOVE) {
             downloadingChapter.remove(value);
+            return true;
+        } else {
+            boolean inDownloadList = false;
+            for (DownloadChapterBean chapterBean : downloadingChapter) {
+                if (chapterBean.getDurChapterUrl().equals(value.getDurChapterUrl())) {
+                    inDownloadList = true;
+                }
+            }
+            return inDownloadList;
         }
     }
 
