@@ -884,23 +884,32 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 是否加入书架
+     * 检查是否加入书架
      */
-    public void initCheckAddShelfPop() {
-        checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
-                new CheckAddShelfPop.OnItemClickListener() {
-                    @Override
-                    public void clickExit() {
-                        mPresenter.removeFromShelf();
-                    }
+    public boolean checkAddShelf() {
+        if (isAdd) {
+            return true;
+        } else {
+            if (checkAddShelfPop == null) {
+                checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
+                        new CheckAddShelfPop.OnItemClickListener() {
+                            @Override
+                            public void clickExit() {
+                                mPresenter.removeFromShelf();
+                            }
 
-                    @Override
-                    public void clickAddShelf() {
-                        mPresenter.addToShelf(null);
-                        checkAddShelfPop.dismiss();
-                    }
-                });
-        initChapterList();
+                            @Override
+                            public void clickAddShelf() {
+                                mPresenter.addToShelf(null);
+                                checkAddShelfPop.dismiss();
+                            }
+                        });
+            }
+            if (!checkAddShelfPop.isShowing()) {
+                checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+            }
+            return false;
+        }
     }
 
     @Override
@@ -1136,13 +1145,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     @Override
     public void finish() {
-        if (!isAdd) {
-            if (checkAddShelfPop == null) {
-                initCheckAddShelfPop();
-            }
-            if (!checkAddShelfPop.isShowing()) {
-                checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
-            }
+        if (!checkAddShelf()) {
             return;
         }
         if (!AppActivityManager.getInstance().isExist(MainActivity.class)) {
