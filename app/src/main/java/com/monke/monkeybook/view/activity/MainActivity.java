@@ -151,7 +151,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         // 这个必须要，没有的话进去的默认是个箭头。。正常应该是三横杠的
         mDrawerToggle.syncState();
         if (swNightTheme != null) {
-            swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
+            swNightTheme.setChecked(isNightTheme());
         }
     }
 
@@ -235,7 +235,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                             FILESELECT_RESULT, perms);
                 }
-                //startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
                 break;
             case R.id.action_add_url:
                 moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
