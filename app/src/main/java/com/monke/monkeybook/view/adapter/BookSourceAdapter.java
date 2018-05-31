@@ -2,6 +2,7 @@ package com.monke.monkeybook.view.adapter;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,14 +90,15 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return itemTouchCallbackListener;
     }
 
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_book_source_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.cbView.setText(dataList.get(position).getBookSourceName());
         holder.cbView.setChecked(dataList.get(position).getEnable());
         holder.cbView.setOnClickListener((View view) -> {
