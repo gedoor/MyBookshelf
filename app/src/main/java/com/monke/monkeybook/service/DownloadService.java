@@ -372,7 +372,7 @@ public class DownloadService extends Service {
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent doneIntent = new Intent(this, this.getClass());
         doneIntent.setAction(doneAction);
-        PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
