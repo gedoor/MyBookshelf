@@ -155,7 +155,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private boolean aloudButton;
     private boolean hideStatusBar;
-    private boolean isBind;
     private String noteUrl;
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
@@ -737,9 +736,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     @Override
                     public void stopService() {
                         csvBook.readAloudStop();
-                        if (isBind) {
+                        try {
                             unbindService(conn);
-                            isBind = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
@@ -1062,7 +1062,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 if (mPresenter.getBookShelf() != null) {
                     aloudButton = true;
                     csvBook.readAloudStart();
-                    isBind = ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
+                    ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
                 }
         }
     }
