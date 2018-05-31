@@ -55,6 +55,7 @@ public class DownloadActivity extends MBaseActivity {
     LinearLayout llContent;
 
     private DownloadAdapter adapter;
+    private boolean downloadPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +136,16 @@ public class DownloadActivity extends MBaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-
+            case R.id.action_cancel:
+                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD);
+                break;
+            case R.id.action_pause_resume:
+                if (downloadPause) {
+                    RxBus.get().post(RxBusTag.START_DOWNLOAD);
+                } else {
+                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD);
+                }
+                break;
             case android.R.id.home:
                 finish();
                 break;
