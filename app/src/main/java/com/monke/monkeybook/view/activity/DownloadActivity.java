@@ -158,7 +158,7 @@ public class DownloadActivity extends MBaseActivity {
     }
 
     private void downloadPause() {
-
+        downloadPause = true;
     }
 
     private void downloadUp() {
@@ -215,6 +215,7 @@ public class DownloadActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)})
     public void progressTask(DownloadChapterBean downloadChapterBean) {
+        downloadPause = false;
         downloadUp();
     }
 }
