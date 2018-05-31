@@ -205,6 +205,6 @@ public class DownloadActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)})
     public void progressTask(DownloadChapterBean downloadChapterBean) {
-//        downloadUp();
+        downloadUp();
     }
 }

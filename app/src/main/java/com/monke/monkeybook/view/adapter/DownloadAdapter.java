@@ -59,7 +59,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dataS.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
