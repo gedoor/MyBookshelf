@@ -64,8 +64,9 @@ import static android.text.TextUtils.isEmpty;
 public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
-    private final static int ADD = 1;
-    private final static int REMOVE = 2;
+    private final int ADD = 1;
+    private final int REMOVE = 2;
+    private final int CHECK = 3;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private int open_from;
@@ -74,7 +75,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private int pageLineCount = 5;   //假设5行一页
     private int pageWidth;
 
-    private CopyOnWriteArrayList<String> downloadingChapterList = new CopyOnWriteArrayList<>();
+    private List<String> downloadingChapterList = new ArrayList<>();
 
     private int numberOfRetries = 0;
 
@@ -249,7 +250,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .flatMap(index -> Observable.create((ObservableOnSubscribe<Integer>) e -> {
                     if (index < bookShelf.getChapterListSize()
                             && !bookShelf.getChapterList(index).getHasCache()
-                            && downloadingChapterList.indexOf(bookShelf.getChapterList(index).getDurChapterUrl()) == -1) {
+                            && !editDownloading(CHECK, bookShelf.getChapterList(index).getDurChapterUrl())) {
                         e.onNext(index);
                     }
                     e.onComplete();
@@ -284,11 +285,15 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     /**
      * 编辑下载列表
      */
-    private synchronized void editDownloading(int editType, String value) {
+    private synchronized boolean editDownloading(int editType, String value) {
         if (editType == ADD) {
             downloadingChapterList.add(value);
+            return true;
         } else if (editType == REMOVE) {
             downloadingChapterList.remove(value);
+            return true;
+        } else {
+            return downloadingChapterList.indexOf(value) != -1;
         }
     }
 
