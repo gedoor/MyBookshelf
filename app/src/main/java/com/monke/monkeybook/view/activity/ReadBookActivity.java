@@ -341,7 +341,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ivInterface.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ivSetting.getDrawable().mutate();
         ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        if (preferences.getBoolean("nightTheme", false)) {
+        if (isNightTheme()) {
             ibNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
         } else {
             ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp_new);
@@ -529,12 +529,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //夜间模式
         ibNightTheme.getDrawable().mutate();
         ibNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibNightTheme.setOnClickListener(view -> {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("nightTheme", !preferences.getBoolean("nightTheme", false));
-            editor.apply();
-            setNightTheme();
-        });
+        ibNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
 
         //上一章
         tvPre.setOnClickListener(view -> {

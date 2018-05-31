@@ -28,7 +28,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         super.onCreate(savedInstanceState);
-        setNightTheme();
+        initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
@@ -126,6 +126,13 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return preferences.getBoolean("nightTheme", false);
     }
 
+    protected void setNightTheme(boolean isNightTheme) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("nightTheme", isNightTheme);
+        editor.apply();
+        initNightTheme();
+    }
+
     public void setOrientation() {
         switch (preferences.getString(getString(R.string.pk_screen_direction), "0")) {
             case "0":
@@ -140,7 +147,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
-    public void setNightTheme() {
+    public void initNightTheme() {
         if (isNightTheme()) {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {

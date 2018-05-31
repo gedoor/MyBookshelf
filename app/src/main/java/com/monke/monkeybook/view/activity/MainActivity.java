@@ -296,8 +296,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         navigationView.addHeaderView(headerView);
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
-        swNightTheme.setChecked(preferences.getBoolean("nightTheme", false));
-        swNightTheme.setOnCheckedChangeListener((compoundButton, b) -> saveNightTheme(b));
+        swNightTheme.setChecked(isNightTheme());
+        swNightTheme.setOnClickListener(view -> setNightTheme(swNightTheme.isChecked()));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
@@ -328,18 +328,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             drawer.closeDrawers();
             return true;
         });
-    }
-
-    private void saveNightTheme(Boolean isNightTheme) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("nightTheme", isNightTheme);
-        editor.apply();
-        if (isNightTheme) {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-        recreate();
     }
 
     //备份
