@@ -29,6 +29,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.view.activity.DownloadActivity;
 import com.monke.monkeybook.view.activity.MainActivity;
 
 import java.util.ArrayList;
@@ -371,7 +372,7 @@ public class DownloadService extends Service {
     private void isProgress(DownloadChapterBean downloadChapterBean) {
         RxBus.get().post(RxBusTag.PROGRESS_DOWNLOAD_LISTENER, downloadChapterBean);
 
-        Intent mainIntent = new Intent(this, MainActivity.class);
+        Intent mainIntent = new Intent(this, DownloadActivity.class);
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent doneIntent = new Intent(this, this.getClass());
         doneIntent.setAction(doneAction);
