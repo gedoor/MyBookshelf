@@ -18,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -296,7 +295,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         Menu drawerMenu = navigationView.getMenu();
         swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(isNightTheme());
-        swNightTheme.setOnClickListener(view -> setNightTheme(swNightTheme.isChecked()));
+        swNightTheme.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                setNightTheme(b);
+            }
+        });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
@@ -321,7 +324,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     restore();
                     break;
                 case R.id.action_night_theme:
-                    swNightTheme.setChecked(!swNightTheme.isChecked());
+                    swNightTheme.setChecked(!isNightTheme());
+                    setNightTheme(!isNightTheme());
                     break;
             }
             drawer.closeDrawers();
