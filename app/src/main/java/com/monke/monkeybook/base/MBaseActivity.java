@@ -71,6 +71,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return super.onMenuOpened(featureId, menu);
     }
 
+    /**
+     * 设置MENU图标颜色
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         for (int i = 0; i < menu.size(); i++) {

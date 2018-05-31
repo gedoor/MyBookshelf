@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fl_content"
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -94,7 +95,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="8dp"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                tools:ignore="RtlHardcoded">
                 <ImageView
                     android:layout_width="9dp"
                     android:layout_height="15dp"
@@ -111,7 +113,8 @@
                 app:fontdrawable="#767676"
                 app:cantouch="false"
                 app:bgdrawable="@color/btn_bg_press"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                tools:ignore="RtlHardcoded" />
 
         </LinearLayout>
     </RelativeLayout>

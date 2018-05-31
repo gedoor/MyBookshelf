@@ -17,8 +17,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:persistent="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/CAppTheme"
         tools:ignore="AllowBackup"
@@ -26,6 +26,7 @@
         <activity android:name=".view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -43,6 +44,7 @@
             android:targetActivity=".view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -50,13 +52,16 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity-alias>
+
         <activity
             android:name=".view.activity.ReadBookActivity"
             android:configChanges="locale|keyboardHidden"
             android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
@@ -120,7 +125,11 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
         <activity android:name=".view.activity.WelcomeToReadActivity" />
-        <activity android:name=".view.activity.ReadStyleActivity"
+        <activity
+            android:name=".view.activity.ReadStyleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity android:name=".view.activity.DownloadActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
 

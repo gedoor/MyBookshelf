@@ -50,7 +50,6 @@ import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.view.impl.IMainView;
-import com.monke.monkeybook.view.popupwindow.DownloadListPop;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
@@ -87,7 +86,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private DownloadListPop downloadListPop;
     private MoProgressHUD moProgressHUD;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
@@ -139,7 +137,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         setupActionBar();
         initDrawer();
         moProgressHUD = new MoProgressHUD(this);
-        downloadListPop = new DownloadListPop(MainActivity.this);
 
         if (viewIsList) {
             rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
@@ -213,7 +210,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         return super.onCreateOptionsMenu(menu);
     }
 
-    //菜单
+
+    /**
+     * 菜单事件
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         SharedPreferences.Editor editor = preferences.edit();
@@ -241,7 +241,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
                 break;
             case R.id.action_download:
-                downloadListPop.showAsDropDown(toolbar);
+                startActivity(new Intent(this, DownloadActivity.class));
                 break;
             case R.id.action_download_all:
                 mPresenter.downloadAll();
@@ -516,7 +516,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        downloadListPop.onDestroy();
         unregisterReceiver(immersionReceiver);
     }
 
