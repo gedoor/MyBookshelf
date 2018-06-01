@@ -79,6 +79,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
+import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
@@ -168,7 +169,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
     private Intent readAloudIntent;
-    private ServiceConnection conn;
     private ThisBatInfoReceiver batInfoReceiver;
     private ContentSwitchView.LoadDataListener loadDataListener;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -275,7 +275,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     protected void initData() {
-        initServiceConn();
         initLoadDataListener();
         mPresenter.saveProgress();
         //显示菜单
@@ -715,78 +714,47 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         llMenuBottom.startAnimation(menuBottomIn);
     }
 
-    private void toast(String msg) {
+    @Override
+    public void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     /**
-     * 朗读服务
+     * 更新朗读状态
      */
-    private void initServiceConn() {
-        conn = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-            }
+    @Override
+    public void upAloudState(int status) {
+        aloudStatus = status;
+        switch (status) {
+            case NEXT:
+                csvBook.readAloudNext();
+                break;
+            case PLAY:
+                ibReadAloud.setImageResource(R.drawable.ic_pause2);
+                llReadAloudTimer.setVisibility(View.VISIBLE);
+                break;
+            case PAUSE:
+                ibReadAloud.setImageResource(R.drawable.ic_play2);
+                llReadAloudTimer.setVisibility(View.VISIBLE);
+                break;
+            default:
+                csvBook.readAloudStop();
+                ibReadAloud.setImageResource(R.drawable.ic_read_aloud);
+                llReadAloudTimer.setVisibility(View.INVISIBLE);
+        }
+        ibReadAloud.getDrawable().mutate();
+        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+    }
 
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                //返回一个MsgService对象
-                ReadAloudService readAloudService = ((ReadAloudService.MyBinder) service).getService();
-                readAloudService.setAloudServiceListener(new ReadAloudService.AloudServiceListener() {
-                    @Override
-                    public void stopService() {
-                        csvBook.readAloudStop();
-                        try {
-                            unbindService(conn);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+    @Override
+    public void upAloudTimer(String text) {
+        ibReadAloud.setContentDescription(text);
+        tvReadAloudTimer.setText(text);
+    }
 
-                    @Override
-                    public void readAloudNext() {
-                        runOnUiThread(() -> csvBook.readAloudNext());
-                    }
-
-                    @Override
-                    public void showMassage(String msg) {
-                        runOnUiThread(() -> toast(msg));
-                    }
-
-                    @Override
-                    public void setStatus(int status) {
-                        aloudStatus = status;
-                        switch (status) {
-                            case PLAY:
-                                ibReadAloud.setImageResource(R.drawable.ic_pause2);
-                                llReadAloudTimer.setVisibility(View.VISIBLE);
-                                break;
-                            case PAUSE:
-                                ibReadAloud.setImageResource(R.drawable.ic_play2);
-                                llReadAloudTimer.setVisibility(View.VISIBLE);
-                                break;
-                            default:
-                                ibReadAloud.setImageResource(R.drawable.ic_read_aloud);
-                                llReadAloudTimer.setVisibility(View.INVISIBLE);
-                        }
-                        ibReadAloud.getDrawable().mutate();
-                        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-                    }
-
-                    @Override
-                    public void upTimer(String text) {
-                        ibReadAloud.setContentDescription(text);
-                        tvReadAloudTimer.setText(text);
-                    }
-
-                    @Override
-                    public void speakStart(int speakIndex) {
-                        runOnUiThread(() -> csvBook.speakStart(speakIndex));
-                    }
-
-                });
-            }
-        };
+    @Override
+    public void speakIndex(int speakIndex) {
+        runOnUiThread(() -> csvBook.speakStart(speakIndex));
     }
 
     /**
@@ -1062,7 +1030,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 if (mPresenter.getBookShelf() != null) {
                     aloudButton = true;
                     csvBook.readAloudStart();
-                    ReadBookActivity.this.bindService(readAloudIntent, conn, Context.BIND_AUTO_CREATE);
                 }
         }
     }

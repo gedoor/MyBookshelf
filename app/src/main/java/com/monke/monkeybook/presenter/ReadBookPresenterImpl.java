@@ -701,6 +701,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         RxBus.get().unregister(this);
     }
 
+    /////////////////////RxBus////////////////////////
+
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
     public void chapterChange(ChapterListBean chapterListBean) {
         if (bookShelf != null && bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
@@ -713,5 +715,25 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (bookShelf != null) {
             mView.onMediaButton();
         }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_STATE)})
+    public void upAloudState(Integer state) {
+        mView.upAloudState(state);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_MSG)})
+    public void showMsg(String msg) {
+        mView.toast(msg);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_INDEX)})
+    public void speakIndex(Integer index) {
+        mView.speakIndex(index);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_TIMER)})
+    public void upAloudTimer(String timer) {
+        mView.upAloudTimer(timer);
     }
 }

@@ -62,4 +62,16 @@ public interface IReadBookView extends IView {
     void chapterChange(ChapterListBean chapterListBean);
 
     void onMediaButton();
+
+    void toast(String msg);
+
+    /**
+     * 更新朗读状态
+     */
+    void upAloudState(int state);
+
+
+    void upAloudTimer(String timer);
+
+    void speakIndex(int index);
 }
