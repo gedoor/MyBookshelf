@@ -48,6 +48,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DownloadService extends Service {
     public static final String doneAction = "doneAction";
+    public static final String pauseAction = "pauseAction";
+    public static final String startAction = "startAction";
     public static final String addDownloadAction = "addDownload";
     private final int notificationId = 19931118;
 
@@ -87,22 +89,28 @@ public class DownloadService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action == null) {
-            stopSelf();
-        } else {
-            switch (action) {
-                case addDownloadAction:
-                    String noteUrl = intent.getStringExtra("noteUrl");
-                    int start = intent.getIntExtra("start", 0);
-                    int end = intent.getIntExtra("end", 0);
-                    addNewTask(noteUrl, start, end);
-                    break;
-                case doneAction:
-                    cancelDownload();
-                    break;
-                default:
-                    break;
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action == null) {
+                stopSelf();
+            } else {
+                switch (action) {
+                    case addDownloadAction:
+                        String noteUrl = intent.getStringExtra("noteUrl");
+                        int start = intent.getIntExtra("start", 0);
+                        int end = intent.getIntExtra("end", 0);
+                        addNewTask(noteUrl, start, end);
+                        break;
+                    case doneAction:
+                        cancelDownload();
+                        break;
+                    case pauseAction:
+                        pauseDownload();
+                        break;
+                    case startAction:
+                        startDownload();
+                        break;
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -370,14 +378,17 @@ public class DownloadService extends Service {
                 });
     }
 
+    private PendingIntent getThisServicePendingIntent(String actionStr) {
+        Intent intent = new Intent(this, this.getClass());
+        intent.setAction(actionStr);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
     private void isProgress(DownloadChapterBean downloadChapterBean) {
         RxBus.get().post(RxBusTag.PROGRESS_DOWNLOAD_LISTENER, downloadChapterBean);
 
         Intent mainIntent = new Intent(this, DownloadActivity.class);
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent doneIntent = new Intent(this, this.getClass());
-        doneIntent.setAction(doneAction);
-        PendingIntent donePendingIntent = PendingIntent.getService(this, 0, doneIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
                 .setSmallIcon(R.drawable.ic_download_black_24dp)
@@ -385,8 +396,13 @@ public class DownloadService extends Service {
                 .setAutoCancel(true)
                 .setContentTitle("正在下载：" + downloadChapterBean.getBookName())
                 .setContentText(downloadChapterBean.getDurChapterName() == null ? "  " : downloadChapterBean.getDurChapterName())
-                .setContentIntent(mainPendingIntent)
-                .addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), donePendingIntent);
+                .setContentIntent(mainPendingIntent);
+        if (isStartDownload) {
+            builder.addAction(R.drawable.ic_pause1, getString(R.string.pause), getThisServicePendingIntent(pauseAction));
+        } else {
+            builder.addAction(R.drawable.ic_play1, getString(R.string.resume), getThisServicePendingIntent(startAction));
+        }
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(doneAction));
         //发送通知
         startForeground(notificationId, builder.build());
     }
