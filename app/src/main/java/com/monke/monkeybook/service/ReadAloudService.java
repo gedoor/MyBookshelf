@@ -154,7 +154,9 @@ public class ReadAloudService extends Service {
 
     public void playTTS() {
         if (contentList.size() < 1) {
-            aloudServiceListener.readAloudNext();
+            if (aloudServiceListener != null) {
+                aloudServiceListener.readAloudNext();
+            }
             return;
         }
         if (ttsInitSuccess && !speak && requestFocus()) {
@@ -480,7 +482,9 @@ public class ReadAloudService extends Service {
             if (i == TextToSpeech.SUCCESS) {
                 int result = textToSpeech.setLanguage(Locale.CHINA);
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    aloudServiceListener.showMassage("LANG_MISSING_DATA  or LANG_NOT_SUPPORTED!");
+                    if (aloudServiceListener != null) {
+                        aloudServiceListener.showMassage("LANG_MISSING_DATA  or LANG_NOT_SUPPORTED!");
+                    }
                 } else {
                     textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     ttsInitSuccess = true;
@@ -489,8 +493,8 @@ public class ReadAloudService extends Service {
             } else {
                 if (aloudServiceListener != null) {
                     aloudServiceListener.showMassage("TTS初始化失败");
-                    doneService();
                 }
+                doneService();
             }
         }
     }
@@ -512,14 +516,18 @@ public class ReadAloudService extends Service {
         public void onDone(String s) {
             nowSpeak = nowSpeak + 1;
             if (nowSpeak >= contentList.size()) {
-                aloudServiceListener.readAloudNext();
+                if (aloudServiceListener != null) {
+                    aloudServiceListener.readAloudNext();
+                }
             }
         }
 
         @Override
         public void onError(String s) {
             pauseReadAloud(true);
-            aloudServiceListener.setStatus(PAUSE);
+            if (aloudServiceListener != null) {
+                aloudServiceListener.setStatus(PAUSE);
+            }
         }
     }
 
