@@ -106,24 +106,26 @@ public class ReadAloudService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (action != null) {
-            switch (action) {
-                case ActionDoneService:
-                    doneService();
-                    break;
-                case ActionPauseService:
-                    pauseReadAloud(true);
-                    break;
-                case ActionResumeService:
-                    resumeReadAloud();
-                    break;
-                case ActionSetTimer:
-                    updateTimer(intent.getIntExtra("minute", 10));
-                    break;
-                case ActionNewReadAloud:
-                    newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
-                    break;
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ActionDoneService:
+                        doneService();
+                        break;
+                    case ActionPauseService:
+                        pauseReadAloud(true);
+                        break;
+                    case ActionResumeService:
+                        resumeReadAloud();
+                        break;
+                    case ActionSetTimer:
+                        updateTimer(intent.getIntExtra("minute", 10));
+                        break;
+                    case ActionNewReadAloud:
+                        newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
+                        break;
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
