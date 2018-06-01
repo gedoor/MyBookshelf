@@ -53,7 +53,7 @@ public class DownloadService extends Service {
 
     private SharedPreferences preferences;
 
-    private Boolean isStartDownload = false;
+    public static Boolean isStartDownload = false;
     private Boolean isDownloading = false;
     private Boolean isFinish = false;
     private final static int ADD = 1;

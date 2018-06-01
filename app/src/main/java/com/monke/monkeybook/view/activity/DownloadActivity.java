@@ -32,6 +32,7 @@ import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.view.adapter.DownloadAdapter;
 
@@ -94,6 +95,7 @@ public class DownloadActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
+        downloadPause = !DownloadService.isStartDownload;
         initRecyclerView();
         RxBus.get().register(this);
     }
@@ -111,9 +113,21 @@ public class DownloadActivity extends MBaseActivity {
                     .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(noteUrl))
                     .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
             DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteInTx(downloadChapterList);
+            emitter.onNext(true);
+            emitter.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe();
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        downloadUp();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     //设置ToolBar
