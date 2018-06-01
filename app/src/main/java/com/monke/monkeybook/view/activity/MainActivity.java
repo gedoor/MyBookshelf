@@ -202,6 +202,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         };
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem pauseMenu = menu.getItem(6);
+        if (viewIsList) {
+            pauseMenu.setTitle(R.string.action_grid);
+        } else {
+            pauseMenu.setTitle(R.string.action_list);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
