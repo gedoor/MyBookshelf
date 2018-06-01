@@ -365,6 +365,7 @@ public class DownloadService extends Service {
                     @Override
                     public void onNext(DownloadChapterBean value) {
                         if (value.getNoteUrl() != null && value.getNoteUrl().length() > 0) {
+                            isProgress(value);
                             RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD_LISTENER, new Object());
                         } else {
                             RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
