@@ -108,19 +108,24 @@ public class DownloadActivity extends MBaseActivity {
     }
 
     public void delDownload(String noteUrl) {
-        Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
+        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
             List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder()
                     .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(noteUrl))
                     .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
             DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteInTx(downloadChapterList);
-            emitter.onNext(true);
+            downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().list();
+            emitter.onNext(downloadChapterList == null ? 0 : downloadChapterList.size());
             emitter.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new SimpleObserver<Integer>() {
                     @Override
-                    public void onNext(Boolean aBoolean) {
-                        downloadUp();
+                    public void onNext(Integer size) {
+                        if (downloadPause & size == 0) {
+                            RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, downloadPause);
+                        } else {
+                            downloadUp();
+                        }
                     }
 
                     @Override
