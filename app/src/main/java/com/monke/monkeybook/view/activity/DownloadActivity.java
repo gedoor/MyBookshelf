@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -124,6 +125,21 @@ public class DownloadActivity extends MBaseActivity {
         }
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem pauseMenu = menu.getItem(0);
+        if (downloadPause) {
+            pauseMenu.setIcon(R.drawable.ic_play1);
+            pauseMenu.setTitle(R.string.start);
+        } else {
+            pauseMenu.setIcon(R.drawable.ic_pause1);
+            pauseMenu.setTitle(R.string.pause);
+        }
+        pauseMenu.getIcon().mutate();
+        pauseMenu.getIcon().setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,13 +153,13 @@ public class DownloadActivity extends MBaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_cancel:
-                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD);
+                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, downloadPause);
                 break;
             case R.id.action_pause_resume:
                 if (downloadPause) {
-                    RxBus.get().post(RxBusTag.START_DOWNLOAD);
+                    RxBus.get().post(RxBusTag.START_DOWNLOAD, downloadPause);
                 } else {
-                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD);
+                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, downloadPause);
                 }
                 break;
             case android.R.id.home:
@@ -153,12 +169,9 @@ public class DownloadActivity extends MBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void downloadFinish() {
-        adapter.upDataS(new ArrayList<>());
-    }
-
     private void downloadPause() {
         downloadPause = true;
+        supportInvalidateOptionsMenu();
     }
 
     private void downloadUp() {
@@ -210,12 +223,13 @@ public class DownloadActivity extends MBaseActivity {
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.FINISH_DOWNLOAD_LISTENER)})
     public void finishTask(Object o) {
-        downloadFinish();
+        downloadUp();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)})
     public void progressTask(DownloadChapterBean downloadChapterBean) {
         downloadPause = false;
+        supportInvalidateOptionsMenu();
         downloadUp();
     }
 }
