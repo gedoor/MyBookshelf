@@ -168,7 +168,7 @@ public class ReadStyleActivity extends MBaseActivity {
         tvSelectBgColor.setOnClickListener(view -> ColorPickerDialogBuilder
                 .with(this)
                 .setTitle("选择背景颜色")
-                .initialColor(readBookControl.getBgColor(textDrawableIndex))
+                .initialColor(bgColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
                 .setOnColorSelectedListener(selectedColor -> {
@@ -186,7 +186,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectBgColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入背景颜色", String.format("#%06X", 0xFFFFFF & readBookControl.getBgColor(textDrawableIndex)), inputText -> {
+            moProgressHUD.showInputBox("输入背景颜色", String.format("#%06X", 0xFFFFFF & bgColor), inputText -> {
                 try {
                     bgColor = Color.parseColor(inputText);
                     bgDrawable = new ColorDrawable(bgColor);
