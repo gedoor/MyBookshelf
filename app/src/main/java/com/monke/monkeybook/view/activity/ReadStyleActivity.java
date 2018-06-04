@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.widget.ContentTextView;
+import com.monke.monkeybook.widget.modialog.InputView;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.io.IOException;
 
@@ -55,6 +59,7 @@ public class ReadStyleActivity extends MBaseActivity {
     Switch swDarkStatusIcon;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private MoProgressHUD moProgressHUD;
     private int textDrawableIndex;
     private int textColor;
     private int bgColor;
@@ -87,6 +92,7 @@ public class ReadStyleActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         setTextKind(readBookControl);
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     @Override
@@ -147,6 +153,17 @@ public class ReadStyleActivity extends MBaseActivity {
                 })
                 .build()
                 .show());
+        tvSelectTextColor.setOnLongClickListener((View view) -> {
+            moProgressHUD.showInputBox("输入文字颜色", String.format("#%06X", 0xFFFFFF & textColor), inputText -> {
+                try {
+                    textColor = Color.parseColor(inputText);
+                    upText();
+                } catch (Exception e) {
+                    Toast.makeText(this, "颜色值错误", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return true;
+        });
         //选择背景颜色
         tvSelectBgColor.setOnClickListener(view -> ColorPickerDialogBuilder
                 .with(this)
@@ -160,7 +177,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
                     bgCustom = 1;
                     bgColor = selectedColor;
-                    bgDrawable = new ColorDrawable(selectedColor);
+                    bgDrawable = new ColorDrawable(bgColor);
                     upBg();
                 })
                 .setNegativeButton("cancel", (dialog, which) -> {
@@ -168,6 +185,19 @@ public class ReadStyleActivity extends MBaseActivity {
                 })
                 .build()
                 .show());
+        tvSelectBgColor.setOnLongClickListener((View view) -> {
+            moProgressHUD.showInputBox("输入背景颜色", String.format("#%06X", 0xFFFFFF & readBookControl.getBgColor(textDrawableIndex)), inputText -> {
+                try {
+                    bgColor = Color.parseColor(inputText);
+                    bgDrawable = new ColorDrawable(bgColor);
+                    bgCustom = 1;
+                    upBg();
+                } catch (Exception e) {
+                    Toast.makeText(this, "颜色值错误", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return true;
+        });
         //选择背景图片
         tvSelectBgImage.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
