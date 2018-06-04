@@ -42,8 +42,6 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     private BookShelfBean bookShelf;
     private Boolean inBookShelf = false;
 
-    private List<BookShelfBean> bookShelfS = Collections.synchronizedList(new ArrayList<BookShelfBean>());   //用来比对搜索的书籍是否已经添加进书架
-
     public BookDetailPresenterImpl(Intent intent) {
         openFrom = intent.getIntExtra("from", FROM_BOOKSHELF);
         if (openFrom == FROM_BOOKSHELF) {
@@ -89,18 +87,10 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     @Override
     public void getBookShelfInfo() {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            bookShelfS = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-            if (bookShelfS == null) {
-                bookShelfS = new ArrayList<>();
-            }
-            for (int i = 0; i < bookShelfS.size(); i++) {
-                if (bookShelfS.get(i).getNoteUrl().equals(bookShelf.getNoteUrl())) {
-                    if (openFrom == FROM_BOOKSHELF) {
-                        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
-                    }
-                    inBookShelf = true;
-                    break;
-                }
+            BookShelfBean bookShelfBean = BookshelfHelp.getBook(bookShelf.getNoteUrl());
+            if (bookShelfBean != null) {
+                inBookShelf = true;
+                bookShelf = bookShelfBean;
             }
             e.onNext(bookShelf);
             e.onComplete();
@@ -135,10 +125,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     public void addToBookShelf() {
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getChapterList());
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
-                //网络数据获取成功  存入BookShelf表数据库
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
+                BookshelfHelp.saveBookToShelf(bookShelf);
+                searchBook.setIsAdd(true);
+                inBookShelf = true;
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
@@ -149,6 +138,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         public void onNext(Boolean value) {
                             if (value) {
                                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
+                                mView.updateView();
                             } else {
                                 Toast.makeText(MApplication.getInstance(), "放入书架失败!", Toast.LENGTH_SHORT).show();
                             }
@@ -168,6 +158,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 BookshelfHelp.removeFromBookShelf(bookShelf);
+                searchBook.setIsAdd(false);
+                inBookShelf = false;
                 e.onNext(true);
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
@@ -178,6 +170,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                         public void onNext(Boolean value) {
                             if (value) {
                                 RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
+                                mView.updateView();
                             } else {
                                 Toast.makeText(MApplication.getInstance(), "移出书架失败!", Toast.LENGTH_SHORT).show();
                             }
@@ -260,49 +253,5 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
-    public void hadAddBook(BookShelfBean value) {
-        if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
-            inBookShelf = true;
-            if (null != searchBook) {
-                searchBook.setIsAdd(true);
-            }
-            mView.updateView();
-        }
-    }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_REMOVE_BOOK)})
-    public void hadRemoveBook(BookShelfBean value) {
-        if (bookShelfS != null) {
-            for (int i = 0; i < bookShelfS.size(); i++) {
-                if (bookShelfS.get(i).getNoteUrl().equals(value.getNoteUrl())) {
-                    bookShelfS.remove(i);
-                    break;
-                }
-            }
-        }
-        if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl()))
-                || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
-            inBookShelf = false;
-            if (null != searchBook) {
-                searchBook.setIsAdd(false);
-            }
-            mView.updateView();
-        }
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_ADD_BOOK),})
-    public void hadBook(BookShelfBean value) {
-        bookShelfS.add(value);
-        if ((null != bookShelf && value.getNoteUrl().equals(bookShelf.getNoteUrl())) || (null != searchBook && value.getNoteUrl().equals(searchBook.getNoteUrl()))) {
-            inBookShelf = true;
-            if (null != searchBook) {
-                searchBook.setIsAdd(true);
-            }
-            mView.updateView();
-        }
-    }
 }
