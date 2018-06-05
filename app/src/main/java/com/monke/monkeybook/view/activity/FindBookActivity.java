@@ -104,7 +104,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     }
 
     private boolean autoExpandGroup() {
-        return preferences.getBoolean(getString(R.string.pk_find_expand_group), true);
+        return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
     }
 
     //设置ToolBar
