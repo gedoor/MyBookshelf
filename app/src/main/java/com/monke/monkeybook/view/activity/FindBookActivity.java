@@ -153,7 +153,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (autoExpandGroup()) {
+            if (!autoExpandGroup()) {
                 for (int i = 0; i < adapter.getGroupCount(); i++) {
                     if (expandableList.isGroupExpanded(i)) {
                         expandableList.collapseGroup(i);
