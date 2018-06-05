@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
@@ -102,6 +103,10 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
         return result;
     }
 
+    private boolean autoExpandGroup() {
+        return preferences.getBoolean(getString(R.string.pk_find_expand_group), true);
+    }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -139,10 +144,26 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     public void updateUI(List<FindKindGroupBean> group) {
         if (group.size() > 0) {
             adapter.resetDataS(group);
-            if (preferences.getBoolean(getString(R.string.pk_find_expand_group), true)) {
+            if (autoExpandGroup()) {
                 expandableList.expandGroup(0);
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (autoExpandGroup()) {
+                for (int i = 0; i < adapter.getGroupCount(); i++) {
+                    if (expandableList.isGroupExpanded(i)) {
+                        expandableList.collapseGroup(i);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
 }
