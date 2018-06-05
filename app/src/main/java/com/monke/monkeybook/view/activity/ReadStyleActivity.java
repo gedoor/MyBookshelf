@@ -28,6 +28,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.modialog.InputView;
@@ -154,7 +155,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectTextColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入文字颜色", String.format("#%06X", 0xFFFFFF & textColor), inputText -> {
+            moProgressHUD.showInputBox("输入文字颜色", ColorUtil.intToString(textColor), inputText -> {
                 try {
                     textColor = Color.parseColor(inputText);
                     upText();
@@ -186,7 +187,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectBgColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入背景颜色", String.format("#%06X", 0xFFFFFF & bgColor), inputText -> {
+            moProgressHUD.showInputBox("输入背景颜色", ColorUtil.intToString(bgColor), inputText -> {
                 try {
                     bgColor = Color.parseColor(inputText);
                     bgDrawable = new ColorDrawable(bgColor);
