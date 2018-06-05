@@ -144,7 +144,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     public void updateUI(List<FindKindGroupBean> group) {
         if (group.size() > 0) {
             adapter.resetDataS(group);
-            if (autoExpandGroup()) {
+            if (autoExpandGroup() || group.size() == 1) {
                 expandableList.expandGroup(0);
             }
         }
