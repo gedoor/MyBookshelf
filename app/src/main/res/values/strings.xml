@@ -184,5 +184,7 @@
     <string name="immersion_status_bar">沉浸式状态栏</string>
     <string name="un_download">还剩%d章未下载</string>
     <string name="long_click_input_color">长按输入颜色值</string>
+    <string name="s_bookshelf_anim">打开书架时显示动画</string>
+    <string name="t_bookshelf_anim">书架动画</string>
 
 </resources>

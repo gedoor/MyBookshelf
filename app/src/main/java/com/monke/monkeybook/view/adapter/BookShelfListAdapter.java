@@ -41,7 +41,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     private Activity activity;
     private List<BookShelfBean> books;
-    private Boolean needAnim = true;
+    private Boolean needAnim;
     private OnItemClickListener itemClickListener;
     private String bookshelfPx;
 
@@ -65,9 +65,10 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfListAdapter(Activity activity) {
+    public BookShelfListAdapter(Activity activity, boolean needAnim) {
         super(false);
         this.activity = activity;
+        this.needAnim = needAnim;
         books = new ArrayList<>();
     }
 
@@ -212,14 +213,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
-    }
-
-    public Boolean getNeedAnim() {
-        return needAnim;
-    }
-
-    public void setNeedAnim(Boolean needAnim) {
-        this.needAnim = needAnim;
     }
 
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {

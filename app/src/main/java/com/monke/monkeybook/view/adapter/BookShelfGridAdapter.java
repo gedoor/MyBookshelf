@@ -39,7 +39,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
 
     private List<BookShelfBean> books;
 
-    private Boolean needAnim = true;
+    private Boolean needAnim;
     private OnItemClickListener itemClickListener;
     private String bookshelfPx;
     private Activity activity;
@@ -69,9 +69,10 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfGridAdapter(Activity activity) {
+    public BookShelfGridAdapter(Activity activity, Boolean needAnim) {
         super(false);
         this.activity = activity;
+        this.needAnim = needAnim;
         books = new ArrayList<>();
     }
 

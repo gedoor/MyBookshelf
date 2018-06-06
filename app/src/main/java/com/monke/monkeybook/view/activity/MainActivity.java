@@ -118,10 +118,14 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         if (viewIsList) {
-            bookShelfListAdapter = new BookShelfListAdapter(this);
+            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
         } else {
-            bookShelfGridAdapter = new BookShelfGridAdapter(this);
+            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
         }
+    }
+
+    private boolean getNeedAnim() {
+        return preferences.getBoolean(getString(R.string.pk_bookshelf_anim), false);
     }
 
     @Override

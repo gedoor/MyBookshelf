@@ -17,6 +17,12 @@
         android:title="@string/bookshelf_px" />
 
     <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_bookshelf_anim"
+        android:summary="@string/s_bookshelf_anim"
+        android:title="@string/t_bookshelf_anim" />
+
+    <SwitchPreference
         android:defaultValue="true"
         android:key="@string/pk_auto_refresh"
         android:summary="@string/ps_auto_refresh"
