@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -112,6 +113,10 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
+
+        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
+        holder.tvProgress.setText(BookshelfHelp.getReadProgress(books.get(index)));
+        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(books.get(index).getBookInfoBean().getCoverUrl())
@@ -119,8 +124,6 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                             .centerCrop().placeholder(R.drawable.img_cover_default))
                     .into(holder.ivCover);
         }
-        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
-        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
@@ -177,6 +180,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         ImageView ivHasNew;
         AutofitTextView tvName;
         ImageButton ibContent;
+        TextView tvProgress;
 
         OtherViewHolder(View itemView) {
             super(itemView);
@@ -185,7 +189,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             ivHasNew = itemView.findViewById(R.id.iv_has_new);
             tvName = itemView.findViewById(R.id.tv_name);
             ibContent = itemView.findViewById(R.id.ib_content);
-
+            tvProgress = itemView.findViewById(R.id.tv_progress);
         }
     }
 
