@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -179,10 +180,7 @@ public class BookContentView extends FrameLayout {
             tvContent.setText(this.content);
             tvTitle.setText(title);
             tvPage.setText(String.format("%d/%d", durPageIndex + 1, pageAll));
-            if (chapterAll > 0) {
-                DecimalFormat df = new DecimalFormat("0.00%");
-                tvProgress.setText(df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll));
-            }
+            tvProgress.setText(BookshelfHelp.getReadProgress(durChapterIndex, chapterAll, durPageIndex, durPageAll));
             tvTitle.setOnClickListener(view -> {
                 ContentSwitchView csv = (ContentSwitchView) getParent();
                 csv.openChapterList();

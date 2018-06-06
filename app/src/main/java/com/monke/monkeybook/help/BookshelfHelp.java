@@ -10,6 +10,7 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -101,6 +102,20 @@ public class BookshelfHelp {
         bookInfo.setOrigin(searchBookBean.getOrigin());
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
+    }
+
+    public static String getReadProgress(BookShelfBean bookShelfBean) {
+        return getReadProgress(bookShelfBean.getDurChapter(), bookShelfBean.getChapterListSize(), 0, 0);
+    }
+
+    public static String getReadProgress(int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
+        DecimalFormat df = new DecimalFormat("0.00%");
+        if (chapterAll == 0) {
+            return "0.00%";
+        } else if (durPageAll == 0) {
+            return df.format(durChapterIndex * 1.0f / chapterAll);
+        }
+        return df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
     }
 
     /**
