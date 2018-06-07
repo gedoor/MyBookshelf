@@ -21,10 +21,14 @@ public interface IMainView extends IView{
      */
     void activityRefreshView();
 
+    void refreshBookStart(int index);
+
     /**
      * 刷新完成
      */
     void refreshFinish();
+
+    void refreshBookEnd(int index);
 
     /**
      * 刷新错误

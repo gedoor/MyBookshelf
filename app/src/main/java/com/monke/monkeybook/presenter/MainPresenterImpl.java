@@ -228,6 +228,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
             if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+                final int index = refreshIndex;
+                mView.refreshBookStart(index);
                 WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
                         .flatMap(this::saveBookToShelfO)
                         .subscribeOn(Schedulers.io())
@@ -241,6 +243,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                     bookShelfBean.setErrorMsg(null);
                                 }
                                 mView.refreshRecyclerViewItemAdd();
+                                mView.refreshBookEnd(index);
                                 refreshBookshelf();
                             }
 
@@ -248,6 +251,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                             public void onError(Throwable e) {
                                 Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
                                 mView.refreshRecyclerViewItemAdd();
+                                mView.refreshBookEnd(index);
                                 refreshBookshelf();
                             }
                         });

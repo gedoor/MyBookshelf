@@ -25,6 +25,7 @@ import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,6 +71,16 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         this.activity = activity;
         this.needAnim = needAnim;
         books = new ArrayList<>();
+    }
+
+    public void refreshBookStart(int index) {
+        books.get(index).setLoading(true);
+        notifyItemChanged(index);
+    }
+
+    public void refreshBookEnd(int index) {
+        books.get(index).setLoading(false);
+        notifyItemChanged(index);
     }
 
     @Override
@@ -209,6 +220,11 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                 }
             }.start();
         }
+        if (books.get(index).isLoading()) {
+            holder.rotateLoading.start();
+        } else {
+            holder.rotateLoading.stop();
+        }
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
@@ -240,6 +256,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         MHorProgressBar mpbDurprogress;
         ImageButton ibContent;
         ImageButton ibCover;
+        RotateLoading rotateLoading;
 
         OtherViewHolder(View itemView) {
             super(itemView);
@@ -253,6 +270,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             mpbDurprogress = itemView.findViewById(R.id.mpb_durprogress);
             ibContent = itemView.findViewById(R.id.ib_content);
             ibCover = itemView.findViewById(R.id.ib_cover);
+            rotateLoading = itemView.findViewById(R.id.rl_loading);
         }
     }
 

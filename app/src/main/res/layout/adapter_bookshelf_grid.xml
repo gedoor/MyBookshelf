@@ -44,15 +44,29 @@
                 android:textColor="#ffffff"
                 android:textSize="12sp" />
 
-            <ImageView
-                android:id="@+id/iv_has_new"
+            <FrameLayout
+                android:id="@+id/fl_has_new"
                 android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_gravity="right"
-                android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp"
-                android:visibility="invisible"
-                tools:ignore="RtlHardcoded" />
+                android:layout_height="26dp">
+
+                <ImageView
+                    android:id="@+id/iv_has_new"
+                    android:visibility="invisible"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_circle_red_24dp" />
+
+                <com.victor.loading.rotate.RotateLoading
+                    android:id="@+id/rl_loading"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    app:loading_width="2dp"
+                    app:loading_color="#767676"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
 
         </LinearLayout>
 

@@ -186,5 +186,6 @@
     <string name="long_click_input_color">长按输入颜色值</string>
     <string name="s_bookshelf_anim">打开书架时显示动画</string>
     <string name="t_bookshelf_anim">书架动画</string>
+    <string name="loading">加载中…</string>
 
 </resources>

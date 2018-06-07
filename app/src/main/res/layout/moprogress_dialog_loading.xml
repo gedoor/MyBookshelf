@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
     android:layout_width="260dp"
     android:layout_height="140dp">
@@ -19,7 +20,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -42,7 +44,7 @@
                 android:id="@+id/msg_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="加载中..."
+                android:text="@string/loading"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textSize="16sp"

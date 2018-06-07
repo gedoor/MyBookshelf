@@ -455,10 +455,28 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
+    public void refreshBookStart(int index) {
+        if (viewIsList) {
+            bookShelfListAdapter.refreshBookStart(index);
+        } else {
+            bookShelfGridAdapter.refreshBookStart(index);
+        }
+    }
+
+    @Override
     public void refreshFinish() {
         rfRvShelf.finishRefresh(false, true);
         if (onRestore) {
             moProgressHUD.dismiss();
+        }
+    }
+
+    @Override
+    public void refreshBookEnd(int index) {
+        if (viewIsList) {
+            bookShelfListAdapter.refreshBookEnd(index);
+        } else {
+            bookShelfGridAdapter.refreshBookEnd(index);
         }
     }
 

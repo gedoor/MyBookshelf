@@ -23,6 +23,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,6 +75,16 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         this.activity = activity;
         this.needAnim = needAnim;
         books = new ArrayList<>();
+    }
+
+    public void refreshBookStart(int index) {
+        books.get(index).setLoading(true);
+        notifyItemChanged(index);
+    }
+
+    public void refreshBookEnd(int index) {
+        books.get(index).setLoading(false);
+        notifyItemChanged(index);
     }
 
     @Override
@@ -155,6 +166,11 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
                 }
             }.start();
         }
+        if (books.get(index).isLoading()) {
+            holder.rotateLoading.start();
+        } else {
+            holder.rotateLoading.stop();
+        }
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
@@ -182,6 +198,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         AutofitTextView tvName;
         ImageButton ibContent;
         TextView tvProgress;
+        RotateLoading rotateLoading;
 
         OtherViewHolder(View itemView) {
             super(itemView);
@@ -191,6 +208,7 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             tvName = itemView.findViewById(R.id.tv_name);
             ibContent = itemView.findViewById(R.id.ib_content);
             tvProgress = itemView.findViewById(R.id.tv_progress);
+            rotateLoading = itemView.findViewById(R.id.rl_loading);
         }
     }
 

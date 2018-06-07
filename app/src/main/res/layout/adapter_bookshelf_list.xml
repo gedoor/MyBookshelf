@@ -28,7 +28,7 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_toEndOf="@+id/iv_cover"
-            android:layout_toStartOf="@+id/iv_has_new"
+            android:layout_toStartOf="@+id/fl_has_new"
             android:paddingEnd="2dp"
             android:paddingStart="12dp"
             android:singleLine="true"
@@ -37,15 +37,30 @@
             android:textSize="16sp"
             app:minTextSize="7sp" />
 
-        <ImageView
-            android:id="@+id/iv_has_new"
-            android:visibility="invisible"
+        <FrameLayout
+            android:id="@+id/fl_has_new"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:padding="6dp"
-            android:src="@drawable/ic_circle_red_24dp" />
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:id="@+id/iv_has_new"
+                android:visibility="invisible"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:padding="6dp"
+                android:src="@drawable/ic_circle_red_24dp" />
+
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/rl_loading"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:loading_width="2dp"
+                app:loading_color="#767676"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_read"

@@ -23,6 +23,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
     public static final String LOCAL_TAG = "loc_book";
     @Transient
     private String errorMsg;
+    @Transient
+    private boolean isLoading;
 
     @Id
     private String noteUrl; //对应BookInfoBean noteUrl;
@@ -62,7 +64,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         finalDate = in.readLong();
         tag = in.readString();
         bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
-        errorMsg = in.readString();
         serialNumber = in.readInt();
         finalRefreshData = in.readLong();
     }
@@ -90,7 +91,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeLong(finalDate);
         dest.writeString(tag);
         dest.writeParcelable(bookInfoBean, flags);
-        dest.writeString(errorMsg);
         dest.writeInt(serialNumber);
         dest.writeLong(finalRefreshData);
     }
@@ -228,5 +228,13 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setFinalRefreshData(long finalRefreshData) {
         this.finalRefreshData = finalRefreshData;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 }
