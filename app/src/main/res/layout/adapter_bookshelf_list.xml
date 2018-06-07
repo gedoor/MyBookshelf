@@ -57,7 +57,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 app:loading_width="2dp"
-                app:loading_color="#767676"
+                app:loading_color="@color/tv_text_default"
                 android:layout_gravity="center" />
 
         </FrameLayout>
