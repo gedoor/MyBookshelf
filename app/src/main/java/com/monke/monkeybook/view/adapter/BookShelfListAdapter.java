@@ -221,8 +221,10 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             }.start();
         }
         if (books.get(index).isLoading()) {
+            holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {
+            holder.rotateLoading.setVisibility(View.INVISIBLE);
             holder.rotateLoading.stop();
         }
     }

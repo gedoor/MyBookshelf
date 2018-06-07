@@ -61,6 +61,7 @@
                     android:id="@+id/rl_loading"
                     android:layout_width="26dp"
                     android:layout_height="26dp"
+                    android:visibility="invisible"
                     app:loading_width="2dp"
                     app:loading_color="@color/white"
                     android:layout_gravity="center" />
