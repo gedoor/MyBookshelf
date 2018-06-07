@@ -266,8 +266,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
-            llDurcursor = itemView.findViewById(R.id.ll_durcursor);
-            mpbDurprogress = itemView.findViewById(R.id.mpb_durprogress);
+            llDurcursor = itemView.findViewById(R.id.ll_durCursor);
+            mpbDurprogress = itemView.findViewById(R.id.mpb_durProgress);
             ibContent = itemView.findViewById(R.id.ib_content);
             ibCover = itemView.findViewById(R.id.ib_cover);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
