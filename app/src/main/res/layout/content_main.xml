@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_view"
@@ -26,15 +25,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
-        android:id="@+id/rf_rv_shelf"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:bg_color="#00000000"
-        app:font_color="#767676"
-        app:second_color="#c1c1c1"
-        app:second_max_progress="80dp"
-        app:speed="2dp" />
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_bookshelf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:bg_color="#00000000"
+            app:font_color="#767676"
+            app:second_color="#c1c1c1"
+            app:second_max_progress="80dp"
+            app:speed="2dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

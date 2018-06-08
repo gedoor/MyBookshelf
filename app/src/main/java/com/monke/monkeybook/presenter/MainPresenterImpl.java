@@ -213,7 +213,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     private void startRefreshBook() {
         if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
-            mView.setRecyclerMaxProgress(bookShelfBeans.size());
             refreshIndex = -1;
             for (int i = 1; i <= getThreadsNum(); i++) {
                 refreshBookshelf();
@@ -242,7 +241,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                     Toast.makeText(mView.getContext(), bookShelfBean.getErrorMsg(), Toast.LENGTH_SHORT).show();
                                     bookShelfBean.setErrorMsg(null);
                                 }
-                                mView.refreshRecyclerViewItemAdd();
                                 mView.refreshBookEnd(index);
                                 refreshBookshelf();
                             }
@@ -250,13 +248,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                             @Override
                             public void onError(Throwable e) {
                                 Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
-                                mView.refreshRecyclerViewItemAdd();
                                 mView.refreshBookEnd(index);
                                 refreshBookshelf();
                             }
                         });
             } else {
-                mView.refreshRecyclerViewItemAdd();
                 refreshBookshelf();
             }
         } else {

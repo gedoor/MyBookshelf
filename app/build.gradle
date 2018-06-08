@@ -76,6 +76,9 @@ dependencies {
     implementation "com.android.support:support-compat:$support_library_version"
     implementation 'com.google.code.gson:gson:2.8.2'
 
+    //下拉刷新
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-6'
+
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.2'

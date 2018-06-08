@@ -15,12 +15,15 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,9 +53,8 @@ import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-import com.monke.monkeybook.widget.refreshview.OnRefreshWithProgressListener;
-import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +68,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
-    private static final int FILESELECT_RESULT = 13;
+    private static final int FILE_SELECT_RESULT = 13;
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -74,8 +76,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.rf_rv_shelf)
-    RefreshRecyclerView rfRvShelf;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.rv_bookshelf)
+    RecyclerView rvBookshelf;
     @BindView(R.id.main_view)
     LinearLayout mainView;
 
@@ -142,9 +146,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         moProgressHUD = new MoProgressHUD(this);
 
         if (viewIsList) {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfListAdapter, new LinearLayoutManager(this));
+            rvBookshelf.setAdapter(bookShelfListAdapter);
+            rvBookshelf.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            rfRvShelf.setRefreshRecyclerViewAdapter(bookShelfGridAdapter, new GridLayoutManager(this, 3));
+            rvBookshelf.setAdapter(bookShelfGridAdapter);
+            rvBookshelf.setLayoutManager(new GridLayoutManager(this, 3));
         }
     }
 
@@ -160,10 +166,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void bindEvent() {
-        bindRvShelfEvent();
+        refreshLayout.setOnRefreshListener(() -> {
+            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
+            if (!NetworkUtil.isNetWorkAvailable()) {
+                Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
+            }
+        });
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         if (bookPx.equals("2")) {
             itemTouchHelpCallback.setDragEnable(true);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+            itemTouchHelper.attachToRecyclerView(rvBookshelf);
         }
         if (viewIsList) {
             bookShelfListAdapter.setItemClickListener(getAdapterListener());
@@ -172,7 +185,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             bookShelfGridAdapter.setItemClickListener(getAdapterListener());
             itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfGridAdapter.getItemTouchCallbackListener());
         }
-        rfRvShelf.setItemTouchHelperCallback(itemTouchHelpCallback);
+
     }
 
     private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
@@ -247,7 +260,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     startActivity(new Intent(MainActivity.this, FileFolderActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                            FILESELECT_RESULT, perms);
+                            FILE_SELECT_RESULT, perms);
                 }
                 break;
             case R.id.action_add_url:
@@ -390,31 +403,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         restore();
     }
 
-    @AfterPermissionGranted(FILESELECT_RESULT)
+    @AfterPermissionGranted(FILE_SELECT_RESULT)
     private void fileSelectResult() {
         startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
-    }
-
-    private void bindRvShelfEvent() {
-        //下拉刷新
-        rfRvShelf.setBaseRefreshListener(new OnRefreshWithProgressListener() {
-            @Override
-            public int getMaxProgress() {
-                if (viewIsList) {
-                    return bookShelfListAdapter.getBooks().size();
-                } else {
-                    return bookShelfGridAdapter.getBooks().size();
-                }
-            }
-
-            @Override
-            public void startRefresh() {
-                mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
-                if (!NetworkUtil.isNetWorkAvailable()) {
-                    Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void fistOpenRun() {
@@ -450,8 +441,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void activityRefreshView() {
-        //执行刷新响应
-        rfRvShelf.startRefresh();
+
     }
 
     @Override
@@ -465,7 +455,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void refreshFinish() {
-        rfRvShelf.finishRefresh(false, true);
+        refreshLayout.setRefreshing(false);
         if (onRestore) {
             moProgressHUD.dismiss();
         }
@@ -484,16 +474,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     public void refreshError(String error) {
         refreshFinish();
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void refreshRecyclerViewItemAdd() {
-        rfRvShelf.getRpb().setDurProgress(rfRvShelf.getRpb().getDurProgress() + 1);
-    }
-
-    @Override
-    public void setRecyclerMaxProgress(int x) {
-        rfRvShelf.getRpb().setMaxProgress(x);
     }
 
     @Override
@@ -545,7 +525,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Snackbar.make(rfRvShelf, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rvBookshelf, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
         } else {
             finish();

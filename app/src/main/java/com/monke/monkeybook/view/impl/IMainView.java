@@ -37,17 +37,6 @@ public interface IMainView extends IView{
     void refreshError(String error);
 
     /**
-     * 刷新书籍  UI进度修改
-     */
-    void refreshRecyclerViewItemAdd();
-
-    /**
-     * 设置刷新进度条最大值
-     * @param x
-     */
-    void setRecyclerMaxProgress(int x);
-
-    /**
      * 显示等待框
      */
     void showLoading(String msg);
