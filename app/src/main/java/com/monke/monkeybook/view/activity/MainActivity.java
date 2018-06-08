@@ -165,6 +165,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void bindEvent() {
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.red), getResources().getColor(R.color.green), getResources().getColor(R.color.azure), getResources().getColor(R.color.violet));
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
             if (!NetworkUtil.isNetWorkAvailable()) {
