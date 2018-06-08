@@ -54,7 +54,6 @@ import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.List;
 import java.util.Objects;
