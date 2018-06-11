@@ -34,15 +34,17 @@
             android:background="#7f000000"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_progress"
+            <com.monke.mprogressbar.MHorProgressBar
+                android:id="@+id/mpb_durProgress"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="3dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/read_dur_progress"
-                android:textColor="#ffffff"
-                android:textSize="12sp" />
+                android:layout_gravity="center_vertical"
+                app:fontdrawable="@color/colorPrimary"
+                app:cantouch="false"
+                app:bgdrawable="@color/white"
+                android:visibility="invisible"
+                tools:ignore="RtlHardcoded" />
 
             <FrameLayout
                 android:id="@+id/fl_has_new"

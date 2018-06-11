@@ -23,6 +23,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -125,7 +126,9 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         }
 
         holder.tvName.setText(books.get(index).getBookInfoBean().getName());
-        holder.tvProgress.setText(BookshelfHelp.getReadProgress(books.get(index)));
+        holder.mpbDurProgress.setVisibility(View.VISIBLE);
+        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
+        holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -197,8 +200,8 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
         ImageView ivHasNew;
         AutofitTextView tvName;
         ImageButton ibContent;
-        TextView tvProgress;
         RotateLoading rotateLoading;
+        MHorProgressBar mpbDurProgress;
 
         OtherViewHolder(View itemView) {
             super(itemView);
@@ -207,8 +210,8 @@ public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
             ivHasNew = itemView.findViewById(R.id.iv_has_new);
             tvName = itemView.findViewById(R.id.tv_name);
             ibContent = itemView.findViewById(R.id.ib_content);
-            tvProgress = itemView.findViewById(R.id.tv_progress);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
+            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
         }
     }
 
