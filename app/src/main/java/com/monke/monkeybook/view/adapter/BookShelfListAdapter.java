@@ -156,13 +156,13 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             }
         }
         //进度条
-        holder.llDurcursor.setVisibility(View.VISIBLE);
-        holder.mpbDurprogress.setVisibility(View.VISIBLE);
-        holder.mpbDurprogress.setMaxProgress(books.get(index).getChapterListSize());
+        holder.llDurCursor.setVisibility(View.VISIBLE);
+        holder.mpbDurProgress.setVisibility(View.VISIBLE);
+        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
         float speed = books.get(index).getChapterListSize() * 1.0f / 60;
 
-        holder.mpbDurprogress.setSpeed(speed <= 0 ? 1 : speed);
-        holder.mpbDurprogress.setProgressListener(new OnProgressListener() {
+        holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
+        holder.mpbDurProgress.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
 
@@ -170,8 +170,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
 
             @Override
             public void durProgressChange(float dur) {
-                float rate = dur / holder.mpbDurprogress.getMaxProgress();
-                holder.llDurcursor.setPadding((int) (holder.mpbDurprogress.getMeasuredWidth() * rate), 0, 0, 0);
+                float rate = dur / holder.mpbDurProgress.getMaxProgress();
+                holder.llDurCursor.setPadding((int) (holder.mpbDurProgress.getMeasuredWidth() * rate), 0, 0, 0);
             }
 
             @Override
@@ -185,9 +185,9 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             }
         });
         if (needAnim) {
-            holder.mpbDurprogress.setDurProgressWithAnim(books.get(index).getDurChapter());
+            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter());
         } else {
-            holder.mpbDurprogress.setDurProgress(books.get(index).getDurChapter());
+            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
         }
         holder.ibCover.setOnClickListener(v -> {
             if (itemClickListener != null)
@@ -252,8 +252,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
-        LinearLayout llDurcursor;
-        MHorProgressBar mpbDurprogress;
+        LinearLayout llDurCursor;
+        MHorProgressBar mpbDurProgress;
         ImageButton ibContent;
         ImageButton ibCover;
         RotateLoading rotateLoading;
@@ -266,8 +266,8 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
-            llDurcursor = itemView.findViewById(R.id.ll_durCursor);
-            mpbDurprogress = itemView.findViewById(R.id.mpb_durProgress);
+            llDurCursor = itemView.findViewById(R.id.ll_durCursor);
+            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
             ibContent = itemView.findViewById(R.id.ib_content);
             ibCover = itemView.findViewById(R.id.ib_cover);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
