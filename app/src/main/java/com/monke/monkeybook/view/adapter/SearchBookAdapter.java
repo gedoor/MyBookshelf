@@ -162,7 +162,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         this.itemClickListener = itemClickListener;
     }
 
-    public synchronized void addAll(List<SearchBookBean> newDataS, String bookName) {
+    public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
@@ -193,9 +193,17 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 }
                 //添加
                 for (SearchBookBean temp : searchBookBeansAdd) {
-                    if (temp.getName().equals(bookName)) {
+                    if (temp.getName().equals(keyWord)) {
                         for (int i = 0; i < searchBooks.size(); i++) {
-                            if (!Objects.equals(temp.getName(), searchBooks.get(i).getName())) {
+                            if (!Objects.equals(keyWord, searchBooks.get(i).getName())) {
+                                searchBooks.add(i, temp);
+                                changed = true;
+                                break;
+                            }
+                        }
+                    } else if (temp.getAuthor().contains(keyWord) || temp.getName().contains(keyWord)) {
+                        for (int i = 0; i < searchBooks.size(); i++) {
+                            if (!Objects.equals(keyWord, searchBooks.get(i).getName()) && !Objects.equals(keyWord, searchBooks.get(i).getAuthor())) {
                                 searchBooks.add(i, temp);
                                 changed = true;
                                 break;
