@@ -73,14 +73,12 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         books = new ArrayList<>();
     }
 
-    public void refreshBookStart(int index) {
-        books.get(index).setLoading(true);
-        notifyItemChanged(index);
-    }
-
-    public void refreshBookEnd(int index) {
-        books.get(index).setLoading(false);
-        notifyItemChanged(index);
+    public void refreshBook(String noteUrl) {
+        for (int i = 0; i < books.size(); i++) {
+            if (Objects.equals(books.get(i).getNoteUrl(), noteUrl)) {
+                notifyItemChanged(i);
+            }
+        }
     }
 
     @Override

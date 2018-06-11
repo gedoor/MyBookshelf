@@ -16,19 +16,17 @@ public interface IMainView extends IView{
      */
     void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
 
+    void refreshBook(String noteUrl);
+
     /**
      * 执行刷新书架小说信息
      */
     void activityRefreshView();
 
-    void refreshBookStart(int index);
-
     /**
      * 刷新完成
      */
     void refreshFinish();
-
-    void refreshBookEnd(int index);
 
     /**
      * 刷新错误

@@ -440,17 +440,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
-    public void activityRefreshView() {
-
+    public void refreshBook(String noteUrl) {
+        if (viewIsList) {
+            bookShelfListAdapter.refreshBook(noteUrl);
+        } else {
+            bookShelfGridAdapter.refreshBook(noteUrl);
+        }
     }
 
     @Override
-    public void refreshBookStart(int index) {
-        if (viewIsList) {
-            bookShelfListAdapter.refreshBookStart(index);
-        } else {
-            bookShelfGridAdapter.refreshBookStart(index);
-        }
+    public void activityRefreshView() {
+
     }
 
     @Override
@@ -458,15 +458,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         refreshLayout.setRefreshing(false);
         if (onRestore) {
             moProgressHUD.dismiss();
-        }
-    }
-
-    @Override
-    public void refreshBookEnd(int index) {
-        if (viewIsList) {
-            bookShelfListAdapter.refreshBookEnd(index);
-        } else {
-            bookShelfGridAdapter.refreshBookEnd(index);
         }
     }
 

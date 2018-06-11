@@ -227,8 +227,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
             if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-                final int index = refreshIndex;
-                mView.refreshBookStart(index);
+                bookShelfBean.setLoading(true);
+                mView.refreshBook(bookShelfBean.getNoteUrl());
                 WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
                         .flatMap(this::saveBookToShelfO)
                         .subscribeOn(Schedulers.io())
@@ -236,19 +236,21 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new SimpleObserver<BookShelfBean>() {
                             @Override
-                            public void onNext(BookShelfBean bookShelfBean) {
-                                if (bookShelfBean.getErrorMsg() != null) {
-                                    Toast.makeText(mView.getContext(), bookShelfBean.getErrorMsg(), Toast.LENGTH_SHORT).show();
-                                    bookShelfBean.setErrorMsg(null);
+                            public void onNext(BookShelfBean value) {
+                                if (value.getErrorMsg() != null) {
+                                    Toast.makeText(mView.getContext(), value.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                                    value.setErrorMsg(null);
                                 }
-                                mView.refreshBookEnd(index);
+                                bookShelfBean.setLoading(false);
+                                mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
-                                mView.refreshBookEnd(index);
+                                bookShelfBean.setLoading(false);
+                                mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
                             }
                         });
@@ -258,7 +260,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 mView.refreshFinish();
-                queryBookShelf(false);
             }
         }
     }
