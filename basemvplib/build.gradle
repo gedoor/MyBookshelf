@@ -16,15 +16,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    //识别编码
-    api files('libs/juniversalchardet-1.0.3.jar')
+
     //support
     api 'com.android.support:appcompat-v7:27.1.1'
+
     //RxAndroid
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
     api 'io.reactivex.rxjava2:rxjava:2.1.12'

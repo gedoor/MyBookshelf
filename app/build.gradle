@@ -51,7 +51,6 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
-    sourceSets { main { resources.srcDirs = ['src/main/resources', 'src/main/resources/'] } }
 
 }
 
@@ -60,7 +59,7 @@ ext {
 }
 dependencies {
     api project(':basemvplib')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     testImplementation 'junit:junit:4.12'
 
     //fireBase
