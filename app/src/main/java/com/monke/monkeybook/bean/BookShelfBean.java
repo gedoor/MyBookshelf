@@ -36,6 +36,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     private String tag;
     private int serialNumber; //手动排序
     private long finalRefreshData;  //章节最后更新时间
+    private int group;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -68,10 +69,10 @@ public class BookShelfBean implements Parcelable,Cloneable{
         finalRefreshData = in.readLong();
     }
 
-    @Generated(hash = 826920685)
+    @Generated(hash = 1430511915)
     public BookShelfBean(String noteUrl, int durChapter, int durChapterPage, long finalDate,
             boolean hasUpdate, int newChapters, String tag, int serialNumber,
-            long finalRefreshData) {
+            long finalRefreshData, int group) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -81,6 +82,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.tag = tag;
         this.serialNumber = serialNumber;
         this.finalRefreshData = finalRefreshData;
+        this.group = group;
     }
 
     @Override
@@ -236,5 +238,13 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setLoading(boolean loading) {
         isLoading = loading;
+    }
+
+    public int getGroup() {
+        return this.group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
     }
 }

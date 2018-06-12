@@ -187,5 +187,7 @@
     <string name="s_bookshelf_anim">打开书架时显示动画</string>
     <string name="t_bookshelf_anim">书架动画</string>
     <string name="loading">加载中…</string>
+    <string name="group_zg">追更区</string>
+    <string name="group_yf">养肥区</string>
 
 </resources>
