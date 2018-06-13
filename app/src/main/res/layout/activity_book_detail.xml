@@ -66,6 +66,7 @@
                             android:layout_weight="1"
                             android:gravity="center|start"
                             android:singleLine="true"
+                            android:text="@string/tv_book_name"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             app:minTextSize="14sp"
@@ -86,6 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:lines="1"
+                        android:text="@string/author"
                         android:textColor="#dfdfdf"
                         android:textSize="13sp" />
 
@@ -128,6 +130,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:lines="2"
+                        android:text="@string/read_dur_progress"
                         android:textColor="#ffffff"
                         android:textSize="15sp" />
 
