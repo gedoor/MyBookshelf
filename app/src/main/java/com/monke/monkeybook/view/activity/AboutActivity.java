@@ -76,7 +76,7 @@ public class AboutActivity extends MBaseActivity {
     @BindView(R.id.tv_source_share)
     TextView tvSourceShare;
 
-    private String qq = "701903217";
+    private String qq = "701903217 788025059";
 
     @Override
     protected IPresenter initInjector() {
