@@ -1,5 +1,8 @@
 package com.monke.monkeybook.help;
 
+import android.content.Context;
+
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -125,6 +128,15 @@ public class BookshelfHelp {
         bookInfo.setOrigin(searchBookBean.getOrigin());
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
+    }
+
+    public static String getGroupName(Context context, int group) {
+        switch (group) {
+            case 1:
+                return context.getString(R.string.group_yf);
+            default:
+                return context.getString(R.string.group_zg);
+        }
     }
 
     public static String getReadProgress(BookShelfBean bookShelfBean) {

@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
@@ -58,10 +60,18 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     ImageView ivRefresh;
     @BindView(R.id.tv_change_origin)
     TextView tvChangeOrigin;
+    @BindView(R.id.tv_group)
+    TextView tvGroup;
 
     private Animation animHideLoading;
     private Animation animShowInfo;
     private MoProgressHUD moProgressHUD;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     protected IBookDetailPresenter initInjector() {
@@ -111,6 +121,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
         if (null != mPresenter.getBookShelf()) {
             tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
+            tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
             if (mPresenter.getInBookShelf()) {
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                     tvChapter.setText(String.format(getString(R.string.read_dur_progress),
@@ -232,16 +243,25 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     protected void bindEvent() {
         iflContent.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if(getStart_share_ele()){
+                if (getStart_share_ele()) {
                     finishAfterTransition();
-                }else{
+                } else {
                     finish();
-                    overridePendingTransition(0,android.R.anim.fade_out);
+                    overridePendingTransition(0, android.R.anim.fade_out);
                 }
             } else {
                 finish();
-                overridePendingTransition(0,android.R.anim.fade_out);
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
+        });
+
+        tvGroup.setOnClickListener(view -> {
+            if (mPresenter.getBookShelf().getGroup() == 0) {
+                mPresenter.getBookShelf().setGroup(1);
+            } else {
+                mPresenter.getBookShelf().setGroup(0);
+            }
+            tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
         });
 
         tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(),
@@ -273,23 +293,23 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
             startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if(getStart_share_ele()){
+                if (getStart_share_ele()) {
                     finishAfterTransition();
-                }else{
+                } else {
                     finish();
-                    overridePendingTransition(0,android.R.anim.fade_out);
+                    overridePendingTransition(0, android.R.anim.fade_out);
                 }
             } else {
                 finish();
-                overridePendingTransition(0,android.R.anim.fade_out);
+                overridePendingTransition(0, android.R.anim.fade_out);
             }
         });
 
         ivRefresh.setOnClickListener(view -> {
             AnimationSet animationSet = new AnimationSet(true);
             RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
-                    Animation.RELATIVE_TO_SELF,0.5f,
-                    Animation.RELATIVE_TO_SELF,0.5f);
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setDuration(1000);
             animationSet.addAnimation(rotateAnimation);
             ivRefresh.startAnimation(animationSet);
