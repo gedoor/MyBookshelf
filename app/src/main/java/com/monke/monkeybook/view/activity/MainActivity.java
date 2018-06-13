@@ -83,7 +83,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     LinearLayout mainView;
 
     private Switch swNightTheme;
-
+    private int group;
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
@@ -142,6 +142,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         setSupportActionBar(toolbar);
         setupActionBar();
         initDrawer();
+        upGroup(0);
         moProgressHUD = new MoProgressHUD(this);
 
         if (viewIsList) {
@@ -167,7 +168,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void bindEvent() {
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.red), getResources().getColor(R.color.green), getResources().getColor(R.color.azure), getResources().getColor(R.color.violet));
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable());
+            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
             if (!NetworkUtil.isNetWorkAvailable()) {
                 Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
             }
@@ -316,6 +317,21 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     }
 
+    private void upGroup(int group) {
+        if (this.group != group) {
+            this.group = group;
+            mPresenter.queryBookShelf(false, group);
+        }
+        switch (group) {
+            case 1:
+                navigationView.setCheckedItem(R.id.action_group_yf);
+                break;
+            default:
+                navigationView.setCheckedItem(R.id.action_group_zg);
+                break;
+        }
+    }
+
     //侧边栏按钮
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
@@ -330,6 +346,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
+                case R.id.action_group_zg:
+                    upGroup(0);
+                    break;
+                case R.id.action_group_yf:
+                    upGroup(1);
+                    break;
                 case R.id.action_book_source_manage:
                     startActivity(new Intent(MainActivity.this, BookSourceActivity.class));
                     break;
@@ -423,9 +445,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void firstRequest() {
         fistOpenRun();
         if (NetworkUtil.isNetWorkAvailable()) {
-            mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false));
+            mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false), group);
         } else {
-            mPresenter.queryBookShelf(false);
+            mPresenter.queryBookShelf(false, group);
             Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
         }
     }

@@ -4,7 +4,7 @@ package com.monke.monkeybook.presenter.impl;
 import com.monke.basemvplib.impl.IPresenter;
 
 public interface IMainPresenter extends IPresenter{
-    void queryBookShelf(Boolean needRefresh);
+    void queryBookShelf(Boolean needRefresh, int group);
 
     void backupData();
 

@@ -49,14 +49,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
+    private int group;
 
     @Override
-    public void queryBookShelf(final Boolean needRefresh) {
+    public void queryBookShelf(final Boolean needRefresh, final int group) {
+        this.group = group;
         if (needRefresh&&NetworkUtil.isNetWorkAvailable()) {
             mView.activityRefreshView();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> bookShelfList = BookshelfHelp.getAllBook();
+            List<BookShelfBean> bookShelfList = BookshelfHelp.getBooksByGroup(group);
             e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
             e.onComplete();
         })
@@ -105,7 +107,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            queryBookShelf(true);
+                            queryBookShelf(true, group);
                             mView.onRestore();
                         } else {
                             Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
@@ -291,6 +293,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
-        queryBookShelf(false);
+        queryBookShelf(false, group);
     }
 }
