@@ -12,14 +12,15 @@
     <color name="blue">#0000FF</color>
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
+    <color name="d_blue">#82A6F5</color>
 
 
     <color name="background">#f4f4f4</color>
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
-    <color name="colorPrimary">#82A6F5</color>
-    <color name="colorPrimaryDark">#6f8ed2</color>
+    <color name="colorPrimary">#f4f4f4</color>
+    <color name="colorPrimaryDark">#949494</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
