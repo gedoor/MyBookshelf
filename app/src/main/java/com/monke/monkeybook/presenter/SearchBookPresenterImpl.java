@@ -48,10 +48,8 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     public SearchBookPresenterImpl(Context context) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().list();
-            if (temp == null)
-                temp = new ArrayList<>();
-            e.onNext(temp);
+            List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
+            e.onNext(booAll == null ? new ArrayList<>() : booAll);
             e.onComplete();
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
