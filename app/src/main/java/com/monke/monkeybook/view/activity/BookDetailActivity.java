@@ -262,6 +262,9 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
                 mPresenter.getBookShelf().setGroup(0);
             }
             tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
+            if (mPresenter.getInBookShelf()) {
+                mPresenter.addToBookShelf();
+            }
         });
 
         tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(),

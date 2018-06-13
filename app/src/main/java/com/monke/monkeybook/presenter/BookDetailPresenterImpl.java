@@ -253,5 +253,4 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         RxBus.get().unregister(this);
     }
 
-
 }
