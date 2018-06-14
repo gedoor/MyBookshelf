@@ -72,8 +72,7 @@ public class DataBackup {
     }
 
     private void backupBookShelf(File file) {
-        List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
+        List<BookShelfBean> bookShelfList = BookshelfHelp.getAllBook();
         if (bookShelfList != null && bookShelfList.size() > 0) {
             for (BookShelfBean bookshelf : bookShelfList) {
                 bookshelf.getBookInfoBean().setChapterList(null);
