@@ -67,6 +67,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         bookInfoBean = in.readParcelable(BookInfoBean.class.getClassLoader());
         serialNumber = in.readInt();
         finalRefreshData = in.readLong();
+        group = in.readInt();
     }
 
     @Generated(hash = 1430511915)
@@ -74,6 +75,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
             boolean hasUpdate, int newChapters, String tag, int serialNumber,
             long finalRefreshData, int group) {
         this.noteUrl = noteUrl;
+        this.group = group;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
         this.finalDate = finalDate;
@@ -82,12 +84,13 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.tag = tag;
         this.serialNumber = serialNumber;
         this.finalRefreshData = finalRefreshData;
-        this.group = group;
+
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(noteUrl);
+        dest.writeInt(group);
         dest.writeInt(durChapter);
         dest.writeInt(durChapterPage);
         dest.writeLong(finalDate);
@@ -95,6 +98,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeParcelable(bookInfoBean, flags);
         dest.writeInt(serialNumber);
         dest.writeLong(finalRefreshData);
+
     }
 
     @Override

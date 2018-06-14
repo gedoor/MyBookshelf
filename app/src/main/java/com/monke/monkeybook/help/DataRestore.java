@@ -44,8 +44,12 @@ public class DataRestore {
             List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {
             }.getType());
             for (BookShelfBean bookshelf : bookShelfList) {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                if (bookshelf.getNoteUrl() != null) {
+                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookshelf);
+                }
+                if (bookshelf.getBookInfoBean().getNoteUrl() != null) {
+                    DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookshelf.getBookInfoBean());
+                }
             }
         }
     }
