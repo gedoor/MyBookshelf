@@ -1,4 +1,4 @@
-package com.monke.monkeybook.widget.contentswitchview;
+package com.monke.monkeybook.widget.contentview;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

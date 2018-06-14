@@ -1,4 +1,4 @@
-package com.monke.monkeybook.widget.contentswitchview;
+package com.monke.monkeybook.widget.contentview;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -26,7 +26,6 @@ import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentTextView;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;

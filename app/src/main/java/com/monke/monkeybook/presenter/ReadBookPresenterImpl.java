@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.view.View;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -45,21 +44,17 @@ import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.impl.IReadBookView;
-import com.monke.monkeybook.widget.contentswitchview.BookContentView;
+import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.text.TextUtils.isEmpty;
 
 public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
     public final static int OPEN_FROM_OTHER = 0;
