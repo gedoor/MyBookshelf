@@ -180,6 +180,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             if (!NetworkUtil.isNetWorkAvailable()) {
                 Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
             }
+            refreshLayout.setRefreshing(false);
         });
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         if (bookPx.equals("2")) {
@@ -485,7 +486,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void refreshFinish() {
-        refreshLayout.setRefreshing(false);
         if (onRestore) {
             moProgressHUD.dismiss();
         }
