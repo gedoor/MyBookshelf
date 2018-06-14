@@ -103,8 +103,16 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            group = savedInstanceState.getInt("group");
+        }
         super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("group", group);
     }
 
     @Override
@@ -142,7 +150,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         setSupportActionBar(toolbar);
         setupActionBar();
         initDrawer();
-        upGroup(0);
+        upGroup(group);
         moProgressHUD = new MoProgressHUD(this);
 
         if (viewIsList) {
@@ -495,9 +503,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
-    public void onRestore() {
+    public void onRestore(String msg) {
         onRestore = true;
-        moProgressHUD.showLoading(getString(R.string.restore_success));
+        moProgressHUD.showLoading(msg);
     }
 
     @Override

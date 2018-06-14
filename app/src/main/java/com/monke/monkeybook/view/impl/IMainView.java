@@ -39,7 +39,10 @@ public interface IMainView extends IView{
      */
     void showLoading(String msg);
 
-    void onRestore();
+    /**
+     * 恢复数据
+     */
+    void onRestore(String msg);
 
     SharedPreferences getPreferences();
 }

@@ -93,7 +93,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void restoreData() {
-        mView.onRestore();
+        mView.onRestore(mView.getContext().getString(R.string.on_restore));
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             if (DataRestore.getInstance().run()) {
                 e.onNext(true);
@@ -108,6 +108,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
+                            mView.onRestore(mView.getContext().getString(R.string.restore_success));
                             queryBookShelf(true, group);
                         } else {
                             mView.refreshFinish();
