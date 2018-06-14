@@ -75,7 +75,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
             boolean hasUpdate, int newChapters, String tag, int serialNumber,
             long finalRefreshData, int group) {
         this.noteUrl = noteUrl;
-        this.group = group;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
         this.finalDate = finalDate;
@@ -84,7 +83,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.tag = tag;
         this.serialNumber = serialNumber;
         this.finalRefreshData = finalRefreshData;
-
+        this.group = group;
     }
 
     @Override
