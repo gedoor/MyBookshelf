@@ -852,7 +852,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 检查是否加入书架
      */
     public boolean checkAddShelf() {
-        if (isAdd) {
+        if (isAdd || mPresenter.getBookShelf() == null) {
             return true;
         } else {
             if (checkAddShelfPop == null) {
