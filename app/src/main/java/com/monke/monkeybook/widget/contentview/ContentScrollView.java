@@ -5,17 +5,53 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.widget.BatteryView;
 import com.monke.monkeybook.widget.ContentView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ContentScrollView extends ContentView {
+
+    @BindView(R.id.iv_bg)
+    ImageView ivBg;
+    @BindView(R.id.tvTime)
+    TextView tvTime;
+    @BindView(R.id.tvProgress)
+    TextView tvProgress;
+    @BindView(R.id.vwBattery)
+    BatteryView vwBattery;
+    @BindView(R.id.llTop)
+    LinearLayout llTop;
+    @BindView(R.id.rv_book_content)
+    RecyclerView rvBookContent;
+    @BindView(R.id.vwLine)
+    View vwLine;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+    @BindView(R.id.tvPage)
+    TextView tvPage;
+    @BindView(R.id.llBottom)
+    LinearLayout llBottom;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.tv_loading)
+    TextView tvLoading;
+    @BindView(R.id.tv_error_info)
+    TextView tvErrorInfo;
+    @BindView(R.id.tv_load_again)
+    TextView tvLoadAgain;
+    @BindView(R.id.ll_error)
+    LinearLayout llError;
 
     public ContentScrollView(@NonNull Context context) {
         super(context);
@@ -38,9 +74,11 @@ public class ContentScrollView extends ContentView {
     }
 
     private void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_scroll, this, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_content_recycler, this, false);
         addView(view);
         ButterKnife.bind(this, view);
+
+
     }
 
     @Override
