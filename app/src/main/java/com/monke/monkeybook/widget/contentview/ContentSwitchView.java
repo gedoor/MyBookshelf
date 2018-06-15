@@ -21,11 +21,12 @@ import android.widget.FrameLayout;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.widget.ContentView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentSwitchView extends FrameLayout implements BookContentView.SetDataListener {
+public class ContentSwitchView extends ContentView implements BookContentView.SetDataListener {
     public final static int NONE = -1;
     public final static int PRE_AND_NEXT = 0;
     public final static int ONLY_PRE = 1;
@@ -596,6 +597,11 @@ public class ContentSwitchView extends FrameLayout implements BookContentView.Se
 
     public Paint getTextPaint() {
         return durPageView.getTvContent().getPaint();
+    }
+
+    @Override
+    public String getContentText() {
+        return durPageView.getContent();
     }
 
     public int getContentWidth() {

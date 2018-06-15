@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,7 @@ import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
+import com.monke.monkeybook.widget.ContentView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -87,8 +89,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
-    @BindView(R.id.csv_book)
-    ContentSwitchView csvBook;
+//    @BindView(R.id.csv_book)
+//    ContentSwitchView csvBook;
     @BindView(R.id.fl_menu)
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
@@ -142,7 +144,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.ll_ISB)
     LinearLayout llISB;
 
-    //主菜单动画
+    private ContentView csvBook;
+
     private Animation menuTopIn;
     private Animation menuTopOut;
     private Animation menuBottomIn;
@@ -448,6 +451,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void initCsvBook() {
+        csvBook = (ContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content, null);
+        flContent.addView(csvBook, 0);
         csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
     }
 
@@ -640,7 +645,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             case R.id.action_copy_text:
                 popMenuOut();
-                moProgressHUD.showText(csvBook.getDurContentView().getContent());
+                moProgressHUD.showText(csvBook.getContentText());
                 break;
             case android.R.id.home:
                 finish();
@@ -978,7 +983,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
 
     @Override
-    public ContentSwitchView getCsvBook() {
+    public ContentView getCsvBook() {
         return csvBook;
     }
 

@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.monke.monkeybook.widget.contentview.ContentSwitchView
-        android:id="@+id/csv_book"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true" />
+    <!--<com.monke.monkeybook.widget.contentview.ContentSwitchView-->
+        <!--android:id="@+id/csv_book"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:clickable="true"-->
+        <!--android:focusable="true" />-->
 
     <FrameLayout
         android:id="@+id/fl_menu"

@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.widget.ContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 
 public interface IReadBookView extends IView {
@@ -26,7 +27,7 @@ public interface IReadBookView extends IView {
     /**
      * @return 控制view
      */
-    ContentSwitchView getCsvBook();
+    ContentView getCsvBook();
 
     /**
      * 小说数据初始化成功
