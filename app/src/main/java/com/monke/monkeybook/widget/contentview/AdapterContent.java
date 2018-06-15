@@ -3,12 +3,18 @@ package com.monke.monkeybook.widget.contentview;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
-public class AdapterContent extends RefreshRecyclerViewAdapter {
+import java.util.ArrayList;
+import java.util.List;
 
-    public AdapterContent() {
+public class AdapterContent extends RefreshRecyclerViewAdapter {
+    private List<ChapterListBean> chapterListBeans;
+
+    AdapterContent() {
         super(false);
+        chapterListBeans = new ArrayList<>();
     }
 
     @Override
@@ -28,6 +34,9 @@ public class AdapterContent extends RefreshRecyclerViewAdapter {
 
     @Override
     public int getItemcount() {
-        return 0;
+        return chapterListBeans.size();
     }
+
+
+
 }

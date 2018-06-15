@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -53,6 +54,8 @@ public class ContentScrollView extends ContentView {
     @BindView(R.id.ll_error)
     LinearLayout llError;
 
+    private AdapterContent adapter;
+
     public ContentScrollView(@NonNull Context context) {
         super(context);
         init();
@@ -78,7 +81,9 @@ public class ContentScrollView extends ContentView {
         addView(view);
         ButterKnife.bind(this, view);
 
-
+        adapter = new AdapterContent();
+        rvBookContent.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        rvBookContent.setAdapter(adapter);
     }
 
     @Override
