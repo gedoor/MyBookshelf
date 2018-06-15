@@ -478,7 +478,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void moveStopProgress(float dur) {
                 int realDur = (int) Math.ceil(dur);
-                if ((realDur) != csvBook.getDurContentView().getDurPageIndex()) {
+                if ((realDur) != mPresenter.getBookShelf().getDurChapterPage()) {
                     csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                             mPresenter.getBookShelf().getChapterListSize(),
                             realDur);
