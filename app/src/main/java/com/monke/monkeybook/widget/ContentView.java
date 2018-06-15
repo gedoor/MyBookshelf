@@ -13,11 +13,11 @@ import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 public abstract class ContentView extends FrameLayout {
 
     public ContentView(@NonNull Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ContentView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public ContentView(Context context, AttributeSet attrs, int defStyleAttr) {

@@ -1,16 +1,46 @@
 package com.monke.monkeybook.widget.contentview;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.widget.ContentView;
+
+import butterknife.ButterKnife;
 
 public class ContentScrollView extends ContentView {
 
     public ContentScrollView(@NonNull Context context) {
         super(context);
+        init();
+    }
+
+    public ContentScrollView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public ContentScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public ContentScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_content_scroll, this, false);
+        addView(view);
+        ButterKnife.bind(this, view);
     }
 
     @Override

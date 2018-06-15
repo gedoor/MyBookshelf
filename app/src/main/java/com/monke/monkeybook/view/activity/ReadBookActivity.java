@@ -451,7 +451,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void initCsvBook() {
-        csvBook = (ContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content, null);
+        csvBook = (ContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
         flContent.addView(csvBook, 0);
         csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
     }
