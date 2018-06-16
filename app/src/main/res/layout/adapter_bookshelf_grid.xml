@@ -40,7 +40,7 @@
                 android:layout_height="3dp"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                app:fontdrawable="@color/colorPrimary"
+                app:fontdrawable="@color/d_blue"
                 app:cantouch="false"
                 app:bgdrawable="@color/white"
                 android:visibility="invisible"
