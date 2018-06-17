@@ -99,6 +99,9 @@ public class BookChapter {
 
         if (dx) {
             Collections.reverse(chapterBeans);
+            for (int i = 0; i < chapterBeans.size(); i++) {
+                chapterBeans.get(i).setDurChapterIndex(i);
+            }
         }
         return new WebChapterBean<>(chapterBeans, false);
     }
