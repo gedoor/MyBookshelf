@@ -7,7 +7,8 @@
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_black_24dp_new"
         android:title="@string/action_search"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_library"
