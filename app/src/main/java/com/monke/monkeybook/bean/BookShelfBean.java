@@ -30,12 +30,12 @@ public class BookShelfBean implements Parcelable,Cloneable{
     private String noteUrl; //对应BookInfoBean noteUrl;
     private Integer durChapter = 0;   //当前章节 （包括番外）
     private Integer durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
-    private Long finalDate;  //最后阅读时间
+    private Long finalDate = System.currentTimeMillis();  //最后阅读时间
     private Boolean hasUpdate = false;  //是否有更新
     private Integer newChapters = 0;  //更新章节数
     private String tag;
     private Integer serialNumber = 0; //手动排序
-    private Long finalRefreshData;  //章节最后更新时间
+    private Long finalRefreshData = System.currentTimeMillis();  //章节最后更新时间
     private Integer group = 0;
     private Boolean isScroll = false;
 
