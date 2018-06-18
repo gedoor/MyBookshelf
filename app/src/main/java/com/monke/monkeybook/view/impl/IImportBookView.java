@@ -25,5 +25,5 @@ public interface IImportBookView extends IView{
     /**
      * 添加失败
      */
-    void addError();
+    void addError(String msg);
 }

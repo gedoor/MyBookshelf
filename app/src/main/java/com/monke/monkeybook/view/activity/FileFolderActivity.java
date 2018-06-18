@@ -94,8 +94,8 @@ public class FileFolderActivity extends MBaseActivity<IImportBookPresenter> impl
     }
 
     @Override
-    public void addError() {
-
+    public void addError(String msg) {
+		moProgressHUD.showInfo("放入书架失败!\n" + msg);
     }
 
     @Override

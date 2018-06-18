@@ -4,6 +4,7 @@ package com.monke.monkeybook.presenter;
 import android.os.Environment;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
@@ -11,6 +12,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
 import com.monke.monkeybook.view.impl.IImportBookView;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.util.List;
@@ -23,10 +25,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> implements IImportBookPresenter {
 
-
     public ImportBookPresenterImpl(){
 
     }
+
     @Override
     public void searchLocationBook(File file) {
         Observable.create((ObservableOnSubscribe<File>) e -> {
@@ -36,6 +38,7 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
             e.onComplete();
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<File>() {
                     @Override
                     public void onNext(File value) {
@@ -73,9 +76,11 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
 
     @Override
     public void importBooks(List<File> books){
-        Observable.fromIterable(books).flatMap(file -> ImportBookModelImpl.getInstance().importBook(file))
+        Observable.fromIterable(books)
+                .flatMap(file -> ImportBookModelImpl.getInstance().importBook(file))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<LocBookShelfBean>() {
                     @Override
                     public void onNext(LocBookShelfBean value) {
@@ -87,7 +92,7 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.addError();
+                        mView.addError(e.getMessage());
                     }
 
                     @Override

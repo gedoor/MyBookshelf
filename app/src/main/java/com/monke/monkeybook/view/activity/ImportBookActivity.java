@@ -206,8 +206,8 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     }
 
     @Override
-    public void addError() {
-        moProgressHUD.showInfo("放入书架失败!");
+    public void addError(String msg) {
+        moProgressHUD.showInfo("放入书架失败!\n" + msg);
     }
 
     @SuppressLint("NewApi")
