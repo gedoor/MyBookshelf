@@ -33,7 +33,9 @@ public class DbHelper {
                         }
                     },
                     BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class, BookContentBeanDao.class,
-                    DownloadChapterBeanDao.class, SearchHistoryBeanDao.class, BookSourceBeanDao.class, ReplaceRuleBeanDao.class);
+                    DownloadChapterBeanDao.class, SearchHistoryBeanDao.class, BookSourceBeanDao.class, ReplaceRuleBeanDao.class,
+                    BookmarkBeanDao.class
+            );
         }
     }
 
