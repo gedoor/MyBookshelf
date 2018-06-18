@@ -82,7 +82,6 @@ public class BookChapter {
             for (int i = 0; i < chapterList.size(); i++) {
                 AnalyzeElement analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
                 ChapterListBean temp = new ChapterListBean();
-                temp.setDurChapterIndex(i);
                 temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
                 temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
                 temp.setNoteUrl(novelUrl);
@@ -92,6 +91,7 @@ public class BookChapter {
                     if (x != -1) {
                         temp.setHasCache(chapterListBeansOld.get(x).getHasCache());
                     }
+                    temp.setDurChapterIndex(chapterBeans.size());
                     chapterBeans.add(temp);
                 }
             }
