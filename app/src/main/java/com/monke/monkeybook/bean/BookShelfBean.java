@@ -28,15 +28,16 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     @Id
     private String noteUrl; //对应BookInfoBean noteUrl;
-    private int durChapter;   //当前章节 （包括番外）
-    private int durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
-    private long finalDate;  //最后阅读时间
-    private boolean hasUpdate;  //是否有更新
-    private int newChapters;  //更新章节数
+    private Integer durChapter = 0;   //当前章节 （包括番外）
+    private Integer durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
+    private Long finalDate;  //最后阅读时间
+    private Boolean hasUpdate = false;  //是否有更新
+    private Integer newChapters = 0;  //更新章节数
     private String tag;
-    private int serialNumber; //手动排序
-    private long finalRefreshData;  //章节最后更新时间
-    private int group;
+    private Integer serialNumber = 0; //手动排序
+    private Long finalRefreshData;  //章节最后更新时间
+    private Integer group = 0;
+    private Boolean isScroll = false;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -68,12 +69,13 @@ public class BookShelfBean implements Parcelable,Cloneable{
         serialNumber = in.readInt();
         finalRefreshData = in.readLong();
         group = in.readInt();
+        isScroll = in.readByte() != 0;
     }
 
-    @Generated(hash = 1430511915)
-    public BookShelfBean(String noteUrl, int durChapter, int durChapterPage, long finalDate,
-            boolean hasUpdate, int newChapters, String tag, int serialNumber,
-            long finalRefreshData, int group) {
+    @Generated(hash = 1672419505)
+    public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage,
+            Long finalDate, Boolean hasUpdate, Integer newChapters, String tag,
+            Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -84,6 +86,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.serialNumber = serialNumber;
         this.finalRefreshData = finalRefreshData;
         this.group = group;
+        this.isScroll = isScroll;
     }
 
     @Override
@@ -97,7 +100,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeParcelable(bookInfoBean, flags);
         dest.writeInt(serialNumber);
         dest.writeLong(finalRefreshData);
-
+        dest.writeByte((byte) (isScroll ? 1 : 0));
     }
 
     @Override
@@ -248,6 +251,46 @@ public class BookShelfBean implements Parcelable,Cloneable{
     }
 
     public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public Boolean getIsScroll() {
+        return this.isScroll;
+    }
+
+    public void setIsScroll(Boolean isScroll) {
+        this.isScroll = isScroll;
+    }
+
+    public void setDurChapter(Integer durChapter) {
+        this.durChapter = durChapter;
+    }
+
+    public void setDurChapterPage(Integer durChapterPage) {
+        this.durChapterPage = durChapterPage;
+    }
+
+    public void setFinalDate(Long finalDate) {
+        this.finalDate = finalDate;
+    }
+
+    public void setHasUpdate(Boolean hasUpdate) {
+        this.hasUpdate = hasUpdate;
+    }
+
+    public void setNewChapters(Integer newChapters) {
+        this.newChapters = newChapters;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public void setFinalRefreshData(Long finalRefreshData) {
+        this.finalRefreshData = finalRefreshData;
+    }
+
+    public void setGroup(Integer group) {
         this.group = group;
     }
 }
