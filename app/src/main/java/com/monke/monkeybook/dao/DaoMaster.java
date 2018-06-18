@@ -30,6 +30,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ReplaceRuleBeanDao.createTable(db, ifNotExists);
         SearchBookBeanDao.createTable(db, ifNotExists);
         SearchHistoryBeanDao.createTable(db, ifNotExists);
+        BookmarkBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -43,6 +44,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ReplaceRuleBeanDao.dropTable(db, ifExists);
         SearchBookBeanDao.dropTable(db, ifExists);
         SearchHistoryBeanDao.dropTable(db, ifExists);
+        BookmarkBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -70,6 +72,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ReplaceRuleBeanDao.class);
         registerDaoClass(SearchBookBeanDao.class);
         registerDaoClass(SearchHistoryBeanDao.class);
+        registerDaoClass(BookmarkBeanDao.class);
     }
 
     public DaoSession newSession() {
