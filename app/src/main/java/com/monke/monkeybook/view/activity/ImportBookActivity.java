@@ -184,6 +184,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
         if (moProgressHUD.isShow()) {
             moProgressHUD.dismiss();
         }
+        super.finish();
     }
 
     @Override
@@ -234,8 +235,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean a = moProgressHUD.onKeyDown(keyCode, event);
-        return a || super.onKeyDown(keyCode, event);
+        return moProgressHUD.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
     }
 
     @Override
