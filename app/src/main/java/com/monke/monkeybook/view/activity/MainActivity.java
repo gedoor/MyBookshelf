@@ -265,12 +265,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_library:
-                startActivityByAnim(new Intent(MainActivity.this, FindBookActivity.class),
+                startActivityByAnim(new Intent(this, FindBookActivity.class),
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, perms)) {
-                    startActivity(new Intent(MainActivity.this, FileFolderActivity.class));
+                    startActivity(new Intent(this, FileFolderActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                             FILE_SELECT_RESULT, perms);
