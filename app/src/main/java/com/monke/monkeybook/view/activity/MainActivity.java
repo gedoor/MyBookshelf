@@ -492,9 +492,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void refreshFinish() {
-        if (onRestore) {
-            moProgressHUD.dismiss();
-        }
+        moProgressHUD.dismiss();
     }
 
     @Override
