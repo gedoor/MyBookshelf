@@ -16,17 +16,16 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.widget.ContentView;
+import com.monke.monkeybook.widget.BaseContentView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentSwitchView extends ContentView implements BookContentView.SetDataListener {
+public class ContentSwitchView extends BaseContentView implements BookContentView.SetDataListener {
     public final static int NONE = -1;
     public final static int PRE_AND_NEXT = 0;
     public final static int ONLY_PRE = 1;

@@ -16,12 +16,12 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.widget.BatteryView;
-import com.monke.monkeybook.widget.ContentView;
+import com.monke.monkeybook.widget.BaseContentView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ContentScrollView extends ContentView {
+public class ContentScrollView extends BaseContentView {
 
     @BindView(R.id.iv_bg)
     ImageView ivBg;

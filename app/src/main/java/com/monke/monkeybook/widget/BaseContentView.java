@@ -10,22 +10,22 @@ import android.widget.FrameLayout;
 
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 
-public abstract class ContentView extends FrameLayout {
+public abstract class BaseContentView extends FrameLayout {
 
-    public ContentView(@NonNull Context context) {
+    public BaseContentView(@NonNull Context context) {
         this(context, null);
     }
 
-    public ContentView(Context context, AttributeSet attrs) {
+    public BaseContentView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ContentView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BaseContentView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ContentView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public BaseContentView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

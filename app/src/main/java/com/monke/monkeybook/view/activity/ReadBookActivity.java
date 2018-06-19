@@ -55,7 +55,7 @@ import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
-import com.monke.monkeybook.widget.ContentView;
+import com.monke.monkeybook.widget.BaseContentView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
@@ -144,7 +144,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.ll_ISB)
     LinearLayout llISB;
 
-    private ContentView csvBook;
+    private BaseContentView csvBook;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -451,7 +451,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void initCsvBook() {
-        csvBook = (ContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
+        csvBook = (BaseContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
         flContent.addView(csvBook, 0);
         csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
     }
@@ -983,7 +983,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
 
     @Override
-    public ContentView getCsvBook() {
+    public BaseContentView getCsvBook() {
         return csvBook;
     }
 
