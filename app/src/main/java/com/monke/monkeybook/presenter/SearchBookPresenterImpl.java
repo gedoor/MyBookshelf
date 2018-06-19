@@ -43,7 +43,6 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
 
-    private Boolean isInput = false;
     private SearchBookModel searchBookModel;
 
     public SearchBookPresenterImpl(Context context) {
@@ -258,6 +257,11 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
                 });
     }
 
+    @Override
+    public void upSearchEngineS() {
+        searchBookModel.refreshSearchEngineS();
+    }
+
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             BookshelfHelp.saveBookToShelf(bookShelfBean);
@@ -289,6 +293,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
             }
         }).subscribe();
     }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
@@ -302,9 +307,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
     public void hadAddBook(BookShelfBean bookShelfBean) {
         bookShelfS.add(bookShelfBean);
         saveSearchBookToDb(bookShelfBean.getBookInfoBean().getName());
@@ -318,8 +321,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         }
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(RxBusTag.HAD_REMOVE_BOOK)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.HAD_REMOVE_BOOK)})
     public void hadRemoveBook(BookShelfBean bookShelfBean) {
         if (bookShelfS != null) {
             for (int i = 0; i < bookShelfS.size(); i++) {
@@ -338,16 +340,5 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
             }
         }
     }
-
-    @Override
-    public Boolean getInput() {
-        return isInput;
-    }
-
-    @Override
-    public void upSearchEngineS() {
-        searchBookModel.refreshSearchEngineS();
-    }
-
 
 }

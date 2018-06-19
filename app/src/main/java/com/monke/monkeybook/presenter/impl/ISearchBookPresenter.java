@@ -24,7 +24,5 @@ public interface ISearchBookPresenter extends IPresenter{
 
     void addBookToShelf(final SearchBookBean searchBookBean);
 
-    Boolean getInput();
-
     void upSearchEngineS();
 }
