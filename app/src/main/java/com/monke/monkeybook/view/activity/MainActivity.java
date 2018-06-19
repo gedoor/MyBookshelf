@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -83,6 +82,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     RecyclerView rvBookshelf;
     @BindView(R.id.main_view)
     LinearLayout mainView;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
 
     private Switch swNightTheme;
     private int group;
