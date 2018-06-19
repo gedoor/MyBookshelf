@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -26,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
-                android:transitionName = "to_search"
+                android:transitionName="to_search"
                 app:defaultQueryHint="搜索"
                 tools:ignore="UnusedAttribute" />
 
@@ -37,6 +38,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
             android:id="@+id/rfRv_search_books"
             android:layout_width="match_parent"
@@ -47,33 +49,37 @@
             app:second_color="#c1c1c1"
             app:second_max_progress="80dp"
             app:speed="2dp" />
+
         <LinearLayout
             android:id="@+id/ll_search_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/background"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:background="@color/background">
+            android:visibility="gone">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp">
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="#767676"
-                    android:text="@string/searchHistory"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="18dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:text="@string/searchHistory"
+                    android:textColor="#767676"
+                    android:textSize="16sp"
                     tools:ignore="RtlHardcoded" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:id="@+id/tv_search_history_clean"
@@ -81,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center"
                     android:paddingBottom="5dp"
                     android:paddingLeft="15dp"
@@ -88,18 +95,18 @@
                     android:paddingTop="5dp"
                     android:text="@string/clear"
                     android:textColor="@drawable/selector_tv_black"
-                    android:textSize="16sp"
-                    android:focusable="true" />
+                    android:textSize="16sp" />
             </LinearLayout>
+
             <com.monke.monkeybook.widget.flowlayout.TagFlowLayout
                 android:id="@+id/tfl_search_history"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:clickable="false">
-            </com.monke.monkeybook.widget.flowlayout.TagFlowLayout>
+                android:layout_marginTop="10dp"
+                android:clickable="false" />
+
         </LinearLayout>
 
     </FrameLayout>
