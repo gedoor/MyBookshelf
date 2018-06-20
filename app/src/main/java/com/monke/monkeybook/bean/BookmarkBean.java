@@ -11,6 +11,7 @@ import org.greenrobot.greendao.annotation.Generated;
 public class BookmarkBean implements Parcelable,Cloneable{
 
     private String noteUrl;
+    private String bookName;
     private String chapterName;
     private Integer chapterIndex;
     private String content;
@@ -18,15 +19,17 @@ public class BookmarkBean implements Parcelable,Cloneable{
 
     protected BookmarkBean(Parcel in) {
         noteUrl = in.readString();
+        bookName = in.readString();
         chapterName = in.readString();
         chapterIndex = in.readInt();
         content = in.readString();
     }
 
-    @Generated(hash = 1851732999)
-    public BookmarkBean(String noteUrl, String chapterName, Integer chapterIndex,
-            String content) {
+    @Generated(hash = 2024364741)
+    public BookmarkBean(String noteUrl, String bookName, String chapterName,
+            Integer chapterIndex, String content) {
         this.noteUrl = noteUrl;
+        this.bookName = bookName;
         this.chapterName = chapterName;
         this.chapterIndex = chapterIndex;
         this.content = content;
@@ -56,6 +59,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(noteUrl);
+        parcel.writeString(bookName);
         parcel.writeString(chapterName);
         parcel.writeInt(chapterIndex);
         parcel.writeString(content);
@@ -97,10 +101,19 @@ public class BookmarkBean implements Parcelable,Cloneable{
     protected Object clone() throws CloneNotSupportedException {
         BookmarkBean bookmarkBean = (BookmarkBean) super.clone();
         bookmarkBean.noteUrl = noteUrl;
+        bookmarkBean.bookName = bookName;
         bookmarkBean.chapterIndex = chapterIndex;
         bookmarkBean.chapterName = chapterName;
         bookmarkBean.content = content;
 
         return bookmarkBean;
+    }
+
+    public String getBookName() {
+        return this.bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 }

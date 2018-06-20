@@ -6,6 +6,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
@@ -34,16 +35,8 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookInfoBean.getNoteUrl()))
-                        .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
-                        .build()
-                        .list());
-                bookInfoBean.setBookmarkList(DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().queryBuilder()
-                        .where(BookmarkBeanDao.Properties.NoteUrl.eq(bookInfoBean.getNoteUrl()))
-                        .orderAsc(BookmarkBeanDao.Properties.ChapterIndex)
-                        .build()
-                        .list());
+                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
+                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
@@ -62,16 +55,8 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookInfoBean.getNoteUrl()))
-                        .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
-                        .build()
-                        .list());
-                bookInfoBean.setBookmarkList(DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().queryBuilder()
-                        .where(BookmarkBeanDao.Properties.NoteUrl.eq(bookInfoBean.getNoteUrl()))
-                        .orderAsc(BookmarkBeanDao.Properties.ChapterIndex)
-                        .build()
-                        .list());
+                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
+                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
@@ -90,16 +75,8 @@ public class BookshelfHelp {
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl())).limit(1).build().list();
             if (temp != null && temp.size() > 0) {
                 BookInfoBean bookInfoBean = temp.get(0);
-                bookInfoBean.setChapterList(DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
-                        .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
-                        .build()
-                        .list());
-                bookInfoBean.setBookmarkList(DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().queryBuilder()
-                        .where(BookmarkBeanDao.Properties.NoteUrl.eq(bookInfoBean.getNoteUrl()))
-                        .orderAsc(BookmarkBeanDao.Properties.ChapterIndex)
-                        .build()
-                        .list());
+                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
+                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfBean.setBookInfoBean(bookInfoBean);
                 return bookShelfBean;
             }
@@ -144,6 +121,22 @@ public class BookshelfHelp {
         bookInfo.setOrigin(searchBookBean.getOrigin());
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
+    }
+
+    private static List<ChapterListBean> getChapterList(String noteUrl) {
+        return DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
+                .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
+                .build()
+                .list();
+    }
+
+    private static List<BookmarkBean> getBookmarkList(String bookName) {
+        return DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().queryBuilder()
+                .where(BookmarkBeanDao.Properties.BookName.eq(bookName))
+                .orderAsc(BookmarkBeanDao.Properties.ChapterIndex)
+                .build()
+                .list();
     }
 
     public static String getGroupName(Context context, int group) {

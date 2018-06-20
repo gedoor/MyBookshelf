@@ -25,9 +25,10 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
      */
     public static class Properties {
         public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
-        public final static Property ChapterName = new Property(1, String.class, "chapterName", false, "CHAPTER_NAME");
-        public final static Property ChapterIndex = new Property(2, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
-        public final static Property Content = new Property(3, String.class, "content", false, "CONTENT");
+        public final static Property BookName = new Property(1, String.class, "bookName", false, "BOOK_NAME");
+        public final static Property ChapterName = new Property(2, String.class, "chapterName", false, "CHAPTER_NAME");
+        public final static Property ChapterIndex = new Property(3, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
+        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
     }
 
 
@@ -44,9 +45,10 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOKMARK_BEAN\" (" + //
                 "\"NOTE_URL\" TEXT," + // 0: noteUrl
-                "\"CHAPTER_NAME\" TEXT," + // 1: chapterName
-                "\"CHAPTER_INDEX\" INTEGER," + // 2: chapterIndex
-                "\"CONTENT\" TEXT);"); // 3: content
+                "\"BOOK_NAME\" TEXT," + // 1: bookName
+                "\"CHAPTER_NAME\" TEXT," + // 2: chapterName
+                "\"CHAPTER_INDEX\" INTEGER," + // 3: chapterIndex
+                "\"CONTENT\" TEXT);"); // 4: content
     }
 
     /** Drops the underlying database table. */
@@ -64,19 +66,24 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
             stmt.bindString(1, noteUrl);
         }
  
+        String bookName = entity.getBookName();
+        if (bookName != null) {
+            stmt.bindString(2, bookName);
+        }
+ 
         String chapterName = entity.getChapterName();
         if (chapterName != null) {
-            stmt.bindString(2, chapterName);
+            stmt.bindString(3, chapterName);
         }
  
         Integer chapterIndex = entity.getChapterIndex();
         if (chapterIndex != null) {
-            stmt.bindLong(3, chapterIndex);
+            stmt.bindLong(4, chapterIndex);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(4, content);
+            stmt.bindString(5, content);
         }
     }
 
@@ -89,19 +96,24 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
             stmt.bindString(1, noteUrl);
         }
  
+        String bookName = entity.getBookName();
+        if (bookName != null) {
+            stmt.bindString(2, bookName);
+        }
+ 
         String chapterName = entity.getChapterName();
         if (chapterName != null) {
-            stmt.bindString(2, chapterName);
+            stmt.bindString(3, chapterName);
         }
  
         Integer chapterIndex = entity.getChapterIndex();
         if (chapterIndex != null) {
-            stmt.bindLong(3, chapterIndex);
+            stmt.bindLong(4, chapterIndex);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(4, content);
+            stmt.bindString(5, content);
         }
     }
 
@@ -114,9 +126,10 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
     public BookmarkBean readEntity(Cursor cursor, int offset) {
         BookmarkBean entity = new BookmarkBean( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // noteUrl
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // chapterName
-            cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2), // chapterIndex
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // content
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // bookName
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // chapterName
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // chapterIndex
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // content
         );
         return entity;
     }
@@ -124,9 +137,10 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
     @Override
     public void readEntity(Cursor cursor, BookmarkBean entity, int offset) {
         entity.setNoteUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setChapterName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setChapterIndex(cursor.isNull(offset + 2) ? null : cursor.getInt(offset + 2));
-        entity.setContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setBookName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setChapterName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setChapterIndex(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override
