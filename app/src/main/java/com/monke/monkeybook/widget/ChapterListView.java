@@ -32,10 +32,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ChapterListView extends FrameLayout {
-    @BindView(R.id.tv_name)
-    TextView tvName;
-    @BindView(R.id.tv_list_count)
-    TextView tvListCount;
     @BindView(R.id.rv_list)
     RecyclerView rvList;
     @BindView(R.id.rvb_slider)
@@ -163,9 +159,6 @@ public class ChapterListView extends FrameLayout {
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
         this.itemClickListener = clickListener;
         this.bookShelfBean = bookShelfBean;
-        tvName.setText(bookShelfBean.getBookInfoBean().getName());
-        tvListCount.setText(String.format(MApplication.getInstance().getString(R.string.all_chapter_num),
-                bookShelfBean.getChapterListSize()));
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(index);

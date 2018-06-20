@@ -19,56 +19,59 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:elevation="5dp"
-            android:background="@color/bg_chapter">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_arrow_back_black_24dp"
-                android:contentDescription="@string/back" />
+                android:clickable="true"
+                android:contentDescription="@string/back"
+                android:focusable="true"
+                android:src="@drawable/ic_arrow_back_black_24dp" />
 
-            <LinearLayout
+            <android.support.design.widget.TabLayout
+                android:id="@+id/toolbar_tab"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:background="@color/background"
+                android:fillViewport="false"
+                app:layout_scrollFlags="scroll"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabIndicatorHeight="2.0dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorAccent"
+                app:tabTextColor="@color/tv_text_default">
 
-                <TextView
-                    android:id="@+id/tv_name"
+                <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:singleLine="true"
-                    android:textColor="@color/tv_text_default"
-                    android:textSize="16sp" />
+                    android:layout_height="match_parent"
+                    android:text="@string/table_of_contents" />
 
-                <TextView
-                    android:id="@+id/tv_list_count"
+                <android.support.design.widget.TabItem
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:singleLine="true"
-                    android:textColor="@color/tv_text_default"
-                    android:textSize="13sp" />
+                    android:layout_height="match_parent"
+                    android:text="@string/bookmark" />
 
-            </LinearLayout>
+            </android.support.design.widget.TabLayout>
+
         </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none" />
 
             <com.monke.monkeybook.widget.RecyclerViewBar
                 android:id="@+id/rvb_slider"
