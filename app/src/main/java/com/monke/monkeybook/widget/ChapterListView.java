@@ -52,6 +52,7 @@ public class ChapterListView extends FrameLayout {
     private Animation animIn;
     private Animation animOut;
     private OnChangeListener changeListener;
+    private int tabPosition;
 
     public ChapterListView(@NonNull Context context) {
         this(context, null);
@@ -170,6 +171,7 @@ public class ChapterListView extends FrameLayout {
 
             }
         });
+
     }
 
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {

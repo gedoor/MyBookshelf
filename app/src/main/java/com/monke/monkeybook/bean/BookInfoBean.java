@@ -24,13 +24,16 @@ public class BookInfoBean implements Parcelable,Cloneable{
     @Id
     private String noteUrl;  //如果是来源网站   则小说根地址 /如果是本地  则是小说本地MD5
     private String chapterUrl;  //章节目录地址
-    @Transient
-    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
     private long finalRefreshData;  //章节最后更新时间
     private String coverUrl; //小说封面
     private String author;//作者
     private String introduce; //简介
     private String origin; //来源
+
+    @Transient
+    private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
+    @Transient
+    private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
 
     public BookInfoBean(){
 
@@ -60,6 +63,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         author = in.readString();
         introduce = in.readString();
         origin = in.readString();
+        bookmarkList = in.createTypedArrayList(BookmarkBean.CREATOR);
     }
 
     @Generated(hash = 1627552162)
@@ -89,6 +93,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         dest.writeString(author);
         dest.writeString(introduce);
         dest.writeString(origin);
+        dest.writeTypedList(bookmarkList);
     }
 
     @Override
@@ -180,6 +185,14 @@ public class BookInfoBean implements Parcelable,Cloneable{
         this.origin = origin;
     }
 
+    public List<BookmarkBean> getBookmarkList() {
+        return bookmarkList;
+    }
+
+    public void setBookmarkList(List<BookmarkBean> bookmarkList) {
+        this.bookmarkList = bookmarkList;
+    }
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         BookInfoBean bookInfoBean = (BookInfoBean) super.clone();
@@ -192,12 +205,20 @@ public class BookInfoBean implements Parcelable,Cloneable{
         bookInfoBean.introduce = introduce;
         bookInfoBean.origin = origin;
         if(chapterList !=null){
-            List<ChapterListBean> newList = new ArrayList<>();
-            Iterator<ChapterListBean> iterator = chapterList.iterator();
-            while(iterator.hasNext()){
-                newList.add((ChapterListBean) iterator.next().clone());
+            List<ChapterListBean> newListC = new ArrayList<>();
+            Iterator<ChapterListBean> iteratorC = chapterList.iterator();
+            while(iteratorC.hasNext()){
+                newListC.add((ChapterListBean) iteratorC.next().clone());
             }
-            bookInfoBean.setChapterList(newList);
+            bookInfoBean.setChapterList(newListC);
+        }
+        if (bookmarkList != null) {
+            List<BookmarkBean> newListM = new ArrayList<>();
+            Iterator<BookmarkBean> iteratorM = bookmarkList.iterator();
+            while(iteratorM.hasNext()){
+                newListM.add((BookmarkBean) iteratorM.next().clone());
+            }
+            bookInfoBean.setBookmarkList(newListM);
         }
         return bookInfoBean;
     }

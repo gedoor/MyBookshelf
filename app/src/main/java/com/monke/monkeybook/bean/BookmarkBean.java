@@ -93,4 +93,15 @@ public class BookmarkBean implements Parcelable,Cloneable{
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BookmarkBean bookmarkBean = (BookmarkBean) super.clone();
+        bookmarkBean.noteUrl = noteUrl;
+        bookmarkBean.chapterIndex = chapterIndex;
+        bookmarkBean.chapterName = chapterName;
+        bookmarkBean.content = content;
+
+        return bookmarkBean;
+    }
 }
