@@ -33,10 +33,11 @@
 
                 <ImageView
                     android:id="@+id/iv_back"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:layout_margin="12dp"
                     android:background="@drawable/bg_ib_pre_round"
                     android:clickable="true"
                     android:contentDescription="@string/back"
