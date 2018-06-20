@@ -15,7 +15,7 @@ import com.monke.monkeybook.bean.BookmarkBean;
 /** 
  * DAO for table "BOOKMARK_BEAN".
 */
-public class BookmarkBeanDao extends AbstractDao<BookmarkBean, String> {
+public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
 
     public static final String TABLENAME = "BOOKMARK_BEAN";
 
@@ -24,7 +24,7 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, String> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", true, "NOTE_URL");
+        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
         public final static Property ChapterName = new Property(1, String.class, "chapterName", false, "CHAPTER_NAME");
         public final static Property ChapterIndex = new Property(2, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
         public final static Property Content = new Property(3, String.class, "content", false, "CONTENT");
@@ -43,7 +43,7 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, String> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOKMARK_BEAN\" (" + //
-                "\"NOTE_URL\" TEXT PRIMARY KEY NOT NULL ," + // 0: noteUrl
+                "\"NOTE_URL\" TEXT," + // 0: noteUrl
                 "\"CHAPTER_NAME\" TEXT," + // 1: chapterName
                 "\"CHAPTER_INDEX\" INTEGER," + // 2: chapterIndex
                 "\"CONTENT\" TEXT);"); // 3: content
@@ -106,8 +106,8 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, String> {
     }
 
     @Override
-    public String readKey(Cursor cursor, int offset) {
-        return cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0);
+    public Void readKey(Cursor cursor, int offset) {
+        return null;
     }    
 
     @Override
@@ -130,22 +130,20 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, String> {
      }
     
     @Override
-    protected final String updateKeyAfterInsert(BookmarkBean entity, long rowId) {
-        return entity.getNoteUrl();
+    protected final Void updateKeyAfterInsert(BookmarkBean entity, long rowId) {
+        // Unsupported or missing PK type
+        return null;
     }
     
     @Override
-    public String getKey(BookmarkBean entity) {
-        if(entity != null) {
-            return entity.getNoteUrl();
-        } else {
-            return null;
-        }
+    public Void getKey(BookmarkBean entity) {
+        return null;
     }
 
     @Override
     public boolean hasKey(BookmarkBean entity) {
-        return entity.getNoteUrl() != null;
+        // TODO
+        return false;
     }
 
     @Override

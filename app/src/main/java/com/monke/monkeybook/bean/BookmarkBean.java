@@ -10,7 +10,6 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class BookmarkBean implements Parcelable,Cloneable{
 
-    @Id
     private String noteUrl;
     private String chapterName;
     private Integer chapterIndex;
