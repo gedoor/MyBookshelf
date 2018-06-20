@@ -19,6 +19,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
     private int index = 0;
+    private int tabPosition;
 
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull ChapterListView.OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
@@ -30,6 +31,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
             notifyItemChanged(chapterListBean.getDurChapterIndex());
         }
+    }
+
+    public void tabChange(int tabPosition) {
+        this.tabPosition = tabPosition;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -45,32 +51,39 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             holder.vLine.setVisibility(View.VISIBLE);
         }
+        if (tabPosition == 0) {
+            holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
+            if (bookShelfBean.getChapterList(position).getHasCache()) {
+                holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            } else {
+                holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
+            holder.flContent.setOnClickListener(v -> {
+                setIndex(position);
+                itemClickListener.itemClick(position);
+            });
+            if (position == index) {
+                holder.flContent.setBackgroundResource(R.color.btn_bg_press);
+                holder.flContent.setClickable(false);
+            } else {
+                holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre);
+                holder.flContent.setClickable(true);
+            }
+        } else {
+            holder.tvName.setText(bookShelfBean.getBookInfoBean().getBookmarkList().get(position).getContent());
+        }
 
-        holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
-        if (bookShelfBean.getChapterList(position).getHasCache()) {
-            holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        } else {
-            holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-        }
-        holder.flContent.setOnClickListener(v -> {
-            setIndex(position);
-            itemClickListener.itemClick(position);
-        });
-        if (position == index) {
-            holder.flContent.setBackgroundResource(R.color.btn_bg_press);
-            holder.flContent.setClickable(false);
-        } else {
-            holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre);
-            holder.flContent.setClickable(true);
-        }
     }
 
     @Override
     public int getItemCount() {
         if (bookShelfBean == null)
             return 0;
-        else
+        else if (tabPosition == 0) {
             return bookShelfBean.getChapterListSize();
+        } else {
+            return bookShelfBean.getBookInfoBean().getBookmarkList().size();
+        }
     }
 
     public int getIndex() {

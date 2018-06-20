@@ -186,6 +186,9 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public List<BookmarkBean> getBookmarkList() {
+        if (bookmarkList == null) {
+            return new ArrayList<>();
+        }
         return bookmarkList;
     }
 

@@ -163,7 +163,7 @@ public class RecyclerViewBar extends LinearLayout {
 
     public void scrollToPositionWithOffset(int position) {
         //判断listView一页显示多少条
-        View listItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findViewByPosition(position);
+        View listItem = recyclerView.getLayoutManager().findViewByPosition(position);
 
         int onePageCount = recyclerView.getMeasuredHeight()/listItem.getMeasuredHeight();//一页显示多少项
         int lastCount = recyclerView.getAdapter().getItemCount()-onePageCount;
@@ -175,7 +175,6 @@ public class RecyclerViewBar extends LinearLayout {
         }else{
             posi = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
         }
-
 
         if (recyclerView != null && posi < recyclerView.getAdapter().getItemCount()) {
             float temp = posi * 1.0f / recyclerView.getAdapter().getItemCount();

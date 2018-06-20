@@ -158,6 +158,9 @@ public class ChapterListView extends FrameLayout {
         toolbarTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                if (chapterListAdapter != null) {
+                    chapterListAdapter.tabChange(tab.getPosition());
+                }
 
             }
 
@@ -168,7 +171,9 @@ public class ChapterListView extends FrameLayout {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                if (chapterListAdapter != null) {
+                    chapterListAdapter.tabChange(tab.getPosition());
+                }
             }
         });
 
