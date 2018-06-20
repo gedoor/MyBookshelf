@@ -33,8 +33,6 @@ import butterknife.ButterKnife;
 public class ChapterListView extends FrameLayout {
     @BindView(R.id.rv_list)
     RecyclerView rvList;
-    @BindView(R.id.rvb_slider)
-    RecyclerViewBar rvbSlider;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.fl_bg)
@@ -189,7 +187,6 @@ public class ChapterListView extends FrameLayout {
             }
         });
         rvList.setAdapter(chapterListAdapter);
-        rvbSlider.setRecyclerView(rvList);
     }
 
     public void upChapterList(ChapterListBean chapterListBean) {

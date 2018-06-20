@@ -30,12 +30,6 @@
         <attr name="color_unchecked_stroke" format="color"/>
     </declare-styleable>
 
-    <declare-styleable name="RecyclerViewBar">
-        <attr name="slider_height" format="dimension"/>
-        <attr name="slider_paddingLeft" format="dimension"/>
-        <attr name="slider_paddingRight" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="NumberPickerPreference">
         <attr name="MinValue" format="integer" />
         <attr name="MaxValue" format="integer" />
