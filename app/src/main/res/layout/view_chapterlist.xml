@@ -29,6 +29,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="16dp"
+                android:background="@drawable/bg_ib_pre_round"
                 android:clickable="true"
                 android:contentDescription="@string/back"
                 android:focusable="true"

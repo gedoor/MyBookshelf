@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<com.monke.monkeybook.widget.contentview.ContentSwitchView-->
-        <!--android:id="@+id/csv_book"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:clickable="true"-->
-        <!--android:focusable="true" />-->
-
     <FrameLayout
         android:id="@+id/fl_menu"
         android:layout_width="match_parent"
@@ -230,6 +223,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="vertical"
@@ -259,6 +253,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="vertical"
@@ -288,6 +283,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="vertical"
@@ -317,6 +313,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="vertical"
