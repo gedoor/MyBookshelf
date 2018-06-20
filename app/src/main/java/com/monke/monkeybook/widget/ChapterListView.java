@@ -10,6 +10,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -19,9 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -42,6 +41,8 @@ public class ChapterListView extends FrameLayout {
     FrameLayout flBg;
     @BindView(R.id.iv_back)
     ImageView ivBack;
+    @BindView(R.id.toolbar_tab)
+    TabLayout toolbarTab;
 
     private ChapterListAdapter chapterListAdapter;
     private OnItemClickListener itemClickListener;
@@ -51,7 +52,6 @@ public class ChapterListView extends FrameLayout {
     private Animation animIn;
     private Animation animOut;
     private OnChangeListener changeListener;
-    public SharedPreferences preferences;
 
     public ChapterListView(@NonNull Context context) {
         this(context, null);
@@ -154,6 +154,22 @@ public class ChapterListView extends FrameLayout {
         llContent.setPadding(0, ImmersionBar.getStatusBarHeight((Activity) mContext), 0, 0);
         rvList.setLayoutManager(new LinearLayoutManager(getContext()));
         rvList.setItemAnimator(null);
+        toolbarTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
@@ -162,7 +178,6 @@ public class ChapterListView extends FrameLayout {
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(index);
-                //rvbSlider.scrollToPositionWithOffset(index);
                 dismissChapterList();
             }
         });
