@@ -32,13 +32,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         }
     }
 
+    @NonNull
     @Override
-    public ThisViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ThisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_chapterlist, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ThisViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ThisViewHolder holder, final int position) {
         if (position == getItemCount() - 1) {
             holder.vLine.setVisibility(View.INVISIBLE);
         } else {
