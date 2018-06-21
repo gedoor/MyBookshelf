@@ -56,7 +56,7 @@
     <group android:id="@+id/drawer_menu_backup">
         <item
             android:id="@+id/action_backup"
-            android:icon="@drawable/ic_settings_backup_restore_black_24dp_new"
+            android:icon="@drawable/ic_settings_backup_restore"
             android:title="@string/backup" />
 
         <item

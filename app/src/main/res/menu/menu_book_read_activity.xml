@@ -32,7 +32,7 @@
 
         <item
             android:id="@+id/action_copy_text"
-            android:icon="@drawable/ic_settings_backup_restore_black_24dp_new"
+            android:icon="@drawable/ic_settings_backup_restore"
             android:title="@string/copy_text"
             app:showAsAction="ifRoom" />
 
