@@ -38,7 +38,6 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
     private Boolean readAloud = false;
 
     private Snackbar snackbar;
-    private int speakStart;
     private BookContentView durPageView;
     private List<BookContentView> viewContents;
     private ReadBookControl readBookControl;
@@ -386,7 +385,6 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
      * 翻页完成
      */
     private void afterOpenPage() {
-        speakStart = 0;
         if (loadDataListener != null) {
             loadDataListener.updateProgress(durPageView.getDurChapterIndex(), durPageView.getDurPageIndex());
             loadDataListener.setHpbReadProgress(durPageView.getDurPageIndex(), durPageView.getPageAll());
@@ -526,7 +524,6 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
      */
     public void readAloudStart() {
         readAloud = true;
-        speakStart = 0;
         loadDataListener.readAloud(durPageView.getContent());
 
     }
@@ -550,23 +547,7 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
      * 开始朗读speakIndex段
      */
     public void speakStart(int speakIndex) {
-        if (durPageView.getContent() == null | speakStart > durPageView.getContent().length()) {
-            return;
-        }
-        if (speakIndex == 0) {
-            if (durPageView.getContent().startsWith("\u3000")) {
-                speakStart = 2;
-            }
-        }
-        int speakEnd = durPageView.getContent().indexOf("\n", speakStart);
-        if (speakEnd == -1) {
-            speakEnd = durPageView.getContent().length();
-        }
-        SpannableString ssContent = new SpannableString(durPageView.getContent());
-        ssContent.setSpan(new UnderlineSpan(), speakStart, speakEnd,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        durPageView.upSpeak(ssContent);
-        speakStart = speakEnd + 3;
+
     }
 
     public void setLoadDataListener(LoadDataListener loadDataListener) {
