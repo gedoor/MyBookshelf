@@ -3,28 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.MainActivity">
 
-    <item
-        android:id="@+id/action_change_source"
-        android:icon="@drawable/ic_exchange_black_24dp_new"
-        android:title="@string/change_origin"
-        app:showAsAction="always" />
+    <group android:id="@+id/menuOnLine" >
+        <item
+            android:id="@+id/action_change_source"
+            android:icon="@drawable/ic_exchange_black_24dp_new"
+            android:title="@string/change_origin"
+            app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh_black_24dp_new"
-        android:title="@string/refresh"
-        app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_refresh"
+            android:icon="@drawable/ic_refresh_black_24dp_new"
+            android:title="@string/refresh"
+            app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_download"
-        android:icon="@drawable/ic_download_black_24dp_new"
-        android:title="@string/download_offline"
-        app:showAsAction="ifRoom" />
+        <item
+            android:id="@+id/action_download"
+            android:icon="@drawable/ic_download_black_24dp_new"
+            android:title="@string/download_offline"
+            app:showAsAction="ifRoom" />
+    </group>
 
-    <item
-        android:id="@+id/action_copy_text"
-        android:icon="@drawable/ic_settings_backup_restore_black_24dp_new"
-        android:title="@string/copy_text"
-        app:showAsAction="ifRoom" />
+    <group android:id="@+id/menuShow">
+        <item
+            android:id="@+id/add_bookmark"
+            android:icon="@drawable/ic_bookmark"
+            android:title="@string/bookmark_add"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/action_copy_text"
+            android:icon="@drawable/ic_settings_backup_restore_black_24dp_new"
+            android:title="@string/copy_text"
+            app:showAsAction="ifRoom" />
+
+    </group>
 
 </menu>

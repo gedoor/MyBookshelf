@@ -191,5 +191,6 @@
     <string name="group_zg">追更区</string>
     <string name="group_yf">养肥区</string>
     <string name="bookmark">书签</string>
+    <string name="bookmark_add">添加书签</string>
 
 </resources>

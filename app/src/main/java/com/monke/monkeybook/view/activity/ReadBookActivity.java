@@ -948,16 +948,20 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             atvUrl.setVisibility(View.VISIBLE);
             if (menu != null) {
                 for (int i = 0; i < menu.size(); i++) {
-                    menu.getItem(i).setVisible(true);
-                    menu.getItem(i).setEnabled(true);
+                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
+                        menu.getItem(i).setVisible(true);
+                        menu.getItem(i).setEnabled(true);
+                    }
                 }
             }
         } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
             atvUrl.setVisibility(View.GONE);
             if (menu != null) {
                 for (int i = 0; i < menu.size(); i++) {
-                    menu.getItem(i).setVisible(false);
-                    menu.getItem(i).setEnabled(false);
+                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
+                        menu.getItem(i).setVisible(false);
+                        menu.getItem(i).setEnabled(false);
+                    }
                 }
             }
         }
