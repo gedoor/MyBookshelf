@@ -131,8 +131,7 @@ public class ChapterListView extends FrameLayout {
      * 显示章节列表，并定位当前阅读章节
      */
     public void show(int durChapter) {
-        chapterListAdapter.setIndex(durChapter);
-        ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
+        upIndex(durChapter);
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
             animOut.cancel();
@@ -140,6 +139,11 @@ public class ChapterListView extends FrameLayout {
             llContent.setVisibility(VISIBLE);
             llContent.startAnimation(animIn);
         }
+    }
+
+    private void upIndex(int durChapter) {
+        chapterListAdapter.setIndex(durChapter);
+        ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
     }
 
     public Boolean hasData() {
@@ -156,6 +160,7 @@ public class ChapterListView extends FrameLayout {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (chapterListAdapter != null) {
                     chapterListAdapter.tabChange(tab.getPosition());
+                    upIndex(bookShelfBean.getDurChapter());
                 }
 
             }
@@ -169,6 +174,7 @@ public class ChapterListView extends FrameLayout {
             public void onTabReselected(TabLayout.Tab tab) {
                 if (chapterListAdapter != null) {
                     chapterListAdapter.tabChange(tab.getPosition());
+                    upIndex(bookShelfBean.getDurChapter());
                 }
             }
         });

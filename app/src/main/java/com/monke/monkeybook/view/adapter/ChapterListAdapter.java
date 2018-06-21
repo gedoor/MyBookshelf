@@ -29,7 +29,9 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public void upChapterList(ChapterListBean chapterListBean) {
         if (bookShelfBean.getChapterListSize() > chapterListBean.getDurChapterIndex()) {
             bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
-            notifyItemChanged(chapterListBean.getDurChapterIndex());
+            if (tabPosition == 0) {
+                notifyItemChanged(chapterListBean.getDurChapterIndex());
+            }
         }
     }
 
@@ -91,9 +93,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public void setIndex(int index) {
-        notifyItemChanged(this.index);
-        this.index = index;
-        notifyItemChanged(this.index);
+        if (tabPosition == 0) {
+            notifyItemChanged(this.index);
+            this.index = index;
+            notifyItemChanged(this.index);
+        }
     }
 
     class ThisViewHolder extends RecyclerView.ViewHolder {
