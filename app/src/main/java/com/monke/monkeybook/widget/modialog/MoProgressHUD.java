@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 
 /**
@@ -331,6 +332,19 @@ public class MoProgressHUD {
         rootView.setOnClickListener(v -> dismiss());
         EditReplaceRuleView.getInstance(mSharedView)
                 .showEditReplaceRule(replaceRuleBean, onSaveReplaceRule, this);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    public void showBookmark(BookmarkBean bookmarkBean, EditBookmarkView.OnSaveBookmark onSaveBookmark) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        EditBookmarkView.getInstance(mSharedView)
+                .showBookmark(bookmarkBean, onSaveBookmark, this);
         if (!isShowing()) {
             onAttached();
         }

@@ -15,7 +15,7 @@ import com.monke.monkeybook.bean.BookmarkBean;
 /** 
  * DAO for table "BOOKMARK_BEAN".
 */
-public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
+public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
 
     public static final String TABLENAME = "BOOKMARK_BEAN";
 
@@ -24,11 +24,12 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property NoteUrl = new Property(0, String.class, "noteUrl", false, "NOTE_URL");
-        public final static Property BookName = new Property(1, String.class, "bookName", false, "BOOK_NAME");
-        public final static Property ChapterName = new Property(2, String.class, "chapterName", false, "CHAPTER_NAME");
-        public final static Property ChapterIndex = new Property(3, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
-        public final static Property Content = new Property(4, String.class, "content", false, "CONTENT");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property NoteUrl = new Property(1, String.class, "noteUrl", false, "NOTE_URL");
+        public final static Property BookName = new Property(2, String.class, "bookName", false, "BOOK_NAME");
+        public final static Property ChapterName = new Property(3, String.class, "chapterName", false, "CHAPTER_NAME");
+        public final static Property ChapterIndex = new Property(4, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
+        public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
     }
 
 
@@ -44,11 +45,12 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BOOKMARK_BEAN\" (" + //
-                "\"NOTE_URL\" TEXT," + // 0: noteUrl
-                "\"BOOK_NAME\" TEXT," + // 1: bookName
-                "\"CHAPTER_NAME\" TEXT," + // 2: chapterName
-                "\"CHAPTER_INDEX\" INTEGER," + // 3: chapterIndex
-                "\"CONTENT\" TEXT);"); // 4: content
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"NOTE_URL\" TEXT," + // 1: noteUrl
+                "\"BOOK_NAME\" TEXT," + // 2: bookName
+                "\"CHAPTER_NAME\" TEXT," + // 3: chapterName
+                "\"CHAPTER_INDEX\" INTEGER," + // 4: chapterIndex
+                "\"CONTENT\" TEXT);"); // 5: content
     }
 
     /** Drops the underlying database table. */
@@ -61,29 +63,34 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
     protected final void bindValues(DatabaseStatement stmt, BookmarkBean entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String noteUrl = entity.getNoteUrl();
         if (noteUrl != null) {
-            stmt.bindString(1, noteUrl);
+            stmt.bindString(2, noteUrl);
         }
  
         String bookName = entity.getBookName();
         if (bookName != null) {
-            stmt.bindString(2, bookName);
+            stmt.bindString(3, bookName);
         }
  
         String chapterName = entity.getChapterName();
         if (chapterName != null) {
-            stmt.bindString(3, chapterName);
+            stmt.bindString(4, chapterName);
         }
  
         Integer chapterIndex = entity.getChapterIndex();
         if (chapterIndex != null) {
-            stmt.bindLong(4, chapterIndex);
+            stmt.bindLong(5, chapterIndex);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
     }
 
@@ -91,73 +98,83 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Void> {
     protected final void bindValues(SQLiteStatement stmt, BookmarkBean entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String noteUrl = entity.getNoteUrl();
         if (noteUrl != null) {
-            stmt.bindString(1, noteUrl);
+            stmt.bindString(2, noteUrl);
         }
  
         String bookName = entity.getBookName();
         if (bookName != null) {
-            stmt.bindString(2, bookName);
+            stmt.bindString(3, bookName);
         }
  
         String chapterName = entity.getChapterName();
         if (chapterName != null) {
-            stmt.bindString(3, chapterName);
+            stmt.bindString(4, chapterName);
         }
  
         Integer chapterIndex = entity.getChapterIndex();
         if (chapterIndex != null) {
-            stmt.bindLong(4, chapterIndex);
+            stmt.bindLong(5, chapterIndex);
         }
  
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(5, content);
+            stmt.bindString(6, content);
         }
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public BookmarkBean readEntity(Cursor cursor, int offset) {
         BookmarkBean entity = new BookmarkBean( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // noteUrl
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // bookName
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // chapterName
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // chapterIndex
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // content
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // noteUrl
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // bookName
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // chapterName
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // chapterIndex
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // content
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, BookmarkBean entity, int offset) {
-        entity.setNoteUrl(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setBookName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setChapterName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setChapterIndex(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
-        entity.setContent(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setNoteUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setBookName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setChapterName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setChapterIndex(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
+        entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(BookmarkBean entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(BookmarkBean entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(BookmarkBean entity) {
-        return null;
+    public Long getKey(BookmarkBean entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(BookmarkBean entity) {
-        // TODO
-        return false;
+        return entity.getId() != null;
     }
 
     @Override

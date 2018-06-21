@@ -28,6 +28,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
@@ -523,6 +524,18 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     }
                 });
 
+    }
+
+    @Override
+    public void saveBookmark(BookmarkBean bookmarkBean) {
+        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+            e.onNext(bookmarkBean);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     /**

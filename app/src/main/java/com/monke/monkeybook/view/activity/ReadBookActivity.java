@@ -38,6 +38,7 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -58,6 +59,7 @@ import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.BaseContentView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
+import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -643,6 +645,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case R.id.action_download:
                 download();
                 break;
+            case R.id.add_bookmark:
+                addBookmark();
+                break;
             case R.id.action_copy_text:
                 popMenuOut();
                 moProgressHUD.showText(csvBook.getContentText());
@@ -667,6 +672,21 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
                     mPresenter.getBookShelf().getChapterListSize(),
                     BookContentView.DurPageIndexBegin);
+        }
+    }
+
+    /**
+     * 添加书签
+     */
+    private void addBookmark() {
+        this.popMenuOut();
+        if (mPresenter.getBookShelf() != null) {
+            BookmarkBean bookmarkBean = new BookmarkBean();
+            bookmarkBean.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
+            bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
+            bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
+            bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
+            moProgressHUD.showBookmark(bookmarkBean, bookmarkBean1 -> mPresenter.saveBookmark(bookmarkBean1));
         }
     }
 

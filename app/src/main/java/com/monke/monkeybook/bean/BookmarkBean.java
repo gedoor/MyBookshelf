@@ -10,6 +10,8 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class BookmarkBean implements Parcelable,Cloneable{
 
+    @Id
+    private Long id = System.currentTimeMillis();
     private String noteUrl;
     private String bookName;
     private String chapterName;
@@ -18,6 +20,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
     
 
     protected BookmarkBean(Parcel in) {
+        id = in.readLong();
         noteUrl = in.readString();
         bookName = in.readString();
         chapterName = in.readString();
@@ -25,9 +28,10 @@ public class BookmarkBean implements Parcelable,Cloneable{
         content = in.readString();
     }
 
-    @Generated(hash = 2024364741)
-    public BookmarkBean(String noteUrl, String bookName, String chapterName,
+    @Generated(hash = 335453502)
+    public BookmarkBean(Long id, String noteUrl, String bookName, String chapterName,
             Integer chapterIndex, String content) {
+        this.id = id;
         this.noteUrl = noteUrl;
         this.bookName = bookName;
         this.chapterName = chapterName;
@@ -58,11 +62,25 @@ public class BookmarkBean implements Parcelable,Cloneable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
         parcel.writeString(noteUrl);
         parcel.writeString(bookName);
         parcel.writeString(chapterName);
         parcel.writeInt(chapterIndex);
         parcel.writeString(content);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BookmarkBean bookmarkBean = (BookmarkBean) super.clone();
+        bookmarkBean.id = id;
+        bookmarkBean.noteUrl = noteUrl;
+        bookmarkBean.bookName = bookName;
+        bookmarkBean.chapterIndex = chapterIndex;
+        bookmarkBean.chapterName = chapterName;
+        bookmarkBean.content = content;
+
+        return bookmarkBean;
     }
 
     public String getNoteUrl() {
@@ -97,23 +115,19 @@ public class BookmarkBean implements Parcelable,Cloneable{
         this.content = content;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        BookmarkBean bookmarkBean = (BookmarkBean) super.clone();
-        bookmarkBean.noteUrl = noteUrl;
-        bookmarkBean.bookName = bookName;
-        bookmarkBean.chapterIndex = chapterIndex;
-        bookmarkBean.chapterName = chapterName;
-        bookmarkBean.content = content;
-
-        return bookmarkBean;
-    }
-
     public String getBookName() {
         return this.bookName;
     }
 
     public void setBookName(String bookName) {
         this.bookName = bookName;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

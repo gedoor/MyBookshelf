@@ -39,12 +39,14 @@ public class EditBookmarkView {
         bindView();
     }
 
-    void showEditReplaceRule(@NotNull BookmarkBean bookmarkBean, final OnSaveBookmark onSaveBookmark, MoProgressHUD moProgressHUD) {
+    void showBookmark(@NotNull BookmarkBean bookmarkBean, final OnSaveBookmark onSaveBookmark, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.onSaveBookmark = onSaveBookmark;
 
         this.bookmarkBean = bookmarkBean;
 
+        tvChapterName.setText(bookmarkBean.getChapterName());
+        tvContent.setText(bookmarkBean.getContent());
     }
 
     private void bindView() {
@@ -54,12 +56,8 @@ public class EditBookmarkView {
         View llContent = moProgressView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
 
-        TextInputLayout tilReplaceSummary = moProgressView.findViewById(R.id.til_replace_summary);
-        tilReplaceSummary.setHint(context.getString(R.string.replace_rule_summary));
-        TextInputLayout tilReplaceRule = moProgressView.findViewById(R.id.til_replace_rule);
-        tilReplaceRule.setHint(context.getString(R.string.replace_rule));
-        TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_replace_to);
-        tilReplaceTo.setHint(context.getString(R.string.replace_to));
+        TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_content);
+        tilReplaceTo.setHint(context.getString(R.string.content));
         tvChapterName = moProgressView.findViewById(R.id.tvChapterName);
         tvContent = moProgressView.findViewById(R.id.tie_content);
 
