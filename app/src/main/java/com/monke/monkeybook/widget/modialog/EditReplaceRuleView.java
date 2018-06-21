@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 
@@ -47,10 +48,6 @@ public class EditReplaceRuleView {
     private OnSaveReplaceRule saveReplaceRule;
     private Context context;
     private ReplaceRuleBean replaceRuleBean;
-
-    private int usableHeightPrevious;
-    private FrameLayout.LayoutParams frameLayoutParams;
-    private View mChildOfContent;
 
     public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
         return new EditReplaceRuleView(moProgressView);
@@ -102,37 +99,7 @@ public class EditReplaceRuleView {
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        if (preference.getBoolean("immersionStatusBar", false)) {
-            resetBoxPosition();
-        }
-    }
-
-    private void resetBoxPosition(){
-
-        final View decorView=((Activity) context).getWindow().getDecorView();
-        decorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect rect=new Rect();
-                decorView.getWindowVisibleDisplayFrame(rect);
-                int screenHeight = getScreenHeight();
-                int heightDifference = screenHeight - rect.bottom;//计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
-                CardView cardView = moProgressView.findViewById(R.id.cv_root);
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) cardView.getLayoutParams();
-                layoutParams.setMargins(TagFlowLayout.dip2px(((Activity) context),20),0,TagFlowLayout.dip2px(((Activity) context),20),heightDifference);//设置rlContent的marginBottom的值为软键盘占有的高度即可
-                cardView.setLayoutParams(layoutParams);
-                cardView.requestLayout();
-            }
-        });
-    }
-
-    private int getScreenHeight(){
-        WindowManager manager = ((Activity) context).getWindowManager();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        manager.getDefaultDisplay().getMetrics(outMetrics);
-        //int height = outMetrics.heightPixels;
-        return  outMetrics.heightPixels;
+        ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
 
     /**

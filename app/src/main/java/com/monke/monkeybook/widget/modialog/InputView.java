@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.modialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -55,6 +57,8 @@ public class InputView {
         tvTitle = moProgressView.findViewById(R.id.tv_title);
         etInput = moProgressView.findViewById(R.id.et_input);
         tvOk = moProgressView.findViewById(R.id.tv_ok);
+
+        ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
 
     /**
