@@ -529,7 +529,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Override
     public void saveBookmark(BookmarkBean bookmarkBean) {
         Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
-            DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
+            BookshelfHelp.saveBookmark(bookmarkBean);
+            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
             e.onNext(bookmarkBean);
             e.onComplete();
         })
