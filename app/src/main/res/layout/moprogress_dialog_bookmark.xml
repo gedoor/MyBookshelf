@@ -32,6 +32,7 @@
             android:id="@+id/til_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:hint="@string/content">
 
             <android.support.design.widget.TextInputEditText
