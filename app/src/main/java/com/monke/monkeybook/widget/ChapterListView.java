@@ -188,10 +188,20 @@ public class ChapterListView extends FrameLayout {
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
         this.itemClickListener = clickListener;
         this.bookShelfBean = bookShelfBean;
-        chapterListAdapter = new ChapterListAdapter(bookShelfBean, (index, tabPosition) -> {
-            if (itemClickListener != null) {
-                itemClickListener.itemClick(index, tabPosition);
-                dismissChapterList();
+        chapterListAdapter = new ChapterListAdapter(bookShelfBean, new OnItemClickListener() {
+            @Override
+            public void itemClick(int index, int tabPosition) {
+                if (itemClickListener != null) {
+                    itemClickListener.itemClick(index, tabPosition);
+                    dismissChapterList();
+                }
+            }
+
+            @Override
+            public void itemLongClick(int index, int tabPosition) {
+                if (itemClickListener != null) {
+                    itemClickListener.itemLongClick(index, tabPosition);
+                }
             }
         });
         rvList.setAdapter(chapterListAdapter);
@@ -222,5 +232,7 @@ public class ChapterListView extends FrameLayout {
 
     public interface OnItemClickListener {
         void itemClick(int index, int tabPosition);
+
+        void itemLongClick(int index, int tabPosition);
     }
 }

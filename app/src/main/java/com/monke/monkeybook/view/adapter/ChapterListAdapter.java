@@ -69,7 +69,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         } else {
             holder.tvName.setText(bookShelfBean.getBookInfoBean().getBookmarkList().get(position).getContent());
             holder.flContent.setOnClickListener(v -> {
-                itemClickListener.itemClick(position, tabPosition);
+                itemClickListener.itemClick(bookShelfBean.getBookInfoBean().getBookmarkList().get(position).getChapterIndex(), tabPosition);
+            });
+            holder.flContent.setOnLongClickListener(view -> {
+                itemClickListener.itemLongClick(position, tabPosition);
+                return true;
             });
         }
 

@@ -22,13 +22,14 @@ import org.jetbrains.annotations.NotNull;
 public class EditBookmarkView {
     private TextView tvChapterName;
     private TextInputEditText tvContent;
+    private View llEdit;
+    private View tvOk;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
     private OnBookmarkClick bookmarkClick;
     private Context context;
     private BookmarkBean bookmarkBean;
-    private boolean isAdd;
 
     public static EditBookmarkView getInstance(MoProgressView moProgressView) {
         return new EditBookmarkView(moProgressView);
@@ -43,8 +44,15 @@ public class EditBookmarkView {
     void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.bookmarkClick = bookmarkClick;
-        this.isAdd = isAdd;
         this.bookmarkBean = bookmarkBean;
+
+        if (isAdd) {
+            llEdit.setVisibility(View.GONE);
+            tvOk.setVisibility(View.VISIBLE);
+        } else {
+            llEdit.setVisibility(View.VISIBLE);
+            tvOk.setVisibility(View.GONE);
+        }
 
         tvChapterName.setText(bookmarkBean.getChapterName());
         tvContent.setText(bookmarkBean.getContent());
@@ -66,7 +74,7 @@ public class EditBookmarkView {
         });
         tvContent = moProgressView.findViewById(R.id.tie_content);
 
-        View tvOk = moProgressView.findViewById(R.id.tv_ok);
+        tvOk = moProgressView.findViewById(R.id.tv_ok);
         tvOk.setOnClickListener(view -> {
             bookmarkBean.setContent(tvContent.getText().toString());
             bookmarkClick.saveBookmark(bookmarkBean);
@@ -85,14 +93,7 @@ public class EditBookmarkView {
             moProgressHUD.dismiss();
         });
 
-        View llEdit = moProgressView.findViewById(R.id.llEdit);
-        if (isAdd) {
-            llEdit.setVisibility(View.GONE);
-            tvOk.setVisibility(View.VISIBLE);
-        } else {
-            llEdit.setVisibility(View.VISIBLE);
-            tvOk.setVisibility(View.GONE);
-        }
+        llEdit = moProgressView.findViewById(R.id.llEdit);
 
         ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
