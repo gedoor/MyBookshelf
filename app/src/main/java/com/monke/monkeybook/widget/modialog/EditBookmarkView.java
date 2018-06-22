@@ -28,6 +28,7 @@ public class EditBookmarkView {
     private OnBookmarkClick bookmarkClick;
     private Context context;
     private BookmarkBean bookmarkBean;
+    private boolean isAdd;
 
     public static EditBookmarkView getInstance(MoProgressView moProgressView) {
         return new EditBookmarkView(moProgressView);
@@ -39,10 +40,10 @@ public class EditBookmarkView {
         bindView();
     }
 
-    void showBookmark(@NotNull BookmarkBean bookmarkBean, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {
+    void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.bookmarkClick = bookmarkClick;
-
+        this.isAdd = isAdd;
         this.bookmarkBean = bookmarkBean;
 
         tvChapterName.setText(bookmarkBean.getChapterName());
@@ -71,6 +72,28 @@ public class EditBookmarkView {
             bookmarkClick.saveBookmark(bookmarkBean);
             moProgressHUD.dismiss();
         });
+
+        View tvSave = moProgressView.findViewById(R.id.tv_save);
+        tvSave.setOnClickListener(view -> {
+            bookmarkBean.setContent(tvContent.getText().toString());
+            bookmarkClick.saveBookmark(bookmarkBean);
+            moProgressHUD.dismiss();
+        });
+        View tvDel = moProgressView.findViewById(R.id.tv_del);
+        tvDel.setOnClickListener(view -> {
+            bookmarkClick.delBookmark(bookmarkBean);
+            moProgressHUD.dismiss();
+        });
+
+        View llEdit = moProgressView.findViewById(R.id.llEdit);
+        if (isAdd) {
+            llEdit.setVisibility(View.GONE);
+            tvOk.setVisibility(View.VISIBLE);
+        } else {
+            llEdit.setVisibility(View.VISIBLE);
+            tvOk.setVisibility(View.GONE);
+        }
+
         ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
 
@@ -79,6 +102,8 @@ public class EditBookmarkView {
      */
     public interface OnBookmarkClick {
         void saveBookmark(BookmarkBean bookmarkBean);
+
+        void delBookmark(BookmarkBean bookmarkBean);
 
         void openChapter(int chapterIndex);
     }

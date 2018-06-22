@@ -338,13 +338,16 @@ public class MoProgressHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
-    public void showBookmark(BookmarkBean bookmarkBean, EditBookmarkView.OnBookmarkClick bookmarkClick) {
+    /**
+     * 书签
+     */
+    public void showBookmark(BookmarkBean bookmarkBean, boolean isAdd, EditBookmarkView.OnBookmarkClick bookmarkClick) {
         initCenter();
         initAnimation();
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
         EditBookmarkView.getInstance(mSharedView)
-                .showBookmark(bookmarkBean, bookmarkClick, this);
+                .showBookmark(bookmarkBean, isAdd, bookmarkClick, this);
         if (!isShowing()) {
             onAttached();
         }
