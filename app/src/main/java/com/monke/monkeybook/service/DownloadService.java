@@ -266,6 +266,16 @@ public class DownloadService extends Service {
 
                         @Override
                         public void onNext(Boolean aBoolean) {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onComplete() {
                             if (isStartDownload) {
                                 new Handler().postDelayed(() -> {
                                     if (isStartDownload) {
@@ -277,17 +287,6 @@ public class DownloadService extends Service {
                             } else {
                                 isPause();
                             }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            toDownload();
-                        }
-
-                        @Override
-                        public void onComplete() {
-
                         }
                     });
         }
