@@ -205,7 +205,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                         @Override
                                                         public void run() {
                                                             d.dispose();
-                                                            bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
+                                                            if (bookTag == bookContentView.getQTag()) {
+                                                                bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
+                                                            }
                                                         }
                                                     }, 20*1000);
                                                 }
