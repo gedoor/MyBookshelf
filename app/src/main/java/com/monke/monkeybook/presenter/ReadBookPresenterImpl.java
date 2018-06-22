@@ -204,9 +204,16 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                     timer.schedule(new TimerTask() {
                                                         @Override
                                                         public void run() {
-                                                            d.dispose();
-                                                            if (bookContentView != null && bookTag == bookContentView.getQTag()) {
-                                                                bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
+                                                            if (!d.isDisposed()) {
+                                                                d.dispose();
+                                                                ((BaseActivity) mView.getContext()).runOnUiThread(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        if (bookContentView != null && bookTag == bookContentView.getQTag()) {
+                                                                            bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
+                                                                        }
+                                                                    }
+                                                                });
                                                             }
                                                         }
                                                     }, 20*1000);
