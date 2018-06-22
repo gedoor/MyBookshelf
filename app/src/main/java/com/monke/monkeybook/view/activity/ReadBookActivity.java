@@ -467,7 +467,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
             public void itemClick(int index, int tabPosition) {
-                csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), BookContentView.DurPageIndexBegin);
+                if (tabPosition == 0) {
+                    csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), BookContentView.DurPageIndexBegin);
+                } else {
+                    csvBook.setInitData(mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index).getChapterIndex(),
+                            mPresenter.getBookShelf().getChapterListSize(),
+                            mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index).getPageIndex());
+                }
             }
 
             @Override
@@ -698,6 +704,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 bookmarkBean.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
                 bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
                 bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
+                bookmarkBean.setPageIndex(mPresenter.getBookShelf().getDurChapterPage());
                 bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
             }
             moProgressHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
@@ -712,8 +719,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 }
 
                 @Override
-                public void openChapter(int chapterIndex) {
-                    csvBook.setInitData(chapterIndex, mPresenter.getBookShelf().getChapterListSize(), 0);
+                public void openChapter(int chapterIndex, int pageIndex) {
+                    csvBook.setInitData(chapterIndex, mPresenter.getBookShelf().getChapterListSize(), pageIndex);
                 }
             });
         }
