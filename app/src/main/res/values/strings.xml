@@ -194,5 +194,6 @@
     <string name="bookmark">书签</string>
     <string name="bookmark_add">添加书签</string>
     <string name="action_del">删除</string>
+    <string name="load_over_time">加载超时</string>
 
 </resources>

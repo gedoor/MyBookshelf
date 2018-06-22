@@ -51,10 +51,14 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> implements IReadBookPresenter {
@@ -193,9 +197,21 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribeOn(Schedulers.newThread())
                                             .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                                            .subscribe(new SimpleObserver<BookContentBean>() {
+                                            .subscribe(new Observer<BookContentBean>() {
                                                 @Override
-                                                public void onNext(BookContentBean value) {
+                                                public void onSubscribe(Disposable d) {
+                                                    Timer timer = new Timer();
+                                                    timer.schedule(new TimerTask() {
+                                                        @Override
+                                                        public void run() {
+                                                            d.dispose();
+                                                            bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
+                                                        }
+                                                    }, 20*1000);
+                                                }
+
+                                                @Override
+                                                public void onNext(BookContentBean bookContentBean) {
                                                     editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                                     numberOfRetries = 0;
                                                     if (value.getRight()) {
@@ -221,6 +237,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                             numberOfRetries = 0;
                                                             bookContentView.loadError(e.getMessage());
                                                         }
+                                                }
+
+                                                @Override
+                                                public void onComplete() {
+
                                                 }
                                             });
                                 }
@@ -265,7 +286,18 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SimpleObserver<BookContentBean>() {
+                .subscribe(new Observer<BookContentBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                d.dispose();
+                            }
+                        }, 20*1000);
+                    }
+
                     @Override
                     public void onNext(BookContentBean bookContentBean) {
                         editDownloading(REMOVE, bookContentBean.getDurChapterUrl());
@@ -273,6 +305,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                     @Override
                     public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });
