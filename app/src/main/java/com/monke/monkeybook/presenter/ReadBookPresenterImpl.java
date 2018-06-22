@@ -205,7 +205,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                         @Override
                                                         public void run() {
                                                             d.dispose();
-                                                            if (bookTag == bookContentView.getQTag()) {
+                                                            if (bookContentView != null && bookTag == bookContentView.getQTag()) {
                                                                 bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
                                                             }
                                                         }
@@ -218,7 +218,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                     numberOfRetries = 0;
                                                     if (value.getRight()) {
                                                         bookShelf.getChapterList(chapterIndex).setBookContentBean(value);
-                                                        if (bookTag == bookContentView.getQTag())
+                                                        if (bookContentView != null && bookTag == bookContentView.getQTag())
                                                             loadContent(bookContentView, bookTag, chapterIndex, finalPageIndex);
                                                     } else {
                                                         if (bookContentView != null && bookTag == bookContentView.getQTag())
