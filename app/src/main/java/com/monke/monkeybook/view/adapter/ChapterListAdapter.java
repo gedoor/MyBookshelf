@@ -48,11 +48,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ThisViewHolder holder, final int position) {
-        if (position == getItemCount() - 1) {
-            holder.vLine.setVisibility(View.INVISIBLE);
-        } else {
-            holder.vLine.setVisibility(View.VISIBLE);
-        }
         if (tabPosition == 0) {
             holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
             if (bookShelfBean.getChapterList(position).getHasCache()) {

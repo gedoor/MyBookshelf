@@ -142,8 +142,12 @@ public class ChapterListView extends FrameLayout {
     }
 
     private void upIndex(int durChapter) {
-        chapterListAdapter.setIndex(durChapter);
-        ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
+        if (toolbarTab.getSelectedTabPosition() == 0) {
+            chapterListAdapter.setIndex(durChapter);
+            ((LinearLayoutManager) rvList.getLayoutManager()).scrollToPositionWithOffset(durChapter, 0);
+        } else {
+            chapterListAdapter.notifyDataSetChanged();
+        }
     }
 
     public Boolean hasData() {

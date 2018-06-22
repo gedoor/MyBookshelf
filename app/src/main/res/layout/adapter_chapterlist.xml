@@ -14,7 +14,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:textSize="15sp"
-        android:text="第三章:hahah"
+        android:text="@string/app_name"
         android:singleLine="true"
         android:ellipsize="end"
         android:paddingTop="12dp"
