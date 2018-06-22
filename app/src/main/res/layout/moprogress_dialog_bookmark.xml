@@ -14,25 +14,25 @@
         android:padding="10dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:gravity="center"
+            android:padding="10dp"
             android:text="@string/bookmark"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvChapterName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="@string/bookmark"/>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:padding="10dp"
             android:hint="@string/content">
 
             <android.support.design.widget.TextInputEditText
@@ -46,13 +46,12 @@
             android:id="@+id/tv_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@drawable/selector_book_detail_read_bg"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
+            android:padding="5dp"
             android:text="@string/ok"
             android:textColor="#ffffff" />
 

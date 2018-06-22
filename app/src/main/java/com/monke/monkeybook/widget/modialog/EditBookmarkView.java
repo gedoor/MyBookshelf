@@ -25,7 +25,7 @@ public class EditBookmarkView {
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
-    private OnSaveBookmark onSaveBookmark;
+    private OnBookmarkClick bookmarkClick;
     private Context context;
     private BookmarkBean bookmarkBean;
 
@@ -39,9 +39,9 @@ public class EditBookmarkView {
         bindView();
     }
 
-    void showBookmark(@NotNull BookmarkBean bookmarkBean, final OnSaveBookmark onSaveBookmark, MoProgressHUD moProgressHUD) {
+    void showBookmark(@NotNull BookmarkBean bookmarkBean, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
-        this.onSaveBookmark = onSaveBookmark;
+        this.bookmarkClick = bookmarkClick;
 
         this.bookmarkBean = bookmarkBean;
 
@@ -59,12 +59,16 @@ public class EditBookmarkView {
         TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_content);
         tilReplaceTo.setHint(context.getString(R.string.content));
         tvChapterName = moProgressView.findViewById(R.id.tvChapterName);
+        tvChapterName.setOnClickListener(view -> {
+            bookmarkClick.openChapter(bookmarkBean.getChapterIndex());
+            moProgressHUD.dismiss();
+        });
         tvContent = moProgressView.findViewById(R.id.tie_content);
 
         View tvOk = moProgressView.findViewById(R.id.tv_ok);
         tvOk.setOnClickListener(view -> {
             bookmarkBean.setContent(tvContent.getText().toString());
-            onSaveBookmark.saveBookmark(bookmarkBean);
+            bookmarkClick.saveBookmark(bookmarkBean);
             moProgressHUD.dismiss();
         });
         ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
@@ -73,7 +77,9 @@ public class EditBookmarkView {
     /**
      * 输入替换规则完成
      */
-    public interface OnSaveBookmark {
+    public interface OnBookmarkClick {
         void saveBookmark(BookmarkBean bookmarkBean);
+
+        void openChapter(int chapterIndex);
     }
 }

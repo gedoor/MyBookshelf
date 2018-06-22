@@ -685,17 +685,25 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     private void showBookmark(BookmarkBean bookmarkBean) {
         this.popMenuOut();
-        if (bookmarkBean == null) {
-            if (mPresenter.getBookShelf() != null) {
+        if (mPresenter.getBookShelf() != null) {
+            if (bookmarkBean == null) {
                 bookmarkBean = new BookmarkBean();
                 bookmarkBean.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
                 bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
                 bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
                 bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
-                moProgressHUD.showBookmark(bookmarkBean, bookmarkBean1 -> mPresenter.saveBookmark(bookmarkBean1));
             }
-        } else {
-            moProgressHUD.showBookmark(bookmarkBean, bookmarkBean1 -> mPresenter.saveBookmark(bookmarkBean1));
+            moProgressHUD.showBookmark(bookmarkBean, new EditBookmarkView.OnBookmarkClick() {
+                @Override
+                public void saveBookmark(BookmarkBean bookmarkBean) {
+                    mPresenter.saveBookmark(bookmarkBean);
+                }
+
+                @Override
+                public void openChapter(int chapterIndex) {
+                    csvBook.setInitData(chapterIndex, mPresenter.getBookShelf().getChapterListSize(), 0);
+                }
+            });
         }
 
     }
