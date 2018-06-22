@@ -43,4 +43,6 @@ public interface IReadBookPresenter extends IPresenter {
     void changeBookSource(SearchBookBean searchBookBean);
 
     void saveBookmark(BookmarkBean bookmarkBean);
+
+    void delBookmark(BookmarkBean bookmarkBean);
 }

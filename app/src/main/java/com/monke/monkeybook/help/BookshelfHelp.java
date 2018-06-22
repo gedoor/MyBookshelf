@@ -135,6 +135,10 @@ public class BookshelfHelp {
         DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
     }
 
+    public static void delBookmark(BookmarkBean bookmarkBean) {
+        DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
+    }
+
     public static List<BookmarkBean> getBookmarkList(String bookName) {
         return DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().queryBuilder()
                 .where(BookmarkBeanDao.Properties.BookName.eq(bookName))

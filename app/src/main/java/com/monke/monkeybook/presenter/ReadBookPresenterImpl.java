@@ -539,6 +539,19 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 .subscribe();
     }
 
+    @Override
+    public void delBookmark(BookmarkBean bookmarkBean) {
+        Observable.create((ObservableOnSubscribe<BookmarkBean>) e -> {
+            BookshelfHelp.delBookmark(bookmarkBean);
+            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookmarkBean.getBookName()));
+            e.onNext(bookmarkBean);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
     /**
      * 保存换源后book
      */

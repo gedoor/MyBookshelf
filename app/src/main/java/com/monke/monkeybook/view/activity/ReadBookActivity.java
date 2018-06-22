@@ -708,7 +708,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                 @Override
                 public void delBookmark(BookmarkBean bookmarkBean) {
-
+                    mPresenter.delBookmark(bookmarkBean);
                 }
 
                 @Override
