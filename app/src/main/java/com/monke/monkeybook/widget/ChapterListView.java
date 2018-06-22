@@ -188,9 +188,9 @@ public class ChapterListView extends FrameLayout {
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
         this.itemClickListener = clickListener;
         this.bookShelfBean = bookShelfBean;
-        chapterListAdapter = new ChapterListAdapter(bookShelfBean, index -> {
+        chapterListAdapter = new ChapterListAdapter(bookShelfBean, (index, tabPosition) -> {
             if (itemClickListener != null) {
-                itemClickListener.itemClick(index);
+                itemClickListener.itemClick(index, tabPosition);
                 dismissChapterList();
             }
         });
@@ -221,6 +221,6 @@ public class ChapterListView extends FrameLayout {
     }
 
     public interface OnItemClickListener {
-        void itemClick(int index);
+        void itemClick(int index, int tabPosition);
     }
 }

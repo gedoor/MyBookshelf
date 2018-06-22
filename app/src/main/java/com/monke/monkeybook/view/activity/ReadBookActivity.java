@@ -452,6 +452,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hpbReadProgress.setMaxProgress(count);
     }
 
+    @SuppressLint("InflateParams")
     private void initCsvBook() {
         csvBook = (BaseContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
         flContent.addView(csvBook, 0);
@@ -463,9 +464,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     @Override
     public void initChapterList() {
-        chapterListView.setData(mPresenter.getBookShelf(), index -> csvBook
-                .setInitData(index, mPresenter.getBookShelf().getChapterListSize(),
-                        BookContentView.DurPageIndexBegin));
+        chapterListView.setData(mPresenter.getBookShelf(), (index, tabPosition) -> {
+            if (tabPosition == 0) {
+                csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), BookContentView.DurPageIndexBegin);
+            } else {
+                showBookmark(mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index));
+            }
+        });
     }
 
     @Override
@@ -646,7 +651,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 download();
                 break;
             case R.id.add_bookmark:
-                addBookmark();
+                showBookmark(null);
                 break;
             case R.id.action_copy_text:
                 popMenuOut();
@@ -676,18 +681,23 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 添加书签
+     * 书签
      */
-    private void addBookmark() {
+    private void showBookmark(BookmarkBean bookmarkBean) {
         this.popMenuOut();
-        if (mPresenter.getBookShelf() != null) {
-            BookmarkBean bookmarkBean = new BookmarkBean();
-            bookmarkBean.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
-            bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
-            bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
-            bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
+        if (bookmarkBean == null) {
+            if (mPresenter.getBookShelf() != null) {
+                bookmarkBean = new BookmarkBean();
+                bookmarkBean.setNoteUrl(mPresenter.getBookShelf().getNoteUrl());
+                bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
+                bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
+                bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
+                moProgressHUD.showBookmark(bookmarkBean, bookmarkBean1 -> mPresenter.saveBookmark(bookmarkBean1));
+            }
+        } else {
             moProgressHUD.showBookmark(bookmarkBean, bookmarkBean1 -> mPresenter.saveBookmark(bookmarkBean1));
         }
+
     }
 
     /**

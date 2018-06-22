@@ -57,7 +57,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             }
             holder.flContent.setOnClickListener(v -> {
                 setIndex(position);
-                itemClickListener.itemClick(position);
+                itemClickListener.itemClick(position, tabPosition);
             });
             if (position == index) {
                 holder.flContent.setBackgroundResource(R.color.btn_bg_press);
@@ -68,6 +68,9 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             }
         } else {
             holder.tvName.setText(bookShelfBean.getBookInfoBean().getBookmarkList().get(position).getContent());
+            holder.flContent.setOnClickListener(v -> {
+                itemClickListener.itemClick(position, tabPosition);
+            });
         }
 
     }
