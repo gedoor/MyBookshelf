@@ -105,13 +105,11 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     class ThisViewHolder extends RecyclerView.ViewHolder {
         private FrameLayout flContent;
         private TextView tvName;
-        private View vLine;
 
         ThisViewHolder(View itemView) {
             super(itemView);
             flContent = itemView.findViewById(R.id.fl_content);
             tvName = itemView.findViewById(R.id.tv_name);
-            vLine = itemView.findViewById(R.id.v_line);
         }
     }
 }

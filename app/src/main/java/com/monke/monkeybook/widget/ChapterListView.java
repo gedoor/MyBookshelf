@@ -164,7 +164,9 @@ public class ChapterListView extends FrameLayout {
             public void onTabSelected(TabLayout.Tab tab) {
                 if (chapterListAdapter != null) {
                     chapterListAdapter.tabChange(tab.getPosition());
-                    upIndex(bookShelfBean.getDurChapter());
+                    if (tab.getPosition() == 0) {
+                        upIndex(bookShelfBean.getDurChapter());
+                    }
                 }
 
             }
@@ -178,7 +180,9 @@ public class ChapterListView extends FrameLayout {
             public void onTabReselected(TabLayout.Tab tab) {
                 if (chapterListAdapter != null) {
                     chapterListAdapter.tabChange(tab.getPosition());
-                    upIndex(bookShelfBean.getDurChapter());
+                    if (tab.getPosition() == 0) {
+                        upIndex(bookShelfBean.getDurChapter());
+                    }
                 }
             }
         });
@@ -192,14 +196,16 @@ public class ChapterListView extends FrameLayout {
             @Override
             public void itemClick(int index, int tabPosition) {
                 if (itemClickListener != null) {
-                    itemClickListener.itemClick(index, tabPosition);
-                    dismissChapterList();
+                    if (!(tabPosition == 0 && index == bookShelfBean.getDurChapter())) {
+                        itemClickListener.itemClick(index, tabPosition);
+                        dismissChapterList();
+                    }
                 }
             }
 
             @Override
             public void itemLongClick(int index, int tabPosition) {
-                if (itemClickListener != null) {
+                if (itemClickListener != null && tabPosition == 1) {
                     itemClickListener.itemLongClick(index, tabPosition);
                 }
             }
