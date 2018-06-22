@@ -35,6 +35,8 @@ import com.monke.monkeybook.view.activity.MainActivity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.crypto.spec.DHGenParameterSpec;
@@ -250,7 +252,18 @@ public class DownloadService extends Service {
             }))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.newThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            Timer timer = new Timer();
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    d.dispose();
+                                }
+                            }, 20*1000);
+                        }
+
                         @Override
                         public void onNext(Boolean aBoolean) {
                             if (isStartDownload) {
@@ -270,6 +283,11 @@ public class DownloadService extends Service {
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             toDownload();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
                         }
                     });
         }
