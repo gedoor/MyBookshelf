@@ -29,7 +29,8 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
         public final static Property BookName = new Property(2, String.class, "bookName", false, "BOOK_NAME");
         public final static Property ChapterName = new Property(3, String.class, "chapterName", false, "CHAPTER_NAME");
         public final static Property ChapterIndex = new Property(4, Integer.class, "chapterIndex", false, "CHAPTER_INDEX");
-        public final static Property Content = new Property(5, String.class, "content", false, "CONTENT");
+        public final static Property PageIndex = new Property(5, Integer.class, "pageIndex", false, "PAGE_INDEX");
+        public final static Property Content = new Property(6, String.class, "content", false, "CONTENT");
     }
 
 
@@ -50,7 +51,8 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
                 "\"BOOK_NAME\" TEXT," + // 2: bookName
                 "\"CHAPTER_NAME\" TEXT," + // 3: chapterName
                 "\"CHAPTER_INDEX\" INTEGER," + // 4: chapterIndex
-                "\"CONTENT\" TEXT);"); // 5: content
+                "\"PAGE_INDEX\" INTEGER," + // 5: pageIndex
+                "\"CONTENT\" TEXT);"); // 6: content
     }
 
     /** Drops the underlying database table. */
@@ -88,9 +90,14 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
             stmt.bindLong(5, chapterIndex);
         }
  
+        Integer pageIndex = entity.getPageIndex();
+        if (pageIndex != null) {
+            stmt.bindLong(6, pageIndex);
+        }
+ 
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(6, content);
+            stmt.bindString(7, content);
         }
     }
 
@@ -123,9 +130,14 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
             stmt.bindLong(5, chapterIndex);
         }
  
+        Integer pageIndex = entity.getPageIndex();
+        if (pageIndex != null) {
+            stmt.bindLong(6, pageIndex);
+        }
+ 
         String content = entity.getContent();
         if (content != null) {
-            stmt.bindString(6, content);
+            stmt.bindString(7, content);
         }
     }
 
@@ -142,7 +154,8 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // bookName
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // chapterName
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // chapterIndex
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // content
+            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // pageIndex
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // content
         );
         return entity;
     }
@@ -154,7 +167,8 @@ public class BookmarkBeanDao extends AbstractDao<BookmarkBean, Long> {
         entity.setBookName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setChapterName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setChapterIndex(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setContent(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setPageIndex(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setContent(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

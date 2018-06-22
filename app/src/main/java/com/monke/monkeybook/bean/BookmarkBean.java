@@ -16,6 +16,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
     private String bookName;
     private String chapterName;
     private Integer chapterIndex;
+    private Integer pageIndex;
     private String content;
     
 
@@ -25,17 +26,19 @@ public class BookmarkBean implements Parcelable,Cloneable{
         bookName = in.readString();
         chapterName = in.readString();
         chapterIndex = in.readInt();
+        pageIndex = in.readInt();
         content = in.readString();
     }
 
-    @Generated(hash = 335453502)
+    @Generated(hash = 1176037419)
     public BookmarkBean(Long id, String noteUrl, String bookName, String chapterName,
-            Integer chapterIndex, String content) {
+            Integer chapterIndex, Integer pageIndex, String content) {
         this.id = id;
         this.noteUrl = noteUrl;
         this.bookName = bookName;
         this.chapterName = chapterName;
         this.chapterIndex = chapterIndex;
+        this.pageIndex = pageIndex;
         this.content = content;
     }
 
@@ -67,6 +70,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
         parcel.writeString(bookName);
         parcel.writeString(chapterName);
         parcel.writeInt(chapterIndex);
+        parcel.writeInt(pageIndex);
         parcel.writeString(content);
     }
 
@@ -78,6 +82,7 @@ public class BookmarkBean implements Parcelable,Cloneable{
         bookmarkBean.bookName = bookName;
         bookmarkBean.chapterIndex = chapterIndex;
         bookmarkBean.chapterName = chapterName;
+        bookmarkBean.pageIndex = pageIndex;
         bookmarkBean.content = content;
 
         return bookmarkBean;
@@ -129,5 +134,13 @@ public class BookmarkBean implements Parcelable,Cloneable{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getPageIndex() {
+        return this.pageIndex;
+    }
+
+    public void setPageIndex(Integer pageIndex) {
+        this.pageIndex = pageIndex;
     }
 }
