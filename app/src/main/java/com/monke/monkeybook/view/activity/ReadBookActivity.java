@@ -156,7 +156,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String noteUrl;
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
-    private boolean fromMediaButton = false;
 
     private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -204,8 +203,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         setContentView(R.layout.activity_book_read);
         readAloudIntent = new Intent(this, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
-        Intent intent = this.getIntent();
-        fromMediaButton = intent.getBooleanExtra("readAloud", false);
+
     }
 
     @Override
@@ -899,9 +897,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void curPageFinish() {
-                if (fromMediaButton) {
-                    fromMediaButton = false;
-                    getIntent().putExtra("readAloud", fromMediaButton);
+                if (getIntent().getBooleanExtra("readAloud", false)) {
+                    getIntent().putExtra("readAloud", false);
                     onMediaButton();
                 }
             }
