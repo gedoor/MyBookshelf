@@ -263,7 +263,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="2" />
                     <!--调节按钮-->
                     <LinearLayout
                         android:id="@+id/ll_light"
@@ -297,7 +297,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="2" />
                     <!--界面按钮-->
                     <LinearLayout
                         android:id="@+id/ll_font"
@@ -331,7 +331,7 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="2" />
                     <!--设置按钮-->
                     <LinearLayout
                         android:id="@+id/ll_setting"
