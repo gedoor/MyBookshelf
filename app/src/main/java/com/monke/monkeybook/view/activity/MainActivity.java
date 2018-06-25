@@ -94,7 +94,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private MoProgressHUD moProgressHUD;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
-    private boolean onRestore = false;
     private String bookPx;
     private ImmersionReceiver immersionReceiver;
 
@@ -508,7 +507,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     public void onRestore(String msg) {
-        onRestore = true;
         moProgressHUD.showLoading(msg);
     }
 
