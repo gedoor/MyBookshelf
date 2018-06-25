@@ -104,7 +104,7 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
-        tvQq.setText(String.format("QQ讨论群:%s", qq));
+        tvQq.setText(String.format(getString(R.string.qq_group), qq));
 
         tvDonate.getCompoundDrawablesRelative()[0].mutate();
         tvDonate.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -155,7 +155,7 @@ public class AboutActivity extends MBaseActivity {
             ClipData clipData = ClipData.newPlainText(null, qq);
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
-                Toast.makeText(this, "已拷贝", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -195,5 +195,7 @@
     <string name="bookmark_add">添加书签</string>
     <string name="action_del">删除</string>
     <string name="load_over_time">加载超时</string>
+    <string name="qq_group">QQ讨论群:%s</string>
+    <string name="copy_complete">已拷贝</string>
 
 </resources>
