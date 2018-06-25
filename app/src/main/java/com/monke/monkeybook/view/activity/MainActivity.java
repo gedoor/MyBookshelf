@@ -455,11 +455,17 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
     }
 
+    private boolean haveRefresh() {
+        boolean isRecreate = getIntent().getBooleanExtra("isRecreate", false);
+        getIntent().putExtra("isRecreate", true);
+        return preferences.getBoolean(getString(R.string.pk_auto_refresh), false) && !isRecreate;
+    }
+
     @Override
     protected void firstRequest() {
         fistOpenRun();
         if (NetworkUtil.isNetWorkAvailable()) {
-            mPresenter.queryBookShelf(preferences.getBoolean(getString(R.string.pk_auto_refresh), false), group);
+            mPresenter.queryBookShelf(haveRefresh(), group);
         } else {
             mPresenter.queryBookShelf(false, group);
             Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
