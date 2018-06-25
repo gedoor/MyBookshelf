@@ -259,7 +259,9 @@ public class DownloadService extends Service {
                             timer.schedule(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    d.dispose();
+                                    if (!d.isDisposed()) {
+                                        d.dispose();
+                                    }
                                 }
                             }, 20*1000);
                         }
