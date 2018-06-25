@@ -91,8 +91,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
-//    @BindView(R.id.csv_book)
-//    ContentSwitchView csvBook;
     @BindView(R.id.fl_menu)
     FrameLayout flMenu;
     @BindView(R.id.v_menu_bg)
