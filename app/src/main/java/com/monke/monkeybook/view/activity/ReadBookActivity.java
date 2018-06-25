@@ -901,6 +901,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             public void curPageFinish() {
                 if (fromMediaButton) {
                     fromMediaButton = false;
+                    getIntent().putExtra("readAloud", fromMediaButton);
                     onMediaButton();
                 }
             }
