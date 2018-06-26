@@ -362,6 +362,14 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         navigationView.addHeaderView(headerView);
         tvUser = headerView.findViewById(R.id.tv_user);
         tvUser.setOnClickListener(view -> signIn());
+        if (preferences.getBoolean("googleSync", false)) {
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+            if (acct == null) {
+                signIn();
+            } else {
+                tvUser.setText(acct.getDisplayName());
+            }
+        }
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -605,7 +613,10 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 if (result.isSuccess()) {
                     GoogleSignInAccount acct = result.getSignInAccount();
                     if (tvUser != null & acct != null) {
-                        tvUser.setText(acct.getEmail());
+                        tvUser.setText(acct.getDisplayName());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("googleSync", true);
+                        editor.apply();
                     }
                 }
                 break;
