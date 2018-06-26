@@ -20,6 +20,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="10dp"
+        android:singleLine="true"
         android:text="@string/read_summary"
         android:textColor="@color/tv_text_default"
         android:textSize="14sp" />
