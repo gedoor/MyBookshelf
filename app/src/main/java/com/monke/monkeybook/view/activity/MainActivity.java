@@ -363,12 +363,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         tvUser = headerView.findViewById(R.id.tv_user);
         tvUser.setOnClickListener(view -> signIn());
         if (preferences.getBoolean("googleSync", false)) {
-            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-            if (acct == null) {
-                signIn();
-            } else {
-                tvUser.setText(acct.getDisplayName());
-            }
+            initGoogleSync(GoogleSignIn.getLastSignedInAccount(this));
         }
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
@@ -420,12 +415,20 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         });
     }
 
+    private void initGoogleSync(GoogleSignInAccount acct) {
+        if (tvUser != null & acct != null) {
+            tvUser.setText(acct.getDisplayName());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("googleSync", true);
+            editor.apply();
+        }
+    }
+
     /** Start sign in activity. */
     private void signIn() {
         GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
         startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
     }
-
 
     private GoogleSignInClient buildGoogleSignInClient() {
         GoogleSignInOptions signInOptions =
@@ -611,13 +614,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case REQUEST_CODE_SIGN_IN:
                 GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                 if (result.isSuccess()) {
-                    GoogleSignInAccount acct = result.getSignInAccount();
-                    if (tvUser != null & acct != null) {
-                        tvUser.setText(acct.getDisplayName());
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean("googleSync", true);
-                        editor.apply();
-                    }
+                    initGoogleSync(result.getSignInAccount());
                 }
                 break;
         }
