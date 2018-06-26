@@ -109,7 +109,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private long exitTime = 0;
     private String bookPx;
     private ImmersionReceiver immersionReceiver;
-
+    GoogleSignInAccount account;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -414,6 +414,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     private void initGoogleSync(GoogleSignInAccount acct) {
         if (tvUser != null & acct != null) {
+            this.account = acct;
             tvUser.setText(acct.getDisplayName());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("googleSync", true);
@@ -544,7 +545,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshFinish() {
         moProgressHUD.dismiss();
-
+        if (account != null) {
+            mPresenter.bookshelfSync(account);
+        }
     }
 
     @Override

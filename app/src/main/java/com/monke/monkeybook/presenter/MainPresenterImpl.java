@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -183,6 +184,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         Toast.makeText(mView.getContext(), "网址格式不对", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void bookshelfSync(GoogleSignInAccount account) {
+
     }
 
     private void getBook(BookShelfBean bookShelfBean) {
