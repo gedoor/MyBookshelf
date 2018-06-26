@@ -11,9 +11,35 @@ def version = "1.6." + increasedVersionCode()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 def gitTag = "git tag " + version
 
+def keystorePSW = ''
+def keystoreAlias = ''
+def keystoreAliasPSW = ''
+// default keystore file, PLZ config file path in local.properties
+def keyFile = file('s.keystore.temp')
+
+Properties properties = new Properties()
+// local.properties file in the root director
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def keystoreFilepath = properties.getProperty("keystore.path")
+
+if (keystoreFilepath) {
+    keystorePSW = properties.getProperty("keystore.password")
+    keystoreAlias = properties.getProperty("keystore.alias")
+    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
+    keyFile = file(keystoreFilepath)
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
+    signingConfigs {
+        myConfig {
+            storeFile keyFile
+            storePassword keystorePSW
+            keyAlias keystoreAlias
+            keyPassword keystoreAliasPSW
+        }
+    }
 
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
@@ -35,6 +61,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
             versionNameSuffix ' debug'
             buildConfigField "boolean", "IS_RELEASE", "false"
