@@ -23,6 +23,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(Database db, boolean ifNotExists) {
         BookContentBeanDao.createTable(db, ifNotExists);
         BookInfoBeanDao.createTable(db, ifNotExists);
+        BookmarkBeanDao.createTable(db, ifNotExists);
         BookShelfBeanDao.createTable(db, ifNotExists);
         BookSourceBeanDao.createTable(db, ifNotExists);
         ChapterListBeanDao.createTable(db, ifNotExists);
@@ -30,13 +31,13 @@ public class DaoMaster extends AbstractDaoMaster {
         ReplaceRuleBeanDao.createTable(db, ifNotExists);
         SearchBookBeanDao.createTable(db, ifNotExists);
         SearchHistoryBeanDao.createTable(db, ifNotExists);
-        BookmarkBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         BookContentBeanDao.dropTable(db, ifExists);
         BookInfoBeanDao.dropTable(db, ifExists);
+        BookmarkBeanDao.dropTable(db, ifExists);
         BookShelfBeanDao.dropTable(db, ifExists);
         BookSourceBeanDao.dropTable(db, ifExists);
         ChapterListBeanDao.dropTable(db, ifExists);
@@ -44,7 +45,6 @@ public class DaoMaster extends AbstractDaoMaster {
         ReplaceRuleBeanDao.dropTable(db, ifExists);
         SearchBookBeanDao.dropTable(db, ifExists);
         SearchHistoryBeanDao.dropTable(db, ifExists);
-        BookmarkBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -65,6 +65,7 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(BookContentBeanDao.class);
         registerDaoClass(BookInfoBeanDao.class);
+        registerDaoClass(BookmarkBeanDao.class);
         registerDaoClass(BookShelfBeanDao.class);
         registerDaoClass(BookSourceBeanDao.class);
         registerDaoClass(ChapterListBeanDao.class);
@@ -72,7 +73,6 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ReplaceRuleBeanDao.class);
         registerDaoClass(SearchBookBeanDao.class);
         registerDaoClass(SearchHistoryBeanDao.class);
-        registerDaoClass(BookmarkBeanDao.class);
     }
 
     public DaoSession newSession() {

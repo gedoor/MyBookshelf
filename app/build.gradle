@@ -59,11 +59,11 @@ ext {
 }
 dependencies {
     api project(':basemvplib')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
@@ -78,6 +78,10 @@ dependencies {
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.2'
+
+    //google
+    implementation 'com.google.android.gms:play-services-drive:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
     //codecMD5
     implementation 'commons-codec:commons-codec:1.11'

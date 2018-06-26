@@ -33,8 +33,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveClient;
+import com.google.android.gms.drive.DriveResourceClient;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -69,6 +79,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
+    private static final int REQUEST_CODE_SIGN_IN = 14;
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -84,6 +95,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     LinearLayout mainView;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+
+    private TextView tvUser;
 
     private Switch swNightTheme;
     private int group;
@@ -347,6 +360,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
+        tvUser = headerView.findViewById(R.id.tv_user);
+        tvUser.setOnClickListener(view -> signIn());
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -395,6 +410,21 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             drawer.closeDrawers();
             return true;
         });
+    }
+
+    /** Start sign in activity. */
+    private void signIn() {
+        GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
+        startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    }
+
+
+    private GoogleSignInClient buildGoogleSignInClient() {
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestScopes(Drive.SCOPE_FILE)
+                        .build();
+        return GoogleSignIn.getClient(this, signInOptions);
     }
 
     //备份
@@ -564,11 +594,23 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SETTING) {
-            if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
-                recreate();
-            }
+        switch (requestCode) {
+            case REQUEST_SETTING:
+                if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
+                    recreate();
+                }
+                break;
+            case REQUEST_CODE_SIGN_IN:
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                if (result.isSuccess()) {
+                    GoogleSignInAccount acct = result.getSignInAccount();
+                    if (tvUser != null & acct != null) {
+                        tvUser.setText(acct.getEmail());
+                    }
+                }
+                break;
         }
+
     }
 
     /**
