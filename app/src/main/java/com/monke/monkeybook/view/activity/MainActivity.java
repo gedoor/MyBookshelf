@@ -362,9 +362,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         navigationView.addHeaderView(headerView);
         tvUser = headerView.findViewById(R.id.tv_user);
         tvUser.setOnClickListener(view -> signIn());
-        if (preferences.getBoolean("googleSync", false)) {
-            initGoogleSync(GoogleSignIn.getLastSignedInAccount(this));
-        }
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -499,6 +496,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
         }
+        if (preferences.getBoolean("googleSync", false)) {
+            initGoogleSync(GoogleSignIn.getLastSignedInAccount(this));
+        }
     }
 
     private boolean haveRefresh() {
@@ -544,6 +544,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshFinish() {
         moProgressHUD.dismiss();
+
     }
 
     @Override
