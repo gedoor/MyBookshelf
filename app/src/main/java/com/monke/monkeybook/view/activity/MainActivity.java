@@ -421,6 +421,8 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("googleSync", true);
             editor.apply();
+        } else {
+            Toast.makeText(this, "Google Drive 登陆失败", Toast.LENGTH_SHORT).show();
         }
     }
 
