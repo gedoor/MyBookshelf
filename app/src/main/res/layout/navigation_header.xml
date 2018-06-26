@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/icon_read_book"
