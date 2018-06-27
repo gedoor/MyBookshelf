@@ -79,7 +79,7 @@ public class EncodeConverter extends Converter.Factory {
                 }
                 //根据内容判断
                 UniversalDetector detector = new UniversalDetector(null);
-                detector.handleData(responseBytes, 0, 2000);
+                detector.handleData(responseBytes, 0, responseBytes.length - 1);
                 detector.dataEnd();
                 charsetStr = detector.getDetectedCharset();
                 return new String(responseBytes, Charset.forName(charsetStr));

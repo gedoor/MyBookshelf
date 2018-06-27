@@ -7,6 +7,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -42,6 +46,7 @@ import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -188,7 +193,20 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void bookshelfSync(GoogleSignInAccount account) {
-
+        Observable.create(emitter -> {
+            DriveResourceClient driveResourceClient = Drive.getDriveResourceClient(mView.getContext(), account);
+            Gson gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
+            List<BookShelfBean> beans = BookshelfHelp.getAllBook();
+            for (BookShelfBean bookShelfBean : beans) {
+                String str = gson.toJson(bookShelfBean);
+                
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     private void getBook(BookShelfBean bookShelfBean) {
