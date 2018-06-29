@@ -92,7 +92,7 @@ public class DonateActivity extends MBaseActivity {
                 Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
                 startActivity(intent);
             }catch (Exception e) {
-                e.printStackTrace();
+                Toast.makeText(this, "打开支付宝失败,请手动打开支付宝", Toast.LENGTH_SHORT).show();
             }
         });
     }
