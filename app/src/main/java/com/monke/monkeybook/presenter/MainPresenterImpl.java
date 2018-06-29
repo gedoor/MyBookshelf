@@ -1,14 +1,22 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hwangjr.rxbus.RxBus;
@@ -40,6 +48,9 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,20 +204,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void bookshelfSync(GoogleSignInAccount account) {
-        Observable.create(emitter -> {
-            DriveResourceClient driveResourceClient = Drive.getDriveResourceClient(mView.getContext(), account);
-            Gson gson = new GsonBuilder()
-                    .disableHtmlEscaping()
-                    .setPrettyPrinting()
-                    .create();
-            List<BookShelfBean> beans = BookshelfHelp.getAllBook();
-            for (BookShelfBean bookShelfBean : beans) {
-                String str = gson.toJson(bookShelfBean);
-                
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+
     }
 
     private void getBook(BookShelfBean bookShelfBean) {

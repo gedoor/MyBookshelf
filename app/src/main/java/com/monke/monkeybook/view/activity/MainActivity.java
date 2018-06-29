@@ -415,6 +415,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private void initGoogleSync(GoogleSignInAccount acct) {
         if (tvUser != null & acct != null) {
             this.account = acct;
+            if (!GoogleSignIn.hasPermissions(account, Drive.SCOPE_APPFOLDER)) {
+                GoogleSignIn.requestPermissions(this, 15, account, Drive.SCOPE_APPFOLDER);
+            }
+            if (!GoogleSignIn.hasPermissions(account, Drive.SCOPE_FILE)) {
+                GoogleSignIn.requestPermissions(this, 15, account, Drive.SCOPE_FILE);
+            }
             tvUser.setText(acct.getDisplayName());
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("googleSync", true);
