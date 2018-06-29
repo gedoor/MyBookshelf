@@ -1,6 +1,10 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -38,6 +42,8 @@ public class DonateActivity extends MBaseActivity {
     LinearLayout llContent;
     @BindView(R.id.vw_qq_rwm)
     CardView vwQqRwm;
+    @BindView(R.id.vw_zfb_hb_kl)
+    CardView vwZfbHbKl;
 
 
     @Override
@@ -70,11 +76,25 @@ public class DonateActivity extends MBaseActivity {
     @Override
     protected void bindEvent() {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
-        vwZfbHb.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW,
-                "https://render.alipay.com/p/f/fd-j6lzqrgm/guiderofmklvtvw.html?shareId=2088002567472225&campStr=p1j%2BdzkZl018zOczaHT4Z5CLdPVCgrEXq89JsWOx1gdt05SIDMPg3PTxZbdPw9dL&sign=OqN%2FEToAWmYOBperSICGSOtBs36JILq1%2BshguP6l51U%3D&scene=offlinePaymentNewSns"));
+        vwZfbHb.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbhbrwm.jpg"));
         vwZfbRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
         vwWxRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
         vwQqRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
+        vwZfbHbKl.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, "支付宝发红包啦！即日起还有机会额外获得余额宝消费红包！长按复制此消息，打开最新版支付宝就能领取！dlwvHh22lu");
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
+                Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
+            }
+            try {
+                PackageManager packageManager = this.getApplicationContext().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
+                startActivity(intent);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     void openIntent(String intentName, String address) {
