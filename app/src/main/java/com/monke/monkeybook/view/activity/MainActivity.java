@@ -306,7 +306,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 LauncherIcon.Change();
                 break;
             case R.id.action_clearBookshelf:
-
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.clear_bookshelf)
+                        .setMessage(R.string.clear_bookshelf_s)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
+                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
+                        .show();
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
@@ -457,8 +462,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
@@ -478,8 +482,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),

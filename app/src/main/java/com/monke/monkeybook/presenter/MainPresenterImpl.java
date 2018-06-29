@@ -207,6 +207,25 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     }
 
+    @Override
+    public void clearBookshelf() {
+        Observable.create((ObservableOnSubscribe<Objects>) e -> {
+            BookshelfHelp.clearBookshelf();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Objects>() {
+                    @Override
+                    public void onNext(Objects objects) {
+                        queryBookShelf(false, group);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void getBook(BookShelfBean bookShelfBean) {
         WebBookModelImpl.getInstance()
                 .getBookInfo(bookShelfBean)

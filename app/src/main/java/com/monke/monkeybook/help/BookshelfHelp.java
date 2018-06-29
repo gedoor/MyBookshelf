@@ -206,4 +206,11 @@ public class BookshelfHelp {
         }
     }
 
+    public static void clearBookshelf() {
+        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteAll();
+        DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteAll();
+        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
+    }
+
 }

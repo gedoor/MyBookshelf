@@ -198,5 +198,6 @@
     <string name="qq_group">QQ讨论群:%s</string>
     <string name="copy_complete">已拷贝</string>
     <string name="clear_bookshelf">清空书架</string>
+    <string name="clear_bookshelf_s">将会清空所有书籍，请谨慎操作</string>
 
 </resources>

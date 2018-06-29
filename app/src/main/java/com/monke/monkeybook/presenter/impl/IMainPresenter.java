@@ -16,4 +16,6 @@ public interface IMainPresenter extends IPresenter{
     void addBookUrl(String bookUrl);
 
     void bookshelfSync(GoogleSignInAccount account);
+
+    void clearBookshelf();
 }
