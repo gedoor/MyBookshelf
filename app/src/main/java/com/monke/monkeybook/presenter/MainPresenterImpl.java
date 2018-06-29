@@ -209,13 +209,15 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
 
     @Override
     public void clearBookshelf() {
-        Observable.create((ObservableOnSubscribe<Objects>) e -> {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             BookshelfHelp.clearBookshelf();
+            e.onNext(true);
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Objects>() {
+                .subscribe(new SimpleObserver<Boolean>() {
                     @Override
-                    public void onNext(Objects objects) {
+                    public void onNext(Boolean value) {
                         queryBookShelf(false, group);
                     }
 
