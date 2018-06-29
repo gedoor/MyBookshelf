@@ -54,16 +54,11 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         dataList = new ArrayList<>();
     }
 
-    public void addDataS(List<BookSourceBean> bookSourceBeanList) {
-        this.dataList = bookSourceBeanList;
-        notifyDataSetChanged();
-        activity.upDateSelectAll();
-    }
-
     public void resetDataS(List<BookSourceBean> bookSourceBeanList) {
         this.dataList = bookSourceBeanList;
         notifyDataSetChanged();
         activity.upDateSelectAll();
+        activity.upSearchView(dataList.size());
     }
 
     private void allDataList(List<BookSourceBean> bookSourceBeanList) {

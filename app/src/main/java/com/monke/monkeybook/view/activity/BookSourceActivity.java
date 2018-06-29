@@ -65,6 +65,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private boolean isSearch;
 
     @Override
+    protected IBookSourcePresenter initInjector() {
+        return new BookSourcePresenterImpl();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -83,6 +88,11 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
+    protected void initData() {
+
+    }
+
+    @Override
     protected void bindView() {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
@@ -92,14 +102,9 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         moProgressHUD = new MoProgressHUD(this);
     }
 
-    @Override
-    protected void initData() {
-
-    }
-
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
-        searchView.setQueryHint("搜索书源");
+        searchView.setQueryHint(getString(R.string.search_book_source));
         searchView.onActionViewExpanded();
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -110,17 +115,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (TextUtils.isEmpty(newText)) {
-                    isSearch = false;
-                    adapter.resetDataS(BookSourceManage.getAllBookSource());
-                } else {
-                    isSearch = true;
-                    List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                            .where(BookSourceBeanDao.Properties.BookSourceName.like("%" + newText + "%"))
-                            .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                            .list();
-                    adapter.resetDataS(sourceBeanList);
-                }
+                isSearch = !TextUtils.isEmpty(newText);
+                refreshBookSource();
                 return false;
             }
         });
@@ -130,7 +126,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        adapter.addDataS(BookSourceManage.getAllBookSource());
+        adapter.resetDataS(BookSourceManage.getAllBookSource());
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchHelpCallback.setDragEnable(true);
@@ -156,9 +152,21 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         selectAll = !selectAll;
     }
 
+    public void upSearchView(int size) {
+        searchView.setQueryHint(String.format(getString(R.string.search_book_source_num), size));
+    }
+
     @Override
     public void refreshBookSource() {
-        adapter.resetDataS(BookSourceManage.getAllBookSource());
+        if (isSearch) {
+            List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.BookSourceName.like("%" + searchView.getQuery() + "%"))
+                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                    .list();
+            adapter.resetDataS(sourceBeanList);
+        } else {
+            adapter.resetDataS(BookSourceManage.getAllBookSource());
+        }
     }
 
     public void delBookSource(BookSourceBean bookSource) {
@@ -177,11 +185,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void firstRequest() {
 
-    }
-
-    @Override
-    protected IBookSourcePresenter initInjector() {
-        return new BookSourcePresenterImpl();
     }
 
     //设置ToolBar

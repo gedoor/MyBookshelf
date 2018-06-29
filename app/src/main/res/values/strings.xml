@@ -199,5 +199,7 @@
     <string name="copy_complete">已拷贝</string>
     <string name="clear_bookshelf">清空书架</string>
     <string name="clear_bookshelf_s">这将会删除所有书籍，请谨慎操作。</string>
+    <string name="search_book_source">搜索书源</string>
+    <string name="search_book_source_num">搜索(共%d个书源)</string>
 
 </resources>
