@@ -51,7 +51,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/ic_clear_all_black_24dp_new" />
+                android:src="@drawable/ic_clear_all" />
         </LinearLayout>
 
 

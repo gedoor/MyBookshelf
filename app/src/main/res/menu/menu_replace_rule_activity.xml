@@ -29,7 +29,7 @@
 
     <item
         android:id="@+id/action_del_all"
-        android:icon="@drawable/ic_clear_all_black_24dp_new"
+        android:icon="@drawable/ic_clear_all"
         android:title="@string/del_all"
         app:showAsAction="never" />
 
