@@ -1,24 +1,11 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveContents;
-import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.DriveResourceClient;
-import com.google.android.gms.drive.MetadataChangeSet;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
@@ -30,9 +17,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -46,18 +30,12 @@ import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.impl.IMainView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -200,11 +178,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                         Toast.makeText(mView.getContext(), "网址格式不对", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    @Override
-    public void bookshelfSync(GoogleSignInAccount account) {
-
     }
 
     @Override

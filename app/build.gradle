@@ -106,11 +106,6 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.2'
 
-    //google
-    implementation 'com.google.android.gms:play-services-drive:15.0.1'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.francescocervone:rxdrive:0.2'
-
     //codecMD5
     implementation 'commons-codec:commons-codec:1.11'
 

@@ -36,15 +36,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.drive.DriveClient;
-import com.google.android.gms.drive.DriveResourceClient;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -109,7 +100,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private long exitTime = 0;
     private String bookPx;
     private ImmersionReceiver immersionReceiver;
-    GoogleSignInAccount account;
 
     @Override
     protected IMainPresenter initInjector() {
@@ -369,7 +359,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
         tvUser = headerView.findViewById(R.id.tv_user);
-        tvUser.setOnClickListener(view -> signIn());
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -418,41 +407,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             drawer.closeDrawers();
             return true;
         });
-    }
-
-    private void initGoogleSync(GoogleSignInAccount acct) {
-        if (tvUser != null & acct != null) {
-            this.account = acct;
-            if (!GoogleSignIn.hasPermissions(account, Drive.SCOPE_APPFOLDER)) {
-                GoogleSignIn.requestPermissions(this, 15, account, Drive.SCOPE_APPFOLDER);
-            }
-            if (!GoogleSignIn.hasPermissions(account, Drive.SCOPE_FILE)) {
-                GoogleSignIn.requestPermissions(this, 15, account, Drive.SCOPE_FILE);
-            }
-            tvUser.setText(acct.getDisplayName());
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("googleSync", true);
-            editor.apply();
-        } else {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("googleSync", false);
-            editor.apply();
-            Toast.makeText(this, "Google Drive 登陆失败", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /** Start sign in activity. */
-    private void signIn() {
-        GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
-        startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
-    }
-
-    private GoogleSignInClient buildGoogleSignInClient() {
-        GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestScopes(Drive.SCOPE_FILE)
-                        .build();
-        return GoogleSignIn.getClient(this, signInOptions);
     }
 
     //备份
@@ -509,9 +463,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
         }
-        if (preferences.getBoolean("googleSync", false)) {
-            initGoogleSync(GoogleSignIn.getLastSignedInAccount(this));
-        }
     }
 
     private boolean haveRefresh() {
@@ -557,9 +508,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     public void refreshFinish() {
         moProgressHUD.dismiss();
-        if (account != null) {
-            mPresenter.bookshelfSync(account);
-        }
     }
 
     @Override
@@ -630,12 +578,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             case REQUEST_SETTING:
                 if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
                     recreate();
-                }
-                break;
-            case REQUEST_CODE_SIGN_IN:
-                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                if (result.isSuccess()) {
-                    initGoogleSync(result.getSignInAccount());
                 }
                 break;
         }
