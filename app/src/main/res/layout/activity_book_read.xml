@@ -158,6 +158,7 @@
                 android:background="@drawable/bg_shadow_bottom" />
             <!--底部设置栏-->
             <LinearLayout
+                android:id="@+id/llNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background"
@@ -368,6 +369,7 @@
                         android:layout_weight="1" />
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </FrameLayout>
 

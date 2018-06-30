@@ -55,8 +55,8 @@ import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
-import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.BaseContentView;
+import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
@@ -143,6 +143,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     AppBarLayout appBar;
     @BindView(R.id.ll_ISB)
     LinearLayout llISB;
+    @BindView(R.id.llNavigationBar)
+    LinearLayout llNavigationBar;
 
     private BaseContentView csvBook;
 
@@ -233,7 +235,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (readBookControl.getHideNavigationBar()) {
             mImmersionBar.fullScreen(true);
             if (ImmersionBar.hasNavigationBar(this)) {
-                llMenuBottom.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(this));
+                llNavigationBar.setPadding(0, 0, 0, ImmersionBar.getNavigationBarHeight(this));
             }
         }
 
