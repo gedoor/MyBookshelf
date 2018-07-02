@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
@@ -218,19 +219,19 @@ public class ChapterListView extends FrameLayout {
         this.bookShelfBean = bookShelfBean;
         chapterListAdapter = new ChapterListAdapter(bookShelfBean, new OnItemClickListener() {
             @Override
-            public void itemClick(int index, int tabPosition) {
+            public void itemClick(int index, int page, int tabPosition) {
                 if (itemClickListener != null) {
                     if (!(tabPosition == 0 && index == bookShelfBean.getDurChapter())) {
-                        itemClickListener.itemClick(index, tabPosition);
+                        itemClickListener.itemClick(index, page, tabPosition);
                         dismissChapterList();
                     }
                 }
             }
 
             @Override
-            public void itemLongClick(int index, int tabPosition) {
+            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
                 if (itemClickListener != null && tabPosition == 1) {
-                    itemClickListener.itemLongClick(index, tabPosition);
+                    itemClickListener.itemLongClick(bookmarkBean, tabPosition);
                 }
             }
         });
@@ -266,8 +267,8 @@ public class ChapterListView extends FrameLayout {
     }
 
     public interface OnItemClickListener {
-        void itemClick(int index, int tabPosition);
+        void itemClick(int index, int page, int tabPosition);
 
-        void itemLongClick(int index, int tabPosition);
+        void itemLongClick(BookmarkBean bookmarkBean, int tabPosition);
     }
 }

@@ -464,20 +464,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void initChapterList() {
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
-            public void itemClick(int index, int tabPosition) {
-                if (tabPosition == 0) {
-                    csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), BookContentView.DurPageIndexBegin);
-                } else {
-                    csvBook.setInitData(mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index).getChapterIndex(),
-                            mPresenter.getBookShelf().getChapterListSize(),
-                            mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index).getPageIndex());
-                }
+            public void itemClick(int index, int page, int tabPosition) {
+                csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), page);
             }
 
             @Override
-            public void itemLongClick(int index, int tabPosition) {
+            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
                 chapterListView.dismissChapterList();
-                showBookmark(mPresenter.getBookShelf().getBookInfoBean().getBookmarkList().get(index));
+                showBookmark(bookmarkBean);
             }
         });
     }

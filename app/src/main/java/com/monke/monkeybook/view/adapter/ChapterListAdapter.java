@@ -11,15 +11,27 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.model.content.BookContent;
+import com.monke.monkeybook.widget.BaseContentView;
 import com.monke.monkeybook.widget.ChapterListView;
+import com.monke.monkeybook.widget.contentview.BookContentView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
+    private List<ChapterListBean> chapterListBeans = new ArrayList<>();
+    private List<BookmarkBean> bookmarkBeans = new ArrayList<>();
     private int index = 0;
     private int tabPosition;
+    private String searchKey = "";
 
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull ChapterListView.OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
@@ -29,7 +41,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public void upChapterList(ChapterListBean chapterListBean) {
         if (bookShelfBean.getChapterListSize() > chapterListBean.getDurChapterIndex()) {
             bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
-            if (tabPosition == 0) {
+            if (tabPosition == 0 && !Objects.equals(searchKey, "")) {
                 notifyItemChanged(chapterListBean.getDurChapterIndex());
             }
         }
@@ -41,7 +53,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     public void search(String key) {
+        if (Objects.equals(key, "")) {
+            searchKey = key;
+            chapterListBeans.clear();
+            bookmarkBeans.clear();
+            notifyDataSetChanged();
+        } else {
 
+        }
     }
 
     @NonNull
@@ -53,17 +72,18 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ThisViewHolder holder, final int position) {
         if (tabPosition == 0) {
-            holder.tvName.setText(bookShelfBean.getChapterList(position).getDurChapterName());
-            if (bookShelfBean.getChapterList(position).getHasCache()) {
+            ChapterListBean chapterListBean = bookShelfBean.getChapterList(position);
+            holder.tvName.setText(chapterListBean.getDurChapterName());
+            if (chapterListBean.getHasCache()) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
             holder.flContent.setOnClickListener(v -> {
                 setIndex(position);
-                itemClickListener.itemClick(position, tabPosition);
+                itemClickListener.itemClick(chapterListBean.getDurChapterIndex(), BookContentView.DurPageIndexBegin, tabPosition);
             });
-            if (position == index) {
+            if (chapterListBean.getDurChapterIndex() == index) {
                 holder.flContent.setBackgroundResource(R.color.btn_bg_press);
                 holder.flContent.setClickable(false);
             } else {
@@ -71,12 +91,13 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 holder.flContent.setClickable(true);
             }
         } else {
-            holder.tvName.setText(bookShelfBean.getBookInfoBean().getBookmarkList().get(position).getContent());
+            BookmarkBean bookmarkBean = bookShelfBean.getBookInfoBean().getBookmarkList().get(position);
+            holder.tvName.setText(bookmarkBean.getContent());
             holder.flContent.setOnClickListener(v -> {
-                itemClickListener.itemClick(position, tabPosition);
+                itemClickListener.itemClick(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex(), tabPosition);
             });
             holder.flContent.setOnLongClickListener(view -> {
-                itemClickListener.itemLongClick(position, tabPosition);
+                itemClickListener.itemLongClick(bookmarkBean, tabPosition);
                 return true;
             });
         }
