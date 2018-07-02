@@ -202,6 +202,7 @@ public class ChapterListView extends FrameLayout {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                chapterListAdapter.search(query);
                 return false;
             }
 

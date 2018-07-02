@@ -40,6 +40,10 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         notifyDataSetChanged();
     }
 
+    public void search(String key) {
+
+    }
+
     @NonNull
     @Override
     public ThisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
