@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -21,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
     private BookShelfBean bookShelfBean;
     private ChapterListView.OnItemClickListener itemClickListener;
@@ -28,7 +34,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private List<BookmarkBean> bookmarkBeans = new ArrayList<>();
     private int index = 0;
     private int tabPosition;
-    private String searchKey = "";
+    private Boolean isSearch = false;
 
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull ChapterListView.OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
@@ -38,7 +44,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public void upChapterList(ChapterListBean chapterListBean) {
         if (bookShelfBean.getChapterListSize() > chapterListBean.getDurChapterIndex()) {
             bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
-            if (tabPosition == 0 && !Objects.equals(searchKey, "")) {
+            if (tabPosition == 0 && !isSearch) {
                 notifyItemChanged(chapterListBean.getDurChapterIndex());
             }
         }
@@ -49,14 +55,49 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         notifyDataSetChanged();
     }
 
-    public void search(String key) {
+    public void search(final String key) {
+        chapterListBeans.clear();
+        bookmarkBeans.clear();
         if (Objects.equals(key, "")) {
-            searchKey = key;
-            chapterListBeans.clear();
-            bookmarkBeans.clear();
+            isSearch = false;
             notifyDataSetChanged();
         } else {
+            Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
+                if (tabPosition == 0) {
+                    for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
+                        if (chapterListBean.getDurChapterName().contains(key)) {
+                            chapterListBeans.add(chapterListBean);
+                        } else if (chapterListBean.getBookContentBean() != null
+                                && chapterListBean.getBookContentBean().getDurChapterContent() != null
+                                && chapterListBean.getBookContentBean().getDurChapterContent().contains(key)) {
+                            chapterListBeans.add(chapterListBean);
+                        }
+                    }
+                } else {
+                    for (BookmarkBean bookmarkBean : bookShelfBean.getBookInfoBean().getBookmarkList()) {
+                        if (bookmarkBean.getChapterName().contains(key)) {
+                            bookmarkBeans.add(bookmarkBean);
+                        } else if (bookmarkBean.getContent().contains(key)) {
+                            bookmarkBeans.add(bookmarkBean);
+                        }
+                    }
+                }
+                emitter.onNext(true);
+                emitter.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SimpleObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean aBoolean) {
+                            isSearch = true;
+                            notifyDataSetChanged();
+                        }
 
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
         }
     }
 
@@ -69,7 +110,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ThisViewHolder holder, final int position) {
         if (tabPosition == 0) {
-            ChapterListBean chapterListBean = bookShelfBean.getChapterList(position);
+            ChapterListBean chapterListBean = isSearch ? chapterListBeans.get(position) : bookShelfBean.getChapterList(position);
             holder.tvName.setText(chapterListBean.getDurChapterName());
             if (chapterListBean.getHasCache()) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -88,7 +129,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 holder.flContent.setClickable(true);
             }
         } else {
-            BookmarkBean bookmarkBean = bookShelfBean.getBookInfoBean().getBookmarkList().get(position);
+            BookmarkBean bookmarkBean = isSearch ? bookmarkBeans.get(position) : bookShelfBean.getBookInfoBean().getBookmarkList().get(position);
             holder.tvName.setText(bookmarkBean.getContent());
             holder.flContent.setOnClickListener(v -> {
                 itemClickListener.itemClick(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex(), tabPosition);
@@ -106,8 +147,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (bookShelfBean == null)
             return 0;
         else if (tabPosition == 0) {
+            if (isSearch) {
+                return chapterListBeans.size();
+            }
             return bookShelfBean.getChapterListSize();
         } else {
+            if (isSearch) {
+                return bookmarkBeans.size();
+            }
             return bookShelfBean.getBookInfoBean().getBookmarkList().size();
         }
     }
