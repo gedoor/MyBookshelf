@@ -26,6 +26,8 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.adapter.ChapterListAdapter;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -211,6 +213,7 @@ public class ChapterListView extends FrameLayout {
             }
         });
         rvList.setAdapter(chapterListAdapter);
+        Objects.requireNonNull(toolbarTab.getTabAt(0)).setText(String.format(mContext.getString(R.string.chapter_list_size), bookShelfBean.getChapterListSize()));
     }
 
     public void upChapterList(ChapterListBean chapterListBean) {
