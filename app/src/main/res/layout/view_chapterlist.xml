@@ -46,8 +46,9 @@
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/toolbar_tab"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_gravity="bottom"
                     android:background="@color/background"
                     android:fillViewport="false"
@@ -69,6 +70,14 @@
                         android:text="@string/bookmark" />
 
                 </android.support.design.widget.TabLayout>
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionSearch"
+                    app:defaultQueryHint="搜索"
+                    tools:ignore="UnusedAttribute" />
 
             </LinearLayout>
 

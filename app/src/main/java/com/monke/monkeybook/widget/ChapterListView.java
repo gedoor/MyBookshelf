@@ -12,8 +12,10 @@ import android.support.annotation.StyleRes;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -42,6 +44,8 @@ public class ChapterListView extends FrameLayout {
     ImageView ivBack;
     @BindView(R.id.toolbar_tab)
     TabLayout toolbarTab;
+    @BindView(R.id.searchView)
+    SearchView searchView;
 
     private ChapterListAdapter chapterListAdapter;
     private OnItemClickListener itemClickListener;
@@ -188,7 +192,24 @@ public class ChapterListView extends FrameLayout {
                 }
             }
         });
+        searchView.onActionViewCollapsed();
+        searchView.setOnCloseListener(() -> {
+            toolbarTab.setVisibility(VISIBLE);
+            return false;
+        });
+        searchView.setOnSearchClickListener(view -> toolbarTab.setVisibility(INVISIBLE));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     public void setData(BookShelfBean bookShelfBean, OnItemClickListener clickListener) {
@@ -225,6 +246,10 @@ public class ChapterListView extends FrameLayout {
     public Boolean dismissChapterList() {
         if (getVisibility() != VISIBLE) {
             return false;
+        } else if (toolbarTab.getVisibility() != VISIBLE) {
+            searchView.onActionViewCollapsed();
+            toolbarTab.setVisibility(VISIBLE);
+            return true;
         } else {
             animOut.cancel();
             animIn.cancel();
