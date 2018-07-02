@@ -62,7 +62,6 @@ public class BookChapter {
             for (int i = 0; i < jsonObjectList.size(); i++) {
                 AnalyzeJson analyzeJson = new AnalyzeJson(jsonObjectList.get(i));
                 ChapterListBean temp = new ChapterListBean();
-                temp.setDurChapterIndex(i);
                 temp.setDurChapterUrl(NetworkUtil.getAbsoluteURL(chapterUrl, analyzeJson.getResult(bookSourceBean.getRuleContentUrl())));
                 temp.setDurChapterName(analyzeJson.getResult(bookSourceBean.getRuleChapterName()));
                 temp.setNoteUrl(novelUrl);
@@ -72,6 +71,7 @@ public class BookChapter {
                     if (x != -1) {
                         temp.setHasCache(chapterListBeansOld.get(x).getHasCache());
                     }
+                    temp.setDurChapterIndex(chapterBeans.size());
                     chapterBeans.add(temp);
                 }
             }

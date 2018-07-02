@@ -11,12 +11,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.model.content.BookContent;
-import com.monke.monkeybook.widget.BaseContentView;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 
