@@ -1,5 +1,6 @@
 package android.support.v7.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -19,6 +20,7 @@ public class HackRecyclerView extends RecyclerView {
         this(context, attrs, 0);
     }
 
+    @SuppressLint({"PrivateResource", "CustomViewStyleable"})
     public HackRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         byte defStyleRes = 0;
@@ -31,11 +33,14 @@ public class HackRecyclerView extends RecyclerView {
         initFastScroller(verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable);
     }
 
+    @SuppressLint({"VisibleForTests", "PrivateResource"})
     void initFastScroller(StateListDrawable verticalThumbDrawable, Drawable verticalTrackDrawable, StateListDrawable horizontalThumbDrawable, Drawable horizontalTrackDrawable) {
         if (verticalThumbDrawable != null && verticalTrackDrawable != null && horizontalThumbDrawable != null && horizontalTrackDrawable != null) {
             Resources resources = getContext().getResources();
-            new HackFastScroller(this, verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable,
-                    resources.getDimensionPixelSize(R.dimen.fastscroll_default_thickness), resources.getDimensionPixelSize(R.dimen.fastscroll_minimum_range),
+            new HackFastScroller(this,
+                    verticalThumbDrawable, verticalTrackDrawable, horizontalThumbDrawable, horizontalTrackDrawable,
+                    resources.getDimensionPixelSize(R.dimen.fastscroll_default_thickness),
+                    resources.getDimensionPixelSize(R.dimen.fastscroll_minimum_range),
                     resources.getDimensionPixelOffset(R.dimen.fastscroll_margin));
         }
     }
