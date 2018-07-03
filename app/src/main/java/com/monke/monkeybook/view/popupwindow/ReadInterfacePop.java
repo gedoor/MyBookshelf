@@ -298,12 +298,8 @@ public class ReadInterfacePop extends PopupWindow {
         }
     }
 
-    private void updateBoldText(Boolean convent) {
-        if (convent) {
-            flTextBold.setText("细");
-        } else {
-            flTextBold.setText("粗");
-        }
+    private void updateBoldText(Boolean isBold) {
+        flTextBold.setSelected(isBold);
     }
 
     public void setBg() {
