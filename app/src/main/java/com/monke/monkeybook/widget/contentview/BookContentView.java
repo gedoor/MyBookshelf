@@ -337,7 +337,6 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setTextKind(ReadBookControl readBookControl) {
-
         tvContent.setTextSize(readBookControl.getTextSize());
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
