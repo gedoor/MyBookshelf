@@ -44,7 +44,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center"
-                android:text="字号" />
+                android:text="字号"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/fl_text_bigger"
@@ -71,9 +72,8 @@
                 android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="加粗"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+                android:text="@string/text_bold"
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="0dp"
@@ -88,9 +88,8 @@
                 android:layout_weight="7"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="自定义字体\n(长按恢复默认)"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+                android:text="@string/custom_font"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -123,7 +122,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:gravity="center"
-                android:text="间距" />
+                android:text="间距"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/fl_line_bigger"
@@ -221,16 +221,17 @@
                     android:contentDescription="背景1"
                     android:src="@color/background"
                     app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
+                    app:civ_border_width="1dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="文字"
+                    android:text="@string/text"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
@@ -248,16 +249,17 @@
                     android:contentDescription="背景2"
                     android:src="@color/background"
                     app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
+                    app:civ_border_width="1dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="文字"
+                    android:text="@string/text"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
@@ -274,16 +276,17 @@
                     android:contentDescription="背景3"
                     android:src="@color/background"
                     app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
+                    app:civ_border_width="1dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="文字"
+                    android:text="@string/text"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
@@ -300,16 +303,17 @@
                     android:contentDescription="背景4"
                     android:src="@color/background"
                     app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
+                    app:civ_border_width="1dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="文字"
+                    android:text="@string/text"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
@@ -326,16 +330,17 @@
                     android:contentDescription="背景5"
                     android:src="@color/background"
                     app:civ_border_color="@color/tv_text_default"
-                    app:civ_border_width="1dp" />
+                    app:civ_border_width="1dp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tv4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="文字"
+                    android:text="@string/text"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
