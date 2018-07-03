@@ -184,7 +184,7 @@ public class ReadInterfacePop extends PopupWindow {
             updateBg(4);
             changeProListener.bgChange();
         });
-        //背景设置
+        //自定义阅读样式
         civBgWhite.setOnLongClickListener(view -> customReadStyle(0));
         civBgYellow.setOnLongClickListener(view -> customReadStyle(1));
         civBgGreen.setOnLongClickListener(view -> customReadStyle(2));
@@ -202,6 +202,7 @@ public class ReadInterfacePop extends PopupWindow {
 
     }
 
+    //自定义阅读样式
     private boolean customReadStyle(int index) {
         Intent intent = new Intent(activity, ReadStyleActivity.class);
         intent.putExtra("index", index);
@@ -209,6 +210,7 @@ public class ReadInterfacePop extends PopupWindow {
         return false;
     }
 
+    //选择字体
     private void chooseReadBookFont() {
         if (EasyPermissions.hasPermissions(activity, perms)) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -227,6 +229,7 @@ public class ReadInterfacePop extends PopupWindow {
         changeProListener.setFont();
     }
 
+    //清除字体
     private void clearFontPath() {
         readBookControl.setReadBookFont(null);
         changeProListener.setFont();
