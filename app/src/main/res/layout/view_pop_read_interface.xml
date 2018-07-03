@@ -71,7 +71,7 @@
                 android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
-                android:text="粗"
+                android:text="加粗"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
