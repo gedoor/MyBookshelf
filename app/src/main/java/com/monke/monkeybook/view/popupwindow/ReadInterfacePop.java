@@ -120,7 +120,6 @@ public class ReadInterfacePop extends PopupWindow {
         updateLineSize(readBookControl.getLineMultiplier());
         updateBoldText(readBookControl.getTextBold());
         updateConvertText(readBookControl.getTextConvert());
-        //upTextColor(readBookControl.getTextColorCustom());
 
     }
 
@@ -280,7 +279,23 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateConvertText(int convent) {
-
+        switch (convent) {
+            case -1:
+                tvConvertF.setSelected(true);
+                tvConvertJ.setSelected(false);
+                tvConvertO.setSelected(false);
+                break;
+            case 0:
+                tvConvertO.setSelected(true);
+                tvConvertJ.setSelected(false);
+                tvConvertF.setSelected(false);
+                break;
+            case 1:
+                tvConvertJ.setSelected(true);
+                tvConvertF.setSelected(false);
+                tvConvertO.setSelected(false);
+                break;
+        }
     }
 
     private void updateBoldText(Boolean convent) {
