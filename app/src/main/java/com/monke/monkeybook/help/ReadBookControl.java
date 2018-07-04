@@ -54,6 +54,7 @@ public class ReadBookControl {
     private long lineChange;
     private String lastNoteUrl;
     private Boolean darkStatusIcon;
+    private int screenTimeOut;
 
     private SharedPreferences readPreference;
     private SharedPreferences defaultPreference;
@@ -99,6 +100,7 @@ public class ReadBookControl {
         this.showLine = readPreference.getBoolean("showLine", true);
         this.lineChange = readPreference.getLong("lineChange", System.currentTimeMillis());
         this.lastNoteUrl = readPreference.getString("lastNoteUrl", "");
+        this.screenTimeOut = readPreference.getInt("screenTimeOut", 0);
 
         initTextDrawableIndex();
     }
@@ -523,4 +525,14 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    public int getScreenTimeOut() {
+        return screenTimeOut;
+    }
+
+    public void setScreenTimeOut(int screenTimeOut) {
+        this.screenTimeOut = screenTimeOut;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("screenTimeOut", screenTimeOut);
+        editor.apply();
+    }
 }

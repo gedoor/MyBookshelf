@@ -22,6 +22,46 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llScreenTimeOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/background"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="@string/keep_light"
+                        android:textColor="@color/tv_text_default" />
+
+                    <TextView
+                        android:id="@+id/tv_screen_time_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/keep_light"
+                        android:textColor="@color/tv_text_default" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_hideStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -328,46 +368,6 @@
                         android:contentDescription="@string/open_page_anim"
                         app:kswBackColor="@drawable/selector_switch_button"
                         app:kswThumbColor="@color/background" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.8dp"
-                    android:background="@color/btn_bg_press" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/keep_light"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_keep_screen_on"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/keep_light"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-
                 </LinearLayout>
 
                 <View

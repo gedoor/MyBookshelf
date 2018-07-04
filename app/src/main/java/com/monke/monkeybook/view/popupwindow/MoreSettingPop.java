@@ -2,14 +2,15 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
@@ -32,8 +33,6 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbKey;
     @BindView(R.id.sb_click)
     SwitchButton sbClick;
-    @BindView(R.id.sb_keep_screen_on)
-    SwitchButton sbKeepScreenOn;
     @BindView(R.id.sb_show_title)
     SwitchButton sbShowTitle;
     @BindView(R.id.sb_showTimeBattery)
@@ -52,6 +51,12 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbShowLine;
     @BindView(R.id.sbImmersionBar)
     SwitchButton sbImmersionBar;
+    @BindView(R.id.llImmersionBar)
+    LinearLayout llImmersionBar;
+    @BindView(R.id.llScreenTimeOut)
+    LinearLayout llScreenTimeOut;
+    @BindView(R.id.tv_screen_time_out)
+    TextView tvScreenTimeOut;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -98,10 +103,6 @@ public class MoreSettingPop extends PopupWindow {
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
         sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
-        sbKeepScreenOn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setKeepScreenOn(isChecked);
-            changeProListener.keepScreenOnChange(isChecked);
-        });
         sbClickAnim.setOnCheckedChangeListener(((compoundButton, b) -> readBookControl.setClickAnim(b)));
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTitle(isChecked);
@@ -126,15 +127,25 @@ public class MoreSettingPop extends PopupWindow {
             activity.sendBroadcast(intent);
             changeProListener.reLoad();
         });
+        llScreenTimeOut.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle("屏幕超时")
+                    .setItems(activity.getResources().getStringArray(R.array.screen_time_out), (dialogInterface, i) -> {
+                        readBookControl.setScreenTimeOut(i);
+                        upScreenTimeOut(i);
+                    })
+                    .create();
+            dialog.show();
+        });
     }
 
     private void initData() {
+        upScreenTimeOut(readBookControl.getScreenTimeOut());
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setCheckedImmediatelyNoEvent(readBookControl.getHideNavigationBar());
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
         sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
-        sbKeepScreenOn.setCheckedImmediatelyNoEvent(readBookControl.getKeepScreenOn());
         sbClickAnim.setCheckedImmediatelyNoEvent(readBookControl.getClickAnim());
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
@@ -146,5 +157,9 @@ public class MoreSettingPop extends PopupWindow {
             llShowTimeBattery.setVisibility(View.GONE);
         }
 
+    }
+
+    private void upScreenTimeOut(int screenTimeOut) {
+        tvScreenTimeOut.setText(activity.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
     }
 }
