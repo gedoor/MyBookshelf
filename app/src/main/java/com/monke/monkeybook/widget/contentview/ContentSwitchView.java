@@ -689,6 +689,8 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
         void openChapterList();
 
         void curPageFinish();
+
+        void onTouch();
     }
 
 }

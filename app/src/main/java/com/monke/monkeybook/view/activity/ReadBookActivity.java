@@ -301,10 +301,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 mTimer = new Timer();
             }
             mTimer.cancel();
+            keepScreenOn(true);
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
+                    keepScreenOn(false);
                 }
             }, screenTimeOut * 1000);
         } else if (mTimer != null){
@@ -923,6 +924,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     getIntent().putExtra("readAloud", false);
                     onMediaButton();
                 }
+            }
+
+            @Override
+            public void onTouch() {
+                screenOff(true);
             }
 
         };
