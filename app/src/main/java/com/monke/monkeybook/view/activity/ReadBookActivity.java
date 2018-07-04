@@ -48,6 +48,7 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
+import com.monke.monkeybook.utils.SystemUtil;
 import com.monke.monkeybook.utils.barUtil.BarHide;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.impl.IReadBookView;
@@ -296,7 +297,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void screenOff(boolean run) {
-        if (run && screenTimeOut > 0) {
+        int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
+        if (run && screenOffTime > 0) {
             if (mTimer != null) {
                 mTimer.cancel();
             }
@@ -307,7 +309,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 public void run() {
                     runOnUiThread(() -> keepScreenOn(false));
                 }
-            }, screenTimeOut * 1000);
+            }, screenOffTime);
         } else if (mTimer != null){
             mTimer.cancel();
         }
