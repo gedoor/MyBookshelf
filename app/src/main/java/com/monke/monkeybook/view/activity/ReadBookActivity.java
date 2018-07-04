@@ -158,6 +158,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private String noteUrl;
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
+    private int screenTimeOut;
 
     private Menu menu;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -192,6 +193,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
+        screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
         batInfoReceiver = new ThisBatInfoReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TIME_TICK);
@@ -279,7 +281,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
 
         mImmersionBar.init();
-        switch (getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()]) {
+        switch (screenTimeOut) {
             case 0:
                 keepScreenOn(false);
                 break;
@@ -424,7 +426,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
             public void keepScreenOnChange(int keepScreenOn) {
-                switch (getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn]) {
+                screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
+                switch (screenTimeOut) {
                     case 0:
                         keepScreenOn(false);
                         break;
