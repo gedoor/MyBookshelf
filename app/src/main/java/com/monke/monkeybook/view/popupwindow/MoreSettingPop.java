@@ -62,7 +62,7 @@ public class MoreSettingPop extends PopupWindow {
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     public interface OnChangeProListener {
-        void keepScreenOnChange(Boolean keepScreenOn);
+        void keepScreenOnChange(int keepScreenOn);
 
         void reLoad();
     }
@@ -133,6 +133,7 @@ public class MoreSettingPop extends PopupWindow {
                     .setItems(activity.getResources().getStringArray(R.array.screen_time_out), (dialogInterface, i) -> {
                         readBookControl.setScreenTimeOut(i);
                         upScreenTimeOut(i);
+                        changeProListener.keepScreenOnChange(i);
                     })
                     .create();
             dialog.show();

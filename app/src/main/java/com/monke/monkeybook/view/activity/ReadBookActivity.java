@@ -416,8 +416,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //其它设置
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
-            public void keepScreenOnChange(Boolean keepScreenOn) {
-                keepScreenOn(keepScreenOn);
+            public void keepScreenOnChange(int keepScreenOn) {
+                switch (getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn]) {
+                    case 0:
+                        keepScreenOn(false);
+                        break;
+                    case -1:
+                        keepScreenOn(true);
+                        break;
+                }
             }
 
             @Override
