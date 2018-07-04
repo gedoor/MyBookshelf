@@ -281,14 +281,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
 
         mImmersionBar.init();
-        switch (screenTimeOut) {
-            case 0:
-                keepScreenOn(false);
-                break;
-            case -1:
-                keepScreenOn(true);
-                break;
-        }
+        keepScreenOn(screenTimeOut != 0);
     }
 
     public void keepScreenOn(boolean keepScreenOn) {
@@ -427,14 +420,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void keepScreenOnChange(int keepScreenOn) {
                 screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
-                switch (screenTimeOut) {
-                    case 0:
-                        keepScreenOn(false);
-                        break;
-                    case -1:
-                        keepScreenOn(true);
-                        break;
-                }
+                keepScreenOn(screenTimeOut != 0);
             }
 
             @Override
