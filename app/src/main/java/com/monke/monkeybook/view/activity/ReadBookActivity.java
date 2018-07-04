@@ -279,6 +279,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
 
         mImmersionBar.init();
+        keepScreenOn(readBookControl.getKeepScreenOn());
+    }
+
+    public void keepScreenOn(boolean keepScreenOn) {
+        if (keepScreenOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     @Override
@@ -336,9 +345,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         setupActionBar();
         initCsvBook();
         llISB.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
-        if (readBookControl.getKeepScreenOn()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
         //图标眷色
         ivCList.getDrawable().mutate();
         ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -411,11 +417,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
             public void keepScreenOnChange(Boolean keepScreenOn) {
-                if (keepScreenOn) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                } else {
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                }
+                keepScreenOn(keepScreenOn);
             }
 
             @Override
