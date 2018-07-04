@@ -68,6 +68,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import at.markushi.ui.CircleButton;
 import butterknife.BindView;
@@ -153,6 +155,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private Animation menuBottomIn;
     private Animation menuBottomOut;
     private ActionBar actionBar;
+    private Timer mTimer;
 
     private boolean aloudButton;
     private String noteUrl;
@@ -289,6 +292,23 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
+    private void screenOff(boolean run) {
+        if (run && screenTimeOut > 0) {
+            if (mTimer == null) {
+                mTimer = new Timer();
+            }
+            mTimer.cancel();
+            mTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
+                }
+            }, screenTimeOut * 1000);
+        } else if (mTimer != null){
+            mTimer.cancel();
         }
     }
 
@@ -618,6 +638,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onPause() {
         super.onPause();
+        screenOff(false);
     }
 
     //设置ToolBar
@@ -1149,6 +1170,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onResume() {
         super.onResume();
+        screenOff(true);
         if (readBookControl.getHideStatusBar()) {
             csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
             csvBook.upBattery(BatteryUtil.getLevel(this));
