@@ -286,6 +286,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
         mImmersionBar.init();
         keepScreenOn(screenTimeOut != 0);
+        screenOff();
     }
 
     public void keepScreenOn(boolean keepScreenOn) {
