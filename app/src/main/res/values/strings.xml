@@ -203,7 +203,7 @@
     <string name="search_book_source_num">搜索(共%d个书源)</string>
     <string name="chapter_list_size">目录(%d)</string>
     <string name="text_bold">加粗</string>
-    <string name="custom_font">自定义字体 (长按恢复默认)</string>
+    <string name="custom_font">自定义字体\n(长按恢复默认)</string>
     <string name="text">文字</string>
 
 </resources>
