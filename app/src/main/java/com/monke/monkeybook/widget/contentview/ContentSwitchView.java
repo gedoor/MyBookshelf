@@ -168,6 +168,9 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    if (loadDataListener != null) {
+                        loadDataListener.onTouch();
+                    }
                     if (event.getX() - startX>clickSensitivity||event.getX() - startX<-clickSensitivity){
                         if (startX == -3)
                             startX = event.getX();

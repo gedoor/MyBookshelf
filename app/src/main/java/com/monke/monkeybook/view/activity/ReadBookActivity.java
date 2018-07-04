@@ -297,15 +297,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private void screenOff(boolean run) {
         if (run && screenTimeOut > 0) {
-            if (mTimer == null) {
-                mTimer = new Timer();
+            if (mTimer != null) {
+                mTimer.cancel();
             }
-            mTimer.cancel();
+            mTimer = new Timer();
             keepScreenOn(true);
             mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    keepScreenOn(false);
+                    runOnUiThread(() -> keepScreenOn(false));
                 }
             }, screenTimeOut * 1000);
         } else if (mTimer != null){
