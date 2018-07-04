@@ -130,10 +130,11 @@ public class MoreSettingPop extends PopupWindow {
         llScreenTimeOut.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setTitle(activity.getString(R.string.keep_light))
-                    .setItems(activity.getResources().getStringArray(R.array.screen_time_out), (dialogInterface, i) -> {
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_time_out), readBookControl.getScreenTimeOut(), (dialogInterface, i) -> {
                         readBookControl.setScreenTimeOut(i);
                         upScreenTimeOut(i);
                         changeProListener.keepScreenOnChange(i);
+                        dialogInterface.dismiss();
                     })
                     .create();
             dialog.show();
