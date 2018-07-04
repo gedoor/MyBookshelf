@@ -296,9 +296,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
     }
 
-    private void screenOff(boolean run) {
+    private void screenOff() {
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
-        if (run && screenOffTime > 0) {
+        if (screenOffTime > 0) {
             if (mTimer != null) {
                 mTimer.cancel();
             }
@@ -310,8 +310,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     runOnUiThread(() -> keepScreenOn(false));
                 }
             }, screenOffTime);
-        } else if (mTimer != null){
-            mTimer.cancel();
+        } else if (screenTimeOut != -1){
+            keepScreenOn(false);
         }
     }
 
@@ -641,7 +641,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onPause() {
         super.onPause();
-        screenOff(false);
     }
 
     //设置ToolBar
@@ -930,7 +929,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void onTouch() {
-                screenOff(true);
+                screenOff();
             }
 
         };
@@ -1178,7 +1177,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     protected void onResume() {
         super.onResume();
-        screenOff(true);
+        screenOff();
         if (readBookControl.getHideStatusBar()) {
             csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
             csvBook.upBattery(BatteryUtil.getLevel(this));
