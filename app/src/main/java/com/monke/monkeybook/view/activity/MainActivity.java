@@ -454,14 +454,16 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
     }
 
-    private void fistOpenRun() {
+    private void versionUpRun() {
         if (preferences.getInt("versionCode", 0) != MApplication.getVersionCode()) {
-            //书源为空时加载默认书源
-            BookSourceManage.initDefaultBookSource(this);
             //保存版本号
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
+            //书源为空时加载默认书源
+            BookSourceManage.initDefaultBookSource(this);
+            //更新日志
+            moProgressHUD.showAssetMarkdown("updateLog.md");
         }
     }
 
@@ -473,7 +475,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @Override
     protected void firstRequest() {
-        fistOpenRun();
+        versionUpRun();
         if (NetworkUtil.isNetWorkAvailable()) {
             mPresenter.queryBookShelf(haveRefresh(), group);
         } else {

@@ -275,6 +275,21 @@ public class MoProgressHUD {
     }
 
     /**
+     * 显示asset Markdown
+     */
+    public void showAssetMarkdown(String assetFileName) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        mSharedView.showAssetMarkdown(assetFileName);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    /**
      * 离线下载
      */
     public void showDownloadList(int startIndex, int endIndex, int all, DownLoadView.OnClickDownload clickDownload) {

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +83,7 @@ public class AboutActivity extends MBaseActivity {
     @BindView(R.id.vw_update_log)
     CardView vwUpdateLog;
 
+    private MoProgressHUD moProgressHUD;
     private String qq = "701903217 788025059";
 
     @Override
@@ -99,7 +103,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     @Override
@@ -166,7 +170,7 @@ public class AboutActivity extends MBaseActivity {
             }
         });
         vwUpdateLog.setOnClickListener(view -> {
-
+            moProgressHUD.showAssetMarkdown("updateLog.md");
         });
     }
 
@@ -207,4 +211,9 @@ public class AboutActivity extends MBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        return mo || super.onKeyDown(keyCode, event);
+    }
 }
