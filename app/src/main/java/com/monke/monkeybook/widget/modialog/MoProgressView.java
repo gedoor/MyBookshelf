@@ -11,6 +11,7 @@ import com.monke.monkeybook.R;
 import com.victor.loading.rotate.RotateLoading;
 
 import br.tiagohm.markdownview.MarkdownView;
+import br.tiagohm.markdownview.css.styles.Github;
 
 /**
  * 对话框
@@ -103,4 +104,5 @@ public class MoProgressView extends LinearLayout {
         MarkdownView markdownView = findViewById(R.id.vw_markdown);
         markdownView.loadMarkdownFromAsset(assetFileName);
     }
+
 }
