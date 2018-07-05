@@ -132,6 +132,9 @@ dependencies {
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    //markdownView
+    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
+
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
 
