@@ -17,6 +17,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.zzhoujay.richtext.RichText;
 
 /**
  * 对话框
@@ -157,6 +158,7 @@ public class MoProgressHUD {
                 new Handler().post(() -> {
                     outAnim.setAnimationListener(outAnimListener);
                     mSharedView.getChildAt(0).startAnimation(outAnim);
+                    RichText.recycle();
                 });
             }
         }
