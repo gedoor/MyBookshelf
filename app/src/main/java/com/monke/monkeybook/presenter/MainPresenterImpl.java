@@ -45,6 +45,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
+    private boolean isRestore = false;
 
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
@@ -67,8 +68,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                             mView.refreshBookShelf(bookShelfBeans);
                             if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
                                 startRefreshBook();
-                            } else {
-                                mView.refreshFinish();
                             }
                         }
                     }
@@ -103,10 +102,11 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
+                            isRestore = true;
                             mView.onRestore(mView.getContext().getString(R.string.restore_success));
                             queryBookShelf(true, group);
                         } else {
-                            mView.refreshFinish();
+                            mView.dismissHUD();
                             Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
                         }
                     }
@@ -114,7 +114,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.refreshFinish();
+                        mView.dismissHUD();
                         Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -238,8 +238,6 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             for (int i = 1; i <= getThreadsNum(); i++) {
                 refreshBookshelf();
             }
-        } else {
-            mView.refreshFinish();
         }
     }
 
@@ -281,7 +279,10 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 queryBookShelf(false, group);
-                mView.refreshFinish();
+                if (isRestore) {
+                    isRestore = false;
+                    mView.dismissHUD();
+                }
             }
         }
     }

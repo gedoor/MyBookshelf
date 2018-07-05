@@ -508,13 +508,12 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
-    public void refreshFinish() {
+    public void dismissHUD() {
         moProgressHUD.dismiss();
     }
 
     @Override
     public void refreshError(String error) {
-        refreshFinish();
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
     }
 

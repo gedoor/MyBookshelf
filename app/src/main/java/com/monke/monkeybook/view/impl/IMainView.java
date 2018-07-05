@@ -24,9 +24,9 @@ public interface IMainView extends IView{
     void activityRefreshView();
 
     /**
-     * 刷新完成
+     * 取消弹出框
      */
-    void refreshFinish();
+    void dismissHUD();
 
     /**
      * 刷新错误
