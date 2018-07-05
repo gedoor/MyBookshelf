@@ -8,10 +8,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.utils.ReadAssets;
 import com.victor.loading.rotate.RotateLoading;
+import com.zzhoujay.richtext.RichText;
 
-import br.tiagohm.markdownview.MarkdownView;
-import br.tiagohm.markdownview.css.styles.Github;
 
 /**
  * 对话框
@@ -101,8 +101,9 @@ public class MoProgressView extends LinearLayout {
     public void showAssetMarkdown(String assetFileName) {
         removeAllViews();
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_markdown, this, true);
-        MarkdownView markdownView = findViewById(R.id.vw_markdown);
-        markdownView.loadMarkdownFromAsset(assetFileName);
+        TextView tvMarkdown = findViewById(R.id.tv_markdown);
+
+        RichText.fromMarkdown(ReadAssets.getText(context, assetFileName)).into(tvMarkdown);
     }
 
 }

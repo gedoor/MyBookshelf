@@ -133,7 +133,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //markdownView
-    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
+    implementation 'com.zzhoujay.richtext:richtext:3.0.7'
 
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
