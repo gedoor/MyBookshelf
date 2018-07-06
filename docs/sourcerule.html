@@ -38,7 +38,9 @@
 		{
 			var subdoc = getSubDocument(elms[i])
 			if (subdoc)
-				document.getElementById('content').innerHTML = subdoc.getElementsByTagName('pre')[1].toString();
+				var mdText = subdoc.getElementsByTagName('pre')[1].toString();
+				console.log(mdText);
+				document.getElementById('content').innerHTML = mdText;
 		}
 	}
   </script>
