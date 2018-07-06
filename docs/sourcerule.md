@@ -65,7 +65,7 @@ url规则和搜索规则一样,多个规则用&&分开,如
 例:class.panel panel-default mt20.0@id.shot@text
 #### RuleCoverUrl 书籍页面里的封面
 例:class.panel-body.0@class.img-thumbnail.0@src
-#### RuleChapterUrl 书籍页面里的目录地址
+#### RuleChapterUrl 书籍页面里的目录地址,如果目录地址和书籍地址一样则留空
 例:class.list-group-item tac.0@tag.a.0@href
 #### RuleChapterList 目录页面的目录列表,前面加 - 号倒序排列
 例:id.chapters-list@tag.a
