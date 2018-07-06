@@ -10,8 +10,8 @@
   <iframe src="sourcerule.md" name=md></iframe>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-      document.getElementById('content').innerHTML =
-      marked(md.body.innerText);
+      var mdText = md.body.innerText;
+      content.innerHTML=mdText;
   </script>
 </body>
 </html>
