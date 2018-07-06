@@ -10,9 +10,39 @@
   <div id="content"></div>
   
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script>
-      var mdText = document.getElementById('md').getSVGDocument().getElementsByTagName('pre');
-      document.getElementById('content').innerHTML = mdText;
-  </script>
+  <script>//<![CDATA[
+		// wait until all the resources are loaded
+		window.addEventListener("load", findSVGElements, false);
+		
+		// fetches the document for the given embedding_element
+		function getSubDocument(embedding_element)
+		{
+			if (embedding_element.contentDocument) 
+			{
+				return embedding_element.contentDocument;
+			} 
+			else 
+			{
+				var subdoc = null;
+				try {
+					subdoc = embedding_element.getSVGDocument();
+				} catch(e) {}
+				return subdoc;
+			}
+		}
+				
+		function findSVGElements()
+		{
+			var elms = document.querySelectorAll(".emb");
+			for (var i = 0; i < elms.length; i++)
+			{
+				var subdoc = getSubDocument(elms[i])
+				if (subdoc)
+					document.getElementById('content').innerHTML = subdoc.getElementsByTagName('pre');
+			}
+		}
+		//]]>
+	</script>
+
 </body>
 </html>
