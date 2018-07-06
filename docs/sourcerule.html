@@ -10,7 +10,8 @@
   
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-      $("#content").html(marked('# Marked in the browser\n\nRendered by **marked**.'));
+      document.getElementById('content').innerHTML =
+      marked('# Marked in the browser\n\nRendered by **marked**.');
   </script>
 </body>
 </html>
