@@ -1,3 +1,4 @@
+# blog http://www.hostfans.cn
 # 开发人员
 fork 之后主要开发人员 kunfei https://github.com/gedoor
 
