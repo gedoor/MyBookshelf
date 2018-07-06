@@ -11,40 +11,10 @@
   
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-	// wait until all the resources are loaded
-	window.addEventListener("load", findSVGElements, false);
-
-	// fetches the document for the given embedding_element
-	function getSubDocument(embedding_element)
-	{
-		if (embedding_element.contentDocument) 
-		{
-			return embedding_element.contentDocument;
-		} 
-		else 
-		{
-			var subdoc = null;
-			try {
-				subdoc = embedding_element.getSVGDocument();
-			} catch(e) {}
-			return subdoc;
-		}
-	}
-
-	function findSVGElements()
-	{
-		var elms = document.querySelectorAll(".emb");
-		for (var i = 0; i < elms.length; i++)
-		{
-			var subdoc = getSubDocument(elms[i])
-			if (subdoc)
-			{
-				var mdText = subdoc.getElementsByTagName('pre')[1].toString();
-				console.log(mdText);
-				document.getElementById('content').innerHTML = mdText;
-			}
-		}
-	}
+	var mdEmb = document.getElementById('md');
+	var mdDoc = mdEmb.getSVGDocument();
+	var mdText = mdDoc.getElementsByTagName('pre')[1].toString();
+	document.getElementById('content').innerHTML = mdText;
   </script>
 
 </body>
