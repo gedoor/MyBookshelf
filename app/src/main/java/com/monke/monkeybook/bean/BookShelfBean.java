@@ -170,16 +170,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return durChapterPage;
     }
 
-    public void setDurChapterPage(int durChapterPage) {
-        this.durChapterPage = durChapterPage;
-    }
-
     public long getFinalDate() {
         return finalDate;
-    }
-
-    public void setFinalDate(long finalDate) {
-        this.finalDate = finalDate;
     }
 
     public String getTag() {
@@ -202,16 +194,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return hasUpdate;
     }
 
-    public void setHasUpdate(boolean hasUpdate) {
-        this.hasUpdate = hasUpdate;
-    }
-
     public int getNewChapters() {
         return newChapters;
-    }
-
-    public void setNewChapters(int newChapters) {
-        this.newChapters = newChapters;
     }
 
     public String getErrorMsg() {
@@ -226,16 +210,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return this.serialNumber;
     }
 
-    public void setSerialNumber(int serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
     public long getFinalRefreshData() {
         return this.finalRefreshData;
-    }
-
-    public void setFinalRefreshData(long finalRefreshData) {
-        this.finalRefreshData = finalRefreshData;
     }
 
     public boolean isLoading() {
@@ -247,11 +223,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     }
 
     public int getGroup() {
-        return this.group;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
+        return this.group == null ? 0 : this.group;
     }
 
     public Boolean getIsScroll() {
