@@ -7,12 +7,12 @@
 
 <body>
   <div id="content"></div>
-  <script src="http://libs.baidu.com/jquery/1.4.4/jquery.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-    $.get("sourcerule.md", function(result){
-        document.getElementById('content').innerHTML = marked(result);
-    }
+    $.get("sourcerule.md", function(response, status, xhr){ 
+        $("#content").html(marked(response)); 
+    });
   </script>
 </body>
 </html>
