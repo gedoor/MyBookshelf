@@ -6,48 +6,16 @@
 </head>
 
 <body>
-  <embed class="emb" src="sourcerule.md" id='md' type="text/markdown" />
+  
   <div id="content"></div>
   
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-	<script>
-		// wait until all the resources are loaded
-		window.addEventListener("load", findSVGElements, false);
-
-		// fetches the document for the given embedding_element
-		function getSubDocument(embedding_element)
-		{
-			if (embedding_element.contentDocument) 
-			{
-				return embedding_element.contentDocument;
-			} 
-			else 
-			{
-				var subdoc = null;
-				try {
-					subdoc = embedding_element.getSVGDocument();
-				} catch(e) {
-					console.log(e)
-				}
-				return subdoc;
-			}
-		}
-
-		function findSVGElements()
-		{
-			var elms = document.querySelectorAll(".emb");
-			for (var i = 0; i < elms.length; i++)
-			{
-				var subdoc = getSubDocument(elms[i])
-				if (subdoc)
-				{
-					var mdText = subdoc.getElementsByTagName('pre')[0].toString();
-					document.getElementById('content').innerHTML = mdText;
-				}
-			}
-		}
-
-	</script>
+  <script>
+    $.get("sourcerule.md", function(response, status, xhr){
+        $("#content").html(marked(response));
+    });
+  </script>
 
 </body>
 </html>
