@@ -201,5 +201,6 @@
     <string name="text_bold">加粗</string>
     <string name="custom_font">自定义字体\n(长按恢复默认)</string>
     <string name="text">文字</string>
+    <string name="home_page">软件主页</string>
 
 </resources>
