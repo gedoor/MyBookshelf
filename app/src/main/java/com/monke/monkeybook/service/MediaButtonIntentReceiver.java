@@ -62,7 +62,11 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, ReadBookActivity.class);
             intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
             intent.putExtra("readAloud", true);
-            context.startActivity(intent);
+            try {
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             RxBus.get().post(RxBusTag.MEDIA_BUTTON, command);
         }
