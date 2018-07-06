@@ -72,12 +72,8 @@ public class AboutActivity extends MBaseActivity {
     TextView tvQq;
     @BindView(R.id.vw_qq)
     CardView vwQq;
-    @BindView(R.id.vw_source_share)
-    CardView vwSourceShare;
     @BindView(R.id.tv_app_summary)
     TextView tvAppSummary;
-    @BindView(R.id.tv_source_share)
-    TextView tvSourceShare;
     @BindView(R.id.tv_update_log)
     TextView tvUpdateLog;
     @BindView(R.id.vw_update_log)
@@ -144,8 +140,6 @@ public class AboutActivity extends MBaseActivity {
         tvVersion.getCompoundDrawablesRelative()[0].mutate();
         tvVersion.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
 
-        tvSourceShare.getCompoundDrawablesRelative()[0].mutate();
-        tvSourceShare.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
@@ -160,7 +154,6 @@ public class AboutActivity extends MBaseActivity {
         vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/sourcerule.html"));
         vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/disclaimer.html"));
         vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/releases"));
-        vwSourceShare.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/tree/master/docs/book_source"));
         vwQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, qq);
