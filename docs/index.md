@@ -6,3 +6,5 @@
 - http://www.hostfans.cn/
 ### 书源制作说明
 - https://gedoor.github.io/MyBookshelf/sourcerule.html
+### 下载最新版本
+- https://github.com/gedoor/MyBookshelf/releases/latest
