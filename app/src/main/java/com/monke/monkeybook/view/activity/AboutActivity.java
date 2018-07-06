@@ -143,7 +143,7 @@ public class AboutActivity extends MBaseActivity {
         vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf"));
         vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/sourcerule.html"));
         vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/disclaimer.html"));
-        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/releases"));
+        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/releases/latest"));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/"));
         vwQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
