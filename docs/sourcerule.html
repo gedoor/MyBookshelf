@@ -11,7 +11,7 @@
   
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-      var mdText = document.getElementById('md');
+      var mdText = document.getElementById('md').contentWindow.document.getElementsByTagName('pre');
       document.getElementById('content').innerHTML = mdText;
   </script>
 </body>
