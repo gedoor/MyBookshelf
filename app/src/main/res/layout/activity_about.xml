@@ -130,7 +130,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_group_black_24dp"
+                    android:drawableStart="@drawable/ic_qq_group"
                     android:gravity="center_vertical"
                     android:text="@string/qqq" />
 
