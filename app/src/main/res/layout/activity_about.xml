@@ -168,7 +168,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_local_florist_black_24dp"
+                    android:drawableStart="@drawable/ic_scoring"
                     android:gravity="center_vertical"
                     android:text="@string/scoring" />
 
@@ -187,7 +187,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_mail_black_24dp"
+                    android:drawableStart="@drawable/ic_mail"
                     android:gravity="center_vertical"
                     android:text="@string/send_mail" />
 
