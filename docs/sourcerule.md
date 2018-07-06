@@ -1,3 +1,5 @@
+# 书源制作教程
+https://www.hostfans.cn/make-course
 # 书源规则说明
 #### 书源规则基于HTML标记,如class,id,tag等
 - 想要写规则先要打开网页原代码,在里面找到想要获取内容对应的标签,
