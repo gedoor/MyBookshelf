@@ -1,134 +1,18 @@
-﻿<!DOCTYPE HTML>
+<!DOCTYPE HTML>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=unicode">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>书源规则说明</title>
 </head>
 
-<body spellcheck="false" class="">
-<h1>书源规则说明</h1>
-
-<h4>书源规则基于HTML标记,如class,id,tag等</h4>
-
-<p>想要写规则先要打开网页原代码,在里面找到想要获取内容对应的标签,
-    Chrome可以在网页上右击点击检查可以方便的查看标签</p>
-
-<h2>基本写法</h2>
-
-<h4>@为分隔符,用来分隔获取规则</h4>
-
-<h4>每段规则可分为3段</h4>
-
-<p>第一段是类型,如class,id,tag等</p>
-
-<p>第二段是名称,</p>
-
-<p>第三段是位置,class,tag会获取到多个,所以要加位置,id类型不要加</p>
-
-<p>如不加位置会获取所有</p>
-
-<h5>!是排除,有些位置不符合需要排除用!,后面的序号用:隔开,%为最后一个</h5>
-
-<p>@的最后一段为获取内容,如text,textNodes,href,src等</p>
-
-<h5>如果有不同网页的规则可以用 | 分隔,多个规则会以第一个取到值的为准</h5>
-
-<h5>如需要正则替换在最后加上 #正则表达式</h5>
-
-<h5>例:</h5>
-
-<p>class.odd.0@tag.a.0@text|tag.dd.0@tag.h1@text#全文阅读</p>
-
-<h3>BookSourceUrl 书源网址</h3>
-
-<h3>BookSourceName 书源名称</h3>
-
-<h3>BookSourceGroup 书源分组</h3>
-
-<h3>RuleSearchUrl 搜索网址</h3>
-
-<p>例:http://www.gxwztv.com/search.htm?keyword=searchKey&amp;pn=searchPage-1</p>
-
-<p>searchKey为关键字标识,运行时会替换为搜索关键字,</p>
-
-<p>searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,</p>
-
-<p>page规则还可以写成{index,index2,index3}</p>
-
-<p>要添加转码编码在最后加 |char=gbk</p>
-
-<h4>ruleFindUrl 发现规则</h4>
-
-<p>发现规则分为两段,名称和url用::分开,如</p>
-
-<p>起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage</p>
-
-<p>url规则和搜索规则一样,多个规则用&amp;&amp;分开,如</p>
-
-<p>起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&amp;&amp;原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&amp;page=searchPage</p>
-
-<h4>RuleSearchList 搜索列表</h4>
-
-<p>例:class.list-group-item!0:%</p>
-
-<h4>RuleSearchAuthor 搜索里的作者</h4>
-
-<p>例:class.col-xs-2.0@text</p>
-
-<h4>RuleSearchKind 搜索里的类型</h4>
-
-<p>例:class.col-xs-1.0@text</p>
-
-<h4>RuleSearchLastChapter 搜索里的最新章节</h4>
-
-<p>例:class.col-xs-4.0@tag.a.0@text</p>
-
-<h4>RuleSearchName 获取搜索里的书名</h4>
-
-<p>例:class.col-xs-3.0@tag.a.0@text</p>
-
-<h4>RuleSearchNoteUrl 搜索里的书链接</h4>
-
-<p>例:class.col-xs-3.0@tag.a.0@href</p>
-
-<h4>RuleSearchCoverUrl 搜索里的书封面</h4>
-
-<p>例:tag.img.0@src</p>
-
-<h4>RuleBookName 书籍页面里的书名称</h4>
-
-<p>例:class.active.0@text</p>
-
-<h4>RuleBookAuthor 书籍页面里的作者</h4>
-
-<p>例:class.col-xs-12.0@tag.small.0@text</p>
-
-<h4>RuleIntroduce 书籍页面里的简介</h4>
-
-<p>例:class.panel panel-default mt20.0@id.shot@text</p>
-
-<h4>RuleCoverUrl 书籍页面里的封面</h4>
-
-<p>例:class.panel-body.0@class.img-thumbnail.0@src</p>
-
-<h4>RuleChapterUrl 书籍页面里的目录地址</h4>
-
-<p>例:class.list-group-item tac.0@tag.a.0@href</p>
-
-<h4>RuleChapterList 目录页面的目录列表,前面加 - 号倒序排列</h4>
-
-<p>例:id.chapters-list@tag.a</p>
-
-<h4>RuleChapterName 目录列表的章节名称</h4>
-
-<p>例:text</p>
-
-<h4>RuleContentUrl 目录列表的章节链接</h4>
-
-<p>例:href</p>
-
-<h4>RuleBookContent 章节内容</h4>
-
-<p>例:id.txtContent@textNodes</p>
+<body>
+  <div id="content"></div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    $.get("sourcerule.md", function(result){
+        document.getElementById('content').innerHTML =
+          marked(result);
+    }
+  </script>
 </body>
 </html>
