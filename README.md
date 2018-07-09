@@ -7,7 +7,7 @@
 - 大古队员 https://github.com/DaguDuiyuan
 - ttydy https://github.com/ttydy
 
-#软件截图
+# 软件截图
 ![image]https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybookshelf.jpg
 
 # 免责声明（Disclaimer）
