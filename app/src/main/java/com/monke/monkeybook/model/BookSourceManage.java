@@ -95,7 +95,7 @@ public class BookSourceManage extends BaseModelImpl {
     }
 
     public static Observable<Boolean> importSourceFromWww(URL url) {
-        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                 .create(IHttpGetApi.class)
                 .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                 .flatMap(rsp -> importBookSourceO(rsp.body()))

@@ -16,6 +16,6 @@
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 
-    <string name="default_source_url">http://read.hostfans.cn/books.txt</string>
-    <string name="default_replace_url">http://read.hostfans.cn/rules.txt</string>
+    <string name="default_source_url">http://read.hostfans.cn/bookSource.txt</string>
+    <string name="default_replace_url">http://read.hostfans.cn/replaceRule.txt</string>
 </resources>

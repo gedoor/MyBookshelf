@@ -1,6 +1,7 @@
 package com.monke.basemvplib;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,13 +23,22 @@ import retrofit2.Retrofit;
 import static android.text.TextUtils.isEmpty;
 
 public class EncodeConverter extends Converter.Factory {
+    private String encode;
 
     private EncodeConverter(){
 
     }
 
+    private EncodeConverter(String encode){
+        this.encode = encode;
+    }
+
     public static EncodeConverter create(){
         return new EncodeConverter();
+    }
+
+    public static EncodeConverter create(String en){
+        return new EncodeConverter(en);
     }
 
     @Override
@@ -36,6 +46,9 @@ public class EncodeConverter extends Converter.Factory {
         return new Converter<ResponseBody, String>() {
             @Override
             public String convert(@NonNull ResponseBody value) throws IOException {
+                if (!TextUtils.isEmpty(encode)) {
+                    return new String((value.bytes()), encode);
+                }
                 String charsetStr;
                 MediaType mediaType = value.contentType();
                 byte[] responseBytes = value.bytes();

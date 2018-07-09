@@ -88,7 +88,7 @@ public class ReplaceRuleManage extends BaseModelImpl {
     }
 
     public static Observable<Boolean> importReplaceRuleFromWww(URL url) {
-        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()))
+        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                 .create(IHttpGetApi.class)
                 .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                 .flatMap(rsp -> importReplaceRuleO(rsp.body()))
