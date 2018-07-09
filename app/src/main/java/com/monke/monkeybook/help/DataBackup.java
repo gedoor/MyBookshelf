@@ -85,6 +85,7 @@ public class DataBackup {
             DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.xml", file.getPath());
             FileHelper.writeString(bookshelf, docFile);
         }
+        BookshelfHelp.getAllBook();
     }
 
     private void backupBookSource(File file) {
