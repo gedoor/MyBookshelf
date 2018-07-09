@@ -352,7 +352,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     private void openRuleSummary() {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("https://gedoor.github.io/MyBookshelf/sourcerule.html"));
+            intent.setData(Uri.parse(getString(R.string.source_rule_url)));
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();

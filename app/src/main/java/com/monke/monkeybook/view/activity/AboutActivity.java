@@ -140,11 +140,11 @@ public class AboutActivity extends MBaseActivity {
         });
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
-        vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf"));
-        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/sourcerule.html"));
-        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/disclaimer.html"));
-        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://github.com/gedoor/MyBookshelf/releases/latest"));
-        vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/"));
+        vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.this_github_url)));
+        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.source_rule_url)));
+        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.disclaimer_url)));
+        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.latest_release_url)));
+        vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, qq);
