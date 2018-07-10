@@ -98,6 +98,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         holder.cbView.setChecked(dataList.get(position).getEnable());
         holder.cbView.setOnClickListener((View view) -> {
             dataList.get(position).setEnable(holder.cbView.isChecked());
+            activity.saveDate(dataList.get(position));
             activity.upDateSelectAll();
         });
         holder.editView.getDrawable().mutate();

@@ -14,6 +14,8 @@ import java.util.List;
 
 public interface IBookSourcePresenter extends IPresenter {
 
+    void saveData(BookSourceBean bookSourceBean);
+
     void saveData(List<BookSourceBean> bookSourceBeans);
 
     void delData(BookSourceBean bookSourceBean);

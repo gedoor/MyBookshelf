@@ -86,7 +86,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     @Override
     protected void onDestroy() {
-        saveDate(adapter.getDataList());
         super.onDestroy();
     }
 
@@ -153,6 +152,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
+        saveDate(adapter.getDataList());
     }
 
     public void upSearchView(int size) {
@@ -174,6 +174,10 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
+    }
+
+    public void saveDate(BookSourceBean date) {
+        mPresenter.saveData(date);
     }
 
     public void saveDate(List<BookSourceBean> date) {

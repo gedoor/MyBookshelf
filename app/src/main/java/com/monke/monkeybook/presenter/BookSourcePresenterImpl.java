@@ -42,6 +42,17 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     }
 
     @Override
+    public void saveData(BookSourceBean bookSourceBean) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+            BookSourceManage.refreshBookSource();
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (int i = 1; i <= bookSourceBeans.size(); i++) {
@@ -52,17 +63,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+                .subscribe();
     }
 
     @Override
