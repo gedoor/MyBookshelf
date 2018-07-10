@@ -259,7 +259,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     @Override
     public void upSearchEngineS() {
-        searchBookModel.refreshSearchEngineS();
+        searchBookModel.initSearchEngineS();
     }
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {

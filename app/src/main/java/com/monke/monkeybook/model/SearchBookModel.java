@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookModel {
     private BaseActivity activity;
     private long startThisSearchTime;
-    private List<SearchEngine> searchEngineS;
+    private List<SearchEngine> searchEngineS = new ArrayList<>();
     private int threadsNum;
     private int page = 0;
     private int searchEngineIndex;
@@ -41,16 +41,10 @@ public class SearchBookModel {
         threadsNum = preference.getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
 
         //搜索引擎初始化
-        searchEngineS = new ArrayList<>();
-        for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
-            SearchEngine se = new SearchEngine();
-            se.setTag(bookSourceBean.getBookSourceUrl());
-            se.setHasMore(true);
-            searchEngineS.add(se);
-        }
+        initSearchEngineS();
     }
 
-    public void refreshSearchEngineS() {
+    public void initSearchEngineS() {
         searchEngineS.clear();
         for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
             SearchEngine se = new SearchEngine();
