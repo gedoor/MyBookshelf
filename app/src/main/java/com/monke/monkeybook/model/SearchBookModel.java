@@ -40,10 +40,12 @@ public class SearchBookModel {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         threadsNum = preference.getInt(MApplication.getInstance().getString(R.string.pk_threads_num), 6);
 
-        //搜索引擎初始化
         initSearchEngineS();
     }
 
+    /**
+     * 搜索引擎初始化
+     */
     public void initSearchEngineS() {
         searchEngineS.clear();
         for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
