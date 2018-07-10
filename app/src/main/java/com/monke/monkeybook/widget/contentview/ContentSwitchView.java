@@ -129,7 +129,7 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //取出灵敏度调整
-        int clickSensitivity = 200-(int)(readBookControl.getClickSensitivity()*1.5);
+        int clickSensitivity = 200-(int)(readBookControl.getClickSensitivity()*1.5f);
         clickSensitivity = clickSensitivity<50?50:clickSensitivity;
         int action = event.getAction();
         if (!isMoving) {
