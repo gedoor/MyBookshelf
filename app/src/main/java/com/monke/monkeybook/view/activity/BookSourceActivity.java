@@ -82,9 +82,12 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     protected void onPause() {
         super.onPause();
-        if (!isSearch) {
-            saveDate(adapter.getDataList());
-        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveDate(adapter.getDataList());
     }
 
     @Override
