@@ -1,7 +1,8 @@
 # 书源制作教程
-https://www.hostfans.cn/make-course
+- https://www.hostfans.cn/make-course
+
 # 书源规则说明
-#### 书源规则基于HTML标记,如class,id,tag等
+- 书源规则基于HTML标记,如class,id,tag等
 - 想要写规则先要打开网页原代码,在里面找到想要获取内容对应的标签,
 - Chrome可以在网页上右击点击检查可以方便的查看标签
 
@@ -22,8 +23,7 @@ https://www.hostfans.cn/make-course
 ### BookSourceName 书源名称
 ### BookSourceGroup 书源分组
 ### RuleSearchUrl 搜索网址
-例:http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1
-
+- 例:http://www.gxwztv.com/search.htm?keyword=searchKey&pn=searchPage-1
 - ?为get @为post
 - searchKey为关键字标识,运行时会替换为搜索关键字,
 - searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,
@@ -31,43 +31,58 @@ https://www.hostfans.cn/make-course
 - 要添加转码编码在最后加 |char=gbk
 
 #### ruleFindUrl 发现规则
-**发现规则分为两段,名称和url用::分开,如**
-
-起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage
-
-**url规则和搜索规则一样,多个规则用&&分开,如**
-
-起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&&原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&page=searchPage
+- 发现规则分为两段,名称和url用::分开,如
+- 起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage
+- url规则和搜索规则一样,多个规则用&&分开,如
+- 起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&&原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&page=searchPage
 
 #### RuleSearchList 搜索列表
-例:class.list-group-item!0:%
+- 例:class.list-group-item!0:%
+
 #### RuleSearchAuthor 搜索里的作者
-例:class.col-xs-2.0@text
+- 例:class.col-xs-2.0@text
+
 #### RuleSearchKind 搜索里的类型
-例:class.col-xs-1.0@text
+- 例:class.col-xs-1.0@text
+
 #### RuleSearchLastChapter 搜索里的最新章节
-例:class.col-xs-4.0@tag.a.0@text
+- 例:class.col-xs-4.0@tag.a.0@text
+
 #### RuleSearchName 获取搜索里的书名
-例:class.col-xs-3.0@tag.a.0@text
+- 例:class.col-xs-3.0@tag.a.0@text
+
 #### RuleSearchNoteUrl 搜索里的书链接
-例:class.col-xs-3.0@tag.a.0@href
+- 例:class.col-xs-3.0@tag.a.0@href
+
 #### RuleSearchCoverUrl 搜索里的书封面
-例:tag.img.0@src
+- 例:tag.img.0@src
+
 #### RuleBookName 书籍页面里的书名称
-例:class.active.0@text
+- 例:class.active.0@text
+
 #### RuleBookAuthor 书籍页面里的作者
-例:class.col-xs-12.0@tag.small.0@text
+- 例:class.col-xs-12.0@tag.small.0@text
+
 #### RuleIntroduce 书籍页面里的简介
-例:class.panel panel-default mt20.0@id.shot@text
+- 例:class.panel panel-default mt20.0@id.shot@text
+
 #### RuleCoverUrl 书籍页面里的封面
-例:class.panel-body.0@class.img-thumbnail.0@src
-#### RuleChapterUrl 书籍页面里的目录地址,如果目录地址和书籍地址一样则留空
-例:class.list-group-item tac.0@tag.a.0@href
-#### RuleChapterList 目录页面的目录列表,前面加 - 号倒序排列
-例:id.chapters-list@tag.a
+- 例:class.panel-body.0@class.img-thumbnail.0@src
+
+#### RuleChapterUrl 书籍页面里的目录地址
+- 如果目录地址和书籍地址一样则留空
+- 例:class.list-group-item tac.0@tag.a.0@href
+
+#### RuleChapterList 目录页面的目录列表
+- 前面加 - 号倒序排列
+- 例:id.chapters-list@tag.a
+- 例:-id.chapters-list@tag.a
+
 #### RuleChapterName 目录列表的章节名称
-例:text
+- 例:text
+
 #### RuleContentUrl 目录列表的章节链接
-例:href
+- 例:href
+
 #### RuleBookContent 章节内容
-例:id.txtContent@textNodes
+- 例:id.txtContent@textNodes

@@ -12,6 +12,9 @@
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
+    marked.setOptions({
+    
+    });
     $.get("sourcerule.md", function(response, status, xhr){
         $("#content").html(marked(response));
     });
