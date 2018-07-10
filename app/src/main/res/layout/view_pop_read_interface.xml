@@ -157,27 +157,17 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5" />
-
             <TextView
                 android:id="@+id/tv_convert_o"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="关闭"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5" />
 
             <TextView
                 android:id="@+id/tv_convert_f"
