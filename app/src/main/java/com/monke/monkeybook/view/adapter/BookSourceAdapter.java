@@ -45,6 +45,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             notifyItemMoved(srcPosition, targetPosition);
             notifyItemChanged(srcPosition);
             notifyItemChanged(targetPosition);
+            activity.saveDate(dataList);
             return true;
         }
     };
