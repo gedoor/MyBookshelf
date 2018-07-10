@@ -147,6 +147,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
                 notifyItemRemoved(index + 1);
             }
             notifyDataSetChanged();
+            activity.saveDate(dataList);
         });
     }
 
