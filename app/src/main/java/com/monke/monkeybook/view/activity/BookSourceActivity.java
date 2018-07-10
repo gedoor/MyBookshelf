@@ -86,8 +86,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         saveDate(adapter.getDataList());
+        super.onDestroy();
     }
 
     @Override
