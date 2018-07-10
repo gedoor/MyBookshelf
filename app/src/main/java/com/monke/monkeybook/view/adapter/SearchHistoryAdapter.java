@@ -14,11 +14,13 @@ import java.util.ArrayList;
 
 public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
     public SearchHistoryAdapter() {
-        super(new ArrayList<SearchHistoryBean>());
+        super(new ArrayList<>());
     }
 
     public interface OnItemClickListener{
         void itemClick(SearchHistoryBean searchHistoryBean);
+
+        void itemLongClick(int index);
     }
     private SearchHistoryAdapter.OnItemClickListener onItemClickListener;
 
@@ -39,6 +41,12 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
             if(null != onItemClickListener){
                 onItemClickListener.itemClick(searchHistoryBean);
             }
+        });
+        tv.setOnLongClickListener(view -> {
+            if(null != onItemClickListener){
+                onItemClickListener.itemLongClick(position);
+            }
+            return true;
         });
         return tv;
     }

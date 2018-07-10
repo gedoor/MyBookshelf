@@ -193,9 +193,18 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
             mPresenter.cleanSearchHistory();
         });
 
-        searchHistoryAdapter.setOnItemClickListener(searchHistoryBean -> {
-            searchView.setQuery(searchHistoryBean.getContent(), true);
-            searchView.clearFocus();
+        searchHistoryAdapter.setOnItemClickListener(new SearchHistoryAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(SearchHistoryBean searchHistoryBean) {
+                searchView.setQuery(searchHistoryBean.getContent(), true);
+                searchView.clearFocus();
+            }
+
+            @Override
+            public void itemLongClick(int index) {
+                explosionField.explode(tflSearchHistory.getChildAt(index));
+                mPresenter.cleanSearchHistory(searchHistoryAdapter.getItemData(index));
+            }
         });
 
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {

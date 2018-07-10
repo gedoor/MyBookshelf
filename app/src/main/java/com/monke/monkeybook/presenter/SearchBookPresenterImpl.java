@@ -177,6 +177,29 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     }
 
     @Override
+    public void cleanSearchHistory(SearchHistoryBean searchHistoryBean) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao().delete(searchHistoryBean);
+            e.onNext(true);
+            e.onComplete();
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean value) {
+                        if (value) {
+                            querySearchHistory(mView.getEdtContent().getText().toString().trim());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    @Override
     public void querySearchHistory(String content) {
         Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
             List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()

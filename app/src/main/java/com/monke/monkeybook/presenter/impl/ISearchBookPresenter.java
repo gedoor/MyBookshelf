@@ -3,6 +3,7 @@ package com.monke.monkeybook.presenter.impl;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.bean.SearchHistoryBean;
 
 public interface ISearchBookPresenter extends IPresenter{
 
@@ -15,6 +16,8 @@ public interface ISearchBookPresenter extends IPresenter{
     void querySearchHistory(String content);
 
     void cleanSearchHistory();
+
+    void cleanSearchHistory(SearchHistoryBean searchHistoryBean);
 
     int getPage();
 
