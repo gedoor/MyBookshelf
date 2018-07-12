@@ -125,7 +125,7 @@ public class ReadInterfacePop extends PopupWindow {
         updateConvertText(readBookControl.getTextConvert());
 
         nbPaddingTop.setMinNumber(0)
-                .setMaxNumber(20)
+                .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingTop())
                 .setOnChangedListener(number -> {
@@ -134,7 +134,7 @@ public class ReadInterfacePop extends PopupWindow {
                 });
 
         nbPaddingBottom.setMinNumber(0)
-                .setMaxNumber(20)
+                .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingBottom())
                 .setOnChangedListener(number -> {
@@ -143,7 +143,7 @@ public class ReadInterfacePop extends PopupWindow {
                 });
 
         nbPaddingLeft.setMinNumber(0)
-                .setMaxNumber(20)
+                .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingLeft())
                 .setOnChangedListener(number -> {
@@ -152,7 +152,7 @@ public class ReadInterfacePop extends PopupWindow {
                 });
 
         nbPaddingRight.setMinNumber(0)
-                .setMaxNumber(20)
+                .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingRight())
                 .setOnChangedListener(number -> {
