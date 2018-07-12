@@ -87,22 +87,12 @@ public class ContentScrollView extends BaseContentView {
     }
 
     @Override
-    public void changeTextSize() {
-
-    }
-
-    @Override
-    public void changeLineSize() {
+    public void changeContentView() {
 
     }
 
     @Override
     public void changeBg() {
-
-    }
-
-    @Override
-    public void setFont() {
 
     }
 

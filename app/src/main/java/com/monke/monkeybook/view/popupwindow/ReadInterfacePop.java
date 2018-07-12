@@ -18,6 +18,7 @@ import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
+import com.monke.monkeybook.widget.NumberButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,7 +60,6 @@ public class ReadInterfacePop extends PopupWindow {
     CircleImageView civBgBlack;
     @BindView(R.id.civ_bg_blue)
     CircleImageView civBgBlue;
-
     @BindView(R.id.tv0)
     TextView tv0;
     @BindView(R.id.tv1)
@@ -70,6 +70,14 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tv3;
     @BindView(R.id.tv4)
     TextView tv4;
+    @BindView(R.id.nbPaddingTop)
+    NumberButton nbPaddingTop;
+    @BindView(R.id.nbPaddingBottom)
+    NumberButton nbPaddingBottom;
+    @BindView(R.id.nbPaddingLeft)
+    NumberButton nbPaddingLeft;
+    @BindView(R.id.nbPaddingRight)
+    NumberButton nbPaddingRight;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -79,17 +87,14 @@ public class ReadInterfacePop extends PopupWindow {
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public interface OnChangeProListener {
-        void textSizeChange();
 
-        void lineSizeChange();
+        void changeContentView();
 
         void bgChange();
 
-        void setFont();
-
-        void setConvert();
-
         void setBold();
+
+        void reLoad();
     }
 
     private OnChangeProListener changeProListener;
@@ -121,41 +126,76 @@ public class ReadInterfacePop extends PopupWindow {
         updateBoldText(readBookControl.getTextBold());
         updateConvertText(readBookControl.getTextConvert());
 
+        nbPaddingTop.setMinNumber(0)
+                .setMaxNumber(20)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getPaddingTop())
+                .setOnChangedListener(number -> {
+                    readBookControl.setPaddingTop((int) number);
+                    changeProListener.changeContentView();
+                });
+
+        nbPaddingBottom.setMinNumber(0)
+                .setMaxNumber(20)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getPaddingBottom())
+                .setOnChangedListener(number -> {
+                    readBookControl.setPaddingBottom((int) number);
+                    changeProListener.changeContentView();
+                });
+
+        nbPaddingLeft.setMinNumber(0)
+                .setMaxNumber(20)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getPaddingLeft())
+                .setOnChangedListener(number -> {
+                    readBookControl.setPaddingLeft((int) number);
+                    changeProListener.changeContentView();
+                });
+
+        nbPaddingRight.setMinNumber(0)
+                .setMaxNumber(20)
+                .setStepNumber(1)
+                .setNumber(readBookControl.getPaddingRight())
+                .setOnChangedListener(number -> {
+                    readBookControl.setPaddingRight((int) number);
+                    changeProListener.reLoad();
+                });
     }
 
     private void bindEvent() {
         flTextSmaller.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() - 1);
-            changeProListener.textSizeChange();
+            changeProListener.reLoad();
         });
         flTextBigger.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() + 1);
-            changeProListener.textSizeChange();
+            changeProListener.reLoad();
         });
         flLineSmaller.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1));
-            changeProListener.lineSizeChange();
+            changeProListener.reLoad();
         });
         flLineBigger.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
-            changeProListener.lineSizeChange();
+            changeProListener.reLoad();
         });
 
         //繁简切换
         tvConvertF.setOnClickListener(view -> {
             readBookControl.setTextConvert(-1);
             updateConvertText(readBookControl.getTextConvert());
-            changeProListener.setConvert();
+            changeProListener.changeContentView();
         });
         tvConvertO.setOnClickListener(view -> {
             readBookControl.setTextConvert(0);
             updateConvertText(readBookControl.getTextConvert());
-            changeProListener.setConvert();
+            changeProListener.changeContentView();
         });
         tvConvertJ.setOnClickListener(view -> {
             readBookControl.setTextConvert(1);
             updateConvertText(readBookControl.getTextConvert());
-            changeProListener.setConvert();
+            changeProListener.changeContentView();
         });
         //加粗切换
         flTextBold.setOnClickListener(view -> {
@@ -226,13 +266,13 @@ public class ReadInterfacePop extends PopupWindow {
     //设置字体
     public void setReadFonts(String path) {
         readBookControl.setReadBookFont(path);
-        changeProListener.setFont();
+        changeProListener.reLoad();
     }
 
     //清除字体
     private void clearFontPath() {
         readBookControl.setReadBookFont(null);
-        changeProListener.setFont();
+        changeProListener.reLoad();
     }
 
     private void updateText(int textKindIndex) {

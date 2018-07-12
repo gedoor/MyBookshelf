@@ -29,13 +29,9 @@ public abstract class BaseContentView extends FrameLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public abstract void changeTextSize();
-
-    public abstract void changeLineSize();
+    public abstract void changeContentView();
 
     public abstract void changeBg();
-
-    public abstract void setFont();
 
     public abstract void setTextBold();
 

@@ -401,16 +401,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
         //界面设置
         readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
-            @Override
-            public void textSizeChange() {
-                readBookControl.setLineChange(System.currentTimeMillis());
-                csvBook.changeTextSize();
-            }
 
             @Override
-            public void lineSizeChange() {
+            public void changeContentView() {
                 readBookControl.setLineChange(System.currentTimeMillis());
-                csvBook.changeLineSize();
+                csvBook.changeContentView();
             }
 
             @Override
@@ -421,21 +416,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void setFont() {
-                readBookControl.setLineChange(System.currentTimeMillis());
-                csvBook.setFont();
-                recreate();
-            }
-
-            @Override
-            public void setConvert() {
-                readBookControl.setLineChange(System.currentTimeMillis());
-                csvBook.changeTextSize();
-            }
-
-            @Override
             public void setBold() {
                 csvBook.setTextBold();
+            }
+
+            @Override
+            public void reLoad() {
+                readBookControl.setLineChange(System.currentTimeMillis());
+                recreate();
             }
 
         });

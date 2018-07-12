@@ -597,27 +597,13 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
         }
     }
 
-    public void setFont() {
-        for (BookContentView item : viewContents) {
-            item.setFont(readBookControl);
-        }
-        loadDataListener.initData(durPageView.getLineCount(durHeight));
-    }
-
     public void setTextBold() {
         for (BookContentView item : viewContents) {
             item.setTextBold(readBookControl);
         }
     }
 
-    public void changeTextSize() {
-        for (BookContentView item : viewContents) {
-            item.setTextKind(readBookControl);
-        }
-        loadDataListener.initData(durPageView.getLineCount(durHeight));
-    }
-
-    public void changeLineSize() {
+    public void changeContentView() {
         for (BookContentView item : viewContents) {
             item.setTextKind(readBookControl);
         }

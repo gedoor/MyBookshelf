@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="6dp"
     android:orientation="horizontal">
 
     <TextView
@@ -11,8 +12,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="-"
-        android:minWidth="30dp"
-        android:textSize="18sp"/>
+        android:minWidth="30dp" />
 
     <TextView
         android:id="@+id/tv_number"
@@ -21,8 +21,7 @@
         android:layout_weight="2"
         android:gravity="center"
         android:text="1"
-        android:minWidth="30dp"
-        android:textSize="18sp"/>
+        android:minWidth="30dp" />
 
     <TextView
         android:id="@+id/button_add"
@@ -31,7 +30,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="+"
-        android:textSize="18sp"/>
+        android:text="+" />
 
 </LinearLayout>

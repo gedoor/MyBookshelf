@@ -124,7 +124,7 @@ public class BookContentView extends FrameLayout {
         } else {
             llTop.setPadding(0, ImmersionBar.getStatusBarHeight(activity), 0, 0);
         }
-        ltvContent.setPadding(readBookControl.getPaddingLeft(), readBookControl.getPaddingTop(), readBookControl.getPaddingRight(), readBookControl.getPaddingBottom());
+        setContentPadding(readBookControl);
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)
                 loading();
@@ -339,7 +339,12 @@ public class BookContentView extends FrameLayout {
 
     }
 
+    public void setContentPadding(ReadBookControl readBookControl) {
+        ltvContent.setPadding(readBookControl.getPaddingLeft(), readBookControl.getPaddingTop(), readBookControl.getPaddingRight(), readBookControl.getPaddingBottom());
+    }
+
     public void setTextKind(ReadBookControl readBookControl) {
+        setContentPadding(readBookControl);
         tvContent.setTextSize(readBookControl.getTextSize());
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }

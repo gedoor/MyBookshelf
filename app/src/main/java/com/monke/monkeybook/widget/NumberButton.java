@@ -11,9 +11,13 @@ import android.widget.TextView;
 import com.monke.monkeybook.R;
 
 public class NumberButton extends LinearLayout  implements View.OnClickListener {
+    public static final int INT = 0;
+    public static final int FLOAT = 1;
+
     private OnChangedListener onChangedListener;
     private TextView tvNumber;
 
+    private int numberType = 0;
     private float minNumber = 0;
     private float maxNumber = 10;
     private float stepNumber = 1;
@@ -53,8 +57,9 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
         }
     }
 
-    public void setNumber(float number) {
-        tvNumber.setText(Float.toString(number));
+    public NumberButton setNumber(float number) {
+        tvNumber.setText(numberType == 0 ? Integer.toString((int) number) : Float.toString(number));
+        return this;
     }
 
     public NumberButton setMinNumber(float minNumber) {
@@ -90,7 +95,7 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
     }
 
     private void changeNumber(float f) {
-        tvNumber.setText(Float.toString(f));
+        tvNumber.setText(numberType == 0 ? Integer.toString((int) f) : Float.toString(f));
         if (onChangedListener != null) {
             onChangedListener.numberChange(f);
         }
