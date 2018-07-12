@@ -54,6 +54,10 @@ public class ReadBookControl {
     private String lastNoteUrl;
     private Boolean darkStatusIcon;
     private int screenTimeOut;
+    private int paddingLeft;
+    private int paddingTop;
+    private int paddingRight;
+    private int paddingBottom;
 
     private SharedPreferences readPreference;
     private SharedPreferences defaultPreference;
@@ -99,6 +103,10 @@ public class ReadBookControl {
         this.lineChange = readPreference.getLong("lineChange", System.currentTimeMillis());
         this.lastNoteUrl = readPreference.getString("lastNoteUrl", "");
         this.screenTimeOut = readPreference.getInt("screenTimeOut", 0);
+        this.paddingLeft = readPreference.getInt("paddingLeft", 0);
+        this.paddingTop = readPreference.getInt("paddingTop", 0);
+        this.paddingRight = readPreference.getInt("paddingRight", 0);
+        this.paddingBottom = readPreference.getInt("paddingBottom", 0);
 
         initTextDrawableIndex();
     }
@@ -520,6 +528,50 @@ public class ReadBookControl {
         this.screenTimeOut = screenTimeOut;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("screenTimeOut", screenTimeOut);
+        editor.apply();
+    }
+
+    public int getPaddingLeft() {
+        return paddingLeft;
+    }
+
+    public void setPaddingLeft(int paddingLeft) {
+        this.paddingLeft = paddingLeft;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("paddingLeft", paddingLeft);
+        editor.apply();
+    }
+
+    public int getPaddingTop() {
+        return paddingTop;
+    }
+
+    public void setPaddingTop(int paddingTop) {
+        this.paddingTop = paddingTop;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("paddingTop", paddingTop);
+        editor.apply();
+    }
+
+    public int getPaddingRight() {
+        return paddingRight;
+    }
+
+    public void setPaddingRight(int paddingRight) {
+        this.paddingRight = paddingRight;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("paddingRight", paddingRight);
+        editor.apply();
+    }
+
+    public int getPaddingBottom() {
+        return paddingBottom;
+    }
+
+    public void setPaddingBottom(int paddingBottom) {
+        this.paddingBottom = paddingBottom;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("paddingBottom", paddingBottom);
         editor.apply();
     }
 }

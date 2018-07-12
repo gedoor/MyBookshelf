@@ -77,15 +77,23 @@
                         app:batteryOrientation="horizontal" />
                 </LinearLayout>
 
-                <com.monke.monkeybook.widget.ContentTextView
-                    android:id="@+id/tv_content"
+                <LinearLayout
+                    android:id="@+id/ltv_content"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:includeFontPadding="false"
-                    android:lineSpacingExtra="5dp"
-                    android:lineSpacingMultiplier="1"
-                    android:textSize="19sp" />
+                    android:orientation="horizontal">
+
+                    <com.monke.monkeybook.widget.ContentTextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="5dp"
+                        android:lineSpacingMultiplier="1"
+                        android:textSize="19sp" />
+
+                </LinearLayout>
 
                 <View
                     android:id="@+id/vwLine"

@@ -69,6 +69,8 @@ public class BookContentView extends FrameLayout {
     TextView tvPage;
     @BindView(R.id.llBottom)
     View llBottom;
+    @BindView(R.id.ltv_content)
+    LinearLayout ltvContent;
 
     private String content;
     private int durChapterIndex;
@@ -122,6 +124,7 @@ public class BookContentView extends FrameLayout {
         } else {
             llTop.setPadding(0, ImmersionBar.getStatusBarHeight(activity), 0, 0);
         }
+        ltvContent.setPadding(readBookControl.getPaddingLeft(), readBookControl.getPaddingTop(), readBookControl.getPaddingRight(), readBookControl.getPaddingBottom());
         tvLoadAgain.setOnClickListener(v -> {
             if (loadDataListener != null)
                 loading();
