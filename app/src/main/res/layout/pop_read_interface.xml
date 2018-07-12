@@ -219,14 +219,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="边距:" />
+                android:text="@string/padding" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="上" />
+                android:text="@string/top" />
 
             <com.monke.monkeybook.widget.NumberButton
                 android:id="@+id/nbPaddingTop"
@@ -240,7 +240,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="下" />
+                android:text="@string/bottom" />
 
             <com.monke.monkeybook.widget.NumberButton
                 android:id="@+id/nbPaddingBottom"
@@ -254,7 +254,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="左" />
+                android:text="@string/left" />
 
             <com.monke.monkeybook.widget.NumberButton
                 android:id="@+id/nbPaddingLeft"
@@ -268,7 +268,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="右" />
+                android:text="@string/right" />
 
             <com.monke.monkeybook.widget.NumberButton
                 android:id="@+id/nbPaddingRight"

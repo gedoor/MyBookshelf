@@ -202,5 +202,10 @@
     <string name="custom_font">字体(长按默认)</string>
     <string name="text">文字</string>
     <string name="home_page">软件主页</string>
+    <string name="right">右</string>
+    <string name="left">左</string>
+    <string name="bottom">下</string>
+    <string name="top">上</string>
+    <string name="padding">边距:</string>
 
 </resources>
