@@ -44,7 +44,6 @@ public class ReadBookControl {
     private Boolean textBold;
     private Boolean canClickTurn;
     private Boolean canKeyTurn;
-    private Boolean keepScreenOn;
     private int clickSensitivity;
     private Boolean clickAllNext;
     private Boolean clickAnim;
@@ -84,7 +83,6 @@ public class ReadBookControl {
         this.textExtra = textKind.get(textKindIndex).get("textExtra");
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
-        this.keepScreenOn = readPreference.getBoolean("keepScreenOn", false);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
         this.clickSensitivity = readPreference.getInt("clickSensitivity", 50) > 100
                 ? 50 : readPreference.getInt("clickSensitivity", 50);
@@ -365,17 +363,6 @@ public class ReadBookControl {
         this.canClickTurn = canClickTurn;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("canClickTurn", canClickTurn);
-        editor.apply();
-    }
-
-    public Boolean getKeepScreenOn() {
-        return keepScreenOn;
-    }
-
-    public void setKeepScreenOn(Boolean keepScreenOn) {
-        this.keepScreenOn = keepScreenOn;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("keepScreenOn", keepScreenOn);
         editor.apply();
     }
 
