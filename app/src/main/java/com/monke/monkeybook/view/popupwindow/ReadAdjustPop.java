@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,7 +14,6 @@ import android.widget.PopupWindow;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
@@ -60,7 +58,7 @@ public class ReadAdjustPop extends PopupWindow {
         this.activity = readBookActivity;
         this.adjustListener = adjustListener;
 
-        View view = LayoutInflater.from(activity).inflate(R.layout.view_pop_read_adjust, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.pop_read_adjust, null);
         ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);

@@ -75,7 +75,7 @@ public class MoreSettingPop extends PopupWindow {
         this.activity = readBookActivity;
         this.changeProListener = changeProListener;
 
-        View view = LayoutInflater.from(activity).inflate(R.layout.view_pop_more_setting, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.pop_more_setting, null);
         ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);

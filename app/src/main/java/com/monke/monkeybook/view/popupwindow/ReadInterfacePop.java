@@ -102,7 +102,7 @@ public class ReadInterfacePop extends PopupWindow {
         this.activity = readBookActivity;
         this.changeProListener = changeProListener;
 
-        View view = LayoutInflater.from(readBookActivity).inflate(R.layout.view_pop_read_interface, null);
+        View view = LayoutInflater.from(readBookActivity).inflate(R.layout.pop_read_interface, null);
         ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);
