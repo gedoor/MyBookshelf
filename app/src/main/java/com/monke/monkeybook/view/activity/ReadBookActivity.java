@@ -420,12 +420,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 csvBook.setTextBold();
             }
 
-            @Override
-            public void reLoad() {
-                readBookControl.setLineChange(System.currentTimeMillis());
-                recreate();
-            }
-
         });
         //其它设置
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {

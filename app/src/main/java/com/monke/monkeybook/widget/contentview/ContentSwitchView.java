@@ -605,6 +605,8 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
 
     public void changeContentView() {
         for (BookContentView item : viewContents) {
+            item.setContentPadding(readBookControl);
+            item.setFont(readBookControl);
             item.setTextKind(readBookControl);
         }
         loadDataListener.initData(durPageView.getLineCount(durHeight));

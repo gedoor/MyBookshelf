@@ -93,8 +93,6 @@ public class ReadInterfacePop extends PopupWindow {
         void bgChange();
 
         void setBold();
-
-        void reLoad();
     }
 
     private OnChangeProListener changeProListener;
@@ -159,26 +157,26 @@ public class ReadInterfacePop extends PopupWindow {
                 .setNumber(readBookControl.getPaddingRight())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingRight((int) number);
-                    changeProListener.reLoad();
+                    changeProListener.changeContentView();
                 });
     }
 
     private void bindEvent() {
         flTextSmaller.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() - 1);
-            changeProListener.reLoad();
+            changeProListener.changeContentView();
         });
         flTextBigger.setOnClickListener(v -> {
             updateText(readBookControl.getTextKindIndex() + 1);
-            changeProListener.reLoad();
+            changeProListener.changeContentView();
         });
         flLineSmaller.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1));
-            changeProListener.reLoad();
+            changeProListener.changeContentView();
         });
         flLineBigger.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
-            changeProListener.reLoad();
+            changeProListener.changeContentView();
         });
 
         //繁简切换
@@ -266,13 +264,13 @@ public class ReadInterfacePop extends PopupWindow {
     //设置字体
     public void setReadFonts(String path) {
         readBookControl.setReadBookFont(path);
-        changeProListener.reLoad();
+        changeProListener.changeContentView();
     }
 
     //清除字体
     private void clearFontPath() {
         readBookControl.setReadBookFont(null);
-        changeProListener.reLoad();
+        changeProListener.changeContentView();
     }
 
     private void updateText(int textKindIndex) {

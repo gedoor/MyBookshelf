@@ -274,6 +274,7 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setReadBookControl(ReadBookControl readBookControl) {
+        setContentPadding(readBookControl);
         setFont(readBookControl);
         setTextBold(readBookControl);
         setTextKind(readBookControl);
@@ -344,7 +345,6 @@ public class BookContentView extends FrameLayout {
     }
 
     public void setTextKind(ReadBookControl readBookControl) {
-        setContentPadding(readBookControl);
         tvContent.setTextSize(readBookControl.getTextSize());
         tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
