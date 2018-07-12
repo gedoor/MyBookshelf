@@ -92,7 +92,7 @@
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="@string/custom_font"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
