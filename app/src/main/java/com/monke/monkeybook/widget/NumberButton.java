@@ -91,6 +91,9 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
                     changeNumber(count - stepNumber);
                 }
                 break;
+            case R.id.tv_number:
+
+                break;
         }
     }
 
