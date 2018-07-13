@@ -15,7 +15,7 @@ public class NumberPickerDialog {
 
     NumberPickerDialog(Context context) {
         builder = new AlertDialog.Builder(context);
-        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.view_number_picker, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.dialog_number_picker, null);
         numberPicker = view.findViewById(R.id.number_picker);
         builder.setView(view);
     }

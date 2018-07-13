@@ -207,5 +207,9 @@
     <string name="bottom">下</string>
     <string name="top">上</string>
     <string name="padding">边距:</string>
+    <string name="padding_top">上边距</string>
+    <string name="padding_bottom">下边距</string>
+    <string name="padding_left">左边距</string>
+    <string name="padding_right">右边距</string>
 
 </resources>
