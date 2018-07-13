@@ -544,7 +544,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ibReadAloud.getDrawable().mutate();
         ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         ibReadAloud.setOnClickListener(view -> onMediaButton());
-        //希望添加长按停止朗读的功能
+        //长按停止朗读
 		ibReadAloud.setOnLongClickListener(view -> {
             ReadAloudService.stop(this);
 			return false;
