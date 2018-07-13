@@ -10,17 +10,20 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 
-public class NumberButton extends LinearLayout  implements View.OnClickListener {
+import org.jetbrains.annotations.NotNull;
+
+public class NumberButton extends LinearLayout implements View.OnClickListener {
     public static final int INT = 0;
     public static final int FLOAT = 1;
 
     private OnChangedListener onChangedListener;
     private TextView tvNumber;
 
-    private int numberType = 0;
+    private int numberType = INT;
     private float minNumber = 0;
     private float maxNumber = 10;
     private float stepNumber = 1;
+    private String tile = "请选择";
 
     public NumberButton(Context context) {
         this(context, null);
@@ -43,6 +46,11 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
 
     }
 
+    public NumberButton setTitle(@NotNull String title) {
+        this.tile = title;
+        return this;
+    }
+
     public NumberButton setOnChangedListener(OnChangedListener onChangedListener) {
         this.onChangedListener = onChangedListener;
         return this;
@@ -58,7 +66,7 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
     }
 
     public NumberButton setNumber(float number) {
-        tvNumber.setText(numberType == 0 ? Integer.toString((int) number) : Float.toString(number));
+        tvNumber.setText(isInt() ? Integer.toString((int) number) : Float.toString(number));
         return this;
     }
 
@@ -77,6 +85,11 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
         return this;
     }
 
+    public NumberButton setNumberType(int numberType) {
+        this.numberType = numberType;
+        return this;
+    }
+
     @Override
     public void onClick(View view) {
         float count = getNumber();
@@ -92,13 +105,26 @@ public class NumberButton extends LinearLayout  implements View.OnClickListener 
                 }
                 break;
             case R.id.tv_number:
-
+                if (isInt()) {
+                    NumberPickerDialog npd = new NumberPickerDialog(getContext());
+                    npd.setTitle(tile)
+                            .setMaxValue((int) maxNumber)
+                            .setMinValue((int) minNumber)
+                            .setValue((int) getNumber())
+                            .setListener(this::changeNumber)
+                            .create()
+                            .show();
+                }
                 break;
         }
     }
 
+    private boolean isInt() {
+        return numberType == INT;
+    }
+
     private void changeNumber(float f) {
-        tvNumber.setText(numberType == 0 ? Integer.toString((int) f) : Float.toString(f));
+        tvNumber.setText(isInt() ? Integer.toString((int) f) : Float.toString(f));
         if (onChangedListener != null) {
             onChangedListener.numberChange(f);
         }
