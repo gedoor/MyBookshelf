@@ -43,6 +43,7 @@ public class NumberButton extends LinearLayout implements View.OnClickListener {
         subButton.setOnClickListener(this);
 
         tvNumber = findViewById(R.id.tv_number);
+        tvNumber.setOnClickListener(this);
 
     }
 
