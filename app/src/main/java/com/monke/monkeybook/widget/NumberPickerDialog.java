@@ -48,7 +48,7 @@ public class NumberPickerDialog {
     public NumberPickerDialog setListener(OnClickListener onClickListener) {
         builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
             if (onClickListener != null) {
-                onClickListener.setNumber(i);
+                onClickListener.setNumber(numberPicker.getValue());
             }
         });
         builder.setNegativeButton(R.string.cancel, null);
