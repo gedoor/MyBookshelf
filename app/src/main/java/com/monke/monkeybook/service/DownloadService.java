@@ -30,16 +30,11 @@ import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.DownloadActivity;
-import com.monke.monkeybook.view.activity.MainActivity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.crypto.spec.DHGenParameterSpec;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -71,7 +66,7 @@ public class DownloadService extends Service {
         super.onCreate();
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
-                .setSmallIcon(R.drawable.ic_download_black_24dp)
+                .setSmallIcon(R.drawable.ic_download)
                 .setOngoing(false)
                 .setContentTitle(getString(R.string.download_offline_t))
                 .setContentText(getString(R.string.download_offline_s));
@@ -411,7 +406,7 @@ public class DownloadService extends Service {
         PendingIntent mainPendingIntent = PendingIntent.getActivity(this, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         //创建 Notification.Builder 对象
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdDownload)
-                .setSmallIcon(R.drawable.ic_download_black_24dp)
+                .setSmallIcon(R.drawable.ic_download)
                 //点击通知后自动清除
                 .setAutoCancel(true)
                 .setContentTitle("正在下载：" + downloadChapterBean.getBookName())

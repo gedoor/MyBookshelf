@@ -383,7 +383,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (isNightTheme()) {
             ibNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
         } else {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness_2_black_24dp_new);
+            ibNightTheme.setImageResource(R.drawable.ic_brightness);
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);

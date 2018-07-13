@@ -134,7 +134,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/replace_rule_title"
-                    android:src="@drawable/ic_find_replace_black_24dp_new"
+                    android:src="@drawable/ic_find_replace"
                     app:cb_color="@color/background" />
 
                 <View
@@ -147,7 +147,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="@string/night_theme"
-                    android:src="@drawable/ic_brightness_2_black_24dp_new"
+                    android:src="@drawable/ic_brightness"
                     app:cb_color="@color/background" />
 
             </LinearLayout>
