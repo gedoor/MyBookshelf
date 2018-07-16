@@ -5,14 +5,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NumberButton extends LinearLayout implements View.OnClickListener {
+public class NumberButton extends FrameLayout implements View.OnClickListener {
     public static final int INT = 0;
     public static final int FLOAT = 1;
 
