@@ -192,7 +192,6 @@ public static java.lang.String TABLENAME;
 -keep class org.jsoup.**{ *; }
 -keep class com.monke.mprogressbar.**{ *; }
 
-##友盟统计
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
 }
@@ -203,8 +202,3 @@ public static java.lang.String TABLENAME;
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
-
-##百度自动更新
--keep class com.baidu.**{*;}
-
--keep class br.tiagohm.markdownview.**{*;}
