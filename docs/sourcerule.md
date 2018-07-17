@@ -86,3 +86,5 @@
 
 #### RuleBookContent 章节内容
 - 例:id.txtContent@textNodes
+- 如需获取AJAX动态内容前面加$
+- 例:$id.txtContent@textNodes
