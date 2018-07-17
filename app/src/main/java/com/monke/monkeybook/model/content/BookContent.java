@@ -19,12 +19,10 @@ import io.reactivex.Observable;
 
 public class BookContent {
     private String tag;
-    private String name;
     private BookSourceBean bookSourceBean;
 
-    BookContent(String tag, String name, BookSourceBean bookSourceBean) {
+    BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
-        this.name = name;
         this.bookSourceBean = bookSourceBean;
     }
 
@@ -34,15 +32,19 @@ public class BookContent {
             bookContentBean.setDurChapterIndex(durChapterIndex);
             bookContentBean.setDurChapterUrl(durChapterUrl);
             bookContentBean.setTag(tag);
+            String ruleBookContent = bookSourceBean.getRuleBookContent();
+            if (ruleBookContent.startsWith("$")) {
+                ruleBookContent = ruleBookContent.substring(1);
+            }
             try {
-                if (bookSourceBean.getRuleBookContent().contains("JSON")) {
+                if (ruleBookContent.contains("JSON")) {
                     JSONObject jsonObject = new JSONObject(s);
                     AnalyzeJson analyzeJson = new AnalyzeJson(jsonObject);
-                    bookContentBean.setDurChapterContent(analyzeJson.getResult(bookSourceBean.getRuleBookContent()));
+                    bookContentBean.setDurChapterContent(analyzeJson.getResult(ruleBookContent));
                 } else {
                     Document doc = Jsoup.parse(s);
                     AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
-                    bookContentBean.setDurChapterContent(analyzeElement.getResult(bookSourceBean.getRuleBookContent()));
+                    bookContentBean.setDurChapterContent(analyzeElement.getResult(ruleBookContent));
                 }
                 bookContentBean.setRight(true);
             } catch (Exception ex) {

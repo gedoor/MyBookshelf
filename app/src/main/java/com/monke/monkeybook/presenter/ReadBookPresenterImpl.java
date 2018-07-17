@@ -195,7 +195,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                     //网络获取正文
                                     WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(chapterIndex).getDurChapterUrl(), chapterIndex, bookShelf.getTag())
                                             .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.newThread())
                                             .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                                             .subscribe(new Observer<BookContentBean>() {
                                                 @Override
@@ -293,7 +292,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                 }))
                 .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

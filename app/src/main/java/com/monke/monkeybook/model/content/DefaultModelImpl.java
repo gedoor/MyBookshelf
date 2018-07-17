@@ -1,6 +1,7 @@
 package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.BaseModelImpl;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -20,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -179,8 +183,6 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
     }
 
-
-
     /**
      * 获取目录
      */
@@ -211,12 +213,21 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        BookContent bookContent = new BookContent(tag, name, bookSourceBean);
-        return getRetrofitString(tag)
-                .create(IHttpGetApi.class)
-                .getWebContent(durChapterUrl, headerMap)
-                .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
-                .flatMap(bookContent::upChapterList);
+        BookContent bookContent = new BookContent(tag, bookSourceBean);
+        if (bookSourceBean.getRuleBookContent().startsWith("$")) {
+            return getAjaxHtml(MApplication.getInstance(), durChapterUrl)
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .observeOn(Schedulers.io())
+                    .flatMap(response -> bookContent.analyzeBookContent(response, durChapterUrl, durChapterIndex))
+                    .flatMap(bookContent::upChapterList);
+        } else {
+            return getRetrofitString(tag)
+                    .create(IHttpGetApi.class)
+                    .getWebContent(durChapterUrl, headerMap)
+                    .subscribeOn(Schedulers.newThread())
+                    .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
+                    .flatMap(bookContent::upChapterList);
+        }
     }
 
 }

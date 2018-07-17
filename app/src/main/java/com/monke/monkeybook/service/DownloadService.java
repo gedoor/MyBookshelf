@@ -246,7 +246,6 @@ public class DownloadService extends Service {
                 e.onComplete();
             }))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.newThread())
                     .subscribe(new Observer<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {

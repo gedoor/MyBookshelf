@@ -1,14 +1,19 @@
 package com.monke.basemvplib;
 
-import java.io.IOException;
+import android.content.Context;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -52,18 +57,39 @@ public class BaseModelImpl {
     }
 
     private static Interceptor getHeaderInterceptor() {
-        return new Interceptor() {
-
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request()
-                        .newBuilder()
-                        .addHeader("Keep-Alive", "300")
-                        .addHeader("Connection", "Keep-Alive")
-                        .addHeader("Cache-Control", "no-cache")
-                        .build();
-                return chain.proceed(request);
-            }
+        return chain -> {
+            Request request = chain.request()
+                    .newBuilder()
+                    .addHeader("Keep-Alive", "300")
+                    .addHeader("Connection", "Keep-Alive")
+                    .addHeader("Cache-Control", "no-cache")
+                    .build();
+            return chain.proceed(request);
         };
     }
+
+    public static Observable<String> getAjaxHtml(Context context, String url) {
+        return Observable.create(e -> {
+            class MyJavaScriptInterface {
+                @JavascriptInterface
+                @SuppressWarnings("unused")
+                public void processHTML(String html) {
+                    e.onNext(html);
+                    e.onComplete();
+                }
+            }
+            WebView webView = new WebView(context);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36");
+            webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+            webView.loadUrl(url);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished (WebView view, String url){
+                    webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                }
+            });
+        });
+    }
+
 }
