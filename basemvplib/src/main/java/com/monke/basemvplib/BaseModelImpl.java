@@ -81,9 +81,9 @@ public class BaseModelImpl {
                 @JavascriptInterface
                 @SuppressWarnings("unused")
                 public void processHTML(String html) {
-                    webView.destroy();
                     e.onNext(html);
                     e.onComplete();
+                    webView.destroy();
                 }
             }
             WebView webView = new WebView(context);
