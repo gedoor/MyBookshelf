@@ -72,9 +72,16 @@ public class BaseModelImpl {
     public static Observable<String> getAjaxHtml(Context context, String url, String userAgent) {
         return Observable.create(e -> {
             class MyJavaScriptInterface {
+                private WebView webView;
+
+                private MyJavaScriptInterface(WebView webView) {
+                    this.webView = webView;
+                }
+
                 @JavascriptInterface
                 @SuppressWarnings("unused")
                 public void processHTML(String html) {
+                    webView.destroy();
                     e.onNext(html);
                     e.onComplete();
                 }
@@ -82,7 +89,7 @@ public class BaseModelImpl {
             WebView webView = new WebView(context);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setUserAgentString(userAgent);
-            webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
+            webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
             webView.loadUrl(url);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
