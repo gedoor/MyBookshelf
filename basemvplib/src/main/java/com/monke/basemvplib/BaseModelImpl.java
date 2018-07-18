@@ -90,13 +90,13 @@ public class BaseModelImpl {
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setUserAgentString(userAgent);
             webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
-            webView.loadUrl(url);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished (WebView view, String url){
                     webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                 }
             });
+            webView.loadUrl(url);
         });
     }
 
