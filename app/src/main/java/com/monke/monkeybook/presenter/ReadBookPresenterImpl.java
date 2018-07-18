@@ -302,7 +302,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             public void run() {
                                 d.dispose();
                             }
-                        }, 20*1000);
+                        }, 30*1000);
                     }
 
                     @Override
