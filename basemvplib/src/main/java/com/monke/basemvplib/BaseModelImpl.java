@@ -1,5 +1,6 @@
 package com.monke.basemvplib;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -9,7 +10,6 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -68,7 +68,8 @@ public class BaseModelImpl {
         };
     }
 
-    public static Observable<String> getAjaxHtml(Context context, String url) {
+    @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
+    public static Observable<String> getAjaxHtml(Context context, String url, String userAgent) {
         return Observable.create(e -> {
             class MyJavaScriptInterface {
                 @JavascriptInterface
@@ -80,7 +81,7 @@ public class BaseModelImpl {
             }
             WebView webView = new WebView(context);
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.getSettings().setUserAgentString("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36");
+            webView.getSettings().setUserAgentString(userAgent);
             webView.addJavascriptInterface(new MyJavaScriptInterface(), "HTMLOUT");
             webView.loadUrl(url);
             webView.setWebViewClient(new WebViewClient() {

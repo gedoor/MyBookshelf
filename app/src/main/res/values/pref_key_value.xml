@@ -12,7 +12,7 @@
     <string name="pk_bookshelf_anim">bookshelfAnim</string>
 
 
-    <string name="pv_user_agent">Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3</string>
+    <string name="pv_user_agent">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36</string>
 
     <string name="file_provider">com.monke.monkeybook.fileprovider</string>
 
