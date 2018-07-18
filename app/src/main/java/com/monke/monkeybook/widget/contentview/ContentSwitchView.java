@@ -634,6 +634,9 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
         } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             gotoPrePage(readBookControl.getClickAnim());
             return true;
+        } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
+            gotoNextPage(readBookControl.getClickAnim());
+            return true;
         }
         return false;
     }
