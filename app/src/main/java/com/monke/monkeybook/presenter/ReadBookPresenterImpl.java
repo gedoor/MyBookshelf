@@ -215,7 +215,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                                 });
                                                             }
                                                         }
-                                                    }, 20*1000);
+                                                    }, 30*1000);
                                                 }
 
                                                 @Override
