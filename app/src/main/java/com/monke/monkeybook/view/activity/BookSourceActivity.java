@@ -163,7 +163,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     public void refreshBookSource() {
         if (isSearch) {
             List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceName.like("%" + searchView.getQuery() + "%"))
+                    .whereOr(BookSourceBeanDao.Properties.BookSourceName.like("%" + searchView.getQuery() + "%"), BookSourceBeanDao.Properties.BookSourceGroup.like("%" + searchView.getQuery() + "%"))
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
