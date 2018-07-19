@@ -122,22 +122,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
     public BookSourceBean() {
     }
 
-    public String getBookSourceName() {
-        return bookSourceName;
-    }
-
-    public void setBookSourceName(String bookSourceName) {
-        this.bookSourceName = bookSourceName;
-    }
-
-    public String getBookSourceUrl() {
-        return bookSourceUrl;
-    }
-
-    public void setBookSourceUrl(String bookSourceUrl) {
-        this.bookSourceUrl = bookSourceUrl;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -170,6 +154,60 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(ruleContentUrl);
         parcel.writeString(ruleBookContent);
         parcel.writeString(httpUserAgent);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BookSourceBean) {
+            BookSourceBean bs = (BookSourceBean) obj;
+            return stringEquals(bookSourceUrl, bs.bookSourceUrl)
+                    && stringEquals(bookSourceName, bs.bookSourceName)
+                    && stringEquals(bookSourceGroup, bs.bookSourceGroup)
+                    && stringEquals(ruleBookName, bs.ruleBookName)
+                    && stringEquals(ruleBookAuthor, bs.ruleBookAuthor)
+                    && stringEquals(ruleChapterUrl, bs.ruleChapterUrl)
+                    && stringEquals(ruleCoverUrl, bs.ruleCoverUrl)
+                    && stringEquals(ruleIntroduce, bs.ruleIntroduce)
+                    && stringEquals(ruleChapterList, bs.ruleChapterList)
+                    && stringEquals(ruleChapterName, bs.ruleChapterName)
+                    && stringEquals(ruleContentUrl, bs.ruleContentUrl)
+                    && stringEquals(ruleBookContent, bs.ruleBookContent)
+                    && stringEquals(ruleSearchUrl, bs.ruleSearchUrl)
+                    && stringEquals(ruleSearchList, bs.ruleSearchList)
+                    && stringEquals(ruleSearchName, bs.ruleSearchName)
+                    && stringEquals(ruleSearchAuthor, bs.ruleSearchAuthor)
+                    && stringEquals(ruleSearchKind, bs.ruleSearchKind)
+                    && stringEquals(ruleSearchLastChapter, bs.ruleSearchLastChapter)
+                    && stringEquals(ruleSearchCoverUrl, bs.ruleSearchCoverUrl)
+                    && stringEquals(ruleSearchNoteUrl, bs.ruleSearchNoteUrl)
+                    && stringEquals(httpUserAgent, bs.httpUserAgent);
+        }
+        return false;
+    }
+
+    private Boolean stringEquals(String str1, String str2) {
+        return Objects.equals(str1, str2) || (isEmpty(str1) && isEmpty(str2));
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public String getBookSourceName() {
+        return bookSourceName;
+    }
+
+    public void setBookSourceName(String bookSourceName) {
+        this.bookSourceName = bookSourceName;
+    }
+
+    public String getBookSourceUrl() {
+        return bookSourceUrl;
+    }
+
+    public void setBookSourceUrl(String bookSourceUrl) {
+        this.bookSourceUrl = bookSourceUrl;
     }
 
     public int getSerialNumber() {
@@ -330,44 +368,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
 
     public void setHttpUserAgent(String httpHeaders) {
         this.httpUserAgent = httpHeaders;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof BookSourceBean) {
-            BookSourceBean bs = (BookSourceBean) obj;
-            return stringEquals(bookSourceUrl, bs.bookSourceUrl)
-                    && stringEquals(bookSourceName, bs.bookSourceName)
-                    && stringEquals(bookSourceGroup, bs.bookSourceGroup)
-                    && stringEquals(ruleBookName, bs.ruleBookName)
-                    && stringEquals(ruleBookAuthor, bs.ruleBookAuthor)
-                    && stringEquals(ruleChapterUrl, bs.ruleChapterUrl)
-                    && stringEquals(ruleCoverUrl, bs.ruleCoverUrl)
-                    && stringEquals(ruleIntroduce, bs.ruleIntroduce)
-                    && stringEquals(ruleChapterList, bs.ruleChapterList)
-                    && stringEquals(ruleChapterName, bs.ruleChapterName)
-                    && stringEquals(ruleContentUrl, bs.ruleContentUrl)
-                    && stringEquals(ruleBookContent, bs.ruleBookContent)
-                    && stringEquals(ruleSearchUrl, bs.ruleSearchUrl)
-                    && stringEquals(ruleSearchList, bs.ruleSearchList)
-                    && stringEquals(ruleSearchName, bs.ruleSearchName)
-                    && stringEquals(ruleSearchAuthor, bs.ruleSearchAuthor)
-                    && stringEquals(ruleSearchKind, bs.ruleSearchKind)
-                    && stringEquals(ruleSearchLastChapter, bs.ruleSearchLastChapter)
-                    && stringEquals(ruleSearchCoverUrl, bs.ruleSearchCoverUrl)
-                    && stringEquals(ruleSearchNoteUrl, bs.ruleSearchNoteUrl)
-                    && stringEquals(httpUserAgent, bs.httpUserAgent);
-        }
-        return false;
-    }
-
-    private Boolean stringEquals(String str1, String str2) {
-        return Objects.equals(str1, str2) || (isEmpty(str1) && isEmpty(str2));
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     public String getRuleFindUrl() {
