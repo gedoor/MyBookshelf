@@ -139,6 +139,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieBookSourceGroup;
     @BindView(R.id.til_bookSourceGroup)
     TextInputLayout tilBookSourceGroup;
+    @BindView(R.id.tie_checkUrl)
+    TextInputEditText tieCheckUrl;
+    @BindView(R.id.til_checkUrl)
+    TextInputLayout tilCheckUrl;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -244,6 +248,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setBookSourceName(trim(tieBookSourceName.getText().toString()));
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText().toString()));
         bookSourceBeanN.setBookSourceGroup(trim(tieBookSourceGroup.getText().toString()));
+        bookSourceBeanN.setCheckUrl(trim(tieCheckUrl.getText().toString()));
         bookSourceBeanN.setRuleBookAuthor(trim(tieRuleBookAuthor.getText().toString()));
         bookSourceBeanN.setRuleBookContent(trim(tieRuleBookContent.getText().toString()));
         bookSourceBeanN.setRuleBookName(trim(tieRuleBookName.getText().toString().trim()));
@@ -276,6 +281,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tieBookSourceName.setText(trim(bookSourceBean.getBookSourceName()));
         tieBookSourceUrl.setText(trim(bookSourceBean.getBookSourceUrl()));
         tieBookSourceGroup.setText(trim(bookSourceBean.getBookSourceGroup()));
+        tieCheckUrl.setText(trim(bookSourceBean.getCheckUrl()));
         tieRuleBookAuthor.setText(trim(bookSourceBean.getRuleBookAuthor()));
         tieRuleBookContent.setText(trim(bookSourceBean.getRuleBookContent()));
         tieRuleBookName.setText(trim(bookSourceBean.getRuleBookName()));
@@ -301,6 +307,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilBookSourceName.setHint("BookSourceName");
         tilBookSourceUrl.setHint("BookSourceUrl");
         tilBookSourceGroup.setHint("BookSourceGroup");
+        tilCheckUrl.setHint("CheckUrl");
         tilRuleBookAuthor.setHint("RuleBookAuthor");
         tilRuleBookContent.setHint("RuleBookContent");
         tilRuleBookName.setHint("RuleBookName");
