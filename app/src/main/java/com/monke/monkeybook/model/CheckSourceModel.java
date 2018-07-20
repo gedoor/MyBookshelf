@@ -2,32 +2,31 @@ package com.monke.monkeybook.model;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.List;
-import java.util.Objects;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CheckBookSource {
+public class CheckSourceModel {
 
     private BaseActivity activity;
     private List<BookSourceBean> bookSourceBeanList;
     private int threadsNum;
     private int checkIndex;
-    private int searchSuccessNum;
 
     private OnCheckSourceListener checkSourceListener;
 
-    public CheckBookSource(BaseActivity activity, OnCheckSourceListener checkSourceListener) {
+    public CheckSourceModel(BaseActivity activity, OnCheckSourceListener checkSourceListener) {
         this.activity = activity;
         this.checkSourceListener = checkSourceListener;
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -36,7 +35,7 @@ public class CheckBookSource {
         bookSourceBeanList = BookSourceManage.getAllBookSource();
     }
 
-    public void startCheck(final String content, final long searchTime, List<BookShelfBean> bookShelfS, Boolean fromError) {
+    public void startCheck() {
         if (bookSourceBeanList != null && bookSourceBeanList.size() > 0) {
             if (checkSourceListener != null) {
                 checkSourceListener.startCheck();
@@ -51,27 +50,40 @@ public class CheckBookSource {
     private synchronized void checkSource() {
         checkIndex++;
         if (checkIndex < bookSourceBeanList.size()) {
+            final BookSourceBean sourceBean = bookSourceBeanList.get(checkIndex);
             BookShelfBean bookShelfBean = new BookShelfBean();
-
-
-            WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
+            bookShelfBean.setTag(sourceBean.getBookSourceUrl());
+            bookShelfBean.setNoteUrl(sourceBean.getCheckUrl());
+            bookShelfBean.setFinalDate(System.currentTimeMillis());
+            bookShelfBean.setDurChapter(0);
+            bookShelfBean.setDurChapterPage(0);
+            WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SimpleObserver<BookShelfBean>() {
+                    .subscribe(new Observer<BookShelfBean>() {
                         @Override
-                        public void onNext(BookShelfBean value) {
+                        public void onSubscribe(Disposable d) {
 
-                            checkSource();
+                        }
+
+                        @Override
+                        public void onNext(BookShelfBean bookShelfBean) {
+
                         }
 
                         @Override
                         public void onError(Throwable e) {
+                            sourceBean.setBookSourceGroup("失效");
+                            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                    .insertOrReplace(sourceBean);
+                        }
 
+                        @Override
+                        public void onComplete() {
                             checkSource();
                         }
                     });
-
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
                 if (checkSourceListener != null) {

@@ -8,12 +8,14 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
+import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.CheckSourceModel;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 
@@ -205,7 +207,18 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
 
     @Override
     public void checkBookSource() {
+        CheckSourceModel checkSourceModel = new CheckSourceModel((BaseActivity) mView.getContext(), new CheckSourceModel.OnCheckSourceListener() {
+            @Override
+            public void startCheck() {
+                mView.loadingStart("正在校验书源");
+            }
 
+            @Override
+            public void checkFinish() {
+                mView.loadingFinish();
+            }
+        });
+        checkSourceModel.startCheck();
     }
 
 }
