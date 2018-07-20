@@ -190,6 +190,16 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
+    public void loadingStart(String msg) {
+        moProgressHUD.showLoading(msg);
+    }
+
+    @Override
+    public void loadingFinish() {
+        moProgressHUD.dismiss();
+    }
+
+    @Override
     protected void firstRequest() {
 
     }
@@ -243,6 +253,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void addBookSource() {
         Intent intent = new Intent(this, SourceEditActivity.class);

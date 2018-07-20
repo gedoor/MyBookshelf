@@ -14,4 +14,8 @@ public interface IBookSourceView extends IView {
     void refreshBookSource();
 
     View getView();
+
+    void loadingStart(String msg);
+
+    void loadingFinish();
 }

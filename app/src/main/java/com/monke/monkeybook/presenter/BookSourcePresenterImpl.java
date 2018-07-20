@@ -181,10 +181,12 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
+        mView.loadingStart("开始导入网络书源");
         BookSourceManage.importSourceFromWww(url)
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
+                        mView.loadingFinish();
                         if (aBoolean) {
                             mView.refreshBookSource();
                             Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
@@ -195,6 +197,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
 
                     @Override
                     public void onError(Throwable e) {
+                        mView.loadingFinish();
                         Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
