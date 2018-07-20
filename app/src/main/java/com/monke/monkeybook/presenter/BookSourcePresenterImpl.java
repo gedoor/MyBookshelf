@@ -216,6 +216,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             @Override
             public void checkFinish() {
                 mView.loadingFinish();
+                mView.refreshBookSource();
             }
         });
         checkSourceModel.startCheck();
