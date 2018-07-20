@@ -25,4 +25,6 @@ public interface IBookSourcePresenter extends IPresenter {
     void importBookSource(Uri uri);
 
     void importBookSource(String url);
+
+    void checkBookSource();
 }

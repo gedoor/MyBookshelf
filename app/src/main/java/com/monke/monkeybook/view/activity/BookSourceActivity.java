@@ -245,7 +245,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 mPresenter.importBookSource(getString(R.string.default_source_url));
                 break;
             case R.id.action_check_book_source:
-
+                mPresenter.checkBookSource();
                 break;
             case android.R.id.home:
                 finish();

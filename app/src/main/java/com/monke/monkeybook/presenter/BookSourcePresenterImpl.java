@@ -203,4 +203,9 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                 });
     }
 
+    @Override
+    public void checkBookSource() {
+
+    }
+
 }
