@@ -181,7 +181,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
-        mView.loadingStart("开始导入网络书源");
+        mView.loadingStart("正在导入网络书源");
         BookSourceManage.importSourceFromWww(url)
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
