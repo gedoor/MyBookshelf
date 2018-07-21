@@ -59,7 +59,16 @@ public class CheckSourceService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        if (intent != null) {
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case ActionDoneService:
+                        doneService();
+                        break;
+                }
+            }
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -81,6 +90,10 @@ public class CheckSourceService extends Service {
         Intent intent = new Intent(context, CheckSourceService.class);
         intent.setAction(ActionStartService);
         context.startService(intent);
+    }
+
+    private void doneService() {
+        stopSelf();
     }
 
     /**
