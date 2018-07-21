@@ -2,6 +2,7 @@ package com.monke.monkeybook.model;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
@@ -51,39 +52,42 @@ public class CheckSourceModel {
         checkIndex++;
         if (checkIndex < bookSourceBeanList.size()) {
             final BookSourceBean sourceBean = bookSourceBeanList.get(checkIndex);
-            BookShelfBean bookShelfBean = new BookShelfBean();
-            bookShelfBean.setTag(sourceBean.getBookSourceUrl());
-            bookShelfBean.setNoteUrl(sourceBean.getCheckUrl());
-            bookShelfBean.setFinalDate(System.currentTimeMillis());
-            bookShelfBean.setDurChapter(0);
-            bookShelfBean.setDurChapterPage(0);
-            WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new Observer<BookShelfBean>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+            if (!TextUtils.isEmpty(sourceBean.getCheckUrl())) {
+                BookShelfBean bookShelfBean = new BookShelfBean();
+                bookShelfBean.setTag(sourceBean.getBookSourceUrl());
+                bookShelfBean.setNoteUrl(sourceBean.getCheckUrl());
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
+                bookShelfBean.setDurChapter(0);
+                bookShelfBean.setDurChapterPage(0);
+                WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
+                        .subscribe(new Observer<BookShelfBean>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onNext(BookShelfBean bookShelfBean) {
+                            @Override
+                            public void onNext(BookShelfBean bookShelfBean) {
+                            }
 
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                sourceBean.setBookSourceGroup("失效");
+                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                        .insertOrReplace(sourceBean);
+                            }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            sourceBean.setBookSourceGroup("失效");
-                            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                    .insertOrReplace(sourceBean);
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            checkSource();
-                        }
-                    });
+                            @Override
+                            public void onComplete() {
+                                checkSource();
+                            }
+                        });
+            } else {
+                   checkSource();
+            }
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
                 if (checkSourceListener != null) {
