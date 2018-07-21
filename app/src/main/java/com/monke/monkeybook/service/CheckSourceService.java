@@ -93,7 +93,7 @@ public class CheckSourceService extends Service {
                 .setContentTitle("校验书源")
                 .setContentText(String.format(getString(R.string.progress_show), state, bookSourceBeanList.size()))
                 .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
         builder.setProgress(bookSourceBeanList.size(), state, false);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
