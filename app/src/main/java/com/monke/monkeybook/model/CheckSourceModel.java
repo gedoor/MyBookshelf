@@ -5,10 +5,13 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.monke.basemvplib.BaseActivity;
+import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.List;
@@ -17,8 +20,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
-public class CheckSourceModel {
+public class CheckSourceModel  extends BaseModelImpl {
 
     private BaseActivity activity;
     private List<BookSourceBean> bookSourceBeanList;
@@ -88,7 +92,35 @@ public class CheckSourceModel {
                             }
                         });
             } else {
-                   checkSource();
+                getRetrofitString(sourceBean.getBookSourceUrl())
+                        .create(IHttpGetApi.class)
+                        .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Response<String>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(Response<String> stringResponse) {
+                                checkSource();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                sourceBean.setBookSourceGroup("失效");
+                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                        .insertOrReplace(sourceBean);
+                                checkSource();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
             }
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
