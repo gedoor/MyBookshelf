@@ -122,6 +122,7 @@ public class BookSourceManage extends BaseModelImpl {
                         }
                     }
                 }
+                refreshBookSource();
                 e.onNext(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
