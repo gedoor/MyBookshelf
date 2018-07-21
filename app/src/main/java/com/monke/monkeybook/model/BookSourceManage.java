@@ -9,14 +9,11 @@ import com.google.gson.reflect.TypeToken;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
-import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
-import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.net.URL;
 import java.util.List;
@@ -25,7 +22,6 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Url;
 
 /**
  * Created by GKF on 2017/12/15.
