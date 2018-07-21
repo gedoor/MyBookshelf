@@ -14,6 +14,7 @@ import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import java.net.URL;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -92,35 +93,44 @@ public class CheckSourceModel  extends BaseModelImpl {
                             }
                         });
             } else {
-                getRetrofitString(sourceBean.getBookSourceUrl())
-                        .create(IHttpGetApi.class)
-                        .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Response<String>>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                try {
+                    new URL(sourceBean.getBookSourceUrl());
+                    getRetrofitString(sourceBean.getBookSourceUrl())
+                            .create(IHttpGetApi.class)
+                            .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<Response<String>>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onNext(Response<String> stringResponse) {
-                                checkSource();
-                            }
+                                @Override
+                                public void onNext(Response<String> stringResponse) {
+                                    checkSource();
+                                }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                sourceBean.setBookSourceGroup("失效");
-                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                        .insertOrReplace(sourceBean);
-                                checkSource();
-                            }
+                                @Override
+                                public void onError(Throwable e) {
+                                    sourceBean.setBookSourceGroup("失效");
+                                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                            .insertOrReplace(sourceBean);
+                                    checkSource();
+                                }
 
-                            @Override
-                            public void onComplete() {
+                                @Override
+                                public void onComplete() {
 
-                            }
-                        });
+                                }
+                            });
+                }  catch (Exception e) {
+                    sourceBean.setBookSourceGroup("失效");
+                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                            .insertOrReplace(sourceBean);
+                    checkSource();
+                }
+
             }
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {

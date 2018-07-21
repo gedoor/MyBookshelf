@@ -25,6 +25,7 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.http.Url;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -123,8 +124,13 @@ public class BookSourceManage extends BaseModelImpl {
                     if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
                         delBySourceUrl(bookSourceBean.getBookSourceUrl());
                     } else {
-                        bookSourceBean.setSerialNumber(i++);
-                        addBookSource(bookSourceBean);
+                        try {
+                            new URL(bookSourceBean.getBookSourceUrl());
+                            bookSourceBean.setSerialNumber(i++);
+                            addBookSource(bookSourceBean);
+                        } catch (Exception exception) {
+                            delBySourceUrl(bookSourceBean.getBookSourceUrl());
+                        }
                     }
                 }
                 e.onNext(true);
