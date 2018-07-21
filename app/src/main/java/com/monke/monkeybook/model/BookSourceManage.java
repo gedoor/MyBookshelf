@@ -95,6 +95,15 @@ public class BookSourceManage extends BaseModelImpl {
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
     }
 
+    private static void delBySourceUrl(String sourceUrl) {
+        BookSourceBean delSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(sourceUrl)).unique();
+        if (delSource != null) {
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                    .delete(delSource);
+        }
+    }
+
     public static Observable<Boolean> importSourceFromWww(URL url) {
         return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                 .create(IHttpGetApi.class)
@@ -112,8 +121,7 @@ public class BookSourceManage extends BaseModelImpl {
                 int i = 1;
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
                     if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
-                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                .deleteByKey(bookSourceBean.getBookSourceUrl());
+                        delBySourceUrl(bookSourceBean.getBookSourceUrl());
                     } else {
                         bookSourceBean.setSerialNumber(i++);
                         addBookSource(bookSourceBean);
