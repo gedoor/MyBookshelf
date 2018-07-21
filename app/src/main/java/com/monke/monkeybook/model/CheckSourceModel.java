@@ -143,6 +143,7 @@ public class CheckSourceModel  extends BaseModelImpl {
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
                 if (checkSourceListener != null) {
+                    BookSourceManage.refreshBookSource();
                     checkSourceListener.checkFinish();
                 }
             }
