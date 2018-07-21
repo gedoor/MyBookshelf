@@ -93,12 +93,8 @@ public class BookSourceManage extends BaseModelImpl {
     }
 
     private static void delBySourceUrl(String sourceUrl) {
-        BookSourceBean delSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(sourceUrl)).unique();
-        if (delSource != null) {
-            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                    .delete(delSource);
-        }
+        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(sourceUrl)).buildDelete();
     }
 
     public static Observable<Boolean> importSourceFromWww(URL url) {
