@@ -19,4 +19,6 @@ public class RxBusTag {
     public final static String ALOUD_INDEX = "rxbus_aloud_index";
     public final static String ALOUD_TIMER = "rxbus_aloud_timer";
 
+    public final static String CHECK_SOURCE_STATE = "rxbusCheckSourceState";
+
 }

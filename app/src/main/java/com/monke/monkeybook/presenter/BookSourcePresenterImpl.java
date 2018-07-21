@@ -1,22 +1,25 @@
 package com.monke.monkeybook.presenter;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.BaseActivity;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.CheckSourceModel;
 import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.service.CheckSourceService;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
@@ -37,11 +40,6 @@ import static android.text.TextUtils.isEmpty;
 
 public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
     private BookSourceBean delBookSource;
-
-    @Override
-    public void detachView() {
-        RxBus.get().unregister(this);
-    }
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
@@ -207,19 +205,26 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
 
     @Override
     public void checkBookSource() {
-        CheckSourceModel checkSourceModel = new CheckSourceModel((BaseActivity) mView.getContext(), new CheckSourceModel.OnCheckSourceListener() {
-            @Override
-            public void startCheck() {
-                mView.loadingStart("正在校验书源");
-            }
-
-            @Override
-            public void checkFinish() {
-                mView.loadingFinish();
-                mView.refreshBookSource();
-            }
-        });
-        checkSourceModel.startCheck();
+        CheckSourceService.start(mView.getContext());
     }
 
+    /////////////////////////////////////////////////
+
+    @Override
+    public void attachView(@NonNull IView iView) {
+        super.attachView(iView);
+        RxBus.get().register(this);
+    }
+
+    @Override
+    public void detachView() {
+        RxBus.get().unregister(this);
+    }
+
+    /////////////////////RxBus////////////////////////
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHECK_SOURCE_STATE)})
+    public void upCheckSourceState(Integer state) {
+        mView.refreshBookSource();
+    }
 }

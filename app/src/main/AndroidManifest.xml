@@ -149,6 +149,7 @@
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
+        <service android:name=".service.CheckSourceService" />
 
         <receiver android:name=".service.MediaButtonIntentReceiver">
             <intent-filter>
