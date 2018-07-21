@@ -58,40 +58,48 @@ public class CheckSourceModel  extends BaseModelImpl {
         if (checkIndex < bookSourceBeanList.size()) {
             final BookSourceBean sourceBean = bookSourceBeanList.get(checkIndex);
             if (!TextUtils.isEmpty(sourceBean.getCheckUrl())) {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(sourceBean.getBookSourceUrl());
-                bookShelfBean.setNoteUrl(sourceBean.getCheckUrl());
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setDurChapterPage(0);
-                WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                        .subscribe(new Observer<BookShelfBean>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                try {
+                    new URL(sourceBean.getCheckUrl());
+                    BookShelfBean bookShelfBean = new BookShelfBean();
+                    bookShelfBean.setTag(sourceBean.getBookSourceUrl());
+                    bookShelfBean.setNoteUrl(sourceBean.getCheckUrl());
+                    bookShelfBean.setFinalDate(System.currentTimeMillis());
+                    bookShelfBean.setDurChapter(0);
+                    bookShelfBean.setDurChapterPage(0);
+                    WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
+                            .subscribe(new Observer<BookShelfBean>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onNext(BookShelfBean bookShelfBean) {
-                                checkSource();
-                            }
+                                @Override
+                                public void onNext(BookShelfBean bookShelfBean) {
+                                    checkSource();
+                                }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                sourceBean.setBookSourceGroup("失效");
-                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                        .insertOrReplace(sourceBean);
-                                checkSource();
-                            }
+                                @Override
+                                public void onError(Throwable e) {
+                                    sourceBean.setBookSourceGroup("失效");
+                                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                            .insertOrReplace(sourceBean);
+                                    checkSource();
+                                }
 
-                            @Override
-                            public void onComplete() {
+                                @Override
+                                public void onComplete() {
 
-                            }
-                        });
+                                }
+                            });
+                } catch (Exception exception) {
+                    sourceBean.setBookSourceGroup("失效");
+                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                            .insertOrReplace(sourceBean);
+                    checkSource();
+                }
             } else {
                 try {
                     new URL(sourceBean.getBookSourceUrl());
@@ -129,8 +137,8 @@ public class CheckSourceModel  extends BaseModelImpl {
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
                     checkSource();
+                    checkSource();
                 }
-
             }
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
