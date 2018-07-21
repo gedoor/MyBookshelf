@@ -143,7 +143,17 @@ public class CheckSourceService extends Service {
         }
 
         if (checkIndex < bookSourceBeanList.size()) {
-            final BookSourceBean sourceBean = bookSourceBeanList.get(checkIndex);
+            new CheckSource(bookSourceBeanList.get(checkIndex));
+        } else {
+            if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
+                RxBus.get().post(CHECK_SOURCE_STATE, -1);
+                stopSelf();
+            }
+        }
+    }
+
+    class CheckSource {
+        CheckSource(final BookSourceBean sourceBean) {
             if (!TextUtils.isEmpty(sourceBean.getCheckUrl())) {
                 try {
                     new URL(sourceBean.getCheckUrl());
@@ -218,21 +228,13 @@ public class CheckSourceService extends Service {
 
                                 }
                             });
-                }  catch (Exception e) {
+                } catch (Exception e) {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
                     checkSource();
-                    checkSource();
                 }
-            }
-        } else {
-            if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
-                RxBus.get().post(CHECK_SOURCE_STATE, -1);
-                stopSelf();
             }
         }
     }
-
-
 }
