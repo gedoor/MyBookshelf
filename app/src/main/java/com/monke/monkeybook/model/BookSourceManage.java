@@ -20,6 +20,7 @@ import com.monke.monkeybook.model.impl.IStationBookModel;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -108,10 +109,16 @@ public class BookSourceManage extends BaseModelImpl {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
-                for (int i = 0; i < bookSourceBeans.size(); i++) {
-                    bookSourceBeans.get(i).setSerialNumber(i+1);
+                int i = 1;
+                for (BookSourceBean bookSourceBean : bookSourceBeans) {
+                    if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
+                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                .deleteByKey(bookSourceBean.getBookSourceUrl());
+                    } else {
+                        bookSourceBean.setSerialNumber(i++);
+                        addBookSource(bookSourceBean);
+                    }
                 }
-                addBookSource(bookSourceBeans);
                 e.onNext(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
