@@ -40,6 +40,7 @@ public class CheckSourceService extends Service {
     private static final int notificationId = 3333;
     public static final String ActionStartService = "startService";
     public static final String ActionDoneService = "doneService";
+    private static final String ActionOpenActivity = "openActivity";
 
     private List<BookSourceBean> bookSourceBeanList;
     private int threadsNum;
@@ -91,7 +92,7 @@ public class CheckSourceService extends Service {
                 .setOngoing(true)
                 .setContentTitle("校验书源")
                 .setContentText(String.format(getString(R.string.progress_show), state, bookSourceBeanList.size()))
-                .setContentIntent(getActivityPendingIntent("xxx"));
+                .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         builder.setProgress(bookSourceBeanList.size(), state, false);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
