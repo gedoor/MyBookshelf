@@ -39,7 +39,7 @@ public class BookSourceManage extends BaseModelImpl {
     public static List<BookSourceBean> getSelectedBookSource() {
         if (selectedBookSource == null) {
             selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                    .where(BookSourceBeanDao.Properties.Enable.eq(true), BookSourceBeanDao.Properties.BookSourceGroup.notEq("失效"))
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
         }
