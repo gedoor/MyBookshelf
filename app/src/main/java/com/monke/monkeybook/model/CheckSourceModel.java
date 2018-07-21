@@ -71,6 +71,7 @@ public class CheckSourceModel {
 
                             @Override
                             public void onNext(BookShelfBean bookShelfBean) {
+                                checkSource();
                             }
 
                             @Override
@@ -78,11 +79,12 @@ public class CheckSourceModel {
                                 sourceBean.setBookSourceGroup("失效");
                                 DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                                         .insertOrReplace(sourceBean);
+                                checkSource();
                             }
 
                             @Override
                             public void onComplete() {
-                                checkSource();
+
                             }
                         });
             } else {
