@@ -94,6 +94,15 @@ public class CheckSourceService extends Service {
         context.startService(intent);
     }
 
+    /**
+     * 停止服务
+     */
+    public static void stop(Context context) {
+        Intent intent = new Intent(context, CheckSourceService.class);
+        intent.setAction(ActionDoneService);
+        context.startService(intent);
+    }
+
     private void doneService() {
         RxBus.get().post(CHECK_SOURCE_STATE, -1);
         compositeDisposable.dispose();

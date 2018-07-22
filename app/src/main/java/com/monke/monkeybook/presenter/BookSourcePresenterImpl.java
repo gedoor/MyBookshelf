@@ -41,7 +41,7 @@ import static android.text.TextUtils.isEmpty;
 
 public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
     private BookSourceBean delBookSource;
-    Snackbar snackbar;
+    Snackbar progressSnackBar;
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
@@ -229,12 +229,14 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         if (state == -1) {
             showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
         } else {
-            if (snackbar == null) {
-                snackbar = Snackbar.make(mView.getView(), getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+            if (progressSnackBar == null) {
+                progressSnackBar = Snackbar.make(mView.getView(), getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+                progressSnackBar.setAction(mView.getContext().getString(R.string.cancel), view -> CheckSourceService.stop(mView.getContext()));
+            } else {
+                progressSnackBar.setText(getProgressStr(state));
             }
-            snackbar.setText(getProgressStr(state));
-            if (!snackbar.isShown()) {
-                snackbar.show();
+            if (!progressSnackBar.isShown()) {
+                progressSnackBar.show();
             }
         }
     }
