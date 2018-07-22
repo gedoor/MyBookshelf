@@ -11,8 +11,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 /**
- * Created by GKF on 2018/1/17.
- * 换源
+ * 输入框
  */
 
 public class InputView {
