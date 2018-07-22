@@ -31,6 +31,7 @@ import java.util.Objects;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -45,13 +46,14 @@ public class CheckSourceService extends Service {
     private List<BookSourceBean> bookSourceBeanList;
     private int threadsNum;
     private int checkIndex;
+    CompositeDisposable compositeDisposable;
 
     @Override
     public void onCreate() {
         super.onCreate();
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
-
+        compositeDisposable = new CompositeDisposable();
         bookSourceBeanList = BookSourceManage.getAllBookSource();
         updateNotification(0);
         startCheck();
@@ -94,6 +96,7 @@ public class CheckSourceService extends Service {
 
     private void doneService() {
         RxBus.get().post(CHECK_SOURCE_STATE, -1);
+        compositeDisposable.dispose();
         stopSelf();
     }
 
@@ -195,7 +198,7 @@ public class CheckSourceService extends Service {
             return new Observer<Object>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-
+                    compositeDisposable.add(d);
                 }
 
                 @Override
