@@ -27,12 +27,12 @@ import com.monke.monkeybook.view.activity.BookSourceActivity;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 
 import static com.monke.monkeybook.help.RxBusTag.CHECK_SOURCE_STATE;
 
@@ -166,30 +166,7 @@ public class CheckSourceService extends Service {
                     WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<BookShelfBean>() {
-                                @Override
-                                public void onSubscribe(Disposable d) {
-
-                                }
-
-                                @Override
-                                public void onNext(BookShelfBean bookShelfBean) {
-                                    checkSource();
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    sourceBean.setBookSourceGroup("失效");
-                                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                            .insertOrReplace(sourceBean);
-                                    checkSource();
-                                }
-
-                                @Override
-                                public void onComplete() {
-
-                                }
-                            });
+                            .subscribe(getObserver(sourceBean));
                 } catch (Exception exception) {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
@@ -204,30 +181,7 @@ public class CheckSourceService extends Service {
                             .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Observer<Response<String>>() {
-                                @Override
-                                public void onSubscribe(Disposable d) {
-
-                                }
-
-                                @Override
-                                public void onNext(Response<String> stringResponse) {
-                                    checkSource();
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    sourceBean.setBookSourceGroup("失效");
-                                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                            .insertOrReplace(sourceBean);
-                                    checkSource();
-                                }
-
-                                @Override
-                                public void onComplete() {
-
-                                }
-                            });
+                            .subscribe(getObserver(sourceBean));
                 } catch (Exception e) {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
@@ -235,6 +189,38 @@ public class CheckSourceService extends Service {
                     checkSource();
                 }
             }
+        }
+
+        private Observer<Object> getObserver(BookSourceBean sourceBean) {
+            return new Observer<Object>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Object value) {
+                    if (Objects.equals(sourceBean.getBookSourceGroup(), "失效")) {
+                        sourceBean.setBookSourceGroup("");
+                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                                .insertOrReplace(sourceBean);
+                    }
+                    checkSource();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    sourceBean.setBookSourceGroup("失效");
+                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
+                            .insertOrReplace(sourceBean);
+                    checkSource();
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            };
         }
     }
 }
