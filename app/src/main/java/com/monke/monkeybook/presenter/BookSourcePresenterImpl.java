@@ -12,6 +12,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -40,6 +41,7 @@ import static android.text.TextUtils.isEmpty;
 
 public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
     private BookSourceBean delBookSource;
+    Snackbar snackbar;
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
@@ -195,6 +197,11 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         Snackbar.make(mView.getView(), msg, length).show();
     }
 
+    private String getProgressStr(int state) {
+        return String.format(mView.getContext().getString(R.string.check_book_source) + mView.getContext().getString(R.string.progress_show),
+                state, BookSourceManage.getAllBookSource().size());
+    }
+
     @Override
     public void checkBookSource() {
         CheckSourceService.start(mView.getContext());
@@ -218,5 +225,17 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHECK_SOURCE_STATE)})
     public void upCheckSourceState(Integer state) {
         mView.refreshBookSource();
+
+        if (state == -1) {
+            showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
+        } else {
+            if (snackbar == null) {
+                snackbar = Snackbar.make(mView.getView(), getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+            }
+            snackbar.setText(getProgressStr(state));
+            if (!snackbar.isShown()) {
+                snackbar.show();
+            }
+        }
     }
 }

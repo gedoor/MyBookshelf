@@ -190,16 +190,6 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
-    public void loadingStart(String msg) {
-        moProgressHUD.showLoading(msg);
-    }
-
-    @Override
-    public void loadingFinish() {
-        moProgressHUD.dismiss();
-    }
-
-    @Override
     protected void firstRequest() {
 
     }

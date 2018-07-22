@@ -104,7 +104,7 @@ public class CheckSourceService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_network_check)
                 .setOngoing(true)
-                .setContentTitle("校验书源")
+                .setContentTitle(getString(R.string.check_book_source))
                 .setContentText(String.format(getString(R.string.progress_show), state, bookSourceBeanList.size()))
                 .setContentIntent(getActivityPendingIntent(ActionOpenActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(ActionDoneService));
