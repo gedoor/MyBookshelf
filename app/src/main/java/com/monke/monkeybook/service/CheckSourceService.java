@@ -240,6 +240,7 @@ public class CheckSourceService extends Service {
                 @Override
                 public void onError(Throwable e) {
                     sourceBean.setBookSourceGroup("失效");
+                    sourceBean.setSerialNumber(1000+checkIndex);
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
                     nextCheck();
