@@ -33,7 +33,7 @@
         android:key="@string/pk_threads_num"
         android:summary="当前线程数 %s"
         android:title="@string/update_search_threads_num"
-        app:MaxValue="16"
+        app:MaxValue="32"
         app:MinValue="1" />
 
     <SwitchPreference
