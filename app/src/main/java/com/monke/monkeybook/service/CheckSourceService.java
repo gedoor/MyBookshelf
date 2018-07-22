@@ -28,6 +28,8 @@ import com.monke.monkeybook.view.activity.BookSourceActivity;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -208,6 +210,16 @@ public class CheckSourceService extends Service {
                 @Override
                 public void onSubscribe(Disposable d) {
                     compositeDisposable.add(d);
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (!d.isDisposed()) {
+                                d.dispose();
+                                checkSource();
+                            }
+                        }
+                    }, 60*1000);
                 }
 
                 @Override
