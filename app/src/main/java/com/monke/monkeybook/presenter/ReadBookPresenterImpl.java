@@ -205,12 +205,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                                         public void run() {
                                                             if (!d.isDisposed()) {
                                                                 d.dispose();
-                                                                ((BaseActivity) mView.getContext()).runOnUiThread(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        if (bookContentView != null && bookTag == bookContentView.getQTag()) {
-                                                                            bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
-                                                                        }
+                                                                ((BaseActivity) mView.getContext()).runOnUiThread(() -> {
+                                                                    if (bookContentView != null && bookTag == bookContentView.getQTag()) {
+                                                                        bookContentView.loadError(mView.getContext().getString(R.string.load_over_time));
                                                                     }
                                                                 });
                                                             }
