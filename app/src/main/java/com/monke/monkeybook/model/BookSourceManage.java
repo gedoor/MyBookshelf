@@ -110,7 +110,8 @@ public class BookSourceManage extends BaseModelImpl {
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
                     if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).buildDelete();
+                                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
+                                .buildDelete().executeDeleteWithoutDetachingEntities();
                     } else {
                         try {
                             new URL(bookSourceBean.getBookSourceUrl());
@@ -118,7 +119,8 @@ public class BookSourceManage extends BaseModelImpl {
                             addBookSource(bookSourceBean);
                         } catch (Exception exception) {
                             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl())).buildDelete();
+                                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
+                                    .buildDelete().executeDeleteWithoutDetachingEntities();
                         }
                     }
                 }
