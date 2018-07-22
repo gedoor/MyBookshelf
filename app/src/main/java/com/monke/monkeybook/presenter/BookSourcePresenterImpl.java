@@ -147,25 +147,11 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             json = FileHelper.readString(file);
         }
         if (!isEmpty(json)) {
+            showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
             BookSourceManage.importBookSourceO(json)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Boolean>() {
-                        @Override
-                        public void onNext(Boolean aBoolean) {
-                            if (aBoolean) {
-                                mView.refreshBookSource();
-                                Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    .subscribe(getImportObserver());
         } else {
             Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
         }
@@ -181,26 +167,32 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
-        mView.loadingStart("正在导入网络书源");
+        showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
         BookSourceManage.importSourceFromWww(url)
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        mView.loadingFinish();
-                        if (aBoolean) {
-                            mView.refreshBookSource();
-                            Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                .subscribe(getImportObserver());
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.loadingFinish();
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private SimpleObserver<Boolean> getImportObserver() {
+        return new SimpleObserver<Boolean>() {
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if (aBoolean) {
+                    mView.refreshBookSource();
+                    showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
+                } else {
+                    showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                showSnackBar(e.getMessage(), Snackbar.LENGTH_SHORT);
+            }
+        };
+    }
+
+    private void showSnackBar(String msg, int length) {
+        Snackbar.make(mView.getView(), msg, length).show();
     }
 
     @Override
