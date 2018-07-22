@@ -41,7 +41,7 @@ import static android.text.TextUtils.isEmpty;
 
 public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
     private BookSourceBean delBookSource;
-    Snackbar progressSnackBar;
+    private Snackbar progressSnackBar;
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
