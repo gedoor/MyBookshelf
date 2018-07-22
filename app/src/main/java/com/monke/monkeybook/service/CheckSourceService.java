@@ -145,12 +145,12 @@ public class CheckSourceService extends Service {
             RxBus.get().post(CHECK_SOURCE_STATE, 0);
             checkIndex = -1;
             for (int i = 1; i <= threadsNum; i++) {
-                checkSource();
+                nextCheck();
             }
         }
     }
 
-    private synchronized void checkSource() {
+    private synchronized void nextCheck() {
         checkIndex++;
         if (checkIndex > threadsNum) {
             RxBus.get().post(CHECK_SOURCE_STATE, checkIndex - threadsNum);
@@ -167,7 +167,10 @@ public class CheckSourceService extends Service {
     }
 
     class CheckSource {
+        CheckSource checkSource;
+
         CheckSource(final BookSourceBean sourceBean) {
+            checkSource = this;
             if (!TextUtils.isEmpty(sourceBean.getCheckUrl())) {
                 try {
                     new URL(sourceBean.getCheckUrl());
@@ -185,7 +188,7 @@ public class CheckSourceService extends Service {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
-                    checkSource();
+                    nextCheck();
                 }
             } else {
                 try {
@@ -200,7 +203,7 @@ public class CheckSourceService extends Service {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
-                    checkSource();
+                    nextCheck();
                 }
             }
         }
@@ -216,7 +219,8 @@ public class CheckSourceService extends Service {
                         public void run() {
                             if (!d.isDisposed()) {
                                 d.dispose();
-                                checkSource();
+                                nextCheck();
+                                checkSource = null;
                             }
                         }
                     }, 60*1000);
@@ -229,7 +233,8 @@ public class CheckSourceService extends Service {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                                 .insertOrReplace(sourceBean);
                     }
-                    checkSource();
+                    nextCheck();
+                    checkSource = null;
                 }
 
                 @Override
@@ -237,7 +242,8 @@ public class CheckSourceService extends Service {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
-                    checkSource();
+                    nextCheck();
+                    checkSource = null;
                 }
 
                 @Override
