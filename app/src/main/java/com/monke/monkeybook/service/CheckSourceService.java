@@ -93,6 +93,7 @@ public class CheckSourceService extends Service {
     }
 
     private void doneService() {
+        RxBus.get().post(CHECK_SOURCE_STATE, -1);
         stopSelf();
     }
 
@@ -146,8 +147,7 @@ public class CheckSourceService extends Service {
             new CheckSource(bookSourceBeanList.get(checkIndex));
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
-                RxBus.get().post(CHECK_SOURCE_STATE, -1);
-                stopSelf();
+                doneService();
             }
         }
     }
