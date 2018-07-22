@@ -106,7 +106,6 @@ public class BookSourceManage extends BaseModelImpl {
             try {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
-                int i = 1;
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
                     if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
@@ -115,7 +114,7 @@ public class BookSourceManage extends BaseModelImpl {
                     } else {
                         try {
                             new URL(bookSourceBean.getBookSourceUrl());
-                            bookSourceBean.setSerialNumber(i++);
+                            bookSourceBean.setSerialNumber(0);
                             addBookSource(bookSourceBean);
                         } catch (Exception exception) {
                             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
