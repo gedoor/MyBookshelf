@@ -195,7 +195,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                 emitter.onComplete();
             });
         }
-        BookChapter bookChapter = new BookChapter(tag, name, bookSourceBean);
+        BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
         return getRetrofitString(tag)
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
