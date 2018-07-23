@@ -460,7 +460,7 @@ public class ReadAloudService extends Service {
             if (i == TextToSpeech.SUCCESS) {
                 int result = textToSpeech.setLanguage(Locale.CHINA);
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    RxBus.get().post(RxBusTag.ALOUD_MSG, "LANG_MISSING_DATA  or LANG_NOT_SUPPORTED!");
+                    RxBus.get().post(RxBusTag.ALOUD_MSG, getString(R.string.tts_not_instell));
                 } else {
                     textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     ttsInitSuccess = true;
