@@ -15,6 +15,7 @@ import com.monke.monkeybook.utils.NetworkUtil;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -59,9 +60,9 @@ public class BookChapter {
 
             if (dx) {
                 Collections.reverse(chapterListBeans);
-                for (int i = 0; i < chapterListBeans.size(); i++) {
-                    chapterListBeans.get(i).setDurChapterIndex(i);
-                }
+            }
+            for (int i = 0; i < chapterListBeans.size(); i++) {
+                chapterListBeans.get(i).setDurChapterIndex(i);
             }
             if (bookShelfBean.getChapterListSize() < chapterListBeans.size()) {
                 bookShelfBean.setHasUpdate(true);
@@ -107,10 +108,10 @@ public class BookChapter {
                     nextUrl = "";
                 }
             }
-            Elements chapterList = AnalyzeElement.getElements(doc, ruleChapterList);
+            Elements elements = AnalyzeElement.getElements(doc, ruleChapterList);
             int x;
-            for (int i = 0; i < chapterList.size(); i++) {
-                analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
+            for (Element element : elements) {
+                analyzeElement = new AnalyzeElement(element, chapterUrl);
                 ChapterListBean temp = new ChapterListBean();
                 temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
                 temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
