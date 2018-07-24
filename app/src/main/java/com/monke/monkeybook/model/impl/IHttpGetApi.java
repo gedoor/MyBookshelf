@@ -28,6 +28,6 @@ public interface IHttpGetApi {
                                             @HeaderMap Map<String, String> headers);
 
     @GET
-    Call<Response<String>> getWebContentCall(@Url String url,
+    Call<String> getWebContentCall(@Url String url,
                                          @HeaderMap Map<String, String> headers);
 }

@@ -84,6 +84,9 @@ public class AnalyzeElement {
                     case "id":
                         elements.add(temp.getElementById(rules[1]));
                         break;
+                    case "text":
+                        elements.addAll(temp.getElementsContainingOwnText(rules[1]));
+                        break;
                 }
                 if (rulePc.length > 1) {
                     String[] rulePcs = rulePc[1].split(":");
