@@ -25,7 +25,6 @@ import java.util.Objects;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
-import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -53,7 +52,14 @@ public class BookChapter {
             while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
                 Call<String> call = DefaultModelImpl.getRetrofitString(webChapterBean.getNextUrl())
                         .create(IHttpGetApi.class).getWebContentCall(webChapterBean.getNextUrl(), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
-                String response = call.execute().body();
+                String response = "";
+                try {
+                    response = call.execute().body();
+                } catch (Exception exception) {
+                    if (!e.isDisposed()) {
+                        e.onError(exception);
+                    }
+                }
                 webChapterBean = analyzeChapterList(response, bookShelfBean.getNoteUrl(), webChapterBean.getNextUrl(), bookShelfBean.getChapterList(), ruleChapterList);
                 chapterListBeans.addAll(webChapterBean.getData());
             }
