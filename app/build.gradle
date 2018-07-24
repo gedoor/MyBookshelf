@@ -104,7 +104,7 @@ dependencies {
 
     //GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
-    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.2'
+    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     //codecMD5
     implementation 'commons-codec:commons-codec:1.11'
