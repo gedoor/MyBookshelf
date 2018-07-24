@@ -75,7 +75,7 @@
 
 #### RuleChapterUrlNext 目录页面里的下一页目录地址
 - 如果没有下一页则留空
-- 例:class.list-group-item tac.0@tag.a.0@href
+- 例:class.page.0@text.下一页.0@href
 
 #### RuleChapterList 目录页面的目录列表
 - 前面加 - 号倒序排列
