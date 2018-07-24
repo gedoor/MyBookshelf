@@ -163,7 +163,7 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 26
+    schemaVersion 27
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }

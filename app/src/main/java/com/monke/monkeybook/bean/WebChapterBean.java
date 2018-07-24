@@ -4,11 +4,11 @@ package com.monke.monkeybook.bean;
 public class WebChapterBean<T> {
     private T data;
 
-    private Boolean next;
+    private String nextUrl;
 
-    public WebChapterBean(T data,Boolean next){
+    public WebChapterBean(T data,String nextUrl){
         this.data = data;
-        this.next = next;
+        this.nextUrl = nextUrl;
     }
 
     public T getData() {
@@ -19,11 +19,11 @@ public class WebChapterBean<T> {
         this.data = data;
     }
 
-    public Boolean getNext() {
-        return next;
+    public String getNextUrl() {
+        return nextUrl;
     }
 
-    public void setNext(Boolean next) {
-        this.next = next;
+    public void setNextUrl(String nextUrl) {
+        this.nextUrl = nextUrl;
     }
 }

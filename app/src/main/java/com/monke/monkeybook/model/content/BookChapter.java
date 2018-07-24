@@ -1,11 +1,15 @@
 package com.monke.monkeybook.model.content;
 
+import android.text.TextUtils;
+
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeJson;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.utils.NetworkUtil;
 
 import org.json.JSONObject;
@@ -16,8 +20,11 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -42,10 +49,13 @@ public class BookChapter {
             WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList(), ruleChapterList);
             List<ChapterListBean> chapterListBeans = webChapterBean.getData();
 
-            if (webChapterBean.getNext()) {
-
+            while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
+                Call<Response<String>> call = DefaultModelImpl.getRetrofitString(webChapterBean.getNextUrl())
+                        .create(IHttpGetApi.class).getWebContentCall(webChapterBean.getNextUrl(), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                Response<String> response = call.execute().body();
+                webChapterBean = analyzeChapterList(response.body(), bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList(), ruleChapterList);
+                chapterListBeans.addAll(webChapterBean.getData());
             }
-
 
             if (dx) {
                 Collections.reverse(chapterListBeans);
@@ -66,6 +76,7 @@ public class BookChapter {
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList (String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld, String ruleChapterList) throws Exception{
         List<ChapterListBean> chapterBeans = new ArrayList<>();
+        String nextUrl = "";
         if (bookSourceBean.getRuleChapterName().contains("JSON")) {
             JSONObject jsonObject = new JSONObject(s);
             List<JSONObject> jsonObjectList = AnalyzeJson.getJsonObjects(jsonObject, ruleChapterList);
@@ -88,10 +99,18 @@ public class BookChapter {
             }
         } else {
             Document doc = Jsoup.parse(s);
+            AnalyzeElement analyzeElement;
+            if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
+                analyzeElement = new AnalyzeElement(doc, chapterUrl);
+                nextUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrlNext());
+                if (Objects.equals(nextUrl, chapterUrl)) {
+                    nextUrl = "";
+                }
+            }
             Elements chapterList = AnalyzeElement.getElements(doc, ruleChapterList);
             int x;
             for (int i = 0; i < chapterList.size(); i++) {
-                AnalyzeElement analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
+                analyzeElement = new AnalyzeElement(chapterList.get(i), chapterUrl);
                 ChapterListBean temp = new ChapterListBean();
                 temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
                 temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
@@ -107,6 +126,6 @@ public class BookChapter {
                 }
             }
         }
-        return new WebChapterBean<>(chapterBeans, false);
+        return new WebChapterBean<>(chapterBeans, nextUrl);
     }
 }

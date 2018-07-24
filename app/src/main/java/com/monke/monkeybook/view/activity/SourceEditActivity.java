@@ -143,6 +143,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieCheckUrl;
     @BindView(R.id.til_checkUrl)
     TextInputLayout tilCheckUrl;
+    @BindView(R.id.tie_ruleChapterUrlNext)
+    TextInputEditText tieRuleChapterUrlNext;
+    @BindView(R.id.til_ruleChapterUrlNext)
+    TextInputLayout tilRuleChapterUrlNext;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -255,6 +259,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setRuleChapterList(trim(tieRuleChapterList.getText().toString()));
         bookSourceBeanN.setRuleChapterName(trim(tieRuleChapterName.getText().toString()));
         bookSourceBeanN.setRuleChapterUrl(trim(tieRuleChapterUrl.getText().toString()));
+        bookSourceBeanN.setRuleChapterUrlNext(trim(tieRuleChapterUrlNext.getText().toString()));
         bookSourceBeanN.setRuleContentUrl(trim(tieRuleContentUrl.getText().toString()));
         bookSourceBeanN.setRuleCoverUrl(trim(tieRuleCoverUrl.getText().toString()));
         bookSourceBeanN.setRuleIntroduce(trim(tieRuleIntroduce.getText().toString()));
@@ -288,6 +293,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tieRuleChapterList.setText(trim(bookSourceBean.getRuleChapterList()));
         tieRuleChapterName.setText(trim(bookSourceBean.getRuleChapterName()));
         tieRuleChapterUrl.setText(trim(bookSourceBean.getRuleChapterUrl()));
+        tieRuleChapterUrlNext.setText(trim(bookSourceBean.getRuleChapterUrlNext()));
         tieRuleContentUrl.setText(trim(bookSourceBean.getRuleContentUrl()));
         tieRuleCoverUrl.setText(trim(bookSourceBean.getRuleCoverUrl()));
         tieRuleIntroduce.setText(trim(bookSourceBean.getRuleIntroduce()));
@@ -314,6 +320,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilRuleChapterList.setHint("RuleChapterList");
         tilRuleChapterName.setHint("RuleChapterName");
         tilRuleChapterUrl.setHint("RuleChapterUrl");
+        tilRuleChapterUrlNext.setHint("RuleChapterUrlNext");
         tilRuleContentUrl.setHint("RuleContentUrl");
         tilRuleCoverUrl.setHint("RuleCoverUrl");
         tilRuleIntroduce.setHint("RuleIntroduce");
