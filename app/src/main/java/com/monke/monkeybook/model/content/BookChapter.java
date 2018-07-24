@@ -3,6 +3,7 @@ package com.monke.monkeybook.model.content;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeJson;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -32,25 +33,38 @@ public class BookChapter {
     public Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             bookShelfBean.setTag(tag);
-            List<ChapterListBean> chapterList = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList());
-            if (bookShelfBean.getChapterListSize() < chapterList.size()) {
+            boolean dx = false;
+            String ruleChapterList = bookSourceBean.getRuleChapterList();
+            if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
+                dx = true;
+                ruleChapterList = ruleChapterList.substring(1);
+            }
+            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList(), ruleChapterList);
+            List<ChapterListBean> chapterListBeans = webChapterBean.getData();
+
+            if (webChapterBean.getNext()) {
+
+            }
+
+
+            if (dx) {
+                Collections.reverse(chapterListBeans);
+                for (int i = 0; i < chapterListBeans.size(); i++) {
+                    chapterListBeans.get(i).setDurChapterIndex(i);
+                }
+            }
+            if (bookShelfBean.getChapterListSize() < chapterListBeans.size()) {
                 bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
-            bookShelfBean.getBookInfoBean().setChapterList(chapterList);
+            bookShelfBean.getBookInfoBean().setChapterList(chapterListBeans);
             e.onNext(bookShelfBean);
             e.onComplete();
         });
     }
 
-    private List<ChapterListBean> analyzeChapterList (String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld) throws Exception{
-        boolean dx = false;
-        String ruleChapterList = bookSourceBean.getRuleChapterList();
-        if (ruleChapterList != null && ruleChapterList.startsWith("-")) {
-            dx = true;
-            ruleChapterList = ruleChapterList.substring(1);
-        }
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList (String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld, String ruleChapterList) throws Exception{
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         if (bookSourceBean.getRuleChapterName().contains("JSON")) {
             JSONObject jsonObject = new JSONObject(s);
@@ -93,13 +107,6 @@ public class BookChapter {
                 }
             }
         }
-
-        if (dx) {
-            Collections.reverse(chapterBeans);
-            for (int i = 0; i < chapterBeans.size(); i++) {
-                chapterBeans.get(i).setDurChapterIndex(i);
-            }
-        }
-        return chapterBeans;
+        return new WebChapterBean<>(chapterBeans, false);
     }
 }

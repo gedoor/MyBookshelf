@@ -30,7 +30,15 @@ public class AnalyzeHeaders {
         return headerMap;
     }
 
-    public static String getDefaultUserAgent() {
+    public static String getUserAgent(String userAgent) {
+        if (isEmpty(userAgent)) {
+            return getDefaultUserAgent();
+        } else {
+            return userAgent;
+        }
+    }
+
+    private static String getDefaultUserAgent() {
         return preferences.getString(MApplication.getInstance().getString(R.string.pk_user_agent),
                 MApplication.getInstance().getString(R.string.pv_user_agent));
     }

@@ -215,7 +215,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-            return getAjaxHtml(MApplication.getInstance(), durChapterUrl, AnalyzeHeaders.getDefaultUserAgent())
+            return getAjaxHtml(MApplication.getInstance(), durChapterUrl, AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(Schedulers.io())
                     .flatMap(response -> bookContent.analyzeBookContent(response, durChapterUrl, durChapterIndex))
