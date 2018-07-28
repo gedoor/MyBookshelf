@@ -58,8 +58,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.get_id()
-                + File.separator + chapter.title + FileUtils.SUFFIX_NB);
+        File file = new File("");
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
@@ -206,15 +205,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     public void saveRecord() {
         super.saveRecord();
-        if (mCollBook != null && isChapterListPrepare) {
-            //表示当前CollBook已经阅读
-            mCollBook.setIsUpdate(false);
-            mCollBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-            //直接更新
-            BookRepository.getInstance()
-                    .saveCollBook(mCollBook);
-        }
+
     }
 }
 
