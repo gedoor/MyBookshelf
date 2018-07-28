@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.DensityUtil;
+import com.monke.monkeybook.widget.page.PageMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class ReadBookControl {
     private int textColor;
     private Drawable textBackground;
     private float lineMultiplier;
+    private int pageMode;
 
     private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
@@ -107,6 +109,7 @@ public class ReadBookControl {
         this.paddingTop = readPreference.getInt("paddingTop", 0);
         this.paddingRight = readPreference.getInt("paddingRight", 0);
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
+        this.pageMode = readPreference.getInt("pageMode", PageMode.SIMULATION.ordinal());
 
         initTextDrawableIndex();
     }
@@ -572,6 +575,17 @@ public class ReadBookControl {
         this.paddingBottom = paddingBottom;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("paddingBottom", paddingBottom);
+        editor.apply();
+    }
+
+    public PageMode getPageMode() {
+        return PageMode.values()[pageMode];
+    }
+
+    public void setPageMode(PageMode mode) {
+        this.pageMode = mode.ordinal();
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("pageMode", pageMode);
         editor.apply();
     }
 }
