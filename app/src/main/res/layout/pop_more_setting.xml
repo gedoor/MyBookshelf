@@ -62,6 +62,46 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llJFConvert"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/background"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="@string/jf_convert"
+                        android:textColor="@color/tv_text_default" />
+
+                    <TextView
+                        android:id="@+id/tvJFConvert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/keep_light"
+                        android:textColor="@color/tv_text_default" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_hideStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

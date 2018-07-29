@@ -109,7 +109,7 @@ public class ReadBookControl {
         this.paddingTop = readPreference.getInt("paddingTop", 0);
         this.paddingRight = readPreference.getInt("paddingRight", 0);
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
-        this.pageMode = readPreference.getInt("pageMode", PageMode.SIMULATION.ordinal());
+        this.pageMode = readPreference.getInt("pageMode", 1);
 
         initTextDrawableIndex();
     }
@@ -340,7 +340,7 @@ public class ReadBookControl {
     }
 
     public int getTextConvert() {
-        return textConvert;
+        return textConvert == -1 ? 2 : textConvert;
     }
 
     public Boolean getTextBold() {
@@ -578,12 +578,27 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public PageMode getPageMode() {
-        return PageMode.values()[pageMode];
+    public int getPageMode() {
+        return pageMode;
     }
 
-    public void setPageMode(PageMode mode) {
-        this.pageMode = mode.ordinal();
+    public PageMode getPageMode(int pageMode) {
+        switch (pageMode) {
+            case 0:
+                return PageMode.SIMULATION;
+            case 1:
+                return PageMode.COVER;
+            case 2:
+                return PageMode.SCROLL;
+            case 3:
+                return PageMode.NONE;
+            default:
+                return PageMode.COVER;
+        }
+    }
+
+    public void setPageMode(int pageMode) {
+        this.pageMode = pageMode;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("pageMode", pageMode);
         editor.apply();

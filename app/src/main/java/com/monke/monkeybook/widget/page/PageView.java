@@ -105,9 +105,6 @@ public class PageView extends View {
             case COVER:
                 mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
-            case SLIDE:
-                mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
-                break;
             case NONE:
                 mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
@@ -352,7 +349,7 @@ public class PageView extends View {
 //        if (collBook.isLocal()) {
 //            mPageLoader = new LocalPageLoader(this, collBook);
 //        } else {
-//            mPageLoader = new NetPageLoader(this, collBook);
+            mPageLoader = new NetPageLoader(this, collBook);
 //        }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {

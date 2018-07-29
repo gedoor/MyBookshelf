@@ -214,5 +214,10 @@
     <string name="check_book_source">校验书源</string>
     <string name="progress_show">进度 %d/%d</string>
     <string name="tts_fix">请安装并选择中文TTS!</string>
+    <string name="jf_convert">简繁转换</string>
+    <string name="jf_convert_o">关闭</string>
+    <string name="jf_convert_f">简转繁</string>
+    <string name="jf_convert_j">繁转简</string>
+    <string name="page_mode">翻页模式</string>
 
 </resources>

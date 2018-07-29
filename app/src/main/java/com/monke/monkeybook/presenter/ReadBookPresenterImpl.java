@@ -400,10 +400,15 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
      * 转繁体
      */
     private String toTraditional(String content) {
-        if (readBookControl.getTextConvert() == 1) {
-            content = ChineseUtils.toTraditional(content);
-        } else if (readBookControl.getTextConvert() == -1) {
-            content = ChineseUtils.toSimplified(content);
+        switch (readBookControl.getTextConvert()) {
+            case 0:
+                break;
+            case 1:
+                content = ChineseUtils.toSimplified(content);
+                break;
+            case 2:
+                content = ChineseUtils.toTraditional(content);
+                break;
         }
         return content;
     }

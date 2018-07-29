@@ -57,6 +57,10 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llScreenTimeOut;
     @BindView(R.id.tv_screen_time_out)
     TextView tvScreenTimeOut;
+    @BindView(R.id.tvJFConvert)
+    TextView tvJFConvert;
+    @BindView(R.id.llJFConvert)
+    LinearLayout llJFConvert;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -139,10 +143,23 @@ public class MoreSettingPop extends PopupWindow {
                     .create();
             dialog.show();
         });
+        llJFConvert.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.jf_convert))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
+                        readBookControl.setTextConvert(i);
+                        upFConvert(i);
+                        changeProListener.reLoad();
+                        dialogInterface.dismiss();
+                    })
+                    .create();
+            dialog.show();
+        });
     }
 
     private void initData() {
         upScreenTimeOut(readBookControl.getScreenTimeOut());
+        upFConvert(readBookControl.getTextConvert());
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setCheckedImmediatelyNoEvent(readBookControl.getHideNavigationBar());
         sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
@@ -164,4 +181,9 @@ public class MoreSettingPop extends PopupWindow {
     private void upScreenTimeOut(int screenTimeOut) {
         tvScreenTimeOut.setText(activity.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
     }
+
+    private void upFConvert(int fConvert){
+        tvJFConvert.setText(activity.getResources().getStringArray(R.array.convert_s)[fConvert]);
+    }
+
 }

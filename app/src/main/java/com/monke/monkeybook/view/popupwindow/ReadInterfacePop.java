@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,6 @@ public class ReadInterfacePop extends PopupWindow {
     TextView tvDurLineSize;//行间距数字
     @BindView(R.id.fl_line_bigger)
     TextView flLineBigger;//行间距大
-    @BindView(R.id.tv_convert_j)
-    TextView tvConvertJ;
-    @BindView(R.id.tv_convert_o)
-    TextView tvConvertO;
-    @BindView(R.id.tv_convert_f)
-    TextView tvConvertF;
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
     @BindView(R.id.fl_text_smaller)
@@ -78,6 +73,8 @@ public class ReadInterfacePop extends PopupWindow {
     NumberButton nbPaddingLeft;
     @BindView(R.id.nbPaddingRight)
     NumberButton nbPaddingRight;
+    @BindView(R.id.tvPageMode)
+    TextView tvPageMode;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -122,7 +119,7 @@ public class ReadInterfacePop extends PopupWindow {
         updateBg(readBookControl.getTextDrawableIndex());
         updateLineSize(readBookControl.getLineMultiplier());
         updateBoldText(readBookControl.getTextBold());
-        updateConvertText(readBookControl.getTextConvert());
+        updatePageMode(readBookControl.getPageMode());
 
         nbPaddingTop.setTitle(activity.getString(R.string.padding_top))
                 .setMinNumber(0)
@@ -183,21 +180,17 @@ public class ReadInterfacePop extends PopupWindow {
             changeProListener.changeContentView();
         });
 
-        //繁简切换
-        tvConvertF.setOnClickListener(view -> {
-            readBookControl.setTextConvert(-1);
-            updateConvertText(readBookControl.getTextConvert());
-            changeProListener.changeContentView();
-        });
-        tvConvertO.setOnClickListener(view -> {
-            readBookControl.setTextConvert(0);
-            updateConvertText(readBookControl.getTextConvert());
-            changeProListener.changeContentView();
-        });
-        tvConvertJ.setOnClickListener(view -> {
-            readBookControl.setTextConvert(1);
-            updateConvertText(readBookControl.getTextConvert());
-            changeProListener.changeContentView();
+        //翻页模式
+        tvPageMode.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.page_mode))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.page_mode), readBookControl.getPageMode(), (dialogInterface, i) -> {
+                        readBookControl.setPageMode(i);
+                        updatePageMode(i);
+                        dialogInterface.dismiss();
+                    })
+                    .create();
+            dialog.show();
         });
         //加粗切换
         flTextBold.setOnClickListener(view -> {
@@ -305,24 +298,8 @@ public class ReadInterfacePop extends PopupWindow {
         readBookControl.setLineMultiplier(lineSize);
     }
 
-    private void updateConvertText(int convent) {
-        switch (convent) {
-            case -1:
-                tvConvertF.setSelected(true);
-                tvConvertJ.setSelected(false);
-                tvConvertO.setSelected(false);
-                break;
-            case 0:
-                tvConvertO.setSelected(true);
-                tvConvertJ.setSelected(false);
-                tvConvertF.setSelected(false);
-                break;
-            case 1:
-                tvConvertJ.setSelected(true);
-                tvConvertF.setSelected(false);
-                tvConvertO.setSelected(false);
-                break;
-        }
+    private void updatePageMode(int pageMode) {
+        tvPageMode.setText(String.format(activity.getString(R.string.page_mode)+":%s", activity.getResources().getStringArray(R.array.page_mode)[pageMode]));
     }
 
     private void updateBoldText(Boolean isBold) {

@@ -2,7 +2,7 @@ package com.monke.monkeybook.utils;
 
 import android.support.annotation.StringRes;
 
-import com.example.newbiechen.ireader.App;
+import com.monke.monkeybook.MApplication;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -86,11 +86,11 @@ public class StringUtils {
     }
 
     public static String getString(@StringRes int id){
-        return App.getContext().getResources().getString(id);
+        return MApplication.getInstance().getResources().getString(id);
     }
 
     public static String getString(@StringRes int id, Object... formatArgs){
-        return App.getContext().getResources().getString(id,formatArgs);
+        return MApplication.getInstance().getString(id,formatArgs);
     }
 
     /**

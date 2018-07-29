@@ -153,7 +153,7 @@ public abstract class PageLoader {
         // 获取配置管理器
         readBookControl = ReadBookControl.getInstance();
         // 获取配置参数
-        mPageMode = readBookControl.getPageMode();
+        mPageMode = readBookControl.getPageMode(readBookControl.getPageMode()) ;
         // 初始化参数
         mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         mMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
@@ -422,7 +422,6 @@ public abstract class PageLoader {
         mPageMode = pageMode;
 
         mPageView.setPageMode(mPageMode);
-        readBookControl.setPageMode(mPageMode);
 
         // 重新绘制当前页
         mPageView.drawCurPage(false);
