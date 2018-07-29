@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="page_mode">
-        <item>仿真</item>
         <item>覆盖</item>
+        <item>仿真</item>
         <item>滚动</item>
         <item>无动画</item>
     </string-array>

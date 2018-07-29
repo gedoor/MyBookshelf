@@ -109,7 +109,7 @@ public class ReadBookControl {
         this.paddingTop = readPreference.getInt("paddingTop", 0);
         this.paddingRight = readPreference.getInt("paddingRight", 0);
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
-        this.pageMode = readPreference.getInt("pageMode", 1);
+        this.pageMode = readPreference.getInt("pageMode", 0);
 
         initTextDrawableIndex();
     }
