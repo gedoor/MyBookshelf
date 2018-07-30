@@ -14,17 +14,26 @@ public class LauncherIcon {
     public static void Change() {
         PackageManager packageManager = MApplication.getInstance().getPackageManager();
         ComponentName componentNameMain = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.view.activity.WelcomeActivity");
+        ComponentName componentNameBookMain = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.view.activity.WelcomeBookActivity");
         ComponentName componentNameBook = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.BookIcon");
 
-        if (packageManager.getComponentEnabledSetting(componentNameBook) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+        if (packageManager.getComponentEnabledSetting(componentNameBookMain) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+            //启用
             packageManager.setComponentEnabledSetting(componentNameMain,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            //禁用
+            packageManager.setComponentEnabledSetting(componentNameBookMain,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
             packageManager.setComponentEnabledSetting(componentNameBook,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         } else {
-            packageManager.setComponentEnabledSetting(componentNameBook,
+            //启用
+            packageManager.setComponentEnabledSetting(componentNameBookMain,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            //禁用
             packageManager.setComponentEnabledSetting(componentNameMain,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            packageManager.setComponentEnabledSetting(componentNameBook,
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         }
     }
