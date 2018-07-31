@@ -991,7 +991,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     popMenuIn();
                 }
                 return true;
-            } else {
+            } else if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
                 Boolean temp = csvBook.onKeyDown(keyCode, event);
                 if (temp) {
                     return true;
@@ -1003,8 +1003,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Boolean temp = csvBook.onKeyUp(keyCode, event);
-        return temp || super.onKeyUp(keyCode, event);
+        if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
+            Boolean temp = csvBook.onKeyUp(keyCode, event);
+            return temp || super.onKeyUp(keyCode, event);
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
     }
 
     @Override

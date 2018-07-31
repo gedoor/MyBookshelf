@@ -205,6 +205,7 @@ public abstract class PageLoader {
         mBgPaint = new Paint();
         mBgPaint.setColor(mBgColor);
 
+
         // 绘制电池的画笔
         mBatteryPaint = new Paint();
         mBatteryPaint.setAntiAlias(true);

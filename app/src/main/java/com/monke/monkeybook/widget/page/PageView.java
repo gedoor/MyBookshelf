@@ -113,7 +113,7 @@ public class PageView extends View {
                         mPageLoader.getMarginHeight(), this, mPageAnimListener);
                 break;
             default:
-                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
+                mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
         }
     }
 
