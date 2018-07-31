@@ -18,6 +18,8 @@ import com.monke.monkeybook.widget.animation.ScrollPageAnim;
 import com.monke.monkeybook.widget.animation.SimulationPageAnim;
 import com.monke.monkeybook.widget.animation.SlidePageAnim;
 
+import java.util.Objects;
+
 
 /**
  * Created by Administrator on 2016/8/29 0029.
@@ -113,7 +115,7 @@ public class PageView extends View {
                         mPageLoader.getMarginHeight(), this, mPageAnimListener);
                 break;
             default:
-                mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
+                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
         }
     }
 
@@ -346,11 +348,11 @@ public class PageView extends View {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-//        if (collBook.isLocal()) {
-//            mPageLoader = new LocalPageLoader(this, collBook);
-//        } else {
+        if (Objects.equals(collBook.getTag(), BookShelfBean.LOCAL_TAG)) {
+            mPageLoader = new LocalPageLoader(this, collBook);
+        } else {
             mPageLoader = new NetPageLoader(this, collBook);
-//        }
+        }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小

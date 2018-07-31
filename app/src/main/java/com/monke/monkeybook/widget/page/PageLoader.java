@@ -3,6 +3,7 @@ package com.monke.monkeybook.widget.page;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -11,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
@@ -80,9 +82,11 @@ public abstract class PageLoader {
     // 绘制小说内容的画笔
     private TextPaint mTextPaint;
     // 阅读器的配置选项
-    private ReadBookControl readBookControl;
+    private ReadBookControl mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
+    // 存储阅读记录类
+//    private BookRecordBean mBookRecord;
 
     private Disposable mPreLoadDisp;
 
@@ -98,6 +102,8 @@ public abstract class PageLoader {
     private boolean isClose;
     // 页面的翻页效果模式
     private PageMode mPageMode;
+    // 加载器的颜色主题
+    private PageStyle mPageStyle;
     //当前是否是夜间模式
     private boolean isNightMode;
     //书籍绘制区域的宽高
@@ -151,14 +157,15 @@ public abstract class PageLoader {
 
     private void initData() {
         // 获取配置管理器
-        readBookControl = ReadBookControl.getInstance();
+        mSettingManager = ReadBookControl.getInstance();
         // 获取配置参数
-        mPageMode = readBookControl.getPageMode(readBookControl.getPageMode()) ;
+        mPageMode = mSettingManager.getPageMode(mSettingManager.getPageMode());
+        mPageStyle = PageStyle.values()[1];
         // 初始化参数
         mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         mMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
         // 配置文字有关的参数
-        setUpTextParams(readBookControl.getTextSize());
+        setUpTextParams(mSettingManager.getTextSize());
     }
 
     /**
@@ -205,14 +212,13 @@ public abstract class PageLoader {
         mBgPaint = new Paint();
         mBgPaint.setColor(mBgColor);
 
-
         // 绘制电池的画笔
         mBatteryPaint = new Paint();
         mBatteryPaint.setAntiAlias(true);
         mBatteryPaint.setDither(true);
 
         // 初始化页面样式
-        setNightMode(readBookControl.getIsNightTheme());
+        setNightMode(mSettingManager.getIsNightTheme());
     }
 
     private void initPageView() {
@@ -390,25 +396,40 @@ public abstract class PageLoader {
      * @param nightMode
      */
     public void setNightMode(boolean nightMode) {
+        isNightMode = nightMode;
 
-            setPageStyle(readBookControl);
-
+        if (isNightMode) {
+            mBatteryPaint.setColor(Color.WHITE);
+            setPageStyle(PageStyle.NIGHT);
+        } else {
+            mBatteryPaint.setColor(Color.BLACK);
+            setPageStyle(mPageStyle);
+        }
     }
 
     /**
      * 设置页面样式
+     *
+     * @param pageStyle:页面样式
      */
-    public void setPageStyle(ReadBookControl readBookControl) {
+    public void setPageStyle(PageStyle pageStyle) {
+        if (pageStyle != PageStyle.NIGHT) {
+            mPageStyle = pageStyle;
+        }
+
+        if (isNightMode && pageStyle != PageStyle.NIGHT) {
+            return;
+        }
 
         // 设置当前颜色样式
-        mTextColor = ContextCompat.getColor(mContext, readBookControl.getTextColor());
-//        mBgColor = ContextCompat.getColor(mContext, pageStyle.getBgColor());
+        mTextColor = ContextCompat.getColor(mContext, pageStyle.getFontColor());
+        mBgColor = ContextCompat.getColor(mContext, pageStyle.getBgColor());
 
         mTipPaint.setColor(mTextColor);
         mTitlePaint.setColor(mTextColor);
         mTextPaint.setColor(mTextColor);
 
-//        mBgPaint.set(mBgColor);
+        mBgPaint.setColor(mBgColor);
 
         mPageView.drawCurPage(false);
     }
@@ -518,11 +539,11 @@ public abstract class PageLoader {
      * 保存阅读记录
      */
     public void saveRecord() {
-//
-//        if (mChapterList.isEmpty()) {
-//            return;
-//        }
-//
+
+        if (mChapterList.isEmpty()) {
+            return;
+        }
+
 //        mBookRecord.setBookId(mCollBook.get_id());
 //        mBookRecord.setChapter(mCurChapterPos);
 //
@@ -541,15 +562,9 @@ public abstract class PageLoader {
      * 初始化书籍
      */
     private void prepareBook() {
-//        mBookRecord = BookRepository.getInstance()
-//                .getBookRecord(mCollBook.get_id());
-//
-//        if (mBookRecord == null) {
-//            mBookRecord = new BookRecordBean();
-//        }
-//
-//        mCurChapterPos = mBookRecord.getChapter();
-//        mLastChapterPos = mCurChapterPos;
+
+        mCurChapterPos = mCollBook.getDurChapter();
+        mLastChapterPos = mCurChapterPos;
     }
 
     /**
@@ -579,7 +594,7 @@ public abstract class PageLoader {
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
-                int position = mCollBook.getDurChapterPage();
+                int position = mCollBook.getDurChapter();
 
                 // 防止记录页的页号，大于当前最大页号
                 if (position >= mCurPageList.size()) {
@@ -772,7 +787,7 @@ public abstract class PageLoader {
         /******绘制当前时间********/
         //底部的字显示的位置Y
         float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
-        String time = StringUtils.dateConvert(System.currentTimeMillis(), "HH:mm");
+        String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
         float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
         canvas.drawText(time, x, y, mTipPaint);
     }

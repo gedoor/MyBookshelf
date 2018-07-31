@@ -1,9 +1,10 @@
 package com.monke.monkeybook.widget.page;
 
-
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.Constant;
+import com.monke.monkeybook.utils.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,7 +59,8 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File("");
+        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.getNoteUrl()
+                + File.separator + chapter.title + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
@@ -68,7 +70,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
-        return true;
+        return BookshelfHelp.isChapterCached(mCollBook.getNoteUrl(), chapter.title);
     }
 
     // 装载上一章节的内容
@@ -205,7 +207,15 @@ public class NetPageLoader extends PageLoader {
     @Override
     public void saveRecord() {
         super.saveRecord();
-
+        if (mCollBook != null && isChapterListPrepare) {
+            //表示当前CollBook已经阅读
+//            mCollBook.setIsUpdate(false);
+//            mCollBook.setLastRead(StringUtils.
+//                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
+//            //直接更新
+//            BookRepository.getInstance()
+//                    .saveCollBook(mCollBook);
+        }
     }
 }
 

@@ -14,7 +14,9 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.utils.FileUtils;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +29,18 @@ import java.util.List;
  */
 
 public class BookshelfHelp {
+    /**
+     * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存
+     * 过)
+     * @param folderName : bookId
+     * @param fileName: chapterName
+     * @return
+     */
+    public static boolean isChapterCached(String folderName, String fileName){
+        File file = new File(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
+        return file.exists();
+    }
 
     public static List<BookShelfBean> getAllBook() {
         List<BookShelfBean> bookShelfList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()

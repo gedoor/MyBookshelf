@@ -18,16 +18,18 @@ import java.util.Objects;
 public class ChapterListBean implements Parcelable,Cloneable{
 
     private String noteUrl; //对应BookInfoBean noteUrl;
-
     private int durChapterIndex;  //当前章节数
     @Id
     private String durChapterUrl;  //当前章节对应的文章地址
-
     private String durChapterName;  //当前章节名称
-
     private String tag;
-
+    //章节内容在文章中的起始位置(本地)
+    private Long start;
+    //章节内容在文章中的终止位置(本地)
+    private Long end;
+    //是否缓存
     private Boolean hasCache = false;
+
     @Transient
     private BookContentBean bookContentBean = new BookContentBean();
 
@@ -37,18 +39,22 @@ public class ChapterListBean implements Parcelable,Cloneable{
         durChapterUrl = in.readString();
         durChapterName = in.readString();
         tag = in.readString();
+        start = in.readLong();
+        end = in.readLong();
         bookContentBean = in.readParcelable(BookContentBean.class.getClassLoader());
         hasCache = in.readByte() != 0;
     }
 
-    @Generated(hash = 1225922702)
-    public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl,
-            String durChapterName, String tag, Boolean hasCache) {
+    @Generated(hash = 1638492836)
+    public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
+            Long start, Long end, Boolean hasCache) {
         this.noteUrl = noteUrl;
         this.durChapterIndex = durChapterIndex;
         this.durChapterUrl = durChapterUrl;
         this.durChapterName = durChapterName;
         this.tag = tag;
+        this.start = start;
+        this.end = end;
         this.hasCache = hasCache;
     }
 
@@ -63,6 +69,8 @@ public class ChapterListBean implements Parcelable,Cloneable{
         dest.writeString(durChapterUrl);
         dest.writeString(durChapterName);
         dest.writeString(tag);
+        dest.writeLong(start);
+        dest.writeLong(end);
         dest.writeParcelable(bookContentBean, flags);
         dest.writeByte((byte)(hasCache?1:0));
     }
@@ -70,6 +78,41 @@ public class ChapterListBean implements Parcelable,Cloneable{
     @Override
     public int describeContents() {
         return 0;
+    }
+    
+    @Transient
+    public static final Creator<ChapterListBean> CREATOR = new Creator<ChapterListBean>() {
+        @Override
+        public ChapterListBean createFromParcel(Parcel in) {
+            return new ChapterListBean(in);
+        }
+
+        @Override
+        public ChapterListBean[] newArray(int size) {
+            return new ChapterListBean[size];
+        }
+    };
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ChapterListBean chapterListBean = (ChapterListBean) super.clone();
+        chapterListBean.noteUrl = noteUrl;
+        chapterListBean.durChapterUrl = durChapterUrl;
+        chapterListBean.durChapterName = durChapterName;
+        chapterListBean.tag = tag;
+        chapterListBean.hasCache = hasCache;
+        chapterListBean.bookContentBean = new BookContentBean();
+        return chapterListBean;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ChapterListBean) {
+            ChapterListBean chapterListBean = (ChapterListBean) obj;
+            return Objects.equals(chapterListBean.durChapterUrl, durChapterUrl);
+        } else {
+            return false;
+        }
     }
 
     public BookContentBean getBookContentBean() {
@@ -132,38 +175,20 @@ public class ChapterListBean implements Parcelable,Cloneable{
         this.noteUrl = noteUrl;
     }
 
-    @Transient
-    public static final Creator<ChapterListBean> CREATOR = new Creator<ChapterListBean>() {
-        @Override
-        public ChapterListBean createFromParcel(Parcel in) {
-            return new ChapterListBean(in);
-        }
-
-        @Override
-        public ChapterListBean[] newArray(int size) {
-            return new ChapterListBean[size];
-        }
-    };
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        ChapterListBean chapterListBean = (ChapterListBean) super.clone();
-        chapterListBean.noteUrl = noteUrl;
-        chapterListBean.durChapterUrl = durChapterUrl;
-        chapterListBean.durChapterName = durChapterName;
-        chapterListBean.tag = tag;
-        chapterListBean.hasCache = hasCache;
-        chapterListBean.bookContentBean = new BookContentBean();
-        return chapterListBean;
+    public Long getStart() {
+        return this.start;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ChapterListBean) {
-            ChapterListBean chapterListBean = (ChapterListBean) obj;
-            return Objects.equals(chapterListBean.durChapterUrl, durChapterUrl);
-        } else {
-            return false;
-        }
+    public void setStart(Long start) {
+        this.start = start;
     }
+
+    public Long getEnd() {
+        return this.end;
+    }
+
+    public void setEnd(Long end) {
+        this.end = end;
+    }
+
 }

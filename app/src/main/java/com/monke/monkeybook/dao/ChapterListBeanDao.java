@@ -29,7 +29,9 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         public final static Property DurChapterUrl = new Property(2, String.class, "durChapterUrl", true, "DUR_CHAPTER_URL");
         public final static Property DurChapterName = new Property(3, String.class, "durChapterName", false, "DUR_CHAPTER_NAME");
         public final static Property Tag = new Property(4, String.class, "tag", false, "TAG");
-        public final static Property HasCache = new Property(5, Boolean.class, "hasCache", false, "HAS_CACHE");
+        public final static Property Start = new Property(5, Long.class, "start", false, "START");
+        public final static Property End = new Property(6, Long.class, "end", false, "END");
+        public final static Property HasCache = new Property(7, Boolean.class, "hasCache", false, "HAS_CACHE");
     }
 
 
@@ -50,7 +52,9 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
                 "\"DUR_CHAPTER_URL\" TEXT PRIMARY KEY NOT NULL ," + // 2: durChapterUrl
                 "\"DUR_CHAPTER_NAME\" TEXT," + // 3: durChapterName
                 "\"TAG\" TEXT," + // 4: tag
-                "\"HAS_CACHE\" INTEGER);"); // 5: hasCache
+                "\"START\" INTEGER," + // 5: start
+                "\"END\" INTEGER," + // 6: end
+                "\"HAS_CACHE\" INTEGER);"); // 7: hasCache
     }
 
     /** Drops the underlying database table. */
@@ -84,9 +88,19 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
             stmt.bindString(5, tag);
         }
  
+        Long start = entity.getStart();
+        if (start != null) {
+            stmt.bindLong(6, start);
+        }
+ 
+        Long end = entity.getEnd();
+        if (end != null) {
+            stmt.bindLong(7, end);
+        }
+ 
         Boolean hasCache = entity.getHasCache();
         if (hasCache != null) {
-            stmt.bindLong(6, hasCache ? 1L: 0L);
+            stmt.bindLong(8, hasCache ? 1L: 0L);
         }
     }
 
@@ -115,9 +129,19 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
             stmt.bindString(5, tag);
         }
  
+        Long start = entity.getStart();
+        if (start != null) {
+            stmt.bindLong(6, start);
+        }
+ 
+        Long end = entity.getEnd();
+        if (end != null) {
+            stmt.bindLong(7, end);
+        }
+ 
         Boolean hasCache = entity.getHasCache();
         if (hasCache != null) {
-            stmt.bindLong(6, hasCache ? 1L: 0L);
+            stmt.bindLong(8, hasCache ? 1L: 0L);
         }
     }
 
@@ -134,7 +158,9 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // durChapterUrl
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // durChapterName
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // tag
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0 // hasCache
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // start
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // end
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0 // hasCache
         );
         return entity;
     }
@@ -146,7 +172,9 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         entity.setDurChapterUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDurChapterName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setTag(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setHasCache(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setStart(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setEnd(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setHasCache(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
      }
     
     @Override
