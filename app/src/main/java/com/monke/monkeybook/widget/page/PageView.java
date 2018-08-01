@@ -98,7 +98,7 @@ public class PageView extends View {
     void setPageMode(PageMode pageMode) {
         mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
-        if (mViewWidth == 0 || mViewHeight == 0) return;
+        if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
 
         switch (mPageMode) {
             case SIMULATION:
@@ -322,8 +322,9 @@ public class PageView extends View {
                 ((ScrollPageAnim) mPageAnim).resetBitmap();
             }
         }
-
-        mPageLoader.drawPage(getNextBitmap(), isUpdate);
+        if (mPageLoader != null) {
+            mPageLoader.drawPage(getNextBitmap(), isUpdate);
+        }
     }
 
     @Override

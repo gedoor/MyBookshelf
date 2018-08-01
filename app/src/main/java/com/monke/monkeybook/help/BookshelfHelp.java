@@ -15,8 +15,13 @@ import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.utils.FileUtils;
+import com.monke.monkeybook.utils.IOUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +45,37 @@ public class BookshelfHelp {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + fileName + FileUtils.SUFFIX_NB);
         return file.exists();
+    }
+
+    /**
+     * 存储章节
+     * @param folderName
+     * @param fileName
+     * @param content
+     */
+    public static void saveChapterInfo(String folderName,String fileName,String content){
+        File file = getBookFile(folderName, fileName);
+        //获取流并存储
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file));
+            writer.write(content);
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            IOUtils.close(writer);
+        }
+    }
+
+    /**
+     * 创建或获取存储文件
+     * @param folderName
+     * @param fileName
+     * @return
+     */
+    public static File getBookFile(String folderName, String fileName){
+        return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
     }
 
     public static List<BookShelfBean> getAllBook() {

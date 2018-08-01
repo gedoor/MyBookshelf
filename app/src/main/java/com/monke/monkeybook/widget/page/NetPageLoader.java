@@ -59,7 +59,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.getNoteUrl()
+        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.getBookInfoBean().getName()
                 + File.separator + chapter.title + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
@@ -70,7 +70,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected boolean hasChapterData(TxtChapter chapter) {
-        return BookshelfHelp.isChapterCached(mCollBook.getNoteUrl(), chapter.title);
+        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(), chapter.title);
     }
 
     // 装载上一章节的内容
@@ -117,12 +117,12 @@ public class NetPageLoader extends PageLoader {
     private void loadPrevChapter() {
         if (mPageChangeListener != null) {
             int end = mCurChapterPos;
-            int begin = end - 2;
+            int begin = end - 1;
             if (begin < 0) {
                 begin = 0;
             }
 
-            requestChapters(begin, end);
+            mPageChangeListener.requestChapters(begin);
         }
     }
 
@@ -131,26 +131,7 @@ public class NetPageLoader extends PageLoader {
      */
     private void loadCurrentChapter() {
         if (mPageChangeListener != null) {
-            int begin = mCurChapterPos;
-            int end = mCurChapterPos;
-
-            // 是否当前不是最后一章
-            if (end < mChapterList.size()) {
-                end = end + 1;
-                if (end >= mChapterList.size()) {
-                    end = mChapterList.size() - 1;
-                }
-            }
-
-            // 如果当前不是第一章
-            if (begin != 0) {
-                begin = begin - 1;
-                if (begin < 0) {
-                    begin = 0;
-                }
-            }
-
-            requestChapters(begin, end);
+            mPageChangeListener.requestChapters(mCurChapterPos);
         }
     }
 
@@ -162,7 +143,6 @@ public class NetPageLoader extends PageLoader {
 
             // 提示加载后两章
             int begin = mCurChapterPos + 1;
-            int end = begin + 1;
 
             // 判断是否大于最后一章
             if (begin >= mChapterList.size()) {
@@ -170,37 +150,7 @@ public class NetPageLoader extends PageLoader {
                 return;
             }
 
-            if (end > mChapterList.size()) {
-                end = mChapterList.size() - 1;
-            }
-
-            requestChapters(begin, end);
-        }
-    }
-
-    private void requestChapters(int start, int end) {
-        // 检验输入值
-        if (start < 0) {
-            start = 0;
-        }
-
-        if (end >= mChapterList.size()) {
-            end = mChapterList.size() - 1;
-        }
-
-
-        List<TxtChapter> chapters = new ArrayList<>();
-
-        // 过滤，哪些数据已经加载了
-        for (int i = start; i <= end; ++i) {
-            TxtChapter txtChapter = mChapterList.get(i);
-            if (!hasChapterData(txtChapter)) {
-                chapters.add(txtChapter);
-            }
-        }
-
-        if (!chapters.isEmpty()) {
-            mPageChangeListener.requestChapters(chapters);
+            mPageChangeListener.requestChapters(begin);
         }
     }
 

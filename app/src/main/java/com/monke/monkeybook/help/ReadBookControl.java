@@ -585,9 +585,9 @@ public class ReadBookControl {
     public PageMode getPageMode(int pageMode) {
         switch (pageMode) {
             case 0:
-                return PageMode.SIMULATION;
-            case 1:
                 return PageMode.COVER;
+            case 1:
+                return PageMode.SIMULATION;
             case 2:
                 return PageMode.SCROLL;
             case 3:

@@ -84,6 +84,7 @@ public class ReadInterfacePop extends PopupWindow {
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public interface OnChangeProListener {
+        void upPageMode();
 
         void changeContentView();
 
@@ -187,6 +188,7 @@ public class ReadInterfacePop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.page_mode), readBookControl.getPageMode(), (dialogInterface, i) -> {
                         readBookControl.setPageMode(i);
                         updatePageMode(i);
+                        changeProListener.upPageMode();
                         dialogInterface.dismiss();
                     })
                     .create();

@@ -12,7 +12,7 @@ public interface IReadBookView extends IView {
     /**
      * @return 获取当前阅读界面UI画笔
      */
-    Paint getPaint();
+//    Paint getPaint();
 
     /**
      * @return Book标志
@@ -23,10 +23,9 @@ public interface IReadBookView extends IView {
 
     void setAdd(Boolean isAdd);
 
-    /**
-     * @return 控制view
-     */
-    BaseContentView getCsvBook();
+    void finishContent();
+
+    void error(String msg);
 
     /**
      * 小说数据初始化成功

@@ -1405,9 +1405,9 @@ public abstract class PageLoader {
         /**
          * 作用：请求加载章节内容
          *
-         * @param requestChapters:需要下载的章节列表
+         * @param chapterIndex:需要下载的章节
          */
-        void requestChapters(List<TxtChapter> requestChapters);
+        void requestChapters(int chapterIndex);
 
         /**
          * 作用：章节目录加载完成时候回调
