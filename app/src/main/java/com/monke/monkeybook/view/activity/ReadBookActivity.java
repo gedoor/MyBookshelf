@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -72,7 +73,6 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import at.markushi.ui.CircleButton;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.grantland.widget.AutofitTextView;
@@ -116,14 +116,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     LinearLayout llSetting;
     @BindView(R.id.clp_chapterList)
     ChapterListView chapterListView;
-    @BindView(R.id.ib_read_aloud)
-    CircleButton ibReadAloud;
-    @BindView(R.id.ib_replace_rule)
-    CircleButton ibReplaceRule;
-    @BindView(R.id.ib_night_theme)
-    CircleButton ibNightTheme;
-    @BindView(R.id.ib_read_aloud_timer)
-    CircleButton ibReadAloudTimer;
     @BindView(R.id.tv_read_aloud_timer)
     TextView tvReadAloudTimer;
     @BindView(R.id.ll_read_aloud_timer)
@@ -148,6 +140,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     LinearLayout llISB;
     @BindView(R.id.llNavigationBar)
     LinearLayout llNavigationBar;
+    @BindView(R.id.fabReadAloud)
+    FloatingActionButton fabReadAloud;
+    @BindView(R.id.fab_read_aloud_timer)
+    FloatingActionButton fabReadAloudTimer;
+    @BindView(R.id.fabReplaceRule)
+    FloatingActionButton fabReplaceRule;
+    @BindView(R.id.fabNightTheme)
+    FloatingActionButton fabNightTheme;
 
     private BaseContentView csvBook;
 
@@ -311,7 +311,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     runOnUiThread(() -> keepScreenOn(false));
                 }
             }, screenOffTime);
-        } else if (screenTimeOut != -1){
+        } else if (screenTimeOut != -1) {
             keepScreenOn(false);
         }
     }
@@ -381,9 +381,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ivSetting.getDrawable().mutate();
         ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (isNightTheme()) {
-            ibNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
+            fabNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
         } else {
-            ibNightTheme.setImageResource(R.drawable.ic_brightness);
+            fabNightTheme.setImageResource(R.drawable.ic_brightness);
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
@@ -536,33 +536,33 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         });
 
         //朗读定时
-        ibReadAloudTimer.getDrawable().mutate();
-        ibReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
+        fabReadAloudTimer.getDrawable().mutate();
+        fabReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
 
         //朗读
-        ibReadAloud.getDrawable().mutate();
-        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReadAloud.setOnClickListener(view -> onMediaButton());
+        fabReadAloud.getDrawable().mutate();
+        fabReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabReadAloud.setOnClickListener(view -> onMediaButton());
         //长按停止朗读
-		ibReadAloud.setOnLongClickListener(view -> {
+        fabReadAloud.setOnLongClickListener(view -> {
             ReadAloudService.stop(this);
-			return false;
+            return true;
         });
 
         //替换
-        ibReplaceRule.getDrawable().mutate();
-        ibReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibReplaceRule.setOnClickListener(view -> {
+        fabReplaceRule.getDrawable().mutate();
+        fabReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabReplaceRule.setOnClickListener(view -> {
             popMenuOut();
             Intent intent = new Intent(this, ReplaceRuleActivity.class);
             startActivityForResult(intent, ResultReplace);
         });
 
         //夜间模式
-        ibNightTheme.getDrawable().mutate();
-        ibNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ibNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
+        fabNightTheme.getDrawable().mutate();
+        fabNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
 
         //上一章
         tvPre.setOnClickListener(view -> {
@@ -802,25 +802,25 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 csvBook.readAloudNext();
                 break;
             case PLAY:
-                ibReadAloud.setImageResource(R.drawable.ic_pause2);
+                fabReadAloud.setImageResource(R.drawable.ic_pause2);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             case PAUSE:
-                ibReadAloud.setImageResource(R.drawable.ic_play2);
+                fabReadAloud.setImageResource(R.drawable.ic_play2);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             default:
                 csvBook.readAloudStop();
-                ibReadAloud.setImageResource(R.drawable.ic_read_aloud);
+                fabReadAloud.setImageResource(R.drawable.ic_read_aloud);
                 llReadAloudTimer.setVisibility(View.INVISIBLE);
         }
-        ibReadAloud.getDrawable().mutate();
-        ibReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabReadAloud.getDrawable().mutate();
+        fabReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
     public void upAloudTimer(String text) {
-        ibReadAloud.setContentDescription(text);
+        fabReadAloudTimer.setContentDescription(text);
         tvReadAloudTimer.setText(text);
     }
 

@@ -49,6 +49,7 @@ android {
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
         multiDexEnabled true
+
     }
 
     lintOptions {
@@ -147,9 +148,6 @@ dependencies {
 
     //简易权限获取
     implementation 'pub.devrel:easypermissions:1.2.0'
-
-    //圆形按钮
-    implementation 'com.github.markushi:circlebutton:1.1'
 
     //二维码
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
