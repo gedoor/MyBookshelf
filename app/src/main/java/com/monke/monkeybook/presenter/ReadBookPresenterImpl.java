@@ -114,7 +114,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     }
 
     @Override
-    public void loadContent(int chapterIndex) {
+    public void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                         BookContentBean bookContentBean = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
@@ -136,6 +136,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             timer.schedule(new TimerTask() {
                                 @Override
                                 public void run() {
+                                    editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                     mView.error(mView.getContext().getString(R.string.load_over_time));
                                     d.dispose();
                                 }
@@ -145,7 +146,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
                             editDownloading(REMOVE, bookContentBean.getDurChapterUrl());
-                            BookshelfHelp.saveChapterInfo(bookShelf.getNoteUrl(),
+                            BookshelfHelp.saveChapterInfo(bookShelf.getBookInfoBean().getName(),
                                     bookShelf.getChapterList(chapterIndex).getDurChapterName(),
                                     bookContentBean.getDurChapterContent());
                             mView.finishContent();
@@ -153,6 +154,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                         @Override
                         public void onError(Throwable e) {
+                            editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             mView.error(e.getMessage());
                         }
 

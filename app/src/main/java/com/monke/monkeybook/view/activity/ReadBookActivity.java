@@ -1166,7 +1166,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void error(String msg) {
-        mPageLoader.chapterError();
+
     }
 
 
