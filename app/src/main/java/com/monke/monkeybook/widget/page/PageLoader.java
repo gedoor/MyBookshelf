@@ -718,13 +718,13 @@ public abstract class PageLoader {
         if (!isUpdate) {
             /****绘制背景****/
             canvas.drawColor(mBgColor);
-            Paint mBitPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mBitPaint.setFilterBitmap(true);
-            mBitPaint.setDither(true);
-            Bitmap bgBitmap = mPageView.getBgBitmap();
-            Rect mSrcRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
-            Rect mDestRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
-            canvas.drawBitmap(bgBitmap,mSrcRect, mDestRect, mBitPaint);
+//            Paint mBitPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//            mBitPaint.setFilterBitmap(true);
+//            mBitPaint.setDither(true);
+//            Bitmap bgBitmap = mPageView.getBgBitmap();
+//            Rect mSrcRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
+//            Rect mDestRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
+//            canvas.drawBitmap(bgBitmap,mSrcRect, mDestRect, mBitPaint);
 
             if (!mChapterList.isEmpty()) {
                 /*****初始化标题的参数********/

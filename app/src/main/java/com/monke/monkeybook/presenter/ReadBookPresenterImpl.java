@@ -117,10 +117,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     public void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                        BookContentBean bookContentBean = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
-                                .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(chapterIndex).getDurChapterUrl()))
-                                .build().unique();
-                        if (bookContentBean == null) {
+                        if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(chapterIndex).getDurChapterName())) {
                             editDownloading(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             e.onNext(chapterIndex);
                         }

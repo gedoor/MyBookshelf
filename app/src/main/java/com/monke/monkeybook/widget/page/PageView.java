@@ -13,6 +13,7 @@ import android.view.ViewConfiguration;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
 import com.monke.monkeybook.widget.animation.HorizonPageAnim;
@@ -33,6 +34,8 @@ import java.util.Objects;
 public class PageView extends View {
 
     private final static String TAG = "BookPageWidget";
+
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
@@ -380,7 +383,7 @@ public class PageView extends View {
             // 初始化 PageLoader 的屏幕大小
             mPageLoader.prepareDisplay(mViewWidth, mViewHeight);
             mBgBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
-
+//            this.setBackground(readBookControl.getTextBackground());
         }
 
         return mPageLoader;
