@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.page;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,9 +12,12 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
@@ -86,8 +90,7 @@ public abstract class PageLoader {
     private ReadBookControl mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
-    // 存储阅读记录类
-//    private BookRecordBean mBookRecord;
+
 
     private Disposable mPreLoadDisp;
 
@@ -715,6 +718,11 @@ public abstract class PageLoader {
         if (!isUpdate) {
             /****绘制背景****/
             canvas.drawColor(mBgColor);
+            Paint mBitPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mBitPaint.setFilterBitmap(true);
+            mBitPaint.setDither(true);
+            Bitmap bgBitmap = mPageView.getBgBitmap();
+            canvas.drawBitmap(bgBitmap,0, 0, mBitPaint);
 
             if (!mChapterList.isEmpty()) {
                 /*****初始化标题的参数********/

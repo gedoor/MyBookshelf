@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.page;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -9,7 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
 import com.monke.monkeybook.widget.animation.HorizonPageAnim;
 import com.monke.monkeybook.widget.animation.NonePageAnim;
@@ -33,6 +37,8 @@ public class PageView extends View {
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
     private int statusBarHeight = 0; //状态栏高度
+    // 背景图片
+    private Bitmap mBgBitmap;
 
     private int mStartX = 0;
     private int mStartY = 0;
@@ -122,6 +128,10 @@ public class PageView extends View {
 
     public int getStatusBarHeight() {
         return statusBarHeight;
+    }
+
+    public Bitmap getmBgBitmap() {
+        return mBgBitmap;
     }
 
     public Bitmap getNextBitmap() {
@@ -369,6 +379,8 @@ public class PageView extends View {
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小
             mPageLoader.prepareDisplay(mViewWidth, mViewHeight);
+            mBgBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
+
         }
 
         return mPageLoader;
