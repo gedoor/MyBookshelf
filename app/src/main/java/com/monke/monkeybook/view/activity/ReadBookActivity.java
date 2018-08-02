@@ -482,12 +482,34 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 //        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
         //获取页面加载器
         mPageLoader = pageView.getPageLoader(mPresenter.getBookShelf(), ImmersionBar.getStatusBarHeight(this));
+        mPageLoader.updateBattery(BatteryUtil.getLevel(this));
         mPageLoader.setOnPageChangeListener(
                 new PageLoader.OnPageChangeListener() {
 
                     @Override
                     public void onChapterChange(int pos) {
+                        actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
+                        if (mPresenter.getBookShelf().getChapterListSize() > 0) {
+                            atvUrl.setText(mPresenter.getBookShelf().getChapterList(pos).getDurChapterUrl());
+                        } else {
+                            atvUrl.setText("");
+                        }
 
+                        if (mPresenter.getBookShelf().getChapterListSize() == 1) {
+                            tvPre.setEnabled(false);
+                            tvNext.setEnabled(false);
+                        } else {
+                            if (pos == 1) {
+                                tvPre.setEnabled(false);
+                                tvNext.setEnabled(true);
+                            } else if (pos == mPresenter.getBookShelf().getChapterListSize() - 1) {
+                                tvPre.setEnabled(true);
+                                tvNext.setEnabled(false);
+                            } else {
+                                tvPre.setEnabled(true);
+                                tvNext.setEnabled(true);
+                            }
+                        }
                     }
 
                     @Override
@@ -499,7 +521,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void onCategoryFinish(List<TxtChapter> chapters) {
-//                        mCategoryAdapter.refreshItems(chapters);
+
                     }
 
                     @Override
