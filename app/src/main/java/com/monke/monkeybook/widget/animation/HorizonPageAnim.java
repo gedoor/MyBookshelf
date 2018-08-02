@@ -43,10 +43,8 @@ public abstract class HorizonPageAnim extends PageAnimation{
                            View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginHeight, view,listener);
         //创建图片
-//        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
-//        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
-        mCurBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
-        mNextBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
+        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
     }
 
     /**

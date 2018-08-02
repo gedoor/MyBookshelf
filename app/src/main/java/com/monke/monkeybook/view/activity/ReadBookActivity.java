@@ -477,9 +477,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     private void initPageView() {
-//        csvBook = (BaseContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
-//        flContent.addView(csvBook, 0);
-//        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
         //获取页面加载器
         mPageLoader = pageView.getPageLoader(mPresenter.getBookShelf(), ImmersionBar.getStatusBarHeight(this));
         mPageLoader.updateBattery(BatteryUtil.getLevel(this));
@@ -548,7 +545,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
             public boolean onTouch() {
-//                return !hideReadMenu();
                 return true;
             }
 
@@ -580,7 +576,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
             public void itemClick(int index, int page, int tabPosition) {
-//                csvBook.setInitData(index, mPresenter.getBookShelf().getChapterListSize(), page);
                 mPageLoader.skipToChapter(index);
             }
 
@@ -609,11 +604,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void moveStopProgress(float dur) {
                 int realDur = (int) Math.ceil(dur);
-//                if ((realDur) != mPresenter.getBookShelf().getDurChapterPage()) {
-////                    csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-////                            mPresenter.getBookShelf().getChapterListSize(),
-////                            realDur);
-////                }
+                if ((realDur) != mPresenter.getBookShelf().getDurChapterPage()) {
+                    mPageLoader.skipToPage(realDur);
+                }
                 if (hpbReadProgress.getDurProgress() != realDur)
                     hpbReadProgress.setDurProgress(realDur);
             }

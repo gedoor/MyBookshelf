@@ -722,7 +722,9 @@ public abstract class PageLoader {
             mBitPaint.setFilterBitmap(true);
             mBitPaint.setDither(true);
             Bitmap bgBitmap = mPageView.getBgBitmap();
-            canvas.drawBitmap(bgBitmap,0, 0, mBitPaint);
+            Rect mSrcRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
+            Rect mDestRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
+            canvas.drawBitmap(bgBitmap,mSrcRect, mDestRect, mBitPaint);
 
             if (!mChapterList.isEmpty()) {
                 /*****初始化标题的参数********/
