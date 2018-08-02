@@ -32,6 +32,7 @@ public class PageView extends View {
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
+    private int statusBarHeight = 0; //状态栏高度
 
     private int mStartX = 0;
     private int mStartY = 0;
@@ -119,6 +120,10 @@ public class PageView extends View {
         }
     }
 
+    public int getStatusBarHeight() {
+        return statusBarHeight;
+    }
+
     public Bitmap getNextBitmap() {
         if (mPageAnim == null) return null;
         return mPageAnim.getNextBitmap();
@@ -195,7 +200,10 @@ public class PageView extends View {
         canvas.drawColor(mBgColor);
 
         //绘制动画
-        mPageAnim.draw(canvas);
+        if (mPageAnim != null) {
+            mPageAnim.draw(canvas);
+        }
+
     }
 
     @Override
@@ -276,7 +284,9 @@ public class PageView extends View {
     @Override
     public void computeScroll() {
         //进行滑动
-        mPageAnim.scrollAnim();
+        if (mPageAnim != null) {
+            mPageAnim.scrollAnim();
+        }
         super.computeScroll();
     }
 
@@ -343,7 +353,8 @@ public class PageView extends View {
      * @param collBook
      * @return
      */
-    public PageLoader getPageLoader(BookShelfBean collBook) {
+    public PageLoader getPageLoader(BookShelfBean collBook, int statusBarHeight) {
+        this.statusBarHeight = statusBarHeight;
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;

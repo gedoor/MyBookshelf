@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -56,7 +55,6 @@ import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
-import com.monke.monkeybook.widget.BaseContentView;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.monke.monkeybook.widget.contentview.ContentSwitchView;
@@ -70,7 +68,6 @@ import com.monke.mprogressbar.OnProgressListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
@@ -157,8 +154,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @BindView(R.id.read_tv_page_tip)
     TextView readTvPageTip;
 
-//    private BaseContentView csvBook;
-
     private Animation menuTopIn;
     private Animation menuTopOut;
     private Animation menuBottomIn;
@@ -182,7 +177,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private MoProgressHUD moProgressHUD;
     private Intent readAloudIntent;
     private ThisBatInfoReceiver batInfoReceiver;
-    private ContentSwitchView.LoadDataListener loadDataListener;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     @SuppressLint("SimpleDateFormat")
@@ -378,6 +372,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
+        mPresenter.initData(this);
         llISB.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
         //图标眷色
         ivCList.getDrawable().mutate();
@@ -476,27 +471,17 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     }
 
-    /**
-     * 首次逻辑操作
-     */
-    @Override
-    protected void firstRequest() {
-        super.firstRequest();
-        mPresenter.initData(this);
-    }
-
     @Override
     public void setHpbReadProgressMax(int count) {
         hpbReadProgress.setMaxProgress(count);
     }
 
-    @SuppressLint("InflateParams")
-    private void initCsvBook() {
+    private void initPageView() {
 //        csvBook = (BaseContentView) LayoutInflater.from(this).inflate(R.layout.view_book_content_swipe, null);
 //        flContent.addView(csvBook, 0);
 //        csvBook.bookReadInit(() -> mPresenter.initData(ReadBookActivity.this));
         //获取页面加载器
-        mPageLoader = pageView.getPageLoader(mPresenter.getBookShelf());
+        mPageLoader = pageView.getPageLoader(mPresenter.getBookShelf(), ImmersionBar.getStatusBarHeight(this));
         mPageLoader.setOnPageChangeListener(
                 new PageLoader.OnPageChangeListener() {
 
@@ -724,7 +709,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public void startLoadingBook() {
 //        csvBook.startLoading();
-        initCsvBook();
+        initPageView();
     }
 
     @Override
@@ -938,7 +923,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      * 正文事件
      */
     private void initLoadDataListener() {
-        loadDataListener = new ContentSwitchView.LoadDataListener() {
+        new ContentSwitchView.LoadDataListener() {
             @Override
             public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
                 mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
@@ -1118,7 +1103,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public void loadLocationBookError(String errMsg) {
 //        csvBook.loadError(errMsg);
-        mPageLoader.chapterError();
+        if (mPageLoader != null) {
+            mPageLoader.chapterError();
+        }
     }
 
     @Override
@@ -1175,12 +1162,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     public void error(String msg) {
 
     }
-
-
-//    @Override
-//    public BaseContentView getCsvBook() {
-//        return csvBook;
-//    }
 
     @Override
     public void showLoading(String msg) {
@@ -1290,8 +1271,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (readBookControl.getHideStatusBar()) {
 //            csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
 //            csvBook.upBattery(BatteryUtil.getLevel(this));
-            mPageLoader.updateTime();
-            mPageLoader.updateBattery(BatteryUtil.getLevel(this));
+            if (mPageLoader != null) {
+                mPageLoader.updateTime();
+                mPageLoader.updateBattery(BatteryUtil.getLevel(this));
+            }
         }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
@@ -1305,6 +1288,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onDestroy();
         unregisterReceiver(batInfoReceiver);
         ReadAloudService.stop(this);
+        mPageLoader.closeBook();
+        mPageLoader = null;
     }
 
     /**
@@ -1332,11 +1317,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             if (readBookControl.getHideStatusBar()) {
                 if (Intent.ACTION_TIME_TICK.equals(intent.getAction())) {
 //                    csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
-                    mPageLoader.updateTime();
+                    if (mPageLoader != null) {
+                        mPageLoader.updateTime();
+                    }
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
 //                    csvBook.upBattery(level);
-                    mPageLoader.updateBattery(level);
+                    if (mPageLoader != null) {
+                        mPageLoader.updateBattery(level);
+                    }
                 }
             }
         }

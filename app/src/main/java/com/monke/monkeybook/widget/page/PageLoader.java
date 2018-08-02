@@ -18,6 +18,7 @@ import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -718,7 +719,9 @@ public abstract class PageLoader {
             if (!mChapterList.isEmpty()) {
                 /*****初始化标题的参数********/
                 //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
-                float tipTop = tipMarginHeight - mTipPaint.getFontMetrics().top;
+                float tipTop = mSettingManager.getHideStatusBar()
+                        ? tipMarginHeight - mTipPaint.getFontMetrics().top
+                        : mPageView.getStatusBarHeight() + tipMarginHeight - mTipPaint.getFontMetrics().top;
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
