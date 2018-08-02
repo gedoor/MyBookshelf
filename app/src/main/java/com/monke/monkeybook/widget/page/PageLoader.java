@@ -840,7 +840,8 @@ public abstract class PageLoader {
             if (mPageMode == PageMode.SCROLL) {
                 top = -mTextPaint.getFontMetrics().top;
             } else {
-                top = mMarginHeight - mTextPaint.getFontMetrics().top;
+                top = mSettingManager.getHideStatusBar() ? mMarginHeight - mTextPaint.getFontMetrics().top
+                        : mPageView.getStatusBarHeight() + mMarginHeight - mTextPaint.getFontMetrics().top;
             }
 
             //设置总距离
@@ -894,7 +895,8 @@ public abstract class PageLoader {
 
         // 获取内容显示位置的大小
         mVisibleWidth = mDisplayWidth - mMarginWidth * 2;
-        mVisibleHeight = mDisplayHeight - mMarginHeight * 2;
+        mVisibleHeight = mSettingManager.getHideStatusBar() ? mDisplayHeight - mMarginHeight * 2
+                : mDisplayHeight - mMarginHeight * 2 - mPageView.getStatusBarHeight();
 
         // 重置 PageMode
         mPageView.setPageMode(mPageMode);
