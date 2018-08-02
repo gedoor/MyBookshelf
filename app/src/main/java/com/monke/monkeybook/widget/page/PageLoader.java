@@ -424,7 +424,7 @@ public abstract class PageLoader {
 
         // 设置当前颜色样式
         mTextColor = ContextCompat.getColor(mContext, pageStyle.getFontColor());
-        mBgColor = ContextCompat.getColor(mContext, pageStyle.getBgColor());
+        mBgColor = 0;
 
         mTipPaint.setColor(mTextColor);
         mTitlePaint.setColor(mTextColor);

@@ -1,10 +1,15 @@
 package com.monke.monkeybook.widget.animation;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
+import com.monke.monkeybook.utils.BitmapUtil;
 
 /**
  * Created by newbiechen on 17-7-24.
@@ -38,8 +43,10 @@ public abstract class HorizonPageAnim extends PageAnimation{
                            View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginHeight, view,listener);
         //创建图片
-        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
-        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+//        mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+//        mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+        mCurBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
+        mNextBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
     }
 
     /**
