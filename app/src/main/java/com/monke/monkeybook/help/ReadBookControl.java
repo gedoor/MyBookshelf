@@ -24,19 +24,17 @@ public class ReadBookControl {
     private static final int DEFAULT_TEXT = 3;
     private static final int DEFAULT_BG = 1;
 
-    private List<Map<String, Integer>> textKind;
     private List<Map<String, Integer>> textDrawable;
 
     private int speechRate;
     private boolean speechRateFollowSys;
     private int textSize;
-    private int textExtra;
+    private float textExtra;
     private int textColor;
     private Drawable textBackground;
     private float lineMultiplier;
     private int pageMode;
 
-    private int textKindIndex;
     private int textDrawableIndex = DEFAULT_BG;
 
     private Boolean hideStatusBar;
@@ -78,15 +76,13 @@ public class ReadBookControl {
     }
 
     private ReadBookControl() {
-        initTextKind();
         initTextDrawable();
         readPreference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
         defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = defaultPreference.getBoolean("hide_navigation_bar", false);
-        this.textKindIndex = readPreference.getInt("textKindIndex", DEFAULT_TEXT);
-        this.textSize = textKind.get(textKindIndex).get("textSize");
-        this.textExtra = textKind.get(textKindIndex).get("textExtra");
+        this.textSize = readPreference.getInt("textSize", 50);
+        this.textExtra = readPreference.getFloat("textExtra", 1.0f);
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
@@ -220,19 +216,6 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    //字体大小
-    private void initTextKind() {
-        if (null == textKind) {
-            textKind = new ArrayList<>();
-            for (int i = 14; i <= 30; i++) {
-                Map<String, Integer> temp = new HashMap<>();
-                temp.put("textSize", i);
-                temp.put("textExtra", DensityUtil.dp2px(MApplication.getInstance(), i / 2));
-                textKind.add(temp);
-            }
-        }
-    }
-
     //阅读背景
     private void initTextDrawable() {
         if (null == textDrawable) {
@@ -273,8 +256,22 @@ public class ReadBookControl {
         return textSize;
     }
 
-    public int getTextExtra() {
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("textSize", textSize);
+        editor.apply();
+    }
+
+    public float getTextExtra() {
         return textExtra;
+    }
+
+    public void setTextExtra(float textExtra) {
+        this.textExtra = textExtra;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putFloat("textExtra", textExtra);
+        editor.apply();
     }
 
     public int getTextColor() {
@@ -283,19 +280,6 @@ public class ReadBookControl {
 
     public Drawable getTextBackground() {
         return textBackground;
-    }
-
-    public int getTextKindIndex() {
-        return textKindIndex;
-    }
-
-    public void setTextKindIndex(int textKindIndex) {
-        this.textKindIndex = textKindIndex;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putInt("textKindIndex", textKindIndex);
-        editor.apply();
-        this.textSize = textKind.get(textKindIndex).get("textSize");
-        this.textExtra = textKind.get(textKindIndex).get("textExtra");
     }
 
     public int getTextDrawableIndex() {
@@ -345,10 +329,6 @@ public class ReadBookControl {
 
     public Boolean getTextBold() {
         return textBold;
-    }
-
-    public List<Map<String, Integer>> getTextKind() {
-        return textKind;
     }
 
     public List<Map<String, Integer>> getTextDrawable() {

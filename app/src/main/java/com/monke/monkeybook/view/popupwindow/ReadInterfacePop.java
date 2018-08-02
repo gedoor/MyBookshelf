@@ -85,7 +85,7 @@ public class ReadInterfacePop extends PopupWindow {
 
     public interface OnChangeProListener {
         void upPageMode();
-
+        void upTextSize();
         void changeContentView();
 
         void bgChange();
@@ -116,9 +116,9 @@ public class ReadInterfacePop extends PopupWindow {
 
     private void initData() {
         setBg();
-        updateText(readBookControl.getTextKindIndex());
+        updateText(readBookControl.getTextSize(), false);
+        updateLineSize(readBookControl.getLineMultiplier(), false);
         updateBg(readBookControl.getTextDrawableIndex());
-        updateLineSize(readBookControl.getLineMultiplier());
         updateBoldText(readBookControl.getTextBold());
         updatePageMode(readBookControl.getPageMode());
 
@@ -165,19 +165,19 @@ public class ReadInterfacePop extends PopupWindow {
 
     private void bindEvent() {
         flTextSmaller.setOnClickListener(v -> {
-            updateText(readBookControl.getTextKindIndex() - 1);
+            updateText(readBookControl.getTextSize() - 1, true);
             changeProListener.changeContentView();
         });
         flTextBigger.setOnClickListener(v -> {
-            updateText(readBookControl.getTextKindIndex() + 1);
+            updateText(readBookControl.getTextSize() + 1, true);
             changeProListener.changeContentView();
         });
         flLineSmaller.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1));
+            updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1), true);
             changeProListener.changeContentView();
         });
         flLineBigger.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1));
+            updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1), true);
             changeProListener.changeContentView();
         });
 
@@ -272,24 +272,26 @@ public class ReadInterfacePop extends PopupWindow {
         changeProListener.changeContentView();
     }
 
-    private void updateText(int textKindIndex) {
-        if (textKindIndex == 0) {
+    private void updateText(int textSize, boolean refresh) {
+        if (textSize < 20) {
             flTextSmaller.setEnabled(false);
             flTextBigger.setEnabled(true);
-        } else if (textKindIndex == readBookControl.getTextKind().size() - 1) {
+        } else if (textSize > 100) {
             flTextSmaller.setEnabled(true);
             flTextBigger.setEnabled(false);
         } else {
             flTextSmaller.setEnabled(true);
             flTextBigger.setEnabled(true);
         }
-
-        tvDurTextSize.setText(String.valueOf(readBookControl.getTextKind().get(textKindIndex).get("textSize")));
-        readBookControl.setTextKindIndex(textKindIndex);
+        tvDurTextSize.setText(String.valueOf(textSize));
+        if (refresh) {
+            readBookControl.setTextSize(textSize);
+            changeProListener.upTextSize();
+        }
     }
 
     @SuppressLint("DefaultLocale")
-    private void updateLineSize(float lineSize) {
+    private void updateLineSize(float lineSize, boolean refresh) {
         if (lineSize > 2) {
             lineSize = 2;
         }
@@ -297,7 +299,10 @@ public class ReadInterfacePop extends PopupWindow {
             lineSize = 0.5f;
         }
         tvDurLineSize.setText(String.format("%.1f", lineSize));
-        readBookControl.setLineMultiplier(lineSize);
+        if (refresh) {
+            readBookControl.setLineMultiplier(lineSize);
+            changeProListener.upTextSize();
+        }
     }
 
     private void updatePageMode(int pageMode) {

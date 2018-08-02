@@ -416,9 +416,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
+            public void upTextSize() {
+                mPageLoader.setTextSize(readBookControl.getTextSize(), readBookControl.getLineMultiplier());
+                mPageLoader.setTipTextSize(readBookControl.getTextSize());
+            }
+
+            @Override
             public void changeContentView() {
                 readBookControl.setLineChange(System.currentTimeMillis());
 //                csvBook.changeContentView();
+
             }
 
             @Override
