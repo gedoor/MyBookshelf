@@ -69,8 +69,7 @@ public class BitmapUtil {
         options.inJustDecodeBounds = true;
         options.inPurgeable = true;
         options.inInputShareable = true;
-        Bitmap bm = BitmapFactory.decodeByteArray(buffer, 0, buffer.length,
-                options);
+        Bitmap bm = BitmapFactory.decodeByteArray(buffer, 0, buffer.length, options);
         // 计算缩放比例
         float reSize = options.outWidth / size;
         if (options.outWidth < options.outHeight)
@@ -276,17 +275,20 @@ public class BitmapUtil {
      * @param src
      * @return
      */
-    public static Bitmap createRepeater(int width, Bitmap src)
+    public static Bitmap createRepeater(int width, int heigth, Bitmap src)
     {
-        int count = (width + src.getWidth() - 1) / src.getWidth();
-        Bitmap bitmap = Bitmap.createBitmap(width, src.getHeight(),
-                Config.ARGB_8888);
+        int countWidth = (width+src.getWidth() - 1) / src.getWidth();
+        int countHeight = (heigth+src.getHeight() - 1) / src.getHeight();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, heigth, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        for (int idx = 0; idx < count; ++idx)
-        {
-            canvas.drawBitmap(src, idx * src.getWidth(), 0, null);
+        for (int i = 0; i < countHeight; ++i) {
+            for(int idx = 0; idx < countWidth; ++ idx){
+                canvas.drawBitmap(src, idx * src.getWidth(), i * src.getHeight(), null);
+            }
         }
         return bitmap;
+
     }
 
     /**
