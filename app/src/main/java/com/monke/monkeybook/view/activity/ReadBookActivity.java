@@ -776,7 +776,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             case R.id.action_copy_text:
                 popMenuOut();
-//                moProgressHUD.showText(csvBook.getContentText());
+                moProgressHUD.showText(mPageLoader.getContext());
                 break;
             case android.R.id.home:
                 finish();
@@ -791,8 +791,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private void refresh() {
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKey(mPresenter.getBookShelf()
-                    .getDurChapterListBean().getDurChapterUrl());
             mPresenter.getBookShelf().getDurChapterListBean()
                     .setBookContentBean(null);
 //            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
@@ -936,100 +934,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 正文事件
-     */
-    private void initLoadDataListener() {
-        new ContentSwitchView.LoadDataListener() {
-            @Override
-            public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-//                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
-            }
-
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void updateProgress(int chapterIndex, int pageIndex) {
-                mPresenter.updateProgress(chapterIndex, pageIndex);
-                actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
-                if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    atvUrl.setText(mPresenter.getBookShelf().getChapterList(chapterIndex).getDurChapterUrl());
-                } else {
-                    atvUrl.setText("");
-                }
-
-                if (mPresenter.getBookShelf().getChapterListSize() == 1) {
-                    tvPre.setEnabled(false);
-                    tvNext.setEnabled(false);
-                } else {
-                    if (chapterIndex == 1) {
-                        tvPre.setEnabled(false);
-                        tvNext.setEnabled(true);
-                    } else if (chapterIndex == mPresenter.getBookShelf().getChapterListSize() - 1) {
-                        tvPre.setEnabled(true);
-                        tvNext.setEnabled(false);
-                    } else {
-                        tvPre.setEnabled(true);
-                        tvNext.setEnabled(true);
-                    }
-                }
-            }
-
-            @Override
-            public String getChapterTitle(int chapterIndex) {
-                return mPresenter.getChapterTitle(chapterIndex);
-            }
-
-            @Override
-            public void initData(int lineCount) {
-                mPresenter.setPageLineCount(lineCount);
-//                mPresenter.setPageWidth(csvBook.getContentWidth());
-                mPresenter.initContent();
-            }
-
-            @Override
-            public void showMenu() {
-                popMenuIn();
-            }
-
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void setHpbReadProgress(int pageIndex, int pageAll) {
-                hpbReadProgress.setMaxProgress(pageAll - 1);
-                if (hpbReadProgress.getDurProgress() != pageIndex)
-                    hpbReadProgress.setDurProgress(pageIndex);
-            }
-
-            @Override
-            public void readAloud(String content) {
-                readAloudIntent.putExtra("aloudButton", aloudButton);
-                readAloudIntent.putExtra("content", content);
-                startService(readAloudIntent);
-                aloudButton = false;
-            }
-
-            @Override
-            public void openChapterList() {
-                if (chapterListView.hasData()) {
-                    new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
-                }
-            }
-
-            @Override
-            public void curPageFinish() {
-                if (getIntent().getBooleanExtra("readAloud", false)) {
-                    getIntent().putExtra("readAloud", false);
-                    onMediaButton();
-                }
-            }
-
-            @Override
-            public void onTouch() {
-                screenOff();
-            }
-
-        };
-    }
-
-    /**
      * 检查是否加入书架
      */
     public boolean checkAddShelf() {
@@ -1098,10 +1002,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 }
                 return true;
             } else if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
-//                Boolean temp = csvBook.onKeyDown(keyCode, event);
-//                if (temp) {
-//                    return true;
-//                }
+                if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                    mPageLoader.skipToNextPage();
+                    return true;
+                } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                    mPageLoader.skipToPrePage();
+                    return true;
+                } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
+                    mPageLoader.skipToNextPage();
+                    return true;
+                }
             }
             return super.onKeyDown(keyCode, event);
         }
@@ -1110,8 +1020,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
-//            Boolean temp = csvBook.onKeyUp(keyCode, event);
-//            return temp || super.onKeyUp(keyCode, event);
+            if (readBookControl.getCanKeyTurn()
+                    && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                return false;
+            }
         }
         return super.onKeyUp(keyCode, event);
     }

@@ -9,9 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -33,7 +30,6 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -45,7 +41,6 @@ import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.impl.IReadBookView;
-import com.monke.monkeybook.widget.contentview.BookContentView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -72,12 +67,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     private int open_from;
     private BookShelfBean bookShelf;
 
-    private int pageLineCount = 5;   //假设5行一页
-    private int pageWidth;
-
     private List<String> downloadingChapterList = new ArrayList<>();
-
-    private int numberOfRetries = 0;
 
     public ReadBookPresenterImpl() {
 
@@ -161,61 +151,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         }
                     });
         }
-    }
-
-    /**
-     * 预加载
-     */
-    private synchronized void LoadNextChapter(int durChapterIndex) {
-        Observable.just(durChapterIndex + 1, durChapterIndex + 2, durChapterIndex + 3, durChapterIndex + 4, durChapterIndex + 5)
-                .flatMap(index -> Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                    if (index < bookShelf.getChapterListSize()
-                            && !bookShelf.getChapterList(index).getHasCache()
-                            && !editDownloading(CHECK, bookShelf.getChapterList(index).getDurChapterUrl())) {
-                        e.onNext(index);
-                    }
-                    e.onComplete();
-                }))
-                .flatMap(index -> Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                    BookContentBean bookContentBean = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
-                            .where(BookContentBeanDao.Properties.DurChapterUrl.eq(bookShelf.getChapterList(index).getDurChapterUrl()))
-                            .build().unique();
-                    if (bookContentBean == null) {
-                        editDownloading(ADD, bookShelf.getChapterList(index).getDurChapterUrl());
-                        e.onNext(index);
-                    }
-                    e.onComplete();
-                }))
-                .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Observer<BookContentBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                d.dispose();
-                            }
-                        }, 30*1000);
-                    }
-
-                    @Override
-                    public void onNext(BookContentBean bookContentBean) {
-                        editDownloading(REMOVE, bookContentBean.getDurChapterUrl());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
     /**
@@ -337,19 +272,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
             }
         }
         return content;
-    }
-
-    /**
-     * 设置每页行数
-     */
-    @Override
-    public void setPageLineCount(int pageLineCount) {
-        this.pageLineCount = pageLineCount;
-    }
-
-    @Override
-    public void setPageWidth(int pageWidth) {
-        this.pageWidth = pageWidth;
     }
 
     /**

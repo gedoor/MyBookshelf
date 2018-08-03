@@ -26,10 +26,6 @@ public interface IReadBookPresenter extends IPresenter {
 
     String getChapterTitle(int chapterIndex);
 
-    void setPageLineCount(int pageLineCount);
-
-    void setPageWidth(int pageWidth);
-
     void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 
     void removeFromShelf();

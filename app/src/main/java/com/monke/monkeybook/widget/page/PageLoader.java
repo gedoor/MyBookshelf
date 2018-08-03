@@ -616,6 +616,14 @@ public abstract class PageLoader {
         return isChapterOpen;
     }
 
+    public String getContext() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < mCurPage.lines.size(); i++) {
+            s.append(mCurPage.lines.get(i));
+        }
+        return s.toString();
+    }
+
     /**
      * 加载页面列表
      *
