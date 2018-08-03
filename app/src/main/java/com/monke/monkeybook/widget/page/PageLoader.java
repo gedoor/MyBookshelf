@@ -12,11 +12,15 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
@@ -58,7 +62,7 @@ public abstract class PageLoader {
     private static final int EXTRA_TITLE_SIZE = 4;
 
     // 当前章节列表
-    protected List<TxtChapter> mChapterList;
+    protected List<ChapterListBean> mChapterList;
     // 书本对象
     protected BookShelfBean mCollBook;
     // 监听器
@@ -66,7 +70,7 @@ public abstract class PageLoader {
 
     private Context mContext;
     // 页面显示类
-    private PageView mPageView;
+    protected PageView mPageView;
     // 当前显示的页
     private TxtPage mCurPage;
     // 上一章的页面列表缓存
@@ -508,7 +512,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public List<TxtChapter> getChapterCategory() {
+    public List<ChapterListBean> getChapterCategory() {
         return mChapterList;
     }
 
@@ -537,29 +541,6 @@ public abstract class PageLoader {
      */
     public int getMarginHeight() {
         return mMarginHeight;
-    }
-
-    /**
-     * 保存阅读记录
-     */
-    public void saveRecord() {
-
-        if (mChapterList.isEmpty()) {
-            return;
-        }
-
-//        mBookRecord.setBookId(mCollBook.get_id());
-//        mBookRecord.setChapter(mCurChapterPos);
-//
-//        if (mCurPage != null) {
-//            mBookRecord.setPagePos(mCurPage.position);
-//        } else {
-//            mBookRecord.setPagePos(0);
-//        }
-//
-//        //存储到数据库
-//        BookRepository.getInstance()
-//                .saveBookRecord(mBookRecord);
     }
 
     /**
@@ -598,7 +579,7 @@ public abstract class PageLoader {
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
-                int position = mCollBook.getDurChapter();
+                int position = mCollBook.getDurChapterPage();
 
                 // 防止记录页的页号，大于当前最大页号
                 if (position >= mCurPageList.size()) {
@@ -668,7 +649,7 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
-        TxtChapter chapter = mChapterList.get(chapterPos);
+        ChapterListBean chapter = mChapterList.get(chapterPos);
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             return null;
@@ -692,14 +673,14 @@ public abstract class PageLoader {
      * @param chapter
      * @return
      */
-    protected abstract BufferedReader getChapterReader(TxtChapter chapter) throws Exception;
+    protected abstract BufferedReader getChapterReader(ChapterListBean chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      *
      * @return
      */
-    protected abstract boolean hasChapterData(TxtChapter chapter);
+    protected abstract boolean hasChapterData(ChapterListBean chapter);
 
     /***********************************default method***********************************************/
 
@@ -735,7 +716,7 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
-                        canvas.drawText(mChapterList.get(mCurChapterPos).getTitle()
+                        canvas.drawText(mChapterList.get(mCurChapterPos).getDurChapterName()
                                 , mMarginWidth, tipTop, mTipPaint);
                     }
                 } else {
@@ -1136,12 +1117,8 @@ public abstract class PageLoader {
         }
 
         //调用异步进行预加载加载
-        Single.create(new SingleOnSubscribe<List<TxtPage>>() {
-            @Override
-            public void subscribe(SingleEmitter<List<TxtPage>> e) throws Exception {
-                e.onSuccess(loadPageList(nextChapter));
-            }
-        }).compose(RxUtils::toSimpleSingle)
+        Single.create((SingleOnSubscribe<List<TxtPage>>) e -> e.onSuccess(loadPageList(nextChapter)))
+                .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<List<TxtPage>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -1230,7 +1207,7 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      * @return
      */
-    private List<TxtPage> loadPages(TxtChapter chapter, BufferedReader br) {
+    private List<TxtPage> loadPages(ChapterListBean chapter, BufferedReader br) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1238,7 +1215,7 @@ public abstract class PageLoader {
         int rHeight = mVisibleHeight;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
-        String paragraph = chapter.getTitle();//默认展示标题
+        String paragraph = chapter.getDurChapterName();//默认展示标题
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
                 // 重置段落
@@ -1265,7 +1242,7 @@ public abstract class PageLoader {
                         // 创建Page
                         TxtPage page = new TxtPage();
                         page.position = pages.size();
-                        page.title = chapter.getTitle();
+                        page.title = chapter.getDurChapterName();
                         page.lines = new ArrayList<>(lines);
                         page.titleLines = titleLinesCount;
                         pages.add(page);
@@ -1318,7 +1295,7 @@ public abstract class PageLoader {
                 //创建Page
                 TxtPage page = new TxtPage();
                 page.position = pages.size();
-                page.title = chapter.getTitle();
+                page.title = chapter.getDurChapterName();
                 page.lines = new ArrayList<>(lines);
                 page.titleLines = titleLinesCount;
                 pages.add(page);
@@ -1429,7 +1406,7 @@ public abstract class PageLoader {
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<TxtChapter> chapters);
+        void onCategoryFinish(List<ChapterListBean> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

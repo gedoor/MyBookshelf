@@ -20,8 +20,6 @@ public interface IReadBookPresenter extends IPresenter {
 
     void loadContent(final int chapterIndex);
 
-    void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);
-
     void updateProgress(int chapterIndex, int pageIndex);
 
     void saveProgress();

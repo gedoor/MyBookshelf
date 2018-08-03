@@ -478,13 +478,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     private void initPageView() {
         //获取页面加载器
-        mPageLoader = pageView.getPageLoader(mPresenter.getBookShelf(), ImmersionBar.getStatusBarHeight(this));
+        mPageLoader = pageView.getPageLoader(this, mPresenter.getBookShelf());
         mPageLoader.updateBattery(BatteryUtil.getLevel(this));
         mPageLoader.setOnPageChangeListener(
                 new PageLoader.OnPageChangeListener() {
 
                     @Override
                     public void onChapterChange(int pos) {
+                        mPresenter.getBookShelf().setDurChapter(pos);
+                        mPresenter.saveProgress();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                             atvUrl.setText(mPresenter.getBookShelf().getChapterList(pos).getDurChapterUrl());
@@ -517,8 +519,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     }
 
                     @Override
-                    public void onCategoryFinish(List<TxtChapter> chapters) {
-
+                    public void onCategoryFinish(List<ChapterListBean> chapters) {
+                        initChapterList();
                     }
 
                     @Override
@@ -536,6 +538,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void onPageChange(int pos) {
+                        mPresenter.getBookShelf().setDurChapterPage(pos);
+                        mPresenter.saveProgress();
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pos)
                         );
@@ -665,9 +669,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //上一章
         tvPre.setOnClickListener(view -> {
             if (mPresenter.getBookShelf() != null) {
-//                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() - 1,
-//                        mPresenter.getBookShelf().getChapterListSize(),
-//                        BookContentView.DurPageIndexBegin);
                 mPageLoader.skipPreChapter();
             }
         });
@@ -675,9 +676,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         //下一章
         tvNext.setOnClickListener(view -> {
             if (mPresenter.getBookShelf() != null) {
-//                csvBook.setInitData(mPresenter.getBookShelf().getDurChapter() + 1,
-//                        mPresenter.getBookShelf().getChapterListSize(),
-//                        BookContentView.DurPageIndexBegin);
                 mPageLoader.skipNextChapter();
             }
         });
@@ -941,7 +939,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         new ContentSwitchView.LoadDataListener() {
             @Override
             public void loadData(BookContentView bookContentView, long qtag, int chapterIndex, int pageIndex) {
-                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
+//                mPresenter.loadContent(bookContentView, qtag, chapterIndex, pageIndex);
             }
 
             @SuppressLint("DefaultLocale")

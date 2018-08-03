@@ -15,6 +15,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BitmapUtil;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
 import com.monke.monkeybook.widget.animation.HorizonPageAnim;
 import com.monke.monkeybook.widget.animation.NonePageAnim;
@@ -35,6 +37,7 @@ public class PageView extends View {
 
     private final static String TAG = "BookPageWidget";
 
+    private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     private int mViewWidth = 0; // 当前View的宽
@@ -127,6 +130,10 @@ public class PageView extends View {
             default:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
         }
+    }
+
+    public ReadBookActivity getActivity() {
+        return activity;
     }
 
     public int getStatusBarHeight() {
@@ -366,8 +373,9 @@ public class PageView extends View {
      * @param collBook
      * @return
      */
-    public PageLoader getPageLoader(BookShelfBean collBook, int statusBarHeight) {
-        this.statusBarHeight = statusBarHeight;
+    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean collBook) {
+        this.activity = activity;
+        this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;
