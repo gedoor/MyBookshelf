@@ -161,10 +161,9 @@ dependencies {
 }
 
 greendao {
-    schemaVersion 28
+    schemaVersion 29
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }
-
 
 apply plugin: 'com.google.gms.google-services'

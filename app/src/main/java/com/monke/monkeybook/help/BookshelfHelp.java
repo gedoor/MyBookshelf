@@ -3,7 +3,6 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
@@ -25,7 +24,6 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -143,7 +141,7 @@ public class BookshelfHelp {
                 keys.add(bookShelfBean.getChapterList(i).getDurChapterUrl());
             }
         }
-        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
+
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
     }
 
@@ -259,7 +257,6 @@ public class BookshelfHelp {
     public static void clearBookshelf() {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteAll();
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteAll();
-        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
     }
 

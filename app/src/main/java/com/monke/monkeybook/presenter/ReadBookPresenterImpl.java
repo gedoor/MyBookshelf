@@ -224,19 +224,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     }
 
     /**
-     * 添加标题
-     */
-    private String addTitle(String content, String chapterName) {
-        if (readBookControl.getShowTitle()) {
-            if (!content.startsWith(String.format("\u3000\u3000%s", chapterName))
-                    && !content.startsWith(chapterName)) {
-                content = String.format("%s\r\n%s", chapterName, content);
-            }
-        }
-        return content;
-    }
-
-    /**
      * 替换净化
      */
     private String replaceContent(String content) {

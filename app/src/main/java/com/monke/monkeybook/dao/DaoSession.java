@@ -8,7 +8,6 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -19,7 +18,6 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 
-import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -39,7 +37,6 @@ import com.monke.monkeybook.dao.SearchHistoryBeanDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig bookContentBeanDaoConfig;
     private final DaoConfig bookInfoBeanDaoConfig;
     private final DaoConfig bookmarkBeanDaoConfig;
     private final DaoConfig bookShelfBeanDaoConfig;
@@ -50,7 +47,6 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig searchBookBeanDaoConfig;
     private final DaoConfig searchHistoryBeanDaoConfig;
 
-    private final BookContentBeanDao bookContentBeanDao;
     private final BookInfoBeanDao bookInfoBeanDao;
     private final BookmarkBeanDao bookmarkBeanDao;
     private final BookShelfBeanDao bookShelfBeanDao;
@@ -64,9 +60,6 @@ public class DaoSession extends AbstractDaoSession {
     public DaoSession(Database db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
         super(db);
-
-        bookContentBeanDaoConfig = daoConfigMap.get(BookContentBeanDao.class).clone();
-        bookContentBeanDaoConfig.initIdentityScope(type);
 
         bookInfoBeanDaoConfig = daoConfigMap.get(BookInfoBeanDao.class).clone();
         bookInfoBeanDaoConfig.initIdentityScope(type);
@@ -95,7 +88,6 @@ public class DaoSession extends AbstractDaoSession {
         searchHistoryBeanDaoConfig = daoConfigMap.get(SearchHistoryBeanDao.class).clone();
         searchHistoryBeanDaoConfig.initIdentityScope(type);
 
-        bookContentBeanDao = new BookContentBeanDao(bookContentBeanDaoConfig, this);
         bookInfoBeanDao = new BookInfoBeanDao(bookInfoBeanDaoConfig, this);
         bookmarkBeanDao = new BookmarkBeanDao(bookmarkBeanDaoConfig, this);
         bookShelfBeanDao = new BookShelfBeanDao(bookShelfBeanDaoConfig, this);
@@ -106,7 +98,6 @@ public class DaoSession extends AbstractDaoSession {
         searchBookBeanDao = new SearchBookBeanDao(searchBookBeanDaoConfig, this);
         searchHistoryBeanDao = new SearchHistoryBeanDao(searchHistoryBeanDaoConfig, this);
 
-        registerDao(BookContentBean.class, bookContentBeanDao);
         registerDao(BookInfoBean.class, bookInfoBeanDao);
         registerDao(BookmarkBean.class, bookmarkBeanDao);
         registerDao(BookShelfBean.class, bookShelfBeanDao);
@@ -119,7 +110,6 @@ public class DaoSession extends AbstractDaoSession {
     }
     
     public void clear() {
-        bookContentBeanDaoConfig.clearIdentityScope();
         bookInfoBeanDaoConfig.clearIdentityScope();
         bookmarkBeanDaoConfig.clearIdentityScope();
         bookShelfBeanDaoConfig.clearIdentityScope();
@@ -129,10 +119,6 @@ public class DaoSession extends AbstractDaoSession {
         replaceRuleBeanDaoConfig.clearIdentityScope();
         searchBookBeanDaoConfig.clearIdentityScope();
         searchHistoryBeanDaoConfig.clearIdentityScope();
-    }
-
-    public BookContentBeanDao getBookContentBeanDao() {
-        return bookContentBeanDao;
     }
 
     public BookInfoBeanDao getBookInfoBeanDao() {
