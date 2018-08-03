@@ -363,16 +363,13 @@ public class PageView extends View {
 
     /**
      * 获取 PageLoader
-     *
-     * @param collBook
-     * @return
      */
     public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean collBook) {
         this.activity = activity;
         this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
         if (mPageLoader != null) {
-            return mPageLoader;
+            mPageLoader.closeBook();
         }
         // 根据书籍类型，获取具体的加载器
         if (Objects.equals(collBook.getTag(), BookShelfBean.LOCAL_TAG)) {

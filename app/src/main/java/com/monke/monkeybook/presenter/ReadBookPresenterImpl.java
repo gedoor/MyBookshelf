@@ -347,10 +347,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                     @Override
                     public void onError(Throwable e) {
-//                        mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
-//                                bookShelf.getChapterListSize(),
-//                                bookShelf.getDurChapterPage());
-//                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -400,18 +397,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value;
-                        mView.initChapterList();
-//                        mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
-//                                bookShelf.getChapterListSize(),
-//                                BookContentView.DurPageIndexBegin);
+                        mView.finishContent();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-//                        mView.getCsvBook().setInitData(bookShelf.getDurChapter(),
-//                                bookShelf.getChapterListSize(),
-//                                bookShelf.getDurChapterPage());
                         Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -8,24 +8,21 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.DensityUtil;
-import com.monke.monkeybook.widget.BaseContentView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentSwitchView extends BaseContentView implements BookContentView.SetDataListener {
+public class ContentSwitchView extends FrameLayout implements BookContentView.SetDataListener {
     public final static int NONE = -1;
     public final static int PRE_AND_NEXT = 0;
     public final static int ONLY_PRE = 1;
@@ -582,7 +579,6 @@ public class ContentSwitchView extends BaseContentView implements BookContentVie
         return durPageView.getTvContent().getPaint();
     }
 
-    @Override
     public String getContentText() {
         return durPageView.getContent();
     }
