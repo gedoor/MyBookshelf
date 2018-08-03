@@ -269,7 +269,7 @@ public class ReadBookControl {
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
             temp2.put("bgIsColor", 1);
-            temp2.put("textBackground", Color.parseColor("#F3F3F3"));
+            temp2.put("textBackground", Color.parseColor("#FFF2E2"));
             temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
@@ -283,7 +283,7 @@ public class ReadBookControl {
             Map<String, Integer> temp4 = new HashMap<>();
             temp4.put("textColor", Color.parseColor("#FFFFFF"));
             temp4.put("bgIsColor", 1);
-            temp4.put("textBackground", Color.parseColor("#DCE2F1"));
+            temp4.put("textBackground", Color.parseColor("#015A86"));
             temp4.put("darkStatusIcon", 0);
             textDrawable.add(temp4);
 

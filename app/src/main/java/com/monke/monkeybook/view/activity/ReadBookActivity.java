@@ -425,7 +425,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void bgChange() {
-//                csvBook.changeBg();
+                mPageLoader.setPageStyle();
                 readBookControl.initTextDrawableIndex();
                 initImmersionBar();
             }
