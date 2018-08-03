@@ -488,6 +488,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     @Override
                     public void onChapterChange(int pos) {
                         mPresenter.getBookShelf().setDurChapter(pos);
+                        mPresenter.getBookShelf().setDurChapterPage(0);
                         mPresenter.saveProgress();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
@@ -527,8 +528,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void onPageCountChange(int count) {
-                        mPresenter.getBookShelf().setDurChapterPage(0);
-                        mPresenter.saveProgress();
                         hpbReadProgress.setMaxProgress(Math.max(0, count - 1));
                         hpbReadProgress.setDurProgress(0);
                         // 如果处于错误状态，那么就冻结使用
