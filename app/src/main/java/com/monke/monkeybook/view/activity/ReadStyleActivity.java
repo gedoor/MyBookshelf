@@ -284,7 +284,6 @@ public class ReadStyleActivity extends MBaseActivity {
         ContentResolver cr = getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
-            bitmap = getSmallerBitmap(bitmap);
             ACache aCache = ACache.get(this);
             aCache.put("customBg", bitmap);
             bgCustom = 2;
@@ -294,16 +293,6 @@ public class ReadStyleActivity extends MBaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private Bitmap getSmallerBitmap(Bitmap bitmap) {
-        int size = bitmap.getWidth() * bitmap.getHeight() / 360000;
-        if (size <= 1) return bitmap; // 如果小于
-        else {
-            Matrix matrix = new Matrix();
-            matrix.postScale((float) (1 / Math.sqrt(size)), (float) (1 / Math.sqrt(size)));
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
     }
 
