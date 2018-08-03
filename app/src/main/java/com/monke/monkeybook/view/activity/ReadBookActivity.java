@@ -321,7 +321,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     protected void initData() {
-//        initLoadDataListener();
         mPresenter.saveProgress();
         //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
@@ -476,6 +475,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         hpbReadProgress.setMaxProgress(count);
     }
 
+    /**
+     * 加载阅读页面
+     */
     private void initPageView() {
         //获取页面加载器
         mPageLoader = pageView.getPageLoader(this, mPresenter.getBookShelf());
@@ -525,6 +527,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void onPageCountChange(int count) {
+                        mPresenter.getBookShelf().setDurChapterPage(0);
+                        mPresenter.saveProgress();
                         hpbReadProgress.setMaxProgress(Math.max(0, count - 1));
                         hpbReadProgress.setDurProgress(0);
                         // 如果处于错误状态，那么就冻结使用
