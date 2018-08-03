@@ -624,9 +624,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
         });
 
-        //正文
-//        csvBook.setLoadDataListener(loadDataListener);
-
         //打开URL
         atvUrl.setOnClickListener(view -> {
             try {
@@ -712,19 +709,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         tvReadAloudTimer.setOnClickListener(null);
     }
 
-//    @Override
-//    public Paint getPaint() {
-//        return csvBook.getTextPaint();
-//    }
-
-    @Override
-    public void initContentSuccess(int durChapterIndex, int chapterAll, int durPageIndex) {
-//        csvBook.setInitData(durChapterIndex, chapterAll, durPageIndex);
-    }
-
     @Override
     public void startLoadingBook() {
-//        csvBook.startLoading();
         initPageView();
     }
 
@@ -848,7 +834,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
                 if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
                     mPresenter.changeBookSource(searchBookBean);
-//                    csvBook.showLoading();
                 }
             });
         }

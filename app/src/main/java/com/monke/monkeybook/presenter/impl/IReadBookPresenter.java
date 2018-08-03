@@ -16,11 +16,7 @@ public interface IReadBookPresenter extends IPresenter {
 
     BookShelfBean getBookShelf();
 
-    void initContent();
-
     void loadContent(final int chapterIndex);
-
-    void updateProgress(int chapterIndex, int pageIndex);
 
     void saveProgress();
 

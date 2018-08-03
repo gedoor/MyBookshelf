@@ -99,11 +99,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     }
 
     @Override
-    public void initContent() {
-        mView.initContentSuccess(bookShelf.getDurChapter(), bookShelf.getChapterListSize(), bookShelf.getDurChapterPage());
-    }
-
-    @Override
     public void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
@@ -166,13 +161,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         } else {
             return downloadingChapterList.indexOf(value) != -1;
         }
-    }
-
-    @Override
-    public void updateProgress(int chapterIndex, int pageIndex) {
-        bookShelf.setDurChapter(chapterIndex);
-        bookShelf.setDurChapterPage(pageIndex);
-        saveProgress();
     }
 
     @Override
