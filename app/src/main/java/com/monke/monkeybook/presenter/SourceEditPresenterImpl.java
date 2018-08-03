@@ -35,6 +35,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
+import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.util.Hashtable;
@@ -130,7 +131,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
         ContentResolver cr = mView.getContext().getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);//显得到bitmap图片
-            bitmap = getSmallerBitmap(bitmap);
+            bitmap = BitmapUtil.getImage(bitmap);
 
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
@@ -155,16 +156,6 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
             Toast.makeText(mView.getContext(), "图片获取错误", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    private Bitmap getSmallerBitmap(Bitmap bitmap){
-        int size = bitmap.getWidth()*bitmap.getHeight() / 360000;
-        if (size <= 1) return bitmap; // 如果小于
-        else {
-            Matrix matrix = new Matrix();
-            matrix.postScale((float) (1 / Math.sqrt(size)), (float) (1 / Math.sqrt(size)));
-            return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        }
     }
 
     @Override
