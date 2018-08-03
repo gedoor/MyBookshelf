@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 
@@ -226,7 +227,7 @@ public abstract class PageLoader {
         mBatteryPaint.setDither(true);
 
         // 初始化页面样式
-        setNightMode(mSettingManager.getIsNightTheme());
+        setPageStyle();
     }
 
     private void initPageView() {
@@ -399,39 +400,13 @@ public abstract class PageLoader {
     }
 
     /**
-     * 设置夜间模式
-     *
-     * @param nightMode
-     */
-    public void setNightMode(boolean nightMode) {
-        isNightMode = nightMode;
-
-        if (isNightMode) {
-            mBatteryPaint.setColor(Color.WHITE);
-            setPageStyle(PageStyle.NIGHT);
-        } else {
-            mBatteryPaint.setColor(Color.BLACK);
-            setPageStyle(mPageStyle);
-        }
-    }
-
-    /**
      * 设置页面样式
-     *
-     * @param pageStyle:页面样式
      */
-    public void setPageStyle(PageStyle pageStyle) {
-        if (pageStyle != PageStyle.NIGHT) {
-            mPageStyle = pageStyle;
-        }
-
-        if (isNightMode && pageStyle != PageStyle.NIGHT) {
-            return;
-        }
+    public void setPageStyle() {
 
         // 设置当前颜色样式
-        mTextColor = ContextCompat.getColor(mContext, pageStyle.getFontColor());
-        mBgColor = ContextCompat.getColor(mContext, pageStyle.getBgColor());
+        mTextColor = mSettingManager.getTextColor();
+        mBgColor = mSettingManager.getBgColor();
 
         mTipPaint.setColor(mTextColor);
         mTitlePaint.setColor(mTextColor);
@@ -698,14 +673,13 @@ public abstract class PageLoader {
         int tipMarginHeight = ScreenUtils.dpToPx(3);
         if (!isUpdate) {
             /****绘制背景****/
-            canvas.drawColor(mBgColor);
-//            Paint mBitPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//            mBitPaint.setFilterBitmap(true);
-//            mBitPaint.setDither(true);
-//            Bitmap bgBitmap = mPageView.getBgBitmap();
-//            Rect mSrcRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
-//            Rect mDestRect = new Rect(0, 0, bgBitmap.getWidth(), bgBitmap.getHeight());
-//            canvas.drawBitmap(bgBitmap,mSrcRect, mDestRect, mBitPaint);
+            if (mSettingManager.bgIsColor()) {
+                canvas.drawColor(mSettingManager.getBgColor());
+            } else {
+                Bitmap mBgBitmap = mSettingManager.getBgBitmap();
+                mBgBitmap = BitmapUtil.scaleImage(mBgBitmap, bitmap.getWidth(), bitmap.getHeight());
+                canvas.drawBitmap(mBgBitmap,0, 0, null);
+            }
 
             if (!mChapterList.isEmpty()) {
                 /*****初始化标题的参数********/

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,13 +39,10 @@ public class PageView extends View {
     private final static String TAG = "BookPageWidget";
 
     private ReadBookActivity activity;
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
     private int statusBarHeight = 0; //状态栏高度
-    // 背景图片
-    private Bitmap mBgBitmap;
 
     private int mStartX = 0;
     private int mStartY = 0;
@@ -138,10 +136,6 @@ public class PageView extends View {
 
     public int getStatusBarHeight() {
         return statusBarHeight;
-    }
-
-    public Bitmap getmBgBitmap() {
-        return mBgBitmap;
     }
 
     public Bitmap getNextBitmap() {
@@ -390,8 +384,6 @@ public class PageView extends View {
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小
             mPageLoader.prepareDisplay(mViewWidth, mViewHeight);
-            mBgBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
-//            this.setBackground(readBookControl.getTextBackground());
         }
 
         return mPageLoader;

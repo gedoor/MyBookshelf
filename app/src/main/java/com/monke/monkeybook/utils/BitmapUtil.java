@@ -269,7 +269,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 根据指定的宽度平铺图像
+     * 根据指定的宽高平铺图像
      *
      * @param width
      * @param src

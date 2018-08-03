@@ -4,6 +4,7 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -32,6 +33,9 @@ public class ReadBookControl {
     private float textExtra;
     private int textColor;
     private Drawable textBackground;
+    private boolean bgIsColor;
+    private int bgColor;
+    private Bitmap bgBitmap;
     private float lineMultiplier;
     private int pageMode;
 
@@ -119,7 +123,34 @@ public class ReadBookControl {
         if (textDrawableIndex == -1) {
             textDrawableIndex = DEFAULT_BG;
         }
+        initPageStyle(MApplication.getInstance());
         setTextDrawable(MApplication.getInstance());
+    }
+
+    private void initPageStyle(Context context) {
+        ACache aCache = ACache.get(context);
+        bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+        switch (getBgCustom(textDrawableIndex)) {
+            case 2:
+                Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                if (bitmap != null) {
+                    bgIsColor = false;
+                    bgBitmap = bitmap;
+                    return;
+                }
+                break;
+            case 1:
+                bgIsColor = true;
+                bgColor = getBgColor(textDrawableIndex);
+                return;
+        }
+        if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+            bgIsColor = true;
+            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+        } else {
+            bgIsColor = false;
+            bgBitmap = BitmapFactory.decodeResource(context.getResources(), getDefaultBg(textDrawableIndex));
+        }
     }
 
     private void setTextDrawable(Context context) {
@@ -149,18 +180,26 @@ public class ReadBookControl {
                 Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
                 if (bitmap != null) {
                     return new BitmapDrawable(context.getResources(), bitmap);
-                } else {
-                    return getDefaultBgDrawable(textDrawableIndex, context);
                 }
+                break;
             case 1:
-                return new ColorDrawable(getBgColor(textDrawableIndex));
-            default:
-                return getDefaultBgDrawable(textDrawableIndex, context);
+                bgColor = getBgColor(textDrawableIndex);
+                return new ColorDrawable(bgColor);
+        }
+        if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+            return new ColorDrawable(bgColor);
+        } else {
+            return getDefaultBgDrawable(textDrawableIndex, context);
         }
     }
 
     public Drawable getDefaultBgDrawable(int textDrawableIndex, Context context) {
-        return context.getResources().getDrawable(getDefaultBg(textDrawableIndex));
+        if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+            return new ColorDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
+        } else {
+            return context.getResources().getDrawable(getDefaultBg(textDrawableIndex));
+        }
     }
 
     public int getBgCustom(int textDrawableIndex) {
@@ -222,31 +261,36 @@ public class ReadBookControl {
             textDrawable = new ArrayList<>();
             Map<String, Integer> temp1 = new HashMap<>();
             temp1.put("textColor", Color.parseColor("#3E3D3B"));
-            temp1.put("textBackground", R.drawable.bg_readbook_white);
+            temp1.put("bgIsColor", 1);
+            temp1.put("textBackground", Color.parseColor("#F3F3F3"));
             temp1.put("darkStatusIcon", 1);
             textDrawable.add(temp1);
 
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
-            temp2.put("textBackground", R.drawable.bg_readbook_yellow);
+            temp2.put("bgIsColor", 1);
+            temp2.put("textBackground", Color.parseColor("#F3F3F3"));
             temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
             Map<String, Integer> temp3 = new HashMap<>();
             temp3.put("textColor", Color.parseColor("#22482C"));
-            temp3.put("textBackground", R.drawable.bg_readbook_green);
+            temp3.put("bgIsColor", 1);
+            temp3.put("textBackground", Color.parseColor("#E1F1DA"));
             temp3.put("darkStatusIcon", 1);
             textDrawable.add(temp3);
 
             Map<String, Integer> temp4 = new HashMap<>();
             temp4.put("textColor", Color.parseColor("#FFFFFF"));
-            temp4.put("textBackground", R.drawable.bg_readbook_blue);
+            temp4.put("bgIsColor", 1);
+            temp4.put("textBackground", Color.parseColor("#DCE2F1"));
             temp4.put("darkStatusIcon", 0);
             textDrawable.add(temp4);
 
             Map<String, Integer> temp5 = new HashMap<>();
             temp5.put("textColor", Color.parseColor("#808080"));
-            temp5.put("textBackground", R.drawable.bg_readbook_black);
+            temp5.put("bgIsColor", 1);
+            temp5.put("textBackground", Color.parseColor("#000000"));
             temp5.put("darkStatusIcon", 0);
             textDrawable.add(temp5);
         }
@@ -267,19 +311,24 @@ public class ReadBookControl {
         return textExtra;
     }
 
-    public void setTextExtra(float textExtra) {
-        this.textExtra = textExtra;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putFloat("textExtra", textExtra);
-        editor.apply();
-    }
-
     public int getTextColor() {
         return textColor;
     }
 
+    public boolean bgIsColor() {
+        return bgIsColor;
+    }
+
     public Drawable getTextBackground() {
         return textBackground;
+    }
+
+    public int getBgColor() {
+        return bgColor;
+    }
+
+    public Bitmap getBgBitmap() {
+        return bgBitmap;
     }
 
     public int getTextDrawableIndex() {
