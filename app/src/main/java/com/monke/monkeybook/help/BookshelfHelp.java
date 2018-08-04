@@ -46,6 +46,17 @@ public class BookshelfHelp {
     }
 
     /**
+     * 删除章节文件
+     * @param folderName : bookId
+     * @param fileName: chapterName
+     * @return
+     */
+    public static void delChapter(String folderName, String fileName){
+        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
+    }
+
+    /**
      * 存储章节
      * @param folderName
      * @param fileName

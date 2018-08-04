@@ -40,6 +40,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -781,9 +782,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (mPresenter.getBookShelf() != null) {
             mPresenter.getBookShelf().getDurChapterListBean()
                     .setBookContentBean(null);
-//            csvBook.setInitData(mPresenter.getBookShelf().getDurChapter(),
-//                    mPresenter.getBookShelf().getChapterListSize(),
-//                    BookContentView.DurPageIndexBegin);
+            BookshelfHelp.delChapter(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()));
             mPageLoader.skipToChapter(mPresenter.getBookShelf().getDurChapter());
         }
     }
