@@ -146,6 +146,7 @@ public abstract class PageLoader {
     protected int mCurChapterPos = 0;
     //上一章的记录
     private int mLastChapterPos = 0;
+    private int goPagePos = 0;
 
     /*****************************init params*******************************/
     public PageLoader(PageView pageView, BookShelfBean collBook) {
@@ -243,6 +244,7 @@ public abstract class PageLoader {
      * @return
      */
     public boolean skipPreChapter() {
+        goPagePos = 0;
         if (!hasPrevChapter()) {
             return false;
         }
@@ -263,6 +265,7 @@ public abstract class PageLoader {
      * @return
      */
     public boolean skipNextChapter() {
+        goPagePos = 0;
         if (!hasNextChapter()) {
             return false;
         }
@@ -278,6 +281,7 @@ public abstract class PageLoader {
     }
 
     public void skipToChapter(int chapterPos, int pagePos) {
+        goPagePos = pagePos;
         // 设置参数
         mCurChapterPos = chapterPos;
 
@@ -300,6 +304,7 @@ public abstract class PageLoader {
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
+        goPagePos = 0;
         // 设置参数
         mCurChapterPos = pos;
 
@@ -548,6 +553,7 @@ public abstract class PageLoader {
      * 打开指定章节
      */
     public void openChapter(int pagePos) {
+
         isFirstOpen = false;
 
         if (!mPageView.isPrepare()) {
@@ -568,6 +574,12 @@ public abstract class PageLoader {
             return;
         }
 
+        if (goPagePos != 0) {
+            pagePos = goPagePos;
+            goPagePos = 0;
+            isChapterOpen = false;
+        }
+
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
@@ -586,7 +598,7 @@ public abstract class PageLoader {
         } else {
             mCurPage = new TxtPage();
         }
-
+        mPageChangeListener.onPageChange(mCurChapterPos, mCurPage.position);
         mPageView.drawCurPage(false);
     }
 
@@ -969,7 +981,7 @@ public abstract class PageLoader {
             chapterChangeCallback();
         } else {
             dealLoadPageList(prevChapter);
-            mCollBook.setDurChapter(999);
+            goPagePos = 999;
         }
         return mCurPageList != null;
     }

@@ -1013,7 +1013,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void loadLocationBookError(String errMsg) {
-//        csvBook.loadError(errMsg);
         if (mPageLoader != null) {
             mPageLoader.chapterError();
         }
