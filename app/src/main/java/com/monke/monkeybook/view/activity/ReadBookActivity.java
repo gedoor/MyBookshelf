@@ -543,7 +543,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
-                        if (aloudStatus == NEXT & mPageLoader.getContext(pageIndex) != null) {
+                        if ((aloudStatus == NEXT | aloudStatus == PLAY) & mPageLoader.getContext(pageIndex) != null) {
                             readAloudIntent.putExtra("aloudButton", false);
                             readAloudIntent.putExtra("content", mPageLoader.getContext(pageIndex));
                             startService(readAloudIntent);
