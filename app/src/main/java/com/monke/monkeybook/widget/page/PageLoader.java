@@ -277,6 +277,23 @@ public abstract class PageLoader {
         return true;
     }
 
+    public void skipToChapter(int chapterPos, int pagePos) {
+        // 设置参数
+        mCurChapterPos = chapterPos;
+
+        // 将上一章的缓存设置为null
+        mPrePageList = null;
+        // 如果当前下一章缓存正在执行，则取消
+        if (mPreLoadDisp != null) {
+            mPreLoadDisp.dispose();
+        }
+        // 将下一章缓存设置为null
+        mNextPageList = null;
+
+        // 打开指定章节
+        openChapter(pagePos);
+    }
+
     /**
      * 跳转到指定章节
      *
@@ -296,7 +313,7 @@ public abstract class PageLoader {
         mNextPageList = null;
 
         // 打开指定章节
-        openChapter();
+        openChapter(0);
     }
 
     /**
@@ -530,7 +547,7 @@ public abstract class PageLoader {
     /**
      * 打开指定章节
      */
-    public void openChapter() {
+    public void openChapter(int pagePos) {
         isFirstOpen = false;
 
         if (!mPageView.isPrepare()) {
@@ -554,13 +571,12 @@ public abstract class PageLoader {
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
-                int position = mCollBook.getDurChapterPage();
 
                 // 防止记录页的页号，大于当前最大页号
-                if (position >= mCurPageList.size()) {
-                    position = mCurPageList.size() - 1;
+                if (pagePos >= mCurPageList.size()) {
+                    pagePos = mCurPageList.size() - 1;
                 }
-                mCurPage = getCurPage(position);
+                mCurPage = getCurPage(pagePos);
                 mCancelPage = mCurPage;
                 // 切换状态
                 isChapterOpen = true;
@@ -881,7 +897,7 @@ public abstract class PageLoader {
             // 所以需要通过 display 再重新调用一次。
             if (!isFirstOpen) {
                 // 打开书籍
-                openChapter();
+                openChapter(mCollBook.getDurChapterPage());
             }
         } else {
             // 如果章节已显示，那么就重新计算页面
@@ -932,7 +948,6 @@ public abstract class PageLoader {
 
     /**
      * 解析上一章数据
-     *
      * @return:数据是否解析成功
      */
     boolean parsePrevChapter() {
@@ -952,6 +967,7 @@ public abstract class PageLoader {
 
             // 回调
             chapterChangeCallback();
+            mPageChangeListener.onPageChange(mCurChapterPos, mCurPageList.size() - 1);
         } else {
             dealLoadPageList(prevChapter);
         }
@@ -1039,6 +1055,7 @@ public abstract class PageLoader {
             mNextPageList = null;
             // 回调
             chapterChangeCallback();
+            mPageChangeListener.onPageChange(mCurChapterPos, 0);
         } else {
             // 处理页面解析
             dealLoadPageList(nextChapter);
@@ -1300,7 +1317,7 @@ public abstract class PageLoader {
      */
     private TxtPage getCurPage(int pos) {
         if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(pos);
+            mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
         return mCurPageList.get(pos);
     }
@@ -1314,7 +1331,7 @@ public abstract class PageLoader {
             return null;
         }
         if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(pos);
+            mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
         return mCurPageList.get(pos);
     }
@@ -1328,7 +1345,7 @@ public abstract class PageLoader {
             return null;
         }
         if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(pos);
+            mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
         return mCurPageList.get(pos);
     }
@@ -1340,7 +1357,7 @@ public abstract class PageLoader {
         int pos = mCurPageList.size() - 1;
 
         if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(pos);
+            mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
 
         return mCurPageList.get(pos);
@@ -1399,9 +1416,7 @@ public abstract class PageLoader {
 
         /**
          * 作用：当页面改变的时候回调
-         *
-         * @param pos:当前的页面的序号
          */
-        void onPageChange(int pos);
+        void onPageChange(int chapterIndex, int pageIndex);
     }
 }

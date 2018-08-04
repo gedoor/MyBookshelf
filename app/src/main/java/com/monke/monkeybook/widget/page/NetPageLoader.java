@@ -41,7 +41,7 @@ public class NetPageLoader extends PageLoader {
         // 如果章节未打开
         if (!isChapterOpen()) {
             // 打开章节
-            openChapter();
+            openChapter(mCollBook.getDurChapterPage());
         }
     }
 

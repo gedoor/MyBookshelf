@@ -310,10 +310,7 @@ public class PageView extends View {
     }
 
     public boolean isRunning() {
-        if (mPageAnim == null) {
-            return false;
-        }
-        return mPageAnim.isRunning();
+        return mPageAnim != null && mPageAnim.isRunning();
     }
 
     public boolean isPrepare() {

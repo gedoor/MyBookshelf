@@ -346,7 +346,7 @@ public class LocalPageLoader extends PageLoader {
             }
 
             // 加载并显示当前章节
-            openChapter();
+            openChapter(mCollBook.getDurChapterPage());
 
             return;
         }
@@ -381,7 +381,7 @@ public class LocalPageLoader extends PageLoader {
                         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
 
                         // 加载并显示当前章节
-                        openChapter();
+                        openChapter(mCollBook.getDurChapterPage());
                     }
 
                     @Override

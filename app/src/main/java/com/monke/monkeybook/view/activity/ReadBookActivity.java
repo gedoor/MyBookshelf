@@ -487,9 +487,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
                     @Override
                     public void onChapterChange(int pos) {
-                        mPresenter.getBookShelf().setDurChapter(pos);
-                        mPresenter.getBookShelf().setDurChapterPage(0);
-                        mPresenter.saveProgress();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                             atvUrl.setText(mPresenter.getBookShelf().getChapterList(pos).getDurChapterUrl());
@@ -540,11 +537,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     }
 
                     @Override
-                    public void onPageChange(int pos) {
-                        mPresenter.getBookShelf().setDurChapterPage(pos);
+                    public void onPageChange(int chapterIndex, int pageIndex) {
+                        mPresenter.getBookShelf().setDurChapter(chapterIndex);
+                        mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
                         hpbReadProgress.post(
-                                () -> hpbReadProgress.setDurProgress(pos)
+                                () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
                     }
                 }
@@ -583,7 +581,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
             public void itemClick(int index, int page, int tabPosition) {
-                mPageLoader.skipToChapter(index);
+                mPageLoader.skipToChapter(index, page);
             }
 
             @Override
@@ -1067,7 +1065,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public void finishContent() {
         if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
-            mPageLoader.openChapter();
+            mPageLoader.openChapter(mPresenter.getBookShelf().getDurChapterPage());
         }
     }
 
