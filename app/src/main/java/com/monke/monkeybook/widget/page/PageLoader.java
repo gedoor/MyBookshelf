@@ -19,6 +19,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
@@ -238,6 +239,11 @@ public abstract class PageLoader {
     }
 
     /****************************** public method***************************/
+    public void refresh() {
+        BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(), mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
+
+    }
+
     /**
      * 跳转到上一章
      *

@@ -779,11 +779,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     private void refresh() {
         ReadBookActivity.this.popMenuOut();
-        if (mPresenter.getBookShelf() != null) {
-            mPresenter.getBookShelf().getDurChapterListBean()
-                    .setBookContentBean(null);
-            BookshelfHelp.delChapter(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()));
-            mPageLoader.skipToChapter(mPresenter.getBookShelf().getDurChapter());
+        if (mPageLoader != null) {
+            mPageLoader.refresh();
         }
     }
 
