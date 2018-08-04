@@ -141,8 +141,8 @@ public class BookshelfHelp {
                 keys.add(bookShelfBean.getChapterList(i).getDurChapterUrl());
             }
         }
-
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
+        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
