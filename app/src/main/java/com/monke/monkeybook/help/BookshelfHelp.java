@@ -135,12 +135,6 @@ public class BookshelfHelp {
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
-        List<String> keys = new ArrayList<>();
-        if (bookShelfBean.getChapterListSize() > 0) {
-            for (int i = 0; i < bookShelfBean.getChapterListSize(); i++) {
-                keys.add(bookShelfBean.getChapterList(i).getDurChapterUrl());
-            }
-        }
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
         FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
     }
