@@ -644,10 +644,21 @@ public abstract class PageLoader {
         return isChapterOpen;
     }
 
-    public String getContext() {
+    public int getPageSize() {
+        return mCurPageList.size();
+    }
+
+    /**
+     * 获取正文
+     */
+    public String getContext(int pagePos) {
+        if (mCurPageList == null || mCurPageList.size() <= pagePos) {
+            return null;
+        }
+        TxtPage txtPage = mCurPageList.get(pagePos);
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < mCurPage.lines.size(); i++) {
-            s.append(mCurPage.lines.get(i));
+        for (int i = 0; i < txtPage.lines.size(); i++) {
+            s.append(txtPage.lines.get(i));
         }
         return s.toString();
     }

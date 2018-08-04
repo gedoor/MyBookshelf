@@ -160,7 +160,11 @@ public class PageView extends View {
 
     public boolean autoNextPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            return false;
+            if (mPageLoader.getPagePos() < mPageLoader.getPageSize() - 1) {
+                mPageLoader.skipToPage(mPageLoader.getPagePos() + 1);
+                return true;
+            }
+            return mPageLoader.skipNextChapter();
         } else {
             startPageAnim(PageAnimation.Direction.NEXT);
             return true;
