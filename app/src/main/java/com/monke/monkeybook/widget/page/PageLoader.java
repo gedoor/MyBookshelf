@@ -967,11 +967,11 @@ public abstract class PageLoader {
 
             // 回调
             chapterChangeCallback();
-            mPageChangeListener.onPageChange(mCurChapterPos, mCurPageList.size() - 1);
         } else {
             dealLoadPageList(prevChapter);
+            mCollBook.setDurChapter(999);
         }
-        return mCurPageList != null ? true : false;
+        return mCurPageList != null;
     }
 
     private boolean hasPrevChapter() {
@@ -1012,6 +1012,7 @@ public abstract class PageLoader {
         // 解析下一章数据
         if (parseNextChapter()) {
             mCurPage = mCurPageList.get(0);
+            mPageChangeListener.onPageChange(mCurChapterPos, mCurPage.position);
         } else {
             mCurPage = new TxtPage();
         }
@@ -1055,14 +1056,13 @@ public abstract class PageLoader {
             mNextPageList = null;
             // 回调
             chapterChangeCallback();
-            mPageChangeListener.onPageChange(mCurChapterPos, 0);
         } else {
             // 处理页面解析
             dealLoadPageList(nextChapter);
         }
         // 预加载下一页面
         preLoadNextChapter();
-        return mCurPageList != null ? true : false;
+        return mCurPageList != null;
     }
 
     private void dealLoadPageList(int chapterPos) {

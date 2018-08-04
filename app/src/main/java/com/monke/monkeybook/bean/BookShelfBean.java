@@ -129,10 +129,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return durChapter;
     }
 
-    public void setDurChapter(int durChapter) {
-        this.durChapter = durChapter;
-    }
-
     //获取当前章节
     public ChapterListBean getDurChapterListBean() {
         return getChapterList(durChapter);
