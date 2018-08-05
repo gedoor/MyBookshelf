@@ -88,7 +88,6 @@ public class ReadInterfacePop extends PopupWindow {
         void upTextSize();
         void upMargin();
         void bgChange();
-        void setBold();
         void refresh();
     }
 
@@ -193,7 +192,7 @@ public class ReadInterfacePop extends PopupWindow {
         flTextBold.setOnClickListener(view -> {
             readBookControl.setTextBold(!readBookControl.getTextBold());
             updateBoldText(readBookControl.getTextBold());
-            changeProListener.setBold();
+            changeProListener.refresh();
         });
         //背景选择
         civBgWhite.setOnClickListener(v -> {

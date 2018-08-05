@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
@@ -196,7 +197,7 @@ public abstract class PageLoader {
         mTitlePara = (int) (mTitleSize * textLine);
     }
 
-    private void initPaint() {
+    public void initPaint() {
         // 绘制提示的画笔
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
@@ -210,6 +211,18 @@ public abstract class PageLoader {
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
         mTextPaint.setTypeface(mSettingManager.getTextBold() ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        try {
+            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
+                Typeface typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+                mTextPaint.setTypeface(typeface);
+            } else {
+                mTextPaint.setTypeface(Typeface.SANS_SERIF);
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
+            mSettingManager.setReadBookFont(null);
+            mTextPaint.setTypeface(Typeface.SANS_SERIF);
+        }
         mTextPaint.setAntiAlias(true);
 
         // 绘制标题的画笔
@@ -381,11 +394,6 @@ public abstract class PageLoader {
         if (!mPageView.isRunning()) {
             mPageView.drawCurPage(true);
         }
-    }
-
-    public void setTextBold(boolean bold) {
-        mTextPaint.setTypeface(bold ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
-        mPageView.drawCurPage(false);
     }
 
     /**

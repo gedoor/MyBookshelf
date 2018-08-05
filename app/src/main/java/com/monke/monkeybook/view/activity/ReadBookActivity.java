@@ -423,13 +423,8 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void setBold() {
-                mPageLoader.setTextBold(readBookControl.getTextBold());
-            }
-
-            @Override
             public void refresh() {
-
+                mPageLoader.initPaint();
             }
 
         });
