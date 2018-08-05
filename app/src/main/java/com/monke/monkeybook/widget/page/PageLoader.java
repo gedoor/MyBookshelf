@@ -210,18 +210,22 @@ public abstract class PageLoader {
         mTextPaint = new TextPaint();
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
-        mTextPaint.setTypeface(mSettingManager.getTextBold() ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        int bold = mSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
+        Typeface typeface;
         try {
             if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
-                Typeface typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+                typeface = Typeface.create(typeface, bold);
                 mTextPaint.setTypeface(typeface);
             } else {
-                mTextPaint.setTypeface(Typeface.SANS_SERIF);
+                typeface = Typeface.create(Typeface.SANS_SERIF, bold);
+                mTextPaint.setTypeface(typeface);
             }
         } catch (Exception e) {
             Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             mSettingManager.setReadBookFont(null);
-            mTextPaint.setTypeface(Typeface.SANS_SERIF);
+            typeface = Typeface.create(Typeface.SANS_SERIF, bold);
+            mTextPaint.setTypeface(typeface);
         }
         mTextPaint.setAntiAlias(true);
 
