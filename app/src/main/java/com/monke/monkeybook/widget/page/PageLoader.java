@@ -84,7 +84,7 @@ public abstract class PageLoader {
 
     // 绘制电池的画笔
     private Paint mBatteryPaint;
-    // 绘制提示的画笔
+    // 绘制提示的画笔(章节名称和时间)
     private Paint mTipPaint;
     // 绘制标题的画笔
     private Paint mTitlePaint;
@@ -112,10 +112,6 @@ public abstract class PageLoader {
     private boolean isClose;
     // 页面的翻页效果模式
     private PageMode mPageMode;
-    // 加载器的颜色主题
-    private PageStyle mPageStyle;
-    //当前是否是夜间模式
-    private boolean isNightMode;
     //书籍绘制区域的宽高
     private int mVisibleWidth;
     private int mVisibleHeight;
@@ -171,7 +167,6 @@ public abstract class PageLoader {
         mSettingManager = ReadBookControl.getInstance();
         // 获取配置参数
         mPageMode = mSettingManager.getPageMode(mSettingManager.getPageMode());
-        mPageStyle = PageStyle.values()[1];
         // 初始化参数
         mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         mMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
@@ -186,7 +181,7 @@ public abstract class PageLoader {
      */
     private void setUpTextParams(int textSize, float textLine) {
         // 文字大小
-        mTextSize = textSize;
+        mTextSize = ScreenUtils.spToPx(textSize);
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
         mTextInterval = (int) (mTextSize / 2 * textLine);
@@ -384,11 +379,10 @@ public abstract class PageLoader {
 
     /**
      * 设置提示的文字大小
-     *
      * @param textSize:单位为 px。
      */
     public void setTipTextSize(int textSize) {
-        mTipPaint.setTextSize(textSize);
+        mTipPaint.setTextSize(ScreenUtils.spToPx(textSize));
 
         // 如果屏幕大小加载完成
         mPageView.drawCurPage(false);

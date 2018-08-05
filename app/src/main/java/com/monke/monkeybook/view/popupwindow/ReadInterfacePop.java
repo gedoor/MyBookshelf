@@ -273,10 +273,10 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void updateText(int textSize, boolean refresh) {
-        if (textSize < 20) {
+        if (textSize < 10) {
             flTextSmaller.setEnabled(false);
             flTextBigger.setEnabled(true);
-        } else if (textSize > 100) {
+        } else if (textSize > 40) {
             flTextSmaller.setEnabled(true);
             flTextBigger.setEnabled(false);
         } else {

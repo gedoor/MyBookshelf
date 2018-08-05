@@ -85,7 +85,7 @@ public class ReadBookControl {
         defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
         this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = defaultPreference.getBoolean("hide_navigation_bar", false);
-        this.textSize = readPreference.getInt("textSize", 50);
+        this.textSize = readPreference.getInt("textSize", 20);
         this.textExtra = readPreference.getFloat("textExtra", 1.0f);
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
