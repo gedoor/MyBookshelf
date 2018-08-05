@@ -22,6 +22,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
@@ -1282,6 +1283,8 @@ public abstract class PageLoader {
         }
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
+                paragraph = ChapterContentHelp.replaceContent(paragraph);
+                paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
                 // 重置段落
                 if (!showTitle) {
                     paragraph = paragraph.replaceAll("\\s", "");
