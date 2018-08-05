@@ -59,8 +59,8 @@ public abstract class PageLoader {
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     // 默认的显示参数配置
-    private static final int DEFAULT_MARGIN_HEIGHT = 28;
-    private static final int DEFAULT_MARGIN_WIDTH = 15;
+    public static final int DEFAULT_MARGIN_HEIGHT = 28;
+    public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 4;
 
@@ -171,10 +171,10 @@ public abstract class PageLoader {
         // 获取配置参数
         mPageMode = mSettingManager.getPageMode(mSettingManager.getPageMode());
         // 初始化参数
-        mMarginLeft = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        mMarginRight = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        mMarginLeft = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
-        mMarginRight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
+        mMarginTop = ScreenUtils.dpToPx(mSettingManager.getPaddingTop());
+        mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom());
+        mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
+        mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
         // 配置文字有关的参数
         setUpTextParams(mSettingManager.getTextSize(), mSettingManager.getLineMultiplier());
     }
@@ -464,10 +464,10 @@ public abstract class PageLoader {
      * 设置内容与屏幕的间距 单位为 px
      */
     public void setMargin(int marginTop, int marginBottom, int marginLeft, int marginRight) {
-        mMarginTop = ScreenUtils.spToPx(marginTop);
-        mMarginBottom = ScreenUtils.spToPx(marginBottom);
-        mMarginLeft = ScreenUtils.spToPx(marginLeft);
-        mMarginRight = ScreenUtils.spToPx(marginRight);
+        mMarginTop = ScreenUtils.dpToPx(marginTop);
+        mMarginBottom = ScreenUtils.dpToPx(marginBottom);
+        mMarginLeft = ScreenUtils.dpToPx(marginLeft);
+        mMarginRight = ScreenUtils.dpToPx(marginRight);
 
         // 如果是滑动动画，则需要重新创建了
         if (mPageMode == PageMode.SCROLL) {
