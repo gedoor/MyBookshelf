@@ -139,7 +139,7 @@ public class ReadAloudService extends Service {
         }
         nowSpeak = 0;
         contentList.clear();
-        String[] splitSpeech = content.split("\r\n");
+        String[] splitSpeech = content.split("\n");
         for (String aSplitSpeech : splitSpeech) {
             if (!isEmpty(aSplitSpeech)) {
                 contentList.add(aSplitSpeech);
