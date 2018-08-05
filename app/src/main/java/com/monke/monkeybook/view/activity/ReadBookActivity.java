@@ -39,8 +39,6 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
@@ -57,13 +55,10 @@ import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
-import com.monke.monkeybook.widget.contentview.BookContentView;
-import com.monke.monkeybook.widget.contentview.ContentSwitchView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
-import com.monke.monkeybook.widget.page.TxtChapter;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
@@ -415,10 +410,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void changeContentView() {
+            public void upMargin() {
                 readBookControl.setLineChange(System.currentTimeMillis());
-//                csvBook.changeContentView();
-
+                mPageLoader.setMargin(readBookControl.getPaddingTop(), readBookControl.getPaddingBottom(), readBookControl.getPaddingLeft(), readBookControl.getPaddingRight());
             }
 
             @Override
@@ -431,6 +425,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             @Override
             public void setBold() {
 //                csvBook.setTextBold();
+            }
+
+            @Override
+            public void refresh() {
+
             }
 
         });
@@ -754,7 +753,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 changeSource();
                 break;
             case R.id.action_refresh:
-                refresh();
+                refreshDurChapter();
                 break;
             case R.id.action_download:
                 download();
@@ -774,9 +773,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     /**
-     * 刷新
+     * 刷新当前章节
      */
-    private void refresh() {
+    private void refreshDurChapter() {
         ReadBookActivity.this.popMenuOut();
         if (mPageLoader != null) {
             mPageLoader.refresh();

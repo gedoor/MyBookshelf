@@ -86,11 +86,10 @@ public class ReadInterfacePop extends PopupWindow {
     public interface OnChangeProListener {
         void upPageMode();
         void upTextSize();
-        void changeContentView();
-
+        void upMargin();
         void bgChange();
-
         void setBold();
+        void refresh();
     }
 
     private OnChangeProListener changeProListener;
@@ -129,7 +128,7 @@ public class ReadInterfacePop extends PopupWindow {
                 .setNumber(readBookControl.getPaddingTop())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingTop((int) number);
-                    changeProListener.changeContentView();
+                    changeProListener.upMargin();
                 });
 
         nbPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
@@ -139,7 +138,7 @@ public class ReadInterfacePop extends PopupWindow {
                 .setNumber(readBookControl.getPaddingBottom())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingBottom((int) number);
-                    changeProListener.changeContentView();
+                    changeProListener.upMargin();
                 });
 
         nbPaddingLeft.setTitle(activity.getString(R.string.padding_left))
@@ -149,7 +148,7 @@ public class ReadInterfacePop extends PopupWindow {
                 .setNumber(readBookControl.getPaddingLeft())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingLeft((int) number);
-                    changeProListener.changeContentView();
+                    changeProListener.upMargin();
                 });
 
         nbPaddingRight.setTitle(activity.getString(R.string.padding_right))
@@ -159,26 +158,22 @@ public class ReadInterfacePop extends PopupWindow {
                 .setNumber(readBookControl.getPaddingRight())
                 .setOnChangedListener(number -> {
                     readBookControl.setPaddingRight((int) number);
-                    changeProListener.changeContentView();
+                    changeProListener.upMargin();
                 });
     }
 
     private void bindEvent() {
         flTextSmaller.setOnClickListener(v -> {
             updateText(readBookControl.getTextSize() - 1, true);
-            changeProListener.changeContentView();
         });
         flTextBigger.setOnClickListener(v -> {
             updateText(readBookControl.getTextSize() + 1, true);
-            changeProListener.changeContentView();
         });
         flLineSmaller.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1), true);
-            changeProListener.changeContentView();
         });
         flLineBigger.setOnClickListener(v -> {
             updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1), true);
-            changeProListener.changeContentView();
         });
 
         //翻页模式
@@ -263,13 +258,13 @@ public class ReadInterfacePop extends PopupWindow {
     //设置字体
     public void setReadFonts(String path) {
         readBookControl.setReadBookFont(path);
-        changeProListener.changeContentView();
+        changeProListener.refresh();
     }
 
     //清除字体
     private void clearFontPath() {
         readBookControl.setReadBookFont(null);
-        changeProListener.changeContentView();
+        changeProListener.refresh();
     }
 
     private void updateText(int textSize, boolean refresh) {
