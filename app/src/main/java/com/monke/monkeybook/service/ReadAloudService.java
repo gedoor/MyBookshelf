@@ -192,6 +192,17 @@ public class ReadAloudService extends Service {
     }
 
     /**
+     * 朗读
+     */
+    public static void play(Context context, Boolean aloudButton, String content) {
+        Intent readAloudIntent = new Intent(context, ReadAloudService.class);
+        readAloudIntent.setAction(ActionNewReadAloud);
+        readAloudIntent.putExtra("aloudButton", aloudButton);
+        readAloudIntent.putExtra("content", content);
+        context.startService(readAloudIntent);
+    }
+
+    /**
      * @param context 停止
      */
     public static void stop(Context context) {

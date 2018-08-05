@@ -170,7 +170,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private ReadInterfacePop readInterfacePop;
     private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
-    private Intent readAloudIntent;
     private ThisBatInfoReceiver batInfoReceiver;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
@@ -207,9 +206,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     protected void onCreateActivity() {
         setOrientation();
         setContentView(R.layout.activity_book_read);
-        readAloudIntent = new Intent(this, ReadAloudService.class);
-        readAloudIntent.setAction(ActionNewReadAloud);
-
     }
 
     @Override
@@ -545,9 +541,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
                         if ((aloudStatus == NEXT | aloudStatus == PLAY) & mPageLoader.getContext(pageIndex) != null) {
-                            readAloudIntent.putExtra("aloudButton", false);
-                            readAloudIntent.putExtra("content", mPageLoader.getContext(pageIndex));
-                            startService(readAloudIntent);
+                            ReadAloudService.play(ReadBookActivity.this, false, mPageLoader.getContext(pageIndex));
                         }
                     }
                 }
@@ -1130,9 +1124,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             default:
                 ReadBookActivity.this.popMenuOut();
                 if (mPresenter.getBookShelf() != null) {
-                    readAloudIntent.putExtra("aloudButton", true);
-                    readAloudIntent.putExtra("content", mPageLoader.getContext(mPageLoader.getPagePos()));
-                    startService(readAloudIntent);
+                    ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()));
                 }
         }
     }
@@ -1175,7 +1167,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case ResultStyleSet:
                 if (resultCode == RESULT_OK) {
                     readBookControl.initTextDrawableIndex();
-//                    csvBook.changeBg();
+                    mPageLoader.initPaint();
                     readInterfacePop.setBg();
                 }
                 break;
@@ -1189,8 +1181,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onResume();
         screenOff();
         if (readBookControl.getHideStatusBar()) {
-//            csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
-//            csvBook.upBattery(BatteryUtil.getLevel(this));
             if (mPageLoader != null) {
                 mPageLoader.updateTime();
                 mPageLoader.updateBattery(BatteryUtil.getLevel(this));
@@ -1236,13 +1226,11 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         public void onReceive(Context context, Intent intent) {
             if (readBookControl.getHideStatusBar()) {
                 if (Intent.ACTION_TIME_TICK.equals(intent.getAction())) {
-//                    csvBook.upTime(dfTime.format(Calendar.getInstance().getTime()));
                     if (mPageLoader != null) {
                         mPageLoader.updateTime();
                     }
                 } else if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
                     int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-//                    csvBook.upBattery(level);
                     if (mPageLoader != null) {
                         mPageLoader.updateBattery(level);
                     }
