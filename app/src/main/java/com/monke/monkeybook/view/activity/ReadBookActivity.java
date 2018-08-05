@@ -424,7 +424,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void setBold() {
-//                csvBook.setTextBold();
+                mPageLoader.setTextBold(readBookControl.getTextBold());
             }
 
             @Override

@@ -62,7 +62,7 @@ public abstract class PageLoader {
     public static final int DEFAULT_MARGIN_HEIGHT = 28;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
-    private static final int EXTRA_TITLE_SIZE = 4;
+    private static final int EXTRA_TITLE_SIZE = 1;
 
     // 当前章节列表
     protected List<ChapterListBean> mChapterList;
@@ -209,6 +209,7 @@ public abstract class PageLoader {
         mTextPaint = new TextPaint();
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
+        mTextPaint.setTypeface(mSettingManager.getTextBold() ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
         mTextPaint.setAntiAlias(true);
 
         // 绘制标题的画笔
@@ -380,6 +381,11 @@ public abstract class PageLoader {
         if (!mPageView.isRunning()) {
             mPageView.drawCurPage(true);
         }
+    }
+
+    public void setTextBold(boolean bold) {
+        mTextPaint.setTypeface(bold ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        mPageView.drawCurPage(false);
     }
 
     /**
