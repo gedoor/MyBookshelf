@@ -385,6 +385,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value;
+                        BookshelfHelp.delChapter(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(bookShelf.getDurChapter()).getDurChapterName());
                         mView.finishContent();
                     }
 
