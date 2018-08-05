@@ -384,19 +384,40 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         }
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
-        //目录初始化
-        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
+
+        initReadInterfacePop();
+        initReadAdjustPop();
+        initMoreSettingPop();
+
+    }
+
+    /**
+     * 调节
+     */
+    private void initReadAdjustPop() {
+        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
             @Override
-            public void animIn() {
-                initImmersionBar();
+            public void changeSpeechRate(int speechRate) {
+                if (ReadAloudService.running) {
+                    ReadAloudService.pause(ReadBookActivity.this);
+                    ReadAloudService.resume(ReadBookActivity.this);
+                }
             }
 
             @Override
-            public void animOut() {
-                initImmersionBar();
+            public void speechRateFollowSys() {
+                if (ReadAloudService.running) {
+                    ReadAloudService.stop(ReadBookActivity.this);
+                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        //界面设置
+    }
+
+    /**
+     * 界面设置
+     */
+    private void initReadInterfacePop() {
         readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
 
             @Override
@@ -428,7 +449,12 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
         });
-        //其它设置
+    }
+
+    /**
+     * 其它设置
+     */
+    private void initMoreSettingPop() {
         moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
             @Override
             public void keepScreenOnChange(int keepScreenOn) {
@@ -442,25 +468,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 recreate();
             }
         });
-        //调节
-        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
-            @Override
-            public void changeSpeechRate(int speechRate) {
-                if (ReadAloudService.running) {
-                    ReadAloudService.pause(ReadBookActivity.this);
-                    ReadAloudService.resume(ReadBookActivity.this);
-                }
-            }
-
-            @Override
-            public void speechRateFollowSys() {
-                if (ReadAloudService.running) {
-                    ReadAloudService.stop(ReadBookActivity.this);
-                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
     @Override
@@ -576,6 +583,17 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
      */
     @Override
     public void initChapterList() {
+        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
+            @Override
+            public void animIn() {
+                initImmersionBar();
+            }
+
+            @Override
+            public void animOut() {
+                initImmersionBar();
+            }
+        });
         chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
             @Override
             public void itemClick(int index, int page, int tabPosition) {
