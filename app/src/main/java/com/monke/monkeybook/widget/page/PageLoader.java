@@ -1276,6 +1276,10 @@ public abstract class PageLoader {
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
         String paragraph = chapter.getDurChapterName();//默认展示标题
+        if (!mSettingManager.getShowTitle()) {
+            showTitle = false;
+            paragraph = null;
+        }
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
                 // 重置段落
