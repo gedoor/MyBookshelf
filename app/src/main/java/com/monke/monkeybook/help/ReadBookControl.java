@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.widget.page.PageMode;
 
@@ -39,6 +40,9 @@ public class ReadBookControl {
     private boolean bgIsColor;
     private int bgColor;
     private Bitmap bgBitmap;
+    private int width;
+    private int height;
+    private Bitmap fBgBitmap;
     private float lineMultiplier;
     private int pageMode;
 
@@ -331,8 +335,13 @@ public class ReadBookControl {
         return bgColor;
     }
 
-    public Bitmap getBgBitmap() {
-        return bgBitmap;
+    public Bitmap getBgBitmap(int width, int height) {
+        if (this.width != width | this.height != height) {
+            this.width = width;
+            this.height = height;
+            fBgBitmap = BitmapUtil.scaleImage(bgBitmap.copy(Bitmap.Config.RGB_565, true), width, height);
+        }
+        return fBgBitmap.copy(Bitmap.Config.RGB_565, true);
     }
 
     public int getTextDrawableIndex() {

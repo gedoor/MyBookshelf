@@ -48,7 +48,7 @@ public class PageView extends View {
     private int mStartY = 0;
     private boolean isMove = false;
     // 初始化参数
-    private int mBgColor;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private PageMode mPageMode = PageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
@@ -90,7 +90,6 @@ public class PageView extends View {
 
     public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mBgColor = context.getResources().getColor(R.color.background);
     }
 
     @Override
@@ -208,15 +207,15 @@ public class PageView extends View {
         this.postInvalidate();
     }
 
-    public void setBgColor(int color) {
-        mBgColor = color;
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
 
         //绘制背景
-        canvas.drawColor(mBgColor);
+        if (readBookControl.bgIsColor()) {
+            canvas.drawColor(readBookControl.getBgColor());
+        } else {
+            canvas.drawBitmap(readBookControl.getBgBitmap(mViewWidth, mViewHeight), 0, 0, null);
+        }
 
         //绘制动画
         if (mPageAnim != null) {
@@ -343,7 +342,7 @@ public class PageView extends View {
     public void drawCurPage(boolean isUpdate) {
         if (!isPrepare) return;
 
-        if (!isUpdate){
+        if (!isUpdate) {
             if (mPageAnim instanceof ScrollPageAnim) {
                 ((ScrollPageAnim) mPageAnim).resetBitmap();
             }

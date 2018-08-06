@@ -246,7 +246,6 @@ public abstract class PageLoader {
     private void initPageView() {
         //配置参数
         mPageView.setPageMode(mPageMode);
-        mPageView.setBgColor(mBgColor);
     }
 
     /****************************** public method***************************/
@@ -741,10 +740,7 @@ public abstract class PageLoader {
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
-                Bitmap mBgBitmap = mSettingManager.getBgBitmap().copy(Bitmap.Config.RGB_565, true);
-                mBgBitmap = BitmapUtil.scaleImage(mBgBitmap, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawBitmap(mBgBitmap,0, 0, null);
-                mBgBitmap.recycle();
+                canvas.drawBitmap(mSettingManager.getBgBitmap(mDisplayWidth, mDisplayHeight),0, 0, null);
             }
 
             if (!mChapterList.isEmpty()) {
@@ -851,10 +847,7 @@ public abstract class PageLoader {
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
-                Bitmap mBgBitmap = mSettingManager.getBgBitmap().copy(Bitmap.Config.RGB_565, true);
-                mBgBitmap = BitmapUtil.scaleImage(mBgBitmap, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawBitmap(mBgBitmap,0, 0, null);
-                mBgBitmap.recycle();
+                canvas.drawBitmap(mSettingManager.getBgBitmap(mDisplayWidth, mDisplayHeight),0, 0, null);
             }
         }
         /******绘制内容****/
