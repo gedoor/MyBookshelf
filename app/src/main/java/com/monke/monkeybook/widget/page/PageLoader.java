@@ -943,7 +943,8 @@ public abstract class PageLoader {
 
         // 获取内容显示位置的大小
         mVisibleWidth = mDisplayWidth - mMarginLeft - mMarginRight;
-        mVisibleHeight = mSettingManager.getHideStatusBar() ? mDisplayHeight - mMarginTop - mMarginBottom
+        mVisibleHeight = mSettingManager.getHideStatusBar()
+                ? mDisplayHeight - mMarginTop - mMarginBottom
                 : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
 
         // 重置 PageMode
