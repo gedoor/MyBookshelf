@@ -54,7 +54,7 @@ public abstract class PageLoader {
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     // 默认的显示参数配置
-    public static final int DEFAULT_MARGIN_HEIGHT = 28;
+    public static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 1;
@@ -252,6 +252,7 @@ public abstract class PageLoader {
 
     /****************************** public method***************************/
     public void refresh() {
+        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
         mPageView.drawCurPage(false);
     }
 
