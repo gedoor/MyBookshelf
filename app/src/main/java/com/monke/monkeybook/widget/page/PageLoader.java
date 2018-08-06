@@ -173,8 +173,9 @@ public abstract class PageLoader {
         // 获取配置参数
         mPageMode = mSettingManager.getPageMode(mSettingManager.getPageMode());
         // 初始化参数
-        mMarginTop = ScreenUtils.dpToPx(mSettingManager.getPaddingTop());
-        mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom());
+        mMarginTop = ScreenUtils.dpToPx(mSettingManager.getPaddingTop() + DEFAULT_MARGIN_HEIGHT);
+        mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+
         mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
         mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
         // 配置文字有关的参数
@@ -483,8 +484,8 @@ public abstract class PageLoader {
      * 设置内容与屏幕的间距 单位为 px
      */
     public void setMargin(int marginTop, int marginBottom, int marginLeft, int marginRight) {
-        mMarginTop = ScreenUtils.dpToPx(marginTop);
-        mMarginBottom = ScreenUtils.dpToPx(marginBottom);
+        mMarginTop = ScreenUtils.dpToPx(marginTop + DEFAULT_MARGIN_HEIGHT);
+        mMarginBottom = ScreenUtils.dpToPx(marginBottom + DEFAULT_MARGIN_HEIGHT);
         mMarginLeft = ScreenUtils.dpToPx(marginLeft);
         mMarginRight = ScreenUtils.dpToPx(marginRight);
 
