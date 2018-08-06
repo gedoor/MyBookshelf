@@ -45,6 +45,8 @@ public class MoreSettingPop extends PopupWindow {
     SwitchButton sbHideNavigationBar;
     @BindView(R.id.ll_hideNavigationBar)
     LinearLayout llHideNavigationBar;
+    @BindView(R.id.sb_showLine)
+    SwitchButton sbShowLine;
     @BindView(R.id.sbImmersionBar)
     SwitchButton sbImmersionBar;
     @BindView(R.id.llImmersionBar)
@@ -103,6 +105,7 @@ public class MoreSettingPop extends PopupWindow {
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
         sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
+
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTitle(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
@@ -110,6 +113,11 @@ public class MoreSettingPop extends PopupWindow {
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTimeBattery(isChecked);
+            readBookControl.setLineChange(System.currentTimeMillis());
+            changeProListener.reLoad();
+        });
+        sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            readBookControl.setShowLine(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
             changeProListener.reLoad();
         });
@@ -157,6 +165,7 @@ public class MoreSettingPop extends PopupWindow {
         sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
         sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
         sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
+        sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
         sbImmersionBar.setCheckedImmediatelyNoEvent(readBookControl.getImmersionStatusBar());
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
