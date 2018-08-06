@@ -66,7 +66,9 @@ public class MoreSettingPop extends PopupWindow {
     public interface OnChangeProListener {
         void keepScreenOnChange(int keepScreenOn);
 
-        void reLoad();
+        void refresh();
+
+        void recreate();
     }
 
     private OnChangeProListener changeProListener;
@@ -95,12 +97,12 @@ public class MoreSettingPop extends PopupWindow {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setHideStatusBar(isChecked);
             initData();
-            changeProListener.reLoad();
+            changeProListener.refresh();
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setHideNavigationBar(isChecked);
             initData();
-            changeProListener.reLoad();
+            changeProListener.recreate();
         });
         sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
@@ -109,17 +111,17 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTitle(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.reLoad();
+            changeProListener.refresh();
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowTimeBattery(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.reLoad();
+            changeProListener.refresh();
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setShowLine(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.reLoad();
+            changeProListener.refresh();
         });
         sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setImmersionStatusBar(isChecked);
@@ -127,7 +129,7 @@ public class MoreSettingPop extends PopupWindow {
             Intent intent = new Intent(ImmersionAction);
             intent.putExtra("data", "Immersion_Change");
             activity.sendBroadcast(intent);
-            changeProListener.reLoad();
+            changeProListener.refresh();
         });
         llScreenTimeOut.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
@@ -147,7 +149,7 @@ public class MoreSettingPop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
-                        changeProListener.reLoad();
+                        changeProListener.refresh();
                         dialogInterface.dismiss();
                     })
                     .create();

@@ -251,6 +251,10 @@ public abstract class PageLoader {
 
     /****************************** public method***************************/
     public void refresh() {
+        mPageView.drawCurPage(false);
+    }
+
+    public void refreshDurChapter() {
         BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(), mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
         clearList(mCurPageList);
         skipToChapter(mCurChapterPos);

@@ -78,7 +78,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static android.text.TextUtils.isEmpty;
 import static android.view.View.GONE;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
-import static com.monke.monkeybook.service.ReadAloudService.ActionNewReadAloud;
 import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
@@ -459,9 +458,15 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             }
 
             @Override
-            public void reLoad() {
+            public void refresh() {
                 readBookControl.setLineChange(System.currentTimeMillis());
-                recreate();
+                initImmersionBar();
+                mPageLoader.refresh();
+            }
+
+            @Override
+            public void recreate() {
+                ReadBookActivity.this.recreate();
             }
         });
     }
@@ -787,7 +792,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     private void refreshDurChapter() {
         ReadBookActivity.this.popMenuOut();
         if (mPageLoader != null) {
-            mPageLoader.refresh();
+            mPageLoader.refreshDurChapter();
         }
     }
 

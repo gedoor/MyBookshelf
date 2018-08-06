@@ -48,7 +48,7 @@ public class PageView extends View {
     private int mStartY = 0;
     private boolean isMove = false;
     // 初始化参数
-    private int mBgColor = 0xFFCEC29C;
+    private int mBgColor;
     private PageMode mPageMode = PageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
@@ -90,6 +90,7 @@ public class PageView extends View {
 
     public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mBgColor = context.getResources().getColor(R.color.background);
     }
 
     @Override
