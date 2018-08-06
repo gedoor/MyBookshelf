@@ -272,7 +272,7 @@ public class ReadBookControl {
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
             temp2.put("bgIsColor", 1);
-            temp2.put("textBackground", Color.parseColor("#FFF2E2"));
+            temp2.put("textBackground", Color.parseColor("#CDBA96"));
             temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
