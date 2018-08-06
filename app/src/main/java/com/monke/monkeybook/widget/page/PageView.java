@@ -106,7 +106,7 @@ public class PageView extends View {
     }
 
     //设置翻页的模式
-    void setPageMode(PageMode pageMode) {
+    void setPageMode(PageMode pageMode, int marginHeight) {
         mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
@@ -123,7 +123,7 @@ public class PageView extends View {
                 break;
             case SCROLL:
                 mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        mPageLoader.getMarginHeight(), this, mPageAnimListener);
+                        marginHeight, this, mPageAnimListener);
                 break;
             default:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);

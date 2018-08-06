@@ -247,7 +247,7 @@ public abstract class PageLoader {
 
     private void initPageView() {
         //配置参数
-        mPageView.setPageMode(mPageMode);
+        mPageView.setPageMode(mPageMode, mMarginTop);
     }
 
     /****************************** public method***************************/
@@ -470,7 +470,7 @@ public abstract class PageLoader {
     public void setPageMode(PageMode pageMode) {
         mPageMode = pageMode;
 
-        mPageView.setPageMode(mPageMode);
+        mPageView.setPageMode(mPageMode, mMarginTop);
 
         // 重新绘制当前页
         mPageView.drawCurPage(false);
@@ -538,15 +538,6 @@ public abstract class PageLoader {
      */
     public int getPagePos() {
         return mCurPage.position;
-    }
-
-    /**
-     * 获取当前章节的章节位置
-     *
-     * @return
-     */
-    public int getChapterPos() {
-        return mCurChapterPos;
     }
 
     /**
@@ -947,7 +938,7 @@ public abstract class PageLoader {
                 : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
 
         // 重置 PageMode
-        mPageView.setPageMode(mPageMode);
+        mPageView.setPageMode(mPageMode, mMarginTop);
 
         if (!isChapterOpen) {
             // 展示加载界面
