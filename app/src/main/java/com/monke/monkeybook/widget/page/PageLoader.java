@@ -765,6 +765,10 @@ public abstract class PageLoader {
                 } else {
                     canvas.drawText(mCurPage.title, mMarginLeft, tipTop, mTipPaint);
                 }
+                if (mSettingManager.getShowLine()) {
+                    tipTop = tipTop + ScreenUtils.dpToPx(4);
+                    canvas.drawLine(mMarginLeft, tipTop, mDisplayWidth - mMarginLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                }
 
                 /*****绘制页码********/
                 // 底部的字显示的位置Y
@@ -1264,7 +1268,6 @@ public abstract class PageLoader {
      *
      * @param chapter：章节信息
      * @param br：章节的文本流
-     * @return
      */
     private List<TxtPage> loadPages(ChapterListBean chapter, BufferedReader br) {
         //生成的页面
