@@ -740,7 +740,7 @@ public abstract class PageLoader {
     private void drawBackground(Bitmap bitmap, boolean isUpdate) {
         Canvas canvas = new Canvas(bitmap);
         int tipMarginHeight = ScreenUtils.dpToPx(3);
-        if (!isUpdate) {
+        if (!isUpdate | !mSettingManager.bgIsColor()) {
             /****绘制背景****/
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
