@@ -375,7 +375,7 @@ public abstract class PageLoader {
      * 更新时间
      */
     public void updateTime() {
-        if (!mPageView.isRunning()) {
+        if (!mPageView.isRunning() & mSettingManager.getHideStatusBar()) {
             mPageView.drawCurPage(true);
         }
     }
@@ -388,7 +388,7 @@ public abstract class PageLoader {
     public void updateBattery(int level) {
         mBatteryLevel = level;
 
-        if (!mPageView.isRunning()) {
+        if (!mPageView.isRunning() & mSettingManager.getHideStatusBar()) {
             mPageView.drawCurPage(true);
         }
     }

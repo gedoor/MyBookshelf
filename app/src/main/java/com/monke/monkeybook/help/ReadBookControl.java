@@ -201,6 +201,7 @@ public class ReadBookControl {
         darkStatusIcon = getDarkStatusIcon(textDrawableIndex);
         textColor = getTextColor(textDrawableIndex);
         textBackground = getBgDrawable(textDrawableIndex, context);
+        initPageStyle(context);
     }
 
     public int getTextColor(int textDrawableIndex) {
