@@ -25,39 +25,40 @@ public class SimulationPageAnim extends HorizonPageAnim{
     private Path mPath0;
     private Path mPath1;
 
-    PointF mBezierStart1 = new PointF(); // 贝塞尔曲线起始点
-    PointF mBezierControl1 = new PointF(); // 贝塞尔曲线控制点
-    PointF mBeziervertex1 = new PointF(); // 贝塞尔曲线顶点
-    PointF mBezierEnd1 = new PointF(); // 贝塞尔曲线结束点
+    private PointF mBezierStart1 = new PointF(); // 贝塞尔曲线起始点
+    private PointF mBezierControl1 = new PointF(); // 贝塞尔曲线控制点
+    private PointF mBeziervertex1 = new PointF(); // 贝塞尔曲线顶点
+    private PointF mBezierEnd1 = new PointF(); // 贝塞尔曲线结束点
 
-    PointF mBezierStart2 = new PointF(); // 另一条贝塞尔曲线
-    PointF mBezierControl2 = new PointF();
-    PointF mBeziervertex2 = new PointF();
-    PointF mBezierEnd2 = new PointF();
+    private PointF mBezierStart2 = new PointF(); // 另一条贝塞尔曲线
+    private PointF mBezierControl2 = new PointF();
+    private PointF mBeziervertex2 = new PointF();
+    private PointF mBezierEnd2 = new PointF();
 
-    float mMiddleX;
-    float mMiddleY;
-    float mDegrees;
-    float mTouchToCornerDis;
-    ColorMatrixColorFilter mColorMatrixFilter;
-    Matrix mMatrix;
-    float[] mMatrixArray = { 0, 0, 0, 0, 0, 0, 0, 0, 1.0f };
+    private float mMiddleX;
+    private float mMiddleY;
+    private float mDegrees;
+    private float mTouchToCornerDis;
+    private ColorMatrixColorFilter mColorMatrixFilter;
+    private Matrix mMatrix;
+    private float[] mMatrixArray = { 0, 0, 0, 0, 0, 0, 0, 0, 1.0f };
 
-    boolean mIsRTandLB; // 是否属于右上左下
+    private boolean mIsRTandLB; // 是否属于右上左下
     private float mMaxLength ;
-    int[] mBackShadowColors;// 背面颜色组
-    int[] mFrontShadowColors;// 前面颜色组
-    GradientDrawable mBackShadowDrawableLR; // 有阴影的GradientDrawable
-    GradientDrawable mBackShadowDrawableRL;
-    GradientDrawable mFolderShadowDrawableLR;
-    GradientDrawable mFolderShadowDrawableRL;
+    private int[] mBackShadowColors;// 背面颜色组
+    private int[] mFrontShadowColors;// 前面颜色组
+    private GradientDrawable mBackShadowDrawableLR; // 有阴影的GradientDrawable
+    private GradientDrawable mBackShadowDrawableRL;
+    private GradientDrawable mFolderShadowDrawableLR;
+    private GradientDrawable mFolderShadowDrawableRL;
 
-    GradientDrawable mFrontShadowDrawableHBT;
-    GradientDrawable mFrontShadowDrawableHTB;
-    GradientDrawable mFrontShadowDrawableVLR;
-    GradientDrawable mFrontShadowDrawableVRL;
+    private GradientDrawable mFrontShadowDrawableHBT;
+    private GradientDrawable mFrontShadowDrawableHTB;
+    private GradientDrawable mFrontShadowDrawableVLR;
+    private GradientDrawable mFrontShadowDrawableVRL;
 
-    Paint mPaint;
+    private Paint mPaint;
+
     public SimulationPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
         mPath0 = new Path();
@@ -288,18 +289,10 @@ public class SimulationPageAnim extends HorizonPageAnim{
             canvas.clipPath(mPath0);
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         mPaint.setColorFilter(mColorMatrixFilter);
-        //对Bitmap进行取色
-        int color = bitmap.getPixel(1, 1);
-        //获取对应的三色
-        int red = (color & 0xff0000) >> 16;
-        int green = (color & 0x00ff00) >> 8;
-        int blue = (color & 0x0000ff);
-        //转换成含有透明度的颜色
-        int tempColor = Color.argb(200, red, green, blue);
-
 
         float dis = (float) Math.hypot(mCornerX - mBezierControl1.x,
                 mBezierControl2.y - mCornerY);
@@ -314,8 +307,6 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mMatrix.preTranslate(-mBezierControl1.x, -mBezierControl1.y);
         mMatrix.postTranslate(mBezierControl1.x, mBezierControl1.y);
         canvas.drawBitmap(bitmap, mMatrix, mPaint);
-        //背景叠加
-        canvas.drawColor(tempColor);
 
         mPaint.setColorFilter(null);
 
