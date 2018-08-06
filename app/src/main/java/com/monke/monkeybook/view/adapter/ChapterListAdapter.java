@@ -16,7 +16,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.widget.ChapterListView;
-import com.monke.monkeybook.widget.contentview.BookContentView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +118,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             }
             holder.flContent.setOnClickListener(v -> {
                 setIndex(position);
-                itemClickListener.itemClick(chapterListBean.getDurChapterIndex(), BookContentView.DurPageIndexBegin, tabPosition);
+                itemClickListener.itemClick(chapterListBean.getDurChapterIndex(), 0, tabPosition);
             });
             if (chapterListBean.getDurChapterIndex() == index) {
                 holder.flContent.setBackgroundResource(R.color.btn_bg_press);

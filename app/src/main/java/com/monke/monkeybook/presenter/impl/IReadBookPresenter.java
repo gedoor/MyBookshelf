@@ -8,7 +8,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.widget.contentview.BookContentView;
 
 public interface IReadBookPresenter extends IPresenter {
 
