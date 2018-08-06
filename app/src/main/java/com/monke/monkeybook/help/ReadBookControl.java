@@ -117,6 +117,47 @@ public class ReadBookControl {
         initTextDrawableIndex();
     }
 
+    //阅读背景
+    private void initTextDrawable() {
+        if (null == textDrawable) {
+            textDrawable = new ArrayList<>();
+            Map<String, Integer> temp1 = new HashMap<>();
+            temp1.put("textColor", Color.parseColor("#3E3D3B"));
+            temp1.put("bgIsColor", 1);
+            temp1.put("textBackground", Color.parseColor("#F3F3F3"));
+            temp1.put("darkStatusIcon", 1);
+            textDrawable.add(temp1);
+
+            Map<String, Integer> temp2 = new HashMap<>();
+            temp2.put("textColor", Color.parseColor("#5E432E"));
+            temp2.put("bgIsColor", 1);
+            temp2.put("textBackground", Color.parseColor("#CDBA96"));
+            temp2.put("darkStatusIcon", 1);
+            textDrawable.add(temp2);
+
+            Map<String, Integer> temp3 = new HashMap<>();
+            temp3.put("textColor", Color.parseColor("#22482C"));
+            temp3.put("bgIsColor", 1);
+            temp3.put("textBackground", Color.parseColor("#E1F1DA"));
+            temp3.put("darkStatusIcon", 1);
+            textDrawable.add(temp3);
+
+            Map<String, Integer> temp4 = new HashMap<>();
+            temp4.put("textColor", Color.parseColor("#FFFFFF"));
+            temp4.put("bgIsColor", 1);
+            temp4.put("textBackground", Color.parseColor("#015A86"));
+            temp4.put("darkStatusIcon", 0);
+            textDrawable.add(temp4);
+
+            Map<String, Integer> temp5 = new HashMap<>();
+            temp5.put("textColor", Color.parseColor("#808080"));
+            temp5.put("bgIsColor", 1);
+            temp5.put("textBackground", Color.parseColor("#000000"));
+            temp5.put("darkStatusIcon", 0);
+            textDrawable.add(temp5);
+        }
+    }
+
     public void initTextDrawableIndex() {
         if (getIsNightTheme()) {
             textDrawableIndex = readPreference.getInt("textDrawableIndexNight", 4);
@@ -256,47 +297,6 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putString("lastNoteUrl", lastNoteUrl);
         editor.apply();
-    }
-
-    //阅读背景
-    private void initTextDrawable() {
-        if (null == textDrawable) {
-            textDrawable = new ArrayList<>();
-            Map<String, Integer> temp1 = new HashMap<>();
-            temp1.put("textColor", Color.parseColor("#3E3D3B"));
-            temp1.put("bgIsColor", 1);
-            temp1.put("textBackground", Color.parseColor("#F3F3F3"));
-            temp1.put("darkStatusIcon", 1);
-            textDrawable.add(temp1);
-
-            Map<String, Integer> temp2 = new HashMap<>();
-            temp2.put("textColor", Color.parseColor("#5E432E"));
-            temp2.put("bgIsColor", 1);
-            temp2.put("textBackground", Color.parseColor("#CDBA96"));
-            temp2.put("darkStatusIcon", 1);
-            textDrawable.add(temp2);
-
-            Map<String, Integer> temp3 = new HashMap<>();
-            temp3.put("textColor", Color.parseColor("#22482C"));
-            temp3.put("bgIsColor", 1);
-            temp3.put("textBackground", Color.parseColor("#E1F1DA"));
-            temp3.put("darkStatusIcon", 1);
-            textDrawable.add(temp3);
-
-            Map<String, Integer> temp4 = new HashMap<>();
-            temp4.put("textColor", Color.parseColor("#FFFFFF"));
-            temp4.put("bgIsColor", 1);
-            temp4.put("textBackground", Color.parseColor("#015A86"));
-            temp4.put("darkStatusIcon", 0);
-            textDrawable.add(temp4);
-
-            Map<String, Integer> temp5 = new HashMap<>();
-            temp5.put("textColor", Color.parseColor("#808080"));
-            temp5.put("bgIsColor", 1);
-            temp5.put("textBackground", Color.parseColor("#000000"));
-            temp5.put("darkStatusIcon", 0);
-            textDrawable.add(temp5);
-        }
     }
 
     public int getTextSize() {

@@ -494,7 +494,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                             tvPre.setEnabled(false);
                             tvNext.setEnabled(false);
                         } else {
-                            if (pos == 1) {
+                            if (pos == 0) {
                                 tvPre.setEnabled(false);
                                 tvNext.setEnabled(true);
                             } else if (pos == mPresenter.getBookShelf().getChapterListSize() - 1) {
