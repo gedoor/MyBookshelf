@@ -745,9 +745,10 @@ public abstract class PageLoader {
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
-                Bitmap mBgBitmap = mSettingManager.getBgBitmap();
+                Bitmap mBgBitmap = mSettingManager.getBgBitmap().copy(Bitmap.Config.RGB_565, true);
                 mBgBitmap = BitmapUtil.scaleImage(mBgBitmap, bitmap.getWidth(), bitmap.getHeight());
                 canvas.drawBitmap(mBgBitmap,0, 0, null);
+                mBgBitmap.recycle();
             }
 
             if (!mChapterList.isEmpty()) {
@@ -851,7 +852,14 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
-            canvas.drawColor(mBgColor);
+            if (mSettingManager.bgIsColor()) {
+                canvas.drawColor(mSettingManager.getBgColor());
+            } else {
+                Bitmap mBgBitmap = mSettingManager.getBgBitmap().copy(Bitmap.Config.RGB_565, true);
+                mBgBitmap = BitmapUtil.scaleImage(mBgBitmap, bitmap.getWidth(), bitmap.getHeight());
+                canvas.drawBitmap(mBgBitmap,0, 0, null);
+                mBgBitmap.recycle();
+            }
         }
         /******绘制内容****/
 
