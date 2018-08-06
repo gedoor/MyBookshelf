@@ -729,7 +729,7 @@ public abstract class PageLoader {
 
     void drawPage(Bitmap bitmap, boolean isUpdate) {
         drawBackground(mPageView.getBgBitmap(), isUpdate);
-        if (!isUpdate) {
+        if (!isUpdate | !mSettingManager.bgIsColor()) {
             drawContent(bitmap);
         }
         //更新绘制
