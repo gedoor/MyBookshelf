@@ -121,7 +121,7 @@ public class ReadInterfacePop extends PopupWindow {
         updatePageMode(readBookControl.getPageMode());
 
         nbPaddingTop.setTitle(activity.getString(R.string.padding_top))
-                .setMinNumber(0)
+                .setMinNumber(20)
                 .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingTop())
@@ -131,7 +131,7 @@ public class ReadInterfacePop extends PopupWindow {
                 });
 
         nbPaddingBottom.setTitle(activity.getString(R.string.padding_bottom))
-                .setMinNumber(0)
+                .setMinNumber(20)
                 .setMaxNumber(50)
                 .setStepNumber(1)
                 .setNumber(readBookControl.getPaddingBottom())
