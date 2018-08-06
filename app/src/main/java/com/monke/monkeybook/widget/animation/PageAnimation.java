@@ -29,7 +29,8 @@ public abstract class PageAnimation {
     protected int mScreenHeight;
     //屏幕的间距
     protected int mMarginWidth;
-    protected int mMarginHeight;
+    protected int mMarginTop;
+    protected int mMarginBottom;
     //视图的尺寸
     protected int mViewWidth;
     protected int mViewHeight;
@@ -44,18 +45,19 @@ public abstract class PageAnimation {
     protected float mLastY;
 
     public PageAnimation(int w, int h, View view, OnPageChangeListener listener){
-        this(w, h, 0, 0, view,listener);
+        this(w, h, 0, 0, 0, view,listener);
     }
 
-    public PageAnimation(int w, int h, int marginWidth, int marginHeight, View view, OnPageChangeListener listener){
+    public PageAnimation(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener){
         mScreenWidth = w;
         mScreenHeight = h;
 
         mMarginWidth = marginWidth;
-        mMarginHeight = marginHeight;
+        mMarginTop = marginTop;
+        mMarginBottom = marginBottom;
 
         mViewWidth = mScreenWidth - mMarginWidth * 2;
-        mViewHeight = mScreenHeight - mMarginHeight * 2;
+        mViewHeight = mScreenHeight - mMarginTop - mMarginBottom;
 
         mView = view;
         mListener = listener;

@@ -43,9 +43,9 @@ public class ScrollPageAnim extends PageAnimation {
     // 是否处于刷新阶段
     private boolean isRefresh = true;
 
-    public ScrollPageAnim(int w, int h, int marginWidth, int marginHeight,
+    public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom,
                           View view, OnPageChangeListener listener) {
-        super(w, h, marginWidth, marginHeight, view, listener);
+        super(w, h, marginWidth, marginTop, marginBottom , view, listener);
         // 创建两个BitmapView
         initWidget();
     }
@@ -349,7 +349,7 @@ public class ScrollPageAnim extends PageAnimation {
         //绘制内容
         canvas.save();
         //移动位置
-        canvas.translate(0, mMarginHeight);
+        canvas.translate(0, mMarginTop);
         //裁剪显示区域
         canvas.clipRect(0, 0, mViewWidth, mViewHeight);
         //设置背景透明
