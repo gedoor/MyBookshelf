@@ -3,35 +3,27 @@ package com.monke.monkeybook.widget.page;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.content.ContextCompat;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.widget.Toast;
 
-import com.hwangjr.rxbus.RxBus;
-import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -40,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
@@ -90,7 +81,7 @@ public abstract class PageLoader {
     // 绘制提示的画笔(章节名称和时间)
     private Paint mTipPaint;
     // 绘制标题的画笔
-    private Paint mTitlePaint;
+    private TextPaint mTitlePaint;
     // 绘制背景颜色的画笔(用来擦除需要重绘的部分)
     private Paint mBgPaint;
     // 绘制小说内容的画笔
@@ -1333,11 +1324,13 @@ public abstract class PageLoader {
 
                     //测量一行占用的字节数
                     if (showTitle) {
-                        wordCount = mTitlePaint.breakText(paragraph,
-                                true, mVisibleWidth, null);
+                        Layout tempLayout = new StaticLayout(paragraph, mTitlePaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                        wordCount = tempLayout.getLineEnd(0);
+//                        wordCount = mTitlePaint.breakText(paragraph, true, mVisibleWidth, null);
                     } else {
-                        wordCount = mTextPaint.breakText(paragraph,
-                                true, mVisibleWidth, null);
+                        Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                        wordCount = tempLayout.getLineEnd(0);
+//                        wordCount = mTextPaint.breakText(paragraph, true, mVisibleWidth, null);
                     }
 
                     subStr = paragraph.substring(0, wordCount);
