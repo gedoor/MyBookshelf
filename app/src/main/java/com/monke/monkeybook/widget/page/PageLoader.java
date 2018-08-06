@@ -488,10 +488,7 @@ public abstract class PageLoader {
         mMarginLeft = ScreenUtils.dpToPx(marginLeft);
         mMarginRight = ScreenUtils.dpToPx(marginRight);
 
-        // 如果是滑动动画，则需要重新创建了
-        if (mPageMode == PageMode.SCROLL) {
-            mPageView.setPageMode(PageMode.SCROLL);
-        }
+        prepareDisplay(mDisplayWidth, mDisplayHeight);
 
         mPageView.drawCurPage(false);
     }
