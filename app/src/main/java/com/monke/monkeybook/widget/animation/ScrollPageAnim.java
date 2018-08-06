@@ -2,6 +2,8 @@ package com.monke.monkeybook.widget.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -350,8 +352,8 @@ public class ScrollPageAnim extends PageAnimation {
         canvas.translate(0, mMarginHeight);
         //裁剪显示区域
         canvas.clipRect(0, 0, mViewWidth, mViewHeight);
-/*        //设置背景透明
-        canvas.drawColor(0x40);*/
+        //设置背景透明
+//        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         //绘制Bitmap
         for (int i = 0; i < mActiveViews.size(); ++i) {
             tmpView = mActiveViews.get(i);

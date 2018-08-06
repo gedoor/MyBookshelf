@@ -850,7 +850,7 @@ public abstract class PageLoader {
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
-                canvas.drawBitmap(mSettingManager.getBgBitmap(bitmap.getWidth(), bitmap.getHeight()),0, 0, null);
+                canvas.drawBitmap(mSettingManager.getBgBitmap(mDisplayWidth, mDisplayHeight),0, 0, null);
             }
         }
         /******绘制内容****/
