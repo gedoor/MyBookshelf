@@ -116,8 +116,7 @@ public class LocalPageLoader extends PageLoader {
                         //设置指针偏移
                         seekPos += chapterContent.length();
 
-                        //如果当前对整个文件的偏移位置为0的话，那么就是序章
-                        if (curOffset == 0) {
+                        if (curOffset == 0) { //如果当前对整个文件的偏移位置为0的话，那么就是序章
                             //创建序章
                             TxtChapter preChapter = new TxtChapter();
                             preChapter.title = "序章";
@@ -134,9 +133,7 @@ public class LocalPageLoader extends PageLoader {
                             curChapter.title = matcher.group();
                             curChapter.start = preChapter.end;
                             chapters.add(curChapter);
-                        }
-                        //否则就block分割之后，上一个章节的剩余内容
-                        else {
+                        } else {  //否则就block分割之后，上一个章节的剩余内容
                             //获取上一章节
                             TxtChapter lastChapter = chapters.get(chapters.size() - 1);
                             //将当前段落添加上一章去

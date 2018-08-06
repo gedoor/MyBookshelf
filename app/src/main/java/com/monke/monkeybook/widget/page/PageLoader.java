@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -186,8 +188,8 @@ public abstract class PageLoader {
         mTextInterval = (int) (mTextSize / 2 * textLine);
         mTitleInterval = (int) (mTitleSize / 2 * textLine);
         // 段落间距(大小为字体的高度)
-        mTextPara = (int) (mTextSize * textLine);
-        mTitlePara = (int) (mTitleSize * textLine);
+        mTextPara = (int) (mTextSize / 2 * textLine);
+        mTitlePara = (int) (mTitleSize / 2 * textLine);
     }
 
     public void initPaint() {
@@ -786,10 +788,10 @@ public abstract class PageLoader {
         if (mSettingManager.getHideStatusBar()) {
             /******绘制电池********/
 
-            int visibleBottom = mDisplayHeight - tipMarginHeight - 1;
+            int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
 
             int outFrameWidth = (int) mTipPaint.measureText("xxx");
-            int outFrameHeight = (int) mTipPaint.getTextSize();
+            int outFrameHeight = (int) mTipPaint.getTextSize() - ScreenUtils.dpToPx(2);
 
             int polarHeight = ScreenUtils.dpToPx(6);
             int polarWidth = ScreenUtils.dpToPx(2);
@@ -844,10 +846,11 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
+//            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
-                canvas.drawBitmap(mSettingManager.getBgBitmap(mDisplayWidth, mDisplayHeight),0, 0, null);
+                canvas.drawBitmap(mSettingManager.getBgBitmap(bitmap.getWidth(), bitmap.getHeight()),0, 0, null);
             }
         }
         /******绘制内容****/
@@ -903,11 +906,6 @@ public abstract class PageLoader {
             //对标题进行绘制
             for (int i = 0; i < mCurPage.titleLines; ++i) {
                 str = mCurPage.lines.get(i);
-
-                //设置顶部间距
-                if (i == 0) {
-                    top += mTitlePara;
-                }
 
                 //计算文字显示的起始点
                 int start = (int) (mDisplayWidth - mTitlePaint.measureText(str)) / 2;
@@ -1289,9 +1287,6 @@ public abstract class PageLoader {
                     // 如果只有换行符，那么就不执行
                     if (paragraph.equals("")) continue;
                     paragraph = StringUtils.halfToFull("  " + paragraph + "\n");
-                } else {
-                    //设置 title 的顶部间距
-                    rHeight -= mTitlePara;
                 }
                 int wordCount = 0;
                 String subStr = null;
