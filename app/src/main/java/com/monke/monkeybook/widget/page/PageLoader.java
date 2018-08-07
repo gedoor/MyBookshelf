@@ -53,6 +53,7 @@ public abstract class PageLoader {
     public static final int STATUS_PARING = 5;          // 正在解析 (装载本地数据)
     public static final int STATUS_PARSE_ERROR = 6;     // 本地文件解析错误(暂未被使用)
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
+    public static final int STATUS_HY = 8;              // 换源
     // 默认的显示参数配置
     public static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
@@ -99,6 +100,8 @@ public abstract class PageLoader {
     /*****************params**************************/
     // 当前的状态
     protected int mStatus = STATUS_LOADING;
+    //errorMsg
+    private String errorMsg;
     // 判断章节列表是否加载完成
     protected boolean isChapterListPrepare;
 
@@ -258,7 +261,13 @@ public abstract class PageLoader {
 
     public void refreshDurChapter() {
         BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(), mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
-        clearList(mCurPageList);
+        skipToChapter(mCurChapterPos);
+    }
+
+    public void changeSourceFinish(BookShelfBean bookShelfBean) {
+        mCollBook = bookShelfBean;
+        mChapterList = mCollBook.getChapterList();
+        mPageChangeListener.onCategoryFinish(mChapterList);
         skipToChapter(mCurChapterPos);
     }
 
@@ -603,9 +612,16 @@ public abstract class PageLoader {
         mPageView.drawCurPage(false);
     }
 
-    public void chapterError() {
+    public void setStatus(int status) {
+        mStatus = status;
+        errorMsg = "";
+        mPageView.drawCurPage(false);
+    }
+
+    public void chapterError(String msg) {
         //加载错误
         mStatus = STATUS_ERROR;
+        errorMsg = msg;
         mPageView.drawCurPage(false);
     }
 
@@ -846,7 +862,7 @@ public abstract class PageLoader {
                     tip = "正在拼命加载中...";
                     break;
                 case STATUS_ERROR:
-                    tip = "加载失败(点击边缘重试)";
+                    tip = String.format("加载失败(点击边缘重试)\n%s", errorMsg);
                     break;
                 case STATUS_EMPTY:
                     tip = "文章内容为空";
@@ -860,6 +876,8 @@ public abstract class PageLoader {
                 case STATUS_CATEGORY_EMPTY:
                     tip = "目录列表为空";
                     break;
+                case STATUS_HY:
+                    tip = "正在换源请等待...";
             }
 
             //将提示语句放到正中间

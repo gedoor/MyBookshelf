@@ -197,7 +197,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     @Override
     public void openBookFromOther(Activity activity) {
         Uri uri = activity.getIntent().getData();
-        mView.showLoading("文本导入中...");
         getRealFilePath(activity, uri)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -213,15 +212,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
-                                        mView.dismissLoading();
                                         checkInShelf();
                                     }
 
                                     @Override
                                     public void onError(Throwable e) {
                                         e.printStackTrace();
-                                        mView.dismissLoading();
-                                        mView.loadLocationBookError(e.getMessage());
                                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -230,8 +226,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        mView.dismissLoading();
-                        mView.loadLocationBookError(e.getMessage());
                         Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -278,9 +272,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                     @Override
                     public void onError(Throwable e) {
                         Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.finishContent();
                     }
                 });
-
     }
 
     @Override
@@ -327,14 +321,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value;
-                        BookshelfHelp.delChapter(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(bookShelf.getDurChapter()).getDurChapterName());
-                        mView.finishContent();
+                        mView.changeSourceFinish();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.finishContent();
                     }
                 });
     }

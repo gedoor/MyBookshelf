@@ -840,6 +840,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         if (mPresenter.getBookShelf() != null) {
             moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
                 if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
+                    mPageLoader.setStatus(PageLoader.STATUS_HY);
                     mPresenter.changeBookSource(searchBookBean);
                 }
             });
@@ -967,6 +968,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         return super.dispatchKeyEvent(event);
     }
 
+    /**
+     * 按键事件
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
@@ -1022,13 +1026,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public void loadLocationBookError(String errMsg) {
-        if (mPageLoader != null) {
-            mPageLoader.chapterError();
-        }
-    }
-
-    @Override
     public void showOnLineView() {
         if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
             atvUrl.setVisibility(View.VISIBLE);
@@ -1073,24 +1070,16 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
     @Override
     public void finishContent() {
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
+        if (mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
             mPageLoader.openChapter(mPresenter.getBookShelf().getDurChapterPage());
         }
     }
 
     @Override
     public void error(String msg) {
-
-    }
-
-    @Override
-    public void showLoading(String msg) {
-        moProgressHUD.showLoading(msg);
-    }
-
-    @Override
-    public void dismissLoading() {
-        moProgressHUD.dismiss();
+        if (mPageLoader != null && mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
+            mPageLoader.chapterError(msg);
+        }
     }
 
     @Override
@@ -1222,6 +1211,13 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             startActivity(intent);
         }
         super.finish();
+    }
+
+    @Override
+    public void changeSourceFinish() {
+        if (mPageLoader != null) {
+            mPageLoader.changeSourceFinish(mPresenter.getBookShelf());
+        }
     }
 
     /**

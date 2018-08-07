@@ -372,7 +372,7 @@ public class PageView extends View {
         this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
         if (mPageLoader != null) {
-            mPageLoader.closeBook();
+            return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
         if (Objects.equals(collBook.getTag(), BookShelfBean.LOCAL_TAG)) {

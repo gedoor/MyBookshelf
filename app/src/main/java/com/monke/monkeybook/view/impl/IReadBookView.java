@@ -7,10 +7,6 @@ import com.monke.monkeybook.bean.ChapterListBean;
 public interface IReadBookView extends IView {
 
     /**
-     * @return 获取当前阅读界面UI画笔
-     */
-
-    /**
      * @return Book标志
      */
     String getNoteUrl();
@@ -32,15 +28,11 @@ public interface IReadBookView extends IView {
 
     void initChapterList();
 
-    void loadLocationBookError(String errorMsg);
-
     void showOnLineView();
 
     void finish();
 
-    void showLoading(String msg);
-
-    void dismissLoading();
+    void changeSourceFinish();
 
     void openBookFromOther();
 

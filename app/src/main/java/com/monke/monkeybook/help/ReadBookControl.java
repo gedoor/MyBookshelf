@@ -176,6 +176,8 @@ public class ReadBookControl {
     }
 
     private void initPageStyle(Context context) {
+        width = 0;
+        height = 0;
         ACache aCache = ACache.get(context);
         bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
         switch (getBgCustom(textDrawableIndex)) {

@@ -383,7 +383,7 @@ public class LocalPageLoader extends PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        chapterError();
+                        chapterError(e.getMessage());
                     }
                 });
     }
