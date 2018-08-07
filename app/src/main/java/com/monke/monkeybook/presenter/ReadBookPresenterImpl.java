@@ -117,7 +117,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                                 @Override
                                 public void run() {
                                     DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
-                                    mView.error(mView.getContext().getString(R.string.load_over_time));
                                     d.dispose();
                                 }
                             }, 30*1000);
