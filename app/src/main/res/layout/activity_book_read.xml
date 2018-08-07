@@ -282,6 +282,7 @@
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
+                        android:contentDescription="@string/table_of_contents"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -316,6 +317,7 @@
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
+                        android:contentDescription="@string/adjust"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -350,6 +352,7 @@
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
+                        android:contentDescription="@string/interface_setting"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -384,6 +387,7 @@
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:focusable="true"
+                        android:contentDescription="@string/setting"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
