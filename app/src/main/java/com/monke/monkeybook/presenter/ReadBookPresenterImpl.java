@@ -134,7 +134,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                         @Override
                         public void onError(Throwable e) {
                             DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
-                            mView.error(e.getMessage());
+                            if (chapterIndex == bookShelf.getDurChapter()) {
+                                mView.error(e.getMessage());
+                            }
                         }
 
                         @Override
