@@ -92,7 +92,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         } else {
             mView.openBookFromOther();
         }
-        mView.showOnLineView();
+        mView.showMenu();
     }
 
     @Override

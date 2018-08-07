@@ -17,6 +17,8 @@ public interface IReadBookView extends IView {
 
     void finishContent();
 
+    void changeSourceFinish();
+
     void error(String msg);
 
     /**
@@ -28,11 +30,7 @@ public interface IReadBookView extends IView {
 
     void initChapterList();
 
-    void showOnLineView();
-
-    void finish();
-
-    void changeSourceFinish();
+    void showMenu();
 
     void openBookFromOther();
 
@@ -50,4 +48,6 @@ public interface IReadBookView extends IView {
     void upAloudTimer(String timer);
 
     void speakIndex(int index);
+
+    void finish();
 }

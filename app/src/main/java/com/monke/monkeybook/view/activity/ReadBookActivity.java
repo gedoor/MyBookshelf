@@ -76,7 +76,6 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.text.TextUtils.isEmpty;
-import static android.view.View.GONE;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -632,12 +631,14 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void moveStopProgress(float dur) {
-                int realDur = (int) Math.ceil(dur);
-                if ((realDur) != mPresenter.getBookShelf().getDurChapterPage()) {
-                    mPageLoader.skipToPage(realDur);
+                if (mPageLoader != null) {
+                    int realDur = (int) Math.ceil(dur);
+                    if ((realDur) != mPresenter.getBookShelf().getDurChapterPage()) {
+                        mPageLoader.skipToPage(realDur);
+                    }
+                    if (hpbReadProgress.getDurProgress() != realDur)
+                        hpbReadProgress.setDurProgress(realDur);
                 }
-                if (hpbReadProgress.getDurProgress() != realDur)
-                    hpbReadProgress.setDurProgress(realDur);
             }
 
             @Override
@@ -759,7 +760,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
-        showOnLineView();
+        showMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -784,7 +785,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             case R.id.action_copy_text:
                 popMenuOut();
-                moProgressHUD.showText(mPageLoader.getContext(mPageLoader.getPagePos()));
+                if (mPageLoader != null) {
+                    moProgressHUD.showText(mPageLoader.getContext(mPageLoader.getPagePos()));
+                }
                 break;
             case android.R.id.home:
                 finish();
@@ -1007,13 +1010,19 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 return true;
             } else if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
                 if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-                    mPageLoader.skipToNextPage();
+                    if (mPageLoader != null) {
+                        mPageLoader.skipToNextPage();
+                    }
                     return true;
                 } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-                    mPageLoader.skipToPrePage();
+                    if (mPageLoader != null) {
+                        mPageLoader.skipToPrePage();
+                    }
                     return true;
                 } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
-                    mPageLoader.skipToNextPage();
+                    if (mPageLoader != null) {
+                        mPageLoader.skipToNextPage();
+                    }
                     return true;
                 }
             }
@@ -1033,7 +1042,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     }
 
     @Override
-    public void showOnLineView() {
+    public void showMenu() {
         if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
             atvUrl.setVisibility(View.VISIBLE);
             if (menu != null) {
@@ -1126,7 +1135,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                 break;
             default:
                 ReadBookActivity.this.popMenuOut();
-                if (mPresenter.getBookShelf() != null) {
+                if (mPresenter.getBookShelf() != null & mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()));
                 }
         }
@@ -1170,7 +1179,9 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
             case ResultStyleSet:
                 if (resultCode == RESULT_OK) {
                     readBookControl.initTextDrawableIndex();
-                    mPageLoader.initPaint();
+                    if (mPageLoader != null) {
+                        mPageLoader.initPaint();
+                    }
                     readInterfacePop.setBg();
                 }
                 break;
