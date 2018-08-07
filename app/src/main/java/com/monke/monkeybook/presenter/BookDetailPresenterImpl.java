@@ -16,8 +16,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.contract.IBookDetailPresenter;
-import com.monke.monkeybook.view.impl.IBookDetailView;
+import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import io.reactivex.Observable;
@@ -25,7 +24,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> implements IBookDetailPresenter {
+public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
     public final static int FROM_SEARCH = 2;
 

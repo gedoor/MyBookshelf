@@ -33,9 +33,8 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.contract.ISourceEditPresenter;
+import com.monke.monkeybook.presenter.contract.SourceEditContract;
 import com.monke.monkeybook.utils.BitmapUtil;
-import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.util.Hashtable;
 import java.util.Objects;
@@ -50,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
  * 编辑书源
  */
 
-public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> implements ISourceEditPresenter {
+public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
 
     @Override
     public void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {

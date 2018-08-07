@@ -23,8 +23,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.presenter.contract.IBookDetailPresenter;
-import com.monke.monkeybook.view.impl.IBookDetailView;
+import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -33,7 +32,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.monke.monkeybook.presenter.BookDetailPresenterImpl.FROM_BOOKSHELF;
 
-public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> implements IBookDetailView {
+public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
     @BindView(R.id.iv_blur_cover)
@@ -74,7 +73,7 @@ public class BookDetailActivity extends MBaseActivity<IBookDetailPresenter> impl
     }
 
     @Override
-    protected IBookDetailPresenter initInjector() {
+    protected BookDetailContract.Presenter initInjector() {
         return new BookDetailPresenterImpl(getIntent());
     }
 

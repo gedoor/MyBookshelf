@@ -28,8 +28,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
-import com.monke.monkeybook.presenter.contract.ISourceEditPresenter;
-import com.monke.monkeybook.view.impl.ISourceEditView;
+import com.monke.monkeybook.presenter.contract.SourceEditContract;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +43,7 @@ import static android.text.TextUtils.isEmpty;
  * 编辑书源
  */
 
-public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> implements ISourceEditView {
+public class SourceEditActivity extends MBaseActivity<SourceEditContract.Presenter> implements SourceEditContract.View {
     private final int REQUEST_QR_IMAGE = 202;
 
     @BindView(R.id.toolbar)
@@ -154,7 +153,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     private String title;
 
     @Override
-    protected ISourceEditPresenter initInjector() {
+    protected SourceEditContract.Presenter initInjector() {
         return new SourceEditPresenterImpl();
     }
 

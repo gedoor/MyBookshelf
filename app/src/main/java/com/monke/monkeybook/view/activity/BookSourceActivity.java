@@ -25,9 +25,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
-import com.monke.monkeybook.presenter.contract.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
-import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.util.List;
@@ -42,7 +41,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * 书源管理
  */
 
-public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceView {
+public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     public static final int EDIT_SOURCE = 101;
     public static final int IMPORT_SOURCE = 102;
     public static final int RESULT_IMPORT_PERMS = 103;
@@ -65,7 +64,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     private boolean isSearch;
 
     @Override
-    protected IBookSourcePresenter initInjector() {
+    protected BookSourceContract.Presenter initInjector() {
         return new BookSourcePresenterImpl();
     }
 
@@ -185,7 +184,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
-    public View getView() {
+    public LinearLayout getView() {
         return llContent;
     }
 

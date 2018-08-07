@@ -19,9 +19,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.contract.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.service.CheckSourceService;
-import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
 import java.net.URL;
@@ -39,7 +38,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
+public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
     private BookSourceBean delBookSource;
     private Snackbar progressSnackBar;
 

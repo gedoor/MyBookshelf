@@ -21,8 +21,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.contract.ISearchBookPresenter;
-import com.monke.monkeybook.view.impl.ISearchBookView;
+import com.monke.monkeybook.presenter.contract.SearchBookContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> implements ISearchBookPresenter {
+public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
     private static final int BOOK = 2;
 
     private Boolean hasSearch = false;   //判断是否搜索过

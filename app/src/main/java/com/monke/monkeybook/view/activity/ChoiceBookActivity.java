@@ -17,9 +17,8 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ChoiceBookPresenterImpl;
-import com.monke.monkeybook.presenter.contract.IChoiceBookPresenter;
+import com.monke.monkeybook.presenter.contract.ChoiceBookContract;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
-import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -29,7 +28,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> implements IChoiceBookView {
+public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Presenter> implements ChoiceBookContract.View {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.rfRv_search_books)
@@ -38,7 +37,7 @@ public class ChoiceBookActivity extends MBaseActivity<IChoiceBookPresenter> impl
     private ChoiceBookAdapter searchBookAdapter;
 
     @Override
-    protected IChoiceBookPresenter initInjector() {
+    protected ChoiceBookContract.Presenter initInjector() {
         return new ChoiceBookPresenterImpl(getIntent());
     }
 

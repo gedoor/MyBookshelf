@@ -25,10 +25,9 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
-import com.monke.monkeybook.presenter.contract.ISearchBookPresenter;
+import com.monke.monkeybook.presenter.contract.SearchBookContract;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
-import com.monke.monkeybook.view.impl.ISearchBookView;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
@@ -39,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import tyrantgit.explosionfield.ExplosionField;
 
-public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> implements ISearchBookView {
+public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
     public final static int BookSource = 1;
 
     @BindView(R.id.searchView)
@@ -60,7 +59,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
 
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
-    private boolean showHishtory;
+    private boolean showHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +67,7 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
     }
 
     @Override
-    protected ISearchBookPresenter initInjector() {
+    protected SearchBookContract.Presenter initInjector() {
         return new SearchBookPresenterImpl(this);
     }
 
@@ -175,11 +174,11 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
             }
         });
         searchView.setOnQueryTextFocusChangeListener((view, b) -> {
-            showHishtory = b;
+            showHistory = b;
             if (!b && searchView.getQuery().toString().trim().equals("")) {
                 finish();
             }
-            openOrCloseHistory(showHishtory);
+            openOrCloseHistory(showHistory);
         });
     }
 
@@ -228,24 +227,24 @@ public class SearchBookActivity extends MBaseActivity<ISearchBookPresenter> impl
             mSearchAutoComplete.setText(searchKey);
             searchView.clearFocus();
             toSearch();
-            showHishtory = false;
+            showHistory = false;
         } else {
-            showHishtory = true;
+            showHistory = true;
             mPresenter.querySearchHistory("");
         }
-        openOrCloseHistory(showHishtory);
+        openOrCloseHistory(showHistory);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        showHishtory = llSearchHistory.getVisibility() == View.VISIBLE;
+        showHistory = llSearchHistory.getVisibility() == View.VISIBLE;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        openOrCloseHistory(showHishtory);
+        openOrCloseHistory(showHistory);
     }
 
     /**
