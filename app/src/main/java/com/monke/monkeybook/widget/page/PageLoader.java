@@ -762,7 +762,7 @@ public abstract class PageLoader {
                 }
                 if (mSettingManager.getShowLine()) {
                     tipTop = tipTop + ScreenUtils.dpToPx(4);
-                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft*2, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                 }
 
                 /*****绘制页码********/
