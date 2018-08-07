@@ -114,8 +114,8 @@ public class ReadBookControl {
         this.screenTimeOut = readPreference.getInt("screenTimeOut", 0);
         this.paddingLeft = readPreference.getInt("paddingLeft", DEFAULT_MARGIN_WIDTH);
         this.paddingTop = readPreference.getInt("paddingTop", 0);
-        this.paddingRight = readPreference.getInt("paddingRight", 0);
-        this.paddingBottom = readPreference.getInt("paddingBottom", DEFAULT_MARGIN_HEIGHT);
+        this.paddingRight = readPreference.getInt("paddingRight", DEFAULT_MARGIN_WIDTH);
+        this.paddingBottom = readPreference.getInt("paddingBottom", 0);
         this.pageMode = readPreference.getInt("pageMode", 0);
 
         initTextDrawableIndex();
