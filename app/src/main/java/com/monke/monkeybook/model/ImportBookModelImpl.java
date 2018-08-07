@@ -30,6 +30,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
             if (bookShelfBean == null) {
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
+                bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalDate(file.lastModified());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);

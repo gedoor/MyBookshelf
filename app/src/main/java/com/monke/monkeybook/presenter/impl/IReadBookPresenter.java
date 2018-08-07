@@ -8,7 +8,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.widget.contentview.BookContentView;
 
 public interface IReadBookPresenter extends IPresenter {
 
@@ -16,21 +15,11 @@ public interface IReadBookPresenter extends IPresenter {
 
     BookShelfBean getBookShelf();
 
-    void initContent();
-
     void loadContent(final int chapterIndex);
-
-    void loadContent(BookContentView bookContentView,long bookTag, final int chapterIndex, final int page);
-
-    void updateProgress(int chapterIndex, int pageIndex);
 
     void saveProgress();
 
     String getChapterTitle(int chapterIndex);
-
-    void setPageLineCount(int pageLineCount);
-
-    void setPageWidth(int pageWidth);
 
     void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
 

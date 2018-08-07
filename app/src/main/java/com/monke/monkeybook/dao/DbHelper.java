@@ -32,9 +32,9 @@ public class DbHelper {
                             DaoMaster.dropAllTables(db, ifExists);
                         }
                     },
-                    BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class, BookContentBeanDao.class,
-                    DownloadChapterBeanDao.class, SearchHistoryBeanDao.class, BookSourceBeanDao.class, ReplaceRuleBeanDao.class,
-                    BookmarkBeanDao.class
+                    BookShelfBeanDao.class, BookInfoBeanDao.class, ChapterListBeanDao.class,
+                    DownloadChapterBeanDao.class, SearchHistoryBeanDao.class, BookSourceBeanDao.class,
+                    ReplaceRuleBeanDao.class, BookmarkBeanDao.class
             );
         }
     }

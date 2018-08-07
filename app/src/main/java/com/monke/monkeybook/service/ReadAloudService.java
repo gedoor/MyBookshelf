@@ -139,7 +139,7 @@ public class ReadAloudService extends Service {
         }
         nowSpeak = 0;
         contentList.clear();
-        String[] splitSpeech = content.split("\r\n");
+        String[] splitSpeech = content.split("\n");
         for (String aSplitSpeech : splitSpeech) {
             if (!isEmpty(aSplitSpeech)) {
                 contentList.add(aSplitSpeech);
@@ -189,6 +189,17 @@ public class ReadAloudService extends Service {
             float speechRateF = (float) speechRate / 10;
             textToSpeech.setSpeechRate(speechRateF);
         }
+    }
+
+    /**
+     * 朗读
+     */
+    public static void play(Context context, Boolean aloudButton, String content) {
+        Intent readAloudIntent = new Intent(context, ReadAloudService.class);
+        readAloudIntent.setAction(ActionNewReadAloud);
+        readAloudIntent.putExtra("aloudButton", aloudButton);
+        readAloudIntent.putExtra("content", content);
+        context.startService(readAloudIntent);
     }
 
     /**

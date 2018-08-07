@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.page;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.utils.FileUtils;
@@ -25,24 +26,11 @@ public class NetPageLoader extends PageLoader {
         super(pageView, collBook);
     }
 
-    private List<TxtChapter> convertTxtChapter(List<ChapterListBean> bookChapters) {
-        List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
-        for (ChapterListBean bean : bookChapters) {
-            TxtChapter chapter = new TxtChapter();
-            chapter.bookId = bean.getNoteUrl();
-            chapter.title = bean.getDurChapterName();
-            chapter.link = bean.getDurChapterUrl();
-            txtChapters.add(chapter);
-        }
-        return txtChapters;
-    }
-
     @Override
     public void refreshChapterList() {
         if (mCollBook.getChapterList() == null) return;
 
-        // 将 BookChapter 转换成当前可用的 Chapter
-        mChapterList = convertTxtChapter(mCollBook.getChapterList());
+        mChapterList = mCollBook.getChapterList();
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -53,14 +41,14 @@ public class NetPageLoader extends PageLoader {
         // 如果章节未打开
         if (!isChapterOpen()) {
             // 打开章节
-            openChapter();
+            openChapter(mCollBook.getDurChapterPage());
         }
     }
 
     @Override
-    protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
+    protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
         File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.getBookInfoBean().getName()
-                + File.separator + chapter.title + FileUtils.SUFFIX_NB);
+                + File.separator + chapter.getDurChapterName() + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
@@ -69,8 +57,8 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
-    protected boolean hasChapterData(TxtChapter chapter) {
-        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(), chapter.title);
+    protected boolean hasChapterData(ChapterListBean chapter) {
+        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(), chapter.getDurChapterName());
     }
 
     // 装载上一章节的内容
@@ -154,18 +142,5 @@ public class NetPageLoader extends PageLoader {
         }
     }
 
-    @Override
-    public void saveRecord() {
-        super.saveRecord();
-        if (mCollBook != null && isChapterListPrepare) {
-            //表示当前CollBook已经阅读
-//            mCollBook.setIsUpdate(false);
-//            mCollBook.setLastRead(StringUtils.
-//                    dateConvert(System.currentTimeMillis(), Constant.FORMAT_BOOK_DATE));
-//            //直接更新
-//            BookRepository.getInstance()
-//                    .saveCollBook(mCollBook);
-        }
-    }
 }
 

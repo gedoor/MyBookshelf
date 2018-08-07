@@ -3,7 +3,6 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
@@ -25,7 +24,6 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -45,6 +43,17 @@ public class BookshelfHelp {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + fileName + FileUtils.SUFFIX_NB);
         return file.exists();
+    }
+
+    /**
+     * 删除章节文件
+     * @param folderName : bookId
+     * @param fileName: chapterName
+     * @return
+     */
+    public static void delChapter(String folderName, String fileName){
+        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + fileName + FileUtils.SUFFIX_NB);
     }
 
     /**
@@ -137,14 +146,8 @@ public class BookshelfHelp {
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
-        List<String> keys = new ArrayList<>();
-        if (bookShelfBean.getChapterListSize() > 0) {
-            for (int i = 0; i < bookShelfBean.getChapterListSize(); i++) {
-                keys.add(bookShelfBean.getChapterList(i).getDurChapterUrl());
-            }
-        }
-        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteByKeyInTx(keys);
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
+        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
@@ -259,7 +262,6 @@ public class BookshelfHelp {
     public static void clearBookshelf() {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteAll();
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteAll();
-        DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().deleteAll();
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
     }
 

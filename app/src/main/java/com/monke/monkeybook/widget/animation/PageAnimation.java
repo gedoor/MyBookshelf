@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import com.monke.monkeybook.help.ReadBookControl;
+
 /**
  * Created by newbiechen on 17-7-24.
  * 翻页动画抽象类
@@ -15,6 +17,7 @@ import android.widget.Scroller;
 public abstract class PageAnimation {
     //正在使用的View
     protected View mView;
+    protected ReadBookControl readBookControl = ReadBookControl.getInstance();
     //滑动装置
     protected Scroller mScroller;
     //监听器
@@ -29,7 +32,8 @@ public abstract class PageAnimation {
     protected int mScreenHeight;
     //屏幕的间距
     protected int mMarginWidth;
-    protected int mMarginHeight;
+    protected int mMarginTop;
+    protected int mMarginBottom;
     //视图的尺寸
     protected int mViewWidth;
     protected int mViewHeight;
@@ -44,18 +48,19 @@ public abstract class PageAnimation {
     protected float mLastY;
 
     public PageAnimation(int w, int h, View view, OnPageChangeListener listener){
-        this(w, h, 0, 0, view,listener);
+        this(w, h, 0, 0, 0, view,listener);
     }
 
-    public PageAnimation(int w, int h, int marginWidth, int marginHeight, View view, OnPageChangeListener listener){
+    public PageAnimation(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener){
         mScreenWidth = w;
         mScreenHeight = h;
 
         mMarginWidth = marginWidth;
-        mMarginHeight = marginHeight;
+        mMarginTop = marginTop;
+        mMarginBottom = marginBottom;
 
         mViewWidth = mScreenWidth - mMarginWidth * 2;
-        mViewHeight = mScreenHeight - mMarginHeight * 2;
+        mViewHeight = mScreenHeight - mMarginTop - mMarginBottom;
 
         mView = view;
         mListener = listener;

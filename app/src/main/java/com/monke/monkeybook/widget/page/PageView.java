@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.BitmapUtil;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
 import com.monke.monkeybook.widget.animation.HorizonPageAnim;
 import com.monke.monkeybook.widget.animation.NonePageAnim;
@@ -35,19 +38,17 @@ public class PageView extends View {
 
     private final static String TAG = "BookPageWidget";
 
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    private ReadBookActivity activity;
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
     private int statusBarHeight = 0; //状态栏高度
-    // 背景图片
-    private Bitmap mBgBitmap;
 
     private int mStartX = 0;
     private int mStartY = 0;
     private boolean isMove = false;
     // 初始化参数
-    private int mBgColor = 0xFFCEC29C;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private PageMode mPageMode = PageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
@@ -105,11 +106,13 @@ public class PageView extends View {
     }
 
     //设置翻页的模式
-    void setPageMode(PageMode pageMode) {
+    void setPageMode(PageMode pageMode, int marginTop, int marginBottom) {
         mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
-
+        if (!readBookControl.getHideStatusBar()) {
+            marginTop = marginTop + statusBarHeight;
+        }
         switch (mPageMode) {
             case SIMULATION:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
@@ -122,19 +125,19 @@ public class PageView extends View {
                 break;
             case SCROLL:
                 mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        mPageLoader.getMarginHeight(), this, mPageAnimListener);
+                        marginTop, marginBottom,this, mPageAnimListener);
                 break;
             default:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
         }
     }
 
-    public int getStatusBarHeight() {
-        return statusBarHeight;
+    public ReadBookActivity getActivity() {
+        return activity;
     }
 
-    public Bitmap getmBgBitmap() {
-        return mBgBitmap;
+    public int getStatusBarHeight() {
+        return statusBarHeight;
     }
 
     public Bitmap getNextBitmap() {
@@ -159,7 +162,11 @@ public class PageView extends View {
 
     public boolean autoNextPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            return false;
+            if (mPageLoader.getPagePos() < mPageLoader.getPageSize() - 1) {
+                mPageLoader.skipToPage(mPageLoader.getPagePos() + 1);
+                return true;
+            }
+            return mPageLoader.skipNextChapter();
         } else {
             startPageAnim(PageAnimation.Direction.NEXT);
             return true;
@@ -202,15 +209,15 @@ public class PageView extends View {
         this.postInvalidate();
     }
 
-    public void setBgColor(int color) {
-        mBgColor = color;
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
 
         //绘制背景
-        canvas.drawColor(mBgColor);
+        if (readBookControl.bgIsColor()) {
+            canvas.drawColor(readBookControl.getBgColor());
+        } else {
+            canvas.drawBitmap(readBookControl.getBgBitmap(mViewWidth, mViewHeight), 0, 0, null);
+        }
 
         //绘制动画
         if (mPageAnim != null) {
@@ -251,8 +258,8 @@ public class PageView extends View {
                 if (!isMove) {
                     //设置中间区域范围
                     if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3,
-                                mViewWidth * 4 / 5, mViewHeight * 2 / 3);
+                        mCenterRect = new RectF(mViewWidth / 3, mViewHeight / 3,
+                                mViewWidth * 2 / 3, mViewHeight * 2 / 3);
                     }
 
                     //是否点击了中间
@@ -309,10 +316,7 @@ public class PageView extends View {
     }
 
     public boolean isRunning() {
-        if (mPageAnim == null) {
-            return false;
-        }
-        return mPageAnim.isRunning();
+        return mPageAnim != null && mPageAnim.isRunning();
     }
 
     public boolean isPrepare() {
@@ -340,7 +344,7 @@ public class PageView extends View {
     public void drawCurPage(boolean isUpdate) {
         if (!isPrepare) return;
 
-        if (!isUpdate){
+        if (!isUpdate) {
             if (mPageAnim instanceof ScrollPageAnim) {
                 ((ScrollPageAnim) mPageAnim).resetBitmap();
             }
@@ -362,12 +366,10 @@ public class PageView extends View {
 
     /**
      * 获取 PageLoader
-     *
-     * @param collBook
-     * @return
      */
-    public PageLoader getPageLoader(BookShelfBean collBook, int statusBarHeight) {
-        this.statusBarHeight = statusBarHeight;
+    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean collBook) {
+        this.activity = activity;
+        this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;
@@ -382,8 +384,6 @@ public class PageView extends View {
         if (mViewWidth != 0 || mViewHeight != 0) {
             // 初始化 PageLoader 的屏幕大小
             mPageLoader.prepareDisplay(mViewWidth, mViewHeight);
-            mBgBitmap = BitmapUtil.scaleImage(BitmapFactory.decodeResource(MApplication.getInstance().getResources(), R.drawable.bg_readbook_yellow), mViewWidth, mViewHeight);
-//            this.setBackground(readBookControl.getTextBackground());
         }
 
         return mPageLoader;

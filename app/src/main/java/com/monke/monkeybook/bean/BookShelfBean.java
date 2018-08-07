@@ -4,8 +4,6 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.monke.monkeybook.widget.contentview.BookContentView;
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -29,7 +27,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     @Id
     private String noteUrl; //对应BookInfoBean noteUrl;
     private Integer durChapter = 0;   //当前章节 （包括番外）
-    private Integer durChapterPage = BookContentView.DurPageIndexBegin;  // 当前章节位置   用页码
+    private Integer durChapterPage = 0;  // 当前章节位置   用页码
     private Long finalDate = System.currentTimeMillis();  //最后阅读时间
     private Boolean hasUpdate = false;  //是否有更新
     private Integer newChapters = 0;  //更新章节数
@@ -129,10 +127,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return durChapter;
     }
 
-    public void setDurChapter(int durChapter) {
-        this.durChapter = durChapter;
-    }
-
     //获取当前章节
     public ChapterListBean getDurChapterListBean() {
         return getChapterList(durChapter);
@@ -167,7 +161,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     }
 
     public int getDurChapterPage() {
-        return durChapterPage;
+        return durChapterPage < 0 ? 0 : durChapterPage;
     }
 
     public long getFinalDate() {

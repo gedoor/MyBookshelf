@@ -23,10 +23,10 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.dao.BookContentBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.view.activity.DownloadActivity;
@@ -227,9 +227,7 @@ public class DownloadService extends Service {
         if (isStartDownload) {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                BookContentBean result = DbHelper.getInstance().getmDaoSession().getBookContentBeanDao().queryBuilder()
-                        .where(BookContentBeanDao.Properties.DurChapterUrl.eq(data.getDurChapterUrl())).unique();
-                e.onNext(result == null);
+                e.onNext(!BookshelfHelp.isChapterCached(data.getBookName(), data.getDurChapterName()));
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
@@ -241,6 +239,11 @@ public class DownloadService extends Service {
                     });
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+                if (bookContentBean.getRight()) {
+                    BookshelfHelp.saveChapterInfo(data.getBookName(),
+                            data.getDurChapterName(),
+                            bookContentBean.getDurChapterContent());
+                }
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
                 e.onNext(editDownloadList(REMOVE, data));
                 e.onComplete();
