@@ -146,8 +146,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
     FloatingActionButton fabNightTheme;
     @BindView(R.id.pageView)
     PageView pageView;
-    @BindView(R.id.read_tv_page_tip)
-    TextView readTvPageTip;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -515,8 +513,6 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
                     @Override
                     public void requestChapters(int chapterIndex) {
                         mPresenter.loadContent(chapterIndex);
-                        //隐藏提示
-                        readTvPageTip.setVisibility(GONE);
                     }
 
                     @Override

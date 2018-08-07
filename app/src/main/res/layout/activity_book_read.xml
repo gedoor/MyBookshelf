@@ -16,24 +16,6 @@
         tools:visibility="gone"
         android:focusable="true" />
 
-    <!--切换页面提示-->
-    <TextView
-        android:id="@+id/read_tv_page_tip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/read_ll_bottom_menu"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:background="@color/background"
-        android:gravity="center"
-        android:paddingBottom="8dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="8dp"
-        android:text="1/12"
-        android:textColor="@color/white"
-        android:visibility="gone" />
-
     <FrameLayout
         android:id="@+id/fl_menu"
         android:layout_width="match_parent"
