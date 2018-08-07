@@ -10,7 +10,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
+import com.monke.monkeybook.presenter.contract.IFindBookPresenter;
 import com.monke.monkeybook.view.impl.IFindBookView;
 
 import java.util.ArrayList;

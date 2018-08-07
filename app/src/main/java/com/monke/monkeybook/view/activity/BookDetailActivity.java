@@ -23,7 +23,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
+import com.monke.monkeybook.presenter.contract.IBookDetailPresenter;
 import com.monke.monkeybook.view.impl.IBookDetailView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 

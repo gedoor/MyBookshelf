@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.presenter.contract.IImportBookPresenter;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.adapter.ImportBookAdapter;

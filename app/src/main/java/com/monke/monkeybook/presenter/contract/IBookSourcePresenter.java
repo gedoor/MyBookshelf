@@ -1,4 +1,4 @@
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter.contract;
 
 import android.net.Uri;
 

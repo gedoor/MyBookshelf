@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -34,7 +33,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
+import com.monke.monkeybook.presenter.contract.ISourceEditPresenter;
 import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.view.impl.ISourceEditView;
 

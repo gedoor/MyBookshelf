@@ -10,7 +10,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.presenter.contract.IImportBookPresenter;
 import com.monke.monkeybook.view.impl.IImportBookView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 

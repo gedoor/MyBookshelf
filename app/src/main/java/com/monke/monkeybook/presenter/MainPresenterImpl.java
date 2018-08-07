@@ -24,10 +24,9 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.impl.IMainView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.net.URL;
@@ -40,7 +39,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
+public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;

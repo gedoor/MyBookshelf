@@ -2,7 +2,6 @@
 package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
@@ -18,7 +17,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
+import com.monke.monkeybook.presenter.contract.IChoiceBookPresenter;
 import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 

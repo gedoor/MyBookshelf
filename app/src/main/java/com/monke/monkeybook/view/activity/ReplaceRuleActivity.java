@@ -21,7 +21,7 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
-import com.monke.monkeybook.presenter.impl.IReplaceRulePresenter;
+import com.monke.monkeybook.presenter.contract.IReplaceRulePresenter;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.view.impl.IReplaceRuleView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;

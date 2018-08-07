@@ -16,7 +16,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.presenter.FindBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
+import com.monke.monkeybook.presenter.contract.IFindBookPresenter;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
 import com.monke.monkeybook.view.impl.IFindBookView;
 

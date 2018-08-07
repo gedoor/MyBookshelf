@@ -1,5 +1,5 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter.contract;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.bean.BookShelfBean;

@@ -24,7 +24,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.MyFile;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IImportBookPresenter;
+import com.monke.monkeybook.presenter.contract.IImportBookPresenter;
 import com.monke.monkeybook.utils.fileSelectorUtil.EmptyFileFilter;
 import com.monke.monkeybook.utils.fileSelectorUtil.FileComparator;
 import com.monke.monkeybook.utils.fileSelectorUtil.SDCardScanner;

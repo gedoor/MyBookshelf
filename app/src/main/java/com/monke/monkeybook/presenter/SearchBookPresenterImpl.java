@@ -21,7 +21,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
+import com.monke.monkeybook.presenter.contract.ISearchBookPresenter;
 import com.monke.monkeybook.view.impl.ISearchBookView;
 
 import java.util.ArrayList;

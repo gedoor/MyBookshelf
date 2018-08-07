@@ -41,7 +41,7 @@ import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IReadBookPresenter;
+import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.FileUtil;
@@ -49,7 +49,6 @@ import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.utils.SystemUtil;
 import com.monke.monkeybook.utils.barUtil.BarHide;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.view.impl.IReadBookView;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
@@ -81,7 +80,7 @@ import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
-public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implements IReadBookView {
+public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
     private final int ResultReplace = 101;
     private final int RESULT_OPEN_OTHER_PERMS = 102;
     public final int ResultSelectFont = 104;
@@ -176,7 +175,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
 
     @Override
-    protected IReadBookPresenter initInjector() {
+    protected ReadBookContract.Presenter initInjector() {
         return new ReadBookPresenterImpl();
     }
 

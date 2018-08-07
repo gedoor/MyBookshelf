@@ -48,12 +48,11 @@ import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
-import com.monke.monkeybook.view.impl.IMainView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
@@ -65,7 +64,7 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
+public class MainActivity extends MBaseActivity<MainContract.Presenter> implements MainContract.View {
     private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
@@ -102,7 +101,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private ImmersionReceiver immersionReceiver;
 
     @Override
-    protected IMainPresenter initInjector() {
+    protected MainContract.Presenter initInjector() {
         return new MainPresenterImpl();
     }
 

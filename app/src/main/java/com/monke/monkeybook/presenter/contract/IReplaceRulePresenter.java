@@ -1,9 +1,8 @@
-package com.monke.monkeybook.presenter.impl;
+package com.monke.monkeybook.presenter.contract;
 
 import android.net.Uri;
 
 import com.monke.basemvplib.impl.IPresenter;
-import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 
 import java.util.List;

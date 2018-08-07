@@ -12,11 +12,9 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
-import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ReplaceRuleManage;
-import com.monke.monkeybook.presenter.impl.IReplaceRulePresenter;
+import com.monke.monkeybook.presenter.contract.IReplaceRulePresenter;
 import com.monke.monkeybook.view.impl.IReplaceRuleView;
 
 import java.io.File;

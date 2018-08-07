@@ -19,7 +19,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.contract.IBookSourcePresenter;
 import com.monke.monkeybook.service.CheckSourceService;
 import com.monke.monkeybook.view.impl.IBookSourceView;
 

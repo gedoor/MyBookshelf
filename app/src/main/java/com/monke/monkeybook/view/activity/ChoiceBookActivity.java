@@ -17,7 +17,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ChoiceBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
+import com.monke.monkeybook.presenter.contract.IChoiceBookPresenter;
 import com.monke.monkeybook.view.adapter.ChoiceBookAdapter;
 import com.monke.monkeybook.view.impl.IChoiceBookView;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
