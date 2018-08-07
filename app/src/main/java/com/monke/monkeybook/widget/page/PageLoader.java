@@ -763,7 +763,6 @@ public abstract class PageLoader {
                 //标题下方线
                 if (mSettingManager.getShowLine()) {
                     tipTop = tipTop + ScreenUtils.dpToPx(4);
-                    //canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                     canvas.drawRect(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                 }
 
@@ -925,8 +924,6 @@ public abstract class PageLoader {
                     top += titleInterval;
                 }
             }
-
-
 
             //对内容进行绘制
             for (int i = mCurPage.titleLines; i < mCurPage.lines.size(); ++i) {
