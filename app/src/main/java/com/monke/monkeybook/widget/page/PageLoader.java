@@ -772,7 +772,8 @@ public abstract class PageLoader {
                 if (mStatus == STATUS_FINISH) {
                     String percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
                     canvas.drawText(percent, mMarginLeft, y, mTipPaint);
-                    if (mSettingManager.getHideStatusBar()) {
+                    if (mSettingManager.getHideStatusBar() & mSettingManager.getShowTimeBattery()) {
+                        /******绘制总进度********/
                         percent = BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
                         canvas.drawText(percent, (mDisplayWidth - mTipPaint.measureText(percent))/2, y, mTipPaint);
                     }
@@ -785,7 +786,7 @@ public abstract class PageLoader {
         }
 
         int visibleRight = mDisplayWidth - tipLeft;
-        if (mSettingManager.getHideStatusBar()) {
+        if (mSettingManager.getHideStatusBar() & mSettingManager.getShowTimeBattery()) {
             /******绘制电池********/
 
             int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
