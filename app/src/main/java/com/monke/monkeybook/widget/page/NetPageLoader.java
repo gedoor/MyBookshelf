@@ -30,12 +30,11 @@ public class NetPageLoader extends PageLoader {
     public void refreshChapterList() {
         if (mCollBook.getChapterList() == null) return;
 
-        mChapterList = mCollBook.getChapterList();
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
         if (mPageChangeListener != null) {
-            mPageChangeListener.onCategoryFinish(mChapterList);
+            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
         }
 
         // 如果章节未打开
@@ -79,7 +78,7 @@ public class NetPageLoader extends PageLoader {
 
         if (mPageChangeListener != null) {
             for (int i=mCurChapterPos; i < mCurChapterPos + 5; i++) {
-                if (i < mChapterList.size()) {
+                if (i < mCollBook.getChapterListSize()) {
                     mPageChangeListener.requestChapters(i);
                 }
             }
@@ -95,7 +94,7 @@ public class NetPageLoader extends PageLoader {
 
         if (mPageChangeListener != null) {
             for (int i=mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
-                if (i < mChapterList.size()) {
+                if (i < mCollBook.getChapterListSize()) {
                     mPageChangeListener.requestChapters(i);
                 }
             }

@@ -64,6 +64,7 @@ public class LocalPageLoader extends PageLoader {
     private Charset mCharset;
 
     private Disposable mChapterDisp = null;
+    private List<ChapterListBean> mChapterList = new ArrayList<>();
 
     public LocalPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);
@@ -331,8 +332,7 @@ public class LocalPageLoader extends PageLoader {
         Long lastModified = mBookFile.lastModified();
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate()
-                && mCollBook.getChapterListSize() > 0) {
+        if (!mCollBook.getHasUpdate() && mCollBook.getChapterListSize() > 0) {
 
             mChapterList = mCollBook.getChapterList();
             isChapterListPrepare = true;
@@ -365,17 +365,17 @@ public class LocalPageLoader extends PageLoader {
                         mChapterDisp = null;
                         isChapterListPrepare = true;
 
-                        // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(mChapterList);
-                        }
-
                         // 存储章节到数据库
                         mCollBook.getBookInfoBean().setChapterList(mChapterList);
                         mCollBook.setFinalRefreshData(lastModified);
 
                         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(mChapterList);
                         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
+
+                        // 提示目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(mChapterList);
+                        }
 
                         // 加载并显示当前章节
                         openChapter(mCollBook.getDurChapterPage());

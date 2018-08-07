@@ -60,8 +60,6 @@ public abstract class PageLoader {
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 1;
 
-    // 当前章节列表
-    protected List<ChapterListBean> mChapterList;
     // 书本对象
     protected BookShelfBean mCollBook;
     // 监听器
@@ -151,7 +149,6 @@ public abstract class PageLoader {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
-        mChapterList = new ArrayList<>(1);
 
         // 初始化数据
         initData();
@@ -266,8 +263,7 @@ public abstract class PageLoader {
 
     public void changeSourceFinish(BookShelfBean bookShelfBean) {
         mCollBook = bookShelfBean;
-        mChapterList = mCollBook.getChapterList();
-        mPageChangeListener.onCategoryFinish(mChapterList);
+        mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
         skipToChapter(mCurChapterPos);
     }
 
@@ -510,7 +506,7 @@ public abstract class PageLoader {
 
         // 如果目录加载完之后才设置监听器，那么会默认回调
         if (isChapterListPrepare) {
-            mPageChangeListener.onCategoryFinish(mChapterList);
+            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
         }
     }
 
@@ -530,15 +526,6 @@ public abstract class PageLoader {
      */
     public BookShelfBean getCollBook() {
         return mCollBook;
-    }
-
-    /**
-     * 获取章节目录。
-     *
-     * @return
-     */
-    public List<ChapterListBean> getChapterCategory() {
-        return mChapterList;
     }
 
     /**
@@ -578,7 +565,7 @@ public abstract class PageLoader {
         }
 
         // 如果获取到的章节目录为空
-        if (mChapterList.isEmpty()) {
+        if (mCollBook.getChapterList().isEmpty()) {
             mStatus = STATUS_CATEGORY_EMPTY;
             mPageView.drawCurPage(false);
             return;
@@ -636,11 +623,9 @@ public abstract class PageLoader {
             mPreLoadDisp.dispose();
         }
 
-        clearList(mChapterList);
         clearList(mCurPageList);
         clearList(mNextPageList);
 
-        mChapterList = null;
         mCurPageList = null;
         mNextPageList = null;
         mPageView = null;
@@ -688,7 +673,7 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
-        ChapterListBean chapter = mChapterList.get(chapterPos);
+        ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             return null;
@@ -745,7 +730,7 @@ public abstract class PageLoader {
                 canvas.drawBitmap(mSettingManager.getBgBitmap(mDisplayWidth, mDisplayHeight),0, 0, null);
             }
 
-            if (!mChapterList.isEmpty()) {
+            if (!mCollBook.getChapterList().isEmpty()) {
                 /*****初始化标题的参数********/
                 //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
                 float tipTop = mSettingManager.getHideStatusBar()
@@ -754,7 +739,7 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
-                        canvas.drawText(mChapterList.get(mCurChapterPos).getDurChapterName()
+                        canvas.drawText(mCollBook.getChapterList(mCurChapterPos).getDurChapterName()
                                 , tipLeft, tipTop, mTipPaint);
                     }
                 } else {
@@ -1096,7 +1081,7 @@ public abstract class PageLoader {
 
     private boolean hasNextChapter() {
         // 判断是否到达目录最后一章
-        if (mCurChapterPos + 1 >= mChapterList.size()) {
+        if (mCurChapterPos + 1 >= mCollBook.getChapterListSize()) {
             return false;
         }
         return true;
@@ -1180,7 +1165,7 @@ public abstract class PageLoader {
 
         // 如果不存在下一章，且下一章没有数据，则不进行加载。
         if (!hasNextChapter()
-                || !hasChapterData(mChapterList.get(nextChapter))) {
+                || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
             return;
         }
 
