@@ -1382,6 +1382,9 @@ public abstract class PageLoader {
      * @return:获取初始显示的页面
      */
     private TxtPage getCurPage(int pos) {
+        if (pos > mCurPageList.size() - 1) {
+            pos = mCurPageList.size() - 1;
+        }
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
