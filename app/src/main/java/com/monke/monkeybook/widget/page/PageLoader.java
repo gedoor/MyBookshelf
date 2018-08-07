@@ -762,7 +762,7 @@ public abstract class PageLoader {
                 }
                 if (mSettingManager.getShowLine()) {
                     tipTop = tipTop + ScreenUtils.dpToPx(4);
-                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft*2, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                 }
 
                 /*****绘制页码********/
@@ -1382,6 +1382,9 @@ public abstract class PageLoader {
      * @return:获取初始显示的页面
      */
     private TxtPage getCurPage(int pos) {
+        if (pos > mCurPageList.size() - 1) {
+            pos = mCurPageList.size() - 1;
+        }
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
