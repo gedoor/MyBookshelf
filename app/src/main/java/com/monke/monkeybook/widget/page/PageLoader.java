@@ -736,6 +736,7 @@ public abstract class PageLoader {
     private void drawBackground(Bitmap bitmap, boolean isUpdate) {
         Canvas canvas = new Canvas(bitmap);
         int tipMarginHeight = ScreenUtils.dpToPx(3);
+        int tipLeft = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         if (!isUpdate | !mSettingManager.bgIsColor()) {
             /****绘制背景****/
             if (mSettingManager.bgIsColor()) {
@@ -754,14 +755,14 @@ public abstract class PageLoader {
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         canvas.drawText(mChapterList.get(mCurChapterPos).getDurChapterName()
-                                , mMarginLeft, tipTop, mTipPaint);
+                                , tipLeft, tipTop, mTipPaint);
                     }
                 } else {
-                    canvas.drawText(mCurPage.title, mMarginLeft, tipTop, mTipPaint);
+                    canvas.drawText(mCurPage.title, tipLeft, tipTop, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     tipTop = tipTop + ScreenUtils.dpToPx(4);
-                    canvas.drawLine(mMarginLeft, tipTop, mDisplayWidth - mMarginLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft*2, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                 }
 
                 /*****绘制页码********/
@@ -783,7 +784,7 @@ public abstract class PageLoader {
             canvas.drawRect(mDisplayWidth/3*2, mDisplayHeight - mMarginBottom + ScreenUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
         }
 
-        int visibleRight = mDisplayWidth - mMarginRight;
+        int visibleRight = mDisplayWidth - tipLeft;
         if (mSettingManager.getHideStatusBar()) {
             /******绘制电池********/
 
