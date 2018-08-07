@@ -562,6 +562,7 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
             public boolean onTouch() {
+                screenOff();
                 return true;
             }
 
