@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import com.monke.monkeybook.help.ReadBookControl;
+
 /**
  * Created by newbiechen on 17-7-24.
  * 翻页动画抽象类
@@ -15,6 +17,7 @@ import android.widget.Scroller;
 public abstract class PageAnimation {
     //正在使用的View
     protected View mView;
+    protected ReadBookControl readBookControl = ReadBookControl.getInstance();
     //滑动装置
     protected Scroller mScroller;
     //监听器
