@@ -100,8 +100,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                         if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(chapterIndex).getDurChapterName())
-                                && editDownloading(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
-                            editDownloading(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
+                            DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             e.onNext(chapterIndex);
                         }
                         e.onComplete();
@@ -116,7 +116,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
                             timer.schedule(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                    DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                     mView.error(mView.getContext().getString(R.string.load_over_time));
                                     d.dispose();
                                 }
@@ -125,7 +125,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
-                            editDownloading(REMOVE, bookContentBean.getDurChapterUrl());
+                            DownloadingList(REMOVE, bookContentBean.getDurChapterUrl());
                             BookshelfHelp.saveChapterInfo(bookShelf.getBookInfoBean().getName(),
                                     bookShelf.getChapterList(chapterIndex).getDurChapterName(),
                                     bookContentBean.getDurChapterContent());
@@ -134,7 +134,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
 
                         @Override
                         public void onError(Throwable e) {
-                            editDownloading(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                            DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             mView.error(e.getMessage());
                         }
 
@@ -149,7 +149,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<IReadBookView> impl
     /**
      * 编辑下载列表
      */
-    private synchronized boolean editDownloading(int editType, String value) {
+    private synchronized boolean DownloadingList(int editType, String value) {
         if (editType == ADD) {
             downloadingChapterList.add(value);
             return true;

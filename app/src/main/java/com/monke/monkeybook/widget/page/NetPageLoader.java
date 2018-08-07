@@ -66,10 +66,8 @@ public class NetPageLoader extends PageLoader {
     boolean parsePrevChapter() {
         boolean isRight = super.parsePrevChapter();
 
-        if (mStatus == STATUS_FINISH) {
-            loadPrevChapter();
-        } else if (mStatus == STATUS_LOADING) {
-            loadCurrentChapter();
+        if (mPageChangeListener != null && mCurChapterPos >= 1) {
+            mPageChangeListener.requestChapters(mCurChapterPos - 1);
         }
         return isRight;
     }
@@ -79,9 +77,14 @@ public class NetPageLoader extends PageLoader {
     boolean parseCurChapter() {
         boolean isRight = super.parseCurChapter();
 
-        if (mStatus == STATUS_LOADING) {
-            loadCurrentChapter();
+        if (mPageChangeListener != null) {
+            for (int i=mCurChapterPos; i < mCurChapterPos + 5; i++) {
+                if (i < mChapterList.size()) {
+                    mPageChangeListener.requestChapters(i);
+                }
+            }
         }
+
         return isRight;
     }
 
@@ -90,56 +93,15 @@ public class NetPageLoader extends PageLoader {
     boolean parseNextChapter() {
         boolean isRight = super.parseNextChapter();
 
-        if (mStatus == STATUS_FINISH) {
-            loadNextChapter();
-        } else if (mStatus == STATUS_LOADING) {
-            loadCurrentChapter();
+        if (mPageChangeListener != null) {
+            for (int i=mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
+                if (i < mChapterList.size()) {
+                    mPageChangeListener.requestChapters(i);
+                }
+            }
         }
 
         return isRight;
-    }
-
-    /**
-     * 加载当前页的前面两个章节
-     */
-    private void loadPrevChapter() {
-        if (mPageChangeListener != null) {
-            int end = mCurChapterPos;
-            int begin = end - 1;
-            if (begin < 0) {
-                begin = 0;
-            }
-
-            mPageChangeListener.requestChapters(begin);
-        }
-    }
-
-    /**
-     * 加载前一页，当前页，后一页。
-     */
-    private void loadCurrentChapter() {
-        if (mPageChangeListener != null) {
-            mPageChangeListener.requestChapters(mCurChapterPos);
-        }
-    }
-
-    /**
-     * 加载当前页的后两个章节
-     */
-    private void loadNextChapter() {
-        if (mPageChangeListener != null) {
-
-            // 提示加载后两章
-            int begin = mCurChapterPos + 1;
-
-            // 判断是否大于最后一章
-            if (begin >= mChapterList.size()) {
-                // 如果下一章超出目录了，就没有必要加载了
-                return;
-            }
-
-            mPageChangeListener.requestChapters(begin);
-        }
     }
 
 }
