@@ -760,9 +760,11 @@ public abstract class PageLoader {
                 } else {
                     canvas.drawText(mCurPage.title, tipLeft, tipTop, mTipPaint);
                 }
+                //标题下方线
                 if (mSettingManager.getShowLine()) {
                     tipTop = tipTop + ScreenUtils.dpToPx(4);
-                    canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                    //canvas.drawLine(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawRect(tipLeft, tipTop, mDisplayWidth - tipLeft, tipTop + ScreenUtils.dpToPx(1), mTextPaint);
                 }
 
                 /*****绘制页码********/
@@ -924,11 +926,24 @@ public abstract class PageLoader {
                 }
             }
 
+
+
             //对内容进行绘制
             for (int i = mCurPage.titleLines; i < mCurPage.lines.size(); ++i) {
                 str = mCurPage.lines.get(i);
+                Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
+                //drawScaledText(canvas,str,width,mTextPaint,top);
 
-                canvas.drawText(str, mMarginLeft, top, mTextPaint);
+                if (needScale(str)) {
+                    //canvas.drawText(str, mMarginLeft, top, mTextPaint);
+                    drawScaledText(canvas,str,width,mTextPaint,top);
+                } else {
+                    canvas.drawText(str, mMarginLeft, top, mTextPaint);
+                }
+
+
+                //
                 if (str.endsWith("\n")) {
                     top += para;
                 } else {
@@ -1289,7 +1304,7 @@ public abstract class PageLoader {
                     paragraph = paragraph.replaceAll("\\s", "");
                     // 如果只有换行符，那么就不执行
                     if (paragraph.equals("")) continue;
-                    paragraph = StringUtils.halfToFull("  " + paragraph + "\n");
+                    paragraph =StringUtils.halfToFull("  ") + paragraph  + "\n";//StringUtils.halfToFull("  " + paragraph+"\n")
                 }
                 int wordCount = 0;
                 String subStr = null;
@@ -1377,6 +1392,41 @@ public abstract class PageLoader {
         return pages;
     }
 
+    private void drawScaledText(Canvas canvas, String line, float lineWidth,TextPaint paint,float top) {
+        float x = mMarginLeft;
+
+        if (isFirstLineOfParagraph(line)) {
+            String blanks = StringUtils.halfToFull("  ");
+            canvas.drawText(blanks, x, top, paint);
+            float bw = StaticLayout.getDesiredWidth(blanks, paint);
+            x += bw;
+
+            line = line.substring(2);
+        }
+
+
+        int gapCount = line.length() - 1;
+
+        int i = 0;
+
+        float d = ((mDisplayWidth- (mMarginLeft+mMarginRight)) - lineWidth) / gapCount;
+        for (; i < line.length(); i++) {
+            String c = String.valueOf(line.charAt(i));
+            float cw = StaticLayout.getDesiredWidth(c, paint);
+            canvas.drawText(c, x, top, paint);
+            x += cw + d;
+        }
+
+    }
+
+    //判断是不是d'hou
+    private boolean isFirstLineOfParagraph(String line) {
+        return line.length() > 3 && line.charAt(0) == (char) 12288 && line.charAt(1) == (char) 12288;
+    }
+
+    private boolean needScale(String line) {//判断不是空行
+        return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
+    }
 
     /**
      * @return:获取初始显示的页面
