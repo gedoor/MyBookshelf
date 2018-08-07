@@ -1,7 +1,7 @@
 package com.monke.monkeybook.presenter.contract;
 
 import android.net.Uri;
-import android.widget.LinearLayout;
+import android.support.design.widget.Snackbar;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
@@ -26,14 +26,16 @@ public interface BookSourceContract {
         void importBookSource(String url);
 
         void checkBookSource();
+
     }
 
     interface View extends IView {
 
         void refreshBookSource();
 
-        LinearLayout getView();
+        Snackbar getSnackBar(String msg, int length);
 
+        void showSnackBar(String msg, int length);
     }
 
 }

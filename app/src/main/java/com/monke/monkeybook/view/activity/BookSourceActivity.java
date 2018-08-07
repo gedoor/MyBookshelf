@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -171,6 +172,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
     }
 
+    @Override
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
+    }
+
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
     }
@@ -184,8 +190,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     @Override
-    public LinearLayout getView() {
-        return llContent;
+    public void showSnackBar(String msg, int length) {
+        Snackbar.make(llContent, msg, length).show();
     }
 
     @Override

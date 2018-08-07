@@ -16,16 +16,15 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.presenter.FindBookPresenterImpl;
-import com.monke.monkeybook.presenter.contract.IFindBookPresenter;
+import com.monke.monkeybook.presenter.contract.FindBookContract;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
-import com.monke.monkeybook.view.impl.IFindBookView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implements IFindBookView {
+public class FindBookActivity extends MBaseActivity<FindBookContract.Presenter> implements FindBookContract.View {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -39,7 +38,7 @@ public class FindBookActivity extends MBaseActivity<IFindBookPresenter> implemen
     private FindKindAdapter adapter;
 
     @Override
-    protected IFindBookPresenter initInjector() {
+    protected FindBookContract.Presenter initInjector() {
         return new FindBookPresenterImpl();
     }
 

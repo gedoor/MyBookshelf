@@ -78,7 +78,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        Snackbar.make(mView.getView(), delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
+                        mView.getSnackBar(delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> {
                                     restoreBookSource(delBookSource);
                                 })
@@ -148,7 +148,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
             json = FileHelper.readString(file);
         }
         if (!isEmpty(json)) {
-            showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
+            mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
             BookSourceManage.importBookSourceO(json)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -168,7 +168,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
-        showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
+        mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
         BookSourceManage.importSourceFromWww(url)
                 .subscribe(getImportObserver());
     }
@@ -179,21 +179,17 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
             public void onNext(Boolean aBoolean) {
                 if (aBoolean) {
                     mView.refreshBookSource();
-                    showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
+                    mView.showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
                 } else {
-                    showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
+                    mView.showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                showSnackBar(e.getMessage(), Snackbar.LENGTH_SHORT);
+                mView.showSnackBar(e.getMessage(), Snackbar.LENGTH_SHORT);
             }
         };
-    }
-
-    private void showSnackBar(String msg, int length) {
-        Snackbar.make(mView.getView(), msg, length).show();
     }
 
     private String getProgressStr(int state) {
@@ -226,10 +222,10 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
         mView.refreshBookSource();
 
         if (state == -1) {
-            showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
+            mView.showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
         } else {
             if (progressSnackBar == null) {
-                progressSnackBar = Snackbar.make(mView.getView(), getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+                progressSnackBar = mView.getSnackBar(getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
                 progressSnackBar.setAction(mView.getContext().getString(R.string.cancel), view -> CheckSourceService.stop(mView.getContext()));
             } else {
                 progressSnackBar.setText(getProgressStr(state));
