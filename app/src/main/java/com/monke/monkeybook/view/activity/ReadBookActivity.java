@@ -415,30 +415,39 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void upPageMode() {
-                mPageLoader.setPageMode(readBookControl.getPageMode(readBookControl.getPageMode()));
+                if (mPageLoader != null) {
+                    mPageLoader.setPageMode(readBookControl.getPageMode(readBookControl.getPageMode()));
+                }
             }
 
             @Override
             public void upTextSize() {
-                mPageLoader.setTextSize(readBookControl.getTextSize(), readBookControl.getLineMultiplier());
+                if (mPageLoader != null) {
+                    mPageLoader.setTextSize(readBookControl.getTextSize(), readBookControl.getLineMultiplier());
+                }
             }
 
             @Override
             public void upMargin() {
-                readBookControl.setLineChange(System.currentTimeMillis());
-                mPageLoader.setMargin(readBookControl.getPaddingTop(), readBookControl.getPaddingBottom(), readBookControl.getPaddingLeft(), readBookControl.getPaddingRight());
+                if (mPageLoader != null) {
+                    mPageLoader.setMargin(readBookControl.getPaddingTop(), readBookControl.getPaddingBottom(), readBookControl.getPaddingLeft(), readBookControl.getPaddingRight());
+                }
             }
 
             @Override
             public void bgChange() {
-                mPageLoader.setPageStyle();
                 readBookControl.initTextDrawableIndex();
                 initImmersionBar();
+                if (mPageLoader != null) {
+                    mPageLoader.setPageStyle();
+                }
             }
 
             @Override
             public void refresh() {
-                mPageLoader.initPaint();
+                if (mPageLoader != null) {
+                    mPageLoader.initPaint();
+                }
             }
 
         });
@@ -457,9 +466,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
 
             @Override
             public void refresh() {
-                readBookControl.setLineChange(System.currentTimeMillis());
                 initImmersionBar();
-                mPageLoader.refresh();
+                if (mPageLoader != null) {
+                    mPageLoader.refresh();
+                }
             }
 
             @Override
