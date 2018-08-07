@@ -14,8 +14,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.FileHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
-import com.monke.monkeybook.presenter.contract.IReplaceRulePresenter;
-import com.monke.monkeybook.view.impl.IReplaceRuleView;
+import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 
 import java.io.File;
 import java.net.URL;
@@ -33,7 +32,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView> implements IReplaceRulePresenter {
+public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
     private BookSourceBean delBookSource;
 
     @Override
@@ -69,7 +68,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView
                     @Override
                     public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
                         mView.refresh();
-                        Snackbar.make(mView.getView(), replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
+                        mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> {
                                     restoreData(replaceRuleBean);
                                 })

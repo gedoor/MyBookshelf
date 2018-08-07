@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
@@ -21,9 +21,8 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
-import com.monke.monkeybook.presenter.contract.IReplaceRulePresenter;
+import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
-import com.monke.monkeybook.view.impl.IReplaceRuleView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.util.List;
@@ -45,7 +44,7 @@ import static com.monke.monkeybook.view.activity.BookSourceActivity.RESULT_IMPOR
  * 书源管理
  */
 
-public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> implements IReplaceRuleView {
+public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Presenter> implements ReplaceRuleContract.View {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -58,6 +57,11 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     private MoProgressHUD moProgressHUD;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;
+
+    @Override
+    protected ReplaceRuleContract.Presenter initInjector() {
+        return new ReplaceRulePresenterImpl();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,11 +152,6 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     @Override
     protected void firstRequest() {
 
-    }
-
-    @Override
-    protected IReplaceRulePresenter initInjector() {
-        return new ReplaceRulePresenterImpl();
     }
 
     //设置ToolBar
@@ -251,7 +250,13 @@ public class ReplaceRuleActivity extends MBaseActivity<IReplaceRulePresenter> im
     }
 
     @Override
-    public View getView() {
-        return llContent;
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
     }
+
+    @Override
+    public void showSnackBar(String msg, int length) {
+        Snackbar.make(llContent, msg, length).show();
+    }
+
 }

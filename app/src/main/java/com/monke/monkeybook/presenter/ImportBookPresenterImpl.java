@@ -10,8 +10,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
-import com.monke.monkeybook.presenter.contract.IImportBookPresenter;
-import com.monke.monkeybook.view.impl.IImportBookView;
+import com.monke.monkeybook.presenter.contract.ImportBookContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -23,7 +22,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ImportBookPresenterImpl extends BasePresenterImpl<IImportBookView> implements IImportBookPresenter {
+public class ImportBookPresenterImpl extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
 
     public ImportBookPresenterImpl(){
 

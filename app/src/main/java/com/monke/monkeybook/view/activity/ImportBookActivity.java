@@ -25,11 +25,10 @@ import android.widget.Toast;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
-import com.monke.monkeybook.presenter.contract.IImportBookPresenter;
+import com.monke.monkeybook.presenter.contract.ImportBookContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.adapter.ImportBookAdapter;
-import com.monke.monkeybook.view.impl.IImportBookView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.victor.loading.rotate.RotateLoading;
 
@@ -38,7 +37,7 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> implements IImportBookView {
+public class ImportBookActivity extends MBaseActivity<ImportBookContract.Presenter> implements ImportBookContract.View {
     private final int RESULT_CHOOSE_DIRECTORY = 1;
 
     @BindView(R.id.toolbar)
@@ -64,7 +63,7 @@ public class ImportBookActivity extends MBaseActivity<IImportBookPresenter> impl
     private MoProgressHUD moProgressHUD;
 
     @Override
-    protected IImportBookPresenter initInjector() {
+    protected ImportBookContract.Presenter initInjector() {
         return new ImportBookPresenterImpl();
     }
 
