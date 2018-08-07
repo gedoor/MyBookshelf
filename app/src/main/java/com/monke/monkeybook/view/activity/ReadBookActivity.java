@@ -1190,8 +1190,10 @@ public class ReadBookActivity extends MBaseActivity<IReadBookPresenter> implemen
         super.onDestroy();
         unregisterReceiver(batInfoReceiver);
         ReadAloudService.stop(this);
-        mPageLoader.closeBook();
-        mPageLoader = null;
+        if (mPageLoader != null) {
+            mPageLoader.closeBook();
+            mPageLoader = null;
+        }
     }
 
     /**
