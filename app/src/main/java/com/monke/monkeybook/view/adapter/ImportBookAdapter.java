@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Viewholder>{
-    private List<File> datas;
-    private List<File> selectDatas;
+    private List<FileItem> datas;
+    private boolean selectAll = false;
 
     public interface OnCheckBookListener{
         void checkBook(int count);
@@ -29,7 +29,6 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
     private OnCheckBookListener checkBookListener;
     public ImportBookAdapter(@NonNull OnCheckBookListener checkBookListener){
         datas = new ArrayList<>();
-        selectDatas = new ArrayList<>();
         this.checkBookListener = checkBookListener;
     }
 
@@ -40,18 +39,16 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
 
     @Override
     public void onBindViewHolder(final Viewholder holder, final int position) {
-        holder.tvNmae.setText(datas.get(position).getName());
-        holder.tvSize.setText(convertByte(datas.get(position).length()));
-        holder.tvLoc.setText(datas.get(position).getAbsolutePath().replace(Environment.getExternalStorageDirectory().getAbsolutePath(),"存储空间"));
+        holder.tvNmae.setText(datas.get(position).getFile().getName());
+        holder.tvSize.setText(convertByte(datas.get(position).getFile().length()));
+        holder.tvLoc.setText(datas.get(position).getFile().getAbsolutePath().replace(Environment.getExternalStorageDirectory().getAbsolutePath(),"存储空间"));
 
         holder.scbSelect.setOnCheckedChangeListener((checkBox, isChecked) -> {
-            if(isChecked){
-                selectDatas.add(datas.get(position));
-            }else{
-                selectDatas.remove(datas.get(position));
-            }
-            checkBookListener.checkBook(selectDatas.size());
+            datas.get(position).setChecked(true);
         });
+        if (selectAll) {
+            holder.scbSelect.setChecked(true);
+        }
         if(canCheck){
             holder.scbSelect.setVisibility(View.VISIBLE);
             holder.llContent.setOnClickListener(v -> holder.scbSelect.setChecked(!holder.scbSelect.isChecked(),true));
@@ -63,7 +60,8 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
 
     public void addData(File newItem){
         int position = datas.size();
-        datas.add(newItem);
+        FileItem fileItem = new FileItem(newItem, false);
+        datas.add(fileItem);
         notifyItemInserted(position);
         notifyItemRangeChanged(position, 1);
     }
@@ -72,6 +70,12 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
     public void setCanCheck(Boolean canCheck){
         this.canCheck = canCheck;
         notifyDataSetChanged();
+    }
+
+    public void selectAll() {
+        selectAll = true;
+        notifyDataSetChanged();
+        selectAll = false;
     }
 
     @Override
@@ -115,6 +119,39 @@ public class ImportBookAdapter extends RecyclerView.Adapter<ImportBookAdapter.Vi
     }
 
     public List<File> getSelectDatas() {
+        List<File> selectDatas = new ArrayList<>();
+        for (FileItem fileItem : datas) {
+            if (fileItem.checked) {
+                selectDatas.add(fileItem.getFile());
+            }
+        }
         return selectDatas;
     }
+
+    public class FileItem {
+        private File file;
+        private boolean checked;
+
+        FileItem(File file, boolean checked) {
+            this.file = file;
+            this.checked = checked;
+        }
+
+        public File getFile() {
+            return file;
+        }
+
+        public void setFile(File file) {
+            this.file = file;
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+    }
+
 }

@@ -1,15 +1,11 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.DocumentsContract;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.R;
@@ -27,7 +22,6 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.ImportBookContract;
 import com.monke.monkeybook.utils.FileUtil;
-import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.view.adapter.ImportBookAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.victor.loading.rotate.RotateLoading;
@@ -44,18 +38,10 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
     Toolbar toolbar;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
-    @BindView(R.id.tv_scan)
-    TextView tvScan;
     @BindView(R.id.rl_loading)
     RotateLoading rlLoading;
-    @BindView(R.id.tv_count)
-    TextView tvCount;
-    @BindView(R.id.rcv_books)
-    RecyclerView rcvBooks;
-    @BindView(R.id.tv_select_dir)
-    TextView tvSelectDir;
-    @BindView(R.id.ll_scan)
-    LinearLayout llScan;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     private ImportBookAdapter importBookAdapter;
     private MenuItem menuItem;
@@ -69,12 +55,11 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_book_import);
+        setContentView(R.layout.activity_recycler_vew);
     }
 
     @Override
     protected void initData() {
-
         importBookAdapter = new ImportBookAdapter(count -> {
             if (menuItem != null) {
                 menuItem.setVisible(count != 0);
@@ -89,11 +74,10 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
         setupActionBar();
         moProgressHUD = new MoProgressHUD(this);
 
-        rcvBooks.setAdapter(importBookAdapter);
-        rcvBooks.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(importBookAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mPresenter.searchLocationBook(new File(getIntent().getStringExtra("path")));
-        llScan.setVisibility(View.INVISIBLE);
         rlLoading.start();
     }
 
@@ -131,46 +115,14 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
                 moProgressHUD.showLoading("放入书架中...");
                 mPresenter.importBooks(importBookAdapter.getSelectDatas());
                 break;
+            case R.id.action_select_all:
+                importBookAdapter.selectAll();
+                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void bindEvent() {
-        tvScan.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(ImportBookActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //申请权限
-                ImportBookActivity.this.requestPermissions(
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        0x11);
-            } else {
-                mPresenter.searchLocationBook(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
-                llScan.setVisibility(View.INVISIBLE);
-                rlLoading.start();
-            }
-        });
-        tvSelectDir.setOnClickListener(view -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(ImportBookActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //申请权限
-                ImportBookActivity.this.requestPermissions(
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        0x11);
-            } else {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                    intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-                    startActivityForResult(intent, RESULT_CHOOSE_DIRECTORY);
-                } else {
-                    Toast.makeText(this, "当前系统版本不支持", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
     @Override
@@ -189,7 +141,6 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
     @Override
     public void addNewBook(File newFile) {
         importBookAdapter.addData(newFile);
-        tvCount.setText(String.format(getString(R.string.import_books_count), String.valueOf(importBookAdapter.getItemCount())));
     }
 
     @Override
@@ -210,28 +161,6 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
         moProgressHUD.showInfo("放入书架失败!\n" + msg);
     }
 
-    @SuppressLint("NewApi")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 0x11) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && PremissionCheck.checkPremission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                mPresenter.searchLocationBook(new File(Environment.getExternalStorageDirectory().getAbsolutePath()));
-                llScan.setVisibility(View.INVISIBLE);
-                rlLoading.start();
-            } else {
-                if (!this.shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    moProgressHUD.showTwoButton("去系统设置打开SD卡读写权限？", "取消", v -> moProgressHUD.dismiss(), "设置", v -> {
-                        moProgressHUD.dismiss();
-                        PremissionCheck.requestPermissionSetting(ImportBookActivity.this);
-                    });
-                } else {
-                    Toast.makeText(this, "未获取SD卡读取权限", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return moProgressHUD.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
@@ -249,11 +178,17 @@ public class ImportBookActivity extends MBaseActivity<ImportBookContract.Present
                     String path = FileUtil.getPath(this, docUri);
                     if (path != null) {
                         mPresenter.searchLocationBook(new File(path));
-                        llScan.setVisibility(View.INVISIBLE);
                         rlLoading.start();
                     }
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

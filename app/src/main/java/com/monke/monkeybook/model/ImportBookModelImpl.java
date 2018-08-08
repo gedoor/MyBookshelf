@@ -32,7 +32,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
                 bookShelfBean.setHasUpdate(true);
-                bookShelfBean.setFinalDate(file.lastModified());
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
@@ -47,7 +47,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                     bookShelfBean.getBookInfoBean().setAuthor("");
                     bookShelfBean.getBookInfoBean().setName(fileName);
                 }
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(file.lastModified());
                 bookShelfBean.getBookInfoBean().setCoverUrl("");
                 bookShelfBean.getBookInfoBean().setNoteUrl(file.getAbsolutePath());
                 bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);
