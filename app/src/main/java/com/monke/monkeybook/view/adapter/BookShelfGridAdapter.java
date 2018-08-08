@@ -35,7 +35,6 @@ import me.grantland.widget.AutofitTextView;
 
 public class BookShelfGridAdapter extends RefreshRecyclerViewAdapter {
     private static final int VIEW_TYPE_ITEM = 1;
-    private static final int VIEW_TYPE_EMPTY = 0;
 
     private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
 

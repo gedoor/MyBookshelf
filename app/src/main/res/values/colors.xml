@@ -13,6 +13,15 @@
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
     <color name="d_blue">#82A6F5</color>
+    <color name="translucent">#99343434</color>
+    <color name="gray">#b8b8b8</color>
+    <color name="light_pink">#fb9090</color>
+    <color name="light_white">#EEEEEE</color>
+    <color name="light_coffee">#A58D5E</color>
+    <color name="light_red">#EC4A48</color>
+    <color name="light_blue">#039BE5</color>
+    <color name="light_translucent">#23000000</color>
+    <color name="common_gray">#EEEEEE</color>
 
 
     <color name="background">#f4f4f4</color>

@@ -62,4 +62,6 @@
         <attr name="textNormalSolidColor" format="color"/>
         <attr name="textIsSelected" format="boolean" />
     </declare-styleable>
+
+
 </resources>

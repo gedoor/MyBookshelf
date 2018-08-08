@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:color="@color/light_red" android:state_checked="true" />
+	<item android:color="@color/light_red" android:state_pressed="true" />
+	<item android:color="@color/light_red" android:state_selected="true" />
+	<!--必须放在最后一行，否则上面的效果全都不能用-->
+	<item android:color="@color/white"/>
+</selector>

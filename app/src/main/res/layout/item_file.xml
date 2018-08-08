@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:background="@drawable/selector_common_bg"
+	android:layout_height="60dp">
+	
+	<FrameLayout
+		android:id="@+id/file_fl_icon"
+		android:layout_width="60dp"
+		android:layout_height="match_parent">
+		<!--文件夹标识或已选文件标识-->
+		<ImageView
+			android:id="@+id/file_iv_icon"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:scaleType="center"
+			android:visibility="gone"
+			tools:src="@drawable/ic_folder_black_24dp"/>
+		<!--选择是否添加文件-->
+		<CheckBox
+			android:id="@+id/file_cb_select"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_gravity="center"
+			android:enabled="false"
+			android:clickable="false"
+			android:focusableInTouchMode="false"
+			android:button="@null"
+			android:background="@drawable/selector_cb_file" />
+	</FrameLayout>
+	
+	<RelativeLayout
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:paddingTop="8dp"
+		android:paddingBottom="8dp">
+		
+		<TextView
+			android:id="@+id/file_tv_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="16sp"
+			android:text="英语四级"/>
+		
+		<LinearLayout
+			android:id="@+id/file_ll_brief"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+			android:layout_alignParentBottom="true">
+			
+			<TextView
+				android:id="@+id/file_tv_tag"
+				android:layout_toRightOf="@+id/file_fl_icon"
+				android:layout_alignParentBottom="true"
+				android:layout_marginRight="15dp"
+				android:text="TXT"
+				android:background="@drawable/bg_ib_pre"/>
+			
+			<TextView
+				android:id="@+id/file_tv_size"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="15dp"
+				tools:text="324kb"/>
+			
+			<TextView
+				android:id="@+id/file_tv_date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:text="2017-05-22"/>
+		</LinearLayout>
+		
+		<TextView
+			android:id="@+id/file_tv_sub_count"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true"
+			tools:text="0 项"
+			android:visibility="gone"/>
+	</RelativeLayout>
+</LinearLayout>

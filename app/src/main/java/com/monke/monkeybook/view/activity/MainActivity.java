@@ -271,7 +271,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 break;
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, perms)) {
-                    startActivity(new Intent(this, FileFolderActivity.class));
+                    startActivity(new Intent(this, ImportBookActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                             FILE_SELECT_RESULT, perms);
@@ -450,7 +450,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @AfterPermissionGranted(FILE_SELECT_RESULT)
     private void fileSelectResult() {
-        startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
+        startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
     }
 
     private void versionUpRun() {
