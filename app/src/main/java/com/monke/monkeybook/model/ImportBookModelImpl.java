@@ -37,7 +37,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
 
-                bookShelfBean.getBookInfoBean().setAuthor("佚名");
+                bookShelfBean.getBookInfoBean().setAuthor("");
                 bookShelfBean.getBookInfoBean().setName(file.getName().replace(".txt", "").replace(".TXT", ""));
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setCoverUrl("");

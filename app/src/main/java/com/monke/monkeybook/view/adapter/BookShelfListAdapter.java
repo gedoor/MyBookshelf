@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.adapter;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +143,11 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
                             .centerCrop().placeholder(R.drawable.img_cover_default))
                     .into(holder.ivCover);
         }
-        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
+        if (!TextUtils.isEmpty(books.get(index).getBookInfoBean().getAuthor())) {
+            holder.tvName.setText(String.format("%s(%s)", books.get(index).getBookInfoBean().getName(), books.get(index).getBookInfoBean().getAuthor()));
+        } else {
+            holder.tvName.setText(books.get(index).getBookInfoBean().getName());
+        }
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
