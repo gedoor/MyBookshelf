@@ -928,7 +928,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void upAloudTimer(String text) {
-        fabReadAloudTimer.setContentDescription(text);
         tvReadAloudTimer.setText(text);
     }
 
