@@ -270,6 +270,10 @@ public class PageView extends View {
                         }
                         return true;
                     }
+
+                    if (!readBookControl.getCanClickTurn()) {
+                        return true;
+                    }
                 }
                 mPageAnim.onTouchEvent(event);
                 break;
