@@ -199,12 +199,9 @@ public class FileUtils {
     public static Single<List<File>> getSDTxtFile(){
         //外部存储卡路径
         String rootPath = Environment.getExternalStorageDirectory().getPath();
-        return Single.create(new SingleOnSubscribe<List<File>>() {
-            @Override
-            public void subscribe(SingleEmitter<List<File>> e) throws Exception {
-                List<File> files = getTxtFiles(rootPath,0);
-                e.onSuccess(files);
-            }
+        return Single.create(e -> {
+            List<File> files = getTxtFiles(rootPath,0);
+            e.onSuccess(files);
         });
     }
 
