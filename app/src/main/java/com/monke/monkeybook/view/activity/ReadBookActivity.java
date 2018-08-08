@@ -428,7 +428,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void upMargin() {
                 if (mPageLoader != null) {
-                    mPageLoader.setMargin(readBookControl.getPaddingTop(), readBookControl.getPaddingBottom(), readBookControl.getPaddingLeft(), readBookControl.getPaddingRight());
+                    mPageLoader.upMargin();
                 }
             }
 
