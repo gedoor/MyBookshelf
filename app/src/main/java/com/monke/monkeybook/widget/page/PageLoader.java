@@ -761,7 +761,7 @@ public abstract class PageLoader {
                         canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                     }
                     //绘制分隔线
-                    tipBottom = tipBottom - mTipPaint.getTextSize() - ScreenUtils.dpToPx(5);
+                    tipBottom = mDisplayHeight - ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
                     canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + ScreenUtils.dpToPx(1), mTextPaint);
                 } else {
                     float tipBottom = tipMarginHeight - mTipPaint.getFontMetrics().top;

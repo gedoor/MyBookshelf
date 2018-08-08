@@ -43,8 +43,7 @@ public class ScrollPageAnim extends PageAnimation {
     // 是否处于刷新阶段
     private boolean isRefresh = true;
 
-    public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom,
-                          View view, OnPageChangeListener listener) {
+    public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom , view, listener);
         // 创建两个BitmapView
         initWidget();
