@@ -156,34 +156,12 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             }
         }
         //进度条
-        holder.llDurCursor.setVisibility(View.VISIBLE);
         holder.mpbDurProgress.setVisibility(View.VISIBLE);
         holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
         float speed = books.get(index).getChapterListSize() * 1.0f / 60;
 
         holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
-        holder.mpbDurProgress.setProgressListener(new OnProgressListener() {
-            @Override
-            public void moveStartProgress(float dur) {
 
-            }
-
-            @Override
-            public void durProgressChange(float dur) {
-                float rate = dur / holder.mpbDurProgress.getMaxProgress();
-                holder.llDurCursor.setPadding((int) (holder.mpbDurProgress.getMeasuredWidth() * rate), 0, 0, 0);
-            }
-
-            @Override
-            public void moveStopProgress(float dur) {
-
-            }
-
-            @Override
-            public void setDurProgress(float dur) {
-
-            }
-        });
         if (needAnim) {
             holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter());
         } else {
@@ -252,7 +230,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
-        LinearLayout llDurCursor;
         MHorProgressBar mpbDurProgress;
         ImageButton ibContent;
         ImageButton ibCover;
@@ -266,7 +243,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
-            llDurCursor = itemView.findViewById(R.id.ll_durCursor);
             mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
             ibContent = itemView.findViewById(R.id.ib_content);
             ibCover = itemView.findViewById(R.id.ib_cover);
