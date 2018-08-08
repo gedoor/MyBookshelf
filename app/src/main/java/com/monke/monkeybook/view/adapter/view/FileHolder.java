@@ -10,7 +10,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.utils.FileUtils;
-import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.view.adapter.base.ViewHolderImpl;
 
