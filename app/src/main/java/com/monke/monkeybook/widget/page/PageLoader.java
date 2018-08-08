@@ -773,9 +773,6 @@ public abstract class PageLoader {
                     } else {
                         canvas.drawText(mCurPage.title, tipMarginWidth, tipBottom, mTipPaint);
                     }
-                    //绘制分隔线
-                    tipBottom = tipBottom + ScreenUtils.dpToPx(4);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + ScreenUtils.dpToPx(1), mTextPaint);
                     if (mStatus == STATUS_FINISH) {
                         tipBottom = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
                         percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
@@ -791,6 +788,9 @@ public abstract class PageLoader {
                             canvas.drawText(readProgress, x, y, mTipPaint);
                         }
                     }
+                    //绘制分隔线
+                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT - 1);
+                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT), mTextPaint);
                 }
             }
         } else {
