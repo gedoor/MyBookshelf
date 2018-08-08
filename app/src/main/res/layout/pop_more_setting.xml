@@ -249,7 +249,7 @@
                         android:layout_width="47dp"
                         android:layout_height="26dp"
                         android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/volume_open_page"
+                        android:contentDescription="@string/showTitle"
                         app:kswBackColor="@drawable/selector_switch_button"
                         app:kswThumbColor="@color/background" />
                 </LinearLayout>

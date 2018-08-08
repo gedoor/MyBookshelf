@@ -550,7 +550,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
-                        if ((aloudStatus == NEXT | aloudStatus == PLAY) & pageIndex >= 0) {
+                        if ((ReadAloudService.running) & pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
                                 ReadAloudService.play(ReadBookActivity.this, false, mPageLoader.getContext(pageIndex));
                             }
@@ -1129,9 +1129,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         switch (aloudStatus) {
             case PAUSE:
                 ReadAloudService.resume(this);
+                fabReadAloud.setContentDescription(getString(R.string.read_aloud));
                 break;
             case PLAY:
                 ReadAloudService.pause(this);
+                fabReadAloud.setContentDescription(getString(R.string.read_aloud_pause));
                 break;
             default:
                 ReadBookActivity.this.popMenuOut();
