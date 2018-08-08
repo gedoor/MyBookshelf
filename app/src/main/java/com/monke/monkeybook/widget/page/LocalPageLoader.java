@@ -1,17 +1,13 @@
 package com.monke.monkeybook.widget.page;
 
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.Void;
-import com.monke.monkeybook.utils.Charset;
 import com.monke.monkeybook.utils.FileUtils;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
-import com.monke.monkeybook.utils.StringUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.BufferedReader;
@@ -21,16 +17,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
+
+import static com.monke.monkeybook.utils.FileUtils.BLANK;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -99,7 +97,7 @@ public class LocalPageLoader extends PageLoader {
             //如果存在Chapter
             if (hasChapter) {
                 //将数据转换成String
-                String blockContent = new String(buffer, 0, length, mCharset.getName());
+                String blockContent = new String(buffer, 0, length, mCharset);
                 //当前Block下使过的String的指针
                 int seekPos = 0;
                 //进行正则匹配
@@ -122,7 +120,7 @@ public class LocalPageLoader extends PageLoader {
                             TxtChapter preChapter = new TxtChapter();
                             preChapter.title = "序章";
                             preChapter.start = 0;
-                            preChapter.end = chapterContent.getBytes(mCharset.getName()).length; //获取String的byte值,作为最终值
+                            preChapter.end = chapterContent.getBytes(mCharset).length; //获取String的byte值,作为最终值
 
                             //如果序章大小大于30才添加进去
                             if (preChapter.end - preChapter.start > 30) {
@@ -138,7 +136,7 @@ public class LocalPageLoader extends PageLoader {
                             //获取上一章节
                             TxtChapter lastChapter = chapters.get(chapters.size() - 1);
                             //将当前段落添加上一章去
-                            lastChapter.end += chapterContent.getBytes(mCharset.getName()).length;
+                            lastChapter.end += chapterContent.getBytes(mCharset).length;
 
                             //如果章节内容太小，则移除
                             if (lastChapter.end - lastChapter.start < 30) {
@@ -160,7 +158,7 @@ public class LocalPageLoader extends PageLoader {
 
                             //获取上一章节
                             TxtChapter lastChapter = chapters.get(chapters.size() - 1);
-                            lastChapter.end = lastChapter.start + chapterContent.getBytes(mCharset.getName()).length;
+                            lastChapter.end = lastChapter.start + chapterContent.getBytes(mCharset).length;
 
                             //如果章节内容太小，则移除
                             if (lastChapter.end - lastChapter.start < 30) {
@@ -200,7 +198,7 @@ public class LocalPageLoader extends PageLoader {
                         int end = length;
                         //寻找换行符作为终止点
                         for (int i = chapterOffset + MAX_LENGTH_WITH_NO_CHAPTER; i < length; ++i) {
-                            if (buffer[i] == Charset.BLANK) {
+                            if (buffer[i] == BLANK) {
                                 end = i;
                                 break;
                             }
@@ -298,7 +296,7 @@ public class LocalPageLoader extends PageLoader {
         //进行章节匹配
         for (String str : CHAPTER_PATTERNS) {
             Pattern pattern = Pattern.compile(str, Pattern.MULTILINE);
-            Matcher matcher = pattern.matcher(new String(buffer, 0, length, mCharset.getName()));
+            Matcher matcher = pattern.matcher(new String(buffer, 0, length, mCharset));
             //如果匹配存在，那么就表示当前章节使用这种匹配方式
             if (matcher.find()) {
                 mChapterPattern = pattern;
@@ -393,7 +391,7 @@ public class LocalPageLoader extends PageLoader {
         //从文件中获取数据
         byte[] content = getChapterContent(chapter);
         ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mCharset.getName()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mCharset));
         return br;
     }
 
