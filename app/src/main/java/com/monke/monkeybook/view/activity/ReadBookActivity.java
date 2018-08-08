@@ -1034,7 +1034,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
             if (readBookControl.getCanKeyTurn()
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                return false;
+                return true;
             }
         }
         return super.onKeyUp(keyCode, event);
