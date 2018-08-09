@@ -275,16 +275,6 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     }
 
     @Override
-    public void addNewBook(File newFile) {
-
-    }
-
-    @Override
-    public void searchFinish() {
-
-    }
-
-    @Override
     public void addSuccess() {
         //设置HashMap为false
         mCurFragment.setCheckedAll(false);
