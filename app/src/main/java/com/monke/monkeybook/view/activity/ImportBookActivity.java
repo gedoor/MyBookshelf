@@ -1,11 +1,12 @@
 package com.monke.monkeybook.view.activity;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
  */
 
 public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Presenter> implements ImportBookContract.View {
-    private static final String TAG = "FileSystemActivity";
+    private static final String TAG = "ImportBookActivity";
 
     @BindView(R.id.file_system_cb_selected_all)
     CheckBox mCbSelectAll;
@@ -75,6 +76,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
         setContentView(R.layout.activity_file_system);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        setupActionBar();
     }
 
     @Override
@@ -144,14 +146,11 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                     new AlertDialog.Builder(this)
                             .setTitle("删除文件")
                             .setMessage("确定删除文件吗?")
-                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //删除选中的文件
-                                    mCurFragment.deleteCheckedFiles();
-                                    //提示删除文件成功
-                                    Toast.makeText(ImportBookActivity.this, "删除文件成功", Toast.LENGTH_SHORT).show();
-                                }
+                            .setPositiveButton(getResources().getString(R.string.ok), (dialog, which) -> {
+                                //删除选中的文件
+                                mCurFragment.deleteCheckedFiles();
+                                //提示删除文件成功
+                                Toast.makeText(ImportBookActivity.this, "删除文件成功", Toast.LENGTH_SHORT).show();
                             })
                             .setNegativeButton(getResources().getString(R.string.cancel), null)
                             .show();
@@ -167,6 +166,41 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
         super.firstRequest();
         mCurFragment = mLocalFragment;
     }
+
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.book_local);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_import, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单状态
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     /**
      * 改变底部选择栏的状态
@@ -241,13 +275,6 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
-
-    @Override
     public void addNewBook(File newFile) {
 
     }
@@ -259,7 +286,12 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     public void addSuccess() {
-
+        //设置HashMap为false
+        mCurFragment.setCheckedAll(false);
+        //改变菜单状态
+        changeMenuStatus();
+        //改变是否可以全选
+        changeCheckedAllStatus();
     }
 
     @Override

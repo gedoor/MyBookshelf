@@ -1,54 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
-	<!--指示器-->
-	<include layout="@layout/scroll_title_indicator"/>
-	
-	<android.support.v4.view.ViewPager
-		android:id="@+id/tab_vp"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1">
-	</android.support.v4.view.ViewPager>
-	
-	<!--文件点击按钮-->
-	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="52dp"
-		android:paddingRight="10dp"
-		android:gravity="center_vertical">
-		
-		<CheckBox
-			android:id="@+id/file_system_cb_selected_all"
-			android:layout_width="120dp"
-			android:layout_height="40dp"
-			android:layout_centerVertical="true"
-			android:button="@drawable/selector_cb_file"
-			android:text="全选"
-			android:textColor="@color/selector_cb_file"/>
-		
-		<Button
-			android:id="@+id/file_system_btn_add_book"
-			android:layout_width="wrap_content"
-			android:layout_height="35dp"
-			android:minWidth="110dp"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-			android:background="@drawable/selector_btn_add"
-			android:textColor="@color/selector_btn_file_add"
-			android:text="加入书架" />
-		
-		<Button
-			android:id="@+id/file_system_btn_delete"
-			android:layout_width="70dp"
-			android:layout_height="35dp"
-			android:layout_centerVertical="true"
-			android:layout_marginRight="15dp"
-			android:background="@drawable/selector_btn_delete"
-			android:textColor="@color/selector_btn_file_delete"
-			android:layout_toLeftOf="@id/file_system_btn_add_book"
-			android:text="删除"/>
-	</RelativeLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+    <!--指示器-->
+    <include layout="@layout/scroll_title_indicator" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tab_vp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!--文件点击按钮-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:paddingRight="10dp">
+
+        <CheckBox
+            android:id="@+id/file_system_cb_selected_all"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:button="@drawable/selector_cb_file"
+            android:text="全选"
+            android:textColor="@color/selector_cb_file" />
+
+        <Button
+            android:id="@+id/file_system_btn_add_book"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_btn_add"
+            android:minWidth="110dp"
+            android:text="加入书架"
+            android:textColor="@color/selector_btn_file_add" />
+
+        <Button
+            android:id="@+id/file_system_btn_delete"
+            android:layout_width="70dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/file_system_btn_add_book"
+            android:background="@drawable/selector_btn_delete"
+            android:text="删除"
+            android:textColor="@color/selector_btn_file_delete" />
+    </RelativeLayout>
 </LinearLayout>
