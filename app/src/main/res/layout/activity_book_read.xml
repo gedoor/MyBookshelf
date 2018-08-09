@@ -110,16 +110,20 @@
                     app:fabSize="mini"
                     app:pressedTranslationZ="4dp" />
 
-                <TextView
-                    android:id="@+id/tv_read_aloud_timer"
+                <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/radius_bg"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:text="@string/read_aloud_timer" />
+                    android:layout_gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_read_aloud_timer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="10dp"
+                        android:text="@string/read_aloud_timer" />
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
