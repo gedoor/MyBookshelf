@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.adapter.view;
 
+import android.graphics.PorterDuff;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -62,12 +63,12 @@ public class FileHolder extends ViewHolderImpl<File> {
         //选择
 
         if (BookshelfHelp.getBook(file.getAbsolutePath()) != null){
-            mCbSelect.setClickable(false);
-            mIvIcon.setVisibility(View.GONE);
-            mCbSelect.setVisibility(View.VISIBLE);
-        }
-        else {
-            mCbSelect.setClickable(true);
+            mIvIcon.setImageResource(R.drawable.ic_book_has);
+            mIvIcon.getDrawable().mutate();
+            mIvIcon.getDrawable().setColorFilter(getContext().getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+            mIvIcon.setVisibility(View.VISIBLE);
+            mCbSelect.setVisibility(View.GONE);
+        } else {
             boolean isSelected = mSelectedMap.get(file);
             mCbSelect.setChecked(isSelected);
             mIvIcon.setVisibility(View.GONE);
