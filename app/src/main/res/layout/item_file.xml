@@ -40,7 +40,8 @@
             android:id="@+id/file_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="英语四级"
+            android:singleLine="true"
+            android:text="@string/app_name"
             android:textSize="16sp" />
 
         <LinearLayout
@@ -59,14 +60,16 @@
                 android:background="@drawable/selector_tv_first_button"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:text="TXT" />
+                android:text="TXT"
+                tools:ignore="HardcodedText,RtlHardcoded" />
 
             <TextView
                 android:id="@+id/file_tv_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                tools:text="324kb" />
+                tools:text="324kb"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/file_tv_date"
