@@ -194,7 +194,7 @@
                 android:gravity="center"
                 android:text="@string/top" />
 
-            <com.monke.monkeybook.widget.NumberButton
+            <com.monke.monkeybook.widget.number.NumberButton
                 android:id="@+id/nbPaddingTop"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -208,7 +208,7 @@
                 android:gravity="center"
                 android:text="@string/bottom" />
 
-            <com.monke.monkeybook.widget.NumberButton
+            <com.monke.monkeybook.widget.number.NumberButton
                 android:id="@+id/nbPaddingBottom"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -222,7 +222,7 @@
                 android:gravity="center"
                 android:text="@string/left" />
 
-            <com.monke.monkeybook.widget.NumberButton
+            <com.monke.monkeybook.widget.number.NumberButton
                 android:id="@+id/nbPaddingLeft"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -236,7 +236,7 @@
                 android:gravity="center"
                 android:text="@string/right" />
 
-            <com.monke.monkeybook.widget.NumberButton
+            <com.monke.monkeybook.widget.number.NumberButton
                 android:id="@+id/nbPaddingRight"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

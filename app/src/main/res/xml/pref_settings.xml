@@ -28,7 +28,7 @@
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
-    <com.monke.monkeybook.widget.NumberPickerPreference
+    <com.monke.monkeybook.widget.number.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"
         android:summary="当前线程数 %s"

@@ -19,7 +19,7 @@ import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
-import com.monke.monkeybook.widget.NumberButton;
+import com.monke.monkeybook.widget.number.NumberButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
