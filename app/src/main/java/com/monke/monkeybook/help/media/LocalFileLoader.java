@@ -68,7 +68,7 @@ public class LocalFileLoader extends CursorLoader {
                 if (file.isDirectory() || !file.exists()){
                     continue;
                 }
-                else {
+                else if (file.length() > 1024){
                     files.add(file);
                 }
             }
