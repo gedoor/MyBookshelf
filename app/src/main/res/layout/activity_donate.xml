@@ -68,6 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝收款,支持红包" />
 
                 </LinearLayout>
@@ -91,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝红包口令" />
 
                 </LinearLayout>
@@ -114,6 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝红包二维码" />
 
                 </LinearLayout>
@@ -137,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝收款二维码" />
 
                 </LinearLayout>
@@ -160,6 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="微信赞赏码" />
 
                 </LinearLayout>
@@ -183,6 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
+                        android:background="@drawable/bg_ib_pre"
                         android:text="QQ收款码" />
 
                 </LinearLayout>

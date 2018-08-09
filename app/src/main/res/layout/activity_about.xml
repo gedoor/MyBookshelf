@@ -12,8 +12,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:transitionName="sharedView"
         android:theme="@style/AppTheme.AppBarOverlay"
+        android:transitionName="sharedView"
         tools:ignore="UnusedAttribute">
 
         <android.support.v7.widget.Toolbar
@@ -38,18 +38,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="10dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="@string/app_name"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_app_summary"
@@ -91,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_update_black_24dp"
                     android:gravity="center_vertical"
@@ -110,6 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_list_black_24dp"
                     android:gravity="center_vertical"
@@ -129,6 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_qq_group"
                     android:gravity="center_vertical"
@@ -148,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_local_cafe_black_24dp_new"
                     android:gravity="center_vertical"
@@ -167,6 +173,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_scoring"
                     android:gravity="center_vertical"
@@ -186,6 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_mail"
                     android:gravity="center_vertical"
@@ -205,6 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_launch_black_24dp"
                     android:gravity="center_vertical"
@@ -224,6 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_launch_black_24dp"
                     android:gravity="center_vertical"
@@ -243,6 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_launch_black_24dp"
                     android:gravity="center_vertical"
@@ -262,6 +273,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_launch_black_24dp"
                     android:gravity="center_vertical"
