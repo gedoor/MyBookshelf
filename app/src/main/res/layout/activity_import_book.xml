@@ -26,7 +26,7 @@
             android:layout_width="120dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:button="@drawable/selector_cb_file"
+            android:layout_marginStart="10dp"
             android:text="全选"
             android:textColor="@color/selector_cb_file" />
 

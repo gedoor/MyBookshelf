@@ -73,7 +73,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_file_system);
+        setContentView(R.layout.activity_import_book);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setupActionBar();

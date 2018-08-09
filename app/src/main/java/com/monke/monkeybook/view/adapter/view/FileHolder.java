@@ -62,11 +62,12 @@ public class FileHolder extends ViewHolderImpl<File> {
         //选择
 
         if (BookshelfHelp.getBook(file.getAbsolutePath()) != null){
-            mIvIcon.setImageResource(R.drawable.ic_file_loaded);
-            mIvIcon.setVisibility(View.VISIBLE);
-            mCbSelect.setVisibility(View.GONE);
+            mCbSelect.setClickable(false);
+            mIvIcon.setVisibility(View.GONE);
+            mCbSelect.setVisibility(View.VISIBLE);
         }
         else {
+            mCbSelect.setClickable(true);
             boolean isSelected = mSelectedMap.get(file);
             mCbSelect.setChecked(isSelected);
             mIvIcon.setVisibility(View.GONE);
