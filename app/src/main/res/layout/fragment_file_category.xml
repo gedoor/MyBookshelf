@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	<!--path-->
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="35dp"
-		android:orientation="horizontal">
-		<TextView
-			android:id="@+id/file_category_tv_path"
-			android:layout_width="0dp"
-			android:layout_height="match_parent"
-			android:layout_weight="1"
-			android:gravity="center_vertical"
-			android:padding="10dp"
-			android:textSize="12dp"
-			android:textColor="@color/tv_text_default"
-			tools:text="存储卡:/"/>
-		
-		<View
-			android:layout_width="2dp"
-			android:layout_height="match_parent"
-			android:layout_marginTop="5dp"
-			android:layout_marginBottom="5dp"
-			android:background="@color/background"/>
-		
-		<TextView
-			android:id="@+id/file_category_tv_back_last"
-			android:layout_width="80dp"
-			android:layout_height="match_parent"
-			android:gravity="center"
-			android:text="上一级"
-			android:textSize="12dp"
-			android:drawableLeft="@drawable/ic_back_last"
-			android:textColor="@color/tv_text_default"/>
-	</LinearLayout>
-	
-	<android.support.v7.widget.RecyclerView
-		android:id="@+id/file_category_rv_content"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1">
-	</android.support.v7.widget.RecyclerView>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--path-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/file_category_tv_path"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:textColor="@color/tv_text_default"
+            android:textSize="13sp"
+            tools:text="存储卡:/" />
+
+        <TextView
+            android:id="@+id/file_category_tv_back_last"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:drawableLeft="@drawable/ic_back_last"
+            android:gravity="center"
+            android:text="上一级"
+            android:textColor="@color/tv_text_default"
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/btn_bg_press" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/file_category_rv_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.fragment;
 
+import android.graphics.PorterDuff;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +63,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
         mRvContent.setAdapter(mAdapter);
+        setTextViewIconColor(mTvBackLast);
     }
 
     @Override
@@ -119,6 +121,11 @@ public class FileCategoryFragment extends BaseFileFragment {
         super.firstRequest();
         File root = Environment.getExternalStorageDirectory();
         toggleFileTree(root);
+    }
+
+    private void setTextViewIconColor(TextView textView) {
+        textView.getCompoundDrawables()[0].mutate();
+        textView.getCompoundDrawables()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     private void toggleFileTree(File file){
