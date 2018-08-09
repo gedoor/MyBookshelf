@@ -63,6 +63,9 @@ public class BookshelfHelp {
      * @param content
      */
     public static void saveChapterInfo(String folderName,String fileName,String content){
+        if (content == null) {
+            content = "";
+        }
         File file = getBookFile(folderName, fileName);
         //获取流并存储
         Writer writer = null;
