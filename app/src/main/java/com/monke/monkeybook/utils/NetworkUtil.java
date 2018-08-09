@@ -54,7 +54,7 @@ public class NetworkUtil {
             URI abs = base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
             URL absURL = abs.toURL();//转成URL
             abURL = absURL.toString();
-        } catch (MalformedURLException | URISyntaxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return abURL;
