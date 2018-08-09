@@ -97,7 +97,7 @@
                 android:singleLine="true"
                 android:textColor="#ffffff"
                 android:textSize="12sp"
-                app:minTextSize="7sp" />
+                app:minTextSize="10sp" />
 
         </LinearLayout>
 
