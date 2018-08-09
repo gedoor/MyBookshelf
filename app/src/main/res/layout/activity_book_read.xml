@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        tools:visibility="gone"
-        android:focusable="true" />
+        android:focusable="true"
+        tools:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/fl_menu"
@@ -110,15 +110,16 @@
                     app:fabSize="mini"
                     app:pressedTranslationZ="4dp" />
 
-                <com.monke.monkeybook.widget.CustomTextView
+                <TextView
                     android:id="@+id/tv_read_aloud_timer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:background="@drawable/radius_bg"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="10dp"
-                    android:text="@string/read_aloud_timer"
-                    app:textNormalSolidColor="@color/background"
-                    app:textRadius="5dp" />
+                    android:text="@string/read_aloud_timer" />
 
             </LinearLayout>
 
@@ -263,8 +264,8 @@
                         android:layout_height="50dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
-                        android:focusable="true"
                         android:contentDescription="@string/table_of_contents"
+                        android:focusable="true"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -298,8 +299,8 @@
                         android:layout_height="50dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
-                        android:focusable="true"
                         android:contentDescription="@string/adjust"
+                        android:focusable="true"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -333,8 +334,8 @@
                         android:layout_height="50dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
-                        android:focusable="true"
                         android:contentDescription="@string/interface_setting"
+                        android:focusable="true"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
@@ -368,8 +369,8 @@
                         android:layout_height="50dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
-                        android:focusable="true"
                         android:contentDescription="@string/setting"
+                        android:focusable="true"
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 

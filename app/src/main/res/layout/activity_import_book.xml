@@ -36,7 +36,7 @@
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/selector_btn_add"
+            android:background="@drawable/selector_btn_accent"
             android:minWidth="110dp"
             android:text="加入书架"
             android:textColor="@color/selector_btn_file_add" />
