@@ -134,8 +134,8 @@ public class ReadBookControl {
 
             Map<String, Integer> temp2 = new HashMap<>();
             temp2.put("textColor", Color.parseColor("#5E432E"));
-            temp2.put("bgIsColor", 0);
-            temp2.put("textBackground", R.drawable.bg_readbook_yellow);
+            temp2.put("bgIsColor", 1);
+            temp2.put("textBackground", Color.parseColor("#B9A274"));
             temp2.put("darkStatusIcon", 1);
             textDrawable.add(temp2);
 
@@ -178,29 +178,35 @@ public class ReadBookControl {
     private void initPageStyle(Context context) {
         width = 0;
         height = 0;
-        ACache aCache = ACache.get(context);
-        bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-        switch (getBgCustom(textDrawableIndex)) {
-            case 2:
-                Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
-                if (bitmap != null) {
-                    bgIsColor = false;
-                    bgBitmap = bitmap;
-                    return;
-                }
-                break;
-            case 1:
-                bgIsColor = true;
-                bgColor = getBgColor(textDrawableIndex);
-                return;
-        }
-        if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
-            bgIsColor = true;
+        try {
+            ACache aCache = ACache.get(context);
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-        } else {
-            bgIsColor = false;
-            bgBitmap = BitmapFactory.decodeResource(context.getResources(), getDefaultBg(textDrawableIndex));
+            switch (getBgCustom(textDrawableIndex)) {
+                case 2:
+                    Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                    if (bitmap != null) {
+                        bgIsColor = false;
+                        bgBitmap = bitmap;
+                        return;
+                    }
+                    break;
+                case 1:
+                    bgIsColor = true;
+                    bgColor = getBgColor(textDrawableIndex);
+                    return;
+            }
+            if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+                bgIsColor = true;
+                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+            } else {
+                bgIsColor = false;
+                bgBitmap = BitmapFactory.decodeResource(context.getResources(), getDefaultBg(textDrawableIndex));
+            }
+        } catch (Exception e) {
+            setBgCustom(textDrawableIndex, 0);
+            initTextDrawableIndex();
         }
+
     }
 
     private void setTextDrawable(Context context) {
