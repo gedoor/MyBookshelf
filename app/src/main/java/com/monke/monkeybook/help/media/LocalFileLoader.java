@@ -21,9 +21,8 @@ public class LocalFileLoader extends CursorLoader {
     private static final String TAG = "LocalFileLoader";
 
     private static final Uri FILE_URI = Uri.parse("content://media/external/file");
-    private static final String SELECTION = MediaStore.Files.FileColumns.DATA + " like ? and " + MediaStore.Files.FileColumns.SIZE + " > ?";
+    private static final String SELECTION = MediaStore.Files.FileColumns.DATA + " like ?";
     private static final String SEARCH_TYPE = "%.txt";
-    private static final String SEARCH_SIZE = "1024";
     private static final String SORT_ORDER = MediaStore.Files.FileColumns.DISPLAY_NAME + " DESC";
     private static final String[] FILE_PROJECTION = {
             MediaStore.Files.FileColumns.DATA,
@@ -42,7 +41,7 @@ public class LocalFileLoader extends CursorLoader {
         setUri(FILE_URI);
         setProjection(FILE_PROJECTION);
         setSelection(SELECTION);
-        setSelectionArgs(new String[]{SEARCH_TYPE, SEARCH_SIZE});
+        setSelectionArgs(new String[]{SEARCH_TYPE});
         setSortOrder(SORT_ORDER);
     }
 
@@ -50,7 +49,6 @@ public class LocalFileLoader extends CursorLoader {
         List<File> files = new ArrayList<>();
         // 判断是否存在数据
         if (cursor == null) {
-            // TODO:当媒体库没有数据的时候，需要做相应的处理
             // 暂时直接返回空数据
             resultCallback.onResultCallback(files);
             return;
@@ -62,14 +60,9 @@ public class LocalFileLoader extends CursorLoader {
 
             path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
             // 路径无效
-            if (TextUtils.isEmpty(path)) {
-                continue;
-            } else {
+            if (!TextUtils.isEmpty(path)) {
                 File file = new File(path);
-                if (file.isDirectory() || !file.exists()){
-                    continue;
-                }
-                else{
+                if (!file.isDirectory() && file.exists() && file.length() > 1024) {
                     files.add(file);
                 }
             }

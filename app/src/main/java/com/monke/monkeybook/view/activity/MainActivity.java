@@ -52,9 +52,9 @@ import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
+import com.monke.monkeybook.view.adapter.base.OnItemClickListener;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.util.List;
 import java.util.Objects;
@@ -87,7 +87,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     LinearLayout llContent;
 
     private TextView tvUser;
-
     private Switch swNightTheme;
     private int group;
     private BookShelfGridAdapter bookShelfGridAdapter;
@@ -136,6 +135,14 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
         } else {
             bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
+        }
+    }
+
+    private List<BookShelfBean> getBookshelfList() {
+        if (viewIsList) {
+            return bookShelfListAdapter.getBooks();
+        } else {
+            return bookShelfGridAdapter.getBooks();
         }
     }
 
@@ -202,10 +209,11 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
-    private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
-        return new RefreshRecyclerViewAdapter.OnItemClickListener() {
+    private OnItemClickListener getAdapterListener() {
+        return new OnItemClickListener() {
             @Override
-            public void onClick(BookShelfBean bookShelfBean, int index) {
+            public void onClick(View view, int index) {
+                BookShelfBean bookShelfBean = getBookshelfList().get(index);
                 bookShelfBean.setHasUpdate(false);
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
@@ -222,13 +230,13 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             }
 
             @Override
-            public void onLongClick(View animView, BookShelfBean bookShelfBean, int index) {
+            public void onLongClick(View view, int index) {
                 Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
                 intent.putExtra("from", BookDetailPresenterImpl.FROM_BOOKSHELF);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
+                BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
+                startActivityByAnim(intent, view, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
             }
         };
     }

@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.adapter;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,9 +23,8 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
-import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.monke.monkeybook.view.adapter.base.OnItemClickListener;
 import com.monke.mprogressbar.MHorProgressBar;
-import com.monke.mprogressbar.OnProgressListener;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -35,9 +34,7 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
-    private static final int VIEW_TYPE_ITEM = 1;
-    private final long DUR_ANIM_ITEM = 30;   //item动画启动间隔
+public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> {
 
     private Activity activity;
     private List<BookShelfBean> books;
@@ -66,7 +63,6 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public BookShelfListAdapter(Activity activity, boolean needAnim) {
-        super(false);
         this.activity = activity;
         this.needAnim = needAnim;
         books = new ArrayList<>();
@@ -81,38 +77,29 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemcount() {
+    public int getItemCount() {
         //如果不为0，按正常的流程跑
         return books.size();
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        return new OtherViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_list, parent, false));
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_list, parent, false));
     }
 
     @Override
-    public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof OtherViewHolder) {
-            bindOtherViewHolder((OtherViewHolder) holder, position);
-        }
-    }
-
-    @Override
-    public int getItemViewtype(int position) {
-        return VIEW_TYPE_ITEM;
-    }
-
-    private void bindOtherViewHolder(final OtherViewHolder holder, final int index) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int index) {
         if (needAnim) {
             final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
-            animation.setAnimationListener(new AnimatontStartListener() {
+            animation.setAnimationListener(new AnimationStartListener() {
                 @Override
                 void onAnimStart(Animation animation) {
                     needAnim = false;
                     holder.flContent.setVisibility(View.VISIBLE);
                 }
             });
+            long DUR_ANIM_ITEM = 30;
             new Handler().postDelayed(() -> holder.flContent.startAnimation(animation), index * DUR_ANIM_ITEM);
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
@@ -157,22 +144,22 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         }
         holder.ibCover.setOnClickListener(v -> {
             if (itemClickListener != null)
-                itemClickListener.onClick(books.get(index), index);
+                itemClickListener.onClick(v, index);
         });
         holder.ibCover.setOnLongClickListener(v -> {
             if (itemClickListener != null) {
-                itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                itemClickListener.onLongClick(v, index);
             }
             return true;
         });
         holder.ibContent.setOnClickListener(v -> {
             if (itemClickListener != null)
-                itemClickListener.onClick(books.get(index), index);
+                itemClickListener.onClick(v, index);
         });
         if (!Objects.equals(bookshelfPx, "2")) {
             holder.ibContent.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
-                    itemClickListener.onLongClick(holder.ivCover, books.get(index), index);
+                    itemClickListener.onLongClick(v, index);
                 }
                 return true;
             });
@@ -211,7 +198,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         return books;
     }
 
-    class OtherViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
         ImageView ivCover;
         ImageView ivHasNew;
@@ -223,7 +210,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         ImageButton ibCover;
         RotateLoading rotateLoading;
 
-        OtherViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             flContent = itemView.findViewById(R.id.fl_content);
             ivCover = itemView.findViewById(R.id.iv_cover);
@@ -238,7 +225,7 @@ public class BookShelfListAdapter extends RefreshRecyclerViewAdapter {
         }
     }
 
-    abstract class AnimatontStartListener implements Animation.AnimationListener {
+    abstract class AnimationStartListener implements Animation.AnimationListener {
 
         @Override
         public void onAnimationStart(Animation animation) {
