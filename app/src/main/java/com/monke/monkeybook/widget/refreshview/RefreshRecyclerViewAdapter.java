@@ -107,7 +107,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         this.isAll = isAll;
         if (needNoti) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
-//                notifyItemRangeChanged(getItemCount(),getItemCount()-getItemCount());
                 if (getItemCount() > getICount()) {
                     notifyItemRangeChanged(getItemCount(), getItemCount() - getICount());
                 } else
