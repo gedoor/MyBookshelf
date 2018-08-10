@@ -40,12 +40,12 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchbook_item, parent, false));
     }
 
     @Override
-    public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -110,12 +110,12 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemViewtype(int position) {
+    public int getIViewType(int position) {
         return 0;
     }
 
     @Override
-    public int getItemcount() {
+    public int getICount() {
         return searchBooks.size();
     }
 
@@ -150,7 +150,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     public void addAll(List<SearchBookBean> newData) {
         if (newData != null && newData.size() > 0) {
-            int position = getItemcount();
+            int position = getICount();
             if (newData.size() > 0) {
                 searchBooks.addAll(newData);
             }

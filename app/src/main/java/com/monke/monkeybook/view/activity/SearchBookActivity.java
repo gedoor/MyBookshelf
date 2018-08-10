@@ -344,7 +344,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void updateSearchItem(int index) {
-        if (index < searchBookAdapter.getItemcount()) {
+        if (index < searchBookAdapter.getICount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
             try {
                 TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
@@ -366,7 +366,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public Boolean checkIsExist(SearchBookBean searchBookBean) {
         Boolean result = false;
-        for (int i = 0; i < searchBookAdapter.getItemcount(); i++) {
+        for (int i = 0; i < searchBookAdapter.getICount(); i++) {
             if (searchBookAdapter.getSearchBooks().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && searchBookAdapter.getSearchBooks().get(i).getTag().equals(searchBookBean.getTag())) {
                 result = true;
                 break;

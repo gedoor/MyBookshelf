@@ -144,7 +144,7 @@ public class RefreshRecyclerView extends FrameLayout {
     }
 
     public void finishRefresh(Boolean needNoti) {
-        finishRefresh(((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getItemcount() == 0, needNoti);
+        finishRefresh(((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0, needNoti);
     }
 
     public void finishRefresh(Boolean isAll, Boolean needNoti) {
@@ -160,7 +160,7 @@ public class RefreshRecyclerView extends FrameLayout {
 
         if (isAll) {
             if (noDataView != null) {
-                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getItemcount() == 0)
+                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0)
                     noDataView.setVisibility(VISIBLE);
                 else
                     noDataView.setVisibility(GONE);

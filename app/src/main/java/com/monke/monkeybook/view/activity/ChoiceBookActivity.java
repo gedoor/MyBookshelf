@@ -203,7 +203,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     public void updateSearchItem(int index) {
-        if (index < searchBookAdapter.getItemcount()) {
+        if (index < searchBookAdapter.getICount()) {
             int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
             TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
             if (tvAddShelf != null) {

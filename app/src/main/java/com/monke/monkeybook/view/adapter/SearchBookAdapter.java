@@ -47,13 +47,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchbook_item, parent, false));
     }
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -122,12 +122,12 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemViewtype(int position) {
+    public int getIViewType(int position) {
         return 0;
     }
 
     @Override
-    public int getItemcount() {
+    public int getICount() {
         return searchBooks.size();
     }
 
@@ -166,7 +166,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
-            int oldCount = getItemcount();
+            int oldCount = getICount();
             Boolean changed = false;
             if (searchBooks.size() == 0) {
                 searchBooks.addAll(newDataS);

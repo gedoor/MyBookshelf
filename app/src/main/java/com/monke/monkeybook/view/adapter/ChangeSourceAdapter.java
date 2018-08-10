@@ -78,12 +78,12 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
         return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false));
     }
 
     @Override
-    public void onBindViewholder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindIViewHolder(RecyclerView.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         myViewHolder.tvBookSource.setText(searchBookBeans.get(position).getOrigin());
@@ -107,12 +107,12 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemViewtype(int position) {
+    public int getIViewType(int position) {
         return 0;
     }
 
     @Override
-    public int getItemcount() {
+    public int getICount() {
         return searchBookBeans.size();
     }
 }

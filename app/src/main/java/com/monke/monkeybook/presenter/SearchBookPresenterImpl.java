@@ -97,7 +97,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
 
             @Override
             public int getItemCount() {
-                return mView.getSearchBookAdapter().getItemcount();
+                return mView.getSearchBookAdapter().getICount();
             }
         };
 
