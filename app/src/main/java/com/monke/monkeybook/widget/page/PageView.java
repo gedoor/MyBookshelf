@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -48,6 +49,7 @@ public class PageView extends View {
     private int mStartX = 0;
     private int mStartY = 0;
     private boolean isMove = false;
+    private int mPageIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private PageMode mPageMode = PageMode.SIMULATION;
@@ -321,8 +323,16 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
+            if (mPageAnim.isStartAnim() && !mPageAnim.getmScroller().computeScrollOffset()) {
+                mPageAnim.setStartAnim(false);
+                if (mPageLoader.getPagePos() != mPageIndex) {
+                    mPageIndex = mPageLoader.getPagePos();
+                    mPageLoader.pagingEnd();
+                }
+            }
         }
         super.computeScroll();
+
     }
 
     //如果滑动状态没有停止就取消状态，重新设置Anim的触碰点

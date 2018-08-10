@@ -26,6 +26,7 @@ public abstract class PageAnimation {
     protected Direction mDirection = Direction.NONE;
 
     protected boolean isRunning = false;
+    private boolean startAnim = false;
 
     //屏幕的尺寸
     protected int mScreenWidth;
@@ -68,7 +69,11 @@ public abstract class PageAnimation {
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
     }
 
-    public void setStartPoint(float x,float y){
+    public Scroller getmScroller() {
+        return mScroller;
+    }
+
+    public void setStartPoint(float x, float y){
         mStartX = x;
         mStartY = y;
 
@@ -88,10 +93,19 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
+    public boolean isStartAnim() {
+        return startAnim;
+    }
+
+    public void setStartAnim(boolean startAnim) {
+        this.startAnim = startAnim;
+    }
+
     /**
      * 开启翻页动画
      */
     public void startAnim(){
+        startAnim = true;
         if (isRunning){
             return;
         }

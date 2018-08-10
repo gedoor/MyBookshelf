@@ -284,6 +284,7 @@ public abstract class PageLoader {
         // 载入上一章。
         if (parsePrevChapter()) {
             mCurPage = getCurPage(0);
+            pagingEnd();
         } else {
             mCurPage = new TxtPage();
         }
@@ -305,6 +306,7 @@ public abstract class PageLoader {
         //判断是否达到章节的终止点
         if (parseNextChapter()) {
             mCurPage = getCurPage(0);
+            pagingEnd();
         } else {
             mCurPage = new TxtPage();
         }
@@ -312,6 +314,9 @@ public abstract class PageLoader {
         return true;
     }
 
+    /**
+     * 跳转到指定章节页
+     */
     public void skipToChapter(int chapterPos, int pagePos) {
         goPagePos = pagePos;
         // 设置参数
@@ -332,7 +337,6 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定章节
-     *
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
@@ -383,6 +387,10 @@ public abstract class PageLoader {
      */
     public boolean skipToNextPage() {
         return mPageView.autoNextPage();
+    }
+
+    public void pagingEnd() {
+        mPageChangeListener.onPageChange(mCurChapterPos, getPagePos());
     }
 
     /**
@@ -601,7 +609,7 @@ public abstract class PageLoader {
         } else {
             mCurPage = new TxtPage();
         }
-        mPageChangeListener.onPageChange(mCurChapterPos, mCurPage.position);
+        pagingEnd();
         mPageView.drawCurPage(false);
     }
 
@@ -1097,7 +1105,6 @@ public abstract class PageLoader {
         // 解析下一章数据
         if (parseNextChapter()) {
             mCurPage = mCurPageList.get(0);
-            mPageChangeListener.onPageChange(mCurChapterPos, mCurPage.position);
         } else {
             mCurPage = new TxtPage();
         }
@@ -1443,9 +1450,6 @@ public abstract class PageLoader {
         if (pos > mCurPageList.size() - 1) {
             pos = mCurPageList.size() - 1;
         }
-        if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(mCurChapterPos, pos);
-        }
         return mCurPageList.get(pos);
     }
 
@@ -1456,9 +1460,6 @@ public abstract class PageLoader {
         int pos = mCurPage.position - 1;
         if (pos < 0) {
             return null;
-        }
-        if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(mCurChapterPos, pos);
         }
         return mCurPageList.get(pos);
     }
@@ -1471,9 +1472,6 @@ public abstract class PageLoader {
         if (pos >= mCurPageList.size()) {
             return null;
         }
-        if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(mCurChapterPos, pos);
-        }
         return mCurPageList.get(pos);
     }
 
@@ -1482,11 +1480,6 @@ public abstract class PageLoader {
      */
     private TxtPage getPrevLastPage() {
         int pos = mCurPageList.size() - 1;
-
-        if (mPageChangeListener != null) {
-            mPageChangeListener.onPageChange(mCurChapterPos, pos);
-        }
-
         return mCurPageList.get(pos);
     }
 

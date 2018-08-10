@@ -33,5 +33,6 @@ public class NonePageAnim extends HorizonPageAnim{
 
     @Override
     public void startAnim() {
+        super.startAnim();
     }
 }

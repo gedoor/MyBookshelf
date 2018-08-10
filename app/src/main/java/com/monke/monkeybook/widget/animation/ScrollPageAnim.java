@@ -363,6 +363,7 @@ public class ScrollPageAnim extends PageAnimation {
 
     @Override
     public synchronized void startAnim() {
+        super.startAnim();
         isRunning = true;
         mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
                 , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
