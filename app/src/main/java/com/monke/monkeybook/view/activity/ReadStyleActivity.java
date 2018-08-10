@@ -142,6 +142,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .initialColor(textColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
+                .lightnessSliderOnly()
                 .setOnColorSelectedListener(selectedColor -> {
 
                 })
@@ -172,6 +173,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .initialColor(bgColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
+                .lightnessSliderOnly()
                 .setOnColorSelectedListener(selectedColor -> {
 
                 })
