@@ -1179,9 +1179,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 break;
             case ResultStyleSet:
                 if (resultCode == RESULT_OK) {
-                    readBookControl.initTextDrawableIndex();
                     if (mPageLoader != null) {
-                        mPageLoader.initPaint();
+                        mPageLoader.refresh();
                     }
                     readInterfacePop.setBg();
                 }

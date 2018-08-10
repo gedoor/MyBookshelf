@@ -261,6 +261,7 @@ public class ReadStyleActivity extends MBaseActivity {
             ACache aCache = ACache.get(this);
             aCache.put("customBg" + textDrawableIndex, bgBitmap);
         }
+        readBookControl.initTextDrawableIndex();
         setResult(RESULT_OK);
         finish();
     }
