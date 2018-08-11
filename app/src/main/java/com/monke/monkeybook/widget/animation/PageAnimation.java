@@ -107,7 +107,7 @@ public abstract class PageAnimation {
     public void startAnim(){
         startAnim = true;
         isRunning = true;
-        mView.invalidate();
+        mView.postInvalidate();
     }
 
     public void setDirection(Direction direction){

@@ -210,7 +210,6 @@ public class PageView extends View {
             }
         }
         mPageAnim.startAnim();
-        this.postInvalidate();
     }
 
     @Override

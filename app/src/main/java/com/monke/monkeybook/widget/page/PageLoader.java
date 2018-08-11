@@ -368,6 +368,7 @@ public abstract class PageLoader {
         }
         mCurPage = getCurPage(pos);
         mPageView.drawCurPage(false);
+        pagingEnd();
         return true;
     }
 
