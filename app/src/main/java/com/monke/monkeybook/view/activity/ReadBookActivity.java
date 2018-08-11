@@ -906,7 +906,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         aloudStatus = status;
         switch (status) {
             case NEXT:
-                if (mPageLoader != null) {
+                if (mPageLoader == null) {
                     ReadAloudService.stop(this);
                     break;
                 }
