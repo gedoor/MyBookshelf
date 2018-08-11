@@ -542,10 +542,12 @@ public abstract class PageLoader {
         return mCollBook;
     }
 
+    public int getChapterPos() {
+        return mCurChapterPos;
+    }
+
     /**
      * 获取当前页的页码
-     *
-     * @return
      */
     public int getPagePos() {
         return mCurPage.position;

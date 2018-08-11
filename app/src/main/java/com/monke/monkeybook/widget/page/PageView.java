@@ -50,6 +50,7 @@ public class PageView extends View {
     private int mStartY = 0;
     private boolean isMove = false;
     private int mPageIndex;
+    private int  mChapterIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private PageMode mPageMode = PageMode.SIMULATION;
@@ -325,8 +326,9 @@ public class PageView extends View {
             mPageAnim.scrollAnim();
             if (mPageAnim.isStartAnim() && !mPageAnim.getmScroller().computeScrollOffset()) {
                 mPageAnim.setStartAnim(false);
-                if (mPageLoader.getPagePos() != mPageIndex) {
+                if (mPageLoader.getPagePos() != mPageIndex | mPageLoader.getChapterPos() != mChapterIndex) {
                     mPageIndex = mPageLoader.getPagePos();
+                    mChapterIndex = mPageLoader.getChapterPos();
                     mPageLoader.pagingEnd();
                 }
             }
