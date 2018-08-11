@@ -326,14 +326,17 @@ public class PageView extends View {
             if (mPageAnim.isStartAnim() && !mPageAnim.getmScroller().computeScrollOffset()) {
                 mPageAnim.setStartAnim(false);
                 if (mPageLoader.getPagePos() != mPageIndex | mPageLoader.getChapterPos() != mChapterIndex) {
-                    mPageIndex = mPageLoader.getPagePos();
-                    mChapterIndex = mPageLoader.getChapterPos();
                     mPageLoader.pagingEnd();
                 }
             }
         }
         super.computeScroll();
 
+    }
+
+    public void upPagePos(int chapterPos, int pagePos) {
+        mChapterIndex = chapterPos;
+        mPageIndex = pagePos;
     }
 
     //如果滑动状态没有停止就取消状态，重新设置Anim的触碰点

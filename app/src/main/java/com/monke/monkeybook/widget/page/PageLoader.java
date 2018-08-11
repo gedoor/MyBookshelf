@@ -391,6 +391,7 @@ public abstract class PageLoader {
     }
 
     public void pagingEnd() {
+        mPageView.upPagePos(mCurChapterPos, mCurPage.position);
         mPageChangeListener.onPageChange(mCurChapterPos, getPagePos());
     }
 
