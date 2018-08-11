@@ -35,6 +35,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         public final static Property FinalRefreshData = new Property(8, Long.class, "finalRefreshData", false, "FINAL_REFRESH_DATA");
         public final static Property Group = new Property(9, Integer.class, "group", false, "GROUP");
         public final static Property IsScroll = new Property(10, Boolean.class, "isScroll", false, "IS_SCROLL");
+        public final static Property DurChapterName = new Property(11, String.class, "durChapterName", false, "DUR_CHAPTER_NAME");
+        public final static Property LastChapterName = new Property(12, String.class, "lastChapterName", false, "LAST_CHAPTER_NAME");
     }
 
 
@@ -60,7 +62,9 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
                 "\"SERIAL_NUMBER\" INTEGER," + // 7: serialNumber
                 "\"FINAL_REFRESH_DATA\" INTEGER," + // 8: finalRefreshData
                 "\"GROUP\" INTEGER," + // 9: group
-                "\"IS_SCROLL\" INTEGER);"); // 10: isScroll
+                "\"IS_SCROLL\" INTEGER," + // 10: isScroll
+                "\"DUR_CHAPTER_NAME\" TEXT," + // 11: durChapterName
+                "\"LAST_CHAPTER_NAME\" TEXT);"); // 12: lastChapterName
     }
 
     /** Drops the underlying database table. */
@@ -127,6 +131,16 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         if (isScroll != null) {
             stmt.bindLong(11, isScroll ? 1L: 0L);
         }
+ 
+        String durChapterName = entity.getDurChapterName();
+        if (durChapterName != null) {
+            stmt.bindString(12, durChapterName);
+        }
+ 
+        String lastChapterName = entity.getLastChapterName();
+        if (lastChapterName != null) {
+            stmt.bindString(13, lastChapterName);
+        }
     }
 
     @Override
@@ -187,6 +201,16 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         if (isScroll != null) {
             stmt.bindLong(11, isScroll ? 1L: 0L);
         }
+ 
+        String durChapterName = entity.getDurChapterName();
+        if (durChapterName != null) {
+            stmt.bindString(12, durChapterName);
+        }
+ 
+        String lastChapterName = entity.getLastChapterName();
+        if (lastChapterName != null) {
+            stmt.bindString(13, lastChapterName);
+        }
     }
 
     @Override
@@ -207,7 +231,9 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
             cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // serialNumber
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // finalRefreshData
             cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // group
-            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0 // isScroll
+            cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0, // isScroll
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // durChapterName
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // lastChapterName
         );
         return entity;
     }
@@ -225,6 +251,8 @@ public class BookShelfBeanDao extends AbstractDao<BookShelfBean, String> {
         entity.setFinalRefreshData(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
         entity.setGroup(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
         entity.setIsScroll(cursor.isNull(offset + 10) ? null : cursor.getShort(offset + 10) != 0);
+        entity.setDurChapterName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setLastChapterName(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     @Override

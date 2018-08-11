@@ -75,6 +75,8 @@ public class BookChapter {
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
+            bookShelfBean.setDurChapterName(chapterListBeans.get(bookShelfBean.getDurChapter()).getDurChapterName());
+            bookShelfBean.setDurChapterName(chapterListBeans.get(chapterListBeans.size()-1).getDurChapterName());
             bookShelfBean.getBookInfoBean().setChapterList(chapterListBeans);
             e.onNext(bookShelfBean);
             e.onComplete();

@@ -36,6 +36,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
     private Long finalRefreshData = System.currentTimeMillis();  //章节最后更新时间
     private Integer group = 0;
     private Boolean isScroll = false;
+    private String durChapterName;
+    private String lastChapterName;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -68,12 +70,15 @@ public class BookShelfBean implements Parcelable,Cloneable{
         finalRefreshData = in.readLong();
         group = in.readInt();
         isScroll = in.readByte() != 0;
+        durChapterName = in.readString();
+        lastChapterName = in.readString();
     }
 
-    @Generated(hash = 1672419505)
+    @Generated(hash = 1443310203)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage,
             Long finalDate, Boolean hasUpdate, Integer newChapters, String tag,
-            Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll) {
+            Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll,
+            String durChapterName, String lastChapterName) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -85,6 +90,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.finalRefreshData = finalRefreshData;
         this.group = group;
         this.isScroll = isScroll;
+        this.durChapterName = durChapterName;
+        this.lastChapterName = lastChapterName;
     }
 
     @Override
@@ -99,6 +106,8 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeInt(serialNumber);
         dest.writeLong(finalRefreshData);
         dest.writeByte((byte) (isScroll ? 1 : 0));
+        dest.writeString(durChapterName);
+        dest.writeString(lastChapterName);
     }
 
     @Override
@@ -258,5 +267,21 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setGroup(Integer group) {
         this.group = group;
+    }
+
+    public String getDurChapterName() {
+        return this.durChapterName;
+    }
+
+    public void setDurChapterName(String durChapterName) {
+        this.durChapterName = durChapterName;
+    }
+
+    public String getLastChapterName() {
+        return this.lastChapterName;
+    }
+
+    public void setLastChapterName(String lastChapterName) {
+        this.lastChapterName = lastChapterName;
     }
 }

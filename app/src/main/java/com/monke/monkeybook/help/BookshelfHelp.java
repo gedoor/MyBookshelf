@@ -60,7 +60,7 @@ public class BookshelfHelp {
         //获取流并存储
         Writer writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(fomartFileName(fileName)));
+            writer = new BufferedWriter(new FileWriter(file));
             writer.write(content);
             writer.flush();
         } catch (IOException e) {
@@ -88,11 +88,8 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
-                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
                 bookShelfList.remove(i);
                 i--;
             }
@@ -108,8 +105,6 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
-                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
@@ -170,7 +165,7 @@ public class BookshelfHelp {
         return bookShelfBean;
     }
 
-    private static List<ChapterListBean> getChapterList(String noteUrl) {
+    public static List<ChapterListBean> getChapterList(String noteUrl) {
         return DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
