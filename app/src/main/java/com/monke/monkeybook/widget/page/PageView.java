@@ -289,7 +289,6 @@ public class PageView extends View {
      * @return
      */
     private boolean hasPrevPage() {
-        mTouchListener.prePage();
         if (mPageLoader.prev()) {
             return true;
         } else {
@@ -304,7 +303,6 @@ public class PageView extends View {
      * @return
      */
     private boolean hasNextPage() {
-        mTouchListener.nextPage();
         if (mPageLoader.next()) {
             return true;
         } else {
@@ -314,7 +312,6 @@ public class PageView extends View {
     }
 
     private void pageCancel() {
-        mTouchListener.cancel();
         mPageLoader.pageCancel();
     }
 
@@ -422,11 +419,5 @@ public class PageView extends View {
         boolean onTouch();
 
         void center();
-
-        void prePage();
-
-        void nextPage();
-
-        void cancel();
     }
 }

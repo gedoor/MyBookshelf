@@ -550,10 +550,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
+                        //继续朗读
                         if ((ReadAloudService.running) & pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
                                 ReadAloudService.play(ReadBookActivity.this, false, mPageLoader.getContext(pageIndex));
                             }
+                        }
+                        //启动朗读
+                        if (getIntent().getBooleanExtra("readAloud", false) && pageIndex >= 0 && mPageLoader.getContext(pageIndex) != null) {
+                            getIntent().putExtra("readAloud", false);
+                            onMediaButton();
                         }
                     }
                 }
@@ -570,17 +576,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 popMenuIn();
             }
 
-            @Override
-            public void prePage() {
-            }
-
-            @Override
-            public void nextPage() {
-            }
-
-            @Override
-            public void cancel() {
-            }
         });
         mPageLoader.refreshChapterList();
     }
