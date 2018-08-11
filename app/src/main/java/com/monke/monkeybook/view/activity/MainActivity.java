@@ -52,7 +52,7 @@ import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
-import com.monke.monkeybook.view.adapter.base.OnItemClickListener;
+import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
@@ -209,8 +209,8 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
-    private OnItemClickListener getAdapterListener() {
-        return new OnItemClickListener() {
+    private OnItemClickListenerTwo getAdapterListener() {
+        return new OnItemClickListenerTwo() {
             @Override
             public void onClick(View view, int index) {
                 BookShelfBean bookShelfBean = getBookshelfList().get(index);

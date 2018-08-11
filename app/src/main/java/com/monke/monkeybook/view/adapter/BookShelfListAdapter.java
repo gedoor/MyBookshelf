@@ -23,7 +23,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
-import com.monke.monkeybook.view.adapter.base.OnItemClickListener;
+import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
@@ -39,7 +39,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     private Activity activity;
     private List<BookShelfBean> books;
     private Boolean needAnim;
-    private OnItemClickListener itemClickListener;
+    private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
 
     private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
@@ -180,7 +180,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
     }
 
-    public void setItemClickListener(OnItemClickListener itemClickListener) {
+    public void setItemClickListener(OnItemClickListenerTwo itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
