@@ -15,8 +15,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.view.adapter.base.OnItemClickListener;
-import com.monke.monkeybook.view.adapter.base.ViewHolderImpl;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
@@ -24,7 +22,7 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfGridHolder extends ViewHolderImpl<BookShelfBean> {
+public class BookShelfHolderGrid extends BookShelfHolder {
     private FrameLayout flContent;
     private ImageView ivCover;
     private ImageView ivHasNew;
@@ -33,22 +31,8 @@ public class BookShelfGridHolder extends ViewHolderImpl<BookShelfBean> {
     private RotateLoading rotateLoading;
     private MHorProgressBar mpbDurProgress;
 
-    private Activity activity;
-    private OnItemClickListener itemClickListener;
-    private Boolean needAnim;
-    private String bookshelfPx;
-
-    BookShelfGridHolder(Activity activity, boolean needAnim) {
-        this.activity = activity;
-        this.needAnim = needAnim;
-    }
-
-    public void setItemClickListener(OnItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    public void setPx(String bookshelfPx) {
-        this.bookshelfPx = bookshelfPx;
+    public BookShelfHolderGrid(Activity activity, boolean needAnim) {
+        super(activity, needAnim);
     }
 
     @Override
@@ -135,23 +119,4 @@ public class BookShelfGridHolder extends ViewHolderImpl<BookShelfBean> {
         }
     }
 
-    abstract class AnimationStartListener implements Animation.AnimationListener {
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-            onAnimStart(animation);
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-
-        abstract void onAnimStart(Animation animation);
-    }
 }

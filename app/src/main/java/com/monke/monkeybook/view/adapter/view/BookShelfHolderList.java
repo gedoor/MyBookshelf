@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfListHolder extends ViewHolderImpl<BookShelfBean> {
+public class BookShelfHolderList extends BookShelfHolder {
     private FrameLayout flContent;
     private ImageView ivCover;
     private ImageView ivHasNew;
@@ -37,22 +37,8 @@ public class BookShelfListHolder extends ViewHolderImpl<BookShelfBean> {
     private ImageButton ibCover;
     private RotateLoading rotateLoading;
 
-    private Activity activity;
-    private OnItemClickListener itemClickListener;
-    private Boolean needAnim;
-    private String bookshelfPx;
-
-    BookShelfListHolder(Activity activity, boolean needAnim) {
-        this.activity = activity;
-        this.needAnim = needAnim;
-    }
-
-    public void setItemClickListener(OnItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
-    public void setPx(String bookshelfPx) {
-        this.bookshelfPx = bookshelfPx;
+    public BookShelfHolderList(Activity activity, boolean needAnim) {
+        super(activity, needAnim);
     }
 
     @Override
@@ -166,23 +152,5 @@ public class BookShelfListHolder extends ViewHolderImpl<BookShelfBean> {
         }
     }
 
-    abstract class AnimationStartListener implements Animation.AnimationListener {
 
-        @Override
-        public void onAnimationStart(Animation animation) {
-            onAnimStart(animation);
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-
-        abstract void onAnimStart(Animation animation);
-    }
 }
