@@ -32,7 +32,9 @@ public class BookShelfAdapter extends BaseListAdapter<BookShelfBean> {
         return bookShelfHolder;
     }
 
-
+    public void setPx() {
+        bookShelfHolder.setPx(preferences.getString(activity.getString(R.string.pk_bookshelf_px), "0"));
+    }
 
 
 
