@@ -1107,7 +1107,7 @@ public abstract class PageLoader {
 
         mCancelPage = mCurPage;
         // 解析下一章数据
-        if (parseNextChapter() & mCurPageList.size() > 0) {
+        if (parseNextChapter() & mCurPageList != null & mCurPageList.size() > 0) {
             mCurPage = mCurPageList.get(0);
         } else {
             mCurPage = new TxtPage();
