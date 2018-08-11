@@ -44,7 +44,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
-    private boolean isRestore = false;
 
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
@@ -101,8 +100,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            isRestore = true;
-                            mView.onRestore(mView.getContext().getString(R.string.restore_success));
+                            mView.dismissHUD();
                             queryBookShelf(true, group);
                         } else {
                             mView.dismissHUD();
@@ -278,10 +276,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 queryBookShelf(false, group);
-                if (isRestore) {
-                    isRestore = false;
-                    mView.dismissHUD();
-                }
             }
         }
     }
