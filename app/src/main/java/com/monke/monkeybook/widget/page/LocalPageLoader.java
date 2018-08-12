@@ -330,7 +330,7 @@ public class LocalPageLoader extends PageLoader {
         Long lastModified = mBookFile.lastModified();
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate() && mCollBook.getChapterListSize() > 0) {
+        if (!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0) {
 
             mChapterList = mCollBook.getChapterList();
             isChapterListPrepare = true;
