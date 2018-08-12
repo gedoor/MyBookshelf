@@ -276,7 +276,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     }
 
     public Integer getChapterListSize() {
-        return this.chapterListSize;
+        return this.chapterListSize == null ? 0 : this.chapterListSize;
     }
 
     public void setChapterListSize(Integer chapterListSize) {
