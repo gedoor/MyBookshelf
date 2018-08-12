@@ -328,11 +328,11 @@ public class LocalPageLoader extends PageLoader {
         mCharset = FileUtils.getCharset(mBookFile.getAbsolutePath());
 
         Long lastModified = mBookFile.lastModified();
+        mChapterList = mCollBook.getChapterList();
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0) {
+        if (!mCollBook.getHasUpdate() && mChapterList.size() > 0) {
 
-            mChapterList = mCollBook.getChapterList();
             isChapterListPrepare = true;
 
             //提示目录加载完成
