@@ -343,47 +343,46 @@ public class LocalPageLoader extends PageLoader {
             // 加载并显示当前章节
             openChapter(mCollBook.getDurChapterPage());
 
-            return;
-        }
-
-        // 通过RxJava异步处理分章事件
-        Single.create((SingleOnSubscribe<Void>) e -> {
-            loadChapters();
-            e.onSuccess(new Void());
-        }).compose(RxUtils::toSimpleSingle)
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SingleObserver<Void>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mChapterDisp = d;
-                    }
-
-                    @Override
-                    public void onSuccess(Void value) {
-                        mChapterDisp = null;
-                        isChapterListPrepare = true;
-
-                        // 存储章节到数据库
-                        mCollBook.getBookInfoBean().setChapterList(mChapterList);
-                        mCollBook.setFinalRefreshData(lastModified);
-
-                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(mChapterList);
-                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
-
-                        // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(mChapterList);
+        } else {
+            // 通过RxJava异步处理分章事件
+            Single.create((SingleOnSubscribe<Void>) e -> {
+                loadChapters();
+                e.onSuccess(new Void());
+            }).compose(RxUtils::toSimpleSingle)
+                    .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
+                    .subscribe(new SingleObserver<Void>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            mChapterDisp = d;
                         }
 
-                        // 加载并显示当前章节
-                        openChapter(mCollBook.getDurChapterPage());
-                    }
+                        @Override
+                        public void onSuccess(Void value) {
+                            mChapterDisp = null;
+                            isChapterListPrepare = true;
 
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
-                });
+                            // 存储章节到数据库
+                            mCollBook.getBookInfoBean().setChapterList(mChapterList);
+                            mCollBook.setFinalRefreshData(lastModified);
+
+                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(mChapterList);
+                            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
+
+                            // 提示目录加载完成
+                            if (mPageChangeListener != null) {
+                                mPageChangeListener.onCategoryFinish(mChapterList);
+                            }
+
+                            // 加载并显示当前章节
+                            openChapter(mCollBook.getDurChapterPage());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            chapterError(e.getMessage());
+                        }
+                    });
+        }
     }
 
     @Override
