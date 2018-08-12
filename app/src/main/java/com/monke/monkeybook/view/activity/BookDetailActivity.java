@@ -124,7 +124,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (mPresenter.getInBookShelf()) {
                 if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                     tvChapter.setText(String.format(getString(R.string.read_dur_progress),
-                            mPresenter.getBookShelf().getDurChapterListBean().getDurChapterName()));
+                            mPresenter.getBookShelf().getDurChapterName()));
                 } else {
                     tvChapter.setText("无章节");
                 }
@@ -139,7 +139,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     tvChapter.setText("无章节");
                 } else {
                     tvChapter.setText(String.format(getString(R.string.book_search_last),
-                            mPresenter.getBookShelf().getLastChapterListBean().getDurChapterName()));
+                            mPresenter.getBookShelf().getLastChapterName()));
                 }
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");

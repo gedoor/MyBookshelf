@@ -106,7 +106,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
         holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
                 books.get(index).getBookInfoBean().getName(),
-                books.get(index).getLastChapterListBean().getDurChapterName()));
+                books.get(index).getLastChapterName()));
         if (!activity.isFinishing()) {
             Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
                     .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -121,9 +121,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
                 && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
             holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
-                    books.get(index).getDurChapterListBean().getDurChapterName()));
+                    books.get(index).getDurChapterName()));
             holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.book_search_last),
-                    books.get(index).getLastChapterListBean().getDurChapterName()));
+                    books.get(index).getLastChapterName()));
             if (books.get(index).getHasUpdate()) {
                 holder.ivHasNew.setVisibility(View.VISIBLE);
             } else {
