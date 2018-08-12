@@ -122,12 +122,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
             if (mPresenter.getInBookShelf()) {
-                if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                    tvChapter.setText(String.format(getString(R.string.read_dur_progress),
-                            mPresenter.getBookShelf().getDurChapterName()));
-                } else {
-                    tvChapter.setText("无章节");
-                }
+                tvChapter.setText(String.format(getString(R.string.read_dur_progress), mPresenter.getBookShelf().getDurChapterName()));
                 tvShelf.setText("移出书架");
                 tvRead.setText("继续阅读");
                 tvShelf.setOnClickListener(v -> {
@@ -135,12 +130,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     mPresenter.removeFromBookShelf();
                 });
             } else {
-                if (mPresenter.getBookShelf().getChapterListSize() == 0) {
-                    tvChapter.setText("无章节");
-                } else {
-                    tvChapter.setText(String.format(getString(R.string.book_search_last),
-                            mPresenter.getBookShelf().getLastChapterName()));
-                }
+                tvChapter.setText(String.format(getString(R.string.book_search_last), mPresenter.getBookShelf().getLastChapterName()));
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
