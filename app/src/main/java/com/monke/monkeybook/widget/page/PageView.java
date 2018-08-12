@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.Snackbar;
@@ -219,7 +220,8 @@ public class PageView extends View {
         if (readBookControl.bgIsColor()) {
             canvas.drawColor(readBookControl.getBgColor());
         } else {
-            canvas.drawBitmap(readBookControl.getBgBitmap(mViewWidth, mViewHeight), 0, 0, null);
+            Rect mDestRect = new Rect(0, 0, mViewWidth, mViewHeight);
+            canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
         }
 
         //绘制动画

@@ -136,16 +136,6 @@ public class BookShelfBean implements Parcelable,Cloneable{
         return durChapter;
     }
 
-    //获取当前章节
-    public ChapterListBean getDurChapterListBean() {
-        return getChapterList(durChapter);
-    }
-
-    //获取最新章节
-    public ChapterListBean getLastChapterListBean() {
-        return getChapterList(bookInfoBean.getChapterList().size() - 1);
-    }
-
     public ChapterListBean getChapterList(int index) {
 
         if (getChapterList() == null || getChapterListSize() == 0 || index < 0) {

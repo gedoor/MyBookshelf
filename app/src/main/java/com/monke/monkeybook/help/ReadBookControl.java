@@ -40,9 +40,6 @@ public class ReadBookControl {
     private boolean bgIsColor;
     private int bgColor;
     private Bitmap bgBitmap;
-    private int width;
-    private int height;
-    private Bitmap fBgBitmap;
     private float lineMultiplier;
     private int pageMode;
 
@@ -176,8 +173,6 @@ public class ReadBookControl {
     }
 
     private void initPageStyle(Context context) {
-        width = 0;
-        height = 0;
         try {
             ACache aCache = ACache.get(context);
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
@@ -343,13 +338,8 @@ public class ReadBookControl {
         return bgColor;
     }
 
-    public Bitmap getBgBitmap(int width, int height) {
-        if (this.width != width | this.height != height) {
-            this.width = width;
-            this.height = height;
-            fBgBitmap = BitmapUtil.scaleImage(bgBitmap.copy(Bitmap.Config.RGB_565, true), width, height);
-        }
-        return fBgBitmap.copy(Bitmap.Config.RGB_565, true);
+    public Bitmap getBgBitmap() {
+        return bgBitmap.copy(Bitmap.Config.RGB_565, true);
     }
 
     public int getTextDrawableIndex() {
