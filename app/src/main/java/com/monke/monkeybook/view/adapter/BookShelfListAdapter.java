@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -89,7 +90,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int index) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
         if (needAnim) {
             final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
             animation.setAnimationListener(new AnimationStartListener() {
@@ -118,17 +119,14 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         }
-        if (null != books.get(index).getBookInfoBean() && null != books.get(index).getChapterList()
-                && books.get(index).getChapterListSize() > books.get(index).getDurChapter()) {
-            holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
-                    books.get(index).getDurChapterName()));
-            holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.book_search_last),
-                    books.get(index).getLastChapterName()));
-            if (books.get(index).getHasUpdate()) {
-                holder.ivHasNew.setVisibility(View.VISIBLE);
-            } else {
-                holder.ivHasNew.setVisibility(View.INVISIBLE);
-            }
+        holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
+                books.get(index).getDurChapterName()));
+        holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.book_search_last),
+                books.get(index).getLastChapterName()));
+        if (books.get(index).getHasUpdate()) {
+            holder.ivHasNew.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivHasNew.setVisibility(View.INVISIBLE);
         }
         //进度条
         holder.mpbDurProgress.setVisibility(View.VISIBLE);
@@ -163,9 +161,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                 }
                 return true;
             });
-        } else if (books.get(index).getSerialNumber() != index){
+        } else if (books.get(index).getSerialNumber() != index) {
             books.get(index).setSerialNumber(index);
-            new Thread(){
+            new Thread() {
                 public void run() {
                     DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index));
                 }
