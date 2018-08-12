@@ -551,7 +551,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
                         //继续朗读
-                        if ((ReadAloudService.running) & pageIndex >= 0) {
+                        if ((ReadAloudService.running) && pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
                                 ReadAloudService.play(ReadBookActivity.this, false, mPageLoader.getContext(pageIndex));
                             }
@@ -1008,7 +1008,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     popMenuIn();
                 }
                 return true;
-            } else if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
+            } else if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE) {
                 if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
@@ -1032,7 +1032,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (flMenu.getVisibility() != View.VISIBLE & chapterListView.getVisibility() != View.VISIBLE) {
+        if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE) {
             if (readBookControl.getCanKeyTurn()
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                 return true;
@@ -1137,7 +1137,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 break;
             default:
                 ReadBookActivity.this.popMenuOut();
-                if (mPresenter.getBookShelf() != null & mPageLoader != null) {
+                if (mPresenter.getBookShelf() != null && mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()));
                 }
         }

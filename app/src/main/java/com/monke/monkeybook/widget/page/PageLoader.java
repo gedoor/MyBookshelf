@@ -399,7 +399,7 @@ public abstract class PageLoader {
      * 更新时间
      */
     public void updateTime() {
-        if (!mPageView.isRunning() & mSettingManager.getHideStatusBar() & mSettingManager.getShowTimeBattery()) {
+        if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
             mPageView.drawCurPage(true);
         }
     }
@@ -412,7 +412,7 @@ public abstract class PageLoader {
     public void updateBattery(int level) {
         mBatteryLevel = level;
 
-        if (!mPageView.isRunning() & mSettingManager.getHideStatusBar() & mSettingManager.getShowTimeBattery()) {
+        if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
             mPageView.drawCurPage(true);
         }
     }
@@ -816,7 +816,7 @@ public abstract class PageLoader {
         }
 
         int visibleRight = mDisplayWidth - tipMarginWidth;
-        if (mSettingManager.getHideStatusBar() & mSettingManager.getShowTimeBattery()) {
+        if (mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
             /******绘制电池********/
 
             int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
@@ -1109,7 +1109,7 @@ public abstract class PageLoader {
 
         mCancelPage = mCurPage;
         // 解析下一章数据
-        if (parseNextChapter() & mCurPageList != null & mCurPageList.size() > 0) {
+        if (parseNextChapter() && mCurPageList != null && mCurPageList.size() > 0) {
             mCurPage = mCurPageList.get(0);
         } else {
             mCurPage = new TxtPage();
@@ -1120,10 +1120,7 @@ public abstract class PageLoader {
 
     private boolean hasNextChapter() {
         // 判断是否到达目录最后一章
-        if (mCurChapterPos + 1 >= mCollBook.getChapterListSize()) {
-            return false;
-        }
-        return true;
+        return mCurChapterPos + 1 < mCollBook.getChapterListSize();
     }
 
     boolean parseCurChapter() {
@@ -1131,7 +1128,7 @@ public abstract class PageLoader {
         dealLoadPageList(mCurChapterPos);
         // 预加载下一页面
         preLoadNextChapter();
-        return mCurPageList != null ? true : false;
+        return mCurPageList != null;
     }
 
     /**
