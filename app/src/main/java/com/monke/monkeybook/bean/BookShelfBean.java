@@ -38,6 +38,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     private Boolean isScroll = false;
     private String durChapterName;
     private String lastChapterName;
+    private Integer chapterListSize = 0;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -72,13 +73,14 @@ public class BookShelfBean implements Parcelable,Cloneable{
         isScroll = in.readByte() != 0;
         durChapterName = in.readString();
         lastChapterName = in.readString();
+        chapterListSize = in.readInt();
     }
 
-    @Generated(hash = 1443310203)
+    @Generated(hash = 971638991)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage,
             Long finalDate, Boolean hasUpdate, Integer newChapters, String tag,
             Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll,
-            String durChapterName, String lastChapterName) {
+            String durChapterName, String lastChapterName, Integer chapterListSize) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -92,6 +94,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         this.isScroll = isScroll;
         this.durChapterName = durChapterName;
         this.lastChapterName = lastChapterName;
+        this.chapterListSize = chapterListSize;
     }
 
     @Override
@@ -108,6 +111,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
         dest.writeByte((byte) (isScroll ? 1 : 0));
         dest.writeString(durChapterName);
         dest.writeString(lastChapterName);
+        dest.writeInt(chapterListSize);
     }
 
     @Override
@@ -138,25 +142,21 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public ChapterListBean getChapterList(int index) {
 
-        if (getChapterList() == null || getChapterListSize() == 0 || index < 0) {
+        if (getChapterList() == null || getChapterList().size() == 0 || index < 0) {
             ChapterListBean chapterListBean = new ChapterListBean();
             chapterListBean.setDurChapterName("暂无");
             chapterListBean.setDurChapterUrl("暂无");
             return chapterListBean;
-        } else if (index < getChapterListSize()) {
+        } else if (index < getChapterList().size()) {
             return getChapterList().get(index);
         } else {
-            durChapter = getChapterListSize() - 1;
-            return getChapterList().get(getChapterListSize() - 1);
+            durChapter = getChapterList().size() - 1;
+            return getChapterList().get(getChapterList().size() - 1);
         }
     }
 
     public List<ChapterListBean> getChapterList() {
         return getBookInfoBean().getChapterList();
-    }
-
-    public int getChapterListSize() {
-        return getChapterList().size();
     }
 
     public int getDurChapterPage() {
@@ -273,5 +273,13 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setLastChapterName(String lastChapterName) {
         this.lastChapterName = lastChapterName;
+    }
+
+    public Integer getChapterListSize() {
+        return this.chapterListSize;
+    }
+
+    public void setChapterListSize(Integer chapterListSize) {
+        this.chapterListSize = chapterListSize;
     }
 }
