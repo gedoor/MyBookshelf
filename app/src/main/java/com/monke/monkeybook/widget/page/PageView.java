@@ -346,6 +346,9 @@ public class PageView extends View {
         this.mTouchListener = mTouchListener;
     }
 
+    /**
+     * 绘制下一页
+     */
     public void drawNextPage() {
         if (!isPrepare) return;
 
@@ -357,8 +360,6 @@ public class PageView extends View {
 
     /**
      * 绘制当前页。
-     *
-     * @param isUpdate
      */
     public void drawCurPage(boolean isUpdate) {
         if (!isPrepare) return;
