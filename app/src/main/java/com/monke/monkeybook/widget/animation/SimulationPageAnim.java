@@ -237,8 +237,6 @@ public class SimulationPageAnim extends HorizonPageAnim{
 
     /**
      * 是否能够拖动过去
-     *
-     * @return
      */
     public boolean canDragOver() {
         if (mTouchToCornerDis > mScreenWidth / 10)
