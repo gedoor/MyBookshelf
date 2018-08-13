@@ -93,7 +93,6 @@
                 android:id="@+id/ll_read_aloud_timer"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:clipChildren="false"
                 android:orientation="horizontal"
                 android:paddingEnd="32dp"
                 android:paddingStart="32dp"
@@ -107,9 +106,9 @@
                     android:contentDescription="@string/set_timer"
                     android:src="@drawable/ic_timer_black_24dp_new"
                     app:backgroundTint="@color/background"
-                    app:elevation="4dp"
+                    app:elevation="2dp"
                     app:fabSize="mini"
-                    app:pressedTranslationZ="4dp" />
+                    app:pressedTranslationZ="2dp" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
@@ -131,7 +130,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:clipChildren="false"
                 android:orientation="horizontal"
                 android:paddingEnd="32dp"
                 android:paddingStart="32dp">
@@ -144,9 +142,9 @@
                     android:contentDescription="@string/read_aloud"
                     android:src="@drawable/ic_read_aloud"
                     app:backgroundTint="@color/background"
-                    app:elevation="4dp"
+                    app:elevation="2dp"
                     app:fabSize="mini"
-                    app:pressedTranslationZ="4dp" />
+                    app:pressedTranslationZ="2dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -161,9 +159,9 @@
                     android:contentDescription="@string/replace_rule_title"
                     android:src="@drawable/ic_find_replace"
                     app:backgroundTint="@color/background"
-                    app:elevation="4dp"
+                    app:elevation="2dp"
                     app:fabSize="mini"
-                    app:pressedTranslationZ="4dp" />
+                    app:pressedTranslationZ="2dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -178,9 +176,9 @@
                     android:contentDescription="@string/night_theme"
                     android:src="@drawable/ic_brightness"
                     app:backgroundTint="@color/background"
-                    app:elevation="4dp"
+                    app:elevation="2dp"
                     app:fabSize="mini"
-                    app:pressedTranslationZ="4dp" />
+                    app:pressedTranslationZ="2dp" />
 
             </LinearLayout>
 
