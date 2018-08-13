@@ -149,7 +149,7 @@ public class MoreSettingPop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
-                        changeProListener.refresh();
+                        changeProListener.recreate();
                         dialogInterface.dismiss();
                     })
                     .create();
