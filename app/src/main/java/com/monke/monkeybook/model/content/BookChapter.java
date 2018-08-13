@@ -63,7 +63,6 @@ public class BookChapter {
                 webChapterBean = analyzeChapterList(response, bookShelfBean.getNoteUrl(), webChapterBean.getNextUrl(), bookShelfBean.getChapterList(), ruleChapterList);
                 chapterListBeans.addAll(webChapterBean.getData());
             }
-
             if (dx) {
                 Collections.reverse(chapterListBeans);
             }
@@ -75,8 +74,10 @@ public class BookChapter {
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
-            bookShelfBean.setDurChapterName(chapterListBeans.get(bookShelfBean.getDurChapter()).getDurChapterName());
-            bookShelfBean.setLastChapterName(chapterListBeans.get(chapterListBeans.size()-1).getDurChapterName());
+            if (chapterListBeans.size() > 0) {
+                bookShelfBean.setDurChapterName(chapterListBeans.get(bookShelfBean.getDurChapter()).getDurChapterName());
+                bookShelfBean.setLastChapterName(chapterListBeans.get(chapterListBeans.size()-1).getDurChapterName());
+            }
             bookShelfBean.setChapterListSize(chapterListBeans.size());
             bookShelfBean.getBookInfoBean().setChapterList(chapterListBeans);
             e.onNext(bookShelfBean);
