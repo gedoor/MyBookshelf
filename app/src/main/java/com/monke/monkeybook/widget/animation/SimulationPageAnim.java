@@ -2,7 +2,6 @@ package com.monke.monkeybook.widget.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
@@ -27,12 +26,12 @@ public class SimulationPageAnim extends HorizonPageAnim{
 
     private PointF mBezierStart1 = new PointF(); // 贝塞尔曲线起始点
     private PointF mBezierControl1 = new PointF(); // 贝塞尔曲线控制点
-    private PointF mBeziervertex1 = new PointF(); // 贝塞尔曲线顶点
+    private PointF mBezierVertex1 = new PointF(); // 贝塞尔曲线顶点
     private PointF mBezierEnd1 = new PointF(); // 贝塞尔曲线结束点
 
     private PointF mBezierStart2 = new PointF(); // 另一条贝塞尔曲线
     private PointF mBezierControl2 = new PointF();
-    private PointF mBeziervertex2 = new PointF();
+    private PointF mBezierVertex2 = new PointF();
     private PointF mBezierEnd2 = new PointF();
 
     private float mMiddleX;
@@ -266,8 +265,8 @@ public class SimulationPageAnim extends HorizonPageAnim{
         float f2 = Math.abs(i1 - mBezierControl2.y);
         float f3 = Math.min(f1, f2);
         mPath1.reset();
-        mPath1.moveTo(mBeziervertex2.x, mBeziervertex2.y);
-        mPath1.lineTo(mBeziervertex1.x, mBeziervertex1.y);
+        mPath1.moveTo(mBezierVertex2.x, mBezierVertex2.y);
+        mPath1.lineTo(mBezierVertex1.x, mBezierVertex1.y);
         mPath1.lineTo(mBezierEnd1.x, mBezierEnd1.y);
         mPath1.lineTo(mTouchX, mTouchY);
         mPath1.lineTo(mBezierEnd2.x, mBezierEnd2.y);
@@ -431,8 +430,8 @@ public class SimulationPageAnim extends HorizonPageAnim{
     private void drawNextPageAreaAndShadow(Canvas canvas, Bitmap bitmap) {
         mPath1.reset();
         mPath1.moveTo(mBezierStart1.x, mBezierStart1.y);
-        mPath1.lineTo(mBeziervertex1.x, mBeziervertex1.y);
-        mPath1.lineTo(mBeziervertex2.x, mBeziervertex2.y);
+        mPath1.lineTo(mBezierVertex1.x, mBezierVertex1.y);
+        mPath1.lineTo(mBezierVertex2.x, mBezierVertex2.y);
         mPath1.lineTo(mBezierStart2.x, mBezierStart2.y);
         mPath1.lineTo(mCornerX, mCornerY);
         mPath1.close();
@@ -587,10 +586,10 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mBezierEnd2 = getCross(new PointF(mTouchX,mTouchY), mBezierControl2, mBezierStart1,
                 mBezierStart2);
 
-        mBeziervertex1.x = (mBezierStart1.x + 2 * mBezierControl1.x + mBezierEnd1.x) / 4;
-        mBeziervertex1.y = (2 * mBezierControl1.y + mBezierStart1.y + mBezierEnd1.y) / 4;
-        mBeziervertex2.x = (mBezierStart2.x + 2 * mBezierControl2.x + mBezierEnd2.x) / 4;
-        mBeziervertex2.y = (2 * mBezierControl2.y + mBezierStart2.y + mBezierEnd2.y) / 4;
+        mBezierVertex1.x = (mBezierStart1.x + 2 * mBezierControl1.x + mBezierEnd1.x) / 4;
+        mBezierVertex1.y = (2 * mBezierControl1.y + mBezierStart1.y + mBezierEnd1.y) / 4;
+        mBezierVertex2.x = (mBezierStart2.x + 2 * mBezierControl2.x + mBezierEnd2.x) / 4;
+        mBezierVertex2.y = (2 * mBezierControl2.y + mBezierStart2.y + mBezierEnd2.y) / 4;
     }
 
     /**
