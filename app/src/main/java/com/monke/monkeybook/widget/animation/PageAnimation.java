@@ -121,15 +121,14 @@ public abstract class PageAnimation {
     public void clear(){
         mView = null;
     }
+
     /**
      * 点击事件的处理
-     * @param event
      */
     public abstract boolean onTouchEvent(MotionEvent event);
 
     /**
      * 绘制图形
-     * @param canvas
      */
     public abstract void draw(Canvas canvas);
 
@@ -146,7 +145,6 @@ public abstract class PageAnimation {
 
     /**
      * 获取背景板
-     * @return
      */
     public abstract Bitmap getBgBitmap();
 
