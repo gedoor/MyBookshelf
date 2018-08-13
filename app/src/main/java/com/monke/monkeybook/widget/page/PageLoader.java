@@ -722,7 +722,7 @@ public abstract class PageLoader {
 
     /***********************************default method***********************************************/
 
-    void drawPage(Bitmap bitmap, boolean isUpdate) {
+    public void drawPage(Bitmap bitmap, boolean isUpdate) {
         drawBackground(mPageView.getBgBitmap(), isUpdate);
         if (!isUpdate | !mSettingManager.bgIsColor()) {
             drawContent(bitmap);
