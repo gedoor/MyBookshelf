@@ -69,7 +69,7 @@ public abstract class PageAnimation {
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
     }
 
-    public Scroller getmScroller() {
+    public Scroller getScroller() {
         return mScroller;
     }
 

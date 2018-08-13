@@ -2,23 +2,17 @@ package com.monke.monkeybook.widget.page;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
@@ -27,7 +21,6 @@ import com.monke.monkeybook.widget.animation.NonePageAnim;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 import com.monke.monkeybook.widget.animation.ScrollPageAnim;
 import com.monke.monkeybook.widget.animation.SimulationPageAnim;
-import com.monke.monkeybook.widget.animation.SlidePageAnim;
 
 import java.util.Objects;
 
@@ -322,7 +315,7 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
-            if (mPageAnim.isStartAnim() && !mPageAnim.getmScroller().computeScrollOffset()) {
+            if (mPageAnim.isStartAnim() && !mPageAnim.getScroller().computeScrollOffset()) {
                 mPageAnim.setStartAnim(false);
                 if (mPageLoader.getPagePos() != mPageIndex | mPageLoader.getChapterPos() != mChapterIndex) {
                     mPageLoader.pagingEnd();
