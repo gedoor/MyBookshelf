@@ -133,15 +133,18 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         initNightTheme();
     }
 
-    public void setOrientation() {
-        switch (preferences.getString(getString(R.string.pk_screen_direction), "0")) {
-            case "0":
+    public void setOrientation(int screenDirection) {
+        switch (screenDirection) {
+            case 0:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 break;
-            case "1":
+            case 1:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 break;
-            case "2":
+            case 2:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case 3:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
         }

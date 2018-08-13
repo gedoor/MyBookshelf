@@ -30,7 +30,7 @@ public class ReadBookControl {
     private static final int DEFAULT_BG = 1;
 
     private List<Map<String, Integer>> textDrawable;
-
+    private int screenDirection;
     private int speechRate;
     private boolean speechRateFollowSys;
     private int textSize;
@@ -114,6 +114,7 @@ public class ReadBookControl {
         this.paddingRight = readPreference.getInt("paddingRight", DEFAULT_MARGIN_WIDTH);
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
         this.pageMode = readPreference.getInt("pageMode", 0);
+        this.screenDirection = readPreference.getInt("screenDirection", 0);
 
         initTextDrawableIndex();
     }
@@ -641,6 +642,17 @@ public class ReadBookControl {
         this.pageMode = pageMode;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("pageMode", pageMode);
+        editor.apply();
+    }
+
+    public int getScreenDirection() {
+        return screenDirection;
+    }
+
+    public void setScreenDirection(int screenDirection) {
+        this.screenDirection = screenDirection;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("screenDirection", screenDirection);
         editor.apply();
     }
 }

@@ -59,6 +59,10 @@ public class MoreSettingPop extends PopupWindow {
     TextView tvJFConvert;
     @BindView(R.id.llJFConvert)
     LinearLayout llJFConvert;
+    @BindView(R.id.tv_screen_direction)
+    TextView tvScreenDirection;
+    @BindView(R.id.ll_screen_direction)
+    LinearLayout llScreenDirection;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -155,9 +159,22 @@ public class MoreSettingPop extends PopupWindow {
                     .create();
             dialog.show();
         });
+        llScreenDirection.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.screen_direction))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_direction_list_title), readBookControl.getScreenDirection(), (dialogInterface, i) -> {
+                        readBookControl.setScreenDirection(i);
+                        upScreenDirection(i);
+                        changeProListener.recreate();
+                        dialogInterface.dismiss();
+                    })
+                    .create();
+            dialog.show();
+        });
     }
 
     private void initData() {
+        upScreenDirection(readBookControl.getScreenDirection());
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
         sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
@@ -181,8 +198,12 @@ public class MoreSettingPop extends PopupWindow {
         tvScreenTimeOut.setText(activity.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
     }
 
-    private void upFConvert(int fConvert){
+    private void upFConvert(int fConvert) {
         tvJFConvert.setText(activity.getResources().getStringArray(R.array.convert_s)[fConvert]);
+    }
+
+    private void upScreenDirection(int screenDirection) {
+        tvScreenDirection.setText(activity.getResources().getStringArray(R.array.screen_direction_list_title)[screenDirection]);
     }
 
 }

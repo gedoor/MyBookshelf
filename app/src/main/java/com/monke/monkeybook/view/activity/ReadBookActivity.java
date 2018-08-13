@@ -199,7 +199,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     protected void onCreateActivity() {
-        setOrientation();
+        setOrientation(readBookControl.getScreenDirection());
         setContentView(R.layout.activity_book_read);
     }
 

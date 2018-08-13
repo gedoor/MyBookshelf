@@ -4,13 +4,6 @@
 
     <ListPreference
         android:defaultValue="0"
-        android:entries="@array/screen_direction_list_title"
-        android:entryValues="@array/screen_direction_list_value"
-        android:key="@string/pk_screen_direction"
-        android:title="@string/screen_direction" />
-
-    <ListPreference
-        android:defaultValue="0"
         android:entries="@array/bookshelf_px_title"
         android:entryValues="@array/bookshelf_px_value"
         android:key="@string/pk_bookshelf_px"
