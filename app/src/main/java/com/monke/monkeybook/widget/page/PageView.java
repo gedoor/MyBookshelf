@@ -47,7 +47,6 @@ public class PageView extends View {
     private int  mChapterIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private PageMode mPageMode = PageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
     // 唤醒菜单的区域
@@ -105,13 +104,12 @@ public class PageView extends View {
 
     //设置翻页的模式
     void setPageMode(PageMode pageMode, int marginTop, int marginBottom) {
-        mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
         if (!readBookControl.getHideStatusBar()) {
             marginTop = marginTop + statusBarHeight;
         }
-        switch (mPageMode) {
+        switch (pageMode) {
             case SIMULATION:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
