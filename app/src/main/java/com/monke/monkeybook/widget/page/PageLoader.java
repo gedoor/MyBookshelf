@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -21,7 +19,6 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
@@ -698,8 +695,7 @@ public abstract class PageLoader {
         }
         // 获取章节的文本流
         BufferedReader reader = getChapterReader(chapter);
-        List<TxtPage> chapters = loadPages(chapter, reader);
-        return chapters;
+        return loadPageList(chapter, reader);
     }
 
     /*******************************abstract method***************************************/
@@ -1296,11 +1292,10 @@ public abstract class PageLoader {
     /**************************************private method********************************************/
     /**
      * 将章节数据，解析成页面列表
-     *
      * @param chapter：章节信息
      * @param br：章节的文本流
      */
-    private List<TxtPage> loadPages(ChapterListBean chapter, BufferedReader br) {
+    private List<TxtPage> loadPageList(ChapterListBean chapter, BufferedReader br) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1400,9 +1395,7 @@ public abstract class PageLoader {
                 //重置Lines
                 lines.clear();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             IOUtils.close(br);

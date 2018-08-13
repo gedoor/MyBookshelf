@@ -83,13 +83,11 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
-        File file = new File(Constant.BOOK_CACHE_PATH + mCollBook.getBookInfoBean().getName()
-                + File.separator + chapter.getDurChapterName() + FileUtils.SUFFIX_NB);
+        File file =BookshelfHelp.getBookFile(mCollBook.getBookInfoBean().getName(), chapter.getDurChapterName());
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
-        BufferedReader br = new BufferedReader(reader);
-        return br;
+        return new BufferedReader(reader);
     }
 
     @Override

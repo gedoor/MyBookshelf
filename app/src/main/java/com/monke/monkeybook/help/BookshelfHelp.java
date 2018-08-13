@@ -22,7 +22,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class BookshelfHelp {
      */
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fomartFileName(fileName) + FileUtils.SUFFIX_NB);
+                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
         return file.exists();
     }
 
@@ -46,7 +45,7 @@ public class BookshelfHelp {
      */
     public static void delChapter(String folderName, String fileName) {
         FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fomartFileName(fileName) + FileUtils.SUFFIX_NB);
+                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
     }
 
     /**
@@ -56,7 +55,7 @@ public class BookshelfHelp {
         if (content == null) {
             content = "";
         }
-        File file = getBookFile(folderName, fomartFileName(fileName));
+        File file = getBookFile(folderName, formatFileName(fileName));
         //获取流并存储
         Writer writer = null;
         try {
@@ -74,11 +73,12 @@ public class BookshelfHelp {
      */
     public static File getBookFile(String folderName, String fileName) {
         return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fomartFileName(fileName) + FileUtils.SUFFIX_NB);
+                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
     }
 
-    private static String fomartFileName(String fileName) {
-        return fileName.replace("/", ".");
+    private static String formatFileName(String fileName) {
+        return fileName.replace("/", "")
+                .replace(".", "");
     }
 
     public static List<BookShelfBean> getAllBook() {
