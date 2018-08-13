@@ -93,6 +93,7 @@
                 android:id="@+id/ll_read_aloud_timer"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:clipChildren="false"
                 android:orientation="horizontal"
                 android:paddingEnd="32dp"
                 android:paddingStart="32dp"
@@ -130,6 +131,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:clipChildren="false"
                 android:orientation="horizontal"
                 android:paddingEnd="32dp"
                 android:paddingStart="32dp">
