@@ -74,8 +74,12 @@ public class FontSelector {
     }
 
     private File[] getFontFiles() {
-        File file = new File(fontPath);
-        return file.listFiles(pathName -> pathName.getName().endsWith(".TTF") || pathName.getName().endsWith(".ttf"));
+        try {
+            File file = new File(fontPath);
+            return file.listFiles(pathName -> pathName.getName().endsWith(".TTF") || pathName.getName().endsWith(".ttf"));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public interface OnThisListener {

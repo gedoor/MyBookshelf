@@ -51,16 +51,15 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
     }
 
     public void upData(File[] files) {
-        if (files == null) {
-            return;
-        }
-        fileList.clear();
-        for (File file : files) {
-            try {
-                Typeface.createFromFile(file);
-                fileList.add(file);
-            } catch (Exception e){
-                e.printStackTrace();
+        if (files != null) {
+            fileList.clear();
+            for (File file : files) {
+                try {
+                    Typeface.createFromFile(file);
+                    fileList.add(file);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
         notifyDataSetChanged();
