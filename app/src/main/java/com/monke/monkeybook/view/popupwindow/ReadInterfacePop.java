@@ -19,6 +19,7 @@ import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
+import com.monke.monkeybook.widget.font.FontSelector;
 import com.monke.monkeybook.widget.number.NumberButton;
 
 import butterknife.BindView;
@@ -223,7 +224,7 @@ public class ReadInterfacePop extends PopupWindow {
         civBgBlack.setOnLongClickListener(view -> customReadStyle(4));
 
         //选择字体
-        fl_text_font.setOnClickListener(view -> chooseReadBookFont());
+        fl_text_font.setOnClickListener(view -> new FontSelector(activity).create().show());
         //长按清除字体
         fl_text_font.setOnLongClickListener(view -> {
             clearFontPath();
