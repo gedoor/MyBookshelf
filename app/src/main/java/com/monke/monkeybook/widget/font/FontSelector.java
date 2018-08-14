@@ -19,6 +19,8 @@ public class FontSelector {
     private FontAdapter adapter;
     private Context context;
     private String fontPath;
+    private OnThisListener thisListener;
+    private AlertDialog alertDialog;
 
     public FontSelector(Context context) {
         builder = new AlertDialog.Builder(context);
@@ -26,10 +28,35 @@ public class FontSelector {
         recyclerView = view.findViewById(R.id.recycler_view);
         builder.setView(view);
         builder.setTitle("选择字体");
+        builder.setNegativeButton(R.string.cancel, null);
         fontPath = FileUtil.getSdCardPath() + "/Fonts";
-        adapter = new FontAdapter();
+        adapter = new FontAdapter(new OnThisListener() {
+            @Override
+            public void setDefault() {
+                if (thisListener != null) {
+                    thisListener.setDefault();
+                }
+                alertDialog.dismiss();
+            }
+
+            @Override
+            public void setFontPath(String fontPath) {
+                if (thisListener != null) {
+                    thisListener.setFontPath(fontPath);
+                }
+                alertDialog.dismiss();
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+    }
+
+    public FontSelector setListener(OnThisListener thisListener){
+        this.thisListener = thisListener;
+        builder.setPositiveButton("默认字体", ((dialogInterface, i) -> {
+            thisListener.setDefault();
+        }));
+        return this;
     }
 
     public FontSelector setPath(String path) {
@@ -44,11 +71,17 @@ public class FontSelector {
     }
 
     public void show() {
-        builder.show();
+        alertDialog = builder.show();
     }
 
     private File[] getFontFiles() {
         File file = new File(fontPath);
         return file.listFiles(pathName -> pathName.getName().endsWith(".TTF") || pathName.getName().endsWith(".ttf"));
+    }
+
+    public interface OnThisListener {
+        void setDefault();
+
+        void setFontPath(String fontPath);
     }
 }

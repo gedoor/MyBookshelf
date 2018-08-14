@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.font;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -17,6 +18,11 @@ import java.util.List;
 
 public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
     private List<File> fileList = new ArrayList<>();
+    private FontSelector.OnThisListener thisListener;
+
+    FontAdapter(FontSelector.OnThisListener thisListener) {
+        this.thisListener = thisListener;
+    }
 
     @NonNull
     @Override
@@ -26,7 +32,14 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Typeface typeface = Typeface.createFromFile(fileList.get(position));
+        holder.tvFont.setTypeface(typeface);
         holder.tvFont.setText(fileList.get(position).getName());
+        holder.tvFont.setOnClickListener(view -> {
+            if (thisListener != null) {
+                thisListener.setFontPath(fileList.get(position).getAbsolutePath());
+            }
+        });
     }
 
     @Override
@@ -39,7 +52,14 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
             return;
         }
         fileList.clear();
-        Collections.addAll(fileList, files);
+        for (File file : files) {
+            try {
+                Typeface.createFromFile(file);
+                fileList.add(file);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         notifyDataSetChanged();
     }
 

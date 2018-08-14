@@ -224,7 +224,20 @@ public class ReadInterfacePop extends PopupWindow {
         civBgBlack.setOnLongClickListener(view -> customReadStyle(4));
 
         //选择字体
-        fl_text_font.setOnClickListener(view -> new FontSelector(activity).create().show());
+        fl_text_font.setOnClickListener(view -> new FontSelector(activity)
+                .setListener(new FontSelector.OnThisListener() {
+                    @Override
+                    public void setDefault() {
+                        clearFontPath();
+                    }
+
+                    @Override
+                    public void setFontPath(String fontPath) {
+                        setReadFonts(fontPath);
+                    }
+                })
+                .create()
+                .show());
         //长按清除字体
         fl_text_font.setOnLongClickListener(view -> {
             clearFontPath();
