@@ -26,7 +26,7 @@ public class FontSelector {
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.view_recycler_font, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         builder.setView(view);
-        builder.setTitle("选择字体");
+        builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
         fontPath = FileUtil.getSdCardPath() + "/Fonts";
         adapter = new FontAdapter(new OnThisListener() {
@@ -52,7 +52,7 @@ public class FontSelector {
 
     public FontSelector setListener(OnThisListener thisListener){
         this.thisListener = thisListener;
-        builder.setPositiveButton("默认字体", ((dialogInterface, i) -> {
+        builder.setPositiveButton(R.string.default_font, ((dialogInterface, i) -> {
             thisListener.setDefault();
         }));
         return this;

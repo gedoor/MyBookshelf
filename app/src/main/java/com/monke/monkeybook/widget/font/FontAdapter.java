@@ -13,7 +13,6 @@ import com.monke.monkeybook.R;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
@@ -32,19 +31,23 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Typeface typeface = Typeface.createFromFile(fileList.get(position));
-        holder.tvFont.setTypeface(typeface);
-        holder.tvFont.setText(fileList.get(position).getName());
-        holder.tvFont.setOnClickListener(view -> {
-            if (thisListener != null) {
-                thisListener.setFontPath(fileList.get(position).getAbsolutePath());
-            }
-        });
+        if (fileList.size() > 0) {
+            Typeface typeface = Typeface.createFromFile(fileList.get(position));
+            holder.tvFont.setTypeface(typeface);
+            holder.tvFont.setText(fileList.get(position).getName());
+            holder.tvFont.setOnClickListener(view -> {
+                if (thisListener != null) {
+                    thisListener.setFontPath(fileList.get(position).getAbsolutePath());
+                }
+            });
+        } else {
+            holder.tvFont.setText(R.string.fonts_folder);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return fileList.size();
+        return fileList.size() == 0 ? 1 : fileList.size();
     }
 
     public void upData(File[] files) {
