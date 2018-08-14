@@ -15,7 +15,6 @@ import java.io.File;
 
 public class FontSelector {
     private AlertDialog.Builder builder;
-    private RecyclerView recyclerView;
     private FontAdapter adapter;
     private Context context;
     private String fontPath;
@@ -25,7 +24,7 @@ public class FontSelector {
     public FontSelector(Context context) {
         builder = new AlertDialog.Builder(context);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.view_recycler_font, null);
-        recyclerView = view.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         builder.setView(view);
         builder.setTitle("选择字体");
         builder.setNegativeButton(R.string.cancel, null);

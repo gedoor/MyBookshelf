@@ -227,7 +227,21 @@ public abstract class PageLoader {
         mTitlePaint.setColor(mTextColor);
         mTitlePaint.setTextSize(mTitleSize);
         mTitlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mTitlePaint.setTypeface(Typeface.DEFAULT_BOLD);
+        try {
+            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
+                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+                typeface = Typeface.create(typeface, Typeface.BOLD);
+                mTextPaint.setTypeface(typeface);
+            } else {
+                typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+                mTextPaint.setTypeface(typeface);
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
+            mSettingManager.setReadBookFont(null);
+            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
+            mTextPaint.setTypeface(typeface);
+        }
         mTitlePaint.setAntiAlias(true);
 
         // 绘制背景的画笔
