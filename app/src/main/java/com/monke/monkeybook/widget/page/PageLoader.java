@@ -191,58 +191,42 @@ public abstract class PageLoader {
     }
 
     public void initPaint() {
+        Typeface typeface;
+        try {
+            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
+                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+            } else {
+                typeface = Typeface.SANS_SERIF;
+            }
+        } catch (Exception e) {
+            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
+            mSettingManager.setReadBookFont(null);
+            typeface = Typeface.SANS_SERIF;
+        }
         // 绘制提示的画笔
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
         mTipPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
+        mTipPaint.setTypeface(Typeface.create(typeface, Typeface.NORMAL));
         mTipPaint.setAntiAlias(true);
         mTipPaint.setSubpixelText(true);
-
-        // 绘制页面内容的画笔
-        mTextPaint = new TextPaint();
-        mTextPaint.setColor(mTextColor);
-        mTextPaint.setTextSize(mTextSize);
-        int bold = mSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
-        Typeface typeface;
-        try {
-            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
-                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
-                typeface = Typeface.create(typeface, bold);
-                mTextPaint.setTypeface(typeface);
-            } else {
-                typeface = Typeface.create(Typeface.SANS_SERIF, bold);
-                mTextPaint.setTypeface(typeface);
-            }
-        } catch (Exception e) {
-            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
-            mSettingManager.setReadBookFont(null);
-            typeface = Typeface.create(Typeface.SANS_SERIF, bold);
-            mTextPaint.setTypeface(typeface);
-        }
-        mTextPaint.setAntiAlias(true);
 
         // 绘制标题的画笔
         mTitlePaint = new TextPaint();
         mTitlePaint.setColor(mTextColor);
         mTitlePaint.setTextSize(mTitleSize);
         mTitlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        try {
-            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
-                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
-                typeface = Typeface.create(typeface, Typeface.BOLD);
-                mTextPaint.setTypeface(typeface);
-            } else {
-                typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
-                mTextPaint.setTypeface(typeface);
-            }
-        } catch (Exception e) {
-            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
-            mSettingManager.setReadBookFont(null);
-            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
-            mTextPaint.setTypeface(typeface);
-        }
+        mTextPaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
         mTitlePaint.setAntiAlias(true);
+
+        // 绘制页面内容的画笔
+        mTextPaint = new TextPaint();
+        mTextPaint.setColor(mTextColor);
+        mTextPaint.setTextSize(mTextSize);
+        int bold = mSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
+        mTextPaint.setTypeface(Typeface.create(typeface, bold));
+        mTextPaint.setAntiAlias(true);
 
         // 绘制背景的画笔
         mBgPaint = new Paint();
@@ -283,8 +267,6 @@ public abstract class PageLoader {
 
     /**
      * 跳转到上一章
-     *
-     * @return
      */
     public boolean skipPreChapter() {
         goPagePos = 0;
@@ -305,8 +287,6 @@ public abstract class PageLoader {
 
     /**
      * 跳转到下一章
-     *
-     * @return
      */
     public boolean skipNextChapter() {
         goPagePos = 0;
@@ -370,8 +350,6 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定的页
-     *
-     * @param pos
      */
     public boolean skipToPage(int pos) {
         if (!isChapterListPrepare) {
@@ -385,8 +363,6 @@ public abstract class PageLoader {
 
     /**
      * 翻到上一页
-     *
-     * @return
      */
     public boolean skipToPrePage() {
         return mPageView.autoPrevPage();
@@ -394,8 +370,6 @@ public abstract class PageLoader {
 
     /**
      * 翻到下一页
-     *
-     * @return
      */
     public boolean skipToNextPage() {
         return mPageView.autoNextPage();
@@ -417,8 +391,6 @@ public abstract class PageLoader {
 
     /**
      * 更新电量
-     *
-     * @param level
      */
     public void updateBattery(int level) {
         mBatteryLevel = level;
@@ -430,7 +402,6 @@ public abstract class PageLoader {
 
     /**
      * 设置提示的文字大小
-     *
      * @param textSize:单位为 px。
      */
     public void setTipTextSize(int textSize) {
