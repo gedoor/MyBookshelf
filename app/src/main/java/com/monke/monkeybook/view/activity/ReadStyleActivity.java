@@ -29,6 +29,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.ColorUtil;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.widget.ContentTextView;
 import com.monke.monkeybook.widget.modialog.InputView;
@@ -66,8 +67,8 @@ public class ReadStyleActivity extends MBaseActivity {
     private int bgColor;
     private Drawable bgDrawable;
     private int bgCustom;
-    private Bitmap bgBitmap;
     private boolean darkStatusIcon;
+    private String bgPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -257,9 +258,8 @@ public class ReadStyleActivity extends MBaseActivity {
         readBookControl.setBgCustom(textDrawableIndex, bgCustom);
         readBookControl.setBgColor(textDrawableIndex, bgColor);
         readBookControl.setDarkStatusIcon(textDrawableIndex, darkStatusIcon);
-        if (bgCustom == 2 && bgBitmap != null) {
-            ACache aCache = ACache.get(this);
-            aCache.put("customBg" + textDrawableIndex, bgBitmap);
+        if (bgCustom == 2) {
+            readBookControl.setBgPath(textDrawableIndex, bgPath);
         }
         readBookControl.initTextDrawableIndex();
         setResult(RESULT_OK);
@@ -284,13 +284,11 @@ public class ReadStyleActivity extends MBaseActivity {
      * 自定义背景
      */
     public void setCustomBg(Uri uri) {
+        bgPath = FileUtil.getPath(this, uri);
         ContentResolver cr = getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
-            ACache aCache = ACache.get(this);
-            aCache.put("customBg", bitmap);
             bgCustom = 2;
-            bgBitmap = bitmap;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
             upBg();
         } catch (IOException e) {

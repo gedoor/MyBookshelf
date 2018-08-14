@@ -26,7 +26,6 @@ import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_HEIGHT;
 import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_WIDTH;
 
 public class ReadBookControl {
-    private static final int DEFAULT_TEXT = 3;
     private static final int DEFAULT_BG = 1;
 
     private List<Map<String, Integer>> textDrawable;
@@ -42,6 +41,7 @@ public class ReadBookControl {
     private Bitmap bgBitmap;
     private float lineMultiplier;
     private int pageMode;
+    private String bgPath;
 
     private int textDrawableIndex = DEFAULT_BG;
 
@@ -175,11 +175,10 @@ public class ReadBookControl {
 
     private void initPageStyle(Context context) {
         try {
-            ACache aCache = ACache.get(context);
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
             switch (getBgCustom(textDrawableIndex)) {
                 case 2:
-                    Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                    Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
                     if (bitmap != null) {
                         bgIsColor = false;
                         bgBitmap = bitmap;
@@ -227,10 +226,9 @@ public class ReadBookControl {
     }
 
     public Drawable getBgDrawable(int textDrawableIndex, Context context) {
-        ACache aCache = ACache.get(context);
         switch (getBgCustom(textDrawableIndex)) {
             case 2:
-                Bitmap bitmap = aCache.getAsBitmap("customBg" + textDrawableIndex);
+                Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
                 if (bitmap != null) {
                     return new BitmapDrawable(context.getResources(), bitmap);
                 }
@@ -262,6 +260,16 @@ public class ReadBookControl {
     public void setBgCustom(int textDrawableIndex, int bgCustom) {
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("bgCustom" + textDrawableIndex, bgCustom);
+        editor.apply();
+    }
+
+    public String getBgPath(int textDrawableIndex) {
+        return readPreference.getString("bgPath" + textDrawableIndex, null);
+    }
+
+    public void setBgPath(int textDrawableIndex, String bgUri) {
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putString("bgPath" + textDrawableIndex, bgUri);
         editor.apply();
     }
 
