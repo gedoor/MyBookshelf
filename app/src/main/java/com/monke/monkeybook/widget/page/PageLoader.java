@@ -217,7 +217,7 @@ public abstract class PageLoader {
         mTitlePaint.setColor(mTextColor);
         mTitlePaint.setTextSize(mTitleSize);
         mTitlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mTextPaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
+        mTitlePaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
         mTitlePaint.setAntiAlias(true);
 
         // 绘制页面内容的画笔
