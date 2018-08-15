@@ -50,7 +50,7 @@
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
     <string name="backup_confirmation">确认备份吗？</string>
-    <string name="backup_message">新备份会替换原有备份。\n备份文件夹Documents</string>
+    <string name="backup_message">新备份会替换原有备份。\n备份文件夹YueDu</string>
     <string name="restore_confirmation">确认恢复吗？</string>
     <string name="restore_message">备份书架会覆盖现有书架。</string>
     <string name="backup_success">备份成功</string>
