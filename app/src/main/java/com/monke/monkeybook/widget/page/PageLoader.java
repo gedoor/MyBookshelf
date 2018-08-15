@@ -78,7 +78,7 @@ public abstract class PageLoader {
     // 绘制电池的画笔
     private Paint mBatteryPaint;
     // 绘制提示的画笔(章节名称和时间)
-    private Paint mTipPaint;
+    private TextPaint mTipPaint;
     // 绘制标题的画笔
     private TextPaint mTitlePaint;
     // 绘制背景颜色的画笔(用来擦除需要重绘的部分)
@@ -205,7 +205,7 @@ public abstract class PageLoader {
             typeface = Typeface.SANS_SERIF;
         }
         // 绘制提示的画笔
-        mTipPaint = new Paint();
+        mTipPaint = new TextPaint();
         mTipPaint.setColor(mTextColor);
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
         mTipPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
@@ -742,7 +742,7 @@ public abstract class PageLoader {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                            percent = TextUtils.ellipsize(percent, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
                                     TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
@@ -756,7 +756,7 @@ public abstract class PageLoader {
                         tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
                         canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                         //绘制标题
-                        percent = TextUtils.ellipsize(mCancelPage.title, mTextPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
+                        percent = TextUtils.ellipsize(mCancelPage.title, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                     }
                     if (mSettingManager.getShowLine()) {
@@ -770,13 +770,13 @@ public abstract class PageLoader {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                            percent = TextUtils.ellipsize(percent, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
                                     TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
                     } else {
                         //绘制标题
-                        percent = TextUtils.ellipsize(mCurPage.title, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                        percent = TextUtils.ellipsize(mCurPage.title, mTipPaint, mDisplayWidth - tipMarginWidth*2,
                                 TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         //绘制页码
