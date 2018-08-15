@@ -737,14 +737,14 @@ public abstract class PageLoader {
                 //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
                 if (!mSettingManager.getHideStatusBar()) {
                     float tipBottom = mDisplayHeight - tipMarginHeight - mTipPaint.getFontMetrics().bottom;
-                    float tipLeft = tipMarginWidth;
+                    float tipLeft;
                     if (mStatus != STATUS_FINISH) {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
                             percent = TextUtils.ellipsize(percent, mTextPaint, mDisplayWidth - tipMarginWidth*2,
                                     TextUtils.TruncateAt.END).toString();
-                            canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                            canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
                     } else {
                         //绘制总进度
@@ -757,7 +757,7 @@ public abstract class PageLoader {
                         canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                         //绘制标题
                         percent = TextUtils.ellipsize(mCancelPage.title, mTextPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                        canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                     }
                     if (mSettingManager.getShowLine()) {
                         //绘制分隔线
