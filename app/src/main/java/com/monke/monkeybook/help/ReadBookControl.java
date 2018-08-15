@@ -38,10 +38,10 @@ public class ReadBookControl {
     private Drawable textBackground;
     private boolean bgIsColor;
     private int bgColor;
-    private Bitmap bgBitmap;
     private float lineMultiplier;
     private int pageMode;
     private String bgPath;
+    private Bitmap bgBitmap;
 
     private int textDrawableIndex = DEFAULT_BG;
 
@@ -176,27 +176,19 @@ public class ReadBookControl {
     private void initPageStyle(Context context) {
         try {
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-            switch (getBgCustom(textDrawableIndex)) {
-                case 2:
-                    Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
-                    if (bitmap != null) {
-                        bgIsColor = false;
-                        bgBitmap = bitmap;
-                        return;
-                    }
-                    break;
-                case 1:
-                    bgIsColor = true;
-                    bgColor = getBgColor(textDrawableIndex);
-                    return;
-            }
-            if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
-                bgIsColor = true;
-                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-            } else {
+            if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
                 bgIsColor = false;
-                bgBitmap = BitmapFactory.decodeResource(context.getResources(), getDefaultBg(textDrawableIndex));
+                bgPath = getBgPath(textDrawableIndex);
+                bgBitmap = BitmapFactory.decodeFile(bgPath);
+                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, 1080);
+                return;
+            } else if (getBgCustom(textDrawableIndex) == 1) {
+                bgIsColor = true;
+                bgColor = getBgColor(textDrawableIndex);
+                return;
             }
+            bgIsColor = true;
+            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
         } catch (Exception e) {
             setBgCustom(textDrawableIndex, 0);
             initTextDrawableIndex();
@@ -208,7 +200,6 @@ public class ReadBookControl {
         darkStatusIcon = getDarkStatusIcon(textDrawableIndex);
         textColor = getTextColor(textDrawableIndex);
         textBackground = getBgDrawable(textDrawableIndex, context);
-        initPageStyle(context);
     }
 
     public int getTextColor(int textDrawableIndex) {
@@ -226,22 +217,31 @@ public class ReadBookControl {
     }
 
     public Drawable getBgDrawable(int textDrawableIndex, Context context) {
-        switch (getBgCustom(textDrawableIndex)) {
-            case 2:
-                Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
-                if (bitmap != null) {
-                    return new BitmapDrawable(context.getResources(), bitmap);
-                }
-                break;
-            case 1:
-                bgColor = getBgColor(textDrawableIndex);
+        try {
+            switch (getBgCustom(textDrawableIndex)) {
+                case 2:
+                    Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
+                    if (bitmap != null) {
+                        return new BitmapDrawable(context.getResources(), bitmap);
+                    }
+                    break;
+                case 1:
+                    bgColor = getBgColor(textDrawableIndex);
+                    return new ColorDrawable(bgColor);
+            }
+            if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
                 return new ColorDrawable(bgColor);
-        }
-        if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
-            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-            return new ColorDrawable(bgColor);
-        } else {
-            return getDefaultBgDrawable(textDrawableIndex, context);
+            } else {
+                return getDefaultBgDrawable(textDrawableIndex, context);
+            }
+        } catch (Exception e) {
+            if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
+                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+                return new ColorDrawable(bgColor);
+            } else {
+                return getDefaultBgDrawable(textDrawableIndex, context);
+            }
         }
     }
 
@@ -343,8 +343,16 @@ public class ReadBookControl {
         return textBackground;
     }
 
+    public int getDefaultBgColor() {
+        return getDefaultBg(textDrawableIndex);
+    }
+
     public int getBgColor() {
         return bgColor;
+    }
+
+    public String getBgPath() {
+        return bgPath;
     }
 
     public Bitmap getBgBitmap() {
@@ -563,7 +571,7 @@ public class ReadBookControl {
     }
 
     public boolean getDarkStatusIcon(int textDrawableIndex) {
-        return defaultPreference.getBoolean("darkStatusIcon" + textDrawableIndex,  textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0 );
+        return defaultPreference.getBoolean("darkStatusIcon" + textDrawableIndex, textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0);
     }
 
     public void setDarkStatusIcon(int textDrawableIndex, Boolean darkStatusIcon) {
