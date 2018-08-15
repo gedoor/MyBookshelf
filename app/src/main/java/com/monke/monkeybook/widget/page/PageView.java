@@ -207,14 +207,6 @@ public class PageView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-//        //绘制背景
-//        if (readBookControl.bgIsColor()) {
-//            canvas.drawColor(readBookControl.getBgColor());
-//        } else {
-//            Rect mDestRect = new Rect(0, 0, mViewWidth, mViewHeight);
-//            canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
-//        }
-
         //绘制动画
         if (mPageAnim != null) {
             mPageAnim.draw(canvas);

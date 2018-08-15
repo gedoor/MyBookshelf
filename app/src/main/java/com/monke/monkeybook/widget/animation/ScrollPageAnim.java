@@ -337,11 +337,9 @@ public class ScrollPageAnim extends PageAnimation {
         //裁剪显示区域
         canvas.clipRect(0, 0, mViewWidth, mViewHeight);
         //绘制Bitmap
-        Paint paint = new Paint();
-        paint.setAlpha(0x40);
         for (int i = 0; i < mActiveViews.size(); ++i) {
             tmpView = mActiveViews.get(i);
-            canvas.drawBitmap(tmpView.bitmap, tmpView.srcRect, tmpView.destRect, paint);
+            canvas.drawBitmap(tmpView.bitmap, tmpView.srcRect, tmpView.destRect, null);
         }
         canvas.restore();
     }

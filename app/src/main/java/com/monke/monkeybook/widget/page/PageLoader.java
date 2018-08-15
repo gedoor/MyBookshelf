@@ -866,13 +866,16 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-//            if (mSettingManager.bgIsColor()) {
-//                canvas.drawColor(mSettingManager.getBgColor());
-//            } else {
-//                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-//                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
-//            }
+//            Paint paint = new Paint();
+//            paint.setAlpha(0);
+//            Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+//            canvas.drawBitmap(bitmap,null,mDestRect, paint);
+            if (mSettingManager.bgIsColor()) {
+                canvas.drawColor(mSettingManager.getBgColor());
+            } else {
+                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
+            }
         }
         /******绘制内容****/
 
