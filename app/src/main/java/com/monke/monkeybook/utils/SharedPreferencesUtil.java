@@ -34,7 +34,7 @@ public class SharedPreferencesUtil {
             editor.putLong(key, (Long) data);
         }
 
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -51,7 +51,7 @@ public class SharedPreferencesUtil {
 
         editor.remove(key);
 
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -92,7 +92,7 @@ public class SharedPreferencesUtil {
     public static void clearData(Context context) {
         SharedPreferences sharedPreferences = context
                 .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();
+        sharedPreferences.edit().clear().apply();
     }
 
 

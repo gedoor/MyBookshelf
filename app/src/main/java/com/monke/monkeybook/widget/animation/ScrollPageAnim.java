@@ -3,6 +3,7 @@ package com.monke.monkeybook.widget.animation;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
@@ -256,21 +257,6 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     /**
-     * 对Bitmap进行擦除
-     *
-     * @param b
-     * @param width
-     * @param height
-     * @param paddingLeft
-     * @param paddingTop
-     */
-    private void eraseBitmap(Bitmap b, int width, int height,
-                             int paddingLeft, int paddingTop) {
-     /*   if (mInitBitmapPix == null) return;
-        b.setPixels(mInitBitmapPix, 0, width, paddingLeft, paddingTop, width, height);*/
-    }
-
-    /**
      * 重置位移
      */
     public void resetBitmap() {
@@ -335,7 +321,6 @@ public class ScrollPageAnim extends PageAnimation {
         return true;
     }
 
-
     BitmapView tmpView;
 
     @Override
@@ -351,12 +336,12 @@ public class ScrollPageAnim extends PageAnimation {
         canvas.translate(0, mMarginTop);
         //裁剪显示区域
         canvas.clipRect(0, 0, mViewWidth, mViewHeight);
-        //设置背景透明
-//        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         //绘制Bitmap
+        Paint paint = new Paint();
+        paint.setAlpha(0x40);
         for (int i = 0; i < mActiveViews.size(); ++i) {
             tmpView = mActiveViews.get(i);
-            canvas.drawBitmap(tmpView.bitmap, tmpView.srcRect, tmpView.destRect, null);
+            canvas.drawBitmap(tmpView.bitmap, tmpView.srcRect, tmpView.destRect, paint);
         }
         canvas.restore();
     }

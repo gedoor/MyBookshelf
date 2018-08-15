@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -864,13 +866,13 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
-//            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-            if (mSettingManager.bgIsColor()) {
-                canvas.drawColor(mSettingManager.getBgColor());
-            } else {
-                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
-            }
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+//            if (mSettingManager.bgIsColor()) {
+//                canvas.drawColor(mSettingManager.getBgColor());
+//            } else {
+//                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+//                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
+//            }
         }
         /******绘制内容****/
 

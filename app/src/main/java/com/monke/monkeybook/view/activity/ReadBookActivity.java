@@ -379,7 +379,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initReadInterfacePop();
         initReadAdjustPop();
         initMoreSettingPop();
-
+        flContent.setBackground(readBookControl.getTextBackground());
     }
 
     /**
@@ -435,6 +435,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void bgChange() {
                 readBookControl.initTextDrawableIndex();
+                flContent.setBackground(readBookControl.getTextBackground());
                 initImmersionBar();
                 if (mPageLoader != null) {
                     mPageLoader.setPageStyle();
@@ -1171,19 +1172,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case ResultReplace:
                 recreate();
                 break;
-            case ResultSelectFont:
-                if (resultCode == RESULT_OK && null != data) {
-                    String path = FileUtil.getPath(this, data.getData());
-                    try {
-                        //判断是否字体文件或字体是否损坏
-                        Typeface.createFromFile(path);
-                        readInterfacePop.setReadFonts(path);
-                    } catch (Exception e) {
-                        Toast.makeText(this, "不是字体文件", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
             case ResultStyleSet:
+                flContent.setBackground(readBookControl.getTextBackground());
                 if (resultCode == RESULT_OK) {
                     if (mPageLoader != null) {
                         mPageLoader.refresh();
