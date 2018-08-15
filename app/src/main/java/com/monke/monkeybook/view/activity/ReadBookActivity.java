@@ -555,11 +555,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         //继续朗读
                         if ((ReadAloudService.running) && pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
-                                ReadAloudService.play(ReadBookActivity.this, false, mPageLoader.getContext(pageIndex));
+                                ReadAloudService.play(ReadBookActivity.this,
+                                        false,
+                                        mPageLoader.getContext(pageIndex));
                             }
                         }
                         //启动朗读
-                        if (getIntent().getBooleanExtra("readAloud", false) && pageIndex >= 0 && mPageLoader.getContext(pageIndex) != null) {
+                        if (getIntent().getBooleanExtra("readAloud", false)
+                                && pageIndex >= 0 && mPageLoader.getContext(pageIndex) != null) {
                             getIntent().putExtra("readAloud", false);
                             onMediaButton();
                         }

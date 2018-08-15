@@ -146,7 +146,7 @@ public class ReadAloudService extends Service {
             }
         }
         running = true;
-        if (aloudButton || speak) {
+        if (aloudButton || (!pause & speak)) {
             speak = false;
             pause = false;
             playTTS();
