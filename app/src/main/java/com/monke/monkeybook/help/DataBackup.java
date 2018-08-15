@@ -1,5 +1,7 @@
 package com.monke.monkeybook.help;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.utils.FileUtil;
 
 import java.io.File;
 import java.util.List;
@@ -39,7 +42,7 @@ public class DataBackup {
 
     public void run() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            FileHelper.createDirIfNotExist(Environment.getExternalStorageDirectory().getPath(), "Documents");
+            FileHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "MyReader");
             File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
             if (file == null) {
                 e.onNext(false);
@@ -128,4 +131,10 @@ public class DataBackup {
         }
     }
 
+    private void backupConfig(File file) {
+        DocumentFile docFile = FileHelper.createFileIfNotExist("config.json", file.getPath());
+        SharedPreferences pref = MApplication.getInstance().getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
+        String json = new Gson().toJson(pref.getAll());
+        FileHelper.writeString(json, docFile);
+    }
 }

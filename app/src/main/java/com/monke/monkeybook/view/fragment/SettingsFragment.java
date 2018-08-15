@@ -45,7 +45,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             // For all other preferences, set the summary to the value's
             preference.setSummary(stringValue);
         }
-        return true;
+        return false;
     };
 
     private static void bindPreferenceSummaryToValue(Preference preference) {
@@ -76,7 +76,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             Intent intent = new Intent(ImmersionAction);
             intent.putExtra("data", "Immersion_Change");
             mContext.sendBroadcast(intent);
-            return true;
+            return false;
         });
     }
 }
