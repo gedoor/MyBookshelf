@@ -37,7 +37,7 @@ public class SearchBookModel {
     public SearchBookModel(BaseActivity activity, OnSearchListener searchListener) {
         this.activity = activity;
         this.searchListener = searchListener;
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences preference = activity.getSharedPreferences("CONFIG", 0);
         threadsNum = preference.getInt(activity.getString(R.string.pk_threads_num), 6);
 
         initSearchEngineS();

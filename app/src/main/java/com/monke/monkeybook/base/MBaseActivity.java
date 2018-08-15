@@ -26,7 +26,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = getSharedPreferences("CONFIG", 0);;
         super.onCreate(savedInstanceState);
         initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

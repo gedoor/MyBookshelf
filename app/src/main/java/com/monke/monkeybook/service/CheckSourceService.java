@@ -53,7 +53,7 @@ public class CheckSourceService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preference = getSharedPreferences("CONFIG", 0);
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
         compositeDisposable = new CompositeDisposable();
         bookSourceBeanList = BookSourceManage.getAllBookSource();

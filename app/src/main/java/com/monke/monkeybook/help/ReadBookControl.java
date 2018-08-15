@@ -68,7 +68,6 @@ public class ReadBookControl {
     private int paddingBottom;
 
     private SharedPreferences readPreference;
-    private SharedPreferences defaultPreference;
 
     private static ReadBookControl readBookControl;
 
@@ -86,9 +85,8 @@ public class ReadBookControl {
     private ReadBookControl() {
         initTextDrawable();
         readPreference = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
-        defaultPreference = PreferenceManager.getDefaultSharedPreferences(MApplication.getInstance());
-        this.hideStatusBar = defaultPreference.getBoolean("hide_status_bar", false);
-        this.hideNavigationBar = defaultPreference.getBoolean("hide_navigation_bar", false);
+        this.hideStatusBar = readPreference.getBoolean("hide_status_bar", false);
+        this.hideNavigationBar = readPreference.getBoolean("hide_navigation_bar", false);
         this.textSize = readPreference.getInt("textSize", 20);
         this.textExtra = readPreference.getFloat("textExtra", 1.0f);
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
@@ -292,15 +290,15 @@ public class ReadBookControl {
     }
 
     public boolean getIsNightTheme() {
-        return defaultPreference.getBoolean("nightTheme", false);
+        return readPreference.getBoolean("nightTheme", false);
     }
 
     public boolean getImmersionStatusBar() {
-        return defaultPreference.getBoolean("immersionStatusBar", false);
+        return readPreference.getBoolean("immersionStatusBar", false);
     }
 
     public void setImmersionStatusBar(boolean immersionStatusBar) {
-        SharedPreferences.Editor editor = defaultPreference.edit();
+        SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("immersionStatusBar", immersionStatusBar);
         editor.apply();
     }
@@ -528,7 +526,7 @@ public class ReadBookControl {
 
     public void setHideStatusBar(Boolean hideStatusBar) {
         this.hideStatusBar = hideStatusBar;
-        SharedPreferences.Editor editor = defaultPreference.edit();
+        SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("hide_status_bar", hideStatusBar);
         editor.apply();
     }
@@ -539,7 +537,7 @@ public class ReadBookControl {
 
     public void setHideNavigationBar(Boolean hideNavigationBar) {
         this.hideNavigationBar = hideNavigationBar;
-        SharedPreferences.Editor editor = defaultPreference.edit();
+        SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("hide_navigation_bar", hideNavigationBar);
         editor.apply();
     }
@@ -571,11 +569,11 @@ public class ReadBookControl {
     }
 
     public boolean getDarkStatusIcon(int textDrawableIndex) {
-        return defaultPreference.getBoolean("darkStatusIcon" + textDrawableIndex, textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0);
+        return readPreference.getBoolean("darkStatusIcon" + textDrawableIndex, textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0);
     }
 
     public void setDarkStatusIcon(int textDrawableIndex, Boolean darkStatusIcon) {
-        SharedPreferences.Editor editor = defaultPreference.edit();
+        SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("darkStatusIcon" + textDrawableIndex, darkStatusIcon);
         editor.apply();
     }
