@@ -869,7 +869,7 @@ public abstract class PageLoader {
                     tip = "正在拼命加载中...";
                     break;
                 case STATUS_ERROR:
-                    tip = String.format("加载失败(点击边缘重试)\n%s", errorMsg);
+                    tip = String.format("加载失败\n%s", errorMsg);
                     break;
                 case STATUS_EMPTY:
                     tip = "文章内容为空";
