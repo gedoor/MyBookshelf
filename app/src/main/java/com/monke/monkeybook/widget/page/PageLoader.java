@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -741,10 +742,11 @@ public abstract class PageLoader {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                            percent = TextUtils.ellipsize(percent, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                                    TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                         }
                     } else {
-                        canvas.drawText(mCurPage.title, tipLeft, tipBottom, mTipPaint);
                         //绘制总进度
                         percent = BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
                         tipLeft = mDisplayWidth - tipMarginWidth - mTipPaint.measureText(percent);
@@ -752,6 +754,9 @@ public abstract class PageLoader {
                         //绘制页码
                         percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
                         tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
+                        canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                        //绘制标题
+                        percent = TextUtils.ellipsize(mCancelPage.title, mTextPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                     }
                     if (mSettingManager.getShowLine()) {
@@ -763,11 +768,17 @@ public abstract class PageLoader {
                     float tipBottom = tipMarginHeight - mTipPaint.getFontMetrics().top;
                     if (mStatus != STATUS_FINISH) {
                         if (isChapterListPrepare) {
+                            //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                            percent = TextUtils.ellipsize(percent, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                                    TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
                     } else {
-                        canvas.drawText(mCurPage.title, tipMarginWidth, tipBottom, mTipPaint);
+                        //绘制标题
+                        percent = TextUtils.ellipsize(mCurPage.title, mTextPaint, mDisplayWidth - tipMarginWidth*2,
+                                TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         //绘制页码
                         tipBottom = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
                         percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
@@ -846,6 +857,8 @@ public abstract class PageLoader {
             canvas.drawText(time, x, y, mTipPaint);
         }
     }
+
+
 
     private void drawContent(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
