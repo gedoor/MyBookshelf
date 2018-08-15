@@ -146,7 +146,7 @@ public class ReadAloudService extends Service {
             }
         }
         running = true;
-        if (aloudButton || (!pause & speak)) {
+        if (aloudButton || speak) {
             speak = false;
             pause = false;
             playTTS();
@@ -207,6 +207,7 @@ public class ReadAloudService extends Service {
      */
     public static void stop(Context context) {
         if (running) {
+            running = false;
             Intent intent = new Intent(context, ReadAloudService.class);
             intent.setAction(ActionDoneService);
             context.startService(intent);
