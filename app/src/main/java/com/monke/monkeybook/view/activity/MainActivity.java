@@ -44,6 +44,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
+import com.monke.monkeybook.help.PermissionHelp;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
@@ -94,7 +95,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
     private String bookPx;
     private ImmersionReceiver immersionReceiver;
@@ -278,11 +278,11 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_local:
-                if (EasyPermissions.hasPermissions(this, perms)) {
+                if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
                     startActivity(new Intent(this, ImportBookActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                            FILE_SELECT_RESULT, perms);
+                            FILE_SELECT_RESULT, MApplication.PerList);
                 }
                 break;
             case R.id.action_add_url:
@@ -418,7 +418,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     //备份
     private void backup() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
@@ -427,7 +427,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
-                    BACKUP_RESULT, perms);
+                    BACKUP_RESULT, MApplication.PerList);
         }
     }
 
@@ -438,7 +438,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     //恢复
     private void restore() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
@@ -447,7 +447,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
-                    RESTORE_RESULT, perms);
+                    RESTORE_RESULT, MApplication.PerList);
         }
     }
 
@@ -489,6 +489,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             mPresenter.queryBookShelf(false, group);
             Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
         }
+        PermissionHelp.checkPermission(this);
     }
 
     @Override

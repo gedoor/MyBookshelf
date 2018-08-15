@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,10 +11,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
+    public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
@@ -45,8 +50,6 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
-        //初始化二维码模块
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
