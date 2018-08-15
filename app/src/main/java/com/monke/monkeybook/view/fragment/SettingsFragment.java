@@ -25,8 +25,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.pref_settings);
         getPreferenceManager().setSharedPreferencesName("CONFIG");
+        addPreferencesFromResource(R.xml.pref_settings);
         mContext = this.getActivity();
         settingActivity = (SettingActivity) this.getActivity();
 
@@ -45,7 +45,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             // For all other preferences, set the summary to the value's
             preference.setSummary(stringValue);
         }
-        return false;
+        return true;
     };
 
     private static void bindPreferenceSummaryToValue(Preference preference) {
@@ -76,7 +76,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             Intent intent = new Intent(ImmersionAction);
             intent.putExtra("data", "Immersion_Change");
             mContext.sendBroadcast(intent);
-            return false;
+            return true;
         });
     }
 }
