@@ -26,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_settings);
+        getPreferenceManager().setSharedPreferencesName("CONFIG");
         mContext = this.getActivity();
         settingActivity = (SettingActivity) this.getActivity();
 
@@ -52,7 +53,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
+                preference.getContext().getSharedPreferences("CONFIG", 0).getString(preference.getKey(), ""));
     }
 
     @Override
