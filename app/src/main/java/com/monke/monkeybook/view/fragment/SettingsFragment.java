@@ -41,8 +41,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             int index = listPreference.findIndexOfValue(stringValue);
             // Set the summary to reflect the new value.
             preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-        }
-        else {
+        } else {
             // For all other preferences, set the summary to the value's
             preference.setSummary(stringValue);
         }
@@ -53,14 +52,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                preference.getContext().getSharedPreferences("CONFIG", 0).getString(preference.getKey(), ""));
+                preference.getContext().getSharedPreferences("CONFIG", Context.MODE_PRIVATE).getString(preference.getKey(), ""));
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
     }
 
     @Override
