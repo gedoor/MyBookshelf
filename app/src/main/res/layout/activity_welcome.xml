@@ -9,8 +9,8 @@
         android:id="@+id/iv_bg"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:src="@drawable/bg_welcome"
-        android:scaleType="centerInside"
+        android:src="@drawable/ic_welcome"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/welcome" />
 
     <ImageView
