@@ -874,8 +874,8 @@ public abstract class PageLoader {
                 canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
             }
         }
-        /******绘制内容****/
 
+        /*****绘制内容****/
         if (mStatus != STATUS_FINISH) {
             //绘制字体
             String tip = "";
