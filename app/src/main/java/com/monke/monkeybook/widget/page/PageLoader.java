@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -866,10 +867,6 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
-//            Paint paint = new Paint();
-//            paint.setAlpha(0);
-//            Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-//            canvas.drawBitmap(bitmap,null,mDestRect, paint);
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
