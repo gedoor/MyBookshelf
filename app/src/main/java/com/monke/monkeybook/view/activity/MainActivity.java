@@ -489,7 +489,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             mPresenter.queryBookShelf(false, group);
             Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
         }
-        PermissionHelp.checkPermission(this);
     }
 
     @Override
