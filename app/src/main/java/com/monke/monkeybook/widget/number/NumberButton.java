@@ -12,13 +12,15 @@ import com.monke.monkeybook.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+
 public class NumberButton extends FrameLayout implements View.OnClickListener {
     public static final int INT = 0;
     public static final int FLOAT = 1;
 
     private OnChangedListener onChangedListener;
     private TextView tvNumber;
-
+    private DecimalFormat decimalFormat = new DecimalFormat("#");
     private int numberType = INT;
     private float minNumber = 0;
     private float maxNumber = 10;
@@ -52,22 +54,26 @@ public class NumberButton extends FrameLayout implements View.OnClickListener {
         return this;
     }
 
-    public NumberButton setOnChangedListener(OnChangedListener onChangedListener) {
+    public void setOnChangedListener(OnChangedListener onChangedListener) {
         this.onChangedListener = onChangedListener;
-        return this;
     }
 
     public float getNumber() {
         try {
             return Float.parseFloat(tvNumber.getText().toString());
         } catch (NumberFormatException e) {
-            tvNumber.setText(Float.toString(minNumber));
+            tvNumber.setText(decimalFormat.format(minNumber));
             return minNumber;
         }
     }
 
+    public NumberButton setFormat(String pattern) {
+        decimalFormat = new DecimalFormat(pattern);
+        return this;
+    }
+
     public NumberButton setNumber(float number) {
-        tvNumber.setText(isInt() ? Integer.toString((int) number) : Float.toString(number));
+        tvNumber.setText(decimalFormat.format(number));
         return this;
     }
 
@@ -106,7 +112,7 @@ public class NumberButton extends FrameLayout implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_number:
-                if (isInt()) {
+                if (numberType == INT) {
                     NumberPickerDialog npd = new NumberPickerDialog(getContext());
                     npd.setTitle(tile)
                             .setMaxValue((int) maxNumber)
@@ -120,12 +126,8 @@ public class NumberButton extends FrameLayout implements View.OnClickListener {
         }
     }
 
-    private boolean isInt() {
-        return numberType == INT;
-    }
-
     private void changeNumber(float f) {
-        tvNumber.setText(isInt() ? Integer.toString((int) f) : Float.toString(f));
+        tvNumber.setText(decimalFormat.format(f));
         if (onChangedListener != null) {
             onChangedListener.numberChange(f);
         }

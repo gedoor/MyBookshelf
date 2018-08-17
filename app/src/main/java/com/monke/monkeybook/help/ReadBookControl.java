@@ -53,7 +53,6 @@ public class ReadBookControl {
     private Boolean canKeyTurn;
     private int clickSensitivity;
     private Boolean clickAllNext;
-    private Boolean clickAnim;
     private Boolean showTitle;
     private Boolean showTimeBattery;
     private Boolean showLine;
@@ -93,7 +92,6 @@ public class ReadBookControl {
         this.clickSensitivity = readPreference.getInt("clickSensitivity", 50) > 100
                 ? 50 : readPreference.getInt("clickSensitivity", 50);
         this.clickAllNext = readPreference.getBoolean("clickAllNext", false);
-        this.clickAnim = readPreference.getBoolean("clickAnim", true);
         this.fontPath = readPreference.getString("fontPath", null);
         this.textConvert = readPreference.getInt("textConvertInt", 0);
         this.textBold = readPreference.getBoolean("textBold", false);
@@ -456,17 +454,6 @@ public class ReadBookControl {
         this.clickAllNext = clickAllNext;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("clickAllNext", clickAllNext);
-        editor.apply();
-    }
-
-    public Boolean getClickAnim() {
-        return clickAnim;
-    }
-
-    public void setClickAnim(Boolean clickAnim) {
-        this.clickAnim = clickAnim;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putBoolean("clickAnim", clickAnim);
         editor.apply();
     }
 

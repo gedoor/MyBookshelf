@@ -229,5 +229,8 @@
     <string name="fonts_folder">请将字体文件放到根目录Fonts文件夹下重新选择</string>
     <string name="default_font">默认字体</string>
     <string name="select_font">选择字体</string>
+    <string name="text_size">字号</string>
+    <string name="line_size">行距</string>
+    <string name="paragraph_size">段距</string>
 
 </resources>

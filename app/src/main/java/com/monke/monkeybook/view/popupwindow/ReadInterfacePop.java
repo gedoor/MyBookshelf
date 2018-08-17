@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -30,23 +29,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadInterfacePop extends PopupWindow {
 
-    @BindView(R.id.fl_line_smaller)
-    TextView flLineSmaller;//行间距小
-    @BindView(R.id.tv_dur_line_size)
-    TextView tvDurLineSize;//行间距数字
-    @BindView(R.id.fl_line_bigger)
-    TextView flLineBigger;//行间距大
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
-    @BindView(R.id.fl_text_smaller)
-    TextView flTextSmaller;//字号小
-    @BindView(R.id.tv_dur_text_size)
-    TextView tvDurTextSize;//字号数字
-    @BindView(R.id.fl_text_bigger)
-    TextView flTextBigger;//字号大
     @BindView(R.id.fl_text_font)
     TextView fl_text_font;
-
     @BindView(R.id.civ_bg_white)
     CircleImageView civBgWhite;
     @BindView(R.id.civ_bg_yellow)
@@ -77,19 +63,25 @@ public class ReadInterfacePop extends PopupWindow {
     NumberButton nbPaddingRight;
     @BindView(R.id.tvPageMode)
     TextView tvPageMode;
+    @BindView(R.id.nbTextSize)
+    NumberButton nbTextSize;
+    @BindView(R.id.nbLineSize)
+    NumberButton nbLineSize;
+    @BindView(R.id.nbParagraphSize)
+    NumberButton nbParagraphSize;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
-    public static final int RESULT_CHOOSEFONT_PERMS = 106;
-
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-
     public interface OnChangeProListener {
         void upPageMode();
+
         void upTextSize();
+
         void upMargin();
+
         void bgChange();
+
         void refresh();
     }
 
@@ -116,11 +108,30 @@ public class ReadInterfacePop extends PopupWindow {
 
     private void initData() {
         setBg();
-        updateText(readBookControl.getTextSize(), false);
-        updateLineSize(readBookControl.getLineMultiplier(), false);
         updateBg(readBookControl.getTextDrawableIndex());
         updateBoldText(readBookControl.getTextBold());
         updatePageMode(readBookControl.getPageMode());
+
+        nbTextSize.setTitle(activity.getString(R.string.text_size))
+                .setMinNumber(10)
+                .setMaxNumber(40)
+                .setNumber(readBookControl.getTextSize())
+                .setOnChangedListener(number -> {
+                    readBookControl.setTextSize((int) number);
+                    changeProListener.upTextSize();
+                });
+
+        nbLineSize.setTitle(activity.getString(R.string.line_size))
+                .setNumberType(NumberButton.FLOAT)
+                .setMinNumber(0.5f)
+                .setMaxNumber(2.0f)
+                .setStepNumber(0.1f)
+                .setFormat("#.0")
+                .setNumber(readBookControl.getLineMultiplier())
+                .setOnChangedListener(number -> {
+                    readBookControl.setLineMultiplier(number);
+                    changeProListener.upTextSize();
+                });
 
         nbPaddingTop.setTitle(activity.getString(R.string.padding_top))
                 .setMinNumber(0)
@@ -164,19 +175,6 @@ public class ReadInterfacePop extends PopupWindow {
     }
 
     private void bindEvent() {
-        flTextSmaller.setOnClickListener(v -> {
-            updateText(readBookControl.getTextSize() - 1, true);
-        });
-        flTextBigger.setOnClickListener(v -> {
-            updateText(readBookControl.getTextSize() + 1, true);
-        });
-        flLineSmaller.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier() - 0.1), true);
-        });
-        flLineBigger.setOnClickListener(v -> {
-            updateLineSize((float) (readBookControl.getLineMultiplier() + 0.1), true);
-        });
-
         //翻页模式
         tvPageMode.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
@@ -275,41 +273,8 @@ public class ReadInterfacePop extends PopupWindow {
         changeProListener.refresh();
     }
 
-    private void updateText(int textSize, boolean refresh) {
-        if (textSize < 10) {
-            flTextSmaller.setEnabled(false);
-            flTextBigger.setEnabled(true);
-        } else if (textSize > 40) {
-            flTextSmaller.setEnabled(true);
-            flTextBigger.setEnabled(false);
-        } else {
-            flTextSmaller.setEnabled(true);
-            flTextBigger.setEnabled(true);
-        }
-        tvDurTextSize.setText(String.valueOf(textSize));
-        if (refresh) {
-            readBookControl.setTextSize(textSize);
-            changeProListener.upTextSize();
-        }
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void updateLineSize(float lineSize, boolean refresh) {
-        if (lineSize > 2) {
-            lineSize = 2;
-        }
-        if (lineSize < 0.5) {
-            lineSize = 0.5f;
-        }
-        tvDurLineSize.setText(String.format("%.1f", lineSize));
-        if (refresh) {
-            readBookControl.setLineMultiplier(lineSize);
-            changeProListener.upTextSize();
-        }
-    }
-
     private void updatePageMode(int pageMode) {
-        tvPageMode.setText(String.format(activity.getString(R.string.page_mode)+":%s", activity.getResources().getStringArray(R.array.page_mode)[pageMode]));
+        tvPageMode.setText(String.format(activity.getString(R.string.page_mode) + ":%s", activity.getResources().getStringArray(R.array.page_mode)[pageMode]));
     }
 
     private void updateBoldText(Boolean isBold) {

@@ -30,44 +30,6 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/fl_text_smaller"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="A-"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/tv_dur_text_size"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="字号"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/fl_text_bigger"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="A+"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
                 android:id="@+id/fl_text_Bold"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -88,11 +50,28 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="7"
+                android:layout_weight="4"
                 android:background="@drawable/selector_pop_font_bg"
                 android:gravity="center"
                 android:text="@string/custom_font"
                 android:textSize="14sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvPageMode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:background="@drawable/selector_pop_font_bg"
+                android:gravity="center"
+                android:text="@string/page_mode"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
@@ -107,54 +86,47 @@
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/fl_line_smaller"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="L-"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+                android:gravity="center_vertical"
+                android:text="@string/text_size" />
 
-            <TextView
-                android:id="@+id/tv_dur_line_size"
+            <com.monke.monkeybook.widget.number.NumberButton
+                android:id="@+id/nbTextSize"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center"
-                android:text="间距"
-                tools:ignore="HardcodedText" />
+                android:background="@drawable/selector_pop_font_bg" />
 
             <TextView
-                android:id="@+id/fl_line_bigger"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="L+"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="@string/line_size"
+                tools:ignore="RtlHardcoded" />
 
-            <View
+            <com.monke.monkeybook.widget.number.NumberButton
+                android:id="@+id/nbLineSize"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="3"
+                android:background="@drawable/selector_pop_font_bg" />
 
             <TextView
-                android:id="@+id/tvPageMode"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="@string/paragraph_size"
+                tools:ignore="RtlHardcoded" />
+
+            <com.monke.monkeybook.widget.number.NumberButton
+                android:id="@+id/nbParagraphSize"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="12"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="@string/page_mode"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+                android:layout_weight="3"
+                android:background="@drawable/selector_pop_font_bg" />
 
         </LinearLayout>
 
@@ -184,13 +156,13 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="@string/padding" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/top" />
 
@@ -202,9 +174,8 @@
                 android:background="@drawable/selector_pop_font_bg" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/bottom" />
 
@@ -216,9 +187,8 @@
                 android:background="@drawable/selector_pop_font_bg" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/left" />
 
@@ -230,9 +200,8 @@
                 android:background="@drawable/selector_pop_font_bg" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/right" />
 
