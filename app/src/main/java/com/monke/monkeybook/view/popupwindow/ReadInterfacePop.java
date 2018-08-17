@@ -124,12 +124,24 @@ public class ReadInterfacePop extends PopupWindow {
         nbLineSize.setTitle(activity.getString(R.string.line_size))
                 .setNumberType(NumberButton.FLOAT)
                 .setMinNumber(0.5f)
-                .setMaxNumber(2.0f)
+                .setMaxNumber(2f)
                 .setStepNumber(0.1f)
-                .setFormat("#.0")
+                .setFormat("0.0")
                 .setNumber(readBookControl.getLineMultiplier())
                 .setOnChangedListener(number -> {
                     readBookControl.setLineMultiplier(number);
+                    changeProListener.upTextSize();
+                });
+
+        nbParagraphSize.setTitle(activity.getString(R.string.paragraph_size))
+                .setNumberType(NumberButton.FLOAT)
+                .setMinNumber(1f)
+                .setMaxNumber(2f)
+                .setStepNumber(0.1f)
+                .setFormat("0.0")
+                .setNumber(readBookControl.getParagraphSize())
+                .setOnChangedListener(number -> {
+                    readBookControl.setParagraphSize(number);
                     changeProListener.upTextSize();
                 });
 

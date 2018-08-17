@@ -174,24 +174,22 @@ public abstract class PageLoader {
         mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
         mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
         // 配置文字有关的参数
-        setUpTextParams(mSettingManager.getTextSize(), mSettingManager.getLineMultiplier());
+        setUpTextParams();
     }
 
     /**
      * 作用：设置与文字相关的参数
-     *
-     * @param textSize
      */
-    private void setUpTextParams(int textSize, float textLine) {
+    private void setUpTextParams() {
         // 文字大小
-        mTextSize = ScreenUtils.spToPx(textSize);
+        mTextSize = ScreenUtils.spToPx(mSettingManager.getTextSize());
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
-        mTextInterval = (int) (mTextSize / 2 * textLine);
-        mTitleInterval = (int) (mTitleSize / 2 * textLine);
+        mTextInterval = (int) (mTextSize / 2 * mSettingManager.getLineMultiplier());
+        mTitleInterval = (int) (mTitleSize / 2 * mSettingManager.getLineMultiplier());
         // 段落间距(大小为字体的高度)
-        mTextPara = (int) (mTextSize / 2 * textLine);
-        mTitlePara = (int) (mTitleSize / 2 * textLine);
+        mTextPara = (int) (mTextSize / 2 * mSettingManager.getLineMultiplier() * mSettingManager.getParagraphSize());
+        mTitlePara = (int) (mTitleSize / 2 * mSettingManager.getLineMultiplier() * mSettingManager.getParagraphSize());
     }
 
     public void initPaint() {
@@ -417,12 +415,10 @@ public abstract class PageLoader {
 
     /**
      * 设置文字相关参数
-     *
-     * @param textSize
      */
-    public void setTextSize(int textSize, float lineSize) {
+    public void setTextSize() {
         // 设置文字相关参数
-        setUpTextParams(textSize, lineSize);
+        setUpTextParams();
 
         // 设置画笔的字体大小
         mTextPaint.setTextSize(mTextSize);

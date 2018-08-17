@@ -38,6 +38,7 @@ public class ReadBookControl {
     private boolean bgIsColor;
     private int bgColor;
     private float lineMultiplier;
+    private float paragraphSize;
     private int pageMode;
     private String bgPath;
     private Bitmap bgBitmap;
@@ -89,6 +90,7 @@ public class ReadBookControl {
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
+        this.paragraphSize = readPreference.getFloat("paragraphSize", 1);
         this.clickSensitivity = readPreference.getInt("clickSensitivity", 50) > 100
                 ? 50 : readPreference.getInt("clickSensitivity", 50);
         this.clickAllNext = readPreference.getBoolean("clickAllNext", false);
@@ -432,6 +434,17 @@ public class ReadBookControl {
         this.lineMultiplier = lineMultiplier;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putFloat("lineMultiplier", lineMultiplier);
+        editor.apply();
+    }
+
+    public float getParagraphSize() {
+        return paragraphSize;
+    }
+
+    public void setParagraphSize(float paragraphSize) {
+        this.paragraphSize = paragraphSize;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putFloat("paragraphSize", paragraphSize);
         editor.apply();
     }
 

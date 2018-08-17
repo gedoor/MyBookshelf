@@ -416,7 +416,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void upTextSize() {
                 if (mPageLoader != null) {
-                    mPageLoader.setTextSize(readBookControl.getTextSize(), readBookControl.getLineMultiplier());
+                    mPageLoader.setTextSize();
                 }
             }
 
