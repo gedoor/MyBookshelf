@@ -94,8 +94,7 @@
             android:id="@+id/nbTextSize"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -109,8 +108,7 @@
             android:id="@+id/nbLineSize"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,8 +122,7 @@
             android:id="@+id/nbParagraphSize"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
     </LinearLayout>
 
@@ -160,47 +157,49 @@
             android:id="@+id/nbPaddingTop"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:text="@string/bottom" />
+            android:text="@string/bottom"
+            tools:ignore="RtlHardcoded" />
 
         <com.monke.monkeybook.widget.number.NumberButton
             android:id="@+id/nbPaddingBottom"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:text="@string/left" />
+            android:text="@string/left"
+            tools:ignore="RtlHardcoded" />
 
         <com.monke.monkeybook.widget.number.NumberButton
             android:id="@+id/nbPaddingLeft"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:gravity="center"
-            android:text="@string/right" />
+            android:text="@string/right"
+            tools:ignore="RtlHardcoded" />
 
         <com.monke.monkeybook.widget.number.NumberButton
             android:id="@+id/nbPaddingRight"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/selector_pop_font_bg" />
+            android:layout_weight="3" />
 
     </LinearLayout>
 
