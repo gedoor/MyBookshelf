@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -224,20 +225,27 @@ public class ReadInterfacePop extends PopupWindow {
         civBgBlack.setOnLongClickListener(view -> customReadStyle(4));
 
         //选择字体
-        fl_text_font.setOnClickListener(view -> new FontSelector(activity)
-                .setListener(new FontSelector.OnThisListener() {
-                    @Override
-                    public void setDefault() {
-                        clearFontPath();
-                    }
+        fl_text_font.setOnClickListener(view -> {
+            if (EasyPermissions.hasPermissions(activity, MApplication.PerList)) {
+                new FontSelector(activity)
+                        .setListener(new FontSelector.OnThisListener() {
+                            @Override
+                            public void setDefault() {
+                                clearFontPath();
+                            }
 
-                    @Override
-                    public void setFontPath(String fontPath) {
-                        setReadFonts(fontPath);
-                    }
-                })
-                .create()
-                .show());
+                            @Override
+                            public void setFontPath(String fontPath) {
+                                setReadFonts(fontPath);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                EasyPermissions.requestPermissions(activity, "读取字体需要存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
+            }
+        });
+
         //长按清除字体
         fl_text_font.setOnLongClickListener(view -> {
             clearFontPath();

@@ -147,7 +147,7 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
 
     //简易权限获取
-    implementation 'pub.devrel:easypermissions:1.2.0'
+    implementation 'pub.devrel:easypermissions:1.3.0'
 
     //二维码
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'

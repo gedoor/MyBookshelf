@@ -18,6 +18,7 @@ public class MApplication extends Application {
     public final static String channelIdDownload = "channel_download";
     public final static String channelIdReadAloud = "channel_read_aloud";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    public final static int RESULT__PERMS = 263;
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;

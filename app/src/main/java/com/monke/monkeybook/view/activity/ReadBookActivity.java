@@ -8,10 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -34,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -44,8 +43,6 @@ import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
-import com.monke.monkeybook.utils.FileUtil;
-import com.monke.monkeybook.utils.PremissionCheck;
 import com.monke.monkeybook.utils.SystemUtil;
 import com.monke.monkeybook.utils.barUtil.BarHide;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -82,7 +79,6 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
     private final int ResultReplace = 101;
-    private final int RESULT_OPEN_OTHER_PERMS = 102;
     public final int ResultSelectFont = 104;
     public final int ResultStyleSet = 105;
 
@@ -159,7 +155,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private int screenTimeOut;
 
     private Menu menu;
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private CheckAddShelfPop checkAddShelfPop;
     private ReadAdjustPop readAdjustPop;
     private ReadInterfacePop readInterfacePop;
@@ -1106,11 +1101,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void openBookFromOther() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             mPresenter.openBookFromOther(this);
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.open_from_other),
-                    RESULT_OPEN_OTHER_PERMS, perms);
+                    MApplication.RESULT__PERMS, MApplication.PerList);
         }
     }
 
@@ -1149,10 +1144,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
-    @AfterPermissionGranted(RESULT_OPEN_OTHER_PERMS)
+    @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void onResultOpenOtherPerms() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            mPresenter.openBookFromOther(this);
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            Toast.makeText(this, "获取权限成功", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "未获取到权限", Toast.LENGTH_SHORT).show();
         }
@@ -1196,8 +1191,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mPageLoader.updateBattery(BatteryUtil.getLevel(this));
             }
         }
-        if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && !(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !PremissionCheck.checkPremission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE))) {
+        if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }
