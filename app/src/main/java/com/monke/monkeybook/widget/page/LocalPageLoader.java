@@ -4,7 +4,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.Void;
-import com.monke.monkeybook.utils.FileUtils;
+import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
@@ -28,7 +28,7 @@ import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
-import static com.monke.monkeybook.utils.FileUtils.BLANK;
+import static com.monke.monkeybook.help.FileHelp.BLANK;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -325,7 +325,7 @@ public class LocalPageLoader extends PageLoader {
         // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
         mBookFile = new File(mCollBook.getNoteUrl());
         //获取文件编码
-        mCharset = FileUtils.getCharset(mBookFile.getAbsolutePath());
+        mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
 
         Long lastModified = mBookFile.lastModified();
         mChapterList = mCollBook.getChapterList();

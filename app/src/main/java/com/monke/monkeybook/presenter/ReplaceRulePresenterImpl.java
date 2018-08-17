@@ -12,7 +12,7 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 
@@ -127,11 +127,11 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
     public void importDataS(Uri uri) {
         String json;
         if (uri.toString().startsWith("content://")) {
-            json = FileHelper.readString(uri);
+            json = DocumentHelper.readString(uri);
         } else {
             String path = uri.getPath();
             DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = FileHelper.readString(file);
+            json = DocumentHelper.readString(file);
         }
         if (!isEmpty(json)) {
             try {

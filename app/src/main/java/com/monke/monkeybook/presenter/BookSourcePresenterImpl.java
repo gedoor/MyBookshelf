@@ -16,7 +16,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
@@ -141,11 +141,11 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
     public void importBookSource(Uri uri) {
         String json;
         if (uri.toString().startsWith("content://")) {
-            json = FileHelper.readString(uri);
+            json = DocumentHelper.readString(uri);
         } else {
             String path = uri.getPath();
             DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = FileHelper.readString(file);
+            json = DocumentHelper.readString(file);
         }
         if (!isEmpty(json)) {
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);

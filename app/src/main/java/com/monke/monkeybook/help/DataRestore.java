@@ -13,7 +13,6 @@ import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.FileUtil;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class DataRestore {
     }
 
     private void restoreConfig(String dirPath) {
-        String json = FileHelper.readString("config.json", dirPath);
+        String json = DocumentHelper.readString("config.json", dirPath);
         if (json != null) {
             try {
                 Map<String, ?> entries = new Gson().fromJson(json, new TypeToken<Map<String, ?>>() {
@@ -56,7 +55,7 @@ public class DataRestore {
     }
 
     private void restoreBookShelf(String file) throws Exception {
-        String json = FileHelper.readString("myBookShelf.json", file);
+        String json = DocumentHelper.readString("myBookShelf.json", file);
         if (json != null) {
             List<BookShelfBean> bookShelfList = new Gson().fromJson(json, new TypeToken<List<BookShelfBean>>() {
             }.getType());
@@ -72,7 +71,7 @@ public class DataRestore {
     }
 
     private void restoreBookSource(String file) throws Exception {
-        String json = FileHelper.readString("myBookSource.json", file);
+        String json = DocumentHelper.readString("myBookSource.json", file);
         if (json != null) {
             List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
             }.getType());
@@ -84,7 +83,7 @@ public class DataRestore {
     }
 
     private void restoreSearchHistory(String file) throws Exception {
-        String json = FileHelper.readString("myBookSearchHistory.json", file);
+        String json = DocumentHelper.readString("myBookSearchHistory.json", file);
         if (json != null) {
             List<SearchHistoryBean> searchHistoryBeans = new Gson().fromJson(json, new TypeToken<List<SearchHistoryBean>>() {
             }.getType());
@@ -95,7 +94,7 @@ public class DataRestore {
     }
 
     private void restoreReplaceRule(String file) throws Exception {
-        String json = FileHelper.readString("myBookReplaceRule.json", file);
+        String json = DocumentHelper.readString("myBookReplaceRule.json", file);
         if (json != null) {
             List<ReplaceRuleBean> replaceRuleBeans = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
             }.getType());

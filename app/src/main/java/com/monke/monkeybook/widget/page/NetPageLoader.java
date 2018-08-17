@@ -1,22 +1,17 @@
 package com.monke.monkeybook.widget.page;
 
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.utils.FileUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

@@ -21,7 +21,7 @@ import java.io.OutputStream;
  * Created by PureDark on 2016/9/24.
  */
 
-public class FileHelper {
+public class DocumentHelper {
 
     public static boolean isFileExist(String fileName, String rootPath, String... subDirs) {
         return DocumentUtil.isFileExist(MApplication.getInstance(), fileName, rootPath, subDirs);

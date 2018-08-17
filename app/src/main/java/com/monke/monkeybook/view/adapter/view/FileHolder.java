@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.Constant;
-import com.monke.monkeybook.utils.FileUtils;
+import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.view.adapter.base.ViewHolderImpl;
 
@@ -79,7 +79,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvSubCount.setVisibility(View.GONE);
 
         mTvName.setText(file.getName());
-        mTvSize.setText(FileUtils.getFileSize(file.length()));
+        mTvSize.setText(FileHelp.getFileSize(file.length()));
         mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
     }
 

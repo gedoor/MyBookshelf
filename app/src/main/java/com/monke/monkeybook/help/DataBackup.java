@@ -2,7 +2,6 @@ package com.monke.monkeybook.help;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
@@ -15,13 +14,11 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.utils.FileUtil;
 
-import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -42,7 +39,7 @@ public class DataBackup {
 
     public void run() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            FileHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "YueDu");
+            DocumentHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "YueDu");
             String dirPath = FileUtil.getSdCardPath() + "/YueDu";
             backupBookShelf(dirPath);
             backupBookSource(dirPath);
@@ -83,8 +80,8 @@ public class DataBackup {
                     .setPrettyPrinting()
                     .create();
             String bookshelf = gson.toJson(bookShelfList);
-            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookShelf.json", file);
-            FileHelper.writeString(bookshelf, docFile);
+            DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookShelf.json", file);
+            DocumentHelper.writeString(bookshelf, docFile);
         }
         BookshelfHelp.getAllBook();
     }
@@ -97,8 +94,8 @@ public class DataBackup {
                     .setPrettyPrinting()
                     .create();
             String str = gson.toJson(bookSourceList);
-            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookSource.json", file);
-            FileHelper.writeString(str, docFile);
+            DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookSource.json", file);
+            DocumentHelper.writeString(str, docFile);
         }
     }
 
@@ -111,8 +108,8 @@ public class DataBackup {
                     .setPrettyPrinting()
                     .create();
             String str = gson.toJson(searchHistoryBeans);
-            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookSearchHistory.json", file);
-            FileHelper.writeString(str, docFile);
+            DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookSearchHistory.json", file);
+            DocumentHelper.writeString(str, docFile);
         }
     }
 
@@ -124,19 +121,19 @@ public class DataBackup {
                     .setPrettyPrinting()
                     .create();
             String str = gson.toJson(replaceRuleBeans);
-            DocumentFile docFile = FileHelper.createFileIfNotExist("myBookReplaceRule.json", file);
-            FileHelper.writeString(str, docFile);
+            DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookReplaceRule.json", file);
+            DocumentHelper.writeString(str, docFile);
         }
     }
 
     private void backupConfig(String file) {
-        DocumentFile docFile = FileHelper.createFileIfNotExist("config.json", file);
+        DocumentFile docFile = DocumentHelper.createFileIfNotExist("config.json", file);
         SharedPreferences pref = MApplication.getInstance().getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .setPrettyPrinting()
                 .create();
         String json = gson.toJson(pref.getAll());
-        FileHelper.writeString(json, docFile);
+        DocumentHelper.writeString(json, docFile);
     }
 }

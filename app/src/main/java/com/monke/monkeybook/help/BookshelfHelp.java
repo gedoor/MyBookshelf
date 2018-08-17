@@ -13,7 +13,6 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.utils.FileUtils;
 import com.monke.monkeybook.utils.IOUtils;
 
 import java.io.BufferedWriter;
@@ -36,7 +35,7 @@ public class BookshelfHelp {
      */
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
         return file.exists();
     }
 
@@ -44,8 +43,8 @@ public class BookshelfHelp {
      * 删除章节文件
      */
     public static void delChapter(String folderName, String fileName) {
-        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
     }
 
     /**
@@ -72,8 +71,8 @@ public class BookshelfHelp {
      * 创建或获取存储文件
      */
     public static File getBookFile(String folderName, String fileName) {
-        return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + formatFileName(fileName) + FileUtils.SUFFIX_NB);
+        return FileHelp.getFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
     }
 
     private static String formatFileName(String fileName) {
@@ -136,7 +135,7 @@ public class BookshelfHelp {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
-        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {

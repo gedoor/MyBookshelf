@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.utils.FileUtil;
 
 import java.io.File;
@@ -76,7 +76,7 @@ public class FontSelector {
 
     private File[] getFontFiles() {
         try {
-            FileHelper.createDirIfNotExist(fontPath);
+            DocumentHelper.createDirIfNotExist(fontPath);
             File file = new File(fontPath);
             return file.listFiles(pathName -> pathName.getName().endsWith(".TTF") || pathName.getName().endsWith(".ttf"));
         } catch (Exception e) {

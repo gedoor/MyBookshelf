@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.FileStack;
-import com.monke.monkeybook.utils.FileUtils;
+import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.view.adapter.FileSystemAdapter;
 import com.monke.monkeybook.widget.itemdecoration.DividerItemDecoration;
 
@@ -187,7 +187,7 @@ public class FileCategoryFragment extends BaseFileFragment {
              */
             //文件内容为空,或者不以txt为开头
             if (!pathname.isDirectory() &&
-                    (pathname.length() == 0 || !pathname.getName().endsWith(FileUtils.SUFFIX_TXT))){
+                    (pathname.length() == 0 || !pathname.getName().endsWith(FileHelp.SUFFIX_TXT))){
                 return false;
             }
             return true;
