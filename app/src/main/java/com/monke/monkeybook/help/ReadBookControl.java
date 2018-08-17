@@ -33,7 +33,6 @@ public class ReadBookControl {
     private int speechRate;
     private boolean speechRateFollowSys;
     private int textSize;
-    private float textExtra;
     private int textColor;
     private Drawable textBackground;
     private boolean bgIsColor;
@@ -88,7 +87,6 @@ public class ReadBookControl {
         this.hideStatusBar = readPreference.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = readPreference.getBoolean("hide_navigation_bar", false);
         this.textSize = readPreference.getInt("textSize", 20);
-        this.textExtra = readPreference.getFloat("textExtra", 1.0f);
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
@@ -323,10 +321,6 @@ public class ReadBookControl {
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("textSize", textSize);
         editor.apply();
-    }
-
-    public float getTextExtra() {
-        return textExtra;
     }
 
     public int getTextColor() {

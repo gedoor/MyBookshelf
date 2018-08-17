@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,13 +25,10 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.widget.ContentTextView;
-import com.monke.monkeybook.widget.modialog.InputView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.io.IOException;
@@ -48,7 +44,7 @@ public class ReadStyleActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_content)
-    ContentTextView tvContent;
+    TextView tvContent;
     @BindView(R.id.tvSelectTextColor)
     TextView tvSelectTextColor;
     @BindView(R.id.tvSelectBgColor)
@@ -267,9 +263,7 @@ public class ReadStyleActivity extends MBaseActivity {
     }
 
     private void setTextKind(ReadBookControl readBookControl) {
-
         tvContent.setTextSize(readBookControl.getTextSize());
-        tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
 
     private void upText() {
