@@ -263,19 +263,6 @@ public class ReadInterfacePop extends PopupWindow {
         return false;
     }
 
-    //选择字体
-    private void chooseReadBookFont() {
-        if (EasyPermissions.hasPermissions(activity, perms)) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
-            activity.startActivityForResult(intent, activity.ResultSelectFont);
-        } else {
-            EasyPermissions.requestPermissions(activity, "选择字体",
-                    RESULT_CHOOSEFONT_PERMS, perms);
-        }
-    }
-
     //设置字体
     public void setReadFonts(String path) {
         readBookControl.setReadBookFont(path);
