@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 @Entity
-public class BookShelfBean implements Parcelable,Cloneable{
+public class BookShelfBean implements Parcelable, Cloneable {
     @Transient
     public static final String LOCAL_TAG = "loc_book";
     @Transient
@@ -43,7 +43,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
 
-    public BookShelfBean(){
+    public BookShelfBean() {
 
     }
 
@@ -78,9 +78,9 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     @Generated(hash = 971638991)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage,
-            Long finalDate, Boolean hasUpdate, Integer newChapters, String tag,
-            Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll,
-            String durChapterName, String lastChapterName, Integer chapterListSize) {
+                         Long finalDate, Boolean hasUpdate, Integer newChapters, String tag,
+                         Integer serialNumber, Long finalRefreshData, Integer group, Boolean isScroll,
+                         String durChapterName, String lastChapterName, Integer chapterListSize) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -137,7 +137,7 @@ public class BookShelfBean implements Parcelable,Cloneable{
     }
 
     public int getDurChapter() {
-        return durChapter;
+        return durChapter < 0 ? 0 : durChapter;
     }
 
     public ChapterListBean getChapterList(int index) {
@@ -273,6 +273,12 @@ public class BookShelfBean implements Parcelable,Cloneable{
 
     public void setLastChapterName(String lastChapterName) {
         this.lastChapterName = lastChapterName;
+    }
+
+    public void upLastChapterName() {
+        if (getChapterListSize() > 0) {
+            lastChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
+        }
     }
 
     public Integer getChapterListSize() {

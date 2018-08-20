@@ -167,7 +167,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 bookShelf.setDurChapterName(getChapterTitle(bookShelf.getDurChapter()));
-                bookShelf.setLastChapterName(getChapterTitle(bookShelf.getChapterListSize() - 1));
+                bookShelf.upLastChapterName();
                 BookshelfHelp.saveBookToShelf(bookShelf);
                 e.onNext(bookShelf);
                 e.onComplete();

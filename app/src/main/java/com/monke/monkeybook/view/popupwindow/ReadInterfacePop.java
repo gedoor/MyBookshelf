@@ -136,7 +136,7 @@ public class ReadInterfacePop extends PopupWindow {
         nbParagraphSize.setTitle(activity.getString(R.string.paragraph_size))
                 .setNumberType(NumberButton.FLOAT)
                 .setMinNumber(1f)
-                .setMaxNumber(2f)
+                .setMaxNumber(3f)
                 .setStepNumber(0.1f)
                 .setFormat("0.0")
                 .setNumber(readBookControl.getParagraphSize())
