@@ -403,17 +403,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 设置提示的文字大小
-     * @param textSize:单位为 px。
-     */
-    public void setTipTextSize(int textSize) {
-        mTipPaint.setTextSize(ScreenUtils.spToPx(textSize));
-
-        // 如果屏幕大小加载完成
-        mPageView.drawCurPage(false);
-    }
-
-    /**
      * 设置文字相关参数
      */
     public void setTextSize() {
@@ -755,7 +744,8 @@ public abstract class PageLoader {
                         tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
                         canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                         //绘制标题
-                        percent = TextUtils.ellipsize(mCancelPage.title, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
+                        percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                        percent = TextUtils.ellipsize(percent, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                     }
                     if (mSettingManager.getShowLine()) {
@@ -775,7 +765,8 @@ public abstract class PageLoader {
                         }
                     } else {
                         //绘制标题
-                        percent = TextUtils.ellipsize(mCurPage.title, mTipPaint, mDisplayWidth - tipMarginWidth*2,
+                        percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                        percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
                                 TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         //绘制页码
