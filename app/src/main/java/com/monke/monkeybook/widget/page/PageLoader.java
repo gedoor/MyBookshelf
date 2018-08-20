@@ -560,13 +560,12 @@ public abstract class PageLoader {
             return;
         }
 
-        if (goPagePos != 0) {
-            pagePos = goPagePos;
-            goPagePos = 0;
-            isChapterOpen = false;
-        }
-
         if (parseCurChapter()) {
+            if (goPagePos != 0) {
+                pagePos = goPagePos;
+                goPagePos = 0;
+                isChapterOpen = false;
+            }
             // 如果章节从未打开
             if (!isChapterOpen) {
 
@@ -581,6 +580,7 @@ public abstract class PageLoader {
             } else {
                 mCurPage = getCurPage(0);
             }
+            mStatus = STATUS_FINISH;
         } else {
             mCurPage = new TxtPage();
         }
