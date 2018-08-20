@@ -74,12 +74,10 @@ public class BookChapter {
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
-            if (chapterListBeans.size() > 0) {
-                bookShelfBean.setDurChapterName(chapterListBeans.get(bookShelfBean.getDurChapter()).getDurChapterName());
-                bookShelfBean.setLastChapterName(chapterListBeans.get(chapterListBeans.size()-1).getDurChapterName());
-            }
             bookShelfBean.setChapterListSize(chapterListBeans.size());
             bookShelfBean.getBookInfoBean().setChapterList(chapterListBeans);
+            bookShelfBean.upDurChapterName();
+            bookShelfBean.upLastChapterName();
             e.onNext(bookShelfBean);
             e.onComplete();
         });

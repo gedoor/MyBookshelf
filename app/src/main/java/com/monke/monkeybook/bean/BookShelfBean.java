@@ -267,6 +267,16 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.durChapterName = durChapterName;
     }
 
+    public void upDurChapterName() {
+        if (getChapterListSize() > 0) {
+            if (durChapter < getChapterListSize()) {
+                durChapterName = getChapterList().get(durChapter).getDurChapterName();
+            } else {
+                durChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
+            }
+        }
+    }
+
     public String getLastChapterName() {
         return this.lastChapterName;
     }
