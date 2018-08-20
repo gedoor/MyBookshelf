@@ -538,7 +538,7 @@ public abstract class PageLoader {
     /**
      * 打开指定章节
      */
-    public void openChapter(int pagePos) {
+    public synchronized void openChapter(int pagePos) {
 
         isFirstOpen = false;
 
