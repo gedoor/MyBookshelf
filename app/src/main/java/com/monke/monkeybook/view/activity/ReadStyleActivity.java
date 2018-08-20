@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.monke.basemvplib.impl.IPresenter;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -35,6 +36,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadStyleActivity extends MBaseActivity {
     private final int ResultSelectBg = 103;
@@ -200,10 +202,14 @@ public class ReadStyleActivity extends MBaseActivity {
         });
         //选择背景图片
         tvSelectBgImage.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            startActivityForResult(intent, ResultSelectBg);
+            if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, ResultSelectBg);
+            } else {
+                EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
+            }
         });
         //恢复默认
         tvDefault.setOnClickListener(view -> {
