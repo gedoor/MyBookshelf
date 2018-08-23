@@ -121,7 +121,6 @@ public class AnalyzeJson {
             }
             StringBuilder content = new StringBuilder();
             for (String text : textS) {
-                text = FormatWebText.getContent(text);
                 if (textS.size() > 1) {
                     if (text.length() > 0) {
                         if (content.length() > 0) {
