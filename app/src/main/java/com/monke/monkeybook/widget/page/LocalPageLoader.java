@@ -259,9 +259,6 @@ public class LocalPageLoader extends PageLoader {
 
     /**
      * 从文件中提取一章的内容
-     *
-     * @param chapter
-     * @return
      */
     private byte[] getChapterContent(ChapterListBean chapter) {
         RandomAccessFile bookStream = null;
@@ -272,9 +269,7 @@ public class LocalPageLoader extends PageLoader {
             byte[] content = new byte[extent];
             bookStream.read(content, 0, extent);
             return content;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             IOUtils.close(bookStream);

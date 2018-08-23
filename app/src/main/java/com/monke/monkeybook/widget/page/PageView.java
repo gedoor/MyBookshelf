@@ -27,13 +27,11 @@ import java.util.Objects;
 
 
 /**
- * Created by Administrator on 2016/8/29 0029.
- * 原作者的GitHub Project Path:(https://github.com/PeachBlossom/treader)
  * 绘制页面显示内容的类
  */
 public class PageView extends View {
 
-    private final static String TAG = "BookPageWidget";
+    private final static String TAG = PageView.class.getSimpleName();
 
     private ReadBookActivity activity;
 
