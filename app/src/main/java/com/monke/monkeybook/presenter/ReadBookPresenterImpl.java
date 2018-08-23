@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -94,11 +95,13 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         mView.showMenu();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void loadContent(final int chapterIndex) {
+    public synchronized void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                        if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(chapterIndex).getDurChapterName())
+                        if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean().getName(),
+                                String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()))
                                 && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
                             DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             e.onNext(chapterIndex);
@@ -121,11 +124,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                             }, 30*1000);
                         }
 
+                        @SuppressLint("DefaultLocale")
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
                             DownloadingList(REMOVE, bookContentBean.getDurChapterUrl());
                             BookshelfHelp.saveChapterInfo(bookShelf.getBookInfoBean().getName(),
-                                    bookShelf.getChapterList(chapterIndex).getDurChapterName(),
+                                    String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()),
                                     bookContentBean.getDurChapterContent());
                             mView.finishContent();
                         }

@@ -256,8 +256,10 @@ public abstract class PageLoader {
         mPageView.drawCurPage(false);
     }
 
+    @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
-        BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(), mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
+        BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(),
+                String.format("%d-%s", mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName()));
         skipToChapter(mCurChapterPos);
     }
 

@@ -1,5 +1,7 @@
 package com.monke.monkeybook.widget.page;
 
+import android.annotation.SuppressLint;
+
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -78,16 +80,19 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
-        File file =BookshelfHelp.getBookFile(mCollBook.getBookInfoBean().getName(), chapter.getDurChapterName());
+        @SuppressLint("DefaultLocale") File file =BookshelfHelp.getBookFile(mCollBook.getBookInfoBean().getName(),
+                String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
         return new BufferedReader(reader);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected boolean hasChapterData(ChapterListBean chapter) {
-        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(), chapter.getDurChapterName());
+        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(),
+                String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
     }
 
     // 装载上一章节的内容

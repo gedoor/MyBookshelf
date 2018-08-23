@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.service;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -223,11 +224,13 @@ public class DownloadService extends Service {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     private synchronized void downloading(final DownloadChapterBean data) {
         if (isStartDownload) {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                e.onNext(!BookshelfHelp.isChapterCached(data.getBookName(), data.getDurChapterName()));
+                e.onNext(!BookshelfHelp.isChapterCached(data.getBookName(),
+                        String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName())));
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
@@ -241,7 +244,7 @@ public class DownloadService extends Service {
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 if (bookContentBean.getRight()) {
                     BookshelfHelp.saveChapterInfo(data.getBookName(),
-                            data.getDurChapterName(),
+                            String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName()),
                             bookContentBean.getDurChapterContent());
                 }
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
