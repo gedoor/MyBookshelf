@@ -12,9 +12,6 @@ public class FormatWebText {
             return null;
         }
         return str
-                .replace(" ", "")
-                .replace(" ", "")
-                .replace("　", "")
                 .replace("\r", "")
                 .replace("\n", "")
                 .replace("\t", "")
