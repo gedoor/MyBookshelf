@@ -24,8 +24,6 @@ public class FormatWebText {
             return "";
         }
         return str
-                .replace(" ", "")
-                .replace("  ", "")
                 .replace("&nbsp;", "")
                 .replace("作者", "")
                 .replace("：", "")
