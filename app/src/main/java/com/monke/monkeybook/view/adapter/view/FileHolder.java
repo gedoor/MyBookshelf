@@ -57,6 +57,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         else {
             setFile(data);
         }
+        mCbSelect.setClickable(false);
     }
 
     private void setFile(File file){
