@@ -1289,13 +1289,16 @@ public abstract class PageLoader {
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight;
         int titleLinesCount = 0;
-        boolean showTitle = true; // 是否展示标题
-        String paragraph = chapter.getDurChapterName();//默认展示标题
-        if (!mSettingManager.getShowTitle()) {
-            showTitle = false;
-            paragraph = null;
-        }
         try {
+            boolean showTitle = true; // 是否展示标题
+            String paragraph = chapter.getDurChapterName();//默认展示标题
+            if (mCollBook.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                br.readLine();
+            }
+            if (!mSettingManager.getShowTitle()) {
+                showTitle = false;
+                paragraph = null;
+            }
             while (showTitle || (paragraph = br.readLine()) != null) {
                 paragraph = ChapterContentHelp.replaceContent(paragraph);
                 paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
@@ -1304,7 +1307,7 @@ public abstract class PageLoader {
                     paragraph = paragraph.replaceAll("\\s", "");
                     // 如果只有换行符，那么就不执行
                     if (paragraph.equals("")) continue;
-                    paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";//StringUtils.halfToFull("  " + paragraph+"\n")
+                    paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
                 }
                 int wordCount = 0;
                 String subStr = null;
@@ -1336,11 +1339,9 @@ public abstract class PageLoader {
                     if (showTitle) {
                         Layout tempLayout = new StaticLayout(paragraph, mTitlePaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                         wordCount = tempLayout.getLineEnd(0);
-//                        wordCount = mTitlePaint.breakText(paragraph, true, mVisibleWidth, null);
                     } else {
                         Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                         wordCount = tempLayout.getLineEnd(0);
-//                        wordCount = mTextPaint.breakText(paragraph, true, mVisibleWidth, null);
                     }
 
                     subStr = paragraph.substring(0, wordCount);
