@@ -1433,7 +1433,7 @@ public abstract class PageLoader {
      * @return:获取初始显示的页面
      */
     private TxtPage getCurPage(int pos) {
-        if (mCurPageList != null) {
+        if (mCurPageList != null && mCurPageList.size() > 0) {
             pos = pos < 0 ? 0 : pos;
             pos = pos > mCurPageList.size() - 1 ? mCurPageList.size() - 1 : pos;
             return mCurPageList.get(pos);
@@ -1446,10 +1446,10 @@ public abstract class PageLoader {
      */
     private TxtPage getPrevPage() {
         int pos = mCurPage.position - 1;
-        if (pos < 0) {
-            return null;
+        if (pos >= 0 && mCurPageList.size() > 0) {
+            return mCurPageList.get(pos);
         }
-        return mCurPageList.get(pos);
+        return null;
     }
 
     /**
@@ -1457,10 +1457,10 @@ public abstract class PageLoader {
      */
     private TxtPage getNextPage() {
         int pos = mCurPage.position + 1;
-        if (pos >= mCurPageList.size()) {
-            return null;
+        if (pos < mCurPageList.size() && mCurPageList.size() > 0) {
+            return mCurPageList.get(pos);
         }
-        return mCurPageList.get(pos);
+        return null;
     }
 
     /**
