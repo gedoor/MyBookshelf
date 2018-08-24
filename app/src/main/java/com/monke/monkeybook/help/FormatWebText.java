@@ -12,6 +12,7 @@ public class FormatWebText {
             return null;
         }
         return str
+                .replaceAll("\\s", " ")
                 .replace("\r", "")
                 .replace("\n", "")
                 .replace("\t", "")
@@ -24,6 +25,7 @@ public class FormatWebText {
             return "";
         }
         return str
+                .replaceAll("\\s", " ")
                 .replace("&nbsp;", "")
                 .replace("作者", "")
                 .replace("：", "")
