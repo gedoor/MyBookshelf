@@ -90,16 +90,18 @@ public class AnalyzeElement {
                 }
                 if (rulePc.length > 1) {
                     String[] rulePcs = rulePc[1].split(":");
-                    for (String pc : rulePcs) {
-                        if (pc.equals("%")) {
-                            elements.set(elements.size() - 1, null);
-                        } else {
-                            elements.set(Integer.parseInt(pc), null);
+                    if (rulePcs.length < elements.size() - 1) {
+                        for (String pc : rulePcs) {
+                            if (pc.equals("%")) {
+                                elements.set(elements.size() - 1, null);
+                            } else if (Integer.parseInt(pc) < elements.size()) {
+                                elements.set(Integer.parseInt(pc), null);
+                            }
                         }
+                        Elements es = new Elements();
+                        es.add(null);
+                        elements.removeAll(es);
                     }
-                    Elements es = new Elements();
-                    es.add(null);
-                    elements.removeAll(es);
                 }
             }
         } catch (Exception e) {
