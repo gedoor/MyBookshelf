@@ -65,10 +65,6 @@ public final class FileUtil {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri) {
-        if (!"content".equals(uri.getScheme())) {
-            return uri.getPath();
-        }
-
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
@@ -149,6 +145,8 @@ public final class FileUtil {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
+        } catch (Exception e){
+            e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();

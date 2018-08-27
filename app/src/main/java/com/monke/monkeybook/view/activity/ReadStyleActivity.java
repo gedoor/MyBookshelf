@@ -282,11 +282,7 @@ public class ReadStyleActivity extends MBaseActivity {
      */
     public void setCustomBg(Uri uri) {
         try {
-            if ("content".equals(uri.getScheme())) {
-                bgPath = FileUtil.getPath(this, uri);
-            } else {
-                bgPath = uri.getPath();
-            }
+            bgPath = FileUtil.getPath(this, uri);
             Bitmap bitmap = BitmapFactory.decodeFile(bgPath);
             bgCustom = 2;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
