@@ -658,9 +658,6 @@ public abstract class PageLoader {
 
     /**
      * 加载页面列表
-     *
-     * @param chapterPos:章节序号
-     * @return
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
@@ -674,7 +671,7 @@ public abstract class PageLoader {
         return loadPageList(chapter, reader);
     }
 
-    /*******************************abstract method***************************************/
+    //*******************************abstract method***************************************/
 
     /**
      * 刷新章节列表

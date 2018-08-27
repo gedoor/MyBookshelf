@@ -43,7 +43,7 @@ public class NetPageLoader extends PageLoader {
             // 如果章节未打开
             if (!isChapterOpen()) {
                 // 打开章节
-                openChapter(mCollBook.getDurChapterPage());
+                skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
             }
         } else {
             WebBookModelImpl.getInstance().getChapterList(mCollBook)
@@ -67,7 +67,7 @@ public class NetPageLoader extends PageLoader {
                             }
 
                             // 加载并显示当前章节
-                            openChapter(mCollBook.getDurChapterPage());
+                            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
                         }
 
                         @Override
