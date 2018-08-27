@@ -34,7 +34,8 @@
                 android:padding="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_ib_pre_round"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_edit"
+                android:contentDescription="@string/edit_source" />
 
             <ImageView
                 android:id="@+id/iv_top_source"
@@ -44,7 +45,8 @@
                 android:padding="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_ib_pre_round"
-                android:src="@drawable/ic_top_source_black_24dp" />
+                android:src="@drawable/ic_top_source_black_24dp"
+                android:contentDescription="@string/top_source" />
 
             <ImageView
                 android:id="@+id/iv_del_source"
@@ -54,7 +56,8 @@
                 android:padding="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_ib_pre_round"
-                android:src="@drawable/ic_clear_all" />
+                android:src="@drawable/ic_clear_all"
+                android:contentDescription="@string/del_source" />
         </LinearLayout>
 
 
