@@ -79,7 +79,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_change_source_item, parent, false));
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_change_source, parent, false));
     }
 
     @Override

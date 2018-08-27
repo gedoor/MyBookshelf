@@ -103,7 +103,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @NonNull
     @Override
     public ThisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_chapterlist, parent, false));
+        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false));
     }
 
     @Override

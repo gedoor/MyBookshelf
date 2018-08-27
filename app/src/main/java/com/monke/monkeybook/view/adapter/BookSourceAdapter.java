@@ -90,7 +90,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_book_source_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_source, parent, false);
         return new MyViewHolder(view);
     }
 
