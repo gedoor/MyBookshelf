@@ -12,11 +12,11 @@ public class FormatWebText {
             return null;
         }
         return str
-                .replaceAll("\\s", " ")
                 .replace("\r", "")
                 .replace("\n", "")
                 .replace("\t", "")
                 .replace("&nbsp;", "")
+                .replaceAll("\\s", " ")
                 .trim();
     }
 
@@ -25,13 +25,13 @@ public class FormatWebText {
             return "";
         }
         return str
-                .replaceAll("\\s", " ")
                 .replace("&nbsp;", "")
                 .replace("作者", "")
                 .replace("：", "")
                 .replace(":", "")
                 .replace("(", "")
                 .replace(")", "")
+                .replaceAll("\\s", " ")
                 .trim();
     }
 }
