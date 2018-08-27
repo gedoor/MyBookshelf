@@ -117,14 +117,6 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
             View tagView = adapter.getView(this, i, adapter.getItem(i));
 
             tagViewContainer = new TagView(getContext());
-//            ViewGroup.MarginLayoutParams clp = (ViewGroup.MarginLayoutParams) tagView.getLayoutParams();
-//            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(clp);
-//            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            lp.topMargin = clp.topMargin;
-//            lp.bottomMargin = clp.bottomMargin;
-//            lp.leftMargin = clp.leftMargin;
-//            lp.rightMargin = clp.rightMargin;
             tagView.setDuplicateParentStateEnabled(true);
             if (tagView.getLayoutParams() != null)
             {
