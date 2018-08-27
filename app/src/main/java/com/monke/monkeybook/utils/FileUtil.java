@@ -65,6 +65,9 @@ public final class FileUtil {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri) {
+        if (!"content".equals(uri.getScheme())) {
+            return uri.getPath();
+        }
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
