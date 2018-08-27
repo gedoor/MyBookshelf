@@ -174,7 +174,7 @@ public class RefreshRecyclerView extends FrameLayout {
     public void finishLoadMore(Boolean isAll, Boolean needNoti) {
         if (isAll) {
             ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(0, false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(isAll, needNoti);
+            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(true, needNoti);
         } else {
             ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(0, needNoti);
         }

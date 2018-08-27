@@ -34,6 +34,8 @@ public interface SearchBookContract {
         void addBookToShelf(final SearchBookBean searchBookBean);
 
         void upSearchEngineS();
+
+        void stopSearch();
     }
 
     interface View extends IView {

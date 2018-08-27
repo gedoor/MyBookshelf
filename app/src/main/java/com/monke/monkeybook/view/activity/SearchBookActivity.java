@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -53,6 +54,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     TagFlowLayout tflSearchHistory;
     @BindView(R.id.rfRv_search_books)
     RefreshRecyclerView rfRvSearchBooks;
+    @BindView(R.id.fabSearchStop)
+    FloatingActionButton fabSearchStop;
 
     private SearchHistoryAdapter searchHistoryAdapter;
     private ExplosionField explosionField;
@@ -91,6 +94,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         this.setSupportActionBar(toolbar);
         setupActionBar();
         initSearchView();
+        fabSearchStop.hide();
         llSearchHistory.setOnClickListener(null);
 
         tflSearchHistory.setAdapter(searchHistoryAdapter);
@@ -120,6 +124,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 intent.putExtra("data", searchBookBean);
                 startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
             }
+        });
+
+        fabSearchStop.setOnClickListener(view -> {
+            fabSearchStop.hide();
+            mPresenter.stopSearch();
         });
     }
 
@@ -178,6 +187,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             if (!b && searchView.getQuery().toString().trim().equals("")) {
                 finish();
             }
+            if (showHistory) {
+                fabSearchStop.hide();
+                mPresenter.stopSearch();
+            }
             openOrCloseHistory(showHistory);
         });
     }
@@ -209,11 +222,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             @Override
             public void startLoadMore() {
                 mPresenter.toSearchBooks(null, false);
+                fabSearchStop.show();
             }
 
             @Override
             public void loadMoreErrorTryAgain() {
                 mPresenter.toSearchBooks(null, true);
+                fabSearchStop.show();
             }
         });
     }
@@ -260,6 +275,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 mPresenter.initPage();
                 mPresenter.toSearchBooks(key, false);
                 rfRvSearchBooks.startRefresh();
+                fabSearchStop.show();
             }, 300);
         }
     }
@@ -299,11 +315,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void refreshFinish(Boolean isAll) {
+        fabSearchStop.hide();
         rfRvSearchBooks.finishRefresh(isAll, true);
     }
 
     @Override
     public void loadMoreFinish(Boolean isAll) {
+        fabSearchStop.hide();
         rfRvSearchBooks.finishLoadMore(isAll, true);
     }
 

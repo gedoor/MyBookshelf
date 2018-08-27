@@ -48,7 +48,7 @@ public class CheckSourceService extends Service {
     private List<BookSourceBean> bookSourceBeanList;
     private int threadsNum;
     private int checkIndex;
-    CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public void onCreate() {

@@ -284,6 +284,11 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
         searchBookModel.initSearchEngineS();
     }
 
+    @Override
+    public void stopSearch() {
+        searchBookModel.stopSearch();
+    }
+
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             BookshelfHelp.saveBookToShelf(bookShelfBean);

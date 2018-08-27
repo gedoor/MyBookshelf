@@ -15,7 +15,10 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -31,7 +34,7 @@ public class SearchBookModel {
     private int page = 0;
     private int searchEngineIndex;
     private int searchSuccessNum;
-
+    private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
 
     public SearchBookModel(BaseActivity activity, OnSearchListener searchListener) {
@@ -39,7 +42,7 @@ public class SearchBookModel {
         this.searchListener = searchListener;
         SharedPreferences preference = activity.getSharedPreferences("CONFIG", 0);
         threadsNum = preference.getInt(activity.getString(R.string.pk_threads_num), 6);
-
+        compositeDisposable = new CompositeDisposable();
         initSearchEngineS();
     }
 
@@ -57,10 +60,19 @@ public class SearchBookModel {
     }
 
     public void searchReNew() {
+        compositeDisposable.dispose();
+        compositeDisposable = new CompositeDisposable();
         page = 0;
         for (SearchEngine searchEngine : searchEngineS) {
             searchEngine.setHasMore(true);
         }
+    }
+
+    public void stopSearch() {
+        compositeDisposable.dispose();
+        compositeDisposable = new CompositeDisposable();
+        searchListener.refreshFinish(true);
+        searchListener.loadMoreFinish(true);
     }
 
     public void setSearchTime(long searchTime) {
@@ -87,7 +99,7 @@ public class SearchBookModel {
         }
     }
 
-    private void searchOnEngine(final String content, List<BookShelfBean> bookShelfS, final long searchTime) {
+    private synchronized void searchOnEngine(final String content, List<BookShelfBean> bookShelfS, final long searchTime) {
         if (searchTime != startThisSearchTime) {
             return;
         }
@@ -100,13 +112,18 @@ public class SearchBookModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
                         .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
-                        .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+                        .subscribe(new Observer<List<SearchBookBean>>() {
                             @Override
-                            public void onNext(List<SearchBookBean> value) {
+                            public void onSubscribe(Disposable d) {
+                                compositeDisposable.add(d);
+                            }
+
+                            @Override
+                            public void onNext(List<SearchBookBean> searchBookBeans) {
                                 if (searchTime == startThisSearchTime) {
                                     searchSuccessNum++;
-                                    if (value.size() > 0) {
-                                        for (SearchBookBean temp : value) {
+                                    if (searchBookBeans.size() > 0) {
+                                        for (SearchBookBean temp : searchBookBeans) {
                                             for (BookShelfBean bookShelfBean : bookShelfS) {
                                                 if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
                                                     temp.setIsAdd(true);
@@ -114,8 +131,8 @@ public class SearchBookModel {
                                                 }
                                             }
                                         }
-                                        if (!searchListener.checkIsExist(value.get(0))) {
-                                            searchListener.loadMoreSearchBook(value);
+                                        if (!searchListener.checkIsExist(searchBookBeans.get(0))) {
+                                            searchListener.loadMoreSearchBook(searchBookBeans);
                                         }
                                     } else {
                                         searchEngine.setHasMore(false);
@@ -128,6 +145,11 @@ public class SearchBookModel {
                             public void onError(Throwable e) {
                                 e.printStackTrace();
                                 searchOnEngine(content, bookShelfS, searchTime);
+                            }
+
+                            @Override
+                            public void onComplete() {
+
                             }
                         });
             } else {
