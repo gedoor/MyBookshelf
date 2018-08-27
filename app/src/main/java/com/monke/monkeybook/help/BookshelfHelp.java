@@ -52,7 +52,7 @@ public class BookshelfHelp {
      */
     public static void saveChapterInfo(String folderName, String fileName, String content) {
         if (content == null) {
-            content = "";
+            return;
         }
         File file = getBookFile(folderName, formatFileName(fileName));
         //获取流并存储

@@ -683,16 +683,11 @@ public abstract class PageLoader {
 
     /**
      * 获取章节的文本流
-     *
-     * @param chapter
-     * @return
      */
     protected abstract BufferedReader getChapterReader(ChapterListBean chapter) throws Exception;
 
     /**
      * 章节数据是否存在
-     *
-     * @return
      */
     protected abstract boolean hasChapterData(ChapterListBean chapter);
 
@@ -707,6 +702,9 @@ public abstract class PageLoader {
         mPageView.invalidate();
     }
 
+    /**
+     * 绘制背景
+     */
     @SuppressLint("DefaultLocale")
     private void drawBackground(Bitmap bitmap, boolean isUpdate) {
         Canvas canvas = new Canvas(bitmap);
@@ -714,7 +712,6 @@ public abstract class PageLoader {
         int tipMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         String percent;
         if (!isUpdate | !mSettingManager.bgIsColor()) {
-            /****绘制背景****/
             if (mSettingManager.bgIsColor()) {
                 canvas.drawColor(mSettingManager.getBgColor());
             } else {
@@ -723,7 +720,7 @@ public abstract class PageLoader {
             }
 
             if (!mCollBook.getChapterList().isEmpty()) {
-                /*****初始化标题的参数********/
+                //初始化标题的参数
                 //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
                 if (!mSettingManager.getHideStatusBar()) {
                     float tipBottom = mDisplayHeight - tipMarginHeight - mTipPaint.getFontMetrics().bottom;
@@ -801,8 +798,7 @@ public abstract class PageLoader {
 
         int visibleRight = mDisplayWidth - tipMarginWidth;
         if (mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
-            /******绘制电池********/
-
+            //绘制电池
             int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
 
             int outFrameWidth = (int) mTipPaint.measureText("xxx");
@@ -841,7 +837,7 @@ public abstract class PageLoader {
             mBatteryPaint.setStyle(Paint.Style.FILL);
             canvas.drawRect(innerFrame, mBatteryPaint);
 
-            /******绘制当前时间********/
+            //绘制当前时间
             //底部的字显示的位置Y
             float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
             String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
@@ -851,7 +847,9 @@ public abstract class PageLoader {
     }
 
 
-
+    /**
+     * 绘制内容
+     */
     private void drawContent(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
 
@@ -864,7 +862,6 @@ public abstract class PageLoader {
             }
         }
 
-        /*****绘制内容****/
         if (mStatus != STATUS_FINISH) {
             //绘制字体
             String tip = "";
