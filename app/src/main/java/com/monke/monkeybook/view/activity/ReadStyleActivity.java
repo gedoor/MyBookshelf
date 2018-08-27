@@ -1,15 +1,14 @@
 package com.monke.monkeybook.view.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,8 +30,6 @@ import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -284,14 +281,17 @@ public class ReadStyleActivity extends MBaseActivity {
      * 自定义背景
      */
     public void setCustomBg(Uri uri) {
-        bgPath = FileUtil.getPath(this, uri);
-        ContentResolver cr = getContentResolver();
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
+            if ("content".equals(uri.getScheme())) {
+                bgPath = FileUtil.getPath(this, uri);
+            } else {
+                bgPath = uri.getPath();
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(bgPath);
             bgCustom = 2;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
             upBg();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
