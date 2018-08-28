@@ -37,10 +37,10 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void drawMove(Canvas canvas) {
-
+        int dis;
         switch (mDirection){
             case NEXT:
-                int dis = (int) (mViewWidth - mStartX + mTouchX);
+                dis = (int) (mViewWidth - mStartX + mTouchX);
                 if (dis > mViewWidth){
                     dis = mViewWidth;
                 }
@@ -53,11 +53,15 @@ public class CoverPageAnim extends HorizonPageAnim {
                 addShadow(dis,canvas);
                 break;
             default:
-                mSrcRect.left = (int) (mViewWidth - mTouchX);
-                mDestRect.right = (int) mTouchX;
+                dis = (int) (mTouchX - mStartX);
+                if (dis > mViewWidth){
+                    dis = mViewWidth;
+                }
+                mSrcRect.left = mViewWidth - dis;
+                mDestRect.right = dis;
                 canvas.drawBitmap(mCurBitmap,0,0,null);
                 canvas.drawBitmap(mNextBitmap,mSrcRect,mDestRect,null);
-                addShadow((int) mTouchX,canvas);
+                addShadow(dis,canvas);
                 break;
         }
     }

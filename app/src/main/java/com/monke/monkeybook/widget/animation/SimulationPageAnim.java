@@ -252,9 +252,6 @@ public class SimulationPageAnim extends HorizonPageAnim{
 
     /**
      * 绘制翻起页背面
-     *
-     * @param canvas
-     * @param bitmap
      */
     private void drawCurrentBackArea(Canvas canvas, Bitmap bitmap) {
         int i = (int) (mBezierStart1.x + mBezierControl1.x) / 2;
