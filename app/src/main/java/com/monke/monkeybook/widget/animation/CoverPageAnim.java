@@ -75,7 +75,7 @@ public class CoverPageAnim extends HorizonPageAnim {
     @Override
     public void startAnim() {
         super.startAnim();
-        int dx = 0;
+        int dx;
         switch (mDirection){
             case NEXT:
                 if (isCancel){
@@ -90,9 +90,9 @@ public class CoverPageAnim extends HorizonPageAnim {
                 break;
             default:
                 if (isCancel){
-                    dx = (int) -mTouchX;
+                    dx = (int) -(mTouchX-mStartX);
                 }else{
-                    dx = (int) (mViewWidth - mTouchX);
+                    dx = (int) (mViewWidth - (mTouchX-mStartX));
                 }
                 break;
         }
