@@ -185,11 +185,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
-        batInfoReceiver = new ThisBatInfoReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_TIME_TICK);
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        registerReceiver(batInfoReceiver, filter);
     }
 
     @Override
@@ -733,11 +728,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initPageView();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     //设置ToolBar
     private void setupActionBar() {
         actionBar = getSupportActionBar();
@@ -1184,12 +1174,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void onResume() {
         super.onResume();
+        batInfoReceiver = new ThisBatInfoReceiver();
+        batInfoReceiver.registerReceiverBatInfo();
         screenOff();
-        if (readBookControl.getHideStatusBar()) {
-            if (mPageLoader != null) {
-                mPageLoader.updateTime();
-                mPageLoader.updateBattery(BatteryUtil.getLevel(this));
-            }
+        if (mPageLoader != null) {
+            mPageLoader.updateTime();
+            mPageLoader.updateBattery(BatteryUtil.getLevel(this));
         }
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             showCheckPermission = true;
@@ -1198,9 +1188,21 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (batInfoReceiver != null) {
+            unregisterReceiver(batInfoReceiver);
+            batInfoReceiver = null;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(batInfoReceiver);
+        if (batInfoReceiver != null) {
+            unregisterReceiver(batInfoReceiver);
+            batInfoReceiver = null;
+        }
         ReadAloudService.stop(this);
         if (mPageLoader != null) {
             mPageLoader.closeBook();
@@ -1250,7 +1252,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
             }
         }
-    }
 
+        public void registerReceiverBatInfo() {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_TIME_TICK);
+            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+            registerReceiver(batInfoReceiver, filter);
+        }
+
+    }
 
 }
