@@ -204,16 +204,20 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
     @Override
     public void updateSearchItem(int index) {
         if (index < searchBookAdapter.getICount()) {
-            int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
-            TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
-            if (tvAddShelf != null) {
-                if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
-                    tvAddShelf.setText("已添加");
-                    tvAddShelf.setEnabled(false);
-                } else {
-                    tvAddShelf.setText("+添加");
-                    tvAddShelf.setEnabled(true);
+            try {
+                int startIndex = ((LinearLayoutManager) rfRvSearchBooks.getRecyclerView().getLayoutManager()).findFirstVisibleItemPosition();
+                TextView tvAddShelf = rfRvSearchBooks.getRecyclerView().getChildAt(index - startIndex).findViewById(R.id.tv_add_shelf);
+                if (tvAddShelf != null) {
+                    if (searchBookAdapter.getSearchBooks().get(index).getIsAdd()) {
+                        tvAddShelf.setText("已添加");
+                        tvAddShelf.setEnabled(false);
+                    } else {
+                        tvAddShelf.setText("+添加");
+                        tvAddShelf.setEnabled(true);
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
