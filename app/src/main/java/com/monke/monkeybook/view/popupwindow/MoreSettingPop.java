@@ -12,16 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.monke.monkeybook.view.fragment.SettingsFragment.ImmersionAction;
 
 public class MoreSettingPop extends PopupWindow {
 
@@ -130,9 +131,7 @@ public class MoreSettingPop extends PopupWindow {
         sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             readBookControl.setImmersionStatusBar(isChecked);
             readBookControl.setLineChange(System.currentTimeMillis());
-            Intent intent = new Intent(ImmersionAction);
-            intent.putExtra("data", "Immersion_Change");
-            activity.sendBroadcast(intent);
+            RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
             changeProListener.refresh();
         });
         llScreenTimeOut.setOnClickListener(view -> {

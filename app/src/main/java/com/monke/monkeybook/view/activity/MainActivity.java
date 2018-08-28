@@ -95,7 +95,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
     private String bookPx;
-    private ImmersionReceiver immersionReceiver;
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -119,10 +118,14 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
-        IntentFilter filter = new IntentFilter(SettingsFragment.ImmersionAction);
-        immersionReceiver = new ImmersionReceiver();
-        registerReceiver(immersionReceiver, filter);
+    }
 
+    /**
+     * 沉浸状态栏
+     */
+    @Override
+    public void initImmersionBar() {
+        super.initImmersionBar();
     }
 
     @Override
@@ -565,7 +568,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(immersionReceiver);
     }
 
     public void exit() {
@@ -588,19 +590,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 break;
         }
 
-    }
-
-    /**
-     * 沉浸状态栏广播
-     */
-    class ImmersionReceiver extends BroadcastReceiver {
-        @SuppressLint("DefaultLocale")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")) {
-                initImmersionBar();
-            }
-        }
     }
 
 }

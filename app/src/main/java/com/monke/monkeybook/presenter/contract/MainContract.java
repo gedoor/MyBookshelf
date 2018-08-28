@@ -12,6 +12,8 @@ public interface MainContract {
 
     interface View extends IView {
 
+        void initImmersionBar();
+
         /**
          * 刷新书架书籍小说信息 更新UI
          * @param bookShelfBeanList 书架

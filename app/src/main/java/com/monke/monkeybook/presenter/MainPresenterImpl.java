@@ -309,4 +309,9 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false, group);
     }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
+    public void initImmersionBar(Boolean immersion) {
+        mView.initImmersionBar();
+    }
 }
