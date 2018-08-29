@@ -227,7 +227,9 @@ public class PageView extends View {
                 mStartX = x;
                 mStartY = y;
                 isMove = false;
-                canTouch = mTouchListener.onTouch();
+                if (mTouchListener != null) {
+                    canTouch = mTouchListener.onTouch();
+                }
                 mPageAnim.onTouchEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE:
