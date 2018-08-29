@@ -218,7 +218,13 @@ public class PageView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
 
-        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) return true;
+        if (mPageAnim == null) {
+            return true;
+        }
+
+        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) {
+            return true;
+        }
 
         int x = (int) event.getX();
         int y = (int) event.getY();
@@ -227,9 +233,7 @@ public class PageView extends View {
                 mStartX = x;
                 mStartY = y;
                 isMove = false;
-                if (mTouchListener != null) {
-                    canTouch = mTouchListener.onTouch();
-                }
+                canTouch = mTouchListener.onTouch();
                 mPageAnim.onTouchEvent(event);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -272,8 +276,6 @@ public class PageView extends View {
 
     /**
      * 判断是否存在上一页
-     *
-     * @return
      */
     private boolean hasPrevPage() {
         if (mPageLoader.prev()) {
@@ -286,8 +288,6 @@ public class PageView extends View {
 
     /**
      * 判断是否下一页存在
-     *
-     * @return
      */
     private boolean hasNextPage() {
         if (mPageLoader.next()) {
