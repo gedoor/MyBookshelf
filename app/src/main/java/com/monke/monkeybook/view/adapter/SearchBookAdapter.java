@@ -166,11 +166,9 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
-            int oldCount = getICount();
-            Boolean changed = false;
             if (searchBooks.size() == 0) {
                 searchBooks.addAll(newDataS);
-                changed = true;
+                notifyItemRangeChanged(0, newDataS.size());
             } else {
                 //已有
                 for (SearchBookBean temp : newDataS) {
@@ -197,7 +195,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                         for (int i = 0; i < searchBooks.size(); i++) {
                             if (!Objects.equals(keyWord, searchBooks.get(i).getName())) {
                                 searchBooks.add(i, temp);
-                                changed = true;
+                                notifyItemRangeChanged(i, searchBooks.size());
                                 break;
                             }
                         }
@@ -205,33 +203,30 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                         for (int i = 0; i < searchBooks.size(); i++) {
                             if (!Objects.equals(keyWord, searchBooks.get(i).getName()) && !Objects.equals(keyWord, searchBooks.get(i).getAuthor())) {
                                 searchBooks.add(i, temp);
-                                changed = true;
+                                notifyItemRangeChanged(i, searchBooks.size());
                                 break;
                             }
                         }
                     } else {
                         searchBooks.add(temp);
+                        notifyItemChanged(searchBooks.size());
                     }
                 }
-            }
-            if (changed) {
-                notifyDataSetChanged();
-            } else {
-                notifyItemRangeInserted(oldCount, searchBookBeansAdd.size());
             }
         }
     }
 
     public void clearAll() {
-        if (searchBooks.size() > 0) {
+        int bookSize = searchBooks.size();
+        if (bookSize > 0) {
             try {
                 Glide.with(activity).onDestroy();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            searchBooks.clear();
+            notifyItemRangeRemoved(0, bookSize);
         }
-        searchBooks.clear();
-        notifyDataSetChanged();
     }
 
     public List<SearchBookBean> getSearchBooks() {
