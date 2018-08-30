@@ -24,7 +24,7 @@
     <com.monke.monkeybook.widget.number.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"
-        android:summary="当前线程数 %s"
+        android:summary="@string/threads_num"
         android:title="@string/update_search_threads_num"
         app:MaxValue="16"
         app:MinValue="1" />
@@ -32,8 +32,8 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_find_expand_group"
-        android:summary="默认展开第一组发现"
-        android:title="自动展开发现" />
+        android:summary="@string/default_expand_first"
+        android:title="@string/auto_expand_find" />
 
     <SwitchPreference
         android:defaultValue="false"

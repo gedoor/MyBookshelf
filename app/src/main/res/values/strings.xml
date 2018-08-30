@@ -235,5 +235,8 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="to_top">置顶</string>
+    <string name="auto_expand_find">自动展开发现</string>
+    <string name="default_expand_first">默认展开第一组发现</string>
+    <string name="threads_num">当前线程数 %s</string>
 
 </resources>
