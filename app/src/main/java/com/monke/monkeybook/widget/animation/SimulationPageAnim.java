@@ -351,7 +351,7 @@ public class SimulationPageAnim extends HorizonPageAnim{
             canvas.clipPath(mPath0, Region.Op.XOR);
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
 
         int leftx;
