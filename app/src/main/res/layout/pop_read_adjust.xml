@@ -204,8 +204,9 @@
             app:cursordrawable_height="13dp"
             app:cursordrawable_width="13dp"
             app:fontdrawable="@color/btn_bg_press_2"
-            app:maxprogress="300"
+            app:maxprogress="180"
             app:progresswidth="2dp" />
 
     </LinearLayout>
+
 </LinearLayout>
