@@ -379,6 +379,17 @@ public abstract class PageLoader {
         return mPageView.autoNextPage();
     }
 
+    /**
+     * 翻到下一页,无动画
+     */
+    public boolean noAnimationToNextPage() {
+        if (getPagePos() < getPageSize() - 1) {
+            skipToPage(getPagePos() + 1);
+            return true;
+        }
+        return skipNextChapter();
+    }
+
     public void pagingEnd() {
         mPageView.upPagePos(mCurChapterPos, mCurPage.position);
         mPageChangeListener.onPageChange(mCurChapterPos, getPagePos());
