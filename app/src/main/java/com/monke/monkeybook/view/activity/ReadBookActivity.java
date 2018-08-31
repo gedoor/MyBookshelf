@@ -309,13 +309,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             autoPageTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (mPageLoader != null) {
-                        mPageLoader.skipToNextPage();
-                    }
+                    nextPage();
                 }
             }, readBookControl.getClickSensitivity()*1000,
                     readBookControl.getClickSensitivity()*1000);
         }
+    }
+
+    private void nextPage() {
+        runOnUiThread(() -> {
+            if (mPageLoader != null) {
+                mPageLoader.skipToNextPage();
+            }
+        });
     }
 
     @Override
