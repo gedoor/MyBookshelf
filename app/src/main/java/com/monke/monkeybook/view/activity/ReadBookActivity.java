@@ -311,8 +311,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 public void run() {
                     nextPage();
                 }
-            }, readBookControl.getClickSensitivity()*1000,
-                    readBookControl.getClickSensitivity()*1000);
+            }, readBookControl.getClickSensitivity()*1000);
         }
     }
 
@@ -572,6 +571,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
+                        autoPage();
                         //继续朗读
                         if ((ReadAloudService.running) && pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
