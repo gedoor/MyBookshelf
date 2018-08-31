@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -79,7 +78,6 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
     private final int ResultReplace = 101;
-    public final int ResultSelectFont = 104;
     public final int ResultStyleSet = 105;
 
     @BindView(R.id.fl_content)
@@ -140,13 +138,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     FloatingActionButton fabNightTheme;
     @BindView(R.id.pageView)
     PageView pageView;
+    @BindView(R.id.fabAutoPage)
+    FloatingActionButton fabAutoPage;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
     private Animation menuBottomIn;
     private Animation menuBottomOut;
     private ActionBar actionBar;
-    private Timer mTimer;
+    private Timer keepScreenTimer;
+    private Timer autoPageTimer;
     private PageLoader mPageLoader;
 
     private String noteUrl;
@@ -167,7 +168,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
-
+    private boolean autoPage = false;
 
     @Override
     protected ReadBookContract.Presenter initInjector() {
@@ -279,12 +280,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void screenOff() {
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
         if (screenOffTime > 0) {
-            if (mTimer != null) {
-                mTimer.cancel();
+            if (keepScreenTimer != null) {
+                keepScreenTimer.cancel();
             }
-            mTimer = new Timer();
+            keepScreenTimer = new Timer();
             keepScreenOn(true);
-            mTimer.schedule(new TimerTask() {
+            keepScreenTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     runOnUiThread(() -> keepScreenOn(false));
@@ -292,6 +293,28 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }, screenOffTime);
         } else if (screenTimeOut != -1) {
             keepScreenOn(false);
+        }
+    }
+
+
+    /**
+     * 自动翻页
+     */
+    private void autoPage() {
+        if (autoPageTimer != null) {
+            autoPageTimer.cancel();
+        }
+        if (autoPage) {
+            autoPageTimer = new Timer();
+            autoPageTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (mPageLoader != null) {
+                        mPageLoader.skipToNextPage();
+                    }
+                }
+            }, readBookControl.getClickSensitivity()*1000,
+                    readBookControl.getClickSensitivity()*1000);
         }
     }
 
@@ -666,6 +689,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             return true;
         });
 
+        //自动翻页
+        fabAutoPage.getDrawable().mutate();
+        fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        fabAutoPage.setOnClickListener(view -> {
+            autoPage = !autoPage;
+            autoPage();
+            if (autoPage) {
+                fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
+                fabAutoPage.getDrawable().mutate();
+                fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+            } else {
+                fabAutoPage.setImageResource(R.drawable.ic_auto_page);
+                fabAutoPage.getDrawable().mutate();
+                fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+            }
+        });
+
         //替换
         fabReplaceRule.getDrawable().mutate();
         fabReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
@@ -896,13 +936,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     ReadAloudService.stop(this);
                     break;
                 }
-                if (!mPageLoader.noAnimationToNextPage()){
+                if (!mPageLoader.noAnimationToNextPage()) {
                     ReadAloudService.stop(this);
                 }
                 break;
             case PLAY:
                 fabReadAloud.setImageResource(R.drawable.ic_pause2);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
+                if (autoPage) {
+                    autoPage = false;
+                    autoPage();
+                }
                 break;
             case PAUSE:
                 fabReadAloud.setImageResource(R.drawable.ic_play2);
@@ -1075,7 +1119,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void finishContent() {
-        if (mPageLoader !=null && mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
+        if (mPageLoader != null && mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
             mPageLoader.openChapter(mPresenter.getBookShelf().getDurChapterPage());
         }
     }

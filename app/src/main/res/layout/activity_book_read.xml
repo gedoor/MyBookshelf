@@ -152,6 +152,23 @@
                     android:layout_weight="1" />
 
                 <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabAutoPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/read_aloud"
+                    android:src="@drawable/ic_auto_page"
+                    app:backgroundTint="@color/background"
+                    app:elevation="2dp"
+                    app:fabSize="mini"
+                    app:pressedTranslationZ="2dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabReplaceRule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
