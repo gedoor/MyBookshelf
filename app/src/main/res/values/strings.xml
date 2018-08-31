@@ -219,8 +219,6 @@
     <string name="jf_convert_f">简转繁</string>
     <string name="jf_convert_j">繁转简</string>
     <string name="page_mode">翻页模式</string>
-
-    <!--file system-->
     <string name="nb.file.sub_count">%1$d 项</string>
     <string name="nb.file.path">存储卡:%1$s</string>
     <string name="nb.file.add_shelf">加入书架</string>
@@ -238,5 +236,7 @@
     <string name="auto_expand_find">自动展开发现</string>
     <string name="default_expand_first">默认展开第一组发现</string>
     <string name="threads_num">当前线程数 %s</string>
+    <string name="read_aloud_speed">朗读语速</string>
+    <string name="auto_next_page_speed">自动翻页间隔</string>
 
 </resources>
