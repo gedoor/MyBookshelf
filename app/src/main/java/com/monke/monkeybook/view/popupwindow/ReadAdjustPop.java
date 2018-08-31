@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
@@ -40,6 +41,8 @@ public class ReadAdjustPop extends PopupWindow {
     MHorProgressBar hpbTtsSpeechRate;
     @BindView(R.id.scb_tts_follow_sys)
     SmoothCheckBox scbTtsFollowSys;
+    @BindView(R.id.tv_auto_page)
+    TextView tvAutoPage;
 
     private ReadBookActivity activity;
     private Boolean isFollowSys;
@@ -125,8 +128,8 @@ public class ReadAdjustPop extends PopupWindow {
             }
         });
 
-        //点击灵敏度调节
-        hpbClick.setMaxProgress(100);
+        //自动翻页间隔
+        hpbClick.setMaxProgress(180);
 
         hpbClick.setDurProgress(readBookControl.getClickSensitivity());
         hpbClick.setProgressListener(new OnProgressListener() {
@@ -137,7 +140,8 @@ public class ReadAdjustPop extends PopupWindow {
 
             @Override
             public void durProgressChange(float dur) {
-                readBookControl.setClickSensitivity((int)dur);
+                tvAutoPage.setText(String.format("%sS", (int) dur));
+                readBookControl.setClickSensitivity((int) dur);
             }
 
             @Override
