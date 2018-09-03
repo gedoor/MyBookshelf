@@ -38,7 +38,12 @@ public class BookInfoActivity extends MBaseActivity {
     TextInputEditText tieBookAuthor;
     @BindView(R.id.til_book_author)
     TextInputLayout tilBookAuthor;
+    @BindView(R.id.tie_cover_url)
+    TextInputEditText tieCoverUrl;
+    @BindView(R.id.til_cover_url)
+    TextInputLayout tilCoverUrl;
 
+    private String noteUrl;
     private BookShelfBean book;
 
 
@@ -59,7 +64,15 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!TextUtils.isEmpty(savedInstanceState.getString("noteUrl"))) {
+            noteUrl = savedInstanceState.getString("noteUrl");
+        }
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("noteUrl", noteUrl);
     }
 
     /**
@@ -73,6 +86,7 @@ public class BookInfoActivity extends MBaseActivity {
         setupActionBar();
         tilBookName.setHint("书名");
         tilBookAuthor.setHint("作者");
+        tilCoverUrl.setHint("封面地址");
     }
 
     /**
@@ -80,12 +94,19 @@ public class BookInfoActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
-        String noteUrl = getIntent().getStringExtra("noteUrl");
+        if (!TextUtils.isEmpty(getIntent().getStringExtra("noteUrl"))) {
+            noteUrl = getIntent().getStringExtra("noteUrl");
+        }
         if (!TextUtils.isEmpty(noteUrl)) {
             book = BookshelfHelp.getBook(noteUrl);
             if (book != null) {
                 tieBookName.setText(book.getBookInfoBean().getName());
                 tieBookAuthor.setText(book.getBookInfoBean().getAuthor());
+                if (TextUtils.isEmpty(book.getCustomCoverPath())) {
+                    tieCoverUrl.setText(book.getBookInfoBean().getCoverUrl());
+                } else {
+                    tieCoverUrl.setText(book.getCustomCoverPath());
+                }
             }
             initCover();
         }
@@ -139,6 +160,6 @@ public class BookInfoActivity extends MBaseActivity {
     }
 
     private void saveInfo() {
-
+        BookshelfHelp.saveBookToShelf(book);
     }
 }
