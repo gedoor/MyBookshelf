@@ -323,6 +323,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvLoading.setOnClickListener(null);
             mPresenter.getBookShelfInfo();
         });
+
+        ivCover.setOnClickListener(view -> {
+            if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
+                Intent intent = new Intent(this, BookInfoActivity.class);
+                intent.putExtra("noteUrl", mPresenter.getBookShelf().getNoteUrl());
+                startActivity(intent);
+            }
+        });
     }
 
 }
