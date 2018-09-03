@@ -2,8 +2,10 @@
 package com.monke.monkeybook.view.activity;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.animation.Animation;
@@ -178,10 +180,12 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     private void initView() {
         String coverUrl;
+        String customCoverPath = null;
         String name;
         String author;
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             coverUrl = mPresenter.getBookShelf().getBookInfoBean().getCoverUrl();
+            customCoverPath = mPresenter.getBookShelf().getCustomCoverPath();
             name = mPresenter.getBookShelf().getBookInfoBean().getName();
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
@@ -213,9 +217,18 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvLoading.setOnClickListener(null);
         }
         if (!this.isFinishing()) {
-            Glide.with(this).load(coverUrl)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .placeholder(R.drawable.img_cover_default)).into(ivCover);
+            if (TextUtils.isEmpty(customCoverPath)) {
+                Glide.with(this).load(coverUrl)
+                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+            } else if (customCoverPath.startsWith("http")) {
+                Glide.with(this).load(customCoverPath)
+                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                .placeholder(R.drawable.img_cover_default)).into(ivCover);
+            } else {
+                ivCover.setImageBitmap(BitmapFactory.decodeFile(customCoverPath));
+            }
+
             Glide.with(this).load(coverUrl)
                     .apply(new RequestOptions()
                             .dontAnimate()
