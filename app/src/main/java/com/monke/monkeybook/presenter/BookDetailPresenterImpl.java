@@ -195,6 +195,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                         if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
                             bookShelfBean.setHasUpdate(false);
                         }
+                        bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
                         saveChangedBook(bookShelfBean);
                     }
 
