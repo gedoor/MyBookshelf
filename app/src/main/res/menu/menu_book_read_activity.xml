@@ -38,4 +38,10 @@
 
     </group>
 
+    <item
+        android:id="@+id/action_book_info"
+        android:icon="@drawable/ic_toc"
+        android:title="@string/book_info"
+        app:showAsAction="never" />
+
 </menu>
