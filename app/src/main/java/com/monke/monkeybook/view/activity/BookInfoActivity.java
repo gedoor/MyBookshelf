@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.monke.basemvplib.impl.IPresenter;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -35,6 +37,13 @@ public class BookInfoActivity extends MBaseActivity {
     TextInputLayout tilBookAuthor;
 
     private BookShelfBean book;
+
+
+    public static void startThis(String noteUrl) {
+        Intent intent = new Intent(MApplication.getInstance(), BookInfoActivity.class);
+        intent.putExtra("noteUrl", noteUrl);
+        MApplication.getInstance().startActivity(intent);
+    }
 
     /**
      * P层绑定   若无则返回null;
