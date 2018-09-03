@@ -163,6 +163,7 @@ public class BookInfoActivity extends MBaseActivity {
 
     private void saveInfo() {
         book.setCustomCoverPath(tieCoverUrl.getText().toString());
+        initCover();
         BookshelfHelp.saveBookToShelf(book);
         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
     }
