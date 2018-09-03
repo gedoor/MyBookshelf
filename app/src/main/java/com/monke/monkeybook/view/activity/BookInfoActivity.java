@@ -115,7 +115,7 @@ public class BookInfoActivity extends MBaseActivity {
     private void initCover() {
         if (!this.isFinishing() && book != null) {
             if (TextUtils.isEmpty(book.getCustomCoverPath())) {
-                Glide.with(this).load(book.getBookInfoBean().getChapterUrl())
+                Glide.with(this).load(book.getBookInfoBean().getCoverUrl())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                 .placeholder(R.drawable.img_cover_default)).into(ivCover);
             } else if (book.getCustomCoverPath().startsWith("http")) {
@@ -133,7 +133,7 @@ public class BookInfoActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
-            actionBar.setTitle(R.string.book_source_manage);
+            actionBar.setTitle(R.string.book_info);
         }
     }
 
