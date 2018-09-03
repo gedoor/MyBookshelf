@@ -5,8 +5,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -56,8 +59,7 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_info);
-        ButterKnife.bind(this);
+
     }
 
     /**
@@ -65,6 +67,10 @@ public class BookInfoActivity extends MBaseActivity {
      */
     @Override
     protected void onCreateActivity() {
+        setContentView(R.layout.activity_book_info);
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
         tilBookName.setHint("书名");
         tilBookAuthor.setHint("作者");
     }
@@ -99,5 +105,40 @@ public class BookInfoActivity extends MBaseActivity {
                 ivCover.setImageBitmap(BitmapFactory.decodeFile(book.getCustomCoverPath()));
             }
         }
+    }
+
+    //设置ToolBar
+    private void setupActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setTitle(R.string.book_source_manage);
+        }
+    }
+
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_info, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_save:
+                saveInfo();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveInfo() {
+
     }
 }

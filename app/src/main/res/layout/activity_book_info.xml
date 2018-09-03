@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,7 +23,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="126dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <ImageView
             android:id="@+id/iv_cover"
@@ -36,8 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:padding="5dp">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_book_name"
