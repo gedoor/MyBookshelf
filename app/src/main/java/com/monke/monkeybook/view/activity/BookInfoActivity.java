@@ -64,7 +64,7 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!TextUtils.isEmpty(savedInstanceState.getString("noteUrl"))) {
+        if (savedInstanceState != null && !TextUtils.isEmpty(savedInstanceState.getString("noteUrl"))) {
             noteUrl = savedInstanceState.getString("noteUrl");
         }
     }
