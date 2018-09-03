@@ -1135,9 +1135,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void error(String msg) {
-        if (mPageLoader != null && mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
-            mPageLoader.chapterError(msg);
-        }
+
     }
 
     @Override
