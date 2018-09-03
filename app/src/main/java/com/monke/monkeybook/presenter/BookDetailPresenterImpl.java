@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
@@ -245,4 +248,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
         RxBus.get().unregister(this);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
+    public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
+        mView.updateView();
+    }
 }
