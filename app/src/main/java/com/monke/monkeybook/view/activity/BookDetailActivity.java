@@ -153,6 +153,27 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
+            if (!this.isFinishing()) {
+                if (TextUtils.isEmpty(mPresenter.getBookShelf().getCustomCoverPath())) {
+                    Glide.with(this).load(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl())
+                            .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                    .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                } else if (mPresenter.getBookShelf().getCustomCoverPath().startsWith("http")) {
+                    Glide.with(this).load(mPresenter.getBookShelf().getCustomCoverPath())
+                            .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                    .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                } else {
+                    ivCover.setImageBitmap(BitmapFactory.decodeFile(mPresenter.getBookShelf().getCustomCoverPath()));
+                }
+
+                Glide.with(this).load(mPresenter.getBookShelf().getCustomCoverPath())
+                        .apply(new RequestOptions()
+                                .dontAnimate()
+                                .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                .placeholder(R.drawable.img_cover_gs))
+                        .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                        .into(ivBlurCover);
+            }
         }
         tvLoading.startAnimation(animHideLoading);
         tvLoading.setOnClickListener(null);
