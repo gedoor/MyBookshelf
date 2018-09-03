@@ -15,12 +15,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.RxBusTag;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -162,5 +164,6 @@ public class BookInfoActivity extends MBaseActivity {
     private void saveInfo() {
         book.setCustomCoverPath(tieCoverUrl.getText().toString());
         BookshelfHelp.saveBookToShelf(book);
+        RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
     }
 }
