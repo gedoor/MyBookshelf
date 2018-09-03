@@ -160,6 +160,7 @@ public class BookInfoActivity extends MBaseActivity {
     }
 
     private void saveInfo() {
+        book.setCustomCoverPath(tieCoverUrl.getText().toString());
         BookshelfHelp.saveBookToShelf(book);
     }
 }
