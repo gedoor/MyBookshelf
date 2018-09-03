@@ -1,10 +1,13 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,7 +97,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int index) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
         if (needAnim) {
             final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
             animation.setAnimationListener(new AnimationStartListener() {
@@ -116,11 +119,19 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (!activity.isFinishing()) {
-            Glide.with(activity)
-                    .load(books.get(index).getBookInfoBean().getCoverUrl())
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .centerCrop().placeholder(R.drawable.img_cover_default))
-                    .into(holder.ivCover);
+            if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
+                Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
+                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .into(holder.ivCover);
+            } else if (books.get(index).getCustomCoverPath().startsWith("http")) {
+                Glide.with(activity).load(books.get(index).getCustomCoverPath())
+                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                                .centerCrop().placeholder(R.drawable.img_cover_default))
+                        .into(holder.ivCover);
+            } else {
+                holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(books.get(index).getCustomCoverPath()));
+            }
         }
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
