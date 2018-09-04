@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,11 +22,16 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.utils.FileUtil;
+import com.monke.monkeybook.widget.modialog.ChangeSourceView;
+import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class BookInfoActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
@@ -44,9 +50,18 @@ public class BookInfoActivity extends MBaseActivity {
     TextInputEditText tieCoverUrl;
     @BindView(R.id.til_cover_url)
     TextInputLayout tilCoverUrl;
+    @BindView(R.id.tv_select_cover)
+    TextView tvSelectCover;
+    @BindView(R.id.tv_change_cover)
+    TextView tvChangeCover;
+    @BindView(R.id.tv_refresh_cover)
+    TextView tvRefreshCover;
+
+    private final int ResultSelectBg = 103;
 
     private String noteUrl;
     private BookShelfBean book;
+    private MoProgressHUD moProgressHUD;
 
 
     public static void startThis(String noteUrl) {
@@ -89,6 +104,7 @@ public class BookInfoActivity extends MBaseActivity {
         tilBookName.setHint("书名");
         tilBookAuthor.setHint("作者");
         tilCoverUrl.setHint("封面地址");
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     /**
@@ -112,6 +128,34 @@ public class BookInfoActivity extends MBaseActivity {
             }
             initCover();
         }
+    }
+
+    /**
+     * 事件触发绑定
+     */
+    @Override
+    protected void bindEvent() {
+        super.bindEvent();
+        tvSelectCover.setOnClickListener(view -> {
+            if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, ResultSelectBg);
+            } else {
+                EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
+            }
+        });
+        tvChangeCover.setOnClickListener(view ->
+                moProgressHUD.showChangeSource(this, book, searchBookBean -> {
+            tieCoverUrl.setText(searchBookBean.getCoverUrl());
+            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+            initCover();
+        }));
+        tvRefreshCover.setOnClickListener(view -> {
+            book.setCustomCoverPath(tieCoverUrl.getText().toString());
+            initCover();
+        });
     }
 
     private void initCover() {
@@ -168,5 +212,20 @@ public class BookInfoActivity extends MBaseActivity {
         initCover();
         BookshelfHelp.saveBookToShelf(book);
         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case ResultSelectBg:
+                if (resultCode == RESULT_OK && null != data) {
+                    tieCoverUrl.setText(FileUtil.getPath(this, data.getData()));
+                    book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                    initCover();
+                }
+                break;
+        }
     }
 }
