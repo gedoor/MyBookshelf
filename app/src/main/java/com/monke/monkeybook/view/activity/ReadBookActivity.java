@@ -822,7 +822,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
                 break;
             case R.id.action_book_info:
-                BookInfoActivity.startThis(mPresenter.getBookShelf().getNoteUrl());
+                BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
             case android.R.id.home:
                 finish();

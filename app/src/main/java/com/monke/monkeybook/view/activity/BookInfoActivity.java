@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -64,10 +65,10 @@ public class BookInfoActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
 
 
-    public static void startThis(String noteUrl) {
-        Intent intent = new Intent(MApplication.getInstance(), BookInfoActivity.class);
+    public static void startThis(Context context, String noteUrl) {
+        Intent intent = new Intent(context, BookInfoActivity.class);
         intent.putExtra("noteUrl", noteUrl);
-        MApplication.getInstance().startActivity(intent);
+        context.startActivity(intent);
     }
 
     /**
