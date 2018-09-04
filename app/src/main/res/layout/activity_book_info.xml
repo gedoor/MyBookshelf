@@ -52,7 +52,7 @@
                     android:id="@+id/tie_book_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -65,7 +65,7 @@
                     android:id="@+id/tie_book_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -75,6 +75,7 @@
         android:id="@+id/til_cover_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:hint="coverUrl">
 
         <android.support.design.widget.TextInputEditText
@@ -86,26 +87,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="5dp"
+        android:orientation="horizontal"
         android:paddingEnd="5dp"
-        android:orientation="horizontal">
+        android:paddingStart="5dp">
 
         <TextView
             android:id="@+id/tv_select_cover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/selector_pop_font_bg"
             android:padding="5dp"
-            android:text="选择本地图片"
-            android:background="@drawable/selector_pop_font_bg"/>
+            android:text="选择本地图片" />
 
         <TextView
             android:id="@+id/tv_change_cover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_pop_font_bg"
             android:padding="5dp"
             android:text="封面换源"
-            android:background="@drawable/selector_pop_font_bg"
             tools:ignore="RtlHardcoded" />
 
         <TextView
@@ -113,10 +114,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_pop_font_bg"
             android:padding="5dp"
             android:text="刷新封面"
-            android:background="@drawable/selector_pop_font_bg"
             tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_book_jj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="简介">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tie_book_jj"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
 </LinearLayout>

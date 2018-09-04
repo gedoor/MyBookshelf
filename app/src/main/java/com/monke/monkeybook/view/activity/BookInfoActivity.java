@@ -23,11 +23,9 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.FileUtil;
-import com.monke.monkeybook.widget.modialog.ChangeSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -35,6 +33,8 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class BookInfoActivity extends MBaseActivity {
+    private final int ResultSelectCover = 103;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.iv_cover)
@@ -57,8 +57,10 @@ public class BookInfoActivity extends MBaseActivity {
     TextView tvChangeCover;
     @BindView(R.id.tv_refresh_cover)
     TextView tvRefreshCover;
-
-    private final int ResultSelectBg = 103;
+    @BindView(R.id.tie_book_jj)
+    TextInputEditText tieBookJj;
+    @BindView(R.id.til_book_jj)
+    TextInputLayout tilBookJj;
 
     private String noteUrl;
     private BookShelfBean book;
@@ -105,6 +107,7 @@ public class BookInfoActivity extends MBaseActivity {
         tilBookName.setHint("书名");
         tilBookAuthor.setHint("作者");
         tilCoverUrl.setHint("封面地址");
+        tilBookJj.setHint("简介");
         moProgressHUD = new MoProgressHUD(this);
     }
 
@@ -121,6 +124,7 @@ public class BookInfoActivity extends MBaseActivity {
             if (book != null) {
                 tieBookName.setText(book.getBookInfoBean().getName());
                 tieBookAuthor.setText(book.getBookInfoBean().getAuthor());
+                tieBookJj.setText(book.getBookInfoBean().getIntroduce());
                 if (TextUtils.isEmpty(book.getCustomCoverPath())) {
                     tieCoverUrl.setText(book.getBookInfoBean().getCoverUrl());
                 } else {
@@ -142,17 +146,17 @@ public class BookInfoActivity extends MBaseActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("image/*");
-                startActivityForResult(intent, ResultSelectBg);
+                startActivityForResult(intent, ResultSelectCover);
             } else {
                 EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
             }
         });
         tvChangeCover.setOnClickListener(view ->
                 moProgressHUD.showChangeSource(this, book, searchBookBean -> {
-            tieCoverUrl.setText(searchBookBean.getCoverUrl());
-            book.setCustomCoverPath(tieCoverUrl.getText().toString());
-            initCover();
-        }));
+                    tieCoverUrl.setText(searchBookBean.getCoverUrl());
+                    book.setCustomCoverPath(tieCoverUrl.getText().toString());
+                    initCover();
+                }));
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();
@@ -209,6 +213,7 @@ public class BookInfoActivity extends MBaseActivity {
     private void saveInfo() {
         book.getBookInfoBean().setName(tieBookName.getText().toString());
         book.getBookInfoBean().setAuthor(tieBookAuthor.getText().toString());
+        book.getBookInfoBean().setIntroduce(tieBookJj.getText().toString());
         book.setCustomCoverPath(tieCoverUrl.getText().toString());
         initCover();
         BookshelfHelp.saveBookToShelf(book);
@@ -220,7 +225,7 @@ public class BookInfoActivity extends MBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case ResultSelectBg:
+            case ResultSelectCover:
                 if (resultCode == RESULT_OK && null != data) {
                     tieCoverUrl.setText(FileUtil.getPath(this, data.getData()));
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
