@@ -2,11 +2,10 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -52,11 +51,9 @@ import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
-import com.monke.monkeybook.view.fragment.SettingsFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -472,6 +469,20 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             BookSourceManage.initDefaultBookSource(this);
             //更新日志
             moProgressHUD.showAssetMarkdown("updateLog.md");
+        }
+
+        //弃用bug图标
+        PackageManager packageManager = MApplication.getInstance().getPackageManager();
+        ComponentName componentNameBookMain = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.view.activity.WelcomeBookActivity");
+        ComponentName componentNameBook = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.BookIcon");
+
+        if (packageManager.getComponentEnabledSetting(componentNameBook) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+            //启用
+            packageManager.setComponentEnabledSetting(componentNameBookMain,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            //禁用
+            packageManager.setComponentEnabledSetting(componentNameBook,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
         }
     }
 
