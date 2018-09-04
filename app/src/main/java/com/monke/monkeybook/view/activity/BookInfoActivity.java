@@ -162,6 +162,8 @@ public class BookInfoActivity extends MBaseActivity {
     }
 
     private void saveInfo() {
+        book.getBookInfoBean().setName(tieBookName.getText().toString());
+        book.getBookInfoBean().setAuthor(tieBookAuthor.getText().toString());
         book.setCustomCoverPath(tieCoverUrl.getText().toString());
         initCover();
         BookshelfHelp.saveBookToShelf(book);
