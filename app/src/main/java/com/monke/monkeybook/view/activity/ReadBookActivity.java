@@ -266,7 +266,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
         mImmersionBar.init();
         keepScreenOn(screenTimeOut != 0);
-        screenOff();
+        screenOffTimerStart();
     }
 
     public void keepScreenOn(boolean keepScreenOn) {
@@ -277,7 +277,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
-    private void screenOff() {
+    private void screenOffTimerStart() {
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
         if (screenOffTime > 0) {
             if (keepScreenTimer != null) {
@@ -317,6 +317,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private void nextPage() {
         runOnUiThread(() -> {
+            screenOffTimerStart();
             if (mPageLoader != null) {
                 mPageLoader.skipToNextPage();
             }
@@ -592,7 +593,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         pageView.setTouchListener(new PageView.TouchListener() {
             @Override
             public boolean onTouch() {
-                screenOff();
+                screenOffTimerStart();
                 return true;
             }
 
@@ -1225,7 +1226,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         super.onResume();
         batInfoReceiver = new ThisBatInfoReceiver();
         batInfoReceiver.registerReceiverBatInfo();
-        screenOff();
+        screenOffTimerStart();
         if (mPageLoader != null) {
             mPageLoader.updateTime();
             mPageLoader.updateBattery(BatteryUtil.getLevel(this));
