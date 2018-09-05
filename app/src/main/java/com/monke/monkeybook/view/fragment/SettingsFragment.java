@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.SettingActivity;
 
@@ -70,12 +71,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        Preference preference = findPreference(getString(R.string.pk_ImmersionStatusBar));
-        preference.setOnPreferenceClickListener(preference1 -> {
+        if (key.equals(getString(R.string.pk_ImmersionStatusBar))) {
             settingActivity.initImmersionBar();
             RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-            return true;
-        });
+        } else if (key.equals(getString(R.string.pk_bookshelf_px))) {
+            RxBus.get().post(RxBusTag.UPDATE_PX, true);
+        }
     }
 }

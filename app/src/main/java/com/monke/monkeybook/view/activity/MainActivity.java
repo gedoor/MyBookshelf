@@ -127,13 +127,18 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @Override
     protected void initData() {
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
+        updatePx();
         if (viewIsList) {
             bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
         } else {
             bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
         }
+    }
+
+    @Override
+    public void updatePx() {
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
     }
 
     private List<BookShelfBean> getBookshelfList() {
@@ -161,7 +166,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         initDrawer();
         upGroup(group);
         moProgressHUD = new MoProgressHUD(this);
-
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         if (viewIsList) {
             rvBookshelf.setAdapter(bookShelfListAdapter);
             rvBookshelf.setLayoutManager(new LinearLayoutManager(this));
@@ -182,8 +187,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     }
 
     @Override
-    protected void bindEvent() {
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+    public void bindEvent() {
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
             if (!NetworkUtil.isNetWorkAvailable()) {
@@ -196,6 +200,8 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             itemTouchHelpCallback.setDragEnable(true);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
             itemTouchHelper.attachToRecyclerView(rvBookshelf);
+        } else {
+            itemTouchHelpCallback.setDragEnable(false);
         }
         if (viewIsList) {
             bookShelfListAdapter.setItemClickListener(getAdapterListener());
@@ -593,13 +599,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_SETTING:
-                if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
-                    recreate();
-                }
-                break;
-        }
 
     }
 
