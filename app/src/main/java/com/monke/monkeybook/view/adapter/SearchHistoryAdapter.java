@@ -52,10 +52,10 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
     }
 
     public SearchHistoryBean getItemData(int position){
-        return mTagDatas.get(position);
+        return mTagDataList.get(position);
     }
 
     public int getDataSize(){
-        return mTagDatas.size();
+        return mTagDataList.size();
     }
 }
