@@ -45,21 +45,15 @@ public class FindBookActivity extends MBaseActivity<FindBookContract.Presenter> 
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_expandable_list_vew);
-    }
-
-    @Override
-    protected void initData() {
-
-    }
-
-    @Override
-    protected void bindView() {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setupActionBar();
 
         initExpandableList();
+    }
 
+    @Override
+    protected void initData() {
         mPresenter.initData();
     }
 
