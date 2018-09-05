@@ -317,8 +317,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
 
     @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
-        mView.updatePx();
-        mView.bindEvent();
-        queryBookShelf(false, group);
+        mView.recreate();
     }
 }

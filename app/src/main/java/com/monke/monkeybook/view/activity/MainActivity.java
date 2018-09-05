@@ -128,17 +128,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void initData() {
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
-        updatePx();
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
         if (viewIsList) {
             bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
         } else {
             bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
         }
-    }
-
-    @Override
-    public void updatePx() {
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
     }
 
     private List<BookShelfBean> getBookshelfList() {
@@ -187,7 +182,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     }
 
     @Override
-    public void bindEvent() {
+    protected void bindEvent() {
         refreshLayout.setOnRefreshListener(() -> {
             mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
             if (!NetworkUtil.isNetWorkAvailable()) {
@@ -202,6 +197,8 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             itemTouchHelper.attachToRecyclerView(rvBookshelf);
         } else {
             itemTouchHelpCallback.setDragEnable(false);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+            itemTouchHelper.attachToRecyclerView(rvBookshelf);
         }
         if (viewIsList) {
             bookShelfListAdapter.setItemClickListener(getAdapterListener());
@@ -262,7 +259,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         getMenuInflater().inflate(R.menu.menu_main_activity, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     /**
      * 菜单事件
@@ -580,6 +576,11 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             }
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Override
+    public void recreate(){
+        super.recreate();
     }
 
     @Override

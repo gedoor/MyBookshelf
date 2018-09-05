@@ -14,10 +14,6 @@ public interface MainContract {
 
         void initImmersionBar();
 
-        void updatePx();
-
-        void bindEvent();
-
         /**
          * 刷新书架书籍小说信息 更新UI
          * @param bookShelfBeanList 书架
@@ -53,6 +49,8 @@ public interface MainContract {
         void onRestore(String msg);
 
         SharedPreferences getPreferences();
+
+        void recreate();
     }
 
     interface Presenter extends IPresenter {

@@ -178,12 +178,14 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
 
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
+        int bookSize = books.size();
         books.clear();
+        notifyItemRangeRemoved(0, bookSize);
         if (null != newDataS && newDataS.size() > 0) {
+            BookshelfHelp.order(newDataS, bookshelfPx);
             books.addAll(newDataS);
         }
-        BookshelfHelp.order(books, bookshelfPx);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, books.size());
     }
 
     public List<BookShelfBean> getBooks() {
