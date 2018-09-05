@@ -108,9 +108,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
         searchBookAdapter.setItemClickListener(new ChoiceBookAdapter.OnItemClickListener() {
             @Override
             public void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean) {
-                Intent intent = new Intent(ChoiceBookActivity.this, SearchBookActivity.class);
-                intent.putExtra("searchKey", searchBookBean.getName());
-                startActivityByAnim(intent, toolbar, "to_search", android.R.anim.fade_in, android.R.anim.fade_out);
+                SearchBookActivity.startByKey(ChoiceBookActivity.this, searchBookBean.getName());
             }
 
             @Override

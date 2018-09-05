@@ -350,6 +350,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
             }
         });
+
+        tvAuthor.setOnClickListener(view -> {
+            SearchBookActivity.startByKey(this, tvAuthor.getText().toString());
+            finish();
+        });
     }
 
 }

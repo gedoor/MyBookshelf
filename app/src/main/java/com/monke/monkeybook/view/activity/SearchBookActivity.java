@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,6 +64,12 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
+
+    public static void startByKey(Context context, String searchKey) {
+        Intent intent = new Intent(context, SearchBookActivity.class);
+        intent.putExtra("searchKey", searchKey);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
