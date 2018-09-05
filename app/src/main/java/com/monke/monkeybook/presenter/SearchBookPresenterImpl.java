@@ -368,4 +368,8 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
         }
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
+    public void searchBook(String searchKey) {
+        mView.searchBook(searchKey);
+    }
 }

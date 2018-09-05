@@ -244,17 +244,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     protected void firstRequest() {
         super.firstRequest();
         Intent intent = this.getIntent();
-        String searchKey = intent.getStringExtra("searchKey");
-        if (!TextUtils.isEmpty(searchKey)) {
-            mSearchAutoComplete.setText(searchKey);
-            searchView.clearFocus();
-            toSearch();
-            showHistory = false;
-        } else {
-            showHistory = true;
-            mPresenter.querySearchHistory("");
-        }
-        openOrCloseHistory(showHistory);
+        searchBook(intent.getStringExtra("searchKey"));
     }
 
     @Override
@@ -266,6 +256,20 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void onResume() {
         super.onResume();
+        openOrCloseHistory(showHistory);
+    }
+
+    @Override
+    public void searchBook(String searchKey) {
+        if (!TextUtils.isEmpty(searchKey)) {
+            mSearchAutoComplete.setText(searchKey);
+            searchView.clearFocus();
+            toSearch();
+            showHistory = false;
+        } else {
+            showHistory = true;
+            mPresenter.querySearchHistory("");
+        }
         openOrCloseHistory(showHistory);
     }
 

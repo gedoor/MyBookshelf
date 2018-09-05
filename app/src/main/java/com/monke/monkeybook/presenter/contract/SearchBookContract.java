@@ -40,15 +40,15 @@ public interface SearchBookContract {
 
     interface View extends IView {
 
+        void searchBook(String searchKey);
+
         /**
          * 成功 新增查询记录
-         * @param searchHistoryBean
          */
         void insertSearchHistorySuccess(SearchHistoryBean searchHistoryBean);
 
         /**
          * 成功搜索 搜索记录
-         * @param datas
          */
         void querySearchHistorySuccess(List<SearchHistoryBean> datas);
 
@@ -59,25 +59,21 @@ public interface SearchBookContract {
 
         /**
          * 加载更多书籍成功 更新UI
-         * @param books
          */
         void loadMoreSearchBook(List<SearchBookBean> books);
 
         /**
          * 刷新成功
-         * @param isAll
          */
         void refreshFinish(Boolean isAll);
 
         /**
          * 加载成功
-         * @param isAll
          */
         void loadMoreFinish(Boolean isAll);
 
         /**
          * 搜索失败
-         * @param isRefresh
          */
         void searchBookError(Boolean isRefresh);
 

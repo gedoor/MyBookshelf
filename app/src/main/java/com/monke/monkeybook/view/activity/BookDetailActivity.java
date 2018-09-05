@@ -19,10 +19,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.hwangjr.rxbus.RxBus;
+import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
@@ -352,7 +355,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
 
         tvAuthor.setOnClickListener(view -> {
-            SearchBookActivity.startByKey(this, tvAuthor.getText().toString());
+            if (!AppActivityManager.getInstance().isExist(SearchBookActivity.class)) {
+                SearchBookActivity.startByKey(this, tvAuthor.getText().toString());
+            } else {
+                RxBus.get().post(RxBusTag.SEARCH_BOOK, tvAuthor.getText().toString());
+            }
             finish();
         });
     }
