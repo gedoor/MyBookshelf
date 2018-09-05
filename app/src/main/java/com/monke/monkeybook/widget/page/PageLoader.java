@@ -253,7 +253,7 @@ public abstract class PageLoader {
         initData();
         initPaint();
         initPageView();
-        mPageView.drawCurPage(false);
+        skipToChapter(mCurChapterPos, mCurPage.position);
     }
 
     @SuppressLint("DefaultLocale")

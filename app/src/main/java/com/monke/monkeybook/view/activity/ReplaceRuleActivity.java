@@ -263,7 +263,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     protected void onDestroy() {
-        RxBus.get().post(RxBusTag.UPDATE_READ, true);
+        RxBus.get().post(RxBusTag.UPDATE_READ, false);
         super.onDestroy();
     }
 }
