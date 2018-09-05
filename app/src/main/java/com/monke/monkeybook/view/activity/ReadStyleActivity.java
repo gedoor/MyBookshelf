@@ -21,11 +21,13 @@ import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -261,7 +263,7 @@ public class ReadStyleActivity extends MBaseActivity {
             readBookControl.setBgPath(textDrawableIndex, bgPath);
         }
         readBookControl.initTextDrawableIndex();
-        setResult(RESULT_OK);
+        RxBus.get().post(RxBusTag.UPDATE_READ, false);
         finish();
     }
 

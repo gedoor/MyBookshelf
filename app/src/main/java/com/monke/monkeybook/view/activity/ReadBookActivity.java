@@ -77,8 +77,6 @@ import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
-    private final int ResultReplace = 101;
-    public final int ResultStyleSet = 105;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -311,7 +309,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 public void run() {
                     nextPage();
                 }
-            }, readBookControl.getClickSensitivity()*1000);
+            }, readBookControl.getClickSensitivity() * 1000);
         }
     }
 
@@ -719,7 +717,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabReplaceRule.setOnClickListener(view -> {
             popMenuOut();
             Intent intent = new Intent(this, ReplaceRuleActivity.class);
-            startActivityForResult(intent, ResultReplace);
+            startActivity(intent);
         });
 
         //夜间模式
@@ -980,6 +978,20 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 //        runOnUiThread(() -> csvBook.speakStart(speakIndex));
     }
 
+    @Override
+    public void refresh(boolean recreate) {
+        if (recreate) {
+            recreate();
+        } else {
+            flContent.setBackground(readBookControl.getTextBackground());
+            if (mPageLoader != null) {
+                mPageLoader.refresh();
+            }
+            readInterfacePop.setBg();
+            initImmersionBar();
+        }
+    }
+
     /**
      * 检查是否加入书架
      */
@@ -1203,20 +1215,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case ResultReplace:
-                recreate();
-                break;
-            case ResultStyleSet:
-                flContent.setBackground(readBookControl.getTextBackground());
-                if (resultCode == RESULT_OK) {
-                    if (mPageLoader != null) {
-                        mPageLoader.refresh();
-                    }
-                    readInterfacePop.setBg();
-                }
-                break;
-        }
         initImmersionBar();
     }
 

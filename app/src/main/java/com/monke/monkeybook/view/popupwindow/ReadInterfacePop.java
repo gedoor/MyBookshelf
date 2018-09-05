@@ -269,7 +269,7 @@ public class ReadInterfacePop extends PopupWindow {
     private boolean customReadStyle(int index) {
         Intent intent = new Intent(activity, ReadStyleActivity.class);
         intent.putExtra("index", index);
-        activity.startActivityForResult(intent, activity.ResultStyleSet);
+        activity.startActivity(intent);
         return false;
     }
 

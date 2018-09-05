@@ -14,11 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
@@ -259,4 +261,9 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         Snackbar.make(llContent, msg, length).show();
     }
 
+    @Override
+    protected void onDestroy() {
+        RxBus.get().post(RxBusTag.UPDATE_READ, true);
+        super.onDestroy();
+    }
 }

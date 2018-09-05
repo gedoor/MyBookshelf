@@ -56,6 +56,8 @@ public interface ReadBookContract {
 
         void speakIndex(int index);
 
+        void refresh(boolean recreate);
+
         void finish();
     }
 

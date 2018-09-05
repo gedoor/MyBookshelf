@@ -494,6 +494,11 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         }
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_READ)})
+    public void updateRead(Boolean recreate) {
+        mView.refresh(recreate);
+    }
+
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_STATE)})
     public void upAloudState(Integer state) {
         mView.upAloudState(state);
@@ -513,4 +518,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     public void upAloudTimer(String timer) {
         mView.upAloudTimer(timer);
     }
+
+
 }

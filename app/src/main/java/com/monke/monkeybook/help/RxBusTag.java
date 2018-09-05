@@ -11,7 +11,7 @@ public class RxBusTag {
     public final static String PAUSE_DOWNLOAD = "pause_download";
     public final static String START_DOWNLOAD = "start_download";
     public final static String CANCEL_DOWNLOAD = "cancel_download";
-    public final static String ADD_DOWNLOAD_TASK = "add_download_task";
+    public final static String UPDATE_READ = "update_read";
     public final static String CHAPTER_CHANGE = "chapter_change";
     public final static String MEDIA_BUTTON = "media_button";
     public final static String ALOUD_MSG = "aloud_string";
