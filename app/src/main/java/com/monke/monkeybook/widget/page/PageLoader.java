@@ -961,7 +961,7 @@ public abstract class PageLoader {
         }
     }
 
-    void prepareDisplay(int w, int h) {
+    public void prepareDisplay(int w, int h) {
         // 获取PageView的宽高
         mDisplayWidth = w;
         mDisplayHeight = h;
@@ -998,7 +998,7 @@ public abstract class PageLoader {
     /**
      * 翻阅上一页
      */
-    boolean prev() {
+    public boolean prev() {
         // 以下情况禁止翻页
         if (!canTurnPage()) {
             return false;
@@ -1208,7 +1208,7 @@ public abstract class PageLoader {
     }
 
     // 取消翻页
-    void pageCancel() {
+    public void pageCancel() {
         if (mCurPage.position == 0 && mCurChapterPos > mLastChapterPos) { // 加载到下一章取消了
             if (mPrePageList != null) {
                 cancelNextChapter();
