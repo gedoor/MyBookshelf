@@ -4,10 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -29,8 +26,6 @@ import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +51,7 @@ public abstract class PageLoader {
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     public static final int STATUS_HY = 8;              // 换源
     // 默认的显示参数配置
+    private static final int CONTENT_MARGIN_HEIGHT = 6;
     public static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
@@ -94,7 +90,7 @@ public abstract class PageLoader {
     private TxtPage mCancelPage;
 
 
-    private Disposable mPreLoadDisp;
+    private Disposable mPreLoadDisposable;
 
     /*****************params**************************/
     // 当前的状态
@@ -121,6 +117,7 @@ public abstract class PageLoader {
     private int mMarginBottom;
     private int mMarginLeft;
     private int mMarginRight;
+    private int contentMarginHeight;
     //字体的颜色
     private int mTextColor;
     //标题的大小
@@ -173,6 +170,7 @@ public abstract class PageLoader {
         mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
         mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
         mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
+        contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
         // 配置文字有关的参数
         setUpTextParams();
     }
@@ -320,8 +318,8 @@ public abstract class PageLoader {
         // 将上一章的缓存设置为null
         mPrePageList = null;
         // 如果当前下一章缓存正在执行，则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mPreLoadDisposable != null) {
+            mPreLoadDisposable.dispose();
         }
         // 将下一章缓存设置为null
         mNextPageList = null;
@@ -332,6 +330,7 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定章节
+     *
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
@@ -342,8 +341,8 @@ public abstract class PageLoader {
         // 将上一章的缓存设置为null
         mPrePageList = null;
         // 如果当前下一章缓存正在执行，则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mPreLoadDisposable != null) {
+            mPreLoadDisposable.dispose();
         }
         // 将下一章缓存设置为null
         mNextPageList = null;
@@ -466,10 +465,7 @@ public abstract class PageLoader {
     }
 
     /**
-     * 翻页动画
-     *
-     * @param pageMode:翻页模式
-     * @see PageMode
+     * 设置翻页动画
      */
     public void setPageMode(PageMode pageMode) {
         mPageMode = pageMode;
@@ -498,8 +494,6 @@ public abstract class PageLoader {
 
     /**
      * 设置页面切换监听
-     *
-     * @param listener
      */
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         mPageChangeListener = listener;
@@ -512,8 +506,6 @@ public abstract class PageLoader {
 
     /**
      * 获取当前页的状态
-     *
-     * @return
      */
     public int getPageStatus() {
         return mStatus;
@@ -521,8 +513,6 @@ public abstract class PageLoader {
 
     /**
      * 获取书籍信息
-     *
-     * @return
      */
     public BookShelfBean getCollBook() {
         return mCollBook;
@@ -621,8 +611,8 @@ public abstract class PageLoader {
         isChapterListPrepare = false;
         isClose = true;
 
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mPreLoadDisposable != null) {
+            mPreLoadDisposable.dispose();
         }
 
         clearList(mCurPageList);
@@ -737,7 +727,7 @@ public abstract class PageLoader {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
+                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                                     TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
@@ -766,14 +756,14 @@ public abstract class PageLoader {
                         if (isChapterListPrepare) {
                             //绘制标题
                             percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
+                            percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                                     TextUtils.TruncateAt.END).toString();
                             canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         }
                     } else {
                         //绘制标题
                         percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                        percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth*2,
+                        percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                                 TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                         //绘制页码
@@ -907,11 +897,11 @@ public abstract class PageLoader {
             float top;
 
             if (mPageMode == PageMode.SCROLL) {
-                top = -mTextPaint.getFontMetrics().top;
+                top = contentMarginHeight - mTextPaint.getFontMetrics().top;
             } else {
                 top = mSettingManager.getHideStatusBar()
-                        ? mMarginTop - mTextPaint.getFontMetrics().top
-                        : mPageView.getStatusBarHeight() + mMarginTop - mTextPaint.getFontMetrics().top;
+                        ? mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top
+                        : mPageView.getStatusBarHeight() + mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top;
             }
 
             //设置总距离
@@ -1000,8 +990,6 @@ public abstract class PageLoader {
 
     /**
      * 翻阅上一页
-     *
-     * @return
      */
     boolean prev() {
         // 以下情况禁止翻页
@@ -1036,8 +1024,6 @@ public abstract class PageLoader {
 
     /**
      * 解析上一章数据
-     *
-     * @return:数据是否解析成功
      */
     boolean parsePrevChapter() {
         // 加载上一章数据
@@ -1065,10 +1051,7 @@ public abstract class PageLoader {
 
     private boolean hasPrevChapter() {
         //判断是否上一章节为空
-        if (mCurChapterPos - 1 < 0) {
-            return false;
-        }
-        return true;
+        return mCurChapterPos - 1 >= 0;
     }
 
     /**
@@ -1196,8 +1179,8 @@ public abstract class PageLoader {
         }
 
         //如果之前正在加载则取消
-        if (mPreLoadDisp != null) {
-            mPreLoadDisp.dispose();
+        if (mPreLoadDisposable != null) {
+            mPreLoadDisposable.dispose();
         }
 
         //调用异步进行预加载加载
@@ -1206,7 +1189,7 @@ public abstract class PageLoader {
                 .subscribe(new SingleObserver<List<TxtPage>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mPreLoadDisp = d;
+                        mPreLoadDisposable = d;
                     }
 
                     @Override
@@ -1283,9 +1266,9 @@ public abstract class PageLoader {
         mCancelPage = null;
     }
 
-    /**************************************private method********************************************/
     /**
      * 将章节数据，解析成页面列表
+     *
      * @param chapter：章节信息
      * @param br：章节的文本流
      */
@@ -1294,7 +1277,7 @@ public abstract class PageLoader {
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
         List<String> lines = new ArrayList<>();
-        int rHeight = mVisibleHeight;
+        int rHeight = mVisibleHeight - ScreenUtils.dpToPx(contentMarginHeight * 2);
         int titleLinesCount = 0;
         try {
             boolean showTitle = true; // 是否展示标题
