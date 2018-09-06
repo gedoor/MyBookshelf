@@ -21,6 +21,7 @@ import com.monke.monkeybook.widget.animation.NonePageAnim;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 import com.monke.monkeybook.widget.animation.ScrollPageAnim;
 import com.monke.monkeybook.widget.animation.SimulationPageAnim;
+import com.monke.monkeybook.widget.animation.SlidePageAnim;
 
 import java.util.Objects;
 
@@ -113,6 +114,9 @@ public class PageView extends View {
                 break;
             case COVER:
                 mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
+                break;
+            case SLIDE:
+                mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
             case NONE:
                 mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
