@@ -886,12 +886,20 @@ public abstract class PageLoader {
             }
 
             //将提示语句放到正中间
+            Layout tempLayout = new StaticLayout(tip, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+            List<String> linesData = new ArrayList<>();
+            for (int i = 0; i < tempLayout.getLineCount(); i++) {
+                linesData.add(tip.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
+            }
             Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
             float textHeight = fontMetrics.top - fontMetrics.bottom;
-            float textWidth = mTextPaint.measureText(tip);
-            float pivotX = (mDisplayWidth - textWidth) / 2;
-            float pivotY = (mDisplayHeight - textHeight) / 2;
-            canvas.drawText(tip, pivotX, pivotY, mTextPaint);
+            float pivotY = (mDisplayHeight - textHeight * linesData.size()) / 2;
+            for (String str : linesData) {
+                float textWidth = mTextPaint.measureText(str);
+                float pivotX = (mDisplayWidth - textWidth) / 2;
+                canvas.drawText(str, pivotX, pivotY, mTextPaint);
+                pivotY = pivotY + textHeight + mTextInterval;
+            }
         } else {
             float top;
 
