@@ -66,6 +66,8 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
 
+        <activity android:name=".view.activity.WelcomeToReadActivity" />
+
         <activity
             android:name=".view.activity.ReadBookActivity"
             android:launchMode="singleTask"
