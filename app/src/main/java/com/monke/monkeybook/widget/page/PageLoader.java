@@ -1280,7 +1280,7 @@ public abstract class PageLoader {
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
         List<String> lines = new ArrayList<>();
-        int rHeight = mVisibleHeight - ScreenUtils.dpToPx(contentMarginHeight * 2);
+        int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
         try {
             boolean showTitle = true; // 是否展示标题
@@ -1322,7 +1322,7 @@ public abstract class PageLoader {
                         pages.add(page);
                         // 重置Lines
                         lines.clear();
-                        rHeight = mVisibleHeight - ScreenUtils.dpToPx(contentMarginHeight * 2);
+                        rHeight = mVisibleHeight - contentMarginHeight * 2;
                         titleLinesCount = 0;
 
                         continue;
