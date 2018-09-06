@@ -1302,8 +1302,8 @@ public abstract class PageLoader {
                     if (paragraph.equals("")) continue;
                     paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
                 }
-                int wordCount = 0;
-                String subStr = null;
+                int wordCount;
+                String subStr;
                 while (paragraph.length() > 0) {
                     //当前空间，是否容得下一行文字
                     if (showTitle) {
@@ -1392,15 +1392,10 @@ public abstract class PageLoader {
             canvas.drawText(blanks, x, top, paint);
             float bw = StaticLayout.getDesiredWidth(blanks, paint);
             x += bw;
-
             line = line.substring(2);
         }
-
-
         int gapCount = line.length() - 1;
-
         int i = 0;
-
         float d = ((mDisplayWidth - (mMarginLeft + mMarginRight)) - lineWidth) / gapCount;
         for (; i < line.length(); i++) {
             String c = String.valueOf(line.charAt(i));
