@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.monke.basemvplib.AppActivityManager;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -26,8 +27,11 @@ public class WelcomeToReadActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
+        Intent intent = new Intent(WelcomeToReadActivity.this, ReadBookActivity.class);
+        intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
         // 避免从桌面启动程序后，会重新实例化入口类的activity
-        if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0){
+        if(AppActivityManager.getInstance().isExist(ReadBookActivity.class)){
+            startActivity(intent);
             finish();
             return;
         }
@@ -42,8 +46,6 @@ public class WelcomeToReadActivity extends MBaseActivity {
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Intent intent = new Intent(WelcomeToReadActivity.this, ReadBookActivity.class);
-                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
                 startActivity(intent);
                 finish();
             }
