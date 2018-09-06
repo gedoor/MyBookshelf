@@ -1063,8 +1063,6 @@ public abstract class PageLoader {
 
     /**
      * 翻到下一页
-     *
-     * @return:是否允许翻页
      */
     boolean next() {
         // 以下情况禁止翻页
@@ -1113,8 +1111,6 @@ public abstract class PageLoader {
 
     /**
      * 解析下一章数据
-     *
-     * @return:返回解析成功还是失败
      */
     boolean parseNextChapter() {
         int nextChapter = mCurChapterPos + 1;
@@ -1326,7 +1322,7 @@ public abstract class PageLoader {
                         pages.add(page);
                         // 重置Lines
                         lines.clear();
-                        rHeight = mVisibleHeight;
+                        rHeight = mVisibleHeight - ScreenUtils.dpToPx(contentMarginHeight * 2);
                         titleLinesCount = 0;
 
                         continue;
