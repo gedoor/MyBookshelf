@@ -73,7 +73,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     @Override
     public void initData(Activity activity) {
         Intent intent = activity.getIntent();
-        open_from = intent.getIntExtra("from", OPEN_FROM_OTHER);
+        open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
+        open_from = intent.getIntExtra("from", open_from);
         if (open_from == OPEN_FROM_APP) {
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
