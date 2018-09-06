@@ -21,6 +21,12 @@
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_default_read"
+        android:summary="@string/ps_default_read"
+        android:title="@string/pt_default_read"/>
+
     <com.monke.monkeybook.widget.number.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"

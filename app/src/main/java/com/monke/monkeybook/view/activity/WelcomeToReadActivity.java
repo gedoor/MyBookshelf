@@ -27,14 +27,6 @@ public class WelcomeToReadActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
-        Intent intent = new Intent(WelcomeToReadActivity.this, ReadBookActivity.class);
-        intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
-        // 避免从桌面启动程序后，会重新实例化入口类的activity
-        if(AppActivityManager.getInstance().isExist(ReadBookActivity.class)){
-            startActivity(intent);
-            finish();
-            return;
-        }
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
@@ -46,7 +38,7 @@ public class WelcomeToReadActivity extends MBaseActivity {
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                startActivity(intent);
+                startReadActivity();
                 finish();
             }
 
@@ -66,6 +58,12 @@ public class WelcomeToReadActivity extends MBaseActivity {
             }
         });
         welAnimator.start();
+    }
+
+    private void startReadActivity() {
+        Intent intent = new Intent(this, ReadBookActivity.class);
+        intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+        startActivity(intent);
     }
 
     @Override
