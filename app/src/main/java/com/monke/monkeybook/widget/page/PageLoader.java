@@ -330,7 +330,6 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定章节
-     *
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
