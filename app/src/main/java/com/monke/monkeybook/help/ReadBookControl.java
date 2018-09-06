@@ -638,8 +638,10 @@ public class ReadBookControl {
             case 1:
                 return PageMode.SIMULATION;
             case 2:
-                return PageMode.SCROLL;
+                return PageMode.SLIDE;
             case 3:
+                return PageMode.SCROLL;
+            case 4:
                 return PageMode.NONE;
             default:
                 return PageMode.COVER;
