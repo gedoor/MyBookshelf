@@ -8,13 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.utils.FileStack;
 import com.monke.monkeybook.help.FileHelp;
+import com.monke.monkeybook.utils.FileStack;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.FileSystemAdapter;
 import com.monke.monkeybook.widget.itemdecoration.DividerItemDecoration;
@@ -27,14 +26,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * Created by newbiechen on 17-5-27.
- */
 
 public class FileCategoryFragment extends BaseFileFragment {
     private static final String TAG = "FileCategoryFragment";
@@ -64,7 +60,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
+        mRvContent.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getContext())));
         mRvContent.setAdapter(mAdapter);
         setTextViewIconColor(mTvBackLast);
     }
@@ -203,15 +199,9 @@ public class FileCategoryFragment extends BaseFileFragment {
                 return false;
             }
 
-            /**
-             * 现在只支持TXT文件的显示
-             */
             //文件内容为空,或者不以txt为开头
-            if (!pathname.isDirectory() &&
-                    (pathname.length() == 0 || !pathname.getName().endsWith(FileHelp.SUFFIX_TXT))) {
-                return false;
-            }
-            return true;
+            return pathname.isDirectory() ||
+                    (pathname.length() != 0 && pathname.getName().endsWith(FileHelp.SUFFIX_TXT));
         }
     }
 }
