@@ -43,7 +43,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     RecyclerView mRvContent;
 
     private FileStack mFileStack;
-
+    private String rootFilePath;
 
     @Override
     protected View createView(LayoutInflater inflater, ViewGroup container) {
@@ -76,7 +76,7 @@ public class FileCategoryFragment extends BaseFileFragment {
                         //保存当前信息。
                         FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
                         snapshot.filePath = mTvPath.getText().toString();
-                        snapshot.files = new ArrayList<File>(mAdapter.getItems());
+                        snapshot.files = new ArrayList<>(mAdapter.getItems());
                         snapshot.scrollOffset = mRvContent.computeVerticalScrollOffset();
                         mFileStack.push(snapshot);
                         //切换下一个文件
@@ -120,6 +120,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     protected void firstRequest() {
         super.firstRequest();
         File root = Environment.getExternalStorageDirectory();
+        rootFilePath = root.getPath();
         toggleFileTree(root);
     }
 
@@ -130,7 +131,7 @@ public class FileCategoryFragment extends BaseFileFragment {
 
     private void toggleFileTree(File file){
         //路径名
-        mTvPath.setText(getString(R.string.nb_file_path, file.getPath()));
+        mTvPath.setText(getString(R.string.nb_file_path, file.getPath().replace(rootFilePath, "")));
         //获取数据
         File[] files = file.listFiles(new SimpleFileFilter());
         //转换成List
