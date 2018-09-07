@@ -18,6 +18,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:padding="10dp"
+            android:singleLine="true"
             android:textColor="@color/tv_text_default"
             android:textSize="13sp"
             tools:text="存储卡:/" />
