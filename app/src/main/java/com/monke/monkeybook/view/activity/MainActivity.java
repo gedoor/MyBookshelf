@@ -129,11 +129,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     protected void initData() {
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-        if (viewIsList) {
-            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
-        } else {
-            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
-        }
     }
 
     private List<BookShelfBean> getBookshelfList() {
@@ -163,9 +158,11 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         moProgressHUD = new MoProgressHUD(this);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         if (viewIsList) {
+            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
             rvBookshelf.setAdapter(bookShelfListAdapter);
             rvBookshelf.setLayoutManager(new LinearLayoutManager(this));
         } else {
+            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
             rvBookshelf.setAdapter(bookShelfGridAdapter);
             rvBookshelf.setLayoutManager(new GridLayoutManager(this, 3));
         }
