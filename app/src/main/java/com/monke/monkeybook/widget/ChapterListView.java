@@ -235,7 +235,7 @@ public class ChapterListView extends FrameLayout {
             }
         });
         rvList.setAdapter(chapterListAdapter);
-        Objects.requireNonNull(toolbarTab.getTabAt(0)).setText(String.format(mContext.getString(R.string.chapter_list_size), bookShelfBean.getChapterListSize()));
+        Objects.requireNonNull(toolbarTab.getTabAt(0)).setText(mContext.getString(R.string.chapter_list_size, bookShelfBean.getChapterListSize()));
     }
 
     public void upChapterList(ChapterListBean chapterListBean) {

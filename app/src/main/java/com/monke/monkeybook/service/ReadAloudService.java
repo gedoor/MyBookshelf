@@ -331,7 +331,7 @@ public class ReadAloudService extends Service {
         if (pause) {
             title = getString(R.string.read_aloud_pause);
         } else if (timeMinute > 0 && timeMinute <= 60) {
-            title = String.format(getString(R.string.read_aloud_timer), timeMinute);
+            title = getString(R.string.read_aloud_timer, timeMinute);
         } else {
             title = getString(R.string.read_aloud_t);
         }
