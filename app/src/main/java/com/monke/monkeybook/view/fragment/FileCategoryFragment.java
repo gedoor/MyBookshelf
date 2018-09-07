@@ -2,17 +2,20 @@ package com.monke.monkeybook.view.fragment;
 
 import android.graphics.PorterDuff;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.FileStack;
 import com.monke.monkeybook.help.FileHelp;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.FileSystemAdapter;
 import com.monke.monkeybook.widget.itemdecoration.DividerItemDecoration;
 
@@ -58,7 +61,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         setUpAdapter();
     }
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
         mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
@@ -72,7 +75,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         mAdapter.setOnItemClickListener(
                 (view, pos) -> {
                     File file = mAdapter.getItem(pos);
-                    if (file.isDirectory()){
+                    if (file.isDirectory()) {
                         //保存当前信息。
                         FileStack.FileSnapshot snapshot = new FileStack.FileSnapshot();
                         snapshot.filePath = mTvPath.getText().toString();
@@ -81,47 +84,64 @@ public class FileCategoryFragment extends BaseFileFragment {
                         mFileStack.push(snapshot);
                         //切换下一个文件
                         toggleFileTree(file);
-                    }
-                    else {
+                    } else {
 
                         //如果是已加载的文件，则点击事件无效。
                         String id = mAdapter.getItem(pos).getAbsolutePath();
-                        if (BookshelfHelp.getBook(id) != null){
+                        if (BookshelfHelp.getBook(id) != null) {
                             return;
                         }
                         //点击选中
                         mAdapter.setCheckedItem(pos);
                         //反馈
-                        if (mListener != null){
+                        if (mListener != null) {
                             mListener.onItemCheckedChange(mAdapter.getItemIsChecked(pos));
                         }
                     }
                 }
         );
 
-        mTvBackLast.setOnClickListener(
-                (v) -> {
+        mTvBackLast.setOnClickListener(v -> {
                     FileStack.FileSnapshot snapshot = mFileStack.pop();
                     int oldScrollOffset = mRvContent.computeHorizontalScrollOffset();
                     if (snapshot == null) return;
                     mTvPath.setText(snapshot.filePath);
                     mAdapter.refreshItems(snapshot.files);
-                    mRvContent.scrollBy(0,snapshot.scrollOffset - oldScrollOffset);
+                    mRvContent.scrollBy(0, snapshot.scrollOffset - oldScrollOffset);
                     //反馈
-                    if (mListener != null){
+                    if (mListener != null) {
                         mListener.onCategoryChanged();
                     }
                 }
         );
 
+        mTvPath.setOnClickListener(v -> {
+            if (getContext() != null) {
+                List<String> list = FileUtil.getStorageData(getContext());
+                if (list != null) {
+                    String[] filePathS = list.toArray(new String[list.size()]);
+                    AlertDialog dialog = new AlertDialog.Builder(getContext())
+                            .setTitle("选择SD卡")
+                            .setSingleChoiceItems(filePathS, 0, (dialogInterface, i) -> {
+                                upRootFile(filePathS[i]);
+                                dialogInterface.dismiss();
+                            })
+                            .create();
+                    dialog.show();
+                }
+            }
+        });
     }
 
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        File root = Environment.getExternalStorageDirectory();
-        rootFilePath = root.getPath();
-        toggleFileTree(root);
+        upRootFile(Environment.getExternalStorageDirectory().getPath());
+    }
+
+    private void upRootFile(String rootFilePath) {
+        this.rootFilePath = rootFilePath;
+        toggleFileTree(new File(rootFilePath));
     }
 
     private void setTextViewIconColor(TextView textView) {
@@ -129,7 +149,7 @@ public class FileCategoryFragment extends BaseFileFragment {
         textView.getCompoundDrawables()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
-    private void toggleFileTree(File file){
+    private void toggleFileTree(File file) {
         //路径名
         mTvPath.setText(getString(R.string.nb_file_path, file.getPath().replace(rootFilePath, "")));
         //获取数据
@@ -137,21 +157,21 @@ public class FileCategoryFragment extends BaseFileFragment {
         //转换成List
         List<File> rootFiles = Arrays.asList(files);
         //排序
-        Collections.sort(rootFiles,new FileComparator());
+        Collections.sort(rootFiles, new FileComparator());
         //加入
         mAdapter.refreshItems(rootFiles);
         //反馈
-        if (mListener != null){
+        if (mListener != null) {
             mListener.onCategoryChanged();
         }
     }
 
     @Override
-    public int getFileCount(){
+    public int getFileCount() {
         int count = 0;
         Set<Map.Entry<File, Boolean>> entrys = mAdapter.getCheckMap().entrySet();
-        for (Map.Entry<File, Boolean> entry:entrys){
-            if (!entry.getKey().isDirectory()){
+        for (Map.Entry<File, Boolean> entry : entrys) {
+            if (!entry.getKey().isDirectory()) {
                 ++count;
             }
         }
@@ -159,9 +179,9 @@ public class FileCategoryFragment extends BaseFileFragment {
     }
 
 
-    public class FileComparator implements Comparator<File>{
+    public class FileComparator implements Comparator<File> {
         @Override
-        public int compare(File o1, File o2){
+        public int compare(File o1, File o2) {
             if (o1.isDirectory() && o2.isFile()) {
                 return -1;
             }
@@ -172,14 +192,14 @@ public class FileCategoryFragment extends BaseFileFragment {
         }
     }
 
-    public class SimpleFileFilter implements FileFilter{
+    public class SimpleFileFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
-            if (pathname.getName().startsWith(".")){
+            if (pathname.getName().startsWith(".")) {
                 return false;
             }
             //文件夹内部数量为0
-            if (pathname.isDirectory() && pathname.list().length == 0){
+            if (pathname.isDirectory() && pathname.list().length == 0) {
                 return false;
             }
 
@@ -188,7 +208,7 @@ public class FileCategoryFragment extends BaseFileFragment {
              */
             //文件内容为空,或者不以txt为开头
             if (!pathname.isDirectory() &&
-                    (pathname.length() == 0 || !pathname.getName().endsWith(FileHelp.SUFFIX_TXT))){
+                    (pathname.length() == 0 || !pathname.getName().endsWith(FileHelp.SUFFIX_TXT))) {
                 return false;
             }
             return true;
