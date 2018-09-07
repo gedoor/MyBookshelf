@@ -110,8 +110,8 @@ public class AboutActivity extends MBaseActivity {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
-        tvQq.setText(String.format(getString(R.string.qq_group), qq));
+        tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
+        tvQq.setText(getString(R.string.qq_group, qq));
 
         setTextViewIconColor(tvDisclaimer);
         setTextViewIconColor(tvGit);

@@ -129,10 +129,8 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         }
-        holder.tvRead.setText(String.format(holder.tvRead.getContext().getString(R.string.read_dur_progress),
-                books.get(index).getDurChapterName()));
-        holder.tvLast.setText(String.format(holder.tvLast.getContext().getString(R.string.book_search_last),
-                books.get(index).getLastChapterName()));
+        holder.tvRead.setText(holder.tvRead.getContext().getString(R.string.read_dur_progress, books.get(index).getDurChapterName()));
+        holder.tvLast.setText(holder.tvLast.getContext().getString(R.string.book_search_last, books.get(index).getLastChapterName()));
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {

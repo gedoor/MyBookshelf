@@ -156,7 +156,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     public void upSearchView(int size) {
-        searchView.setQueryHint(String.format(getString(R.string.search_book_source_num), size));
+        searchView.setQueryHint(getString(R.string.search_book_source_num, size));
     }
 
     @Override

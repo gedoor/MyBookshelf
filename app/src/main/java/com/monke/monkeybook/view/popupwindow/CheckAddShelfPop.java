@@ -11,23 +11,25 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 
-public class CheckAddShelfPop extends PopupWindow{
+public class CheckAddShelfPop extends PopupWindow {
     private Context mContext;
     private View view;
 
     public interface OnItemClickListener {
         void clickExit();
+
         void clickAddShelf();
     }
+
     private OnItemClickListener itemClick;
     private String bookName;
 
-    public CheckAddShelfPop(Context context,@NonNull String bookName,@NonNull OnItemClickListener itemClick){
-        super(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    public CheckAddShelfPop(Context context, @NonNull String bookName, @NonNull OnItemClickListener itemClick) {
+        super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
         this.bookName = bookName;
         this.itemClick = itemClick;
-        view = LayoutInflater.from(mContext).inflate(R.layout.moprogress_dialog_two,null);
+        view = LayoutInflater.from(mContext).inflate(R.layout.moprogress_dialog_two, null);
         this.setContentView(view);
 
         initView();
@@ -39,7 +41,7 @@ public class CheckAddShelfPop extends PopupWindow{
 
     private void initView() {
         TextView tvBookName = view.findViewById(R.id.tv_msg);
-        tvBookName.setText(String.format(mContext.getString(R.string.check_add_bookshelf),bookName));
+        tvBookName.setText(mContext.getString(R.string.check_add_bookshelf, bookName));
         TextView tvExit = view.findViewById(R.id.tv_cancel);
         tvExit.setText("退出阅读");
         tvExit.setOnClickListener(v -> {

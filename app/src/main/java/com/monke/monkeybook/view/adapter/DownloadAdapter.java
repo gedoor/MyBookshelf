@@ -52,7 +52,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
                         .dontAnimate().placeholder(R.drawable.img_cover_default))
                 .into(holder.ivCover);
         holder.tvName.setText(dataS.get(position).getName());
-        holder.tvDownload.setText(String.format(activity.getString(R.string.un_download), dataS.get(position).getDownload()));
+        holder.tvDownload.setText(activity.getString(R.string.un_download, dataS.get(position).getDownload()));
         holder.ivDel.setOnClickListener(view -> activity.delDownload(dataS.get(position).getNoteUrl()));
     }
 
