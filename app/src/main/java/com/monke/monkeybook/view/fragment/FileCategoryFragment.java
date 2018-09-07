@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.fragment;
 
 import android.graphics.PorterDuff;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class FileCategoryFragment extends BaseFileFragment {
     private static final String TAG = "FileCategoryFragment";
@@ -40,6 +42,9 @@ public class FileCategoryFragment extends BaseFileFragment {
     TextView mTvBackLast;
     @BindView(R.id.file_category_rv_content)
     RecyclerView mRvContent;
+    @BindView(R.id.tv_sd)
+    TextView tvSd;
+    Unbinder unbinder;
 
     private FileStack mFileStack;
     private String rootFilePath;
@@ -111,7 +116,7 @@ public class FileCategoryFragment extends BaseFileFragment {
                 }
         );
 
-        mTvPath.setOnClickListener(v -> {
+        tvSd.setOnClickListener(v -> {
             if (getContext() != null) {
                 List<String> list = FileUtil.getStorageData(getContext());
                 if (list != null) {
@@ -147,7 +152,7 @@ public class FileCategoryFragment extends BaseFileFragment {
 
     private void toggleFileTree(File file) {
         //路径名
-        mTvPath.setText(getString(R.string.nb_file_path, file.getPath().replace(rootFilePath, "")));
+        mTvPath.setText(file.getPath().replace(rootFilePath, ""));
         //获取数据
         File[] files = file.listFiles(new SimpleFileFilter());
         //转换成List
@@ -172,6 +177,19 @@ public class FileCategoryFragment extends BaseFileFragment {
             }
         }
         return count;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
 

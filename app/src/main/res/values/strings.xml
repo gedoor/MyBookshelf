@@ -220,7 +220,7 @@
     <string name="jf_convert_j">繁转简</string>
     <string name="page_mode">翻页模式</string>
     <string name="nb.file.sub_count">%1$d 项</string>
-    <string name="nb.file.path">存储卡:%1$s</string>
+    <string name="nb.file.path">存储卡:</string>
     <string name="nb.file.add_shelf">加入书架</string>
     <string name="nb.file.add_shelves">加入书架(%1$d)</string>
     <string name="nb.file.add_succeed">成功添加%1$d本书</string>

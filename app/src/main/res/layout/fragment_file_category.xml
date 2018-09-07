@@ -12,16 +12,29 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tv_sd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_margin="5dp"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:background="@drawable/selector_tv_first_button"
+            android:textSize="13sp"
+            android:text="@string/nb.file.path" />
+
+        <TextView
             android:id="@+id/file_category_tv_path"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/tv_text_default"
             android:textSize="13sp"
-            tools:text="存储卡:/" />
+            tools:text="/" />
 
         <TextView
             android:id="@+id/file_category_tv_back_last"
