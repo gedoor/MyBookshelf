@@ -156,23 +156,25 @@ public class SearchBookModel {
                 searchOnEngine(content, bookShelfS, searchTime);
             }
         } else {
-            if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
-                if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
-                    if (page == 1) {
-                        searchListener.searchBookError(true);
+            activity.runOnUiThread(() -> {
+                if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
+                    if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
+                        if (page == 1) {
+                            searchListener.searchBookError(true);
+                        } else {
+                            searchListener.searchBookError(false);
+                        }
                     } else {
-                        searchListener.searchBookError(false);
-                    }
-                } else {
-                    if (page == 1) {
-                        searchListener.refreshFinish(false);
-                    } else if (page < 3) {
-                        searchListener.loadMoreFinish(false);
-                    } else {
-                        searchListener.loadMoreFinish(true);
+                        if (page == 1) {
+                            searchListener.refreshFinish(false);
+                        } else if (page < 3) {
+                            searchListener.loadMoreFinish(false);
+                        } else {
+                            searchListener.loadMoreFinish(true);
+                        }
                     }
                 }
-            }
+            });
         }
     }
 
