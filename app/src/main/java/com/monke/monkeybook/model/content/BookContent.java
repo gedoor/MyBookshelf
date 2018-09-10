@@ -8,10 +8,8 @@ import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeJson;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -37,15 +35,9 @@ public class BookContent {
                 ruleBookContent = ruleBookContent.substring(1);
             }
             try {
-                if (ruleBookContent.contains("JSON")) {
-                    JSONObject jsonObject = new JSONObject(s);
-                    AnalyzeJson analyzeJson = new AnalyzeJson(jsonObject);
-                    bookContentBean.setDurChapterContent(analyzeJson.getResult(ruleBookContent));
-                } else {
-                    Document doc = Jsoup.parse(s);
-                    AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
-                    bookContentBean.setDurChapterContent(analyzeElement.getResult(ruleBookContent));
-                }
+                Document doc = Jsoup.parse(s);
+                AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
+                bookContentBean.setDurChapterContent(analyzeElement.getResult(ruleBookContent));
                 bookContentBean.setRight(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
