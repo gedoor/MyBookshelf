@@ -45,12 +45,14 @@ public class ChangeSourceView {
     private String bookTag;
     private String bookName;
     private String bookAuthor;
+    private BaseActivity activity;
 
     public static ChangeSourceView getInstance(BaseActivity activity, MoProgressView moProgressView) {
         return new ChangeSourceView(activity, moProgressView);
     }
 
     private ChangeSourceView(BaseActivity activity, MoProgressView moProgressView) {
+        this.activity = activity;
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
@@ -75,13 +77,11 @@ public class ChangeSourceView {
 
             @Override
             public void refreshFinish(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true,true);
             }
 
             @Override
             public void loadMoreFinish(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true);
             }
 
@@ -104,7 +104,6 @@ public class ChangeSourceView {
 
             @Override
             public void searchBookError(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true);
             }
 
@@ -170,7 +169,7 @@ public class ChangeSourceView {
         searchBookModel.search(bookName, startThisSearchTime, bookShelfS, false);
     }
 
-    private void addSearchBook(List<SearchBookBean> value) {
+    private synchronized void addSearchBook(List<SearchBookBean> value) {
         if (value.size() > 0) {
             for (SearchBookBean searchBookBean : value) {
                 if (Objects.equals(searchBookBean.getName(), bookName)
@@ -180,8 +179,8 @@ public class ChangeSourceView {
                     } else {
                         searchBookBean.setIsAdd(false);
                     }
-                    adapter.addSourceAdapter(searchBookBean);
-                    saveSearchBook();
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                    activity.runOnUiThread(() ->adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
             }
@@ -199,12 +198,6 @@ public class ChangeSourceView {
 
         rvSource.setBaseRefreshListener(this::reSearchBook);
 
-    }
-
-    private void saveSearchBook() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e->{
-            DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(adapter.getSearchBookBeans());
-        }).subscribe();
     }
 
     /**
