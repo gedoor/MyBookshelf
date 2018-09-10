@@ -61,10 +61,10 @@
                         android:layout_height="1dp"
                         android:background="@color/btn_bg_press" />
 
-                    <me.grantland.widget.AutofitTextView
+                    <TextView
                         android:id="@+id/atv_url"
                         android:layout_width="match_parent"
-                        android:layout_height="22dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/background"
                         android:paddingEnd="10dp"
                         android:paddingStart="10dp"
