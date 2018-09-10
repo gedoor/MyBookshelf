@@ -264,7 +264,7 @@ public abstract class PageLoader {
     public void changeSourceFinish(BookShelfBean bookShelfBean) {
         mCollBook = bookShelfBean;
         mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
-        skipToChapter(mCurChapterPos, mCurPage.position);
+        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
     }
 
     /**
