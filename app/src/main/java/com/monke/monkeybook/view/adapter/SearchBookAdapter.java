@@ -21,6 +21,7 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -163,25 +164,24 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
+        List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
-            if (searchBooks.size() == 0) {
-                searchBooks.addAll(newDataS);
-                notifyItemRangeChanged(0, newDataS.size());
+            if (copyDataS.size() == 0) {
+                copyDataS.addAll(newDataS);
             } else {
                 //已有
                 for (SearchBookBean temp : newDataS) {
                     Boolean hasSame = false;
-                    for (int i = 0; i < searchBooks.size(); i++) {
-                        SearchBookBean searchBook = searchBooks.get(i);
+                    for (int i = 0; i < copyDataS.size(); i++) {
+                        SearchBookBean searchBook = copyDataS.get(i);
                         if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
                             if (temp.getIsAdd()) {
                                 searchBook.setIsAdd(true);
                             }
                             hasSame = true;
                             searchBook.originNumAdd();
-                            notifyItemChanged(i);
                             break;
                         }
                     }
@@ -192,28 +192,27 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 //添加
                 for (SearchBookBean temp : searchBookBeansAdd) {
                     if (temp.getName().equals(keyWord)) {
-                        for (int i = 0; i < searchBooks.size(); i++) {
-                            if (!Objects.equals(keyWord, searchBooks.get(i).getName())) {
-                                searchBooks.add(i, temp);
-                                notifyItemRangeChanged(i, searchBooks.size());
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            if (!Objects.equals(keyWord, copyDataS.get(i).getName())) {
+                                copyDataS.add(i, temp);
                                 break;
                             }
                         }
                     } else if (temp.getAuthor().contains(keyWord) || temp.getName().contains(keyWord)) {
-                        for (int i = 0; i < searchBooks.size(); i++) {
-                            if (!Objects.equals(keyWord, searchBooks.get(i).getName()) && !Objects.equals(keyWord, searchBooks.get(i).getAuthor())) {
-                                searchBooks.add(i, temp);
-                                notifyItemRangeChanged(i, searchBooks.size());
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            if (!Objects.equals(keyWord, copyDataS.get(i).getName()) && !Objects.equals(keyWord, copyDataS.get(i).getAuthor())) {
+                                copyDataS.add(i, temp);
                                 break;
                             }
                         }
                     } else {
-                        searchBooks.add(temp);
-                        notifyItemChanged(searchBooks.size());
+                        copyDataS.add(temp);
                     }
                 }
             }
         }
+        searchBooks = copyDataS;
+        activity.runOnUiThread(this::notifyDataSetChanged);
     }
 
     public void clearAll() {

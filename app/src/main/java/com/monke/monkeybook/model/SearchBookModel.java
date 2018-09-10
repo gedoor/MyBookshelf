@@ -109,7 +109,7 @@ public class SearchBookModel {
             if (searchEngine.getHasMore()) {
                 WebBookModelImpl.getInstance()
                         .searchOtherBook(content, page, searchEngine.getTag())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(Schedulers.io())
                         .subscribeOn(Schedulers.newThread())
                         .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(new Observer<List<SearchBookBean>>() {
