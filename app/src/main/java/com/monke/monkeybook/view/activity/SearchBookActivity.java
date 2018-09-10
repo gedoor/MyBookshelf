@@ -326,23 +326,29 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public void refreshFinish(Boolean isAll) {
-        fabSearchStop.hide();
-        rfRvSearchBooks.finishRefresh(isAll, true);
+        runOnUiThread(() -> {
+            fabSearchStop.hide();
+            rfRvSearchBooks.finishRefresh(isAll, true);
+        });
     }
 
     @Override
     public void loadMoreFinish(Boolean isAll) {
-        fabSearchStop.hide();
-        rfRvSearchBooks.finishLoadMore(isAll, true);
+        runOnUiThread(() -> {
+            fabSearchStop.hide();
+            rfRvSearchBooks.finishLoadMore(isAll, true);
+        });
     }
 
     @Override
     public void searchBookError(Boolean isRefresh) {
-        if (isRefresh) {
-            rfRvSearchBooks.refreshError();
-        } else {
-            rfRvSearchBooks.loadMoreError();
-        }
+        runOnUiThread(() -> {
+            if (isRefresh) {
+                rfRvSearchBooks.refreshError();
+            } else {
+                rfRvSearchBooks.loadMoreError();
+            }
+        });
     }
 
     @Override
