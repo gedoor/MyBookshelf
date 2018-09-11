@@ -87,6 +87,8 @@ public class EditReplaceRuleView {
         tilReplaceRule.setHint(context.getString(R.string.replace_rule));
         TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_replace_to);
         tilReplaceTo.setHint(context.getString(R.string.replace_to));
+        TextInputLayout tilUseTo = moProgressView.findViewById(R.id.til_use_to);
+        tilUseTo.setHint(context.getString(R.string.use_to));
         tieReplaceRule = moProgressView.findViewById(R.id.tie_replace_rule);
         tieReplaceSummary = moProgressView.findViewById(R.id.tie_replace_summary);
         tieReplaceTo = moProgressView.findViewById(R.id.tie_replace_to);

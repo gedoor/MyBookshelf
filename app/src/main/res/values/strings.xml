@@ -241,5 +241,6 @@
     <string name="book_info">书籍信息</string>
     <string name="ps_default_read">默认打开书架</string>
     <string name="pt_default_read">自动跳转最近阅读</string>
+    <string name="use_to">作用于</string>
 
 </resources>
