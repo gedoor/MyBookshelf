@@ -1,5 +1,7 @@
 package com.monke.monkeybook.presenter.contract;
 
+import android.content.Intent;
+
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -7,6 +9,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 
 public interface BookDetailContract {
     interface Presenter extends IPresenter {
+        void initData(Intent intent);
 
         int getOpenFrom();
 

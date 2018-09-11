@@ -36,7 +36,8 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
     private BookShelfBean bookShelf;
     private Boolean inBookShelf = false;
 
-    public BookDetailPresenterImpl(Intent intent) {
+    @Override
+    public void initData(Intent intent) {
         openFrom = intent.getIntExtra("from", FROM_BOOKSHELF);
         if (openFrom == FROM_BOOKSHELF) {
             String key = intent.getStringExtra("data_key");
@@ -57,6 +58,10 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
 
     @Override
     public void initBookFormSearch(SearchBookBean searchBookBean) {
+        if (searchBookBean == null) {
+            mView.finish();
+            return;
+        }
         searchBook = searchBookBean;
         inBookShelf = searchBookBean.getIsAdd();
         bookShelf = BookshelfHelp.getBookFromSearchBook(searchBookBean);

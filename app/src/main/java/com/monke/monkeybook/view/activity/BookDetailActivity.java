@@ -79,7 +79,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected BookDetailContract.Presenter initInjector() {
-        return new BookDetailPresenterImpl(getIntent());
+        return new BookDetailPresenterImpl();
     }
 
     @Override
@@ -89,6 +89,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected void initData() {
+        mPresenter.initData(getIntent());
         animShowInfo = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
         animHideLoading = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
         animHideLoading.setAnimationListener(new Animation.AnimationListener() {
@@ -208,6 +209,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         String name;
         String author;
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
+            if (mPresenter.getBookShelf() == null) return;
             coverUrl = mPresenter.getBookShelf().getBookInfoBean().getCoverUrl();
             customCoverPath = mPresenter.getBookShelf().getCustomCoverPath();
             name = mPresenter.getBookShelf().getBookInfoBean().getName();
@@ -220,6 +222,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
             updateView();
         } else {
+            if (mPresenter.getSearchBook() == null) return;
             coverUrl = mPresenter.getSearchBook().getCoverUrl();
             name = mPresenter.getSearchBook().getName();
             author = mPresenter.getSearchBook().getAuthor();
