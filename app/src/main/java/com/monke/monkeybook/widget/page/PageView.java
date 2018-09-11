@@ -43,7 +43,7 @@ public class PageView extends View {
     private int mStartY = 0;
     private boolean isMove = false;
     private int mPageIndex;
-    private int  mChapterIndex;
+    private int mChapterIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     // 是否允许点击
@@ -123,7 +123,7 @@ public class PageView extends View {
                 break;
             case SCROLL:
                 mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        marginTop, marginBottom,this, mPageAnimListener);
+                        marginTop, marginBottom, this, mPageAnimListener);
                 break;
             default:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
@@ -352,22 +352,21 @@ public class PageView extends View {
         if (mPageAnim instanceof HorizonPageAnim) {
             ((HorizonPageAnim) mPageAnim).changePage();
         }
-        mPageLoader.drawPage(getNextBitmap(), false);
+        mPageLoader.drawPage(getNextBitmap());
     }
 
     /**
      * 绘制当前页。
      */
-    public void drawCurPage(boolean isUpdate) {
+    public void drawCurPage() {
         if (!isPrepare) return;
 
-        if (!isUpdate) {
-            if (mPageAnim instanceof ScrollPageAnim) {
-                ((ScrollPageAnim) mPageAnim).resetBitmap();
-            }
+        if (mPageAnim instanceof ScrollPageAnim) {
+            ((ScrollPageAnim) mPageAnim).resetBitmap();
         }
+
         if (mPageLoader != null) {
-            mPageLoader.drawPage(getNextBitmap(), isUpdate);
+            mPageLoader.drawPage(getNextBitmap());
         }
     }
 
