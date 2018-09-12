@@ -1286,7 +1286,7 @@ public abstract class PageLoader {
                 paragraph = null;
             }
             while (showTitle || (paragraph = br.readLine()) != null) {
-                paragraph = ChapterContentHelp.replaceContent(paragraph);
+                paragraph = ChapterContentHelp.replaceContent(mCollBook.getBookInfoBean().getName(), mCollBook.getTag(), paragraph);
                 paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
                 // 重置段落
                 if (!showTitle) {
