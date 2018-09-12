@@ -42,6 +42,7 @@ public class EditReplaceRuleView {
     private TextInputEditText tieReplaceSummary;
     private TextInputEditText tieReplaceRule;
     private TextInputEditText tieReplaceTo;
+    private TextInputEditText tieUseTo;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
@@ -68,6 +69,7 @@ public class EditReplaceRuleView {
             tieReplaceSummary.setText(replaceRuleBean.getReplaceSummary());
             tieReplaceTo.setText(replaceRuleBean.getReplacement());
             tieReplaceRule.setText(replaceRuleBean.getRegex());
+            tieUseTo.setText(replaceRuleBean.getUseTo());
         } else {
             this.replaceRuleBean = new ReplaceRuleBean();
             this.replaceRuleBean.setEnable(true);
@@ -92,12 +94,14 @@ public class EditReplaceRuleView {
         tieReplaceRule = moProgressView.findViewById(R.id.tie_replace_rule);
         tieReplaceSummary = moProgressView.findViewById(R.id.tie_replace_summary);
         tieReplaceTo = moProgressView.findViewById(R.id.tie_replace_to);
+        tieUseTo = moProgressView.findViewById(R.id.tie_use_to);
 
         View tvOk = moProgressView.findViewById(R.id.tv_ok);
         tvOk.setOnClickListener(view -> {
             replaceRuleBean.setReplaceSummary(tieReplaceSummary.getText().toString());
             replaceRuleBean.setRegex(tieReplaceRule.getText().toString());
             replaceRuleBean.setReplacement(tieReplaceTo.getText().toString());
+            replaceRuleBean.setUseTo(tieUseTo.getText().toString());
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
