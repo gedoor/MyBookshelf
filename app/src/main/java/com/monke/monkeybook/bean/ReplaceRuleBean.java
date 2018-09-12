@@ -23,6 +23,7 @@ public class ReplaceRuleBean implements Parcelable {
     private String regex;
     //替换为
     private String replacement;
+    private String useTo;
 
     private Boolean enable;
     @OrderBy
@@ -33,17 +34,19 @@ public class ReplaceRuleBean implements Parcelable {
         regex = in.readString();
         replacement = in.readString();
         replaceSummary = in.readString();
+        useTo = in.readString();
         enable = in.readByte() != 0;
         serialNumber = in.readInt();
     }
 
-    @Generated(hash = 298152313)
+    @Generated(hash = 91525001)
     public ReplaceRuleBean(Long id, String replaceSummary, String regex, String replacement,
-            Boolean enable, int serialNumber) {
+            String useTo, Boolean enable, int serialNumber) {
         this.id = id;
         this.replaceSummary = replaceSummary;
         this.regex = regex;
         this.replacement = replacement;
+        this.useTo = useTo;
         this.enable = enable;
         this.serialNumber = serialNumber;
     }
@@ -58,6 +61,7 @@ public class ReplaceRuleBean implements Parcelable {
         parcel.writeString(regex);
         parcel.writeString(replacement);
         parcel.writeString(replaceSummary);
+        parcel.writeString(useTo);
         parcel.writeByte((byte) (enable ? 1 : 0));
         parcel.writeInt(serialNumber);
     }
@@ -129,6 +133,14 @@ public class ReplaceRuleBean implements Parcelable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUseTo() {
+        return this.useTo;
+    }
+
+    public void setUseTo(String useTo) {
+        this.useTo = useTo;
     }
 
 }

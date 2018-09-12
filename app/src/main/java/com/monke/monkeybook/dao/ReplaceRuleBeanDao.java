@@ -28,8 +28,9 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
         public final static Property ReplaceSummary = new Property(1, String.class, "replaceSummary", false, "REPLACE_SUMMARY");
         public final static Property Regex = new Property(2, String.class, "regex", false, "REGEX");
         public final static Property Replacement = new Property(3, String.class, "replacement", false, "REPLACEMENT");
-        public final static Property Enable = new Property(4, Boolean.class, "enable", false, "ENABLE");
-        public final static Property SerialNumber = new Property(5, int.class, "serialNumber", false, "SERIAL_NUMBER");
+        public final static Property UseTo = new Property(4, String.class, "useTo", false, "USE_TO");
+        public final static Property Enable = new Property(5, Boolean.class, "enable", false, "ENABLE");
+        public final static Property SerialNumber = new Property(6, int.class, "serialNumber", false, "SERIAL_NUMBER");
     }
 
 
@@ -49,8 +50,9 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
                 "\"REPLACE_SUMMARY\" TEXT," + // 1: replaceSummary
                 "\"REGEX\" TEXT," + // 2: regex
                 "\"REPLACEMENT\" TEXT," + // 3: replacement
-                "\"ENABLE\" INTEGER," + // 4: enable
-                "\"SERIAL_NUMBER\" INTEGER NOT NULL );"); // 5: serialNumber
+                "\"USE_TO\" TEXT," + // 4: useTo
+                "\"ENABLE\" INTEGER," + // 5: enable
+                "\"SERIAL_NUMBER\" INTEGER NOT NULL );"); // 6: serialNumber
     }
 
     /** Drops the underlying database table. */
@@ -83,11 +85,16 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
             stmt.bindString(4, replacement);
         }
  
+        String useTo = entity.getUseTo();
+        if (useTo != null) {
+            stmt.bindString(5, useTo);
+        }
+ 
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(5, enable ? 1L: 0L);
+            stmt.bindLong(6, enable ? 1L: 0L);
         }
-        stmt.bindLong(6, entity.getSerialNumber());
+        stmt.bindLong(7, entity.getSerialNumber());
     }
 
     @Override
@@ -114,11 +121,16 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
             stmt.bindString(4, replacement);
         }
  
+        String useTo = entity.getUseTo();
+        if (useTo != null) {
+            stmt.bindString(5, useTo);
+        }
+ 
         Boolean enable = entity.getEnable();
         if (enable != null) {
-            stmt.bindLong(5, enable ? 1L: 0L);
+            stmt.bindLong(6, enable ? 1L: 0L);
         }
-        stmt.bindLong(6, entity.getSerialNumber());
+        stmt.bindLong(7, entity.getSerialNumber());
     }
 
     @Override
@@ -133,8 +145,9 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // replaceSummary
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // regex
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // replacement
-            cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // enable
-            cursor.getInt(offset + 5) // serialNumber
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // useTo
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // enable
+            cursor.getInt(offset + 6) // serialNumber
         );
         return entity;
     }
@@ -145,8 +158,9 @@ public class ReplaceRuleBeanDao extends AbstractDao<ReplaceRuleBean, Long> {
         entity.setReplaceSummary(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setRegex(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setReplacement(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setEnable(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setSerialNumber(cursor.getInt(offset + 5));
+        entity.setUseTo(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setEnable(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setSerialNumber(cursor.getInt(offset + 6));
      }
     
     @Override
