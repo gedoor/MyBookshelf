@@ -313,6 +313,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    private void autoPageStop() {
+        autoPage = false;
+        autoPage();
+    }
+
     private void nextPage() {
         runOnUiThread(() -> {
             screenOffTimerStart();
@@ -564,14 +569,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void onPageChange(int chapterIndex, int pageIndex) {
+                        pageView.setContentDescription(mPageLoader.getContext(pageIndex));
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
-                        pageView.setContentDescription(mPageLoader.getContext(pageIndex));
-                        autoPage();
                         //继续朗读
                         if ((ReadAloudService.running) && pageIndex >= 0) {
                             if (mPageLoader.getContext(pageIndex) != null) {
@@ -579,13 +583,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getContext(pageIndex));
                             }
+                            return;
                         }
                         //启动朗读
                         if (getIntent().getBooleanExtra("readAloud", false)
                                 && pageIndex >= 0 && mPageLoader.getContext(pageIndex) != null) {
                             getIntent().putExtra("readAloud", false);
                             onMediaButton();
+                            return;
                         }
+                        autoPage();
                     }
                 }
         );
@@ -952,10 +959,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case PLAY:
                 fabReadAloud.setImageResource(R.drawable.ic_pause2);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
-                if (autoPage) {
-                    autoPage = false;
-                    autoPage();
-                }
+                if (autoPage) autoPageStop();
                 break;
             case PAUSE:
                 fabReadAloud.setImageResource(R.drawable.ic_play2);
