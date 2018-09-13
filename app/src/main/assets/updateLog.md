@@ -1,6 +1,7 @@
 ## 更新日志
 **2018/09/13**
 * 内容可以用TalkBack朗读
+* 修复一个BUG,String input must not be null
 
 **2018/09/12**
 * 替换添加作用于,可填写书名和书源url,不填应用到所有
