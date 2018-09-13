@@ -36,6 +36,11 @@ public class BookChapter {
 
     public Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
+            if (s == null) {
+                e.onError(new Throwable("目录获取失败"));
+                e.onComplete();
+                return;
+            }
             bookShelfBean.setTag(tag);
             boolean dx = false;
             String ruleChapterList = bookSourceBean.getRuleChapterList();

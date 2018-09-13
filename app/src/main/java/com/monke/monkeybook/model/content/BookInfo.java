@@ -26,6 +26,11 @@ public class BookInfo {
 
     public Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
+            if (s == null) {
+                e.onError(new Throwable("书籍信息获取失败"));
+                e.onComplete();
+                return;
+            }
             bookShelfBean.setTag(tag);
             BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
             if (bookInfoBean == null) {
