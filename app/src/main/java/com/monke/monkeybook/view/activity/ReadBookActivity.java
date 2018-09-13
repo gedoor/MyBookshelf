@@ -570,6 +570,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         hpbReadProgress.post(
                                 () -> hpbReadProgress.setDurProgress(pageIndex)
                         );
+                        pageView.setContentDescription(mPageLoader.getContext(pageIndex));
                         autoPage();
                         //继续朗读
                         if ((ReadAloudService.running) && pageIndex >= 0) {
