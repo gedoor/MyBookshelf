@@ -3,6 +3,7 @@ package com.monke.monkeybook.help;
 import android.text.TextUtils;
 
 import com.luhuiguo.chinese.ChineseUtils;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 
@@ -28,14 +29,14 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public static String replaceContent(String sourceUrl, String bookName, String content) {
+    public static String replaceContent(BookShelfBean mBook, String content) {
         String allLine[] = content.split("\n\u3000\u3000");
         //替换
         if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
             StringBuilder contentBuilder = new StringBuilder();
             for (String line : allLine) {
                 for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                    if (TextUtils.isEmpty(replaceRule.getUseTo()) || replaceRule.getUseTo().contains(sourceUrl) || replaceRule.getUseTo().contains(bookName)) {
+                    if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                         try {
                             line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
                         } catch (Exception e1) {
@@ -53,7 +54,7 @@ public class ChapterContentHelp {
             }
             content = contentBuilder.toString();
             for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                if (TextUtils.isEmpty(replaceRule.getUseTo()) || replaceRule.getUseTo().contains(sourceUrl) || replaceRule.getUseTo().contains(bookName)) {
+                if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                     if (replaceRule.getRegex().contains("\\n")) {
                         try {
                             content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
@@ -65,6 +66,11 @@ public class ChapterContentHelp {
             }
         }
         return content;
+    }
+
+    private static boolean isUseTo(BookShelfBean mBook, String useTo) {
+        return useTo.contains(mBook.getTag())
+                || useTo.contains(mBook.getBookInfoBean().getName());
     }
 
 }
