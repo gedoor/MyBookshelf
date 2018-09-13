@@ -20,12 +20,12 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeElement {
-    private String baseURI;
+    private String baseURL;
     private Element element;
 
-    public AnalyzeElement(Element element, String baseURI) {
+    public AnalyzeElement(Element element, String baseURL) {
         this.element = element;
-        this.baseURI = baseURI;
+        this.baseURL = baseURL;
     }
 
     /**
@@ -209,7 +209,7 @@ public class AnalyzeElement {
                     }
                     break;
                 default:
-                    String absURL = NetworkUtil.getAbsoluteURL(baseURI, elements.get(0).attr(lastRule));
+                    String absURL = NetworkUtil.getAbsoluteURL(baseURL, elements.get(0).attr(lastRule));
                     textS.add(absURL);
             }
             return textS;

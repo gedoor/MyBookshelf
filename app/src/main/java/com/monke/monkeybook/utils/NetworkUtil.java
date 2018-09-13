@@ -12,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,16 +49,14 @@ public class NetworkUtil {
     /**
      * 获取绝对地址
      */
-    public static String getAbsoluteURL(String baseURI, String relativePath) {
-        String abURL = relativePath;
+    public static String getAbsoluteURL(String baseURL, String relativePath) {
         try {
-            URI base = new URI(baseURI);//基本网页URI
-            URI abs = base.resolve(relativePath);//解析于上述网页的相对URL，得到绝对URI
-            URL absURL = abs.toURL();//转成URL
-            abURL = absURL.toString();
+            URL absoluteUrl = new URL(baseURL);
+            URL parseUrl = new URL(absoluteUrl ,relativePath );
+            return parseUrl.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return abURL;
+        return relativePath;
     }
 }
