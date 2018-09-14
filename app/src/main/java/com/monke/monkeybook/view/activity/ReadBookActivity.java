@@ -466,7 +466,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void refresh() {
                 if (mPageLoader != null) {
-                    mPageLoader.initPaint();
+                    mPageLoader.refreshUi();
                 }
             }
 
