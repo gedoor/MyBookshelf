@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model.content;
 
+import android.text.TextUtils;
+
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -26,7 +28,7 @@ public class BookInfo {
 
     public Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            if (s == null) {
+            if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("书籍信息获取失败"));
                 e.onComplete();
                 return;

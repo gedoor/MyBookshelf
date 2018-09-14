@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.bean.WebChapterBean;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
@@ -36,7 +35,7 @@ public class BookChapter {
 
     public Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
-            if (s == null) {
+            if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("目录获取失败"));
                 e.onComplete();
                 return;
@@ -116,5 +115,25 @@ public class BookChapter {
             }
         }
         return new WebChapterBean<>(chapterBeans, nextUrl);
+    }
+
+    private class WebChapterBean<T> {
+        private T data;
+
+        private String nextUrl;
+
+        private WebChapterBean(T data,String nextUrl){
+            this.data = data;
+            this.nextUrl = nextUrl;
+        }
+
+        private T getData() {
+            return data;
+        }
+
+        private String getNextUrl() {
+            return nextUrl;
+        }
+
     }
 }
