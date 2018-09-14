@@ -299,6 +299,18 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_ruleContentUrlNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ruleContentUrlNext">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tie_ruleContentUrlNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_ruleBookContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
