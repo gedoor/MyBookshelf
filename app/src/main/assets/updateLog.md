@@ -1,4 +1,7 @@
 ## 更新日志
+**2018/09/14**
+* 添加内容分页获取规则
+
 **2018/09/13**
 * 内容可以用TalkBack朗读
 * 修复一个BUG,String input must not be null

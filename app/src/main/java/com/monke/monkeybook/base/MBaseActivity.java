@@ -90,26 +90,29 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      * 沉浸状态栏
      */
     protected void initImmersionBar() {
-        if (isImmersionBarEnabled()) {
-            mImmersionBar.transparentStatusBar();
-        } else {
-            mImmersionBar.statusBarColor(R.color.status_bar_bag);
-        }
-        if (isImmersionBarEnabled() && !isNightTheme()) {
-            mImmersionBar.statusBarDarkFont(true, 0.2f);
-        } else {
-            mImmersionBar.statusBarDarkFont(false);
-        }
-        if (ImmersionBar.canNavigationBarDarkFont()) {
-            mImmersionBar.navigationBarColor(R.color.background);
-            if (isNightTheme()) {
-                mImmersionBar.navigationBarDarkFont(false);
+        try {
+            if (isImmersionBarEnabled()) {
+                mImmersionBar.transparentStatusBar();
             } else {
-                mImmersionBar.navigationBarDarkFont(true);
+                mImmersionBar.statusBarColor(R.color.status_bar_bag);
             }
+            if (isImmersionBarEnabled() && !isNightTheme()) {
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
+            } else {
+                mImmersionBar.statusBarDarkFont(false);
+            }
+            if (ImmersionBar.canNavigationBarDarkFont()) {
+                mImmersionBar.navigationBarColor(R.color.background);
+                if (isNightTheme()) {
+                    mImmersionBar.navigationBarDarkFont(false);
+                } else {
+                    mImmersionBar.navigationBarDarkFont(true);
+                }
+            }
+            mImmersionBar.init();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        mImmersionBar.init();
-
     }
 
     /**
