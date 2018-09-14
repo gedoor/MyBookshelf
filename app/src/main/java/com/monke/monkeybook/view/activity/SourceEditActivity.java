@@ -146,6 +146,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     TextInputEditText tieRuleChapterUrlNext;
     @BindView(R.id.til_ruleChapterUrlNext)
     TextInputLayout tilRuleChapterUrlNext;
+    @BindView(R.id.tie_ruleContentUrlNext)
+    TextInputEditText tieRuleContentUrlNext;
+    @BindView(R.id.til_ruleContentUrlNext)
+    TextInputLayout tilRuleContentUrlNext;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -272,6 +276,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setRuleSearchUrl(trim(tieRuleSearchUrl.getText().toString()));
         bookSourceBeanN.setHttpUserAgent(trim(tieHttpUserAgent.getText().toString()));
         bookSourceBeanN.setRuleFindUrl(trim(tieRuleFindUrl.getText().toString()));
+        bookSourceBeanN.setRuleContentUrlNext(trim(tieRuleContentUrlNext.getText().toString()));
         bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
         return bookSourceBeanN;
@@ -306,6 +311,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieRuleSearchUrl.setText(trim(bookSourceBean.getRuleSearchUrl()));
         tieHttpUserAgent.setText(trim(bookSourceBean.getHttpUserAgent()));
         tieRuleFindUrl.setText(trim(bookSourceBean.getRuleFindUrl()));
+        tieRuleContentUrlNext.setText(trim(bookSourceBean.getRuleContentUrlNext()));
     }
 
     private void setHint() {
@@ -333,6 +339,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tilRuleSearchUrl.setHint("RuleSearchUrl");
         tilHttpUserAgent.setHint("HttpUserAgent");
         tilRuleFindUrl.setHint("RuleFindUrl");
+        tieRuleContentUrlNext.setHint("RuleContentUrlNext");
     }
 
     private void shareBookSource() {
