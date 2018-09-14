@@ -569,7 +569,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void onPageChange(int chapterIndex, int pageIndex) {
-                        pageView.setContentDescription(mPageLoader.getContext(pageIndex));
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
