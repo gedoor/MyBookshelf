@@ -339,7 +339,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tilRuleSearchUrl.setHint("RuleSearchUrl");
         tilHttpUserAgent.setHint("HttpUserAgent");
         tilRuleFindUrl.setHint("RuleFindUrl");
-        tieRuleContentUrlNext.setHint("RuleContentUrlNext");
+        tilRuleContentUrlNext.setHint("RuleContentUrlNext");
     }
 
     private void shareBookSource() {
