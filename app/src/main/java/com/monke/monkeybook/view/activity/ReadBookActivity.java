@@ -66,7 +66,6 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.grantland.widget.AutofitTextView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -489,7 +488,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void refresh() {
                 initImmersionBar();
                 if (mPageLoader != null) {
-                    mPageLoader.refresh();
+                    mPageLoader.refreshUi();
                 }
             }
 
@@ -989,7 +988,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         } else {
             flContent.setBackground(readBookControl.getTextBackground());
             if (mPageLoader != null) {
-                mPageLoader.refresh();
+                mPageLoader.refreshUi();
             }
             readInterfacePop.setBg();
             initImmersionBar();
