@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -342,6 +343,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tilRuleContentUrlNext.setHint("RuleContentUrlNext");
     }
 
+    @SuppressLint("SetWorldReadable")
     private void shareBookSource() {
         Bitmap bitmap = mPresenter.encodeAsBitmap(getBookSourceStr());
         try {
