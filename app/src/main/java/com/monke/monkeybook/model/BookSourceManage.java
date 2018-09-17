@@ -43,9 +43,6 @@ public class BookSourceManage extends BaseModelImpl {
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
         }
-        if (selectedBookSource.size() == 0) {
-            selectedBookSource = getAllBookSource();
-        }
         return selectedBookSource;
     }
 
