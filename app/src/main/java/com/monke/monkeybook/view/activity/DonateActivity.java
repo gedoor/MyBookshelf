@@ -83,10 +83,10 @@ public class DonateActivity extends MBaseActivity {
         vwQqRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
         vwZfbHbKl.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, "支付宝发红包啦！即日起还有机会额外获得余额宝消费红包！长按复制此消息，打开最新版支付宝就能领取！dlwvHh22lu");
+            ClipData clipData = ClipData.newPlainText(null, "537954522");
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
-                Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "红包码已复制\n 打开支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_SHORT).show();
             }
             try {
                 PackageManager packageManager = this.getApplicationContext().getPackageManager();
