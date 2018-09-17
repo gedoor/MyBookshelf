@@ -10,11 +10,13 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.model.source.My716;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -52,10 +54,12 @@ public class SearchBookModel {
      */
     public void initSearchEngineS() {
         searchEngineS.clear();
-        SearchEngine my716 = new SearchEngine();
-        my716.setTag(My716.TAG);
-        my716.setHasMore(true);
-        searchEngineS.add(my716);
+        if (Objects.equals(ACache.get(activity).getAsString("getZfbHb"), "True")) {
+            SearchEngine my716 = new SearchEngine();
+            my716.setTag(My716.TAG);
+            my716.setHasMore(true);
+            searchEngineS.add(my716);
+        }
         for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
             SearchEngine se = new SearchEngine();
             se.setTag(bookSourceBean.getBookSourceUrl());

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.Donate;
 
 import butterknife.BindView;
@@ -91,8 +92,10 @@ public class DonateActivity extends MBaseActivity {
                 PackageManager packageManager = this.getApplicationContext().getPackageManager();
                 Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
                 startActivity(intent);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 Toast.makeText(this, "打开支付宝失败,请手动打开支付宝", Toast.LENGTH_SHORT).show();
+            } finally {
+                ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
             }
         });
     }
