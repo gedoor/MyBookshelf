@@ -160,6 +160,7 @@ public class BookshelfHelp {
         bookInfo.setName(searchBookBean.getName());
         bookInfo.setTag(searchBookBean.getTag());
         bookInfo.setOrigin(searchBookBean.getOrigin());
+        bookInfo.setIntroduce(searchBookBean.getIntroduce());
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
     }

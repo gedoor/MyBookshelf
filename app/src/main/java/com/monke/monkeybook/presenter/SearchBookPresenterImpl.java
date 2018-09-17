@@ -249,19 +249,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     //添加书集
     @Override
     public void addBookToShelf(final SearchBookBean searchBookBean) {
-        final BookShelfBean bookShelfResult = new BookShelfBean();
-        bookShelfResult.setNoteUrl(searchBookBean.getNoteUrl());
-        bookShelfResult.setFinalDate(System.currentTimeMillis());
-        bookShelfResult.setDurChapter(0);
-        bookShelfResult.setDurChapterPage(0);
-        bookShelfResult.setTag(searchBookBean.getTag());
-        BookInfoBean bookInfoBean = new BookInfoBean();
-        bookInfoBean.setNoteUrl(searchBookBean.getNoteUrl());
-        bookInfoBean.setAuthor(searchBookBean.getAuthor());
-        bookInfoBean.setCoverUrl(searchBookBean.getCoverUrl());
-        bookInfoBean.setName(searchBookBean.getName());
-        bookInfoBean.setTag(searchBookBean.getTag());
-        bookShelfResult.setBookInfoBean(bookInfoBean);
+        final BookShelfBean bookShelfResult = BookshelfHelp.getBookFromSearchBook(searchBookBean);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())

@@ -233,6 +233,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvOrigin.setVisibility(View.GONE);
             }
             tvChapter.setText(getString(R.string.book_search_last, mPresenter.getSearchBook().getLastChapter()));
+            tvIntro.setText(mPresenter.getSearchBook().getIntroduce());
             tvShelf.setText("放入书架");
             tvRead.setText("开始阅读");
             tvRead.setOnClickListener(v -> {

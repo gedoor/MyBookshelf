@@ -80,6 +80,8 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                     searchBookBean.setName(book.get("title").getAsString());
                     searchBookBean.setAuthor(book.get("author").getAsString());
                     searchBookBean.setLastChapter(book.get("lastChapter").getAsString());
+                    searchBookBean.setCoverUrl("http://statics.zhuishushenqi.com" + book.get("cover").getAsString());
+                    searchBookBean.setIntroduce(book.get("shortIntro").getAsString());
 
                     searchBookList.add(searchBookBean);
                 }

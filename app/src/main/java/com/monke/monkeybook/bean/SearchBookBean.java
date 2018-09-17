@@ -17,10 +17,12 @@ public class SearchBookBean implements Parcelable{
     private String name;
     private String author;
     private String tag;
-    private String kind;
-    private String origin;
+    private String kind;//分类
+    private String origin;//来源
     private String desc;
     private String lastChapter;
+    @Transient
+    private String introduce; //简介
     @Transient
     private long words;
     @Transient
@@ -48,6 +50,7 @@ public class SearchBookBean implements Parcelable{
         origin = in.readString();
         desc = in.readString();
         originNum = in.readInt();
+        introduce = in.readString();
     }
 
     @Generated(hash = 1315866286)
@@ -79,6 +82,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(origin);
         dest.writeString(desc);
         dest.writeInt(originNum);
+        dest.writeString(introduce);
     }
 
     @Override
@@ -200,5 +204,13 @@ public class SearchBookBean implements Parcelable{
 
     public int getOriginNum() {
         return originNum;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 }
