@@ -3,7 +3,7 @@ package com.monke.monkeybook.model.content;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

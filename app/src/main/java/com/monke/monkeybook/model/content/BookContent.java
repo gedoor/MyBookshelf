@@ -9,8 +9,8 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 

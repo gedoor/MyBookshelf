@@ -8,8 +8,8 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeSearchUrl;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeSearchUrl;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IHttpPostApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

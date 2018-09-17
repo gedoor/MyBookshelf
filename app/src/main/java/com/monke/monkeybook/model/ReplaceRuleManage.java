@@ -7,7 +7,7 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.ReplaceRuleBeanDao;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
 import java.net.URL;

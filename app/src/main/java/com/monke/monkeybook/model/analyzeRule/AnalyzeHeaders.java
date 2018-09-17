@@ -1,7 +1,6 @@
-package com.monke.monkeybook.model.AnalyzeRule;
+package com.monke.monkeybook.model.analyzeRule;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;

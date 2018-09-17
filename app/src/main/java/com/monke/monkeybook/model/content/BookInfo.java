@@ -6,7 +6,7 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
