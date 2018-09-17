@@ -45,6 +45,8 @@ public class DonateActivity extends MBaseActivity {
     CardView vwQqRwm;
     @BindView(R.id.vw_zfb_hb_kl)
     CardView vwZfbHbKl;
+    @BindView(R.id.vw_zfb_hb_ssm)
+    CardView vwZfbHbSsm;
 
 
     @Override
@@ -87,6 +89,23 @@ public class DonateActivity extends MBaseActivity {
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
                 Toast.makeText(this, getString(R.string.copy_complete), Toast.LENGTH_SHORT).show();
+            }
+            try {
+                PackageManager packageManager = this.getApplicationContext().getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "打开支付宝失败,请手动打开支付宝", Toast.LENGTH_SHORT).show();
+            } finally {
+                ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
+            }
+        });
+        vwZfbHbSsm.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, "537954522");
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
+                Toast.makeText(this, "红包码已复制\n 打开支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_SHORT).show();
             }
             try {
                 PackageManager packageManager = this.getApplicationContext().getPackageManager();
