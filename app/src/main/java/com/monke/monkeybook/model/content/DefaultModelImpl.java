@@ -218,14 +218,14 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(Schedulers.io())
                     .flatMap(response -> bookContent.analyzeBookContent(response, durChapterUrl, durChapterIndex))
-                    .flatMap(bookContent::upChapterList);
+                    .flatMap(BookContent::upChapterList);
         } else {
             return getRetrofitString(tag)
                     .create(IHttpGetApi.class)
                     .getWebContent(durChapterUrl, headerMap)
                     .subscribeOn(Schedulers.newThread())
                     .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
-                    .flatMap(bookContent::upChapterList);
+                    .flatMap(BookContent::upChapterList);
         }
     }
 

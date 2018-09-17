@@ -93,7 +93,7 @@ public class BookContent {
         return webContentBean;
     }
 
-    public Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
+    public static Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
         return Observable.create(e -> {
             if (bookContentBean.getRight()) {
                 ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
