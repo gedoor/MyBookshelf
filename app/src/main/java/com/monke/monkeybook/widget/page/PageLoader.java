@@ -944,6 +944,9 @@ public abstract class PageLoader {
                 }
             }
 
+            if (mCurPage.lines == null) {
+                return;
+            }
             //对内容进行绘制
             for (int i = mCurPage.titleLines; i < mCurPage.lines.size(); ++i) {
                 str = mCurPage.lines.get(i);
