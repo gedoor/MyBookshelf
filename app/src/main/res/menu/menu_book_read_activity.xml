@@ -31,6 +31,12 @@
             app:showAsAction="ifRoom" />
 
         <item
+            android:id="@+id/action_replace_rule"
+            android:icon="@drawable/ic_find_replace"
+            android:title="@string/replace_rule_title"
+            app:showAsAction="ifRoom" />
+
+        <item
             android:id="@+id/action_copy_text"
             android:icon="@drawable/ic_settings_backup_restore"
             android:title="@string/copy_text"
