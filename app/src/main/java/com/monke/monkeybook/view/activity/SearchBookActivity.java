@@ -115,8 +115,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         viewRefreshError.findViewById(R.id.tv_refresh_again).setOnClickListener(v -> {
             //刷新失败 ，重试
             mPresenter.initPage();
-            mPresenter.toSearchBooks(null, true);
             rfRvSearchBooks.startRefresh();
+            mPresenter.toSearchBooks(null, true);
         });
         rfRvSearchBooks.setNoDataAndrRefreshErrorView(LayoutInflater.from(this).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
@@ -254,14 +254,14 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void startLoadMore() {
-                mPresenter.toSearchBooks(null, false);
                 fabSearchStop.show();
+                mPresenter.toSearchBooks(null, false);
             }
 
             @Override
             public void loadMoreErrorTryAgain() {
-                mPresenter.toSearchBooks(null, true);
                 fabSearchStop.show();
+                mPresenter.toSearchBooks(null, true);
             }
         });
     }
@@ -310,9 +310,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             //执行搜索请求
             new Handler().postDelayed(() -> {
                 mPresenter.initPage();
-                mPresenter.toSearchBooks(key, false);
                 rfRvSearchBooks.startRefresh();
                 fabSearchStop.show();
+                mPresenter.toSearchBooks(key, false);
             }, 300);
         }
     }

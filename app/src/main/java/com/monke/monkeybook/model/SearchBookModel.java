@@ -1,12 +1,10 @@
 package com.monke.monkeybook.model;
 
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.monke.basemvplib.BaseActivity;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -19,7 +17,6 @@ import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -91,6 +88,12 @@ public class SearchBookModel {
 
     public void search(final String content, final long searchTime, List<BookShelfBean> bookShelfS, Boolean fromError) {
         if (searchTime != startThisSearchTime) {
+            return;
+        }
+        if (searchEngineS.size() == 0) {
+            Toast.makeText(activity, "没有选中几何书源", Toast.LENGTH_SHORT).show();
+            searchListener.refreshFinish(true);
+            searchListener.loadMoreFinish(true);
             return;
         }
         if (!fromError) {
