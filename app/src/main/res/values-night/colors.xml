@@ -10,6 +10,7 @@
     <color name="btn_bg_press">#545454</color>
     <color name="btn_bg_press_2">#363636</color>
     <color name="btn_bg_press_tp">#884e4e4e</color>
+    <color name="d_blue">#767676</color>
 
     <color name="tv_btn_normal_black">#737373</color>
     <color name="tv_btn_press_black">#565656</color>
