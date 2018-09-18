@@ -176,6 +176,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             case R.id.action_my716:
                 useMy716 = !useMy716;
                 itemMy716.setChecked(useMy716);
+                mPresenter.setUseMy716(useMy716);
                 break;
             case android.R.id.home:
                 finish();

@@ -39,6 +39,7 @@ public class SearchBookModel {
     private int searchSuccessNum;
     private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
+    private boolean useMy716 = true;
 
     public SearchBookModel(BaseActivity activity, OnSearchListener searchListener) {
         this.activity = activity;
@@ -54,7 +55,7 @@ public class SearchBookModel {
      */
     public void initSearchEngineS() {
         searchEngineS.clear();
-        if (Objects.equals(ACache.get(activity).getAsString("getZfbHb"), "True")) {
+        if (Objects.equals(ACache.get(activity).getAsString("getZfbHb"), "True") && useMy716) {
             SearchEngine my716 = new SearchEngine();
             my716.setTag(My716.TAG);
             my716.setHasMore(true);
@@ -193,6 +194,10 @@ public class SearchBookModel {
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public void setUseMy716(boolean useMy716) {
+        this.useMy716 = useMy716;
     }
 
     public interface OnSearchListener {

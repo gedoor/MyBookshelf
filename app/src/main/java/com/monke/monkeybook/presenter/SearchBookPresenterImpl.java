@@ -235,6 +235,11 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     }
 
     @Override
+    public void setUseMy716(boolean useMy716) {
+        searchBookModel.setUseMy716(useMy716);
+    }
+
+    @Override
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
             durSearchKey = key;
