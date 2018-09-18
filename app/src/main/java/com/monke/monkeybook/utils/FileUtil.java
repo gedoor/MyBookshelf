@@ -124,8 +124,13 @@ public final class FileUtil {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-
                 final String id = DocumentsContract.getDocumentId(uri);
+                final String[] split = id.split(":");
+                final String type = split[0];
+                if ("raw".equalsIgnoreCase(type)) { //处理某些机型（比如Goole Pixel ）ID是raw:/storage/emulated/0/Download/c20f8664da05ab6b4644913048ea8c83.mp4
+                    return split[1];
+                }
+
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
