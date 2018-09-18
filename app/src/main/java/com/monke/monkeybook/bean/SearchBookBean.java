@@ -21,7 +21,6 @@ public class SearchBookBean implements Parcelable{
     private String origin;//来源
     private String desc;
     private String lastChapter;
-    @Transient
     private String introduce; //简介
     @Transient
     private long words;
@@ -53,9 +52,10 @@ public class SearchBookBean implements Parcelable{
         introduce = in.readString();
     }
 
-    @Generated(hash = 1315866286)
+    @Generated(hash = 568199654)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-            String tag, String kind, String origin, String desc, String lastChapter) {
+            String tag, String kind, String origin, String desc, String lastChapter,
+            String introduce) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -65,6 +65,7 @@ public class SearchBookBean implements Parcelable{
         this.origin = origin;
         this.desc = desc;
         this.lastChapter = lastChapter;
+        this.introduce = introduce;
     }
 
     @Override
