@@ -98,7 +98,7 @@ public class CoverPageAnim extends HorizonPageAnim {
         }
 
         //滑动速度保持一致
-        int duration = (400 * Math.abs(dx)) / mViewWidth;
+        int duration = (200 * Math.abs(dx)) / mViewWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
     }
 }
