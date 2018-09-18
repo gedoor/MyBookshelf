@@ -93,23 +93,6 @@ public class BookContent {
         return webContentBean;
     }
 
-    public static Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
-        return Observable.create(e -> {
-            if (bookContentBean.getRight()) {
-                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
-                if (chapterListBean != null) {
-                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    chapterListBean.setHasCache(true);
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
-                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
-                }
-            }
-            e.onNext(bookContentBean);
-            e.onComplete();
-        });
-    }
-
     private class WebContentBean {
         private String content;
         private boolean isRight;

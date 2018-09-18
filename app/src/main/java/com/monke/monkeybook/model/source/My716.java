@@ -11,7 +11,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
-import com.monke.monkeybook.model.content.BookContent;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
@@ -185,8 +184,7 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, AnalyzeHeaders.getMap(null))
                 .subscribeOn(Schedulers.newThread())
-                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex))
-                .flatMap(BookContent::upChapterList);
+                .flatMap(response -> analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
     }
 
     private Observable<BookContentBean> analyzeBookContent(String s, String durChapterUrl, int durChapterIndex) {

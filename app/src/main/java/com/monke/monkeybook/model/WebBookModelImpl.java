@@ -1,9 +1,14 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.dao.ChapterListBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 import com.monke.monkeybook.model.impl.IWebBookModel;
@@ -60,7 +65,8 @@ public class WebBookModelImpl implements IWebBookModel {
     public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex, String tag) {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
-            return bookModel.getBookContent(durChapterUrl, durChapterIndex);
+            return bookModel.getBookContent(durChapterUrl, durChapterIndex)
+                    .flatMap(this::upChapterList);
         } else
             return Observable.create(e -> {
                 e.onNext(new BookContentBean());
@@ -111,5 +117,22 @@ public class WebBookModelImpl implements IWebBookModel {
             default:
                 return DefaultModelImpl.getInstance(tag);
         }
+    }
+
+    private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
+        return Observable.create(e -> {
+            if (bookContentBean.getRight()) {
+                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
+                if (chapterListBean != null) {
+                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
+                    chapterListBean.setHasCache(true);
+                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
+                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
+                }
+            }
+            e.onNext(bookContentBean);
+            e.onComplete();
+        });
     }
 }
