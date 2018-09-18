@@ -5,6 +5,7 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
@@ -186,11 +187,10 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      * 获取目录
      */
     @Override
-    public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
+    public Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
-                bookShelfBean.setErrorMsg(String.format("%s没有找到书源配置", bookShelfBean.getBookInfoBean().getName()));
-                emitter.onNext(bookShelfBean);
+                emitter.onError(new Throwable(String.format("%s没有找到书源配置", bookShelfBean.getBookInfoBean().getName())));
                 emitter.onComplete();
             });
         }

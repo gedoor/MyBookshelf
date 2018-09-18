@@ -134,14 +134,14 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
      * @param bookShelfBean
      */
     @Override
-    public Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
+    public Observable<List<ChapterListBean>> getChapterList(BookShelfBean bookShelfBean) {
         return getRetrofitString("http://api.zhuishushenqi.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), AnalyzeHeaders.getMap(null))
                 .flatMap(response -> analyzeChapterList(response.body(), bookShelfBean));
     }
 
-    private Observable<BookShelfBean> analyzeChapterList(String s, BookShelfBean bookShelfBean) {
+    private Observable<List<ChapterListBean>> analyzeChapterList(String s, BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             List<ChapterListBean> chapterList = new ArrayList<>();
             JsonObject root = new JsonParser().parse(s).getAsJsonObject();
@@ -157,18 +157,8 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
                 chapterList.add(chapterListBean);
             }
-            if (bookShelfBean.getChapterListSize() < chapterList.size()) {
-                bookShelfBean.setHasUpdate(true);
-                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
-            }
-            bookShelfBean.setChapterListSize(chapterList.size());
-            bookShelfBean.getBookInfoBean().setChapterList(chapterList);
-            bookShelfBean.upDurChapterName();
-            bookShelfBean.upLastChapterName();
-            e.onNext(bookShelfBean);
+            e.onNext(chapterList);
             e.onComplete();
-
         });
     }
 

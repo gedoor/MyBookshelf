@@ -3,6 +3,7 @@ package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface IStationBookModel {
     /**
      * 网络解析图书目录
      */
-    Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean);
+    Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean);
 
     /**
      * 章节缓存

@@ -33,7 +33,7 @@ public class BookChapter {
         this.bookSourceBean = bookSourceBean;
     }
 
-    public Observable<BookShelfBean> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
+    public Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("目录获取失败"));
@@ -48,7 +48,7 @@ public class BookChapter {
                 ruleChapterList = ruleChapterList.substring(1);
             }
             WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList(), ruleChapterList);
-            List<ChapterListBean> chapterListBeans = webChapterBean.getData();
+            List<ChapterListBean> chapterList = webChapterBean.getData();
 
             while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
                 Call<String> call = DefaultModelImpl.getRetrofitString(bookSourceBean.getBookSourceUrl())
@@ -62,24 +62,15 @@ public class BookChapter {
                     }
                 }
                 webChapterBean = analyzeChapterList(response, bookShelfBean.getNoteUrl(), webChapterBean.getNextUrl(), bookShelfBean.getChapterList(), ruleChapterList);
-                chapterListBeans.addAll(webChapterBean.getData());
+                chapterList.addAll(webChapterBean.getData());
             }
             if (dx) {
-                Collections.reverse(chapterListBeans);
+                Collections.reverse(chapterList);
             }
-            for (int i = 0; i < chapterListBeans.size(); i++) {
-                chapterListBeans.get(i).setDurChapterIndex(i);
+            for (int i = 0; i < chapterList.size(); i++) {
+                chapterList.get(i).setDurChapterIndex(i);
             }
-            if (bookShelfBean.getChapterListSize() < chapterListBeans.size()) {
-                bookShelfBean.setHasUpdate(true);
-                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
-            }
-            bookShelfBean.setChapterListSize(chapterListBeans.size());
-            bookShelfBean.getBookInfoBean().setChapterList(chapterListBeans);
-            bookShelfBean.upDurChapterName();
-            bookShelfBean.upLastChapterName();
-            e.onNext(bookShelfBean);
+            e.onNext(chapterList);
             e.onComplete();
         });
     }

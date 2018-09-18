@@ -50,7 +50,8 @@ public class WebBookModelImpl implements IWebBookModel {
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
-            return bookModel.getChapterList(bookShelfBean);
+            return bookModel.getChapterList(bookShelfBean)
+                    .flatMap((chapterList) -> getChapterList(bookShelfBean, chapterList));
         } else {
             return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName()+"没有书源"));
         }
@@ -117,6 +118,22 @@ public class WebBookModelImpl implements IWebBookModel {
             default:
                 return DefaultModelImpl.getInstance(tag);
         }
+    }
+
+    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
+        return Observable.create(e -> {
+            if (bookShelfBean.getChapterListSize() < chapterList.size()) {
+                bookShelfBean.setHasUpdate(true);
+                bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+            }
+            bookShelfBean.setChapterListSize(chapterList.size());
+            bookShelfBean.getBookInfoBean().setChapterList(chapterList);
+            bookShelfBean.upDurChapterName();
+            bookShelfBean.upLastChapterName();
+            e.onNext(bookShelfBean);
+            e.onComplete();
+        });
     }
 
     private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
