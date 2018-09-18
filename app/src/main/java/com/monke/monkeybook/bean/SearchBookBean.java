@@ -13,7 +13,7 @@ import org.greenrobot.greendao.annotation.Transient;
 public class SearchBookBean implements Parcelable{
     @Id
     private String noteUrl;
-    private String coverUrl;
+    private String coverUrl;//封面URL
     private String name;
     private String author;
     private String tag;
@@ -22,6 +22,7 @@ public class SearchBookBean implements Parcelable{
     private String desc;
     private String lastChapter;
     private String introduce; //简介
+    private String chapterUrl;//目录URL
     @Transient
     private long words;
     @Transient
@@ -50,12 +51,13 @@ public class SearchBookBean implements Parcelable{
         desc = in.readString();
         originNum = in.readInt();
         introduce = in.readString();
+        chapterUrl = in.readString();
     }
 
-    @Generated(hash = 568199654)
+    @Generated(hash = 472283759)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
             String tag, String kind, String origin, String desc, String lastChapter,
-            String introduce) {
+            String introduce, String chapterUrl) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -66,6 +68,7 @@ public class SearchBookBean implements Parcelable{
         this.desc = desc;
         this.lastChapter = lastChapter;
         this.introduce = introduce;
+        this.chapterUrl = chapterUrl;
     }
 
     @Override
@@ -84,6 +87,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(desc);
         dest.writeInt(originNum);
         dest.writeString(introduce);
+        dest.writeString(chapterUrl);
     }
 
     @Override
@@ -213,5 +217,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public String getChapterUrl() {
+        return this.chapterUrl;
+    }
+
+    public void setChapterUrl(String chapterUrl) {
+        this.chapterUrl = chapterUrl;
     }
 }

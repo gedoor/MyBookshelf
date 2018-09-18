@@ -11,6 +11,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
@@ -23,6 +24,7 @@ import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
 import retrofit2.Response;
 
 public class My716 extends BaseModelImpl implements IStationBookModel {
@@ -82,7 +84,29 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                     searchBookBean.setCoverUrl("http://statics.zhuishushenqi.com" + book.get("cover").getAsString());
                     searchBookBean.setIntroduce(book.get("shortIntro").getAsString());
 
-                    searchBookList.add(searchBookBean);
+                    Call<String> call = DefaultModelImpl.getRetrofitString("http://api.zhuishushenqi.com")
+                            .create(IHttpGetApi.class).getWebContentCall(searchBookBean.getNoteUrl(), AnalyzeHeaders.getMap(null));
+                    String s = "";
+                    try {
+                        s = call.execute().body();
+                    } catch (Exception exception) {
+                        if (!e.isDisposed()) {
+                            e.onError(exception);
+                        }
+                    }
+                    if (!TextUtils.isEmpty(s)) {
+                        JsonArray sourceArray = new JsonParser().parse(s).getAsJsonArray();
+                        for (int j = 0; j < sourceArray.size(); j++) {
+                            JsonObject source = sourceArray.get(j).getAsJsonObject();
+                            String name = source.get("source").getAsString();
+                            if (name.equals("my176")) {
+                                searchBookBean.setLastChapter(source.get("lastChapter").getAsString());
+                                searchBookBean.setChapterUrl("http://api.zhuishushenqi.com/atoc/" + source.get("_id").getAsString() + "?view=chapters");
+                                searchBookList.add(searchBookBean);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             e.onNext(searchBookList);
@@ -116,6 +140,7 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                 JsonObject source = sourceArray.get(i).getAsJsonObject();
                 String name = source.get("source").getAsString();
                 if (name.equals("my176")) {
+                    bookShelfBean.setLastChapterName(source.get("lastChapter").getAsString());
                     bookShelfBean.getBookInfoBean().setChapterUrl("http://api.zhuishushenqi.com/atoc/" + source.get("_id").getAsString() + "?view=chapters");
 
                     e.onNext(bookShelfBean);
