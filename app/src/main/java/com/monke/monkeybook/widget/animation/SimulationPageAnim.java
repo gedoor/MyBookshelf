@@ -147,7 +147,7 @@ public class SimulationPageAnim extends HorizonPageAnim{
                 dy = (int) (1 - mTouchY); // 防止mTouchY最终变为0
             }
         }
-        mScroller.startScroll((int) mTouchX, (int) mTouchY, dx, dy, 400);
+        mScroller.startScroll((int) mTouchX, (int) mTouchY, dx, dy, 200);
     }
 
     @Override
