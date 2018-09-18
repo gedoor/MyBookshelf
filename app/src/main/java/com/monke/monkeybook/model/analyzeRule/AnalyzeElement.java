@@ -199,12 +199,14 @@ public class AnalyzeElement {
                     }
                     break;
                 case "textNodes":
-                    List<TextNode> contentEs = elements.get(0).textNodes();
-                    for (int i = 0; i < contentEs.size(); i++) {
-                        String temp = contentEs.get(i).text().trim();
-                        temp = FormatWebText.getContent(temp);
-                        if (temp.length() > 0) {
-                            textS.add(temp);
+                    for (Element element : elements) {
+                        List<TextNode> contentEs = element.textNodes();
+                        for (int i = 0; i < contentEs.size(); i++) {
+                            String temp = contentEs.get(i).text().trim();
+                            temp = FormatWebText.getContent(temp);
+                            if (temp.length() > 0) {
+                                textS.add(temp);
+                            }
                         }
                     }
                     break;
