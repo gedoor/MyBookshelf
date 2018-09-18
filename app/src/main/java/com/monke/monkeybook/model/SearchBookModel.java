@@ -198,6 +198,7 @@ public class SearchBookModel {
 
     public void setUseMy716(boolean useMy716) {
         this.useMy716 = useMy716;
+        initSearchEngineS();
     }
 
     public interface OnSearchListener {
