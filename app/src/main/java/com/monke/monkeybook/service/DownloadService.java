@@ -261,6 +261,7 @@ public class DownloadService extends Service {
                                 public void run() {
                                     if (!d.isDisposed()) {
                                         d.dispose();
+                                        timer.cancel();
                                     }
                                 }
                             }, 30*1000);

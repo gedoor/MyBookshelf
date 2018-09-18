@@ -121,6 +121,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                                 public void run() {
                                     DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                     d.dispose();
+                                    timer.cancel();
                                 }
                             }, 30*1000);
                         }
@@ -213,7 +214,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     public void onNext(String value) {
                         ImportBookModelImpl.getInstance().importBook(new File(value))
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.newThread())
+                                .subscribeOn(Schedulers.io())
                                 .subscribe(new SimpleObserver<LocBookShelfBean>() {
                                     @Override
                                     public void onNext(LocBookShelfBean value) {

@@ -222,7 +222,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
             return getRetrofitString(tag)
                     .create(IHttpGetApi.class)
                     .getWebContent(durChapterUrl, headerMap)
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
         }
     }

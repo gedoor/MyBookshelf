@@ -537,7 +537,7 @@ public abstract class PageLoader {
      * 获取当前页的页码
      */
     public int getPagePos() {
-        return mCurPage.position;
+        return mCurPage == null ? 0 : mCurPage.position;
     }
 
     /**
