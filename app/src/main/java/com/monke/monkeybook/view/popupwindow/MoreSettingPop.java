@@ -202,7 +202,12 @@ public class MoreSettingPop extends PopupWindow {
     }
 
     private void upScreenDirection(int screenDirection) {
-        tvScreenDirection.setText(activity.getResources().getStringArray(R.array.screen_direction_list_title)[screenDirection]);
+        String[] screenDirectionListTitle = activity.getResources().getStringArray(R.array.screen_direction_list_title);
+        if (screenDirection >= screenDirectionListTitle.length) {
+            tvScreenDirection.setText(screenDirectionListTitle[0]);
+        } else {
+            tvScreenDirection.setText(screenDirectionListTitle[screenDirection]);
+        }
     }
 
 }
