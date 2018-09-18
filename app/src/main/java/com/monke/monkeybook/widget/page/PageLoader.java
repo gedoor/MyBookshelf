@@ -51,7 +51,7 @@ public abstract class PageLoader {
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     public static final int STATUS_HY = 8;              // 换源
     // 默认的显示参数配置
-    private static final int CONTENT_MARGIN_HEIGHT = 6;
+    private static final int CONTENT_MARGIN_HEIGHT = 4;
     public static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
@@ -719,7 +719,7 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     private void drawBackground(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
-        int tipMarginHeight = ScreenUtils.dpToPx(3);
+        int tipMarginHeight = ScreenUtils.dpToPx(1);
         int tipMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         String percent;
         if (mSettingManager.bgIsColor()) {
@@ -733,7 +733,7 @@ public abstract class PageLoader {
             //初始化标题的参数
             //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
             if (!mSettingManager.getHideStatusBar()) {
-                float tipBottom = mDisplayHeight - tipMarginHeight - mTipPaint.getFontMetrics().bottom;
+                float tipBottom = mDisplayHeight - tipMarginHeight - mTipPaint.getFontMetrics().bottom + 2;
                 float tipLeft;
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
@@ -760,7 +760,7 @@ public abstract class PageLoader {
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + 2, mTextPaint);
                 }
             } else {
                 float tipBottom = tipMarginHeight - mTipPaint.getFontMetrics().top;
@@ -795,8 +795,8 @@ public abstract class PageLoader {
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
-                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT - 1);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT), mTextPaint);
+                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
+                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT) + 2, mTextPaint);
                 }
             }
         }
