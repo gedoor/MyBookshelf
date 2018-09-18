@@ -67,6 +67,9 @@ public class AnalyzeElement {
                 String[] rulePc = rule.split("!");
                 String[] rules = rulePc[0].split("\\.");
                 switch (rules[0]) {
+                    case "children":
+                        elements.addAll(temp.children());
+                        break;
                     case "class":
                         if (rules.length == 3) {
                             elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
