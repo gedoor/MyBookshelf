@@ -18,25 +18,28 @@ public class AnalyzeSearchUrl {
     private String searchUrl;
     private String searchPath;
     private Map<String, String> queryMap;
-    private String searchKey;
     private int searchPage;
     private String charCode;
 
-    public AnalyzeSearchUrl(final String ruleUrl, final String key, final int page) throws Exception {
-        searchKey = key;
+    public AnalyzeSearchUrl(String ruleUrl, final String key, final int page) throws Exception {
         searchPage = page;
+        //替换关键字
+        ruleUrl = ruleUrl.replace("searchKey", key);
+        //分离编码规则
         String[] ruleUrlS = ruleUrl.split("\\|");
         if (ruleUrlS.length > 1) {
             analyzeQt(ruleUrlS[1]);
         }
+        //设置页数
         ruleUrlS[0] = setPage(ruleUrlS[0]);
+        //分离post参数
         ruleUrlS = ruleUrlS[0].split("@");
         if (ruleUrlS.length == 1) {
+            //分离get参数
             ruleUrlS = ruleUrlS[0].split("\\?");
         }
         if (ruleUrlS.length == 1) {
-            String url = ruleUrlS[0].replace("searchKey", searchKey)
-                    .replace("searchPage-1", String.valueOf(page - 1))
+            String url = ruleUrlS[0].replace("searchPage-1", String.valueOf(page - 1))
                     .replace("searchPage", String.valueOf(page));
             generateUrlPath(url);
             return;
@@ -45,6 +48,9 @@ public class AnalyzeSearchUrl {
         queryMap = getQueryMap(ruleUrlS[1]);
     }
 
+    /**
+     * 解析页数
+     */
     private String setPage(String urlStr) {
         Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
         Matcher matcher = pattern.matcher(urlStr);
@@ -59,13 +65,15 @@ public class AnalyzeSearchUrl {
         return urlStr;
     }
 
+    /**
+     * 解析编码规则
+     */
     private void analyzeQt(final String qtRule) throws Exception {
         String[] qtS = qtRule.split("&");
         for (String qt : qtS) {
             String[] gz = qt.split("=");
             if (gz[0].equals("char")) {
                 charCode = gz[1];
-                searchKey = URLEncoder.encode(searchKey, charCode);
             }
         }
     }
@@ -76,9 +84,6 @@ public class AnalyzeSearchUrl {
         for (String query : queryS) {
             String[] queryM = query.split("=");
             switch (queryM[1]) {
-                case "searchKey":
-                    map.put(queryM[0], searchKey);
-                    break;
                 case "searchPage":
                     map.put(queryM[0], String.valueOf(searchPage));
                     break;

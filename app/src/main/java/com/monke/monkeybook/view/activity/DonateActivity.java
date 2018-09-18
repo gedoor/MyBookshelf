@@ -88,38 +88,34 @@ public class DonateActivity extends MBaseActivity {
             ClipData clipData = ClipData.newPlainText(null, "支付宝红包再升级，红包种类更多，金额更大！人人可领，天天可领！长按复制此消息，打开支付宝领红包！4ZEEL3226k");
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
-                Toast.makeText(this, getString(R.string.copy_complete), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "隐藏书源已开启", Toast.LENGTH_SHORT).show();
             }
-            try {
-                PackageManager packageManager = this.getApplicationContext().getPackageManager();
-                Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
-                startActivity(intent);
-            } catch (Exception e) {
-                Toast.makeText(this, "打开支付宝失败,请手动打开支付宝", Toast.LENGTH_SHORT).show();
-            } finally {
-                ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
-            }
+            openZfb();
         });
         vwZfbHbSsm.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, "537954522");
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
-                Toast.makeText(this, "红包码已复制\n 打开支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "隐藏书源已开启\n红包码已复制\n支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_SHORT).show();
             }
-            try {
-                PackageManager packageManager = this.getApplicationContext().getPackageManager();
-                Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
-                startActivity(intent);
-            } catch (Exception e) {
-                Toast.makeText(this, "打开支付宝失败,请手动打开支付宝", Toast.LENGTH_SHORT).show();
-            } finally {
-                ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
-            }
+            openZfb();
         });
     }
 
-    void openIntent(String intentName, String address) {
+    private void openZfb() {
+        try {
+            PackageManager packageManager = this.getApplicationContext().getPackageManager();
+            Intent intent = packageManager.getLaunchIntentForPackage("com.eg.android.AlipayGphone");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
+        }
+    }
+
+    private void openIntent(String intentName, String address) {
         try {
             Intent intent = new Intent(intentName);
             intent.setData(Uri.parse(address));
