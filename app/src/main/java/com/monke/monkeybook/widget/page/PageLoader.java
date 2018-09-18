@@ -655,7 +655,7 @@ public abstract class PageLoader {
     }
 
     public int getPageSize() {
-        return mCurPageList.size();
+        return mCurPageList == null ? 0 : mCurPageList.size();
     }
 
     /**
