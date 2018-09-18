@@ -90,12 +90,6 @@ public class SearchBookModel {
         if (searchTime != startThisSearchTime) {
             return;
         }
-        if (searchEngineS.size() == 0) {
-            Toast.makeText(activity, "没有选中几何书源", Toast.LENGTH_SHORT).show();
-            searchListener.refreshFinish(true);
-            searchListener.loadMoreFinish(true);
-            return;
-        }
         if (!fromError) {
             page++;
         }
@@ -104,6 +98,12 @@ public class SearchBookModel {
         }
         if (page == 1) {
             searchListener.refreshSearchBook();
+        }
+        if (searchEngineS.size() == 0) {
+            Toast.makeText(activity, "没有选中几何书源", Toast.LENGTH_SHORT).show();
+            searchListener.refreshFinish(true);
+            searchListener.loadMoreFinish(true);
+            return;
         }
         searchSuccessNum = 0;
         searchEngineIndex = -1;
