@@ -829,6 +829,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_book_info:
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
+            case R.id.action_replace_rule:
+                startActivity(new Intent(ReadBookActivity.this, ReplaceRuleActivity.class));
+                break;
             case android.R.id.home:
                 finish();
                 break;
