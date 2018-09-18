@@ -241,7 +241,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseMenu = menu.getItem(6);
+        MenuItem pauseMenu = menu.findItem(R.id.action_list_grid);
         if (viewIsList) {
             pauseMenu.setTitle(R.string.action_grid);
         } else {

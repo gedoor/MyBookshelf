@@ -25,6 +25,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
@@ -35,6 +36,7 @@ import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,12 +60,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
+    MenuItem itemMy716;
     private SearchHistoryAdapter searchHistoryAdapter;
     private ExplosionField explosionField;
-
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
+    private boolean useMy716 = true;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -155,6 +158,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        itemMy716 = menu.findItem(R.id.action_my716);
+        upMenu();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -163,11 +173,26 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             case R.id.action_book_source_manage:
                 startActivityForResult(new Intent(this, BookSourceActivity.class), BookSource);
                 break;
+            case R.id.action_my716:
+                useMy716 = !useMy716;
+                itemMy716.setChecked(useMy716);
+                break;
             case android.R.id.home:
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void upMenu() {
+        if (itemMy716 != null) {
+            itemMy716.setChecked(useMy716);
+            if (Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True")) {
+                itemMy716.setVisible(true);
+            } else {
+                itemMy716.setVisible(false);
+            }
+        }
     }
 
     private void initSearchView() {
