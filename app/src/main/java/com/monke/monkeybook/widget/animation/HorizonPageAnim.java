@@ -18,6 +18,8 @@ import com.monke.monkeybook.utils.BitmapUtil;
 
 public abstract class HorizonPageAnim extends PageAnimation{
     private static final String TAG = "HorizonPageAnim";
+    //动画速度
+    protected static final int animationSpeed = 300;
 
     protected Bitmap mCurBitmap;
     protected Bitmap mNextBitmap;
