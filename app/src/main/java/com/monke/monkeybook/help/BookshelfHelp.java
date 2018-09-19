@@ -204,13 +204,17 @@ public class BookshelfHelp {
     }
 
     public static String getReadProgress(int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
-        DecimalFormat df = new DecimalFormat("0.00%");
+        DecimalFormat df = new DecimalFormat("0.0%");
         if (chapterAll == 0) {
-            return "0.00%";
+            return "0.0%";
         } else if (durPageAll == 0) {
             return df.format(durChapterIndex * 1.0f / chapterAll);
         }
-        return df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
+        String percent = df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
+        if (percent.equals("100.0%") && (durChapterIndex + 1 != chapterAll || durPageIndex + 1 != durPageAll) ) {
+            percent = "99.9%";
+        }
+        return percent;
     }
 
     /**
