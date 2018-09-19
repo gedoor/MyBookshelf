@@ -344,6 +344,15 @@ public class PageView extends View {
     }
 
     /**
+     * 重置滚动位移
+     */
+    public void resetScroll() {
+        if (mPageAnim instanceof ScrollPageAnim) {
+            ((ScrollPageAnim) mPageAnim).resetBitmap();
+        }
+    }
+
+    /**
      * 绘制下一页
      */
     public void drawNextPage() {
@@ -360,10 +369,6 @@ public class PageView extends View {
      */
     public void drawCurPage() {
         if (!isPrepare) return;
-
-        if (mPageAnim instanceof ScrollPageAnim) {
-            ((ScrollPageAnim) mPageAnim).resetBitmap();
-        }
 
         if (mPageLoader != null) {
             mPageLoader.drawPage(getNextBitmap());

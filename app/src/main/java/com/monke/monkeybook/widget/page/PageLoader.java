@@ -291,6 +291,7 @@ public abstract class PageLoader {
         } else {
             mCurPage = new TxtPage();
         }
+        mPageView.resetScroll();
         mPageView.drawCurPage();
         return true;
     }
@@ -311,6 +312,7 @@ public abstract class PageLoader {
         } else {
             mCurPage = new TxtPage();
         }
+        mPageView.resetScroll();
         mPageView.drawCurPage();
         return true;
     }
@@ -366,6 +368,7 @@ public abstract class PageLoader {
             return false;
         }
         mCurPage = getCurPage(pos);
+        mPageView.resetScroll();
         mPageView.drawCurPage();
         pagingEnd();
         return true;
@@ -484,6 +487,7 @@ public abstract class PageLoader {
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
 
         // 重新绘制当前页
+        mPageView.resetScroll();
         mPageView.drawCurPage();
     }
 

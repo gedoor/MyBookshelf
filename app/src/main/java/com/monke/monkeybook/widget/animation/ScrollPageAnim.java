@@ -262,9 +262,7 @@ public class ScrollPageAnim extends PageAnimation {
     public void resetBitmap() {
         isRefresh = true;
         // 将所有的Active加入到Scrap中
-        for (BitmapView view : mActiveViews) {
-            mScrapViews.add(view);
-        }
+        mScrapViews.addAll(mActiveViews);
         // 清除所有的Active
         mActiveViews.clear();
         // 重新进行布局
