@@ -119,6 +119,7 @@ public class ReadStyleActivity extends MBaseActivity {
         bgDrawable = readBookControl.getBgDrawable(textDrawableIndex, getContext());
         bgColor = readBookControl.getBgColor(textDrawableIndex);
         darkStatusIcon = readBookControl.getDarkStatusIcon(textDrawableIndex);
+        bgPath = readBookControl.getBgPath(textDrawableIndex);
         upText();
         upBg();
     }
