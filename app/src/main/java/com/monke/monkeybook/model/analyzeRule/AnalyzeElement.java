@@ -36,10 +36,19 @@ public class AnalyzeElement {
         if (temp == null || isEmpty(rule)) {
             return elements;
         }
-        String[] ruleStrS = rule.split("\\|");
+        boolean isAnd;
+        String[] ruleStrS;
+        if (rule.contains("&")) {
+            isAnd = true;
+            ruleStrS = rule.split("&");
+        } else {
+            isAnd = false;
+            ruleStrS = rule.split("\\|");
+        }
         for (String ruleStr : ruleStrS) {
-            elements = getElementsSingle(temp, ruleStr);
-            if (elements.size() > 0) {
+            Elements tempS = getElementsSingle(temp, ruleStr);
+            elements.addAll(tempS);
+            if (elements.size() > 0 && !isAnd) {
                 break;
             }
         }
@@ -131,15 +140,25 @@ public class AnalyzeElement {
         if (isEmpty(ruleStrS[0])) {
             result = element.data();
         } else {
-            ruleStrS = ruleStrS[0].split("\\|");
-            List<String> textS = null;
+            boolean isAnd;
+            if (ruleStrS[0].contains("&")) {
+                isAnd = true;
+                ruleStrS = ruleStrS[0].split("&");
+            } else {
+                isAnd = false;
+                ruleStrS = ruleStrS[0].split("\\|");
+            }
+            List<String> textS = new ArrayList<>();
             for (String ruleStrX : ruleStrS) {
-                textS = getResultList(ruleStrX);
-                if (textS != null) {
+                List<String> temp = getResultList(ruleStrX);
+                if (temp != null) {
+                    textS.addAll(temp);
+                }
+                if (textS.size() > 0 && !isAnd) {
                     break;
                 }
             }
-            if (textS == null) {
+            if (textS.size() == 0) {
                 return null;
             }
             StringBuilder content = new StringBuilder();
