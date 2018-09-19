@@ -41,6 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private int threadsNum = 6;
+    private int downloadNum = 10;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
@@ -126,7 +127,11 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     intent.setAction("addDownload");
                     intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
                     intent.putExtra("start", bookShelfBean.getDurChapter());
-                    intent.putExtra("end", bookShelfBean.getChapterListSize() - 1);
+                    if (bookShelfBean.getChapterListSize() - 1 <= bookShelfBean.getDurChapter() + downloadNum) {
+                        intent.putExtra("end", bookShelfBean.getChapterListSize() - 1);
+                    } else {
+                        intent.putExtra("end", bookShelfBean.getDurChapter() + downloadNum);
+                    }
                     mView.getContext().startService(intent);
                 }
             }
@@ -276,6 +281,14 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 queryBookShelf(false, group);
+                for(BookShelfBean book: bookShelfBeans) {
+                    if(book.getHasUpdate()) {
+                       downloadAll();
+                       mView.refreshBookShelf(bookShelfBeans);
+                       break;
+                    }
+                }
+
             }
         }
     }
