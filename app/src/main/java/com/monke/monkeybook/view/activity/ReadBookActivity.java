@@ -722,8 +722,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabReplaceRule.setOnClickListener(view -> {
             popMenuOut();
-            Intent intent = new Intent(this, ReplaceRuleActivity.class);
-            startActivity(intent);
+            ReplaceRuleActivity.startThis(this);
         });
 
         //夜间模式

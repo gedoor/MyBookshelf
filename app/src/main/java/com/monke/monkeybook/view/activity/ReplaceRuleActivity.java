@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -59,6 +60,10 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     private MoProgressHUD moProgressHUD;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;
+
+    public static void startThis(Context context) {
+        context.startActivity(new Intent(context, ReplaceRuleActivity.class));
+    }
 
     @Override
     protected ReplaceRuleContract.Presenter initInjector() {
@@ -149,11 +154,6 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     public void saveDataS() {
         mPresenter.saveData(adapter.getDataList());
-    }
-
-    @Override
-    protected void firstRequest() {
-
     }
 
     //设置ToolBar

@@ -18,4 +18,9 @@
         android:visible="false"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_donate"
+        android:icon="@drawable/ic_local_cafe_black_24dp_new"
+        android:title="@string/donate"
+        app:showAsAction="never" />
 </menu>

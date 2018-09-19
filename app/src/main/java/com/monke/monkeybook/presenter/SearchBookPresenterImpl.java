@@ -273,11 +273,6 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     }
 
     @Override
-    public void upSearchEngineS() {
-        searchBookModel.initSearchEngineS();
-    }
-
-    @Override
     public void stopSearch() {
         searchBookModel.stopSearch();
     }
@@ -364,5 +359,10 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
     public void searchBook(String searchKey) {
         mView.searchBook(searchKey);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
+    public void sourceListChange(String searchKey) {
+        searchBookModel.initSearchEngineS();
     }
 }

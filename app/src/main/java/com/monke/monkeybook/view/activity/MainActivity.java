@@ -61,7 +61,6 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends MBaseActivity<MainContract.Presenter> implements MainContract.View {
-    private static final int REQUEST_SETTING = 210;
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
@@ -383,19 +382,19 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     upGroup(1);
                     break;
                 case R.id.action_book_source_manage:
-                    startActivity(new Intent(MainActivity.this, BookSourceActivity.class));
+                    BookSourceActivity.startThis(this);
                     break;
                 case R.id.action_replace_rule:
-                    startActivity(new Intent(MainActivity.this, ReplaceRuleActivity.class));
+                    ReplaceRuleActivity.startThis(this);
                     break;
                 case R.id.action_setting:
-                    startActivityForResult(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING);
+                    SettingActivity.startThis(this);
                     break;
                 case R.id.action_about:
-                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    AboutActivity.startThis(this);
                     break;
                 case R.id.action_donate:
-                    startActivity(new Intent(MainActivity.this, DonateActivity.class));
+                    DonateActivity.startThis(this);
                     break;
                 case R.id.action_backup:
                     backup();

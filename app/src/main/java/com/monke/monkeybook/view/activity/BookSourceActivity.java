@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -63,6 +64,10 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private MoProgressHUD moProgressHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
+
+    public static void startThis(Context context) {
+        context.startActivity(new Intent(context, BookSourceActivity.class));
+    }
 
     @Override
     protected BookSourceContract.Presenter initInjector() {

@@ -48,6 +48,10 @@ public class DonateActivity extends MBaseActivity {
     @BindView(R.id.vw_zfb_hb_ssm)
     CardView vwZfbHbSsm;
 
+    public static void startThis(Context context) {
+        Intent intent = new Intent(context, DonateActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

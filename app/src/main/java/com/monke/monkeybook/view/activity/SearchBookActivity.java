@@ -43,7 +43,6 @@ import butterknife.ButterKnife;
 import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
-    public final static int BookSource = 1;
 
     @BindView(R.id.searchView)
     SearchView searchView;
@@ -61,6 +60,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     FloatingActionButton fabSearchStop;
 
     MenuItem itemMy716;
+    MenuItem itemDonate;
     private SearchHistoryAdapter searchHistoryAdapter;
     private ExplosionField explosionField;
     private SearchBookAdapter searchBookAdapter;
@@ -161,6 +161,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         itemMy716 = menu.findItem(R.id.action_my716);
+        itemDonate = menu.findItem(R.id.action_donate);
         upMenu();
         return super.onPrepareOptionsMenu(menu);
     }
@@ -171,12 +172,15 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         int id = item.getItemId();
         switch (id) {
             case R.id.action_book_source_manage:
-                startActivityForResult(new Intent(this, BookSourceActivity.class), BookSource);
+                BookSourceActivity.startThis(this);
                 break;
             case R.id.action_my716:
                 useMy716 = !useMy716;
                 itemMy716.setChecked(useMy716);
                 mPresenter.setUseMy716(useMy716);
+                break;
+            case R.id.action_donate:
+                DonateActivity.startThis(this);
                 break;
             case android.R.id.home:
                 finish();
@@ -185,13 +189,18 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 更新菜单
+     */
     private void upMenu() {
         if (itemMy716 != null) {
             itemMy716.setChecked(useMy716);
             if (Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True")) {
                 itemMy716.setVisible(true);
+                itemDonate.setVisible(false);
             } else {
                 itemMy716.setVisible(false);
+                itemDonate.setVisible(true);
             }
         }
     }
@@ -433,8 +442,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BookSource) {
-            mPresenter.upSearchEngineS();
-        }
+
     }
 }

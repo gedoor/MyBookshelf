@@ -85,6 +85,11 @@ public class AboutActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
     private String qq = "701903217 788025059";
 
+    public static void startThis(Context context) {
+        Intent intent = new Intent(context, AboutActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected IPresenter initInjector() {
         return null;
@@ -134,10 +139,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void bindEvent() {
-        vwDonate.setOnClickListener(view -> {
-            Intent intent = new Intent(this, DonateActivity.class);
-            startActivity(intent);
-        });
+        vwDonate.setOnClickListener(view -> DonateActivity.startThis(this));
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
         vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.this_github_url)));
@@ -153,9 +155,7 @@ public class AboutActivity extends MBaseActivity {
                 Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
             }
         });
-        vwUpdateLog.setOnClickListener(view -> {
-            moProgressHUD.showAssetMarkdown("updateLog.md");
-        });
+        vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
     }
 
     @Override
