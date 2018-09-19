@@ -213,6 +213,7 @@ public class ReadBookControl {
     }
 
     public Drawable getBgDrawable(int textDrawableIndex, Context context) {
+        int color;
         try {
             switch (getBgCustom(textDrawableIndex)) {
                 case 2:
@@ -222,19 +223,19 @@ public class ReadBookControl {
                     }
                     break;
                 case 1:
-                    bgColor = getBgColor(textDrawableIndex);
-                    return new ColorDrawable(bgColor);
+                    color = getBgColor(textDrawableIndex);
+                    return new ColorDrawable(color);
             }
             if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
-                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-                return new ColorDrawable(bgColor);
+                color = textDrawable.get(textDrawableIndex).get("textBackground");
+                return new ColorDrawable(color);
             } else {
                 return getDefaultBgDrawable(textDrawableIndex, context);
             }
         } catch (Exception e) {
             if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
-                bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-                return new ColorDrawable(bgColor);
+                color = textDrawable.get(textDrawableIndex).get("textBackground");
+                return new ColorDrawable(color);
             } else {
                 return getDefaultBgDrawable(textDrawableIndex, context);
             }
