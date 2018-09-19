@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model.analyzeRule;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.monke.monkeybook.help.FormatWebText;
@@ -226,9 +227,18 @@ public class AnalyzeElement {
                         for (int i = 0; i < contentEs.size(); i++) {
                             String temp = contentEs.get(i).text().trim();
                             temp = FormatWebText.getContent(temp);
-                            if (temp.length() > 0) {
+                            if (!TextUtils.isEmpty(temp)) {
                                 textS.add(temp);
                             }
+                        }
+                    }
+                    break;
+                case "html":
+                    String html = elements.html();
+                    String[] htmlS = html.replaceAll("<.*?>", "\n").split("\n");
+                    for (String temp : htmlS) {
+                        if (!TextUtils.isEmpty(FormatWebText.getContent(temp))) {
+                            textS.add(temp);
                         }
                     }
                     break;
