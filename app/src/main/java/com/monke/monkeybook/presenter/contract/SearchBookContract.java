@@ -101,7 +101,8 @@ public interface SearchBookContract {
          * 判断书籍是否已经在书架上
          */
         Boolean checkIsExist(SearchBookBean searchBookBean);
-    }
 
+        void upMenu();
+    }
 
 }

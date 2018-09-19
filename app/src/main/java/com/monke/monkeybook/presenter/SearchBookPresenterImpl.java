@@ -362,7 +362,12 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
-    public void sourceListChange(String searchKey) {
+    public void sourceListChange(Boolean change) {
         searchBookModel.initSearchEngineS();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})
+    public void getZfbHB(Boolean getZfbHB) {
+        mView.upMenu();
     }
 }

@@ -192,7 +192,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     /**
      * 更新菜单
      */
-    private void upMenu() {
+    @Override
+    public void upMenu() {
         if (itemMy716 != null) {
             itemMy716.setChecked(useMy716);
             if (Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True")) {

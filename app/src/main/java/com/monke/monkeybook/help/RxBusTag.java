@@ -23,4 +23,5 @@ public class RxBusTag {
     public final static String IMMERSION_CHANGE = "Immersion_Change";
     public final static String SEARCH_BOOK = "search_book";
     public final static String SOURCE_LIST_CHANGE = "sourceListChange";
+    public final static String GET_ZFB_Hb = "getZfbHb";
 }
