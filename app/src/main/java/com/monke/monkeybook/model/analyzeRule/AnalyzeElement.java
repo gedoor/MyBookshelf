@@ -235,7 +235,7 @@ public class AnalyzeElement {
                     break;
                 case "html":
                     String html = elements.html();
-                    String[] htmlS = html.replaceAll("<(br|(p.*?|div.*?)|/(p|div))>", "\n")
+                    String[] htmlS = html.replaceAll("<(br|p.*?|div.*?|/p|/div)>", "\n")
                             .replaceAll("<.*?>", "")
                             .split("\n");
                     for (String temp : htmlS) {
