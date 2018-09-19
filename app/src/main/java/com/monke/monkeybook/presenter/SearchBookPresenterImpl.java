@@ -368,6 +368,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})
     public void getZfbHB(Boolean getZfbHB) {
+        searchBookModel.setUseMy716(getZfbHB);
         mView.upMenu();
     }
 }
