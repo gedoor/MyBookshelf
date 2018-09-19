@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -374,6 +375,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             }
         });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
+            drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_group_zg:
                     upGroup(0);
@@ -382,19 +384,19 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     upGroup(1);
                     break;
                 case R.id.action_book_source_manage:
-                    BookSourceActivity.startThis(this);
+                    new Handler().postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
                 case R.id.action_replace_rule:
-                    ReplaceRuleActivity.startThis(this);
+                    new Handler().postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
                     break;
                 case R.id.action_setting:
-                    SettingActivity.startThis(this);
+                    new Handler().postDelayed(() -> SettingActivity.startThis(this), 200);
                     break;
                 case R.id.action_about:
-                    AboutActivity.startThis(this);
+                    new Handler().postDelayed(() -> AboutActivity.startThis(this), 200);
                     break;
                 case R.id.action_donate:
-                    DonateActivity.startThis(this);
+                    new Handler().postDelayed(() -> DonateActivity.startThis(this), 200);
                     break;
                 case R.id.action_backup:
                     backup();
@@ -407,7 +409,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     setNightTheme(!isNightTheme());
                     break;
             }
-            drawer.closeDrawers();
             return true;
         });
     }
