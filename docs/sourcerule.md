@@ -18,6 +18,7 @@
 - 如果有不同网页的规则可以用 | 或 & 分隔,|会以第一个取到值的为准, & 会合并所有规则取到的值
 - 如需要正则替换在最后加上 #正则表达式
 - 例:class.odd.0@tag.a.0@text|tag.dd.0@tag.h1@text#全文阅读
+- 例:class.odd.0@tag.a.0@text&tag.dd.0@tag.h1@text#全文阅读
 
 ### BookSourceUrl 书源网址
 ### BookSourceName 书源名称
