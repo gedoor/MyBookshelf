@@ -235,7 +235,9 @@ public class AnalyzeElement {
                     break;
                 case "html":
                     String html = elements.html();
-                    String[] htmlS = html.replaceAll("<.*?>", "\n").split("\n");
+                    String[] htmlS = html.replaceAll("<br|(p.*?|div.*?)|/(p|div)>", "\n")
+                            .replaceAll("<.*?>", "")
+                            .split("\n");
                     for (String temp : htmlS) {
                         if (!TextUtils.isEmpty(FormatWebText.getContent(temp))) {
                             textS.add(temp);
