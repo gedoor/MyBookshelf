@@ -26,6 +26,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -234,8 +235,12 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 selectBookSourceFile();
                 break;
             case R.id.action_import_book_source_onLine:
-                moProgressHUD.showInputBox("输入书源网址", getString(R.string.default_source_url),
-                        inputText -> mPresenter.importBookSource(inputText));
+                String cacheUrl = ACache.get(this).getAsString("sourceUrl");
+                moProgressHUD.showInputBox("输入书源网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                        inputText -> {
+                            ACache.get(this).put("sourceUrl", inputText);
+                            mPresenter.importBookSource(inputText);
+                        });
                 break;
             case R.id.action_del_select:
                 mPresenter.delData(adapter.getSelectDataList());
@@ -252,7 +257,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void addBookSource() {
@@ -305,7 +309,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isSearch){
+            if (isSearch) {
                 try {
                     //如果搜索框中有文字，则会先清空文字.
                     mSearchAutoComplete.setText("");

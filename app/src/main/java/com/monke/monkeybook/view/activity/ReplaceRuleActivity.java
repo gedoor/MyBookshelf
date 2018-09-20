@@ -192,9 +192,9 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 String cacheUrl = ACache.get(this).getAsString("replaceUrl");
                 moProgressHUD.showInputBox("输入替换规则网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_replace_url) : cacheUrl,
                         inputText -> {
-                    ACache.get(this).put("replaceUrl", inputText);
-                    mPresenter.importDataS(inputText);
-                });
+                            ACache.get(this).put("replaceUrl", inputText);
+                            mPresenter.importDataS(inputText);
+                        });
                 break;
             case R.id.action_del_all:
                 mPresenter.delData(adapter.getDataList());
