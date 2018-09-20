@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ReplaceRuleManage;
@@ -187,8 +189,12 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 selectReplaceRuleFile();
                 break;
             case R.id.action_import_onLine:
-                moProgressHUD.showInputBox("输入替换规则网址", getString(R.string.default_replace_url),
-                        inputText -> mPresenter.importDataS(inputText));
+                String cacheUrl = ACache.get(this).getAsString("replaceUrl");
+                moProgressHUD.showInputBox("输入替换规则网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_replace_url) : cacheUrl,
+                        inputText -> {
+                    ACache.get(this).put("replaceUrl", inputText);
+                    mPresenter.importDataS(inputText);
+                });
                 break;
             case R.id.action_del_all:
                 mPresenter.delData(adapter.getDataList());
