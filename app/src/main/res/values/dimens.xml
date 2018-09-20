@@ -3,5 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="fast_scroll_min_thumb_height">24dp</dimen>
+    <dimen name="fast_scroll_min_thumb_height">64dp</dimen>
 </resources>
