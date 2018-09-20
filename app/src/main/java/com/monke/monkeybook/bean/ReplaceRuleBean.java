@@ -23,6 +23,7 @@ public class ReplaceRuleBean implements Parcelable {
     private String regex;
     //替换为
     private String replacement;
+    //作用于
     private String useTo;
 
     private Boolean enable;
