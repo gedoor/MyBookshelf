@@ -2,6 +2,7 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -17,6 +18,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
@@ -44,7 +46,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
 
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenterImpl(Context context) {
+    public SearchBookPresenterImpl(Context context, boolean useMy716) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
@@ -100,9 +102,8 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
                 return mView.getSearchBookAdapter().getICount();
             }
         };
-
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener);
+        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener, useMy716);
     }
 
     @Override

@@ -36,11 +36,12 @@ public class SearchBookModel {
     private int searchSuccessNum;
     private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
-    private boolean useMy716 = true;
+    private boolean useMy716;
 
-    public SearchBookModel(BaseActivity activity, OnSearchListener searchListener) {
+    public SearchBookModel(BaseActivity activity, OnSearchListener searchListener, boolean useMy716) {
         this.activity = activity;
         this.searchListener = searchListener;
+        this.useMy716 = useMy716;
         SharedPreferences preference = activity.getSharedPreferences("CONFIG", 0);
         threadsNum = preference.getInt(activity.getString(R.string.pk_threads_num), 6);
         compositeDisposable = new CompositeDisposable();

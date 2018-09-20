@@ -66,7 +66,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
-    private boolean useMy716 = true;
+    private boolean useMy716;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -81,13 +81,13 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected SearchBookContract.Presenter initInjector() {
-        return new SearchBookPresenterImpl(this);
+        useMy716 = !Objects.equals(ACache.get(this).getAsString("useMy716"), "False");
+        return new SearchBookPresenterImpl(this, useMy716);
     }
 
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_search_book);
-
     }
 
     @Override
@@ -178,6 +178,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 useMy716 = !useMy716;
                 itemMy716.setChecked(useMy716);
                 mPresenter.setUseMy716(useMy716);
+                ACache.get(this).put("useMy716", useMy716 ? "True" : "False");
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);

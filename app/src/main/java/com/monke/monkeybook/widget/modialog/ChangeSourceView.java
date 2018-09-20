@@ -69,7 +69,8 @@ public class ChangeSourceView {
         });
         rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
-        searchBookModel = new SearchBookModel(activity, new SearchBookModel.OnSearchListener() {
+
+        SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
                 adapter.reSetSourceAdapter();
@@ -111,7 +112,8 @@ public class ChangeSourceView {
             public int getItemCount() {
                 return 0;
             }
-        });
+        };
+        searchBookModel = new SearchBookModel(activity, searchListener, true);
     }
 
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
