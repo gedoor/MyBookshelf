@@ -35,29 +35,30 @@ import java.util.List;
 
 public class BookshelfHelp {
 
-    private static HashMap<String, HashSet<Integer>> chapterCaches = new HashMap<>();
+    private static HashMap<String, HashSet<Integer>> getChapterCaches(){
+        HashMap<String, HashSet<Integer>> temp = new HashMap<>();
+        try {
+            File file = new File(Constant.BOOK_CACHE_PATH);
+            String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
 
-    static {
-        upChapterCaches();
-    }
-    private static void upChapterCaches(){
-        if(chapterCaches.size() > 0)
-            chapterCaches.clear();
-        File file = new File(Constant.BOOK_CACHE_PATH);
-        String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
-
-        for(String bookPath: booksCached) {
-            HashSet<Integer> chapterIndexS = new HashSet<>();
-            file = new File(Constant.BOOK_CACHE_PATH + bookPath);
-            String[] chapters = file.list((dir, name) -> name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$"));
-            for (String chapter: chapters) {
+            for (String bookPath : booksCached) {
+                HashSet<Integer> chapterIndexS = new HashSet<>();
+                file = new File(Constant.BOOK_CACHE_PATH + bookPath);
+                String[] chapters = file.list((dir, name) -> name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$"));
+                for (String chapter : chapters) {
                     chapterIndexS.add(
                             Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
                     );
+                }
+                temp.put(bookPath, chapterIndexS);
             }
-            chapterCaches.put(bookPath, chapterIndexS);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return temp;
     }
+
+    private static HashMap<String, HashSet<Integer>> chapterCaches = getChapterCaches();
 
     public static String getCachePathName(DownloadChapterBean chapter) {
         return formatFileName(chapter.getBookName() + "-" + chapter.getTag());
