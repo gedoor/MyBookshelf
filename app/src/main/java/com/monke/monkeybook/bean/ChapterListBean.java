@@ -37,9 +37,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
     //章节内容在文章中的终止位置(本地)
     private Long end;
 
-    @Transient
-    private BookContentBean bookContentBean = new BookContentBean();
-
     protected ChapterListBean(Parcel in) {
         noteUrl = in.readString();
         durChapterIndex = in.readInt();
@@ -48,7 +45,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         tag = in.readString();
         start = in.readLong();
         end = in.readLong();
-        bookContentBean = in.readParcelable(BookContentBean.class.getClassLoader());
     }
 
     @Generated(hash = 1504053071)
@@ -76,7 +72,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         dest.writeString(tag);
         dest.writeLong(start);
         dest.writeLong(end);
-        dest.writeParcelable(bookContentBean, flags);
     }
 
     @Override
@@ -112,7 +107,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         chapterListBean.durChapterUrl = durChapterUrl;
         chapterListBean.durChapterName = durChapterName;
         chapterListBean.tag = tag;
-        chapterListBean.bookContentBean = new BookContentBean();
         return chapterListBean;
     }
 
@@ -124,14 +118,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         } else {
             return false;
         }
-    }
-
-    public BookContentBean getBookContentBean() {
-        return bookContentBean;
-    }
-
-    public void setBookContentBean(BookContentBean bookContentBean) {
-        this.bookContentBean = bookContentBean;
     }
 
     public Boolean getHasCache() {

@@ -66,10 +66,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                     for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
                         if (chapterListBean.getDurChapterName().contains(key)) {
                             chapterListBeans.add(chapterListBean);
-                        } else if (chapterListBean.getBookContentBean() != null
-                                && chapterListBean.getBookContentBean().getDurChapterContent() != null
-                                && chapterListBean.getBookContentBean().getDurChapterContent().contains(key)) {
-                            chapterListBeans.add(chapterListBean);
                         }
                     }
                 } else {
