@@ -101,7 +101,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     public synchronized void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                        if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean().getName(),
+                        if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
                                 String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()))
                                 && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
                             DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
@@ -130,7 +130,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
                             DownloadingList(REMOVE, bookContentBean.getDurChapterUrl());
-                            BookshelfHelp.saveChapterInfo(bookShelf.getBookInfoBean().getName(),
+                            BookshelfHelp.saveChapterInfo(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
                                     String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()),
                                     bookContentBean.getDurChapterContent());
                             mView.finishContent();

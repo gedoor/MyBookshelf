@@ -101,7 +101,7 @@ public class SearchBookModel {
             searchListener.refreshSearchBook();
         }
         if (searchEngineS.size() == 0) {
-            Toast.makeText(activity, "没有选中几何书源", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "没有选中任何书源", Toast.LENGTH_SHORT).show();
             searchListener.refreshFinish(true);
             searchListener.loadMoreFinish(true);
             return;

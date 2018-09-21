@@ -229,8 +229,10 @@ public class DownloadService extends Service {
         if (isStartDownload) {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                e.onNext(!BookshelfHelp.isChapterCached(data.getBookName(),
-                        String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName())));
+                e.onNext(!BookshelfHelp.isChapterCached(
+                        BookshelfHelp.getCachePathName(data),
+                        String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName())
+                ));
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
@@ -243,7 +245,7 @@ public class DownloadService extends Service {
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 if (bookContentBean.getRight()) {
-                    BookshelfHelp.saveChapterInfo(data.getBookName(),
+                    BookshelfHelp.saveChapterInfo(BookshelfHelp.getCachePathName(data),
                             String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName()),
                             bookContentBean.getDurChapterContent());
                 }

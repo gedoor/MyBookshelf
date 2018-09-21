@@ -7,6 +7,7 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
@@ -18,10 +19,13 @@ import com.monke.monkeybook.utils.IOUtils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -30,13 +34,80 @@ import java.util.List;
  */
 
 public class BookshelfHelp {
+
+    private static HashMap<String, HashSet<Integer>> chapterCaches;
+
+    static {
+        chapterCaches = new HashMap<>();
+        upChapterCaches();
+    }
+    private static void upChapterCaches(){
+        if(chapterCaches.size() > 0)
+            chapterCaches.clear();
+        File file = new File(Constant.BOOK_CACHE_PATH);
+        String[] booksCached = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isDirectory();
+            }
+        });
+
+        for(String bookPath: booksCached) {
+            HashSet<Integer> chapterIndexs = new HashSet<>();
+            file = new File(Constant.BOOK_CACHE_PATH + bookPath);
+            String[] chapters = file.list(new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$");
+                }
+            });
+            for (String chapter: chapters) {
+                    chapterIndexs.add(
+                            Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
+                    );
+            }
+            chapterCaches.put(bookPath, chapterIndexs);
+        }
+    }
+
+    public static String getCachePathName(DownloadChapterBean chapter) {
+        return formatFileName(chapter.getBookName() + "-" + chapter.getTag());
+    }
+
+    public static String getCachePathName(BookInfoBean book) {
+        return formatFileName(book.getName() + "-" + book.getTag());
+    }
+
+    public static boolean setChapterIsCached(ChapterListBean chapter, boolean cached) {
+        return setChapterIsCached(getCachePathName(chapter.getBookInfo()), chapter.getDurChapterIndex(), cached);
+    }
+
+    public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
+        if(!chapterCaches.containsKey(bookPathName))
+            chapterCaches.put(bookPathName, new HashSet<>());
+        if (cached)
+            return chapterCaches.get(bookPathName).add(index);
+        else
+            return chapterCaches.get(bookPathName).remove(index);
+    }
+
     /**
      * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存过)
      */
+    // be careful to use this method, the storage path (folderName) has been changed
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
         return file.exists();
+    }
+
+    public static boolean isChapterCached(ChapterListBean chapter) {
+        return isChapterCached(chapter.getBookInfo(), chapter);
+    }
+
+    public static boolean isChapterCached(BookInfoBean book, ChapterListBean chapter) {
+        final String path = getCachePathName(book);
+        return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
     /**
@@ -77,6 +148,7 @@ public class BookshelfHelp {
 
     private static String formatFileName(String fileName) {
         return fileName.replace("/", "")
+                .replace(":", "")
                 .replace(".", "");
     }
 
@@ -135,7 +207,8 @@ public class BookshelfHelp {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
-        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
+        chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
