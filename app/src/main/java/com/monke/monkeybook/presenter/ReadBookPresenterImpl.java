@@ -109,7 +109,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         }
                         e.onComplete();
                     })
-                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
+                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new Observer<BookContentBean>() {

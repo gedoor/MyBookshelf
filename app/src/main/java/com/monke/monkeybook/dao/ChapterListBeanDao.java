@@ -1,18 +1,13 @@
 package com.monke.monkeybook.dao;
 
-import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
-import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
-
-import com.monke.monkeybook.bean.BookInfoBean;
 
 import com.monke.monkeybook.bean.ChapterListBean;
 
@@ -38,8 +33,6 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         public final static Property End = new Property(6, Long.class, "end", false, "END");
     }
 
-    private DaoSession daoSession;
-
 
     public ChapterListBeanDao(DaoConfig config) {
         super(config);
@@ -47,7 +40,6 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
     
     public ChapterListBeanDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -142,12 +134,6 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
     }
 
     @Override
-    protected final void attachEntity(ChapterListBean entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
-    }
-
-    @Override
     public String readKey(Cursor cursor, int offset) {
         return cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2);
     }    
@@ -201,95 +187,4 @@ public class ChapterListBeanDao extends AbstractDao<ChapterListBean, String> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getBookInfoBeanDao().getAllColumns());
-            builder.append(" FROM CHAPTER_LIST_BEAN T");
-            builder.append(" LEFT JOIN BOOK_INFO_BEAN T0 ON T.\"NOTE_URL\"=T0.\"NOTE_URL\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected ChapterListBean loadCurrentDeep(Cursor cursor, boolean lock) {
-        ChapterListBean entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        BookInfoBean bookInfo = loadCurrentOther(daoSession.getBookInfoBeanDao(), cursor, offset);
-        entity.setBookInfo(bookInfo);
-
-        return entity;    
-    }
-
-    public ChapterListBean loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<ChapterListBean> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<ChapterListBean> list = new ArrayList<ChapterListBean>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
-            }
-        }
-        return list;
-    }
-    
-    protected List<ChapterListBean> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<ChapterListBean> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }

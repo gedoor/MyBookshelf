@@ -97,10 +97,6 @@ public class BookChapter {
             temp.setNoteUrl(novelUrl);
             temp.setTag(tag);
             if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
-                x = chapterListBeansOld.indexOf(temp);
-                if (x != -1) {
-                    temp.setHasCache(chapterListBeansOld.get(x).getHasCache());
-                }
                 temp.setDurChapterIndex(chapterBeans.size());
                 chapterBeans.add(temp);
             }

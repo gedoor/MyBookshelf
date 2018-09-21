@@ -4,6 +4,7 @@ package com.monke.monkeybook.model;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
@@ -63,11 +64,11 @@ public class WebBookModelImpl implements IWebBookModel {
      * 章节缓存
      */
     @Override
-    public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex, String tag) {
+    public Observable<BookContentBean> getBookContent(String bookName, String durChapterUrl, int durChapterIndex, String tag) {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(durChapterUrl, durChapterIndex)
-                    .flatMap(this::upChapterList);
+                    .flatMap((bookContentBean -> upChapterList(bookName, bookContentBean, tag)));
         } else
             return Observable.create(e -> {
                 e.onNext(new BookContentBean());
@@ -136,14 +137,14 @@ public class WebBookModelImpl implements IWebBookModel {
         });
     }
 
-    private Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
+    private Observable<BookContentBean> upChapterList(String bookName, BookContentBean bookContentBean, String tag) {
         return Observable.create(e -> {
             if (bookContentBean.getRight()) {
                 ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
                 if (chapterListBean != null) {
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    chapterListBean.setHasCache(true);
+                    chapterListBean.setHasCache(bookName, true);
                     DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
                     RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
                 }

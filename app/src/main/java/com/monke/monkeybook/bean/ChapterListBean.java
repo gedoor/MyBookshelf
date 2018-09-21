@@ -24,8 +24,6 @@ import com.monke.monkeybook.help.BookshelfHelp;
 public class ChapterListBean implements Parcelable,Cloneable{
 
     private String noteUrl; //对应BookInfoBean noteUrl;
-    @ToOne(joinProperty = "noteUrl")
-    private BookInfoBean bookInfo;
 
     private int durChapterIndex;  //当前章节数
     @Id
@@ -91,14 +89,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
             return new ChapterListBean[size];
         }
     };
-    /** Used to resolve relations */
-    @Generated(hash = 2040040024)
-    private transient DaoSession daoSession;
-    /** Used for active entity operations. */
-    @Generated(hash = 74829519)
-    private transient ChapterListBeanDao myDao;
-    @Generated(hash = 1509892206)
-    private transient String bookInfo__resolvedKey;
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -120,12 +110,16 @@ public class ChapterListBean implements Parcelable,Cloneable{
         }
     }
 
-    public Boolean getHasCache() {
-        return BookshelfHelp.isChapterCached(this);
+    public Boolean getHasCache(BookInfoBean bookInfoBean) {
+        return BookshelfHelp.isChapterCached(bookInfoBean, this);
     }
 
-    public void setHasCache(Boolean hasCache) {
-        BookshelfHelp.setChapterIsCached(this, hasCache);
+    public void setHasCache(BookInfoBean bookInfoBean, Boolean hasCache) {
+        BookshelfHelp.setChapterIsCached(BookshelfHelp.getCachePathName(bookInfoBean),durChapterIndex, hasCache);
+    }
+
+    public void setHasCache(String bookName, Boolean hasCache) {
+        BookshelfHelp.setChapterIsCached(bookName + "-" + tag, durChapterIndex, hasCache);
     }
 
     public String getTag() {
@@ -186,78 +180,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
 
     public void setEnd(Long end) {
         this.end = end;
-    }
-
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1678998200)
-    public BookInfoBean getBookInfo() {
-        String __key = this.noteUrl;
-        if (bookInfo__resolvedKey == null || bookInfo__resolvedKey != __key) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            BookInfoBeanDao targetDao = daoSession.getBookInfoBeanDao();
-            BookInfoBean bookInfoNew = targetDao.load(__key);
-            synchronized (this) {
-                bookInfo = bookInfoNew;
-                bookInfo__resolvedKey = __key;
-            }
-        }
-        return bookInfo;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 955140842)
-    public void setBookInfo(BookInfoBean bookInfo) {
-        synchronized (this) {
-            this.bookInfo = bookInfo;
-            noteUrl = bookInfo == null ? null : bookInfo.getNoteUrl();
-            bookInfo__resolvedKey = noteUrl;
-        }
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 128553479)
-    public void delete() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.delete(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 1942392019)
-    public void refresh() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.refresh(this);
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
-    @Generated(hash = 713229351)
-    public void update() {
-        if (myDao == null) {
-            throw new DaoException("Entity is detached from DAO context");
-        }
-        myDao.update(this);
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 180114398)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getChapterListBeanDao() : null;
     }
 
 }

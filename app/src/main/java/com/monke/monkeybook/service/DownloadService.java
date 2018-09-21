@@ -128,7 +128,7 @@ public class DownloadService extends Service {
             if (!(bookShelf == null)) {
                 List<DownloadChapterBean> chapterBeans = new ArrayList<>();
                 for (int i = start; i <= end; i++) {
-                    if (!bookShelf.getChapterList(i).getHasCache()) {
+                    if (!bookShelf.getChapterList(i).getHasCache(bookShelf.getBookInfoBean())) {
                         DownloadChapterBean item = new DownloadChapterBean();
                         item.setNoteUrl(bookShelf.getNoteUrl());
                         item.setDurChapterIndex(bookShelf.getChapterList(i).getDurChapterIndex());
@@ -173,12 +173,7 @@ public class DownloadService extends Service {
                     .subscribe(new SimpleObserver<DownloadChapterBean>() {
                         @Override
                         public void onNext(DownloadChapterBean value) {
-                            if (value.getNoteUrl() != null && value.getNoteUrl().length() > 0) {
-                                downloading(value);
-                            } else {
-                                isDownloading = false;
-                                finishDownload();
-                            }
+                            downloading(value);
                         }
 
                         @Override
@@ -215,10 +210,12 @@ public class DownloadService extends Service {
                     }
                 }
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                e.onNext(new DownloadChapterBean());
+                isDownloading = false;
+                finishDownload();
             } else {
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                e.onNext(new DownloadChapterBean());
+                isDownloading = false;
+                finishDownload();
             }
             e.onComplete();
         });
@@ -236,7 +233,7 @@ public class DownloadService extends Service {
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
-                    return WebBookModelImpl.getInstance().getBookContent(data.getDurChapterUrl(), data.getDurChapterIndex(), data.getTag());
+                    return WebBookModelImpl.getInstance().getBookContent(data.getBookName(), data.getDurChapterUrl(), data.getDurChapterIndex(), data.getTag());
                 } else {
                     return Observable.create(e -> {
                         e.onNext(new BookContentBean());

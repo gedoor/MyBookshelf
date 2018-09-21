@@ -68,10 +68,6 @@ public class BookshelfHelp {
         return formatFileName(book.getName() + "-" + book.getTag());
     }
 
-    public static boolean setChapterIsCached(ChapterListBean chapter, boolean cached) {
-        return setChapterIsCached(getCachePathName(chapter.getBookInfo()), chapter.getDurChapterIndex(), cached);
-    }
-
     public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
         if(!chapterCaches.containsKey(bookPathName))
             chapterCaches.put(bookPathName, new HashSet<>());
@@ -89,10 +85,6 @@ public class BookshelfHelp {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
         return file.exists();
-    }
-
-    public static boolean isChapterCached(ChapterListBean chapter) {
-        return isChapterCached(chapter.getBookInfo(), chapter);
     }
 
     public static boolean isChapterCached(BookInfoBean book, ChapterListBean chapter) {

@@ -23,7 +23,7 @@ public interface IWebBookModel {
     /**
      * 章节缓存
      */
-    Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex, String tag);
+    Observable<BookContentBean> getBookContent(final String bookName, final String durChapterUrl, final int durChapterIndex, String tag);
 
     /**
      * 其他站点资源整合搜索
