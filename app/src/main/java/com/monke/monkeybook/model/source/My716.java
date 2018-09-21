@@ -175,7 +175,6 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                 JsonObject chapter = chapterArray.get(i).getAsJsonObject();
 
                 ChapterListBean chapterListBean = new ChapterListBean();
-                chapterListBean.setNoteUrl(bookShelfBean.getNoteUrl());
                 chapterListBean.setDurChapterIndex(i);
                 chapterListBean.setDurChapterName(chapter.get("title").getAsString());
                 chapterListBean.setDurChapterUrl("http://chapterup.zhuishushenqi.com/chapter/" + URLEncoder.encode(chapter.get("link").getAsString(), "UTF-8"));

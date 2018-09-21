@@ -123,6 +123,10 @@ public class WebBookModelImpl implements IWebBookModel {
 
     private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
+            for (ChapterListBean chapter : chapterList) {
+                chapter.setTag(bookShelfBean.getTag());
+                chapter.setNoteUrl(bookShelfBean.getNoteUrl());
+            }
             if (bookShelfBean.getChapterListSize() < chapterList.size()) {
                 bookShelfBean.setHasUpdate(true);
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());

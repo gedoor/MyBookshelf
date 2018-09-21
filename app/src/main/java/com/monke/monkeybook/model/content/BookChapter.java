@@ -47,7 +47,7 @@ public class BookChapter {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
-            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getNoteUrl(), bookShelfBean.getBookInfoBean().getChapterUrl(), bookShelfBean.getChapterList(), ruleChapterList);
+            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList);
             List<ChapterListBean> chapterList = webChapterBean.getData();
 
             while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
@@ -61,7 +61,7 @@ public class BookChapter {
                         e.onError(exception);
                     }
                 }
-                webChapterBean = analyzeChapterList(response, bookShelfBean.getNoteUrl(), webChapterBean.getNextUrl(), bookShelfBean.getChapterList(), ruleChapterList);
+                webChapterBean = analyzeChapterList(response, webChapterBean.getNextUrl(), ruleChapterList);
                 chapterList.addAll(webChapterBean.getData());
             }
             if (dx) {
@@ -75,7 +75,7 @@ public class BookChapter {
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String novelUrl, String chapterUrl, List<ChapterListBean> chapterListBeansOld, String ruleChapterList) throws Exception {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws Exception {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         String nextUrl = "";
         Document doc = Jsoup.parse(s);
@@ -94,7 +94,6 @@ public class BookChapter {
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
             temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
-            temp.setNoteUrl(novelUrl);
             temp.setTag(tag);
             if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {
                 temp.setDurChapterIndex(chapterBeans.size());
