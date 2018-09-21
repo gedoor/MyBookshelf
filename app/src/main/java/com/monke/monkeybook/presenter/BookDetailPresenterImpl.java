@@ -184,10 +184,17 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
         }
     }
 
+    /**
+     * 换源
+     */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
         BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
         bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
+        bookShelfBean.setLastChapterName(bookShelf.getLastChapterName());
+        bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
+        bookShelfBean.setDurChapter(bookShelf.getDurChapter());
+        bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
@@ -195,11 +202,6 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelf.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
-                            bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
-                        } else {
-                            bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-                        }
                         if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
                             bookShelfBean.setHasUpdate(false);
                         }

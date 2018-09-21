@@ -262,6 +262,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     public void changeBookSource(SearchBookBean searchBook) {
         BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBook);
         bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
+        bookShelfBean.setLastChapterName(bookShelf.getLastChapterName());
+        bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
+        bookShelfBean.setDurChapter(bookShelf.getDurChapter());
+        bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
@@ -269,11 +273,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelf.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
-                            bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
-                        } else {
-                            bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-                        }
                         bookShelfBean.setHasUpdate(false);
                         bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
                         saveChangedBook(bookShelfBean);
