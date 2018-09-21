@@ -261,7 +261,7 @@ public abstract class PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
-        BookshelfHelp.delChapter(mCollBook.getBookInfoBean().getName(),
+        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
                 String.format("%d-%s", mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName()));
         skipToChapter(mCurChapterPos);
     }
@@ -743,6 +743,7 @@ public abstract class PageLoader {
                     if (isChapterListPrepare) {
                         //绘制标题
                         percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                        percent = ChapterContentHelp.replaceContent(mCollBook, percent);
                         percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                                 TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
@@ -758,6 +759,7 @@ public abstract class PageLoader {
                     canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                     //绘制标题
                     percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                    percent = ChapterContentHelp.replaceContent(mCollBook, percent);
                     percent = TextUtils.ellipsize(percent, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
                     canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
                 }
@@ -772,6 +774,7 @@ public abstract class PageLoader {
                     if (isChapterListPrepare) {
                         //绘制标题
                         percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                        percent = ChapterContentHelp.replaceContent(mCollBook, percent);
                         percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                                 TextUtils.TruncateAt.END).toString();
                         canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
@@ -779,6 +782,7 @@ public abstract class PageLoader {
                 } else {
                     //绘制标题
                     percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
+                    percent = ChapterContentHelp.replaceContent(mCollBook, percent);
                     percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
                             TextUtils.TruncateAt.END).toString();
                     canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
