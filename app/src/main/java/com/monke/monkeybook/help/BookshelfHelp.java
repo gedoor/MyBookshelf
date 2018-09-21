@@ -14,7 +14,6 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.content.BookInfo;
 import com.monke.monkeybook.utils.IOUtils;
 
 import java.io.BufferedWriter;
