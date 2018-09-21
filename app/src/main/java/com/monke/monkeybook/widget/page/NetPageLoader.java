@@ -80,7 +80,8 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
-        @SuppressLint("DefaultLocale") File file =BookshelfHelp.getBookFile(mCollBook.getBookInfoBean().getName(),
+        @SuppressLint("DefaultLocale")
+        File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
                 String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
         if (!file.exists()) return null;
 
@@ -91,7 +92,7 @@ public class NetPageLoader extends PageLoader {
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean hasChapterData(ChapterListBean chapter) {
-        return BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean().getName(),
+        return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
                 String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
     }
 
