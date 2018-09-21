@@ -15,6 +15,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.widget.ChapterListView;
 
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (tabPosition == 0) {
             ChapterListBean chapterListBean = isSearch ? chapterListBeans.get(position) : bookShelfBean.getChapterList(position);
             holder.tvName.setText(chapterListBean.getDurChapterName());
-            if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || chapterListBean.getHasCache(bookShelfBean.getBookInfoBean())) {
+            if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapterListBean)) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));

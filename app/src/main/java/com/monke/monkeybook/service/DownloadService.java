@@ -128,7 +128,7 @@ public class DownloadService extends Service {
             if (!(bookShelf == null)) {
                 List<DownloadChapterBean> chapterBeans = new ArrayList<>();
                 for (int i = start; i <= end; i++) {
-                    if (!bookShelf.getChapterList(i).getHasCache(bookShelf.getBookInfoBean())) {
+                    if (!BookshelfHelp.isChapterCached(bookShelf.getBookInfoBean(), bookShelf.getChapterList(i))) {
                         DownloadChapterBean item = new DownloadChapterBean();
                         item.setNoteUrl(bookShelf.getNoteUrl());
                         item.setDurChapterIndex(bookShelf.getChapterList(i).getDurChapterIndex());

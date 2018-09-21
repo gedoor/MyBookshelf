@@ -9,6 +9,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
 import com.monke.monkeybook.model.impl.IStationBookModel;
@@ -156,7 +157,7 @@ public class WebBookModelImpl implements IWebBookModel {
                         .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
                 if (chapterListBean != null) {
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    chapterListBean.setHasCache(bookName, true);
+                    BookshelfHelp.setChapterIsCached(bookName, chapterListBean, true);
                     DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
                     RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
                 }
