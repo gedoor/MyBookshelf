@@ -106,7 +106,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (tabPosition == 0) {
             ChapterListBean chapterListBean = isSearch ? chapterListBeans.get(position) : bookShelfBean.getChapterList(position);
             holder.tvName.setText(chapterListBean.getDurChapterName());
-            if (chapterListBean.getHasCache(bookShelfBean.getBookInfoBean())) {
+            if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || chapterListBean.getHasCache(bookShelfBean.getBookInfoBean())) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
