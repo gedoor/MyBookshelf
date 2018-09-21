@@ -123,7 +123,9 @@ public class WebBookModelImpl implements IWebBookModel {
 
     private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
-            for (ChapterListBean chapter : chapterList) {
+            for (int i = 0; i < chapterList.size(); i++) {
+                ChapterListBean chapter = chapterList.get(i);
+                chapter.setDurChapterIndex(i);
                 chapter.setTag(bookShelfBean.getTag());
                 chapter.setNoteUrl(bookShelfBean.getNoteUrl());
             }

@@ -67,9 +67,6 @@ public class BookChapter {
             if (dx) {
                 Collections.reverse(chapterList);
             }
-            for (int i = 0; i < chapterList.size(); i++) {
-                chapterList.get(i).setDurChapterIndex(i);
-            }
             e.onNext(chapterList);
             e.onComplete();
         });
@@ -88,7 +85,6 @@ public class BookChapter {
             }
         }
         Elements elements = AnalyzeElement.getElements(doc, ruleChapterList);
-        int x;
         for (Element element : elements) {
             analyzeElement = new AnalyzeElement(element, chapterUrl);
             ChapterListBean temp = new ChapterListBean();
