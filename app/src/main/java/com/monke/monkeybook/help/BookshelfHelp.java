@@ -45,22 +45,12 @@ public class BookshelfHelp {
         if(chapterCaches.size() > 0)
             chapterCaches.clear();
         File file = new File(Constant.BOOK_CACHE_PATH);
-        String[] booksCached = file.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return new File(dir, name).isDirectory();
-            }
-        });
+        String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
 
         for(String bookPath: booksCached) {
             HashSet<Integer> chapterIndexs = new HashSet<>();
             file = new File(Constant.BOOK_CACHE_PATH + bookPath);
-            String[] chapters = file.list(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$");
-                }
-            });
+            String[] chapters = file.list((dir, name) -> name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$"));
             for (String chapter: chapters) {
                     chapterIndexs.add(
                             Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
