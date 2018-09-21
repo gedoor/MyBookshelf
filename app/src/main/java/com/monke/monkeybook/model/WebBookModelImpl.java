@@ -68,7 +68,7 @@ public class WebBookModelImpl implements IWebBookModel {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(durChapterUrl, durChapterIndex)
-                    .flatMap((bookContentBean -> upChapterList(bookName, bookContentBean, tag)));
+                    .flatMap((bookContentBean -> upChapterList(bookName, bookContentBean)));
         } else
             return Observable.create(e -> {
                 e.onNext(new BookContentBean());
@@ -141,7 +141,7 @@ public class WebBookModelImpl implements IWebBookModel {
         });
     }
 
-    private Observable<BookContentBean> upChapterList(String bookName, BookContentBean bookContentBean, String tag) {
+    private Observable<BookContentBean> upChapterList(String bookName, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             if (bookContentBean.getRight()) {
                 ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
