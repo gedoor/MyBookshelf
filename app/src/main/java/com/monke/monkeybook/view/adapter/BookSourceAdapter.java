@@ -61,6 +61,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         notifyDataSetChanged();
         activity.upDateSelectAll();
         activity.upSearchView(dataList.size());
+        activity.upGroupMenu();
     }
 
     private void allDataList(List<BookSourceBean> bookSourceBeanList) {

@@ -242,5 +242,6 @@
     <string name="ps_default_read">默认打开书架</string>
     <string name="pt_default_read">自动跳转最近阅读</string>
     <string name="use_to">作用于</string>
+    <string name="menu_action_group">分组</string>
 
 </resources>

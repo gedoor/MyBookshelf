@@ -8,23 +8,22 @@
         android:id="@+id/action_select_all"
         android:icon="@drawable/ic_done_all_black_24dp_new"
         android:title="@string/select_all"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/action_group"
-        android:title="分组"
-        app:showAsAction="always">
+        android:title="@string/menu_action_group"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
 
         <menu>
-            <item
-                android:id="@+id/all_group"
-                android:title="所有" />
+            <group android:id="@+id/source_group">
 
-            <item
-                android:id="@+id/un_group"
-                android:title="未分组" />
+            </group>
 
         </menu>
+
     </item>
 
     <item

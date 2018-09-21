@@ -17,6 +17,7 @@ import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -35,6 +36,7 @@ import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,7 +65,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean selectAll = true;
-
+    private SubMenu groupMenu;
     private BookSourceAdapter adapter;
     private MoProgressHUD moProgressHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
@@ -220,6 +222,14 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem groupItem = menu.findItem(R.id.action_group);
+        groupMenu = groupItem.getSubMenu();
+        upGroupMenu();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -255,9 +265,19 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 finish();
                 break;
         }
+        if (item.getGroupId() == R.id.source_group) {
+            searchView.setQuery(item.getTitle(), true);
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    public void upGroupMenu() {
+        if (groupMenu == null) return;
+        groupMenu.removeGroup(R.id.source_group);
+        for (String groupName : BookSourceManage.groupList) {
+            groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
+        }
+    }
 
     private void addBookSource() {
         Intent intent = new Intent(this, SourceEditActivity.class);
