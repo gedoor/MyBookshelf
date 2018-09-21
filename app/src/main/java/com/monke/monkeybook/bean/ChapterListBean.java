@@ -114,10 +114,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         return BookshelfHelp.isChapterCached(bookInfoBean, this);
     }
 
-    public void setHasCache(BookInfoBean bookInfoBean, Boolean hasCache) {
-        BookshelfHelp.setChapterIsCached(BookshelfHelp.getCachePathName(bookInfoBean),durChapterIndex, hasCache);
-    }
-
     public void setHasCache(String bookName, Boolean hasCache) {
         BookshelfHelp.setChapterIsCached(bookName + "-" + tag, durChapterIndex, hasCache);
     }
