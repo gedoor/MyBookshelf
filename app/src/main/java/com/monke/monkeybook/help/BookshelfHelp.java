@@ -58,8 +58,7 @@ public class BookshelfHelp {
             String[] chapters = file.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB);
-                    // return name.endsWith(FileHelp.SUFFIX_NB);
+                    return name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$");
                 }
             });
             for (String chapter: chapters) {
