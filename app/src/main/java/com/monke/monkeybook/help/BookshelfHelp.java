@@ -48,15 +48,15 @@ public class BookshelfHelp {
         String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
 
         for(String bookPath: booksCached) {
-            HashSet<Integer> chapterIndexs = new HashSet<>();
+            HashSet<Integer> chapterIndexS = new HashSet<>();
             file = new File(Constant.BOOK_CACHE_PATH + bookPath);
             String[] chapters = file.list((dir, name) -> name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$"));
             for (String chapter: chapters) {
-                    chapterIndexs.add(
+                    chapterIndexS.add(
                             Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
                     );
             }
-            chapterCaches.put(bookPath, chapterIndexs);
+            chapterCaches.put(bookPath, chapterIndexS);
         }
     }
 
