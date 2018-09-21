@@ -35,10 +35,9 @@ import java.util.List;
 
 public class BookshelfHelp {
 
-    private static HashMap<String, HashSet<Integer>> chapterCaches;
+    private static HashMap<String, HashSet<Integer>> chapterCaches = new HashMap<>();
 
     static {
-        chapterCaches = new HashMap<>();
         upChapterCaches();
     }
     private static void upChapterCaches(){
