@@ -25,13 +25,15 @@ public class FormatWebText {
             return "";
         }
         return str
-                .replace("&nbsp;", "")
-                .replace("作者", "")
+                .replace("&nbsp;", " ")
+                .replaceAll("\\s", " ")
                 .replace("：", "")
                 .replace(":", "")
                 .replace("(", "")
                 .replace(")", "")
-                .replaceAll("\\s", " ")
+                .replace("（", "")
+                .replace("）", "")
+                .replaceAll("作.*?者", "")
                 .trim();
     }
 }
