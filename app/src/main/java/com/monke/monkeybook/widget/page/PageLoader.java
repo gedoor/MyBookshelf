@@ -263,6 +263,7 @@ public abstract class PageLoader {
     public void refreshDurChapter() {
         BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
                 String.format("%d-%s", mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName()));
+        BookshelfHelp.setChapterIsCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),mCurChapterPos,false);
         skipToChapter(mCurChapterPos);
     }
 
@@ -1164,7 +1165,7 @@ public abstract class PageLoader {
         return mCurPageList != null;
     }
 
-    private void dealLoadPageList(int chapterPos) {
+    void dealLoadPageList(int chapterPos) {
         try {
             mCurPageList = loadPageList(chapterPos);
             if (mCurPageList != null) {

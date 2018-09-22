@@ -18,6 +18,8 @@ import java.io.Reader;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
+
 /**
  * Created by newbiechen on 17-5-29.
  * 网络页面加载器
@@ -96,12 +98,16 @@ public class NetPageLoader extends PageLoader {
                 String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
     }
 
+    public boolean shouldRequestChapter(Integer chapterIndex) {
+        return (isNetWorkAvailable() &&
+                !BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean(), mCollBook.getChapterList(chapterIndex)));
+    }
+
     // 装载上一章节的内容
     @Override
     boolean parsePrevChapter() {
         boolean isRight = super.parsePrevChapter();
-
-        if (mPageChangeListener != null && mCurChapterPos >= 1) {
+        if (mPageChangeListener != null && mCurChapterPos >= 1 && shouldRequestChapter(mCurChapterPos - 1)) {
             mPageChangeListener.requestChapters(mCurChapterPos - 1);
         }
         return isRight;
@@ -111,15 +117,13 @@ public class NetPageLoader extends PageLoader {
     @Override
     boolean parseCurChapter() {
         boolean isRight = super.parseCurChapter();
-
         if (mPageChangeListener != null) {
             for (int i=mCurChapterPos; i < mCurChapterPos + 5; i++) {
-                if (i < mCollBook.getChapterListSize()) {
+                if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
                     mPageChangeListener.requestChapters(i);
                 }
             }
         }
-
         return isRight;
     }
 
@@ -127,17 +131,22 @@ public class NetPageLoader extends PageLoader {
     @Override
     boolean parseNextChapter() {
         boolean isRight = super.parseNextChapter();
-
         if (mPageChangeListener != null) {
             for (int i=mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
-                if (i < mCollBook.getChapterListSize()) {
+                if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
                     mPageChangeListener.requestChapters(i);
                 }
             }
         }
-
         return isRight;
     }
 
+    @Override
+    void dealLoadPageList(int chapterPos) {
+        super.dealLoadPageList(chapterPos);
+        if(!shouldRequestChapter(chapterPos) && mStatus == STATUS_LOADING) {
+            chapterError("网络连接不可用");
+        }
+    }
 }
 
