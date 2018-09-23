@@ -17,15 +17,13 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
