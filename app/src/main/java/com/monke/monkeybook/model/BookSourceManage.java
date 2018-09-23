@@ -95,7 +95,7 @@ public class BookSourceManage extends BaseModelImpl {
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
     }
 
-    private static void upGroupList() {
+    private synchronized static void upGroupList() {
         groupList.clear();
         for (BookSourceBean bookSourceBean : allBookSource) {
             if (!TextUtils.isEmpty(bookSourceBean.getBookSourceGroup()) && !groupList.contains(bookSourceBean.getBookSourceGroup())) {
