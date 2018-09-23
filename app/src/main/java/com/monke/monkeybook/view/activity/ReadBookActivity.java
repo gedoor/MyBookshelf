@@ -696,6 +696,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabReadAloud.setOnClickListener(view -> onMediaButton());
         //长按停止朗读
         fabReadAloud.setOnLongClickListener(view -> {
+            Toast.makeText(this, getString(R.string.read_aloud), Toast.LENGTH_SHORT).show();
             ReadAloudService.stop(this);
             return true;
         });
@@ -716,6 +717,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             }
         });
+        fabAutoPage.setOnLongClickListener(view -> {
+            Toast.makeText(this, getString(R.string.auto_next_page), Toast.LENGTH_SHORT).show();
+            return true;
+        });
 
         //替换
         fabReplaceRule.getDrawable().mutate();
@@ -724,11 +729,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             popMenuOut();
             ReplaceRuleActivity.startThis(this);
         });
+        fabReplaceRule.setOnLongClickListener(view -> {
+            Toast.makeText(this, getString(R.string.replace_rule_title), Toast.LENGTH_SHORT).show();
+            return true;
+        });
 
         //夜间模式
         fabNightTheme.getDrawable().mutate();
         fabNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
+        fabNightTheme.setOnLongClickListener(view -> {
+            Toast.makeText(this, getString(R.string.night_theme), Toast.LENGTH_SHORT).show();
+            return true;
+        });
 
         //上一章
         tvPre.setOnClickListener(view -> {
