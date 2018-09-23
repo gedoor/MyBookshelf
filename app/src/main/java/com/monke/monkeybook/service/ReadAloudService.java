@@ -83,20 +83,11 @@ public class ReadAloudService extends Service {
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
     private int speechRate;
-    private String title;
     private String text;
 
     public ReadAloudService() {
     }
-/*
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-*/
     @Override
     public void onCreate() {
         super.onCreate();
@@ -147,8 +138,7 @@ public class ReadAloudService extends Service {
             stopSelf();
             return;
         }
-        this.text = text;
-        this.title = title;
+        this.text = String.format("%s(%s)", title, text);
         nowSpeak = 0;
         contentList.clear();
         String[] splitSpeech = content.split("\n");
@@ -340,17 +330,16 @@ public class ReadAloudService extends Service {
     /**
      * 更新通知
      */
-    private void updateNotification(){
-        if(text == null)
+    private void updateNotification() {
+        if (text == null)
             text = getString(R.string.read_aloud_s);
-        if(title == null) {
-            if (pause) {
-                title = getString(R.string.read_aloud_pause);
-            } else if (timeMinute > 0 && timeMinute <= 60) {
-                text = getString(R.string.read_aloud_timer, timeMinute);
-            } else {
-                title = getString(R.string.read_aloud_t);
-            }
+        String title;
+        if (pause) {
+            title = getString(R.string.read_aloud_pause);
+        } else if (timeMinute > 0 && timeMinute <= 60) {
+            title = getString(R.string.read_aloud_timer, timeMinute);
+        } else {
+            title = getString(R.string.read_aloud_t);
         }
         RxBus.get().post(RxBusTag.ALOUD_TIMER, title);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
