@@ -104,7 +104,7 @@ public class AnalyzeSearchUrl {
 
     private void generateUrlPath(String ruleUrl) throws Exception {
         URL url = new URL(ruleUrl);
-        searchUrl = String.format("%s://%s", url.getProtocol(), url.getHost());
+        searchUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
         searchPath = ruleUrl.replace(searchUrl, "");
     }
 
