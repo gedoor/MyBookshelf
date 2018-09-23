@@ -74,6 +74,7 @@ import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTH
 import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
+import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
 
@@ -542,7 +543,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void requestChapters(int chapterIndex) {
-                        mPresenter.loadContent(chapterIndex);
+                        if(isNetWorkAvailable())
+                            mPresenter.loadContent(chapterIndex);
                     }
 
                     @Override
@@ -579,7 +581,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                             if (mPageLoader.getContext(pageIndex) != null) {
                                 ReadAloudService.play(ReadBookActivity.this,
                                         false,
-                                        mPageLoader.getContext(pageIndex));
+                                        mPageLoader.getContext(pageIndex),
+                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
+                                        mPresenter.getChapterTitle(chapterIndex)
+                                );
                             }
                             return;
                         }
@@ -839,6 +844,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 刷新当前章节
      */
     private void refreshDurChapter() {
+        if(!isNetWorkAvailable()) {
+            toast("网络不可用，无法刷新当前章节!");
+            return;
+        }
         ReadBookActivity.this.popMenuOut();
         if (mPageLoader != null) {
             mPageLoader.refreshDurChapter();
@@ -885,6 +894,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 换源
      */
     private void changeSource() {
+        if(!isNetWorkAvailable()) {
+            toast("网络不可用，无法换源!");
+            return;
+        }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
             moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
@@ -900,6 +913,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 下载
      */
     private void download() {
+        if(!isNetWorkAvailable()) {
+            toast("网络不可用，无法下载");
+            return;
+        }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
             //弹出离线下载界面
@@ -1193,7 +1210,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             default:
                 ReadBookActivity.this.popMenuOut();
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
-                    ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()));
+                    ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()),
+                            mPresenter.getBookShelf().getBookInfoBean().getName(),
+                            mPresenter.getChapterTitle(mPageLoader.getChapterPos())
+                            );
                 }
         }
     }

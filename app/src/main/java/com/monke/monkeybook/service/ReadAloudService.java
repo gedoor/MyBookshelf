@@ -83,10 +83,20 @@ public class ReadAloudService extends Service {
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
     private int speechRate;
+    private String title;
+    private String text;
 
     public ReadAloudService() {
     }
+/*
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+*/
     @Override
     public void onCreate() {
         super.onCreate();
@@ -124,7 +134,7 @@ public class ReadAloudService extends Service {
                         updateTimer(intent.getIntExtra("minute", 10));
                         break;
                     case ActionNewReadAloud:
-                        newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
+                        newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false), intent.getStringExtra("title"), intent.getStringExtra("text"));
                         break;
                 }
             }
@@ -132,11 +142,13 @@ public class ReadAloudService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void newReadAloud(String content, Boolean aloudButton) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
         if (content == null) {
             stopSelf();
             return;
         }
+        this.text = text;
+        this.title = title;
         nowSpeak = 0;
         contentList.clear();
         String[] splitSpeech = content.split("\n");
@@ -194,11 +206,13 @@ public class ReadAloudService extends Service {
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
         readAloudIntent.putExtra("content", content);
+        readAloudIntent.putExtra("title", title);
+        readAloudIntent.putExtra("text", text);
         context.startService(readAloudIntent);
     }
 
@@ -326,21 +340,24 @@ public class ReadAloudService extends Service {
     /**
      * 更新通知
      */
-    private void updateNotification() {
-        String title;
-        if (pause) {
-            title = getString(R.string.read_aloud_pause);
-        } else if (timeMinute > 0 && timeMinute <= 60) {
-            title = getString(R.string.read_aloud_timer, timeMinute);
-        } else {
-            title = getString(R.string.read_aloud_t);
+    private void updateNotification(){
+        if(text == null)
+            text = getString(R.string.read_aloud_s);
+        if(title == null) {
+            if (pause) {
+                title = getString(R.string.read_aloud_pause);
+            } else if (timeMinute > 0 && timeMinute <= 60) {
+                text = getString(R.string.read_aloud_timer, timeMinute);
+            } else {
+                title = getString(R.string.read_aloud_t);
+            }
         }
         RxBus.get().post(RxBusTag.ALOUD_TIMER, title);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
                 .setContentTitle(title)
-                .setContentText(getString(R.string.read_aloud_s))
+                .setContentText(text)
                 .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         if (pause) {
