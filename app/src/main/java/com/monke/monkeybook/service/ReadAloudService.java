@@ -125,7 +125,10 @@ public class ReadAloudService extends Service {
                         updateTimer(intent.getIntExtra("minute", 10));
                         break;
                     case ActionNewReadAloud:
-                        newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false), intent.getStringExtra("title"), intent.getStringExtra("text"));
+                        newReadAloud(intent.getStringExtra("content"),
+                                intent.getBooleanExtra("aloudButton", false),
+                                intent.getStringExtra("title"),
+                                intent.getStringExtra("text"));
                         break;
                 }
             }
