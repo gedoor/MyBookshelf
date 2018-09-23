@@ -53,6 +53,7 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
+    private List<CheckSource> checkSourceList;
 
     @Override
     public void onCreate() {
@@ -166,6 +167,7 @@ public class CheckSourceService extends Service {
 
         if (checkIndex < bookSourceBeanList.size()) {
             CheckSource checkSource = new CheckSource(bookSourceBeanList.get(checkIndex));
+            checkSourceList.add(checkSource);
             checkSource.startCheck();
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
