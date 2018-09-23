@@ -241,7 +241,6 @@ public class CheckSourceService extends Service {
                                 .insertOrReplace(sourceBean);
                     }
                     nextCheck();
-                    checkSource = null;
                 }
 
                 @Override
@@ -251,12 +250,11 @@ public class CheckSourceService extends Service {
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
                             .insertOrReplace(sourceBean);
                     nextCheck();
-                    checkSource = null;
                 }
 
                 @Override
                 public void onComplete() {
-
+                    checkSource = null;
                 }
             };
         }
