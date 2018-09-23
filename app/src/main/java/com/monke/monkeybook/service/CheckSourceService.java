@@ -215,7 +215,7 @@ public class CheckSourceService extends Service {
             }
         }
 
-        private Observer<Object> getObserver(BookSourceBean sourceBean) {
+        private Observer<Object> getObserver(final BookSourceBean sourceBean) {
             return new Observer<Object>() {
                 @Override
                 public void onSubscribe(Disposable d) {
