@@ -25,6 +25,7 @@ import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
@@ -53,7 +54,6 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
-    private List<CheckSource> checkSourceList;
 
     @Override
     public void onCreate() {
@@ -167,7 +167,6 @@ public class CheckSourceService extends Service {
 
         if (checkIndex < bookSourceBeanList.size()) {
             CheckSource checkSource = new CheckSource(bookSourceBeanList.get(checkIndex));
-            checkSourceList.add(checkSource);
             checkSource.startCheck();
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
