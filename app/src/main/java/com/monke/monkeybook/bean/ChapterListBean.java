@@ -15,7 +15,6 @@ import org.greenrobot.greendao.DaoException;
 import com.monke.monkeybook.dao.DaoSession;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
-import com.monke.monkeybook.help.BookshelfHelp;
 
 /**
  * 章节列表
@@ -108,14 +107,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         } else {
             return false;
         }
-    }
-
-    public Boolean getHasCache(BookInfoBean bookInfoBean) {
-        return BookshelfHelp.isChapterCached(bookInfoBean, this);
-    }
-
-    public void setHasCache(String bookName, Boolean hasCache) {
-        BookshelfHelp.setChapterIsCached(bookName + "-" + tag, durChapterIndex, hasCache);
     }
 
     public String getTag() {

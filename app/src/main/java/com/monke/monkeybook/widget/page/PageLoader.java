@@ -1,6 +1,7 @@
 package com.monke.monkeybook.widget.page;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,7 +13,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -33,6 +34,9 @@ import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
+
+import static android.widget.Toast.*;
+import static com.monke.monkeybook.bean.BookShelfBean.LOCAL_TAG;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -199,7 +203,7 @@ public abstract class PageLoader {
                 typeface = Typeface.SANS_SERIF;
             }
         } catch (Exception e) {
-            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
+            makeText(mContext, "字体文件未找,到恢复默认字体", LENGTH_SHORT).show();
             mSettingManager.setReadBookFont(null);
             typeface = Typeface.SANS_SERIF;
         }
@@ -263,6 +267,7 @@ public abstract class PageLoader {
     public void refreshDurChapter() {
         BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
                 String.format("%d-%s", mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName()));
+        BookshelfHelp.setChapterIsCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),mCurChapterPos,false);
         skipToChapter(mCurChapterPos);
     }
 
@@ -566,7 +571,9 @@ public abstract class PageLoader {
 
         // 如果章节目录没有准备好
         if (!isChapterListPrepare) {
-            mStatus = STATUS_LOADING;
+            // sf
+            mStatus = STATUS_ERROR;
+            errorMsg = "Unprepared";
             mPageView.drawCurPage();
             return;
         }
@@ -1062,7 +1069,10 @@ public abstract class PageLoader {
         mCurChapterPos = prevChapter;
 
         // 当前章缓存为下一章
-        mNextPageList = mCurPageList;
+        if(mStatus == STATUS_FINISH || mStatus == STATUS_EMPTY)
+            mNextPageList = mCurPageList;
+        else
+            mNextPageList = null;
 
         // 判断是否具有上一章缓存
         if (mPrePageList != null) {
@@ -1147,7 +1157,10 @@ public abstract class PageLoader {
         mCurChapterPos = nextChapter;
 
         // 将当前章的页面列表，作为上一章缓存
-        mPrePageList = mCurPageList;
+        if(mStatus == STATUS_FINISH || mStatus == STATUS_EMPTY)
+            mPrePageList = mCurPageList;
+        else
+            mPrePageList = null;
 
         // 是否下一章数据已经预加载了
         if (mNextPageList != null) {
@@ -1164,13 +1177,12 @@ public abstract class PageLoader {
         return mCurPageList != null;
     }
 
-    private void dealLoadPageList(int chapterPos) {
+    void dealLoadPageList(int chapterPos) {
         try {
             mCurPageList = loadPageList(chapterPos);
             if (mCurPageList != null) {
                 if (mCurPageList.isEmpty()) {
                     mStatus = STATUS_EMPTY;
-
                     // 添加一个空数据
                     TxtPage page = new TxtPage();
                     page.lines = new ArrayList<>(1);
@@ -1183,9 +1195,10 @@ public abstract class PageLoader {
             }
         } catch (Exception e) {
             e.printStackTrace();
-
             mCurPageList = null;
             mStatus = STATUS_ERROR;
+            Log.e("MonkeyBook", e.getLocalizedMessage());
+            errorMsg = e.getCause().getMessage();
         }
 
         // 回调
@@ -1317,7 +1330,7 @@ public abstract class PageLoader {
         try {
             boolean showTitle = true; // 是否展示标题
             String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-            if (mCollBook.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            if (mCollBook.getTag().equals(LOCAL_TAG)) {
                 br.readLine();
             }
             if (!mSettingManager.getShowTitle()) {
@@ -1498,11 +1511,8 @@ public abstract class PageLoader {
             return false;
         }
 
-        if (mStatus == STATUS_PARSE_ERROR
-                || mStatus == STATUS_PARING) {
+        if (mStatus == STATUS_PARSE_ERROR || mStatus == STATUS_PARING) {
             return false;
-        } else if (mStatus == STATUS_ERROR) {
-            mStatus = STATUS_LOADING;
         }
         return true;
     }

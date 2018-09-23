@@ -14,14 +14,11 @@ import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.utils.IOUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,10 +34,9 @@ public class BookshelfHelp {
 
     private static HashMap<String, HashSet<Integer>> getChapterCaches(){
         HashMap<String, HashSet<Integer>> temp = new HashMap<>();
+        File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
         try {
-            File file = new File(Constant.BOOK_CACHE_PATH);
             String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
-
             for (String bookPath : booksCached) {
                 HashSet<Integer> chapterIndexS = new HashSet<>();
                 file = new File(Constant.BOOK_CACHE_PATH + bookPath);
@@ -68,7 +64,12 @@ public class BookshelfHelp {
         return formatFileName(book.getName() + "-" + book.getTag());
     }
 
+    public static void setChapterIsCached(String bookName, ChapterListBean chapter, boolean cached) {
+        setChapterIsCached(bookName + "-" + chapter.getTag(), chapter.getDurChapterIndex(), cached);
+    }
+
     public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
+        bookPathName = formatFileName(bookPathName);
         if(!chapterCaches.containsKey(bookPathName))
             chapterCaches.put(bookPathName, new HashSet<>());
         if (cached)
@@ -109,14 +110,11 @@ public class BookshelfHelp {
         }
         File file = getBookFile(folderName, formatFileName(fileName));
         //获取流并存储
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            IOUtils.close(writer);
         }
     }
 
