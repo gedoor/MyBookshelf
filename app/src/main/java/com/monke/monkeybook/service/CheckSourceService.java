@@ -196,7 +196,7 @@ public class CheckSourceService extends Service {
                     WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(getObserver(sourceBean));
+                            .subscribe(getObserver());
                 } catch (Exception exception) {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
@@ -211,7 +211,7 @@ public class CheckSourceService extends Service {
                             .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
                             .subscribeOn(scheduler)
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(getObserver(sourceBean));
+                            .subscribe(getObserver());
                 } catch (Exception e) {
                     sourceBean.setBookSourceGroup("失效");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
@@ -221,7 +221,7 @@ public class CheckSourceService extends Service {
             }
         }
 
-        private Observer<Object> getObserver(final BookSourceBean sourceBean) {
+        private Observer<Object> getObserver() {
             return new Observer<Object>() {
                 @Override
                 public void onSubscribe(Disposable d) {
