@@ -108,7 +108,7 @@ public class BookshelfHelp {
         if (content == null) {
             return;
         }
-        File file = getBookFile(folderName, formatFileName(fileName));
+        File file = getBookFile(formatFileName(folderName), formatFileName(fileName));
         //获取流并存储
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
