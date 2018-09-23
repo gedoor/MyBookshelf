@@ -98,7 +98,7 @@ public class NetPageLoader extends PageLoader {
                 String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
     }
 
-    public boolean shouldRequestChapter(Integer chapterIndex) {
+    private boolean shouldRequestChapter(Integer chapterIndex) {
         return (isNetWorkAvailable() &&
                 !BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean(), mCollBook.getChapterList(chapterIndex)));
     }
@@ -141,13 +141,13 @@ public class NetPageLoader extends PageLoader {
         return isRight;
     }
 
+
     @Override
     void dealLoadPageList(int chapterPos) {
         super.dealLoadPageList(chapterPos);
-        if(!shouldRequestChapter(chapterPos) && mStatus == STATUS_LOADING) {
+        if(!shouldRequestChapter(chapterPos) && getPageStatus() == STATUS_LOADING) {
             chapterError("网络连接不可用\n\n"
                     + mCollBook.getChapterList(chapterPos).getDurChapterName());
         }
     }
-
 }
