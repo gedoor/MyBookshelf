@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -48,12 +51,16 @@ public class CheckSourceService extends Service {
     private int threadsNum;
     private int checkIndex;
     private CompositeDisposable compositeDisposable;
+    private ExecutorService executorService;
+    private Scheduler scheduler;
 
     @Override
     public void onCreate() {
         super.onCreate();
         SharedPreferences preference = getSharedPreferences("CONFIG", 0);
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
+        executorService = Executors.newFixedThreadPool(threadsNum);
+        scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
         bookSourceBeanList = BookSourceManage.getAllBookSource();
         updateNotification(0);
@@ -78,6 +85,7 @@ public class CheckSourceService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        executorService.shutdown();
     }
 
     @Nullable
@@ -165,7 +173,7 @@ public class CheckSourceService extends Service {
         }
     }
 
-    class CheckSource {
+    private class CheckSource {
         CheckSource checkSource;
 
         CheckSource(final BookSourceBean sourceBean) {
@@ -195,7 +203,7 @@ public class CheckSourceService extends Service {
                     BaseModelImpl.getRetrofitString(sourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class)
                             .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
-                            .subscribeOn(Schedulers.io())
+                            .subscribeOn(scheduler)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver(sourceBean));
                 } catch (Exception e) {
