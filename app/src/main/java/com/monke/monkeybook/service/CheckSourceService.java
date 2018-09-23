@@ -200,8 +200,7 @@ public class CheckSourceService extends Service {
                             .subscribe(getObserver());
                 } catch (Exception exception) {
                     sourceBean.setBookSourceGroup("失效");
-                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                            .insertOrReplace(sourceBean);
+                    BookSourceManage.addBookSource(sourceBean);
                     nextCheck();
                 }
             } else {
@@ -215,8 +214,7 @@ public class CheckSourceService extends Service {
                             .subscribe(getObserver());
                 } catch (Exception e) {
                     sourceBean.setBookSourceGroup("失效");
-                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                            .insertOrReplace(sourceBean);
+                    BookSourceManage.addBookSource(sourceBean);
                     nextCheck();
                 }
             }
@@ -244,8 +242,7 @@ public class CheckSourceService extends Service {
                 public void onNext(Object value) {
                     if (Objects.equals(sourceBean.getBookSourceGroup(), "失效")) {
                         sourceBean.setBookSourceGroup("");
-                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                                .insertOrReplace(sourceBean);
+                        BookSourceManage.addBookSource(sourceBean);
                     }
                     nextCheck();
                 }
@@ -254,8 +251,7 @@ public class CheckSourceService extends Service {
                 public void onError(Throwable e) {
                     sourceBean.setBookSourceGroup("失效");
                     sourceBean.setSerialNumber(10000+checkIndex);
-                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao()
-                            .insertOrReplace(sourceBean);
+                    BookSourceManage.addBookSource(sourceBean);
                     nextCheck();
                 }
 
