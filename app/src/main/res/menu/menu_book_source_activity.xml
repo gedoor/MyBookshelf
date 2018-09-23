@@ -13,6 +13,7 @@
 
     <item
         android:id="@+id/action_group"
+        android:icon="@drawable/ic_group"
         android:title="@string/menu_action_group"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction">

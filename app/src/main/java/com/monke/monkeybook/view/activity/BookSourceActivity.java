@@ -65,6 +65,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean selectAll = true;
+    private MenuItem groupItem;
     private SubMenu groupMenu;
     private BookSourceAdapter adapter;
     private MoProgressHUD moProgressHUD;
@@ -224,7 +225,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem groupItem = menu.findItem(R.id.action_group);
+        groupItem = menu.findItem(R.id.action_group);
         groupMenu = groupItem.getSubMenu();
         upGroupMenu();
         return super.onPrepareOptionsMenu(menu);
@@ -274,8 +275,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void upGroupMenu() {
         if (groupMenu == null) return;
         groupMenu.removeGroup(R.id.source_group);
-        for (String groupName : BookSourceManage.groupList) {
-            groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
+        if (BookSourceManage.groupList.size() == 0) {
+            groupItem.setVisible(false);
+        } else {
+            groupItem.setVisible(true);
+            for (String groupName : new ArrayList<>(BookSourceManage.groupList)) {
+                groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
+            }
         }
     }
 
