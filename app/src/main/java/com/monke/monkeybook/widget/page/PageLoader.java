@@ -591,9 +591,7 @@ public abstract class PageLoader {
 
         // 如果章节目录没有准备好
         if (!isChapterListPrepare) {
-            // sf
-            setChapterPageStatus(STATUS_ERROR);
-            errorMsg = "Unprepared";
+            setChapterPageStatus(STATUS_LOADING);
             mPageView.drawCurPage();
             return;
         }
@@ -1094,7 +1092,6 @@ public abstract class PageLoader {
             mNextPageList = mCurPageList;
         else {
             mNextPageList = null;
-            // removeChapterPageStatus(mLastChapterPos);
         }
 
         // 判断是否具有上一章缓存
@@ -1214,24 +1211,14 @@ public abstract class PageLoader {
                     setChapterPageStatus(chapterPos, STATUS_FINISH);
                 }
             } else {
-                /*
-                if(isNetWorkAvailable() || mCollBook.getTag().equals(LOCAL_TAG)
-                    || hasChapterData(mCollBook.getChapterList(chapterPos))) {
-                    */
-                    setChapterPageStatus(chapterPos, STATUS_LOADING);
-                /*
-                } else {
-                    setChapterPageStatus(chapterPos, STATUS_ERROR);
-                    errorMsg = "网络连接不可用\n\n" + mCollBook.getChapterList(chapterPos).getDurChapterName();
-                }
-                */
+                setChapterPageStatus(chapterPos, STATUS_LOADING);
             }
         } catch (Exception e) {
             e.printStackTrace();
             mCurPageList = null;
             setChapterPageStatus(chapterPos, STATUS_ERROR);
             Log.e("MonkeyBook", e.getLocalizedMessage());
-            errorMsg = e.getCause().getMessage();
+            errorMsg = "未知错误";
         }
 
         // 回调
@@ -1250,7 +1237,6 @@ public abstract class PageLoader {
      */
     private void preLoadNextChapter() {
         int nextChapter = mCurChapterPos + 1;
-        // makeText(mContext, "Preloading " + mCollBook.getChapterList(nextChapter).getDurChapterName(), Toast.LENGTH_SHORT).show();
 
         // 如果不存在下一章，且下一章没有数据，则不进行加载。
         if (!hasNextChapter()
