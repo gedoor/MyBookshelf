@@ -66,7 +66,7 @@ public class LocalPageLoader extends PageLoader {
 
     public LocalPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);
-        mStatus = STATUS_PARING;
+        setChapterPageStatus(STATUS_PARING);
     }
 
     /**
