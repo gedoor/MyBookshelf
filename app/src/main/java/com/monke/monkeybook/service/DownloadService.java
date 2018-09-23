@@ -36,10 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -59,8 +62,10 @@ public class DownloadService extends Service {
     private final static int ADD = 1;
     private final static int REMOVE = 2;
     private final static int CHECK = 3;
-
+    private int threadsNum;
     private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
+    private ExecutorService executorService;
+    private Scheduler scheduler;
 
     @Override
     public void onCreate() {
@@ -74,12 +79,16 @@ public class DownloadService extends Service {
         //发送通知
         startForeground(notificationId, builder.build());
         RxBus.get().register(this);
-        preferences = getSharedPreferences("CONFIG", 0);;
+        preferences = getSharedPreferences("CONFIG", 0);
+        threadsNum = preferences.getInt(this.getString(R.string.pk_threads_num), 6);
+        executorService = Executors.newFixedThreadPool(threadsNum);
+        scheduler = Schedulers.from(executorService);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        executorService.shutdown();
         stopForeground(true);
         RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
         RxBus.get().unregister(this);
@@ -151,7 +160,7 @@ public class DownloadService extends Service {
                     @Override
                     public void onNext(Boolean value) {
                         if (!isDownloading) {
-                            for (int i = 1; i <= preferences.getInt(getString(R.string.pk_threads_num), 6); i++) {
+                            for (int i = 1; i <= preferences.getInt(getString(R.string.pk_threads_num), threadsNum); i++) {
                                 toDownload();
                             }
                         }
@@ -233,7 +242,7 @@ public class DownloadService extends Service {
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
-                    return WebBookModelImpl.getInstance().getBookContent(data.getBookName(), data.getDurChapterUrl(), data.getDurChapterIndex(), data.getTag());
+                    return WebBookModelImpl.getInstance().getBookContent(scheduler, data.getBookName(), data.getDurChapterUrl(), data.getDurChapterIndex(), data.getTag());
                 } else {
                     return Observable.create(e -> {
                         e.onNext(new BookContentBean());

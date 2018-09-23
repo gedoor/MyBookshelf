@@ -45,10 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -63,11 +66,13 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private int open_from;
     private BookShelfBean bookShelf;
-
+    private ExecutorService executorService;
+    private Scheduler scheduler;
     private List<String> downloadingChapterList = new ArrayList<>();
 
     public ReadBookPresenterImpl() {
-
+        executorService = Executors.newFixedThreadPool(10);
+        scheduler = Schedulers.from(executorService);
     }
 
     @Override
@@ -109,7 +114,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         }
                         e.onComplete();
                     })
-                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
+                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(scheduler, bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new Observer<BookContentBean>() {
@@ -473,6 +478,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
 
     @Override
     public void detachView() {
+        executorService.shutdown();
         RxBus.get().unregister(this);
     }
 

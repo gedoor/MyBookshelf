@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -36,9 +37,6 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
     /**
      * 发现书籍
-     *
-     * @param url
-     * @param page
      */
     @Override
     public Observable<List<SearchBookBean>> findBook(String url, int page) {
@@ -47,9 +45,6 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
     /**
      * 搜索书籍
-     *
-     * @param content
-     * @param page
      */
     @Override
     public Observable<List<SearchBookBean>> searchBook(String content, int page) {
@@ -116,8 +111,6 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
     /**
      * 网络请求并解析书籍信息
-     *
-     * @param bookShelfBean
      */
     @Override
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
@@ -155,8 +148,6 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
     /**
      * 网络解析图书目录
-     *
-     * @param bookShelfBean
      */
     @Override
     public Observable<List<ChapterListBean>> getChapterList(BookShelfBean bookShelfBean) {
@@ -188,12 +179,9 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
     /**
      * 章节缓存
-     *
-     * @param durChapterUrl
-     * @param durChapterIndex
      */
     @Override
-    public Observable<BookContentBean> getBookContent(String durChapterUrl, int durChapterIndex) {
+    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, int durChapterIndex) {
         return getRetrofitString("http://chapterup.zhuishushenqi.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(durChapterUrl, AnalyzeHeaders.getMap(null))

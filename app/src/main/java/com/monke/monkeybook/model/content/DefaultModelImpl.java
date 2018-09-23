@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -205,7 +205,7 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
      * 获取正文
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex) {
+    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, final int durChapterIndex) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
@@ -216,13 +216,13 @@ public class DefaultModelImpl extends BaseModelImpl implements IStationBookModel
         if (bookSourceBean.getRuleBookContent().startsWith("$")) {
             return getAjaxHtml(MApplication.getInstance(), durChapterUrl, AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
                     .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(Schedulers.io())
+                    .observeOn(scheduler)
                     .flatMap(response -> bookContent.analyzeBookContent(response, durChapterUrl, durChapterIndex));
         } else {
             return getRetrofitString(tag)
                     .create(IHttpGetApi.class)
                     .getWebContent(durChapterUrl, headerMap)
-                    .subscribeOn(Schedulers.io())
+                    .subscribeOn(scheduler)
                     .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
         }
     }

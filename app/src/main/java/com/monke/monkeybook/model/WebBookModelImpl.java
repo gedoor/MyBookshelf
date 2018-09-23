@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 
 public class WebBookModelImpl implements IWebBookModel {
 
@@ -67,14 +68,14 @@ public class WebBookModelImpl implements IWebBookModel {
      * 章节缓存
      */
     @Override
-    public Observable<BookContentBean> getBookContent(String bookName, String durChapterUrl, int durChapterIndex, String tag) {
+    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String bookName, final String durChapterUrl, final int durChapterIndex, String tag) {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
-            return bookModel.getBookContent(durChapterUrl, durChapterIndex)
+            return bookModel.getBookContent(scheduler, durChapterUrl, durChapterIndex)
                     .flatMap((bookContentBean -> upChapterList(bookName, tag, bookContentBean)));
         } else
             return Observable.create(e -> {
-                e.onNext(new BookContentBean());
+                e.onError(new Throwable("没有找到书源"));
                 e.onComplete();
             });
     }
