@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model;
 
+import android.annotation.SuppressLint;
+
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -69,7 +71,7 @@ public class WebBookModelImpl implements IWebBookModel {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(durChapterUrl, durChapterIndex)
-                    .flatMap((bookContentBean -> upChapterList(bookName, bookContentBean)));
+                    .flatMap((bookContentBean -> upChapterList(bookName, tag, bookContentBean)));
         } else
             return Observable.create(e -> {
                 e.onNext(new BookContentBean());
@@ -150,19 +152,26 @@ public class WebBookModelImpl implements IWebBookModel {
         });
     }
 
-    private Observable<BookContentBean> upChapterList(String bookName, BookContentBean bookContentBean) {
+    @SuppressLint("DefaultLocale")
+    private Observable<BookContentBean> upChapterList(String bookName, String tag, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             if (bookContentBean.getRight()) {
                 ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
                 if (chapterListBean != null) {
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
+                    BookshelfHelp.saveChapterInfo(bookName + "-" + tag,
+                            String.format("%d-%s", chapterListBean.getDurChapterIndex(), chapterListBean.getDurChapterName()),
+                            bookContentBean.getDurChapterContent());
                     BookshelfHelp.setChapterIsCached(bookName, chapterListBean, true);
                     DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
                     RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
+                    e.onNext(bookContentBean);
+                    e.onComplete();
+                    return;
                 }
             }
-            e.onNext(bookContentBean);
+            e.onError(new Throwable("保存章节出错"));
             e.onComplete();
         });
     }

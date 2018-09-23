@@ -22,9 +22,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
         BookInfoBeanDao.createTable(db, ifNotExists);
+        BookmarkBeanDao.createTable(db, ifNotExists);
         BookShelfBeanDao.createTable(db, ifNotExists);
         BookSourceBeanDao.createTable(db, ifNotExists);
-        BookmarkBeanDao.createTable(db, ifNotExists);
         ChapterListBeanDao.createTable(db, ifNotExists);
         DownloadChapterBeanDao.createTable(db, ifNotExists);
         ReplaceRuleBeanDao.createTable(db, ifNotExists);
@@ -35,9 +35,9 @@ public class DaoMaster extends AbstractDaoMaster {
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         BookInfoBeanDao.dropTable(db, ifExists);
+        BookmarkBeanDao.dropTable(db, ifExists);
         BookShelfBeanDao.dropTable(db, ifExists);
         BookSourceBeanDao.dropTable(db, ifExists);
-        BookmarkBeanDao.dropTable(db, ifExists);
         ChapterListBeanDao.dropTable(db, ifExists);
         DownloadChapterBeanDao.dropTable(db, ifExists);
         ReplaceRuleBeanDao.dropTable(db, ifExists);
@@ -62,9 +62,9 @@ public class DaoMaster extends AbstractDaoMaster {
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
         registerDaoClass(BookInfoBeanDao.class);
+        registerDaoClass(BookmarkBeanDao.class);
         registerDaoClass(BookShelfBeanDao.class);
         registerDaoClass(BookSourceBeanDao.class);
-        registerDaoClass(BookmarkBeanDao.class);
         registerDaoClass(ChapterListBeanDao.class);
         registerDaoClass(DownloadChapterBeanDao.class);
         registerDaoClass(ReplaceRuleBeanDao.class);

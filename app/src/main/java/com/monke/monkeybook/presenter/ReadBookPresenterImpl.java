@@ -130,9 +130,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
                             DownloadingList(REMOVE, bookContentBean.getDurChapterUrl());
-                            BookshelfHelp.saveChapterInfo(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
-                                    String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()),
-                                    bookContentBean.getDurChapterContent());
                             mView.finishContent();
                         }
 

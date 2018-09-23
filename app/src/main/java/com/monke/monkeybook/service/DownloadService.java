@@ -241,11 +241,6 @@ public class DownloadService extends Service {
                     });
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-                if (bookContentBean.getRight()) {
-                    BookshelfHelp.saveChapterInfo(BookshelfHelp.getCachePathName(data),
-                            String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName()),
-                            bookContentBean.getDurChapterContent());
-                }
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
                 e.onNext(editDownloadList(REMOVE, data));
                 e.onComplete();
