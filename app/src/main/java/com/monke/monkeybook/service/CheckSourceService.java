@@ -165,7 +165,8 @@ public class CheckSourceService extends Service {
         }
 
         if (checkIndex < bookSourceBeanList.size()) {
-            new CheckSource(bookSourceBeanList.get(checkIndex));
+            CheckSource checkSource = new CheckSource(bookSourceBeanList.get(checkIndex));
+            checkSource.startCheck();
         } else {
             if (checkIndex >= bookSourceBeanList.size() + threadsNum - 1) {
                 doneService();
@@ -175,9 +176,14 @@ public class CheckSourceService extends Service {
 
     private class CheckSource {
         CheckSource checkSource;
+        BookSourceBean sourceBean;
 
-        CheckSource(final BookSourceBean sourceBean) {
+        CheckSource(BookSourceBean sourceBean) {
             checkSource = this;
+            this.sourceBean = sourceBean;
+        }
+
+        private void startCheck() {
             if (!TextUtils.isEmpty(sourceBean.getCheckUrl())) {
                 try {
                     new URL(sourceBean.getCheckUrl());
