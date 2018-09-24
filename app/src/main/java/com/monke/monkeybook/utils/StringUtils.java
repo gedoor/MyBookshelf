@@ -207,7 +207,7 @@ public class StringUtils {
             try {
                 return Integer.parseInt(num);
             } catch (Exception e) {
-                num = num.replace("两", "二").replace("〇", "零");
+                num = num.replaceAll("两", "二").replaceAll("〇", "零");
                 return chineseNumToInt(num);
             }
         }
