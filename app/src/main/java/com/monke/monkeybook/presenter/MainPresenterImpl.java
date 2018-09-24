@@ -123,8 +123,8 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-                    Integer chapterNum = bookShelfBean.getChapterListSize();
-                    for (Integer start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
+                    int chapterNum = bookShelfBean.getChapterListSize();
+                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
                         if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
                             Intent intent = new Intent(mView.getContext(), DownloadService.class);
                             intent.setAction("addDownload");
