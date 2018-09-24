@@ -106,7 +106,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
-        holder.ibContent.setContentDescription(String.format("%s,最新章节:%s",
+        holder.ibContent.setContentDescription(String.format("%s, 最新章节: %s",
                 books.get(index).getBookInfoBean().getName(),
                 books.get(index).getLastChapterName()));
         if (!activity.isFinishing()) {
@@ -144,9 +144,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
 
         if (needAnim) {
-            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter());
+            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter() + 1);
         } else {
-            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
+            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
         }
         holder.ibCover.setOnClickListener(v -> {
             if (itemClickListener != null)
