@@ -116,7 +116,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         holder.mpbDurProgress.setVisibility(View.VISIBLE);
         holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
-        holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter());
+        holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
         holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
