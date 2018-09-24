@@ -62,6 +62,7 @@ public class DownloadService extends Service {
     private final static int ADD = 1;
     private final static int REMOVE = 2;
     private final static int CHECK = 3;
+    private int totalChapters = 0;
     private int threadsNum;
     private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
     private ExecutorService executorService;
@@ -251,6 +252,7 @@ public class DownloadService extends Service {
                 }
             }).flatMap(bookContentBean -> Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().delete(data);
+                totalChapters += 1;
                 e.onNext(editDownloadList(REMOVE, data));
                 e.onComplete();
             }))
@@ -432,10 +434,10 @@ public class DownloadService extends Service {
     }
 
     private synchronized void finishDownload() {
-        if (downloadingChapter.size() == 0 && !isFinish) {
+        if (downloadingChapter.size() == 0 && !isFinish && totalChapters > 0) {
             isFinish = true;
             stopSelf();
-            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "全部离线章节下载完成", Toast.LENGTH_SHORT).show());
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载"+totalChapters+"章", Toast.LENGTH_SHORT).show());
         }
     }
 
