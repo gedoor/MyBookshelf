@@ -18,6 +18,7 @@ import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -147,6 +148,7 @@ public class ChangeSourceView {
                                     searchBookBean.setIsAdd(false);
                                 }
                             }
+                            Collections.sort(searchBookBeans, (s1, s2) -> Long.compare(s2.getAddTime(), s1.getAddTime()));
                             adapter.addAllSourceAdapter(searchBookBeans);
                             rvSource.finishRefresh(true, true);
                         } else {
@@ -173,6 +175,7 @@ public class ChangeSourceView {
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {
         if (value.size() > 0) {
+            Collections.sort(value, (s1, s2) -> s2.getTag().equals(bookTag) ? 1 : Long.compare(s2.getAddTime(), s1.getAddTime()) );
             for (SearchBookBean searchBookBean : value) {
                 if (Objects.equals(searchBookBean.getName(), bookName)
                         && (Objects.equals(searchBookBean.getAuthor(), bookAuthor) || Objects.equals(searchBookBean.getAuthor(), "") || Objects.equals(bookAuthor, ""))) {
