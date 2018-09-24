@@ -780,9 +780,11 @@ public abstract class PageLoader {
                     tipLeft = mDisplayWidth - tipMarginWidth - mTipPaint.measureText(percent);
                     canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                     //绘制页码
-                    percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
-                    tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
-                    canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    if(mPageMode != PageMode.SCROLL) {
+                        percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
+                        tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
+                        canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    }
                     //绘制标题
                     percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
                     percent = ChapterContentHelp.replaceContent(mCollBook, percent);
