@@ -38,7 +38,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
 
     @Override
     public void initData(Intent intent) {
-        openFrom = intent.getIntExtra("from", FROM_BOOKSHELF);
+        openFrom = intent.getIntExtra("openFrom", FROM_BOOKSHELF);
         if (openFrom == FROM_BOOKSHELF) {
             String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);

@@ -216,7 +216,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 bookShelfBean.setHasUpdate(false);
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
-                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 try {
@@ -231,7 +231,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             @Override
             public void onLongClick(View view, int index) {
                 Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-                intent.putExtra("from", BookDetailPresenterImpl.FROM_BOOKSHELF);
+                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));

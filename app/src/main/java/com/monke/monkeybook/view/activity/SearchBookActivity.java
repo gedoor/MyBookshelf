@@ -130,7 +130,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             @Override
             public void clickItem(View animView, int position, SearchBookBean searchBookBean) {
                 Intent intent = new Intent(SearchBookActivity.this, BookDetailActivity.class);
-                intent.putExtra("from", BookDetailPresenterImpl.FROM_SEARCH);
+                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_SEARCH);
                 intent.putExtra("data", searchBookBean);
                 startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
             }

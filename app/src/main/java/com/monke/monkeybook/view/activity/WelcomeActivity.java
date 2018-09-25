@@ -75,7 +75,7 @@ public class WelcomeActivity extends MBaseActivity {
 
     private void startReadActivity() {
         Intent intent = new Intent(this, ReadBookActivity.class);
-        intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+        intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
         startActivity(intent);
     }
 

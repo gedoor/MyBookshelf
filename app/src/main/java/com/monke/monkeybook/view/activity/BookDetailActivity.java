@@ -314,7 +314,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvRead.setOnClickListener(v -> {
             //进入阅读
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
-            intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+            intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
             String key = String.valueOf(System.currentTimeMillis());
             intent.putExtra("data_key", key);
             try {
