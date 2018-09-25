@@ -123,16 +123,18 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-                    Intent intent = new Intent(mView.getContext(), DownloadService.class);
-                    intent.setAction("addDownload");
-                    intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
-                    intent.putExtra("start", bookShelfBean.getDurChapter());
-                    if (bookShelfBean.getChapterListSize() - 1 <= bookShelfBean.getDurChapter() + downloadNum) {
-                        intent.putExtra("end", bookShelfBean.getChapterListSize() - 1);
-                    } else {
-                        intent.putExtra("end", bookShelfBean.getDurChapter() + downloadNum);
+                    int chapterNum = bookShelfBean.getChapterListSize();
+                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
+                        if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
+                            Intent intent = new Intent(mView.getContext(), DownloadService.class);
+                            intent.setAction("addDownload");
+                            intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
+                            intent.putExtra("start", start);
+                            intent.putExtra("end", Math.min(chapterNum - 1, start + downloadNum));
+                            mView.getContext().startService(intent);
+                            break;
+                        }
                     }
-                    mView.getContext().startService(intent);
                 }
             }
             e.onNext(true);
@@ -281,6 +283,14 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 queryBookShelf(false, group);
+                for(BookShelfBean book: bookShelfBeans) {
+                    if(book.getHasUpdate()) {
+                       downloadAll();
+                       mView.refreshBookShelf(bookShelfBeans);
+                       break;
+                    }
+                }
+
             }
         }
     }
