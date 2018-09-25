@@ -283,14 +283,15 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         } else {
             if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
                 queryBookShelf(false, group);
-                for(BookShelfBean book: bookShelfBeans) {
-                    if(book.getHasUpdate()) {
-                       downloadAll();
-                       mView.refreshBookShelf(bookShelfBeans);
-                       break;
+                if (mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
+                    for(BookShelfBean book: bookShelfBeans) {
+                        if(book.getHasUpdate()) {
+                            downloadAll();
+                            mView.refreshBookShelf(bookShelfBeans);
+                            break;
+                        }
                     }
                 }
-
             }
         }
     }

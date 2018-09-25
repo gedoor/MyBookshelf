@@ -23,6 +23,12 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:key="@string/pk_auto_download"
+        android:summary="@string/ps_auto_download"
+        android:title="@string/pt_auto_download" />
+
+    <SwitchPreference
+        android:defaultValue="false"
         android:key="@string/pk_default_read"
         android:summary="@string/ps_default_read"
         android:title="@string/pt_default_read"/>
