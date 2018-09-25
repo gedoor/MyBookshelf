@@ -1,7 +1,6 @@
 package com.monke.monkeybook.widget.page;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -26,6 +25,10 @@ import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 
+import net.ricecode.similarity.JaroWinklerStrategy;
+import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
+
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +39,8 @@ import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
-import static android.widget.Toast.*;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 import static com.monke.monkeybook.bean.BookShelfBean.LOCAL_TAG;
 
 /**
@@ -292,8 +296,46 @@ public abstract class PageLoader {
      * 换源结束
      */
     public void changeSourceFinish(BookShelfBean bookShelfBean) {
+        int oldChapterSize = mCollBook.getChapterListSize();
+        int oldChapterIndex = mCollBook.getDurChapter();
+        int oldChapterNum = mCollBook.getChapterList(mCollBook.getDurChapter()).getChapterNum();
+        String oldName = mCollBook.getChapterList(mCollBook.getDurChapter()).getPureChapterName();
         mCollBook = bookShelfBean;
         mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+        int newChapterSize = mCollBook.getChapterListSize();
+        int min = Math.max(0, Math.min(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) - 10);
+        int max = Math.min(newChapterSize - 1, Math.max(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) + 10);
+        double nameSim = 0;
+        int newIndex = 0;
+        int newNum = 0;
+        if (!oldName.isEmpty()) {
+            StringSimilarityService service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
+            for (int i = min; i <= max; i++) {
+                String newName = mCollBook.getChapterList(i).getPureChapterName();
+                double temp = service.score(oldName, newName);
+                if (temp > nameSim) {
+                    nameSim = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim < 0.9 && oldChapterNum > 0) {
+            for (int i = min; i <= max; i++) {
+                int temp = mCollBook.getChapterList(i).getChapterNum();
+                if (temp == oldChapterNum) {
+                    newNum = temp;
+                    newIndex = i;
+                    break;
+                } else if (Math.abs(temp - oldChapterNum) < Math.abs(newNum - oldChapterNum)) {
+                    newNum = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim > 0.9 || Math.abs(newNum - oldChapterNum) < 1) {
+            bookShelfBean.setDurChapter(newIndex);
+        }
+
         skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
     }
 
@@ -780,9 +822,11 @@ public abstract class PageLoader {
                     tipLeft = mDisplayWidth - tipMarginWidth - mTipPaint.measureText(percent);
                     canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
                     //绘制页码
-                    percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
-                    tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
-                    canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    if(mPageMode != PageMode.SCROLL) {
+                        percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
+                        tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
+                        canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    }
                     //绘制标题
                     percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
                     percent = ChapterContentHelp.replaceContent(mCollBook, percent);

@@ -156,11 +156,14 @@ dependencies {
 
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
+    
+    //字符串比较
+    implementation 'net.ricecode:string-similarity:1.0.0'
 
 }
 
 greendao {
-    schemaVersion 38
+    schemaVersion 39
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }

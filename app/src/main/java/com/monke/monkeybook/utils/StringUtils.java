@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by newbiechen on 17-4-22.
@@ -134,5 +135,82 @@ public class StringUtils {
                 c[i] = (char) (c[i] - 65248);
         }
         return new String(c);
+    }
+
+    public final static HashMap<Character, Integer> ChnMap = getChnMap();
+
+    private static HashMap<Character, Integer> getChnMap() {
+        String cnStr = "零一二三四五六七八九十";
+        HashMap<Character, Integer> map = new HashMap<>();
+        char[] c = cnStr.toCharArray();
+        for (int i = 0; i <= 10; i++) {
+            map.put(c[i], i);
+        }
+        map.put('百', 100);
+        map.put('千', 1000);
+        map.put('万', 10000);
+        map.put('亿', 100000000);
+        return map;
+    }
+
+    // 修改自 https://binux.blog/2011/03/python-tools-chinese-digit/
+    public static int chineseNumToInt(String chNum) {
+        int result = 0;
+        int tmp = 0;
+        int billion = 0;
+        char[] cn = chNum.toCharArray();
+
+        // "一零二五" 形式
+        if (cn.length > 1 && chNum.matches("^[零一二三四五六七八九]$")) {
+            for (int i = 0; i < cn.length; i++) {
+                cn[i] = (char) (48 + ChnMap.get(cn[i]));
+            }
+            return Integer.parseInt(new String(cn));
+        }
+
+        // "一千零二十五", "一千二" 形式
+        try {
+            for (int i = 0; i < cn.length; i++) {
+                int tmpNum = ChnMap.get(cn[i]);
+                if (tmpNum == 100000000) {
+                    result += tmp;
+                    result *= tmpNum;
+                    billion = billion * 100000000 + result;
+                    result = 0;
+                    tmp = 0;
+                } else if (tmpNum == 10000) {
+                    result += tmp;
+                    result *= tmpNum;
+                    tmp = 0;
+                } else if (tmpNum >= 10) {
+                    if (tmp == 0)
+                        tmp = 1;
+                    result += tmpNum * tmp;
+                    tmp = 0;
+                } else {
+                    if (i == cn.length - 1 && ChnMap.get(cn[i-1]) > 10)
+                        tmp = tmpNum * ChnMap.get(cn[i-1]) / 10;
+                    else
+                        tmp = tmp * 10 + tmpNum;
+                }
+            }
+            result += tmp + billion;
+            return result;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    public static int stringToInt(String str) {
+        if (str != null) {
+            String num = fullToHalf(str).replaceAll("\\s", "");
+            try {
+                return Integer.parseInt(num);
+            } catch (Exception e) {
+                num = num.replaceAll("两", "二").replaceAll("〇", "零");
+                return chineseNumToInt(num);
+            }
+        }
+        return -1;
     }
 }

@@ -4,17 +4,16 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.monke.monkeybook.utils.StringUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
-import org.greenrobot.greendao.DaoException;
-import com.monke.monkeybook.dao.DaoSession;
-import com.monke.monkeybook.dao.BookInfoBeanDao;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 章节列表
@@ -33,6 +32,8 @@ public class ChapterListBean implements Parcelable,Cloneable{
     private Long start;
     //章节内容在文章中的终止位置(本地)
     private Long end;
+    @Transient
+    private static Pattern chapterNamePattern = Pattern.compile("^(第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
     protected ChapterListBean(Parcel in) {
         noteUrl = in.readString();
@@ -123,10 +124,30 @@ public class ChapterListBean implements Parcelable,Cloneable{
 
     public void setDurChapterName(String durChapterName) {
         if (durChapterName != null) {
-            this.durChapterName = durChapterName.replaceAll("^(第[\\d零〇一二两三四五六七八九十百千万\\s]+[章节篇回集])[、，。　：:.\\s]*", "$1 ");
-        } else {
-            this.durChapterName = null;
+            durChapterName = durChapterName.trim();
+            Matcher matcher = chapterNamePattern.matcher(durChapterName);
+            if(matcher.find()) {
+                int num = StringUtils.stringToInt(matcher.group(2));
+                this.durChapterName = num > 0 ? matcher.replaceFirst("第" + num + "章 ") : matcher.replaceFirst("$1 ");
+                return;
+            }
         }
+        this.durChapterName = durChapterName;
+    }
+
+    public String getPureChapterName() {
+        return durChapterName == null ? ""
+            : durChapterName.replaceAll("^第.*?章|[（(【\\[].*?[)）】\\]]$|[\\s　]", "");
+    }
+
+    public int getChapterNum() {
+        if (durChapterName != null) {
+            Matcher matcher = chapterNamePattern.matcher(durChapterName);
+            if (matcher.find()) {
+                return StringUtils.stringToInt(matcher.group(2));
+            }
+        }
+        return -1;
     }
 
     public String getDurChapterUrl() {

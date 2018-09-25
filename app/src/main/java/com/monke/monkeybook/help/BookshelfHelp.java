@@ -93,6 +93,12 @@ public class BookshelfHelp {
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
+    public static void clearCaches() {
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH);
+        FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
+        chapterCaches.clear();
+    }
+
     /**
      * 删除章节文件
      */

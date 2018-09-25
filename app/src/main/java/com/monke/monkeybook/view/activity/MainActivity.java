@@ -299,6 +299,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             case R.id.action_change_icon:
                 LauncherIcon.Change();
                 break;
+            case R.id.action_clear_cache:
+                BookshelfHelp.clearCaches();
+                break;
             case R.id.action_clearBookshelf:
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.clear_bookshelf)
