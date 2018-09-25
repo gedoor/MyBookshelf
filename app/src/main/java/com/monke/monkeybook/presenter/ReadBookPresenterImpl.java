@@ -319,7 +319,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
      */
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            BookshelfHelp.removeFromBookShelf(bookShelf);
+            BookshelfHelp.removeFromBookShelf(bookShelf, true);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
             e.onComplete();

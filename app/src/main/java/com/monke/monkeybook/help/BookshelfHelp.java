@@ -183,12 +183,18 @@ public class BookshelfHelp {
         return null;
     }
 
-    public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
+    public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
-        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
-        chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+        if(!keepCaches) {
+            FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
+            chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+        }
+    }
+
+    public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
+        removeFromBookShelf(bookShelfBean, false);
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
