@@ -434,10 +434,11 @@ public class DownloadService extends Service {
     }
 
     private synchronized void finishDownload() {
-        if (downloadingChapter.size() == 0 && !isFinish && totalChapters > 0) {
+        if (downloadingChapter.size() == 0 && !isFinish) {
             isFinish = true;
             stopSelf();
-            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载"+totalChapters+"章", Toast.LENGTH_SHORT).show());
+            if (totalChapters > 0)
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载"+totalChapters+"章", Toast.LENGTH_SHORT).show());
         }
     }
 
