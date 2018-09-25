@@ -498,11 +498,15 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void firstRequest() {
         versionUpRun();
-        if (NetworkUtil.isNetWorkAvailable()) {
-            mPresenter.queryBookShelf(haveRefresh(), group);
+        if (haveRefresh()) {
+            if (NetworkUtil.isNetWorkAvailable()) {
+                mPresenter.queryBookShelf(true, group);
+            } else {
+                mPresenter.queryBookShelf(false, group);
+                Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
+            }
         } else {
             mPresenter.queryBookShelf(false, group);
-            Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
         }
     }
 
