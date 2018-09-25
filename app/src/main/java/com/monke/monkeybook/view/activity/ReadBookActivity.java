@@ -37,6 +37,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
@@ -583,7 +584,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getContext(pageIndex),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        mPresenter.getChapterTitle(chapterIndex)
+                                        ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
                                 );
                             }
                             return;
@@ -1225,7 +1226,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            mPresenter.getChapterTitle(mPageLoader.getChapterPos())
+                            ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()))
                             );
                 }
         }
