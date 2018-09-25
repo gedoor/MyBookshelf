@@ -507,9 +507,6 @@ public abstract class PageLoader {
         mTextPaint.setTextSize(mTextSize);
         // 设置标题的字体大小
         mTitlePaint.setTextSize(mTitleSize);
-        // 取消缓存
-        mPrePageList = null;
-        mNextPageList = null;
 
         skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
