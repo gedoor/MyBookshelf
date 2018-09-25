@@ -469,8 +469,10 @@ public abstract class PageLoader {
      * 翻页完成
      */
     public void pagingEnd() {
-        mPageView.upPagePos(mCurChapterPos, mCurPage.position);
         mPageView.setContentDescription(getContext(getPagePos()));
+        mPageView.upPagePos(mCurChapterPos, mCurPage.position);
+        mCollBook.setDurChapter(mCurChapterPos);
+        mCollBook.setDurChapterPage( mCurPage.position);
         mPageChangeListener.onPageChange(mCurChapterPos, getPagePos());
     }
 
@@ -508,23 +510,8 @@ public abstract class PageLoader {
         // 取消缓存
         mPrePageList = null;
         mNextPageList = null;
-        mStatus.clear();
 
-        // 如果当前已经显示数据
-        if (isChapterListPrepare && getPageStatus() == STATUS_FINISH) {
-            // 重新计算当前页面
-            dealLoadPageList(mCurChapterPos);
-
-            // 防止在最后一页，通过修改字体，以至于页面数减少导致崩溃的问题
-            if (mCurPage.position >= mCurPageList.size()) {
-                mCurPage.position = mCurPageList.size() - 1;
-            }
-
-            // 重新获取指定页面
-            mCurPage = mCurPageList.get(mCurPage.position);
-        }
-
-        mPageView.drawCurPage();
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
 
     /**
@@ -542,7 +529,7 @@ public abstract class PageLoader {
 
         mBgPaint.setColor(mBgColor);
 
-        mPageView.drawCurPage();
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
 
     /**
@@ -571,7 +558,7 @@ public abstract class PageLoader {
 
         prepareDisplay(mDisplayWidth, mDisplayHeight);
 
-        mPageView.drawCurPage();
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
 
     /**
