@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -25,17 +27,21 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -151,6 +157,33 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
 
                         }
                     });
+        }
+    }
+
+    /**
+     * 禁用当前书源
+     */
+    public void disableDurBookSource() {
+        try {
+            switch (bookShelf.getTag()) {
+                case BookShelfBean.LOCAL_TAG:
+                    break;
+                case My716.TAG:
+                    ACache.get(mView.getContext()).put("useMy716", "False");
+                    mView.toast("已禁用My716书源");
+                    break;
+                default:
+                    BookSourceBean bookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                            .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookShelf.getTag())).unique();
+                    bookSource.setEnable(false);
+                    if (TextUtils.isEmpty(bookSource.getBookSourceGroup()))
+                        bookSource.setBookSourceGroup("禁用");
+                    mView.toast("已禁用" + bookSource.getBookSourceName());
+                    DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSource);
+                    break;
+            }
+        } catch (Exception e) {
+            Log.e("MonkBook", e.getLocalizedMessage() + "\n" + e.getMessage());
         }
     }
 
