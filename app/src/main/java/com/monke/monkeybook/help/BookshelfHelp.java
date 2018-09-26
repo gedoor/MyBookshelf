@@ -164,7 +164,7 @@ public class BookshelfHelp {
                 }
             }
         }
-        if (nameSim < 0.9 && oldChapterNum > 0) {
+        if (nameSim < 0.96 && oldChapterNum > 0) {
             for (int i = min; i <= max; i++) {
                 int temp = newBook.getChapterList(i).getChapterNum();
                 if (temp == oldChapterNum) {
@@ -177,11 +177,11 @@ public class BookshelfHelp {
                 }
             }
         }
-        if (nameSim > 0.9 || Math.abs(newNum - oldChapterNum) < 1) {
+        if (nameSim > 0.96 || Math.abs(newNum - oldChapterNum) < 1) {
             return newIndex;
         } else {
             if (oldChapterIndex >= newBook.getChapterListSize()) {
-                return newBook.getChapterListSize();
+                return Math.max(0, newBook.getChapterListSize() - 1);
             } else {
                 return oldChapterIndex;
             }
