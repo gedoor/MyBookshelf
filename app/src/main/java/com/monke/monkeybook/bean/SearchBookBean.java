@@ -53,6 +53,7 @@ public class SearchBookBean implements Parcelable{
         originNum = in.readInt();
         introduce = in.readString();
         chapterUrl = in.readString();
+        addTime = in.readLong();
     }
 
     @Generated(hash = 1805065778)
