@@ -4,13 +4,13 @@
     android:id="@+id/fl_content"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:background="@color/background">
 
         <ImageView
@@ -108,20 +108,25 @@
             android:visibility="invisible"
             tools:ignore="RtlHardcoded" />
 
+        <ImageButton
+            android:id="@+id/ib_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_ib_pre"
+            android:contentDescription="@string/book" />
+
+        <ImageButton
+            android:id="@+id/ib_cover"
+            android:layout_width="56dp"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_ib_pre"
+            android:contentDescription="@string/book" />
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/ib_content"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_ib_pre"
-        android:contentDescription="@string/book" />
-
-    <ImageButton
-        android:id="@+id/ib_cover"
-        android:layout_width="56dp"
-        android:layout_height="80dp"
-        android:background="@drawable/bg_ib_pre"
-        android:contentDescription="@string/book" />
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:background="@color/btn_bg_press" />
 
 </FrameLayout>
