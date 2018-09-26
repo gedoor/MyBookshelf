@@ -106,12 +106,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             picker.setRootPath(preference.getSummary().toString());
             picker.setItemHeight(30);
             picker.setOnFilePickListener(currentPath -> {
+                MApplication.downloadPath = currentPath;
+                Constant.BOOK_CACHE_PATH = currentPath + File.separator + "book_cache"+ File.separator ;
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(getString(R.string.pk_download_path), currentPath);
                 editor.apply();
                 preference.setSummary(currentPath);
-                MApplication.downloadPath = currentPath;
-                Constant.BOOK_CACHE_PATH = currentPath + File.separator + "book_cache"+ File.separator ;
             });
             picker.show();
 
