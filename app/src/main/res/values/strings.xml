@@ -222,11 +222,11 @@
     <string name="jf_convert_f">简转繁</string>
     <string name="jf_convert_j">繁转简</string>
     <string name="page_mode">翻页模式</string>
-    <string name="nb.file.sub_count">%1$d 项</string>
-    <string name="nb.file.path">存储卡:</string>
-    <string name="nb.file.add_shelf">加入书架</string>
-    <string name="nb.file.add_shelves">加入书架(%1$d)</string>
-    <string name="nb.file.add_succeed">成功添加%1$d本书</string>
+    <string name="nb_file_sub_count">%1$d 项</string>
+    <string name="nb_file_path">存储卡:</string>
+    <string name="nb_file_add_shelf">加入书架</string>
+    <string name="nb_file_add_shelves">加入书架(%1$d)</string>
+    <string name="nb_file_add_succeed">成功添加%1$d本书</string>
     <string name="fonts_folder">请将字体文件放到SD根目录Fonts文件夹下重新选择</string>
     <string name="default_font">默认字体</string>
     <string name="select_font">选择字体</string>
