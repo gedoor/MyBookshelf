@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -18,8 +19,10 @@ import java.util.List;
 public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
     private List<File> fileList = new ArrayList<>();
     private FontSelector.OnThisListener thisListener;
+    private String selectPath;
 
-    FontAdapter(FontSelector.OnThisListener thisListener) {
+    FontAdapter(String selectPath, FontSelector.OnThisListener thisListener) {
+        this.selectPath = selectPath;
         this.thisListener = thisListener;
     }
 
@@ -35,6 +38,11 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
             Typeface typeface = Typeface.createFromFile(fileList.get(position));
             holder.tvFont.setTypeface(typeface);
             holder.tvFont.setText(fileList.get(position).getName());
+            if (fileList.get(position).getAbsolutePath().equals(selectPath)) {
+                holder.ivChecked.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivChecked.setVisibility(View.INVISIBLE);
+            }
             holder.tvFont.setOnClickListener(view -> {
                 if (thisListener != null) {
                     thisListener.setFontPath(fileList.get(position).getAbsolutePath());
@@ -67,10 +75,12 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvFont;
+        ImageView ivChecked;
 
         MyViewHolder(View itemView) {
             super(itemView);
             tvFont = itemView.findViewById(R.id.tv_font);
+            ivChecked = itemView.findViewById(R.id.iv_checked);
         }
     }
 

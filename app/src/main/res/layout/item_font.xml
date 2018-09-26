@@ -2,12 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:padding="5dp">
 
     <TextView
         android:id="@+id/tv_font"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:padding="5dp" />
+
+    <ImageView
+        android:id="@+id/iv_checked"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_check_black_24dp"
+        android:visibility="invisible" />
 
 </LinearLayout>

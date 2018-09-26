@@ -23,7 +23,7 @@
             android:textColor="#ffffff"
             android:background="@drawable/selector_tv_first_button"
             android:textSize="13sp"
-            android:text="@string/nb.file.path" />
+            android:text="@string/nb_file_path" />
 
         <TextView
             android:id="@+id/file_category_tv_path"

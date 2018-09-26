@@ -237,7 +237,7 @@ public class ReadInterfacePop extends PopupWindow {
         //选择字体
         fl_text_font.setOnClickListener(view -> {
             if (EasyPermissions.hasPermissions(activity, MApplication.PerList)) {
-                new FontSelector(activity)
+                new FontSelector(activity, readBookControl.getFontPath())
                         .setListener(new FontSelector.OnThisListener() {
                             @Override
                             public void setDefault() {

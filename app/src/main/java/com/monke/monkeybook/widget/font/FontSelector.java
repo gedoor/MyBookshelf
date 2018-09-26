@@ -22,7 +22,7 @@ public class FontSelector {
     private OnThisListener thisListener;
     private AlertDialog alertDialog;
 
-    public FontSelector(Context context) {
+    public FontSelector(Context context, String selectPath) {
         builder = new AlertDialog.Builder(context);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.view_recycler_font, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
@@ -30,28 +30,29 @@ public class FontSelector {
         builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
         fontPath = FileUtil.getSdCardPath() + "/Fonts";
-        adapter = new FontAdapter(new OnThisListener() {
-            @Override
-            public void setDefault() {
-                if (thisListener != null) {
-                    thisListener.setDefault();
-                }
-                alertDialog.dismiss();
-            }
+        adapter = new FontAdapter(selectPath,
+                new OnThisListener() {
+                    @Override
+                    public void setDefault() {
+                        if (thisListener != null) {
+                            thisListener.setDefault();
+                        }
+                        alertDialog.dismiss();
+                    }
 
-            @Override
-            public void setFontPath(String fontPath) {
-                if (thisListener != null) {
-                    thisListener.setFontPath(fontPath);
-                }
-                alertDialog.dismiss();
-            }
-        });
+                    @Override
+                    public void setFontPath(String fontPath) {
+                        if (thisListener != null) {
+                            thisListener.setFontPath(fontPath);
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 
-    public FontSelector setListener(OnThisListener thisListener){
+    public FontSelector setListener(OnThisListener thisListener) {
         this.thisListener = thisListener;
         builder.setPositiveButton(R.string.default_font, ((dialogInterface, i) -> {
             thisListener.setDefault();
