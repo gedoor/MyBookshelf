@@ -1,53 +1,66 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view.activity.MainActivity">
+    tools:context=".view.activity.BookSourceActivity">
 
-    <group android:id="@+id/menuOnLine" >
-        <item
-            android:id="@+id/action_change_source"
-            android:icon="@drawable/ic_exchange"
-            android:title="@string/change_origin"
-            app:showAsAction="always" />
-
-        <item
-            android:id="@+id/action_refresh"
-            android:icon="@drawable/ic_refresh_black_24dp_new"
-            android:title="@string/refresh"
-            app:showAsAction="ifRoom" />
-
-        <item
-            android:id="@+id/action_download"
-            android:icon="@drawable/ic_download_line"
-            android:title="@string/download_offline"
-            app:showAsAction="ifRoom" />
-    </group>
-
-    <group android:id="@+id/menuShow">
-        <item
-            android:id="@+id/add_bookmark"
-            android:icon="@drawable/ic_bookmark"
-            android:title="@string/bookmark_add"
-            app:showAsAction="ifRoom" />
-
-        <item
-            android:id="@+id/action_copy_text"
-            android:icon="@drawable/ic_settings_backup_restore"
-            android:title="@string/copy_text"
-            app:showAsAction="ifRoom" />
-
-        <item
-            android:id="@+id/disable_book_source"
-            android:icon="@drawable/ic_cancel"
-            android:title="@string/disable_book_source"
-            app:showAsAction="ifRoom" />
-
-    </group>
 
     <item
-        android:id="@+id/action_book_info"
-        android:icon="@drawable/ic_toc"
-        android:title="@string/book_info"
+        android:id="@+id/action_select_all"
+        android:icon="@drawable/ic_done_all_black_24dp_new"
+        android:title="@string/select_all"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_group"
+        android:icon="@drawable/ic_group"
+        android:title="@string/menu_action_group"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
+
+        <menu>
+            <group android:id="@+id/source_group">
+
+            </group>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_add_book_source"
+        android:icon="@drawable/ic_add_black_24dp_new"
+        android:title="@string/add_book_source"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_book_source_local"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:title="@string/import_book_source_local"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import_book_source_onLine"
+        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:title="@string/import_book_source_on_line"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_del_select"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/del_select"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reset_book_source"
+        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:title="@string/refresh_default"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_check_book_source"
+        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:title="@string/check_book_source"
         app:showAsAction="never" />
 
 </menu>
