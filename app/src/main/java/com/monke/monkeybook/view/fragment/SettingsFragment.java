@@ -16,6 +16,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.activity.SettingActivity;
 
 import java.io.File;
@@ -106,7 +107,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             picker.setRootPath(preference.getSummary().toString());
             picker.setItemHeight(30);
             picker.setOnFilePickListener(currentPath -> {
-                MApplication.downloadPath = currentPath;
+                if (!currentPath.contains(FileUtil.getSdCardPath())) {
+                    MApplication.downloadPath = FileHelp.getCachePath();
+                } else {
+                    MApplication.downloadPath = currentPath;
+                }
                 Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
