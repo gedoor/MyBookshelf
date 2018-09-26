@@ -62,8 +62,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,9 +143,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Animation menuBottomIn;
     private Animation menuBottomOut;
     private ActionBar actionBar;
-    private Timer keepScreenTimer;
-    private Timer autoPageTimer;
     private PageLoader mPageLoader;
+    private Handler mHandler;
+    private Runnable autoPageRunnable;
+    private Runnable keepScreenRunnable;
 
     private String noteUrl;
     private Boolean isAdd = false; //判断是否已经添加进书架
@@ -185,6 +184,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
+        mHandler = new Handler();
+        keepScreenRunnable = this::unKeepScreenOn;
+        autoPageRunnable = this::nextPage;
     }
 
     @Override
@@ -268,6 +270,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         screenOffTimerStart();
     }
 
+    private void unKeepScreenOn() {
+        keepScreenOn(false);
+    }
+
     public void keepScreenOn(boolean keepScreenOn) {
         if (keepScreenOn) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -279,17 +285,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void screenOffTimerStart() {
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
         if (screenOffTime > 0) {
-            if (keepScreenTimer != null) {
-                keepScreenTimer.cancel();
-            }
-            keepScreenTimer = new Timer();
+            mHandler.removeCallbacks(keepScreenRunnable);
             keepScreenOn(true);
-            keepScreenTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(() -> keepScreenOn(false));
-                }
-            }, screenOffTime);
+            mHandler.postDelayed(keepScreenRunnable, screenOffTime);
         } else if (screenTimeOut != -1) {
             keepScreenOn(false);
         }
@@ -300,17 +298,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 自动翻页
      */
     private void autoPage() {
-        if (autoPageTimer != null) {
-            autoPageTimer.cancel();
-        }
+        mHandler.removeCallbacks(autoPageRunnable);
         if (autoPage) {
-            autoPageTimer = new Timer();
-            autoPageTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    nextPage();
-                }
-            }, readBookControl.getClickSensitivity() * 1000);
+            mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
         }
     }
 
