@@ -2,6 +2,8 @@ package com.monke.monkeybook.help;
 
 import android.support.annotation.StringDef;
 
+import com.monke.monkeybook.MApplication;
+
 import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,8 +23,7 @@ public class Constant {
     //RxBus
     public static final int MSG_SELECTOR = 1;
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
-    public static String BOOK_CACHE_PATH = FileHelp.getCachePath()+File.separator
-            + "book_cache"+ File.separator ;
+    public static String BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
     //文件阅读记录保存的路径
     public static String BOOK_RECORD_PATH = FileHelp.getCachePath() + File.separator
             + "book_record" + File.separator;

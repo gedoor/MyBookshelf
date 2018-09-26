@@ -7,9 +7,12 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+
+import com.monke.monkeybook.help.FileHelp;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -22,6 +25,7 @@ public class MApplication extends Application {
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
+    public static String downloadPath;
 
     public static MApplication getInstance() {
         return instance;
@@ -51,6 +55,13 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
+        SharedPreferences sharedPreferences = getSharedPreferences("CONFIG", 0);
+        if (sharedPreferences.getString(getString(R.string.pk_download_path), "").equals("")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
+            editor.apply();
+        }
+        downloadPath = sharedPreferences.getString(getString(R.string.pk_download_path), FileHelp.getCachePath());
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

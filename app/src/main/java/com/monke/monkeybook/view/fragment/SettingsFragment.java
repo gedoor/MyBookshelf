@@ -13,9 +13,12 @@ import android.preference.PreferenceScreen;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.SettingActivity;
+
+import java.io.File;
 
 import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -106,6 +109,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(getString(R.string.pk_download_path), currentPath);
                 editor.apply();
+                preference.setSummary(currentPath);
+                MApplication.downloadPath = currentPath;
+                Constant.BOOK_CACHE_PATH = currentPath + File.separator + "book_cache"+ File.separator ;
             });
             picker.show();
 
