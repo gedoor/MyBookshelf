@@ -154,9 +154,14 @@ dependencies {
     //颜色选择
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
 
+    //文件目录选择
+    implementation('com.github.gzu-liyujiang.AndroidPicker:FilePicker:1.5.6') {
+        exclude group: 'com.android.support'
+    }
+
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
-    
+
     //字符串比较
     implementation 'net.ricecode:string-similarity:1.0.0'
 

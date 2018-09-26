@@ -17,6 +17,7 @@ import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.SettingActivity;
 
+import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
@@ -98,12 +99,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 EasyPermissions.requestPermissions(this, "自定义缓存路径需要存储权限", 0, MApplication.PerList);
                 return true;
             }
-//            Intent intent = null;
-//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-//                startActivityForResult(intent, REQUEST_CODE_OPEN_DIRECTORY);
-//            }
-
+            FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
+            picker.setRootPath(preference.getSummary().toString());
+            picker.setItemHeight(30);
+            picker.setOnFilePickListener(currentPath -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getString(R.string.pk_download_path), currentPath);
+                editor.apply();
+            });
+            picker.show();
 
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
