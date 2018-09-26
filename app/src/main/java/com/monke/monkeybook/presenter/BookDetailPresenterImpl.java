@@ -220,6 +220,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
             }
             bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
             bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
+            bookShelfBean.setDurChapterName(bookShelfBean.getChapterList(bookShelfBean.getDurChapter()).getDurChapterName());
             BookshelfHelp.removeFromBookShelf(bookShelf);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
