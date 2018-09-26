@@ -92,10 +92,13 @@ public class NetPageLoader extends PageLoader {
     }
 
     @SuppressLint("DefaultLocale")
-    @Override
+    @Override    
     protected boolean hasChapterData(ChapterListBean chapter) {
-        return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
+        String bookCachePath = BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean());
+        boolean cached = BookshelfHelp.isChapterCached(bookCachePath,
                 String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
+        BookshelfHelp.setChapterIsCached(bookCachePath, chapter.getDurChapterIndex(), cached);
+        return cached;
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
