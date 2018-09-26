@@ -56,7 +56,11 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
                             .placeholder(R.drawable.img_cover_default))
                     .into(myViewHolder.ivCover);
         }
-        myViewHolder.tvName.setText(String.format("%s(%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
+        String title = searchBooks.get(position).getName();
+        String author = searchBooks.get(position).getAuthor();
+        if (author != null && author.trim().length() > 0)
+            title = String.format("%s (%s)", title, author);
+        myViewHolder.tvName.setText(title);
         String state = searchBooks.get(position).getState();
         if (state == null || state.length() == 0) {
             myViewHolder.tvState.setVisibility(View.GONE);
