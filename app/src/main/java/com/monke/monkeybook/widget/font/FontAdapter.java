@@ -1,5 +1,7 @@
 package com.monke.monkeybook.widget.font;
 
+import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +21,11 @@ import java.util.List;
 public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
     private List<File> fileList = new ArrayList<>();
     private FontSelector.OnThisListener thisListener;
+    private Context context;
     private String selectPath;
 
-    FontAdapter(String selectPath, FontSelector.OnThisListener thisListener) {
+    FontAdapter(Context context, String selectPath, FontSelector.OnThisListener thisListener) {
+        this.context = context;
         this.selectPath = selectPath;
         this.thisListener = thisListener;
     }
@@ -42,6 +46,8 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
                 holder.ivChecked.setVisibility(View.VISIBLE);
             } else {
                 holder.ivChecked.setVisibility(View.INVISIBLE);
+                holder.ivChecked.getDrawable().mutate();
+                holder.ivChecked.getDrawable().setColorFilter(context.getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
             }
             holder.tvFont.setOnClickListener(view -> {
                 if (thisListener != null) {

@@ -30,7 +30,7 @@ public class FontSelector {
         builder.setTitle(R.string.select_font);
         builder.setNegativeButton(R.string.cancel, null);
         fontPath = FileUtil.getSdCardPath() + "/Fonts";
-        adapter = new FontAdapter(selectPath,
+        adapter = new FontAdapter(context, selectPath,
                 new OnThisListener() {
                     @Override
                     public void setDefault() {
