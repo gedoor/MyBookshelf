@@ -142,9 +142,7 @@ public class WebBookModelImpl implements IWebBookModel {
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
             bookShelfBean.setChapterListSize(chapterList.size());
-            if (bookShelfBean.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
-                bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
-            }
+            bookShelfBean.setDurChapter(Math.min(bookShelfBean.getDurChapter(), bookShelfBean.getChapterListSize() - 1));
             bookShelfBean.getBookInfoBean().setChapterList(chapterList);
             bookShelfBean.upDurChapterName();
             bookShelfBean.upLastChapterName();
