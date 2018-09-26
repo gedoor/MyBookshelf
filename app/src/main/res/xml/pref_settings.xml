@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_ImmersionStatusBar"
+        android:title="@string/immersion_status_bar" />
+
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/bookshelf_px_title"
@@ -47,9 +52,8 @@
         android:summary="@string/default_expand_first"
         android:title="@string/auto_expand_find" />
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_ImmersionStatusBar"
-        android:title="@string/immersion_status_bar" />
+    <Preference
+        android:key="@string/pk_download_path"
+        android:title="@string/download_path" />
 
 </PreferenceScreen>
