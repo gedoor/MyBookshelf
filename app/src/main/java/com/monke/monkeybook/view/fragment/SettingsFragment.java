@@ -120,8 +120,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
