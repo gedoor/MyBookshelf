@@ -844,6 +844,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     moProgressHUD.showText(mPageLoader.getContext(mPageLoader.getPagePos()));
                 }
                 break;
+            case R.id.disable_book_source:
+                mPresenter.disableDurBookSource();
+                break;
             case R.id.action_book_info:
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;

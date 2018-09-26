@@ -88,5 +88,7 @@ public interface ReadBookContract {
         void saveBookmark(BookmarkBean bookmarkBean);
 
         void delBookmark(BookmarkBean bookmarkBean);
+
+        void disableDurBookSource();
     }
 }
