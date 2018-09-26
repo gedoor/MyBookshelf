@@ -131,7 +131,7 @@ public class StringUtils {
                 continue;
             }
 
-            if (c[i]> 65280&& c[i]< 65375)
+            if (c[i]> 65280 && c[i]< 65375)
                 c[i] = (char) (c[i] - 65248);
         }
         return new String(c);
@@ -188,7 +188,7 @@ public class StringUtils {
                     result += tmpNum * tmp;
                     tmp = 0;
                 } else {
-                    if (i == cn.length - 1 && ChnMap.get(cn[i-1]) > 10)
+                    if (i >= 2 && i == cn.length - 1 && ChnMap.get(cn[i-1]) > 10)
                         tmp = tmpNum * ChnMap.get(cn[i-1]) / 10;
                     else
                         tmp = tmp * 10 + tmpNum;
