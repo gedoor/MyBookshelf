@@ -202,10 +202,6 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
-                            bookShelfBean.setHasUpdate(false);
-                        }
-                        bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
                         saveChangedBook(bookShelfBean);
                     }
 
@@ -219,6 +215,11 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
 
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
+                bookShelfBean.setHasUpdate(false);
+            }
+            bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
+            bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
             BookshelfHelp.removeFromBookShelf(bookShelf);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);

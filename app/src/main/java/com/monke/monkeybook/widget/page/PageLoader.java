@@ -296,46 +296,8 @@ public abstract class PageLoader {
      * 换源结束
      */
     public void changeSourceFinish(BookShelfBean bookShelfBean) {
-        int oldChapterSize = mCollBook.getChapterListSize();
-        int oldChapterIndex = mCollBook.getDurChapter();
-        int oldChapterNum = mCollBook.getChapterList(mCollBook.getDurChapter()).getChapterNum();
-        String oldName = mCollBook.getChapterList(mCollBook.getDurChapter()).getPureChapterName();
         mCollBook = bookShelfBean;
         mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
-        int newChapterSize = mCollBook.getChapterListSize();
-        int min = Math.max(0, Math.min(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) - 10);
-        int max = Math.min(newChapterSize - 1, Math.max(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) + 10);
-        double nameSim = 0;
-        int newIndex = 0;
-        int newNum = 0;
-        if (!oldName.isEmpty()) {
-            StringSimilarityService service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
-            for (int i = min; i <= max; i++) {
-                String newName = mCollBook.getChapterList(i).getPureChapterName();
-                double temp = service.score(oldName, newName);
-                if (temp > nameSim) {
-                    nameSim = temp;
-                    newIndex = i;
-                }
-            }
-        }
-        if (nameSim < 0.9 && oldChapterNum > 0) {
-            for (int i = min; i <= max; i++) {
-                int temp = mCollBook.getChapterList(i).getChapterNum();
-                if (temp == oldChapterNum) {
-                    newNum = temp;
-                    newIndex = i;
-                    break;
-                } else if (Math.abs(temp - oldChapterNum) < Math.abs(newNum - oldChapterNum)) {
-                    newNum = temp;
-                    newIndex = i;
-                }
-            }
-        }
-        if (nameSim > 0.9 || Math.abs(newNum - oldChapterNum) < 1) {
-            bookShelfBean.setDurChapter(newIndex);
-        }
-
         skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
     }
 

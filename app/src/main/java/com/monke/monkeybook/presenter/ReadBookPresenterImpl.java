@@ -275,8 +275,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        bookShelfBean.setHasUpdate(false);
-                        bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
                         saveChangedBook(bookShelfBean);
                     }
 
@@ -319,6 +317,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
      */
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            bookShelfBean.setHasUpdate(false);
+            bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
+            bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
             BookshelfHelp.removeFromBookShelf(bookShelf, true);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);

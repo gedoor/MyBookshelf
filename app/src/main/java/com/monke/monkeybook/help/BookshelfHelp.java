@@ -15,6 +15,10 @@ import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 
+import net.ricecode.similarity.JaroWinklerStrategy;
+import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -136,6 +140,52 @@ public class BookshelfHelp {
         return fileName.replace("/", "")
                 .replace(":", "")
                 .replace(".", "");
+    }
+
+    public static int getDurChapter(BookShelfBean oldBook, BookShelfBean newBook) {
+        int oldChapterSize = oldBook.getChapterListSize();
+        int oldChapterIndex = oldBook.getDurChapter();
+        int oldChapterNum = oldBook.getChapterList(oldBook.getDurChapter()).getChapterNum();
+        String oldName = oldBook.getChapterList(oldBook.getDurChapter()).getPureChapterName();
+        int newChapterSize = newBook.getChapterListSize();
+        int min = Math.max(0, Math.min(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) - 10);
+        int max = Math.min(newChapterSize - 1, Math.max(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) + 10);
+        double nameSim = 0;
+        int newIndex = 0;
+        int newNum = 0;
+        if (!oldName.isEmpty()) {
+            StringSimilarityService service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
+            for (int i = min; i <= max; i++) {
+                String newName = newBook.getChapterList(i).getPureChapterName();
+                double temp = service.score(oldName, newName);
+                if (temp > nameSim) {
+                    nameSim = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim < 0.9 && oldChapterNum > 0) {
+            for (int i = min; i <= max; i++) {
+                int temp = newBook.getChapterList(i).getChapterNum();
+                if (temp == oldChapterNum) {
+                    newNum = temp;
+                    newIndex = i;
+                    break;
+                } else if (Math.abs(temp - oldChapterNum) < Math.abs(newNum - oldChapterNum)) {
+                    newNum = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim > 0.9 || Math.abs(newNum - oldChapterNum) < 1) {
+            return newIndex;
+        } else {
+            if (oldChapterIndex >= newBook.getChapterListSize()) {
+                return newBook.getChapterListSize();
+            } else {
+                return oldChapterIndex;
+            }
+        }
     }
 
     public static List<BookShelfBean> getAllBook() {
