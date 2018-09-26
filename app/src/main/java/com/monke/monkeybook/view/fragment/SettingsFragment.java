@@ -107,15 +107,25 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             picker.setItemHeight(30);
             picker.setOnFilePickListener(currentPath -> {
                 MApplication.downloadPath = currentPath;
-                Constant.BOOK_CACHE_PATH = currentPath + File.separator + "book_cache"+ File.separator ;
+                Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(getString(R.string.pk_download_path), currentPath);
+                editor.putString(getString(R.string.pk_download_path), MApplication.downloadPath);
                 editor.apply();
-                preference.setSummary(currentPath);
+                preference.setSummary(MApplication.downloadPath);
             });
             picker.show();
+            picker.getCancelButton().setText("恢复默认");
+            picker.getCancelButton().setOnClickListener(view -> {
+                picker.dismiss();
+                MApplication.downloadPath = FileHelp.getCachePath();
+                Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
 
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getString(R.string.pk_download_path), MApplication.downloadPath);
+                editor.apply();
+                preference.setSummary(MApplication.downloadPath);
+            });
         }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
