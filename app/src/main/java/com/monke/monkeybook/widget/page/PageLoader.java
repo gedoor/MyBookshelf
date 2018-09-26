@@ -601,9 +601,7 @@ public abstract class PageLoader {
             if (!isChapterOpen) {
 
                 // 防止记录页的页号，大于当前最大页号
-                if (pagePos >= mCurPageList.size()) {
-                    pagePos = mCurPageList.size() - 1;
-                }
+                pagePos = Math.min(pagePos, mCurPageList.size() - 1);
                 mCurPage = getCurPage(pagePos);
                 mCancelPage = mCurPage;
                 // 切换状态
@@ -1476,8 +1474,8 @@ public abstract class PageLoader {
      */
     private TxtPage getCurPage(int pos) {
         if (mCurPageList != null && mCurPageList.size() > 0) {
-            pos = pos < 0 ? 0 : pos;
-            pos = pos > mCurPageList.size() - 1 ? mCurPageList.size() - 1 : pos;
+            pos = Math.max(pos, 0);
+            pos = Math.min(pos, mCurPageList.size() - 1);
             return mCurPageList.get(pos);
         }
         return null;
