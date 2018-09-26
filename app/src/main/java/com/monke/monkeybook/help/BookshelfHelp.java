@@ -89,7 +89,12 @@ public class BookshelfHelp {
     public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
                 + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
-        return file.exists();
+        boolean cached = file.exists();
+        if (fileName.matches("^\\d+-")) {
+            int index = Integer.parseInt(fileName.substring(0, fileName.indexOf("-")));
+            setChapterIsCached(folderName, index, cached);
+        }
+        return cached;
     }
 
     public static boolean isChapterCached(BookInfoBean book, ChapterListBean chapter) {
