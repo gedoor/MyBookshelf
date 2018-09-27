@@ -106,6 +106,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
             picker.setRootPath(preference.getSummary().toString());
             picker.setItemHeight(30);
+            picker.setBackgroundColor(R.string.background);
             picker.setOnFilePickListener(currentPath -> {
                 if (!currentPath.contains(FileUtil.getSdCardPath())) {
                     MApplication.downloadPath = FileHelp.getCachePath();
