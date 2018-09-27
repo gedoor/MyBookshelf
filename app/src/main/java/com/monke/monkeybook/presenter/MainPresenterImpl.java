@@ -4,6 +4,7 @@ package com.monke.monkeybook.presenter;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -45,12 +46,15 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
+    private boolean hasUpdate = false;
+    private List<String> errBooks = new ArrayList<>();
 
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
         this.group = group;
-        if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
-            mView.activityRefreshView();
+        if(needRefresh) {
+            hasUpdate = false;
+            errBooks.clear();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfList = BookshelfHelp.getBooksByGroup(group);
@@ -249,7 +253,8 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
-            if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
                 WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
@@ -265,13 +270,16 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                                     value.setErrorMsg(null);
                                 }
                                 bookShelfBean.setLoading(false);
+                                if (chapterNum < bookShelfBean.getChapterListSize())
+                                    hasUpdate = true;
                                 mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
+                                errBooks.add(bookShelfBean.getBookInfoBean().getName());
+                                Log.w("MonkBook", String.format("%s: %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()));
                                 bookShelfBean.setLoading(false);
                                 mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
@@ -280,19 +288,16 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
             } else {
                 refreshBookshelf();
             }
-        } else {
-            if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
-                queryBookShelf(false, group);
-                if (mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
-                    for(BookShelfBean book: bookShelfBeans) {
-                        if(book.getHasUpdate()) {
-                            downloadAll();
-                            mView.refreshBookShelf(bookShelfBeans);
-                            break;
-                        }
-                    }
-                }
+        } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
+            if(errBooks.size() > 0) {
+                Toast.makeText(mView.getContext(), TextUtils.join("、", errBooks) + " 更新失败！", Toast.LENGTH_SHORT).show();
+                errBooks.clear();
             }
+            if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
+                downloadAll();
+                hasUpdate = false;
+            }
+            queryBookShelf(false, group);
         }
     }
 
