@@ -290,7 +290,10 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 startActivity(new Intent(this, DownloadActivity.class));
                 break;
             case R.id.action_download_all:
-                mPresenter.downloadAll();
+                if (!NetworkUtil.isNetWorkAvailable())
+                    Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
+                else
+                    mPresenter.downloadAll();
                 break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);

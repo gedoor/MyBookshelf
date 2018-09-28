@@ -99,8 +99,7 @@ public class NetPageLoader extends PageLoader {
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return (isNetWorkAvailable() &&
-                !BookshelfHelp.isChapterCached(mCollBook.getBookInfoBean(), mCollBook.getChapterList(chapterIndex)));
+        return isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterIndex));
     }
 
     // 装载上一章节的内容
@@ -145,7 +144,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     void dealLoadPageList(int chapterPos) {
         super.dealLoadPageList(chapterPos);
-        if(!shouldRequestChapter(chapterPos) && getPageStatus() == STATUS_LOADING) {
+        if(!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && getPageStatus() == STATUS_LOADING) {
             chapterError("网络连接不可用\n\n"
                     + mCollBook.getChapterList(chapterPos).getDurChapterName());
         }
