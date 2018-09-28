@@ -42,7 +42,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private int threadsNum = 6;
-    private int downloadNum = 10;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
@@ -134,7 +133,33 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                             intent.setAction("addDownload");
                             intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
                             intent.putExtra("start", start);
-                            intent.putExtra("end", Math.min(chapterNum - 1, start + downloadNum));
+                            intent.putExtra("end", chapterNum - 1);
+                            mView.getContext().startService(intent);
+                            break;
+                        }
+                    }
+                }
+            }
+            e.onNext(true);
+            e.onComplete();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    private void downloadAll(int downloadNum) {
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
+                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+                    int chapterNum = bookShelfBean.getChapterListSize();
+                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
+                        if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
+                            Intent intent = new Intent(mView.getContext(), DownloadService.class);
+                            intent.setAction("addDownload");
+                            intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
+                            intent.putExtra("start", start);
+                            intent.putExtra("end", Math.min(chapterNum - 1, downloadNum));
                             mView.getContext().startService(intent);
                             break;
                         }
@@ -294,7 +319,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 errBooks.clear();
             }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
-                downloadAll();
+                downloadAll(10);
                 hasUpdate = false;
             }
             queryBookShelf(false, group);
