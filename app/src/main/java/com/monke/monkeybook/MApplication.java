@@ -58,11 +58,8 @@ public class MApplication extends Application {
         }
         sharedPreferences = getSharedPreferences("CONFIG", 0);
         if (sharedPreferences.getString(getString(R.string.pk_download_path), "").equals("")) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
-            editor.apply();
+            setDownloadPath(FileHelp.getCachePath());
         }
-        downloadPath = sharedPreferences.getString(getString(R.string.pk_download_path), FileHelp.getCachePath());
     }
 
     public void setDownloadPath(String downloadPath) {
