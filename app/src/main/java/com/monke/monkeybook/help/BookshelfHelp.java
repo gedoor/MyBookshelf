@@ -120,18 +120,20 @@ public class BookshelfHelp {
     /**
      * 存储章节
      */
-    public static void saveChapterInfo(String folderName, String fileName, String content) {
+    public static boolean saveChapterInfo(String folderName, String fileName, String content) {
         if (content == null) {
-            return;
+            return false;
         }
         File file = getBookFile(formatFileName(folderName), formatFileName(fileName));
         //获取流并存储
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
             writer.flush();
+            return true;
         } catch (IOException e) {
             MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
             e.printStackTrace();
+            return false;
         }
     }
 

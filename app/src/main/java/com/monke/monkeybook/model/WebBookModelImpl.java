@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
@@ -159,15 +158,16 @@ public class WebBookModelImpl implements IWebBookModel {
                         .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
                 if (chapterListBean != null) {
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    BookshelfHelp.saveChapterInfo(bookName + "-" + tag,
+                    if (BookshelfHelp.saveChapterInfo(bookName + "-" + tag,
                             String.format("%d-%s", chapterListBean.getDurChapterIndex(), chapterListBean.getDurChapterName()),
-                            bookContentBean.getDurChapterContent());
-                    BookshelfHelp.setChapterIsCached(bookName, chapterListBean, true);
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
-                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
-                    e.onNext(bookContentBean);
-                    e.onComplete();
-                    return;
+                            bookContentBean.getDurChapterContent())) {
+                        BookshelfHelp.setChapterIsCached(bookName, chapterListBean, true);
+                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
+                        RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
+                        e.onNext(bookContentBean);
+                        e.onComplete();
+                        return;
+                    }
                 }
             }
             e.onError(new Throwable("保存章节出错"));
