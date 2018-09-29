@@ -25,10 +25,6 @@ import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 
-import net.ricecode.similarity.JaroWinklerStrategy;
-import net.ricecode.similarity.StringSimilarityService;
-import net.ricecode.similarity.StringSimilarityServiceImpl;
-
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -889,6 +885,12 @@ public abstract class PageLoader {
             }
         }
 
+        //设置总距离
+        int interval = mTextInterval + (int) mTextPaint.getTextSize();
+        int para = mTextPara + (int) mTextPaint.getTextSize();
+        int titleInterval = mTitleInterval + (int) mTitlePaint.getTextSize();
+        int titlePara = mTitlePara + (int) mTextPaint.getTextSize();
+
         if (getPageStatus() != STATUS_FINISH) {
             //绘制字体
             String tip = "";
@@ -928,7 +930,7 @@ public abstract class PageLoader {
                 float textWidth = mTextPaint.measureText(str);
                 float pivotX = (mDisplayWidth - textWidth) / 2;
                 canvas.drawText(str, pivotX, pivotY, mTextPaint);
-                pivotY = pivotY + textHeight + mTextInterval;
+                pivotY += interval;
             }
         } else {
             float top;
@@ -940,12 +942,6 @@ public abstract class PageLoader {
                         ? mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top
                         : mPageView.getStatusBarHeight() + mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top;
             }
-
-            //设置总距离
-            int interval = mTextInterval + (int) mTextPaint.getTextSize();
-            int para = mTextPara + (int) mTextPaint.getTextSize();
-            int titleInterval = mTitleInterval + (int) mTitlePaint.getTextSize();
-            int titlePara = mTitlePara + (int) mTextPaint.getTextSize();
             String str = null;
 
             //对标题进行绘制
@@ -982,7 +978,6 @@ public abstract class PageLoader {
                 } else {
                     canvas.drawText(str, mMarginLeft, top, mTextPaint);
                 }
-
 
                 //
                 if (str.endsWith("\n")) {
