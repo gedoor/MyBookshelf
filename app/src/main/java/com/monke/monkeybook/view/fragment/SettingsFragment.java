@@ -13,13 +13,10 @@ import android.preference.PreferenceScreen;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.activity.SettingActivity;
-
-import java.io.File;
 
 import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -110,27 +107,17 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             picker.setItemHeight(30);
             picker.setOnFilePickListener(currentPath -> {
                 if (!currentPath.contains(FileUtil.getSdCardPath())) {
-                    MApplication.downloadPath = FileHelp.getCachePath();
+                    MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
                 } else {
-                    MApplication.downloadPath = currentPath;
+                    MApplication.getInstance().setDownloadPath(currentPath);
                 }
-                Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(getString(R.string.pk_download_path), MApplication.downloadPath);
-                editor.apply();
                 preference.setSummary(MApplication.downloadPath);
             });
             picker.show();
             picker.getCancelButton().setText("恢复默认");
             picker.getCancelButton().setOnClickListener(view -> {
                 picker.dismiss();
-                MApplication.downloadPath = FileHelp.getCachePath();
-                Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(getString(R.string.pk_download_path), MApplication.downloadPath);
-                editor.apply();
+                MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
                 preference.setSummary(MApplication.downloadPath);
             });
         }

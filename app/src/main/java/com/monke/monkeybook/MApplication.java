@@ -2,7 +2,6 @@
 package com.monke.monkeybook;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,9 +11,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 
+import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.FileHelp;
 
-import pub.devrel.easypermissions.EasyPermissions;
+import java.io.File;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
@@ -26,6 +26,7 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     public static String downloadPath;
+    private SharedPreferences sharedPreferences;
 
     public static MApplication getInstance() {
         return instance;
@@ -55,13 +56,21 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
-        SharedPreferences sharedPreferences = getSharedPreferences("CONFIG", 0);
+        sharedPreferences = getSharedPreferences("CONFIG", 0);
         if (sharedPreferences.getString(getString(R.string.pk_download_path), "").equals("")) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
             editor.apply();
         }
         downloadPath = sharedPreferences.getString(getString(R.string.pk_download_path), FileHelp.getCachePath());
+    }
+
+    public void setDownloadPath(String downloadPath) {
+        MApplication.downloadPath = downloadPath;
+        Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
+        editor.apply();
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
