@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.FileHelp;
@@ -57,7 +58,8 @@ public class MApplication extends Application {
             createChannelIdReadAloud();
         }
         sharedPreferences = getSharedPreferences("CONFIG", 0);
-        if (sharedPreferences.getString(getString(R.string.pk_download_path), "").equals("")) {
+        downloadPath = sharedPreferences.getString(getString(R.string.pk_download_path), "");
+        if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
     }
