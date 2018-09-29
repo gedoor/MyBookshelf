@@ -2,6 +2,7 @@ package com.monke.monkeybook.help;
 
 import android.content.Context;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -129,6 +130,7 @@ public class BookshelfHelp {
             writer.write(content);
             writer.flush();
         } catch (IOException e) {
+            MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
             e.printStackTrace();
         }
     }
