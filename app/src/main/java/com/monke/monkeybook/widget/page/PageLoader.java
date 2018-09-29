@@ -942,7 +942,7 @@ public abstract class PageLoader {
                         ? mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top
                         : mPageView.getStatusBarHeight() + mMarginTop + contentMarginHeight - mTextPaint.getFontMetrics().top;
             }
-            String str = null;
+            String str;
 
             //对标题进行绘制
             for (int i = 0; i < mCurPage.titleLines; ++i) {
@@ -979,7 +979,7 @@ public abstract class PageLoader {
                     canvas.drawText(str, mMarginLeft, top, mTextPaint);
                 }
 
-                //
+                //设置尾部间距
                 if (str.endsWith("\n")) {
                     top += para;
                 } else {
