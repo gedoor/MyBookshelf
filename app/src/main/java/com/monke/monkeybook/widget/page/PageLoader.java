@@ -925,7 +925,7 @@ public abstract class PageLoader {
             }
             Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
             float textHeight = fontMetrics.top - fontMetrics.bottom;
-            float pivotY = (mDisplayHeight - textHeight * linesData.size()) / 2;
+            float pivotY = (mDisplayHeight - (textHeight + interval) * linesData.size()) / 3;
             for (String str : linesData) {
                 float textWidth = mTextPaint.measureText(str);
                 float pivotX = (mDisplayWidth - textWidth) / 2;

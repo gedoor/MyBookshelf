@@ -140,13 +140,11 @@ public class NetPageLoader extends PageLoader {
         return isRight;
     }
 
-
     @Override
     void dealLoadPageList(int chapterPos) {
         super.dealLoadPageList(chapterPos);
         if(!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && getPageStatus() == STATUS_LOADING) {
-            chapterError("网络连接不可用\n\n"
-                    + mCollBook.getChapterList(chapterPos).getDurChapterName());
+            chapterError("网络连接不可用");
         }
     }
 }
