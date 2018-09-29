@@ -1,6 +1,7 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,6 +105,8 @@ public class MoProgressView extends LinearLayout {
         TextView tvMarkdown = findViewById(R.id.tv_markdown);
 
         RichText.fromMarkdown(ReadAssets.getText(context, assetFileName)).into(tvMarkdown);
+        tvMarkdown.setBackgroundColor(Color.WHITE);
+        tvMarkdown.setTextColor(Color.BLACK);
     }
 
 }
