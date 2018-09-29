@@ -104,6 +104,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 return true;
             }
             FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
+            picker.setBackgroundColor(getResources().getColor(R.color.background));
+            picker.setTopBackgroundColor(getResources().getColor(R.color.background));
             picker.setRootPath(preference.getSummary().toString());
             picker.setItemHeight(30);
             picker.setOnFilePickListener(currentPath -> {
