@@ -300,7 +300,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void autoPage() {
         mHandler.removeCallbacks(autoPageRunnable);
         if (autoPage) {
+            fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
             mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
+        } else {
+            fabAutoPage.setContentDescription(getString(R.string.auto_next_page));
         }
     }
 
