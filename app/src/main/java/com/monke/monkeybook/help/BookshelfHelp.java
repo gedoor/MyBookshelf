@@ -73,6 +73,7 @@ public class BookshelfHelp {
         setChapterIsCached(bookName + "-" + chapter.getTag(), chapter.getDurChapterIndex(), cached);
     }
 
+
     public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
         bookPathName = formatFileName(bookPathName);
         if(!chapterCaches.containsKey(bookPathName))
@@ -189,8 +190,7 @@ public class BookshelfHelp {
         if (nameSim > 0.96 || Math.abs(newNum - oldChapterNum) < 1) {
             return newIndex;
         } else {
-            return oldChapterIndex >= newBook.getChapterListSize() ?
-                    Math.max(0, newBook.getChapterListSize() - 1) : oldChapterIndex;
+            return Math.min(Math.max(0, newBook.getChapterListSize() - 1), oldChapterIndex);
         }
     }
 
