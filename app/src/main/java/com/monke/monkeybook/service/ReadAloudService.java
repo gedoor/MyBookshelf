@@ -292,11 +292,17 @@ public class ReadAloudService extends Service {
         } else {
             timerEnable = true;
             updateNotification();
-            setTimer();
+            mHandler.postDelayed(readTimerRunnable, 6000);
         }
     }
 
     private void setTimer() {
+        if (!pause) {
+            Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+            setTimerIntent.setAction(ActionSetTimer);
+            setTimerIntent.putExtra("minute", -1);
+            startService(setTimerIntent);
+        }
         mHandler.postDelayed(readTimerRunnable, 6000);
     }
 
