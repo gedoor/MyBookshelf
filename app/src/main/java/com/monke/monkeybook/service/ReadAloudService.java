@@ -14,6 +14,7 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -35,8 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.MApplication.DEBUG;
@@ -75,7 +74,8 @@ public class ReadAloudService extends Service {
     private int nowSpeak;
     private int timeMinute = 0;
     private boolean timerEnable = false;
-    private Timer mTimer;
+    private Handler mHandler = new Handler();
+    private Runnable readTimerRunnable;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
@@ -104,6 +104,7 @@ public class ReadAloudService extends Service {
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
+        readTimerRunnable = this::setTimer;
     }
 
     @Override
@@ -296,26 +297,11 @@ public class ReadAloudService extends Service {
     }
 
     private void setTimer() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!pause) {
-                        Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                        setTimerIntent.setAction(ActionSetTimer);
-                        setTimerIntent.putExtra("minute", -1);
-                        startService(setTimerIntent);
-                    }
-                }
-            }, 60000, 60000);
-        }
+        mHandler.postDelayed(readTimerRunnable, 6000);
     }
 
     private void cancelTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-        }
+        mHandler.removeCallbacks(readTimerRunnable);
     }
 
     private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
