@@ -1,6 +1,5 @@
 package com.monke.monkeybook.presenter;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
@@ -135,27 +134,6 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                         e.printStackTrace();
                     }
                 });
-    }
-
-    @Override
-    public void importBookSource(Uri uri) {
-        String json;
-        if (uri.toString().startsWith("content://")) {
-            json = DocumentHelper.readString(uri);
-        } else {
-            String path = uri.getPath();
-            DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = DocumentHelper.readString(file);
-        }
-        if (!isEmpty(json)) {
-            mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
-            BookSourceManage.importBookSourceO(json)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(getImportObserver());
-        } else {
-            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

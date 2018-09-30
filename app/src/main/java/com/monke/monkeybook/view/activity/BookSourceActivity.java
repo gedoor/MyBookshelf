@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ import android.view.SubMenu;
 import android.widget.LinearLayout;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -50,8 +50,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     public static final int EDIT_SOURCE = 101;
-    public static final int IMPORT_SOURCE = 102;
-    public static final int RESULT_IMPORT_PERMS = 103;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -62,7 +60,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean selectAll = true;
     private MenuItem groupItem;
     private SubMenu groupMenu;
@@ -293,28 +290,23 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void selectBookSourceFile() {
-        FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
-        filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-        filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-        filePicker.setItemHeight(30);
-        filePicker.setAllowExtensions(new String[]{".json", ".txt"});
-        filePicker.setOnFilePickListener(s -> {
-            mPresenter.importBookSourceLocal(s);
-        });
-        filePicker.show();
-
-//        if (EasyPermissions.hasPermissions(this, perms)) {
-//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//            intent.addCategory(Intent.CATEGORY_OPENABLE);
-//            intent.setType("text/*");//设置类型
-//            startActivityForResult(intent, IMPORT_SOURCE);
-//        } else {
-//            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-//                    RESULT_IMPORT_PERMS, perms);
-//        }
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
+            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setItemHeight(30);
+            filePicker.setAllowExtensions(new String[]{".json", ".txt"});
+            filePicker.setOnFilePickListener(s -> {
+                mPresenter.importBookSourceLocal(s);
+            });
+            filePicker.show();
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
+                    MApplication.RESULT__PERMS, MApplication.PerList);
+        }
     }
 
-    @AfterPermissionGranted(RESULT_IMPORT_PERMS)
+    @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void resultImportPerms() {
         selectBookSourceFile();
     }
@@ -334,11 +326,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             switch (requestCode) {
                 case EDIT_SOURCE:
                     refreshBookSource();
-                    break;
-                case IMPORT_SOURCE:
-                    if (data != null) {
-                        mPresenter.importBookSource(data.getData());
-                    }
                     break;
             }
         }

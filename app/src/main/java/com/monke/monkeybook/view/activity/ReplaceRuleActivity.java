@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
@@ -34,15 +35,13 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.qqtheme.framework.picker.FilePicker;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
-import static com.monke.monkeybook.view.activity.BookSourceActivity.IMPORT_SOURCE;
-import static com.monke.monkeybook.view.activity.BookSourceActivity.RESULT_IMPORT_PERMS;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -207,18 +206,23 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectReplaceRuleFile() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/*");//设置类型
-            startActivityForResult(intent, IMPORT_SOURCE);
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
+            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setItemHeight(30);
+            filePicker.setAllowExtensions(new String[]{".json", ".txt"});
+            filePicker.setOnFilePickListener(s -> {
+                mPresenter.importDataSLocal(s);
+            });
+            filePicker.show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    RESULT_IMPORT_PERMS, perms);
+                    MApplication.RESULT__PERMS, MApplication.PerList);
         }
     }
 
-    @AfterPermissionGranted(RESULT_IMPORT_PERMS)
+    @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void resultImportPerms() {
         selectReplaceRuleFile();
     }
@@ -241,15 +245,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case IMPORT_SOURCE:
-                    if (data != null) {
-                        mPresenter.importDataS(data.getData());
-                    }
-                    break;
-            }
-        }
+
     }
 
     @Override

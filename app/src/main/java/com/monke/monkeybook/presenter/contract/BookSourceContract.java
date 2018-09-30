@@ -1,6 +1,5 @@
 package com.monke.monkeybook.presenter.contract;
 
-import android.net.Uri;
 import android.support.design.widget.Snackbar;
 
 import com.monke.basemvplib.impl.IPresenter;
@@ -20,8 +19,6 @@ public interface BookSourceContract {
         void delData(BookSourceBean bookSourceBean);
 
         void delData(List<BookSourceBean> bookSourceBeans);
-
-        void importBookSource(Uri uri);
 
         void importBookSource(String url);
 
