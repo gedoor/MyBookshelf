@@ -10,7 +10,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.utils.Resources;
 
 public class CheckAddShelfPop extends PopupWindow {
     private Context mContext;
@@ -34,7 +33,7 @@ public class CheckAddShelfPop extends PopupWindow {
         this.setContentView(view);
 
         initView();
-        setBackgroundDrawable(Resources.getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
+        setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
         setAnimationStyle(R.style.anim_pop_checkaddshelf);

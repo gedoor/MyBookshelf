@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.Resources;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
@@ -99,7 +98,7 @@ public class ReadInterfacePop extends PopupWindow {
         initData();
         bindEvent();
 
-        setBackgroundDrawable(Resources.getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
+        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
         setFocusable(true);
         setTouchable(true);
         setClippingEnabled(false);

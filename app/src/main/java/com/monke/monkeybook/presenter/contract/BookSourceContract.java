@@ -25,6 +25,8 @@ public interface BookSourceContract {
 
         void importBookSource(String url);
 
+        void importBookSourceLocal(String path);
+
         void checkBookSource();
 
     }

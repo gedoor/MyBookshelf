@@ -173,6 +173,22 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                 .subscribe(getImportObserver());
     }
 
+    @Override
+    public void importBookSourceLocal(String path) {
+        String json;
+        DocumentFile file = DocumentFile.fromFile(new File(path));
+        json = DocumentHelper.readString(file);
+        if (!isEmpty(json)) {
+            mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
+            BookSourceManage.importBookSourceO(json)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getImportObserver());
+        } else {
+            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private SimpleObserver<Boolean> getImportObserver() {
         return new SimpleObserver<Boolean>() {
             @Override

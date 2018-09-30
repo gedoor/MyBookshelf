@@ -13,12 +13,10 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.hwangjr.rxbus.RxBus;
@@ -41,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -294,15 +293,25 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void selectBookSourceFile() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/*");//设置类型
-            startActivityForResult(intent, IMPORT_SOURCE);
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    RESULT_IMPORT_PERMS, perms);
-        }
+        FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
+        filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+        filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+        filePicker.setItemHeight(30);
+        filePicker.setAllowExtensions(new String[]{".json", ".txt"});
+        filePicker.setOnFilePickListener(s -> {
+            mPresenter.importBookSourceLocal(s);
+        });
+        filePicker.show();
+
+//        if (EasyPermissions.hasPermissions(this, perms)) {
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            intent.addCategory(Intent.CATEGORY_OPENABLE);
+//            intent.setType("text/*");//设置类型
+//            startActivityForResult(intent, IMPORT_SOURCE);
+//        } else {
+//            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
+//                    RESULT_IMPORT_PERMS, perms);
+//        }
     }
 
     @AfterPermissionGranted(RESULT_IMPORT_PERMS)

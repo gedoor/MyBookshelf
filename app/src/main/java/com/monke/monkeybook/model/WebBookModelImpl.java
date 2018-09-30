@@ -30,6 +30,7 @@ public class WebBookModelImpl implements IWebBookModel {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 网络请求并解析书籍信息
      * return BookShelfBean
@@ -57,7 +58,7 @@ public class WebBookModelImpl implements IWebBookModel {
             return bookModel.getChapterList(bookShelfBean)
                     .flatMap((chapterList) -> getChapterList(bookShelfBean, chapterList));
         } else {
-            return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName()+"没有书源"));
+            return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName() + "没有书源"));
         }
     }
 
