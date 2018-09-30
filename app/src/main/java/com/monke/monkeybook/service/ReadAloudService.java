@@ -292,7 +292,7 @@ public class ReadAloudService extends Service {
         } else {
             timerEnable = true;
             updateNotification();
-            mHandler.postDelayed(readTimerRunnable, 6000);
+            mHandler.postDelayed(readTimerRunnable, 60000);
         }
     }
 
@@ -303,7 +303,6 @@ public class ReadAloudService extends Service {
             setTimerIntent.putExtra("minute", -1);
             startService(setTimerIntent);
         }
-        mHandler.postDelayed(readTimerRunnable, 6000);
     }
 
     private void cancelTimer() {
