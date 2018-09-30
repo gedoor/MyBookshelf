@@ -189,11 +189,8 @@ public class BookshelfHelp {
         if (nameSim > 0.96 || Math.abs(newNum - oldChapterNum) < 1) {
             return newIndex;
         } else {
-            if (oldChapterIndex >= newBook.getChapterListSize()) {
-                return Math.max(0, newBook.getChapterListSize() - 1);
-            } else {
-                return oldChapterIndex;
-            }
+            return oldChapterIndex >= newBook.getChapterListSize() ?
+                    Math.max(0, newBook.getChapterListSize() - 1) : oldChapterIndex;
         }
     }
 
@@ -253,8 +250,26 @@ public class BookshelfHelp {
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
         if(!keepCaches) {
-            FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
-            chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+            String bookName = bookShelfBean.getBookInfoBean().getName();
+            // 如果书架上有其他同名书籍，只删除本书源的缓存
+            long bookNum = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.Name.eq(bookName)).count();
+            if (bookNum > 0) {
+                FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
+                chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+                return;
+            }
+            // 没有同名书籍，删除本书所有的缓存
+            try {
+                File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
+                String[] bookCaches = file.list((dir, name) -> new File(dir, name).isDirectory() && name.startsWith(bookName + "-"));
+                for (String bookPath: bookCaches) {
+                    FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookPath);
+                    if (chapterCaches.containsKey(bookPath))
+                        chapterCaches.remove(bookPath);
+                }
+            } catch (Exception e) {
+            }
         }
     }
 
