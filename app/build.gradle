@@ -155,7 +155,7 @@ dependencies {
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
 
     //文件目录选择
-    implementation('com.github.gedoor.AndroidPicker:FilePicker:1.6.0') {
+    implementation('com.github.gedoor.AndroidPicker:FilePicker:1.6.1') {
         exclude group: 'com.android.support'
     }
 
