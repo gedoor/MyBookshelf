@@ -720,6 +720,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabAutoPage.getDrawable().mutate();
         fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabAutoPage.setOnClickListener(view -> {
+            ReadAloudService.stop(this);
             autoPage = !autoPage;
             autoPage();
             if (autoPage) {
@@ -986,6 +987,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public void upAloudState(int status) {
         aloudStatus = status;
+        autoPageStop();
         switch (status) {
             case NEXT:
                 if (mPageLoader == null) {
@@ -999,7 +1001,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case PLAY:
                 fabReadAloud.setImageResource(R.drawable.ic_pause2);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
-                if (autoPage) autoPageStop();
                 break;
             case PAUSE:
                 fabReadAloud.setImageResource(R.drawable.ic_play2);
