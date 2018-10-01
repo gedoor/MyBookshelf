@@ -213,7 +213,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
             filePicker.setBackgroundColor(getResources().getColor(R.color.background));
             filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
             filePicker.setItemHeight(30);
-            filePicker.setAllowExtensions(new String[]{".json", ".txt"});
+            filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
             filePicker.setOnFilePickListener(s -> {
                 mPresenter.importDataSLocal(s);
             });
