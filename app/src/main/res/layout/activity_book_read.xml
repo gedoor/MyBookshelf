@@ -66,8 +66,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/background"
-                        android:paddingEnd="10dp"
                         android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         android:singleLine="true"
                         android:textColor="@color/tv_text_default"
                         android:visibility="gone" />
@@ -94,8 +94,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:orientation="horizontal"
-                android:paddingEnd="32dp"
                 android:paddingStart="32dp"
+                android:paddingEnd="32dp"
                 android:visibility="invisible">
 
                 <android.support.design.widget.FloatingActionButton
@@ -131,8 +131,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:orientation="horizontal"
-                android:paddingEnd="32dp"
-                android:paddingStart="32dp">
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp">
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fabReadAloud"
@@ -214,24 +214,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tv_pre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:enabled="false"
                         android:focusable="true"
-                        android:paddingBottom="10dp"
                         android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
                         android:text="@string/previous_chapter"
                         android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
@@ -254,14 +254,14 @@
                         android:id="@+id/tv_next"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/bg_ib_pre_round"
                         android:clickable="true"
                         android:enabled="false"
                         android:focusable="true"
-                        android:paddingBottom="10dp"
                         android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
                         android:text="@string/next_chapter"
                         android:textColor="@color/tv_text_default"
                         android:textSize="14sp" />
@@ -423,6 +423,15 @@
 
         </LinearLayout>
     </FrameLayout>
+
+    <com.monke.mprogressbar.MHorProgressBar
+        android:id="@+id/hpb_next_page_progress"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="invisible"
+        app:bgdrawable="@color/btn_bg_press"
+        app:cantouch="false"
+        app:fontdrawable="@color/btn_bg_press_2" />
 
     <com.monke.monkeybook.widget.ChapterListView
         android:id="@+id/clp_chapterList"

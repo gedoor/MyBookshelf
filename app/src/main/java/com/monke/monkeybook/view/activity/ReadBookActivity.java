@@ -137,6 +137,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     PageView pageView;
     @BindView(R.id.fabAutoPage)
     FloatingActionButton fabAutoPage;
+    @BindView(R.id.hpb_next_page_progress)
+    MHorProgressBar hpbNextPageProgress;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -147,7 +149,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Handler mHandler;
     private Runnable autoPageRunnable;
     private Runnable keepScreenRunnable;
-
+    private Runnable upHpbNextPage;
+    private int nextPageTime;
     private String noteUrl;
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
@@ -187,6 +190,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mHandler = new Handler();
         keepScreenRunnable = this::unKeepScreenOn;
         autoPageRunnable = this::nextPage;
+        upHpbNextPage = this::upHpbNextPage;
     }
 
     @Override
@@ -300,11 +304,23 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void autoPage() {
         mHandler.removeCallbacks(autoPageRunnable);
         if (autoPage) {
+            hpbNextPageProgress.setMaxProgress(readBookControl.getClickSensitivity());
+            mHandler.postDelayed(upHpbNextPage, 1000);
+            hpbNextPageProgress.setVisibility(View.VISIBLE);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
             mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
+
         } else {
+            mHandler.removeCallbacks(upHpbNextPage);
+            hpbNextPageProgress.setVisibility(View.INVISIBLE);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page));
         }
+    }
+
+    private void upHpbNextPage() {
+        nextPageTime = readBookControl.getClickSensitivity() - 1;
+        hpbNextPageProgress.setDurProgress(nextPageTime);
+        mHandler.postDelayed(upHpbNextPage, 1000);
     }
 
     private void autoPageStop() {
@@ -537,7 +553,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void requestChapters(int chapterIndex) {
-                        if(isNetWorkAvailable())
+                        if (isNetWorkAvailable())
                             mPresenter.loadContent(chapterIndex);
                     }
 
@@ -854,7 +870,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 刷新当前章节
      */
     private void refreshDurChapter() {
-        if(!isNetWorkAvailable()) {
+        if (!isNetWorkAvailable()) {
             toast("网络不可用，无法刷新当前章节!");
             return;
         }
@@ -904,7 +920,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 换源
      */
     private void changeSource() {
-        if(!isNetWorkAvailable()) {
+        if (!isNetWorkAvailable()) {
             toast("网络不可用，无法换源!");
             return;
         }
@@ -923,7 +939,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 下载
      */
     private void download() {
-        if(!isNetWorkAvailable()) {
+        if (!isNetWorkAvailable()) {
             toast("网络不可用，无法下载");
             return;
         }
@@ -1223,7 +1239,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
                             ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()))
-                            );
+                    );
                 }
         }
     }
