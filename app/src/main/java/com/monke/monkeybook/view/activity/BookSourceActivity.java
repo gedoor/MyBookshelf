@@ -31,6 +31,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
@@ -50,6 +51,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     public static final int EDIT_SOURCE = 101;
+    private final int IMPORT_SOURCE = 102;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -174,8 +176,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             String term = "%" + searchView.getQuery() + "%";
             List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
-                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
-                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
+                            BookSourceBeanDao.Properties.BookSourceGroup.like(term),
+                            BookSourceBeanDao.Properties.BookSourceUrl.like(term))
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
@@ -306,6 +308,13 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
     }
 
+    private void selectBookSourceFileSys() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/*");//设置类型
+        startActivityForResult(intent, IMPORT_SOURCE);
+    }
+
     @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void resultImportPerms() {
         selectBookSourceFile();
@@ -326,6 +335,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             switch (requestCode) {
                 case EDIT_SOURCE:
                     refreshBookSource();
+                    break;
+                case IMPORT_SOURCE:
+                    if (data != null) {
+                        mPresenter.importBookSourceLocal(FileUtil.getPath(this, data.getData()));
+                    }
                     break;
             }
         }
