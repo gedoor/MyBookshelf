@@ -427,11 +427,11 @@
     <com.monke.mprogressbar.MHorProgressBar
         android:id="@+id/hpb_next_page_progress"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="3dp"
         android:visibility="invisible"
         app:bgdrawable="@color/btn_bg_press"
         app:cantouch="false"
-        app:fontdrawable="@color/btn_bg_press_2" />
+        app:fontdrawable="@color/d_blue" />
 
     <com.monke.monkeybook.widget.ChapterListView
         android:id="@+id/clp_chapterList"

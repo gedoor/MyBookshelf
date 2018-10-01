@@ -155,7 +155,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Boolean isAdd = false; //判断是否已经添加进书架
     private int aloudStatus;
     private int screenTimeOut;
-
+    private int upHpbInterval = 100;
     private Menu menu;
     private CheckAddShelfPop checkAddShelfPop;
     private ReadAdjustPop readAdjustPop;
@@ -302,25 +302,25 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 自动翻页
      */
     private void autoPage() {
+        mHandler.removeCallbacks(upHpbNextPage);
         mHandler.removeCallbacks(autoPageRunnable);
         if (autoPage) {
-            hpbNextPageProgress.setMaxProgress(readBookControl.getClickSensitivity());
-            mHandler.postDelayed(upHpbNextPage, 1000);
             hpbNextPageProgress.setVisibility(View.VISIBLE);
+            nextPageTime = readBookControl.getClickSensitivity() * 1000;
+            hpbNextPageProgress.setMaxProgress(nextPageTime);
+            mHandler.postDelayed(upHpbNextPage, upHpbInterval);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
             mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
-
         } else {
-            mHandler.removeCallbacks(upHpbNextPage);
             hpbNextPageProgress.setVisibility(View.INVISIBLE);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page));
         }
     }
 
     private void upHpbNextPage() {
-        nextPageTime = readBookControl.getClickSensitivity() - 1;
+        nextPageTime = nextPageTime - upHpbInterval;
         hpbNextPageProgress.setDurProgress(nextPageTime);
-        mHandler.postDelayed(upHpbNextPage, 1000);
+        mHandler.postDelayed(upHpbNextPage, upHpbInterval);
     }
 
     private void autoPageStop() {
