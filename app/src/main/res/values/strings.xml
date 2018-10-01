@@ -249,5 +249,6 @@
     <string name="use_to">作用于</string>
     <string name="menu_action_group">分组</string>
     <string name="download_path">内容缓存路径</string>
+    <string name="sys_file_picker">系统文件选择器</string>
 
 </resources>

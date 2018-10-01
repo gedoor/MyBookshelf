@@ -302,13 +302,18 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 mPresenter.importBookSourceLocal(s);
             });
             filePicker.show();
+            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+            filePicker.getSubmitButton().setOnClickListener(view -> {
+                filePicker.dismiss();
+                selectFileSys();
+            });
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                     MApplication.RESULT__PERMS, MApplication.PerList);
         }
     }
 
-    private void selectBookSourceFileSys() {
+    private void selectFileSys() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/*");//设置类型

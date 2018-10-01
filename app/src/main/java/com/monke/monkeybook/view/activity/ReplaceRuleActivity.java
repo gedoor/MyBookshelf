@@ -28,6 +28,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
@@ -49,6 +50,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Presenter> implements ReplaceRuleContract.View {
+    private final int IMPORT_SOURCE = 102;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -216,10 +218,22 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 mPresenter.importDataSLocal(s);
             });
             filePicker.show();
+            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+            filePicker.getSubmitButton().setOnClickListener(view -> {
+                filePicker.dismiss();
+                selectFileSys();
+            });
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
                     MApplication.RESULT__PERMS, MApplication.PerList);
         }
+    }
+
+    private void selectFileSys() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/*");//设置类型
+        startActivityForResult(intent, IMPORT_SOURCE);
     }
 
     @AfterPermissionGranted(MApplication.RESULT__PERMS)
@@ -245,7 +259,13 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        switch (requestCode) {
+            case IMPORT_SOURCE:
+                if (data != null) {
+                    mPresenter.importDataSLocal(FileUtil.getPath(this, data.getData()));
+                }
+                break;
+        }
     }
 
     @Override
