@@ -165,6 +165,8 @@ dependencies {
     //字符串比较
     implementation 'net.ricecode:string-similarity:1.0.0'
 
+    //下载
+    implementation 'com.liulishuo.okdownload:okdownload:1.0.4'
 }
 
 greendao {
