@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +50,8 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         UpdateInfoBean updateInfo = getIntent().getParcelableExtra("updateInfo");
         RichText.fromMarkdown(updateInfo.getDetail()).into(tvMarkdown);
+        tvMarkdown.setBackgroundColor(Color.WHITE);
+        tvMarkdown.setTextColor(Color.BLACK);
     }
 
     //设置ToolBar
