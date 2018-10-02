@@ -8,33 +8,35 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
-import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.UpdateActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class UpdateService extends Service {
-
-    /* 下载包安装路径 */
-    private final String savePath = Environment.getDownloadCacheDirectory().getAbsolutePath();
     private static final String startDownload = "startDownload";
-
+    private final String cancel = "cancel";
+    private String apkFilePath;
     private UpdateInfoBean updateInfo;
     private boolean interceptFlag = false;
 
@@ -73,6 +75,9 @@ public class UpdateService extends Service {
                         updateInfo = intent.getParcelableExtra("updateInfo");
                         downloadApk(updateInfo.getUrl());
                         break;
+                    case cancel:
+                        stopSelf();
+                        break;
                 }
             }
         }
@@ -95,7 +100,7 @@ public class UpdateService extends Service {
                 .setContentTitle(getString(R.string.download_update))
                 .setContentText(String.format(getString(R.string.progress_show), state, 100))
                 .setContentIntent(getActivityPendingIntent(""));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(""));
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(cancel));
         builder.setProgress(100, state, false);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
@@ -116,7 +121,7 @@ public class UpdateService extends Service {
     }
 
     private void downloadApk(String apkUrl) {
-        try {
+        Observable.create((ObservableOnSubscribe<Integer>) e -> {
             URL url = new URL(apkUrl);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -124,11 +129,7 @@ public class UpdateService extends Service {
             int length = conn.getContentLength();
             InputStream is = conn.getInputStream();
 
-            File file = new File(savePath);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-            String apkFilePath = savePath + apkUrl.substring(apkUrl.lastIndexOf("\\"));
+            apkFilePath = UpdateManager.getSavePath(apkUrl.substring(apkUrl.lastIndexOf("/")));
             File apkFile = new File(apkFilePath);
             FileOutputStream fos = new FileOutputStream(apkFile);
 
@@ -139,27 +140,37 @@ public class UpdateService extends Service {
                 int numread = is.read(buf);
                 count += numread;
                 int progress = (int) (((float) count / length) * 100);
-                updateNotification(progress);
                 //更新进度
-
+                e.onNext(progress);
                 if (numread <= 0) {
                     //下载完成通知安装
-                    fos.close();
-                    is.close();
-                    UpdateActivity.startThis(this, updateInfo);
-                    UpdateManager.getInstance(this).installApk(apkFile);
+                    e.onNext(numread);
+                    e.onComplete();
                     break;
                 }
                 fos.write(buf, 0, numread);
             } while (!interceptFlag);//点击取消就停止下载.
-
             fos.close();
             is.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<Integer>() {
+                    @Override
+                    public void onNext(Integer integer) {
+                        if (integer < 0) {
+                            UpdateActivity.startThis(UpdateService.this, updateInfo);
+                            UpdateManager.getInstance(UpdateService.this).installApk(new File(apkFilePath));
+                        } else {
+                            updateNotification(integer);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        UpdateService.this.stopSelf();
+                    }
+                });
 
     }
 

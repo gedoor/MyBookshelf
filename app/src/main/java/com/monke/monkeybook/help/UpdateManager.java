@@ -3,8 +3,7 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -25,6 +24,8 @@ import java.io.File;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class UpdateManager {
     private Context context;
@@ -93,14 +94,18 @@ public class UpdateManager {
     /**
      * 安装apk
      */
-    public void installApk(File apkfile) {
-        if (!apkfile.exists()) {
+    public void installApk(File apkFile) {
+        if (!apkFile.exists()) {
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Logger.d("UpdateManager", apkfile.toString());
-        intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
+        Logger.d("UpdateManager", apkFile.toString());
+        intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
         context.startActivity(intent);
+    }
+
+    public static String getSavePath(String fileName) {
+        return Environment.getExternalStoragePublicDirectory(DOWNLOAD_SERVICE).getPath() + fileName;
     }
 }
