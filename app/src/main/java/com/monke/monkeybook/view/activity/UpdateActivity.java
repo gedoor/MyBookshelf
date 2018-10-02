@@ -85,9 +85,11 @@ public class UpdateActivity extends MBaseActivity {
     @Override
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
-        RichText.fromMarkdown(updateInfo.getDetail()).into(tvMarkdown);
-        tvMarkdown.setBackgroundColor(Color.WHITE);
-        tvMarkdown.setTextColor(Color.BLACK);
+        if (updateInfo != null) {
+            RichText.fromMarkdown(updateInfo.getDetail()).into(tvMarkdown);
+            tvMarkdown.setBackgroundColor(Color.WHITE);
+            tvMarkdown.setTextColor(Color.BLACK);
+        }
     }
 
     //设置ToolBar
