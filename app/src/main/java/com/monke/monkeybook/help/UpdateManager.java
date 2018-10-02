@@ -3,6 +3,8 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -13,8 +15,10 @@ import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
+import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
+import com.monke.monkeybook.view.activity.UpdateActivity;
 
 import java.io.File;
 
@@ -40,11 +44,13 @@ public class UpdateManager {
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<UpdateInfo>() {
+                .subscribe(new SimpleObserver<UpdateInfoBean>() {
                     @Override
-                    public void onNext(UpdateInfo updateInfo) {
-                        if (!TextUtils.isEmpty(updateInfo.lastVersion)) {
-                            Toast.makeText(context, "有新版本" + updateInfo.lastVersion, Toast.LENGTH_SHORT).show();
+                    public void onNext(UpdateInfoBean updateInfo) {
+                        if (!TextUtils.isEmpty(updateInfo.getLastVersion())) {
+                            Intent intent = new Intent(context, UpdateActivity.class);
+                            intent.putExtra("updateInfo", updateInfo);
+                            context.startActivity(intent);
                         } else if (showMsg) {
                             Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
                         }
@@ -57,10 +63,10 @@ public class UpdateManager {
                 });
     }
 
-    private Observable<UpdateInfo> analyzeLastReleaseApi(String jsonStr) {
+    private Observable<UpdateInfoBean> analyzeLastReleaseApi(String jsonStr) {
         return Observable.create(emitter -> {
             try {
-                UpdateInfo updateInfo = new UpdateInfo();
+                UpdateInfoBean updateInfo = new UpdateInfoBean();
                 JsonObject version = new JsonParser().parse(jsonStr).getAsJsonObject();
                 boolean prerelease = version.get("prerelease").getAsBoolean();
                 if (prerelease)
@@ -72,10 +78,9 @@ public class UpdateManager {
                     String detail = version.get("body").getAsString();
                     String thisVersion = MApplication.getVersionName().split("\\s")[0];
                     if (Integer.valueOf(lastVersion.split("\\.")[2]) > Integer.valueOf(thisVersion.split("\\.")[2])) {
-                        updateInfo.url = url;
-                        updateInfo.lastVersion = lastVersion;
-                        updateInfo.detail = detail;
-
+                        updateInfo.setUrl(url);
+                        updateInfo.setLastVersion(lastVersion);
+                        updateInfo.setDetail(detail);
                     }
                 }
                 emitter.onNext(updateInfo);
@@ -99,11 +104,5 @@ public class UpdateManager {
         Logger.d("UpdateManager", apkfile.toString());
         intent.setDataAndType(Uri.fromFile(apkfile), "application/vnd.android.package-archive");
         context.startActivity(intent);
-    }
-
-    private class UpdateInfo {
-        String lastVersion;
-        String url;
-        String detail;
     }
 }
