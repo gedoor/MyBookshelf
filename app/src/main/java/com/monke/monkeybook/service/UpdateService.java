@@ -87,7 +87,7 @@ public class UpdateService extends Service {
                         downloadApk(updateInfo.getUrl());
                         break;
                     case stopDownload:
-                        stopSelf();
+                        interceptFlag = true;
                         break;
                 }
             }
@@ -159,14 +159,14 @@ public class UpdateService extends Service {
                 e.onNext(progress);
                 if (numread <= 0) {
                     //下载完成通知安装
-                    e.onNext(numread);
-                    e.onComplete();
                     break;
                 }
                 fos.write(buf, 0, numread);
             } while (!interceptFlag);//点击取消就停止下载.
             fos.close();
             is.close();
+            e.onNext(-1);
+            e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Integer>() {
@@ -194,7 +194,7 @@ public class UpdateService extends Service {
 
                     @Override
                     public void onComplete() {
-
+                        UpdateService.this.stopSelf();
                     }
                 });
 
