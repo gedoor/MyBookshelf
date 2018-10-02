@@ -121,7 +121,7 @@ public class UpdateActivity extends MBaseActivity {
     private void upMenu() {
         if (updateInfo != null && menuItemDownload != null) {
             File apkFile = new File(UpdateManager.getSavePath(updateInfo.getUrl().substring(updateInfo.getUrl().lastIndexOf("/"))));
-            if (UpdateService.isRuning) {
+            if (UpdateService.isRunning) {
                 menuItemDownload.setTitle("取消下载");
             } else if (apkFile.exists()) {
                 menuItemDownload.setTitle("重新下载");

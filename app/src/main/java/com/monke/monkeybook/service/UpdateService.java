@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
@@ -36,7 +34,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class UpdateService extends Service {
-    public static boolean isRuning = false;
+    public static boolean isRunning = false;
     private static final String startDownload = "startDownload";
     private final String cancel = "cancel";
     private String apkFilePath;
@@ -54,7 +52,7 @@ public class UpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        isRuning = true;
+        isRunning = true;
         //创建 Notification.Builder 对象
         updateNotification(0);
         RxBus.get().register(this);
@@ -63,7 +61,7 @@ public class UpdateService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        isRuning = false;
+        isRunning = false;
         disposableDown.dispose();
         stopForeground(true);
         RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
@@ -129,6 +127,9 @@ public class UpdateService extends Service {
     }
 
     private void downloadApk(String apkUrl) {
+        if (disposableDown != null) {
+            return;
+        }
         Observable.create((ObservableOnSubscribe<Integer>) e -> {
             URL url = new URL(apkUrl);
 
