@@ -70,7 +70,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        Toast.makeText(mView.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
