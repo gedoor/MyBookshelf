@@ -39,6 +39,7 @@ public class UpdateManager {
     }
 
     public void checkUpdate(boolean showMsg) {
+        ACache.get(activity).put("checkUpdate", "checkUpdate", MApplication.getInstance().getCheckUpdateDay() * ACache.TIME_DAY);
         BaseModelImpl.getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
@@ -57,7 +58,9 @@ public class UpdateManager {
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(activity, "检测新版本出错", Toast.LENGTH_SHORT).show();
+                        if (showMsg) {
+                            Toast.makeText(activity, "检测新版本出错", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
@@ -80,7 +83,6 @@ public class UpdateManager {
                         updateInfo.setUrl(url);
                         updateInfo.setLastVersion(lastVersion);
                         updateInfo.setDetail("# "+lastVersion +"\n"+ detail);
-                        ACache.get(activity).put("checkUpdate", "checkUpdate", MApplication.getInstance().getCheckUpdateDay() * ACache.TIME_DAY);
                     }
                 }
                 emitter.onNext(updateInfo);
