@@ -183,7 +183,6 @@ public class UpdateService extends Service {
                         if (integer < 0) {
                             RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
                             UpdateActivity.startThis(UpdateService.this, updateInfo);
-                            UpdateManager.getInstance(UpdateService.this).installApk(new File(apkFilePath));
                         } else {
                             updateNotification(integer);
                         }
