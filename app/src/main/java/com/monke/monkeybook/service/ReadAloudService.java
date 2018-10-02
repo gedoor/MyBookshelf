@@ -95,7 +95,17 @@ public class ReadAloudService extends Service {
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (!pause) {
+                    Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+                    setTimerIntent.setAction(ActionSetTimer);
+                    setTimerIntent.putExtra("minute", -1);
+                    startService(setTimerIntent);
+                }
+            }
+        };
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initFocusRequest();
         }
