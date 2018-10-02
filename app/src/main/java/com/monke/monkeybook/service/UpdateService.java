@@ -70,7 +70,7 @@ public class UpdateService extends Service {
         isRunning = false;
         disposableDown.dispose();
         stopForeground(true);
-        RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
+        RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
         RxBus.get().unregister(this);
     }
 
