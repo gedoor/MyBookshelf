@@ -36,7 +36,7 @@ import io.reactivex.schedulers.Schedulers;
 public class UpdateService extends Service {
     public static boolean isRunning = false;
     private static final String startDownload = "startDownload";
-    private final String cancel = "cancel";
+    private static final String stopDownload = "stopDownload";
     private String apkFilePath;
     private UpdateInfoBean updateInfo;
     private boolean interceptFlag = false;
@@ -46,6 +46,12 @@ public class UpdateService extends Service {
         Intent intent = new Intent(context, UpdateService.class);
         intent.setAction(startDownload);
         intent.putExtra("updateInfo", updateInfoBean);
+        context.startService(intent);
+    }
+
+    public static void stopThis(Context context) {
+        Intent intent = new Intent(context, UpdateService.class);
+        intent.setAction(stopDownload);
         context.startService(intent);
     }
 
@@ -80,7 +86,7 @@ public class UpdateService extends Service {
                         updateInfo = intent.getParcelableExtra("updateInfo");
                         downloadApk(updateInfo.getUrl());
                         break;
-                    case cancel:
+                    case stopDownload:
                         stopSelf();
                         break;
                 }
@@ -106,7 +112,7 @@ public class UpdateService extends Service {
                 .setContentTitle(getString(R.string.download_update))
                 .setContentText(String.format(getString(R.string.progress_show), state, 100))
                 .setContentIntent(getActivityPendingIntent(""));
-        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(cancel));
+        builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(stopDownload));
         builder.setProgress(100, state, false);
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();

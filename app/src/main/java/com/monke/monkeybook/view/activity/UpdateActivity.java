@@ -109,7 +109,11 @@ public class UpdateActivity extends MBaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_download:
-                UpdateService.startThis(this, updateInfo);
+                if (UpdateService.isRunning) {
+                    UpdateService.stopThis(this);
+                } else {
+                    UpdateService.startThis(this, updateInfo);
+                }
                 break;
             case android.R.id.home:
                 finish();
