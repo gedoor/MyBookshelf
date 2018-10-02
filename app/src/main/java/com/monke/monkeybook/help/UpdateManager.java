@@ -3,7 +3,6 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -22,10 +21,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class UpdateManager extends BaseModelImpl {
+public class UpdateManager {
+    private Context context;
 
-    public void checkUpdate(final Context context) {
-        getRetrofitString("https://api.github.com")
+    public static UpdateManager getInstance(Context context) {
+        return new UpdateManager(context);
+    }
+
+    private UpdateManager(Context context) {
+        this.context = context;
+    }
+
+    public void checkUpdate() {
+        BaseModelImpl.getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
                 .flatMap(response -> analyzeLastReleaseApi(response.body()))

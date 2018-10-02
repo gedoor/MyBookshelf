@@ -44,6 +44,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
+import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
@@ -511,6 +512,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         } else {
             mPresenter.queryBookShelf(false, group);
         }
+        UpdateManager.getInstance(this).checkUpdate();
     }
 
     @Override
