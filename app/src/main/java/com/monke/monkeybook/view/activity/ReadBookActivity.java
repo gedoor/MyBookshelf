@@ -313,7 +313,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             fabAutoPage.getDrawable().mutate();
             fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
-            mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
+            mHandler.postDelayed(autoPageRunnable, nextPageTime);
         } else {
             hpbNextPageProgress.setVisibility(View.INVISIBLE);
             fabAutoPage.setImageResource(R.drawable.ic_auto_page);
