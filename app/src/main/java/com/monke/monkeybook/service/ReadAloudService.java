@@ -14,7 +14,6 @@ import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -36,6 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.MApplication.DEBUG;
@@ -74,8 +75,8 @@ public class ReadAloudService extends Service {
     private int nowSpeak;
     private int timeMinute = 0;
     private boolean timerEnable = false;
-    private Handler mHandler = new Handler();
-    private Runnable readTimerRunnable;
+    private Timer mTimer;
+    private TimerTask timerTask;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
@@ -301,22 +302,21 @@ public class ReadAloudService extends Service {
         } else {
             timerEnable = true;
             updateNotification();
-            mHandler.removeCallbacks(readTimerRunnable);
-            mHandler.postDelayed(readTimerRunnable, 60000);
+            setTimer();
         }
     }
 
     private void setTimer() {
-        if (!pause) {
-            Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-            setTimerIntent.setAction(ActionSetTimer);
-            setTimerIntent.putExtra("minute", -1);
-            startService(setTimerIntent);
+        if (mTimer == null) {
+            mTimer = new Timer();
+            mTimer.schedule(timerTask, 60000, 60000);
         }
     }
 
     private void cancelTimer() {
-        mHandler.removeCallbacks(readTimerRunnable);
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
     }
 
     private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
