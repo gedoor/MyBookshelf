@@ -230,6 +230,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         }
 
+        if (readBookControl.getHideStatusBar()) {
+            hpbNextPageProgress.setY(0);
+        } else {
+            hpbNextPageProgress.setY(ImmersionBar.getStatusBarHeight(this));
+        }
+
         if (flMenu.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
