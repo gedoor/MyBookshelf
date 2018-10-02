@@ -3,6 +3,7 @@ package com.monke.monkeybook.help;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -32,7 +33,7 @@ public class UpdateManager {
         this.context = context;
     }
 
-    public void checkUpdate() {
+    public void checkUpdate(boolean showMsg) {
         BaseModelImpl.getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))
@@ -42,7 +43,11 @@ public class UpdateManager {
                 .subscribe(new SimpleObserver<UpdateInfo>() {
                     @Override
                     public void onNext(UpdateInfo updateInfo) {
-                        Toast.makeText(context, "有新版本" + updateInfo.lastVersion, Toast.LENGTH_SHORT).show();
+                        if (!TextUtils.isEmpty(updateInfo.lastVersion)) {
+                            Toast.makeText(context, "有新版本" + updateInfo.lastVersion, Toast.LENGTH_SHORT).show();
+                        } else if (showMsg) {
+                            Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -55,28 +60,30 @@ public class UpdateManager {
     private Observable<UpdateInfo> analyzeLastReleaseApi(String jsonStr) {
         return Observable.create(emitter -> {
             try {
+                UpdateInfo updateInfo = new UpdateInfo();
                 JsonObject version = new JsonParser().parse(jsonStr).getAsJsonObject();
                 boolean prerelease = version.get("prerelease").getAsBoolean();
                 if (prerelease)
                     return;
                 JsonArray assets = version.get("assets").getAsJsonArray();
                 if (assets.size() > 0) {
-                    String lastVersion = version.get("tag_name").getAsString().substring(1);
+                    String lastVersion = version.get("tag_name").getAsString();
                     String url = assets.get(0).getAsJsonObject().get("browser_download_url").getAsString();
                     String detail = version.get("body").getAsString();
-                    if (Integer.valueOf(lastVersion.split(".")[2]) > Integer.valueOf(MApplication.getVersionName().split(".")[2])) {
-                        UpdateInfo updateInfo = new UpdateInfo();
+                    String thisVersion = MApplication.getVersionName().split("\\s")[0];
+                    if (Integer.valueOf(lastVersion.split("\\.")[2]) > Integer.valueOf(thisVersion.split("\\.")[2])) {
                         updateInfo.url = url;
                         updateInfo.lastVersion = lastVersion;
                         updateInfo.detail = detail;
-                        emitter.onNext(updateInfo);
+
                     }
                 }
+                emitter.onNext(updateInfo);
+                emitter.onComplete();
             } catch (Exception e) {
-                e.printStackTrace();
-                emitter.onError(new Throwable("检测更新失败!"));
+                emitter.onError(e);
+                emitter.onComplete();
             }
-            emitter.onComplete();
         });
     }
 

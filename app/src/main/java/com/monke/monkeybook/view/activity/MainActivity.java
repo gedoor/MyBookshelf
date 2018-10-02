@@ -498,10 +498,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @Override
     protected void firstRequest() {
-        if (!isRecreate) {
-            versionUpRun();
-            UpdateManager.getInstance(this).checkUpdate();
-        }
         if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
             if (NetworkUtil.isNetWorkAvailable()) {
                 mPresenter.queryBookShelf(true, group);
@@ -511,6 +507,10 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             }
         } else {
             mPresenter.queryBookShelf(false, group);
+        }
+        if (!isRecreate) {
+            versionUpRun();
+            UpdateManager.getInstance(this).checkUpdate(false);
         }
     }
 
