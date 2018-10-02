@@ -65,7 +65,7 @@
         app:fontdrawable="@color/d_blue" />
 
     <TextView
-        android:id="@+id/fl_install_update"
+        android:id="@+id/tv_install_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

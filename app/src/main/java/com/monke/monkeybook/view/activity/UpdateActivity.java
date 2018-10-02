@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,8 +45,8 @@ public class UpdateActivity extends MBaseActivity {
     LinearLayout llDownload;
     @BindView(R.id.hpb_download_progress)
     MHorProgressBar hpbDownloadProgress;
-    @BindView(R.id.fl_install_update)
-    TextView flInstallUpdate;
+    @BindView(R.id.tv_install_update)
+    TextView tvInstallUpdate;
 
     private UpdateInfoBean updateInfo;
     private MenuItem menuItemDownload;
@@ -121,6 +122,7 @@ public class UpdateActivity extends MBaseActivity {
                 if (UpdateService.isRunning) {
                     UpdateService.stopThis(this);
                 } else {
+                    tvDownloadProgress.setText(getString(R.string.progress_show, 0, 100));
                     UpdateService.startThis(this, updateInfo);
                 }
                 break;
@@ -136,10 +138,19 @@ public class UpdateActivity extends MBaseActivity {
             File apkFile = new File(UpdateManager.getSavePath(updateInfo.getUrl().substring(updateInfo.getUrl().lastIndexOf("/"))));
             if (UpdateService.isRunning) {
                 menuItemDownload.setTitle("取消下载");
+                llDownload.setVisibility(View.VISIBLE);
+                hpbDownloadProgress.setVisibility(View.VISIBLE);
+                tvInstallUpdate.setVisibility(View.GONE);
             } else if (apkFile.exists()) {
                 menuItemDownload.setTitle("重新下载");
+                llDownload.setVisibility(View.GONE);
+                hpbDownloadProgress.setVisibility(View.GONE);
+                tvInstallUpdate.setVisibility(View.VISIBLE);
             } else {
                 menuItemDownload.setTitle("下载更新");
+                llDownload.setVisibility(View.GONE);
+                hpbDownloadProgress.setVisibility(View.GONE);
+                tvInstallUpdate.setVisibility(View.GONE);
             }
         }
     }
@@ -147,5 +158,10 @@ public class UpdateActivity extends MBaseActivity {
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_APK_STATE)})
     public void updateState(Integer state) {
         upMenu();
+        if (state > 0) {
+            tvDownloadProgress.setText(getString(R.string.progress_show, state, 100));
+            hpbDownloadProgress.setMaxProgress(100);
+            hpbDownloadProgress.setDurProgress(state);
+        }
     }
 }
