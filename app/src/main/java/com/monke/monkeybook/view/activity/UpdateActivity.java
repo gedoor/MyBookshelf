@@ -1,5 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -14,6 +16,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.UpdateManager;
+import com.monke.monkeybook.service.UpdateService;
 import com.zzhoujay.richtext.RichText;
 
 import butterknife.BindView;
@@ -27,6 +30,14 @@ public class UpdateActivity extends MBaseActivity {
     TextView tvMarkdown;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+
+    private UpdateInfoBean updateInfo;
+
+    public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
+        Intent intent = new Intent(context, UpdateActivity.class);
+        intent.putExtra("updateInfo", updateInfoBean);
+        context.startActivity(intent);
+    }
 
     @Override
     protected IPresenter initInjector() {
@@ -48,7 +59,7 @@ public class UpdateActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        UpdateInfoBean updateInfo = getIntent().getParcelableExtra("updateInfo");
+        updateInfo = getIntent().getParcelableExtra("updateInfo");
         RichText.fromMarkdown(updateInfo.getDetail()).into(tvMarkdown);
         tvMarkdown.setBackgroundColor(Color.WHITE);
         tvMarkdown.setTextColor(Color.BLACK);
@@ -75,6 +86,9 @@ public class UpdateActivity extends MBaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.action_download:
+                UpdateService.startThis(this, updateInfo);
+                break;
             case android.R.id.home:
                 finish();
                 break;

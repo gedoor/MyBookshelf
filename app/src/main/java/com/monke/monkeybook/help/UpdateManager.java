@@ -48,9 +48,7 @@ public class UpdateManager {
                     @Override
                     public void onNext(UpdateInfoBean updateInfo) {
                         if (!TextUtils.isEmpty(updateInfo.getLastVersion())) {
-                            Intent intent = new Intent(context, UpdateActivity.class);
-                            intent.putExtra("updateInfo", updateInfo);
-                            context.startActivity(intent);
+                            UpdateActivity.startThis(context, updateInfo);
                         } else if (showMsg) {
                             Toast.makeText(context, "已是最新版本", Toast.LENGTH_SHORT).show();
                         }
@@ -95,7 +93,7 @@ public class UpdateManager {
     /**
      * 安装apk
      */
-    private void installApk(Context context, File apkfile) {
+    public void installApk(File apkfile) {
         if (!apkfile.exists()) {
             return;
         }

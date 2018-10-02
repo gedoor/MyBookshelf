@@ -4,7 +4,7 @@
     tools:context=".view.activity.MainActivity">
 
     <item
-        android:id="@+id/action_book_source_manage"
+        android:id="@+id/action_download"
         android:title="@string/download_update"
         app:showAsAction="always" />
 
