@@ -27,7 +27,7 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     public static String downloadPath;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences configPreferences;
 
     public static MApplication getInstance() {
         return instance;
@@ -57,8 +57,8 @@ public class MApplication extends Application {
             createChannelIdDownload();
             createChannelIdReadAloud();
         }
-        sharedPreferences = getSharedPreferences("CONFIG", 0);
-        downloadPath = sharedPreferences.getString(getString(R.string.pk_download_path), "");
+        configPreferences = getSharedPreferences("CONFIG", 0);
+        downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
@@ -67,13 +67,13 @@ public class MApplication extends Application {
     public void setDownloadPath(String downloadPath) {
         MApplication.downloadPath = downloadPath;
         Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences.Editor editor = configPreferences.edit();
         editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
         editor.apply();
     }
 
-    public int getCheckUpdateDay() {
-        return Integer.valueOf(sharedPreferences.getString(getString(R.string.pk_check_update), "1"));
+    public SharedPreferences getConfigPreferences() {
+        return configPreferences;
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
