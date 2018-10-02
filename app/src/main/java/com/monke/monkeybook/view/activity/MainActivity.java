@@ -493,26 +493,28 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
     }
 
-    private boolean haveRefresh() {
+    private boolean isRecreate() {
         boolean isRecreate = getIntent().getBooleanExtra("isRecreate", false);
         getIntent().putExtra("isRecreate", true);
-        return preferences.getBoolean(getString(R.string.pk_auto_refresh), false) && !isRecreate;
+        return isRecreate;
     }
 
     @Override
     protected void firstRequest() {
-        versionUpRun();
-        if (haveRefresh()) {
-            if (NetworkUtil.isNetWorkAvailable()) {
-                mPresenter.queryBookShelf(true, group);
+        if (!isRecreate()) {
+            versionUpRun();
+            if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false)) {
+                if (NetworkUtil.isNetWorkAvailable()) {
+                    mPresenter.queryBookShelf(true, group);
+                } else {
+                    mPresenter.queryBookShelf(false, group);
+                    Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 mPresenter.queryBookShelf(false, group);
-                Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            mPresenter.queryBookShelf(false, group);
+            UpdateManager.getInstance(this).checkUpdate();
         }
-        UpdateManager.getInstance(this).checkUpdate();
     }
 
     @Override
