@@ -94,6 +94,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
     private String bookPx;
+    private boolean isRecreate;
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -129,6 +130,8 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @Override
     protected void initData() {
+        isRecreate = getIntent().getBooleanExtra("isRecreate", false);
+        getIntent().putExtra("isRecreate", true);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
     }
@@ -493,27 +496,21 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
     }
 
-    private boolean isRecreate() {
-        boolean isRecreate = getIntent().getBooleanExtra("isRecreate", false);
-        getIntent().putExtra("isRecreate", true);
-        return isRecreate;
-    }
-
     @Override
     protected void firstRequest() {
-        if (!isRecreate()) {
+        if (!isRecreate) {
             versionUpRun();
-            if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false)) {
-                if (NetworkUtil.isNetWorkAvailable()) {
-                    mPresenter.queryBookShelf(true, group);
-                } else {
-                    mPresenter.queryBookShelf(false, group);
-                    Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
-                }
+            UpdateManager.getInstance(this).checkUpdate();
+        }
+        if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
+            if (NetworkUtil.isNetWorkAvailable()) {
+                mPresenter.queryBookShelf(true, group);
             } else {
                 mPresenter.queryBookShelf(false, group);
+                Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
             }
-            UpdateManager.getInstance(this).checkUpdate();
+        } else {
+            mPresenter.queryBookShelf(false, group);
         }
     }
 
