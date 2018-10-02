@@ -79,7 +79,7 @@ public class UpdateManager {
                     if (Integer.valueOf(lastVersion.split("\\.")[2]) > Integer.valueOf(thisVersion.split("\\.")[2])) {
                         updateInfo.setUrl(url);
                         updateInfo.setLastVersion(lastVersion);
-                        updateInfo.setDetail(detail);
+                        updateInfo.setDetail("# "+lastVersion +"\n"+ detail);
                         ACache.get(activity).put("checkUpdate", "checkUpdate", MApplication.getInstance().getCheckUpdateDay() * ACache.TIME_DAY);
                     }
                 }
