@@ -110,7 +110,7 @@
     <string name="copy_source">拷贝书源</string>
     <string name="paste_source">粘贴书源</string>
     <string name="source_rule_s">书源规则说明</string>
-    <string name="update_url">查看最新版本</string>
+    <string name="check_update">检查更新</string>
     <string name="camera_scan">扫描二维码</string>
     <string name="scan_image">扫描本地图片</string>
     <string name="rule_summary">规则说明</string>

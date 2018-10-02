@@ -97,7 +97,7 @@
                     android:drawablePadding="6dp"
                     android:drawableStart="@drawable/ic_update_black_24dp"
                     android:gravity="center_vertical"
-                    android:text="@string/update_url" />
+                    android:text="@string/check_update" />
 
             </android.support.v7.widget.CardView>
 

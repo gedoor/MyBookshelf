@@ -166,6 +166,10 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
             android:theme="@style/CAppTransparentTheme" />
+        <activity android:name=".view.activity.UpdateActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
