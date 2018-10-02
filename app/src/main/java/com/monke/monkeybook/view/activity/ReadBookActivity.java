@@ -720,7 +720,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabAutoPage.getDrawable().mutate();
         fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabAutoPage.setOnClickListener(view -> {
-            ReadAloudService.stop(this);
+            if (ReadAloudService.running) {
+                Toast.makeText(this, "朗读正在运行,不能自动翻页", Toast.LENGTH_SHORT).show();
+                return;
+            }
             autoPage = !autoPage;
             autoPage();
             if (autoPage) {
