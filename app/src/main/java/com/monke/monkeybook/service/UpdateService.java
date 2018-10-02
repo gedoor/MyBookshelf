@@ -150,9 +150,9 @@ public class UpdateService extends Service {
 
             int count = 0;
             byte buf[] = new byte[1024];
-
+            int numread;
             do {
-                int numread = is.read(buf);
+                numread = is.read(buf);
                 count += numread;
                 int progress = (int) (((float) count / length) * 100);
                 //更新进度
@@ -165,6 +165,9 @@ public class UpdateService extends Service {
             } while (!interceptFlag);//点击取消就停止下载.
             fos.close();
             is.close();
+            if (numread > 0) {
+                apkFile.delete();
+            }
             e.onNext(-1);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
