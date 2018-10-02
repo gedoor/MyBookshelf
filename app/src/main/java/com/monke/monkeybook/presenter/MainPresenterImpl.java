@@ -123,6 +123,9 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
 
     @Override
     public void downloadAll() {
+        if (bookShelfBeans == null) {
+            return;
+        }
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
