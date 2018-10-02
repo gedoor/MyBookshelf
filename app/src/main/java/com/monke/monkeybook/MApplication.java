@@ -72,6 +72,10 @@ public class MApplication extends Application {
         editor.apply();
     }
 
+    public int getCheckUpdateDay() {
+        return Integer.valueOf(sharedPreferences.getString(getString(R.string.pk_check_update), "1"));
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private void createChannelIdDownload() {
         //用唯一的ID创建渠道对象

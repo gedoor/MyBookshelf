@@ -24,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +42,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
@@ -510,7 +512,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
         if (!isRecreate) {
             versionUpRun();
-            UpdateManager.getInstance(this).checkUpdate(false);
+            if (TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
+                UpdateManager.getInstance(this).checkUpdate(false);
+            }
         }
     }
 

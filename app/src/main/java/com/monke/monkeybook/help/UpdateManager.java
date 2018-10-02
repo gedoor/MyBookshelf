@@ -80,6 +80,7 @@ public class UpdateManager {
                         updateInfo.setUrl(url);
                         updateInfo.setLastVersion(lastVersion);
                         updateInfo.setDetail(detail);
+                        ACache.get(context).put("checkUpdate", "checkUpdate", MApplication.getInstance().getCheckUpdateDay() * ACache.TIME_DAY);
                     }
                 }
                 emitter.onNext(updateInfo);
