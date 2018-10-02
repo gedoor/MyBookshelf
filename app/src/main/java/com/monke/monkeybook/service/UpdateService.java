@@ -123,6 +123,7 @@ public class UpdateService extends Service {
     private PendingIntent getActivityPendingIntent(String actionStr) {
         Intent intent = new Intent(this, UpdateActivity.class);
         intent.setAction(actionStr);
+        intent.putExtra("updateInfo", updateInfo);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
