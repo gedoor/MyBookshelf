@@ -47,6 +47,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         }
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_bookshelf_px)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_download_path)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_check_update)));
     }
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value)-> {

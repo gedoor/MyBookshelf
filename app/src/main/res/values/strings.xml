@@ -157,6 +157,7 @@
     <string name="import_replace_rule">本地导入</string>
     <string name="import_replace_rule_on_line">网络导入</string>
     <string name="bookshelf_px">书架排序</string>
+    <string name="check_update_interval">检查更新间隔</string>
     <string name="bookshelf_px_0">按阅读时间排序</string>
     <string name="bookshelf_px_1">按更新时间排序</string>
     <string name="bookshelf_px_2">手动排序</string>
