@@ -92,6 +92,20 @@ public class UpdateActivity extends MBaseActivity {
         }
     }
 
+    /**
+     * 控件绑定
+     */
+    @Override
+    protected void bindView() {
+        super.bindView();
+        tvInstallUpdate.setOnClickListener(view -> {
+            String url = updateInfo.getUrl();
+            String fileName = url.substring(url.lastIndexOf("/"));
+            File apkFile = new File(UpdateManager.getSavePath(fileName));
+            UpdateManager.getInstance(this).installApk(apkFile);
+        });
+    }
+
     //设置ToolBar
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
