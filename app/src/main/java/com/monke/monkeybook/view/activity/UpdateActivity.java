@@ -22,6 +22,7 @@ import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.service.UpdateService;
+import com.monke.mprogressbar.MHorProgressBar;
 import com.zzhoujay.richtext.RichText;
 
 import java.io.File;
@@ -37,6 +38,14 @@ public class UpdateActivity extends MBaseActivity {
     TextView tvMarkdown;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+    @BindView(R.id.tv_download_progress)
+    TextView tvDownloadProgress;
+    @BindView(R.id.ll_download)
+    LinearLayout llDownload;
+    @BindView(R.id.hpb_download_progress)
+    MHorProgressBar hpbDownloadProgress;
+    @BindView(R.id.fl_install_update)
+    TextView flInstallUpdate;
 
     private UpdateInfoBean updateInfo;
     private MenuItem menuItemDownload;
@@ -135,7 +144,7 @@ public class UpdateActivity extends MBaseActivity {
         }
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_APK_STATE)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_APK_STATE)})
     public void updateState(Integer state) {
         upMenu();
     }
