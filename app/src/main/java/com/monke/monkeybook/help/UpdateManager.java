@@ -98,11 +98,15 @@ public class UpdateManager {
         if (!apkFile.exists()) {
             return;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Logger.d("UpdateManager", apkFile.toString());
-        intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
-        context.startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Logger.d("UpdateManager", apkFile.toString());
+            intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getSavePath(String fileName) {
