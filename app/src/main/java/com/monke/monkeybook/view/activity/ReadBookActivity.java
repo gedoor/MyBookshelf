@@ -717,8 +717,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         fabReadAloud.setOnClickListener(view -> onMediaButton());
         //长按停止朗读
         fabReadAloud.setOnLongClickListener(view -> {
-            Toast.makeText(this, getString(R.string.read_aloud), Toast.LENGTH_SHORT).show();
-            ReadAloudService.stop(this);
+            if (ReadAloudService.running) {
+                Toast.makeText(this, getString(R.string.aloud_stop), Toast.LENGTH_SHORT).show();
+                ReadAloudService.stop(this);
+            } else {
+                Toast.makeText(this, getString(R.string.read_aloud), Toast.LENGTH_SHORT).show();
+            }
             return true;
         });
 
