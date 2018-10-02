@@ -309,10 +309,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             nextPageTime = readBookControl.getClickSensitivity() * 1000;
             hpbNextPageProgress.setMaxProgress(nextPageTime);
             mHandler.postDelayed(upHpbNextPage, upHpbInterval);
+            fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
+            fabAutoPage.getDrawable().mutate();
+            fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
             mHandler.postDelayed(autoPageRunnable, readBookControl.getClickSensitivity() * 1000);
         } else {
             hpbNextPageProgress.setVisibility(View.INVISIBLE);
+            fabAutoPage.setImageResource(R.drawable.ic_auto_page);
+            fabAutoPage.getDrawable().mutate();
+            fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page));
         }
     }
@@ -726,15 +732,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
             autoPage = !autoPage;
             autoPage();
-            if (autoPage) {
-                fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
-                fabAutoPage.getDrawable().mutate();
-                fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-            } else {
-                fabAutoPage.setImageResource(R.drawable.ic_auto_page);
-                fabAutoPage.getDrawable().mutate();
-                fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-            }
         });
         fabAutoPage.setOnLongClickListener(view -> {
             Toast.makeText(this, getString(R.string.auto_next_page), Toast.LENGTH_SHORT).show();
