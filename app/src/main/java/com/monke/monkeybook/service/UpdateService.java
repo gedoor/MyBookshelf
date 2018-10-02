@@ -193,6 +193,7 @@ public class UpdateService extends Service {
 
                     @Override
                     public void onComplete() {
+                        RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
                         UpdateService.this.stopSelf();
                     }
                 });
