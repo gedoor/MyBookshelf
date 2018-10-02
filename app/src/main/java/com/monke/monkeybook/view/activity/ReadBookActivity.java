@@ -1119,13 +1119,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     popMenuIn();
                 }
                 return true;
-            } else if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE && aloudStatus == ReadAloudService.PLAY) {
+            } else if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE && aloudStatus != ReadAloudService.PLAY) {
                 if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
                     }
                     return true;
-                } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP && aloudStatus == ReadAloudService.PLAY) {
+                } else if (readBookControl.getCanKeyTurn() && keyCode == KeyEvent.KEYCODE_VOLUME_UP && aloudStatus != ReadAloudService.PLAY) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToPrePage();
                     }
@@ -1144,7 +1144,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE) {
-            if (readBookControl.getCanKeyTurn() && aloudStatus == ReadAloudService.PLAY
+            if (readBookControl.getCanKeyTurn() && aloudStatus != ReadAloudService.PLAY
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                 return true;
             }
