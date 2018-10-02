@@ -292,6 +292,7 @@ public class ReadAloudService extends Service {
         } else {
             timerEnable = true;
             updateNotification();
+            mHandler.removeCallbacks(readTimerRunnable);
             mHandler.postDelayed(readTimerRunnable, 60000);
         }
     }
