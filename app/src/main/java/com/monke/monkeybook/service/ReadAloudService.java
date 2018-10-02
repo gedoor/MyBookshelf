@@ -104,7 +104,6 @@ public class ReadAloudService extends Service {
         mediaSessionCompat.setActive(true);
         updateMediaSessionPlaybackState();
         updateNotification();
-        readTimerRunnable = this::setTimer;
     }
 
     @Override
