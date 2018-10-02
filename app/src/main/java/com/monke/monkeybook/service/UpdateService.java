@@ -189,7 +189,6 @@ public class UpdateService extends Service {
                     @Override
                     public void onError(Throwable e) {
                         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
-                        UpdateService.this.stopSelf();
                     }
 
                     @Override
