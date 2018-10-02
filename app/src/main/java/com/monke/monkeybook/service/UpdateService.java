@@ -30,15 +30,19 @@ import java.net.URL;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class UpdateService extends Service {
+    public static boolean isRuning = false;
     private static final String startDownload = "startDownload";
     private final String cancel = "cancel";
     private String apkFilePath;
     private UpdateInfoBean updateInfo;
     private boolean interceptFlag = false;
+    private Disposable disposableDown;
 
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateService.class);
@@ -50,6 +54,7 @@ public class UpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        isRuning = true;
         //创建 Notification.Builder 对象
         updateNotification(0);
         RxBus.get().register(this);
@@ -58,6 +63,8 @@ public class UpdateService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isRuning = false;
+        disposableDown.dispose();
         stopForeground(true);
         RxBus.get().post(RxBusTag.FINISH_DOWNLOAD_LISTENER, new Object());
         RxBus.get().unregister(this);
@@ -94,6 +101,7 @@ public class UpdateService extends Service {
      * 更新通知
      */
     private void updateNotification(int state) {
+        RxBus.get().post(RxBusTag.UPDATE_APK_STATE, state);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_download)
                 .setOngoing(true)
@@ -154,10 +162,16 @@ public class UpdateService extends Service {
             is.close();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Integer>() {
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableDown = d;
+                    }
+
                     @Override
                     public void onNext(Integer integer) {
                         if (integer < 0) {
+                            RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
                             UpdateActivity.startThis(UpdateService.this, updateInfo);
                             UpdateManager.getInstance(UpdateService.this).installApk(new File(apkFilePath));
                         } else {
@@ -169,6 +183,11 @@ public class UpdateService extends Service {
                     public void onError(Throwable e) {
                         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "下载更新出错\n" + e.getMessage(), Toast.LENGTH_SHORT).show());
                         UpdateService.this.stopSelf();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
 
