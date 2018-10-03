@@ -253,5 +253,6 @@
     <string name="sys_file_picker">系统文件选择器</string>
     <string name="new_version">新版本</string>
     <string name="download_update">下载更新</string>
+    <string name="aloud_volume_page">朗读时音量键翻页</string>
 
 </resources>

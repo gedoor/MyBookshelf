@@ -52,6 +52,7 @@ public class ReadBookControl {
     private Boolean textBold;
     private Boolean canClickTurn;
     private Boolean canKeyTurn;
+    private Boolean readAloudCanKeyTurn;
     private int clickSensitivity;
     private Boolean clickAllNext;
     private Boolean showTitle;
@@ -89,6 +90,7 @@ public class ReadBookControl {
         this.textSize = readPreference.getInt("textSize", 20);
         this.canClickTurn = readPreference.getBoolean("canClickTurn", true);
         this.canKeyTurn = readPreference.getBoolean("canKeyTurn", true);
+        this.readAloudCanKeyTurn = readPreference.getBoolean("readAloudCanKeyTurn", false);
         this.lineMultiplier = readPreference.getFloat("lineMultiplier", 1);
         this.paragraphSize = readPreference.getFloat("paragraphSize", 1);
         this.clickSensitivity = readPreference.getInt("clickSensitivity", 50) > 100
@@ -405,6 +407,16 @@ public class ReadBookControl {
         return textDrawable;
     }
 
+    public Boolean getCanKeyTurn(Boolean isPlay) {
+        if (!canClickTurn) {
+            return false;
+        } else if (readAloudCanKeyTurn) {
+            return true;
+        } else {
+            return !isPlay;
+        }
+    }
+
     public Boolean getCanKeyTurn() {
         return canKeyTurn;
     }
@@ -413,6 +425,17 @@ public class ReadBookControl {
         this.canKeyTurn = canKeyTurn;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("canKeyTurn", canKeyTurn);
+        editor.apply();
+    }
+
+    public Boolean getAloudCanKeyTurn() {
+        return readAloudCanKeyTurn;
+    }
+
+    public void setAloudCanKeyTurn(Boolean canAloudKeyTurn) {
+        this.readAloudCanKeyTurn = canAloudKeyTurn;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putBoolean("readAloudCanKeyTurn", canAloudKeyTurn);
         editor.apply();
     }
 

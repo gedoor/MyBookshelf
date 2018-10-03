@@ -134,8 +134,8 @@ public class ScrollPageAnim extends PageAnimation {
         while (realEdge < mViewHeight && mActiveViews.size() < 2) {
             // 从废弃的Views中获取一个
             view = mScrapViews.getFirst();
-/*          //擦除其Bitmap(重新创建会不会更好一点)
-            eraseBitmap(view.bitmap,view.bitmap.getWidth(),view.bitmap.getHeight(),0,0);*/
+            //擦除其Bitmap(重新创建会不会更好一点)
+//            eraseBitmap(view.bitmap,view.bitmap.getWidth(),view.bitmap.getHeight(),0,0);
             if (view == null) return;
 
             Bitmap cancelBitmap = mNextBitmap;
@@ -346,8 +346,8 @@ public class ScrollPageAnim extends PageAnimation {
     public synchronized void startAnim() {
         super.startAnim();
         isRunning = true;
-        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
-                , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
+//        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
+//                , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
     }
 
     @Override
