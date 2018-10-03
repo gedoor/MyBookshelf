@@ -347,8 +347,7 @@ public class ScrollPageAnim extends PageAnimation {
         super.startAnim();
         isRunning = true;
         //惯性滚动
-//        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
-//                , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
+        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity(), 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
     }
 
     @Override
