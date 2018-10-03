@@ -106,9 +106,9 @@ public class MoreSettingPop extends PopupWindow {
     private void bindEvent() {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
-                upView();
                 readBookControl.setHideStatusBar(isChecked);
                 changeProListener.refresh();
+                upView();
             }
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -120,8 +120,8 @@ public class MoreSettingPop extends PopupWindow {
         });
         swVolumeNextPage.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
-                upView();
                 readBookControl.setCanKeyTurn(b);
+                upView();
             }
         });
         swReadAloudKey.setOnCheckedChangeListener((compoundButton, b) -> {
