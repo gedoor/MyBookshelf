@@ -3,14 +3,18 @@ package com.monke.monkeybook.help;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.monke.basemvplib.BaseModelImpl;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
@@ -54,10 +58,11 @@ public class UpdateManager {
                 .subscribe(new SimpleObserver<UpdateInfoBean>() {
                     @Override
                     public void onNext(UpdateInfoBean updateInfo) {
-                        if (!TextUtils.isEmpty(updateInfo.getLastVersion())) {
+                        if (updateInfo.getUpDate()) {
                             UpdateActivity.startThis(activity, updateInfo);
                         } else if (showMsg) {
                             Toast.makeText(activity, "已是最新版本", Toast.LENGTH_SHORT).show();
+                            UpdateActivity.startThis(activity, updateInfo);
                         }
                     }
 
@@ -84,10 +89,13 @@ public class UpdateManager {
                     String url = assets.get(0).getAsJsonObject().get("browser_download_url").getAsString();
                     String detail = version.get("body").getAsString();
                     String thisVersion = MApplication.getVersionName().split("\\s")[0];
+                    updateInfo.setUrl(url);
+                    updateInfo.setLastVersion(lastVersion);
+                    updateInfo.setDetail("# "+lastVersion +"\n"+ detail);
                     if (Integer.valueOf(lastVersion.split("\\.")[2]) > Integer.valueOf(thisVersion.split("\\.")[2])) {
-                        updateInfo.setUrl(url);
-                        updateInfo.setLastVersion(lastVersion);
-                        updateInfo.setDetail("# "+lastVersion +"\n"+ detail);
+                        updateInfo.setUpDate(true);
+                    } else {
+                        updateInfo.setUpDate(false);
                     }
                 }
                 emitter.onNext(updateInfo);
@@ -106,14 +114,22 @@ public class UpdateManager {
         if (!apkFile.exists()) {
             return;
         }
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
+        Intent intent = new Intent();
+        //执行动作
+        intent.setAction(Intent.ACTION_VIEW);
+        //判读版本是否在7.0以上
+        if (Build.VERSION.SDK_INT >= 24) {
+            Uri apkUri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+        } else {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Logger.d("UpdateManager", apkFile.toString());
             intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
+        }
+        try {
             activity.startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("wwd", "Failed to launcher installing activity");
         }
     }
 

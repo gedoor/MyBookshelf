@@ -7,6 +7,7 @@ public class UpdateInfoBean implements Parcelable {
     private String lastVersion;
     private String url;
     private String detail;
+    private Boolean upDate;
 
     public UpdateInfoBean() {
 
@@ -16,6 +17,7 @@ public class UpdateInfoBean implements Parcelable {
         lastVersion = in.readString();
         url = in.readString();
         detail = in.readString();
+        upDate = in.readByte() != 0;
     }
 
     public static final Creator<UpdateInfoBean> CREATOR = new Creator<UpdateInfoBean>() {
@@ -40,6 +42,7 @@ public class UpdateInfoBean implements Parcelable {
         parcel.writeString(lastVersion);
         parcel.writeString(url);
         parcel.writeString(detail);
+        parcel.writeByte((byte) (upDate ? 1 : 0));
     }
 
     public String getLastVersion() {
@@ -64,5 +67,13 @@ public class UpdateInfoBean implements Parcelable {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Boolean getUpDate() {
+        return upDate;
+    }
+
+    public void setUpDate(Boolean upDate) {
+        this.upDate = upDate;
     }
 }

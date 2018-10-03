@@ -35,7 +35,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
     private Integer serialNumber = 0; //手动排序
     private Long finalRefreshData = System.currentTimeMillis();  //章节最后更新时间
     private Integer group = 0;
-    private Boolean isScroll = false;
     private String durChapterName;
     private String lastChapterName;
     private Integer chapterListSize = 0;
@@ -71,18 +70,17 @@ public class BookShelfBean implements Parcelable, Cloneable {
         serialNumber = in.readInt();
         finalRefreshData = in.readLong();
         group = in.readInt();
-        isScroll = in.readByte() != 0;
         durChapterName = in.readString();
         lastChapterName = in.readString();
         chapterListSize = in.readInt();
         customCoverPath = in.readString();
     }
 
-    @Generated(hash = 495009764)
+    @Generated(hash = 229342711)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
             Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber,
-            Long finalRefreshData, Integer group, Boolean isScroll, String durChapterName,
-            String lastChapterName, Integer chapterListSize, String customCoverPath) {
+            Long finalRefreshData, Integer group, String durChapterName, String lastChapterName,
+            Integer chapterListSize, String customCoverPath) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -93,7 +91,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.serialNumber = serialNumber;
         this.finalRefreshData = finalRefreshData;
         this.group = group;
-        this.isScroll = isScroll;
         this.durChapterName = durChapterName;
         this.lastChapterName = lastChapterName;
         this.chapterListSize = chapterListSize;
@@ -111,7 +108,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
         dest.writeParcelable(bookInfoBean, flags);
         dest.writeInt(serialNumber);
         dest.writeLong(finalRefreshData);
-        dest.writeByte((byte) (isScroll ? 1 : 0));
         dest.writeString(durChapterName);
         dest.writeString(lastChapterName);
         dest.writeInt(chapterListSize);
@@ -221,14 +217,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
 
     public int getGroup() {
         return this.group == null ? 0 : this.group;
-    }
-
-    public Boolean getIsScroll() {
-        return this.isScroll;
-    }
-
-    public void setIsScroll(Boolean isScroll) {
-        this.isScroll = isScroll;
     }
 
     public void setDurChapter(Integer durChapter) {

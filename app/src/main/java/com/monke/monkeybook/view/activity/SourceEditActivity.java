@@ -24,6 +24,7 @@ import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -353,7 +354,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             fOut.flush();
             fOut.close();
             file.setReadable(true, false);
-            Uri contentUri = FileProvider.getUriForFile(this, getString(R.string.file_provider), file);
+            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
