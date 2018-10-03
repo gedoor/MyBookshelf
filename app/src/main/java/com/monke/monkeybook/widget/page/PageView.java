@@ -40,10 +40,6 @@ public class PageView extends View {
     private int mViewHeight = 0; // 当前View的高
     private int statusBarHeight = 0; //状态栏高度
 
-    private Handler mHandler = new Handler();
-    private Runnable runnableCanNext = this::upCanNext;
-    private boolean canNext = true;
-
     private int mStartX = 0;
     private int mStartY = 0;
     private boolean isMove = false;
@@ -213,12 +209,10 @@ public class PageView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         //绘制动画
         if (mPageAnim != null) {
             mPageAnim.draw(canvas);
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -286,17 +280,10 @@ public class PageView extends View {
      * 判断是否存在上一页
      */
     private boolean hasPrevPage() {
-        if (canNext) {
-            canNext = false;
-            mHandler.removeCallbacks(runnableCanNext);
-            mHandler.postDelayed(runnableCanNext, 200);
-            if (mPageLoader.prev()) {
-                return true;
-            } else {
-                Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT).show();
-                return false;
-            }
+        if (mPageLoader.prev()) {
+            return true;
         } else {
+            Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -305,23 +292,12 @@ public class PageView extends View {
      * 判断是否下一页存在
      */
     private boolean hasNextPage() {
-        if (canNext) {
-            canNext = false;
-            mHandler.removeCallbacks(runnableCanNext);
-            mHandler.postDelayed(runnableCanNext, 200);
-            if (mPageLoader.next()) {
-                return true;
-            } else {
-                Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT).show();
-                return false;
-            }
+        if (mPageLoader.next()) {
+            return true;
         } else {
+            Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT).show();
             return false;
         }
-    }
-
-    private void upCanNext() {
-        canNext = true;
     }
 
     private void pageCancel() {
