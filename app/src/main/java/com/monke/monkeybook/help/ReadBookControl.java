@@ -408,7 +408,7 @@ public class ReadBookControl {
     }
 
     public Boolean getCanKeyTurn(Boolean isPlay) {
-        if (!canClickTurn) {
+        if (!canKeyTurn) {
             return false;
         } else if (readAloudCanKeyTurn) {
             return true;
