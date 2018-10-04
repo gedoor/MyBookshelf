@@ -310,7 +310,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 LauncherIcon.Change();
                 break;
             case R.id.action_clear_cache:
-                BookshelfHelp.clearCaches();
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.clear_content)
+                        .setMessage("是否同时删除已下载的书籍目录？")
+                        .setPositiveButton("是", (dialog, which) -> BookshelfHelp.clearCaches(true))
+                        .setNegativeButton("否", (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
+                        .show();
                 break;
             case R.id.action_clearBookshelf:
                 new AlertDialog.Builder(this)
