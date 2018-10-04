@@ -60,7 +60,7 @@ public interface MainContract {
 
         void restoreData();
 
-        void downloadAll();
+        void downloadAll(int num, boolean onlyNew);
 
         void addBookUrl(String bookUrl);
 
