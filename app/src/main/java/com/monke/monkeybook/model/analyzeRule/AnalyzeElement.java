@@ -134,7 +134,7 @@ public class AnalyzeElement {
         String regex = null;
         String result = "";
         //分离正则表达式
-        String[] ruleStrS = ruleStr.split("#");
+        String[] ruleStrS = ruleStr.trim().split("#");
         if (ruleStrS.length > 1) {
             regex = ruleStrS[1];
         }
