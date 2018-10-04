@@ -104,10 +104,12 @@ public class BookshelfHelp {
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }
 
-    public static void clearCaches() {
+    public static void clearCaches(boolean clearChapterList) {
         FileHelp.deleteFile(Constant.BOOK_CACHE_PATH);
         FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
         chapterCaches.clear();
+        if (clearChapterList)
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
     }
 
     /**
