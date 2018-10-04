@@ -299,7 +299,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 if (!NetworkUtil.isNetWorkAvailable())
                     Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
                 else
-                    mPresenter.downloadAll();
+                    mPresenter.downloadAll(0, false);
                 break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
