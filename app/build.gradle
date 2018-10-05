@@ -133,7 +133,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //markdown
-    implementation ru.noties:markwon:2.0.0'
+    implementation 'ru.noties:markwon:2.0.0'
 
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
