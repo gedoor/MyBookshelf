@@ -132,8 +132,8 @@ dependencies {
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    //markdownView
-    implementation 'com.zzhoujay.richtext:richtext:3.0.7'
+    //markdown
+    implementation ru.noties:markwon:2.0.0'
 
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
