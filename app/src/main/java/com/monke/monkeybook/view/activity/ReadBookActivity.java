@@ -600,10 +600,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         );
                         //继续朗读
                         if ((ReadAloudService.running) && pageIndex >= 0) {
-                            if (mPageLoader.getContext(pageIndex) != null) {
+                            if (mPageLoader.getContent(pageIndex) != null) {
                                 ReadAloudService.play(ReadBookActivity.this,
                                         false,
-                                        mPageLoader.getContext(pageIndex),
+                                        mPageLoader.getContent(pageIndex),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
                                         ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
                                 );
@@ -612,7 +612,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         }
                         //启动朗读
                         if (getIntent().getBooleanExtra("readAloud", false)
-                                && pageIndex >= 0 && mPageLoader.getContext(pageIndex) != null) {
+                                && pageIndex >= 0 && mPageLoader.getContent(pageIndex) != null) {
                             getIntent().putExtra("readAloud", false);
                             onMediaButton();
                             return;
@@ -861,7 +861,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_copy_text:
                 popMenuOut();
                 if (mPageLoader != null) {
-                    moProgressHUD.showText(mPageLoader.getContext(mPageLoader.getPagePos()));
+                    moProgressHUD.showText(mPageLoader.getContent(mPageLoader.getPagePos()));
                 }
                 break;
             case R.id.disable_book_source:
@@ -1247,7 +1247,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             default:
                 ReadBookActivity.this.popMenuOut();
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
-                    ReadAloudService.play(this, true, mPageLoader.getContext(mPageLoader.getPagePos()),
+                    ReadAloudService.play(this, true, mPageLoader.getContent(mPageLoader.getPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
                             ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()))
                     );
