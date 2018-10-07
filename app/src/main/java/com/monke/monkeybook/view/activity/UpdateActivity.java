@@ -2,7 +2,6 @@ package com.monke.monkeybook.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +23,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.service.UpdateService;
 import com.monke.mprogressbar.MHorProgressBar;
-import com.zzhoujay.richtext.RichText;
+import ru.noties.markwon.Markwon;
 
 import java.io.File;
 
@@ -86,11 +85,10 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
         if (updateInfo != null) {
-            RichText.fromMarkdown(updateInfo.getDetail()).into(tvMarkdown);
-            tvMarkdown.setBackgroundColor(Color.WHITE);
-            tvMarkdown.setTextColor(Color.BLACK);
+            Markwon.setMarkdown(tvMarkdown, updateInfo.getDetail());
         }
     }
+
 
     /**
      * 控件绑定
