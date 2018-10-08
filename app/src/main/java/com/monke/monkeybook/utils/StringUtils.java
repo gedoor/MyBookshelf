@@ -137,7 +137,7 @@ public class StringUtils {
         return new String(c);
     }
 
-    public final static HashMap<Character, Integer> ChnMap = getChnMap();
+    private final static HashMap<Character, Integer> ChnMap = getChnMap();
 
     private static HashMap<Character, Integer> getChnMap() {
         String cnStr = "零一二三四五六七八九十";
@@ -146,6 +146,8 @@ public class StringUtils {
         for (int i = 0; i <= 10; i++) {
             map.put(c[i], i);
         }
+        map.put('〇', 0);
+        map.put('两', 2);
         map.put('百', 100);
         map.put('千', 1000);
         map.put('万', 10000);
@@ -161,7 +163,7 @@ public class StringUtils {
         char[] cn = chNum.toCharArray();
 
         // "一零二五" 形式
-        if (cn.length > 1 && chNum.matches("^[零一二三四五六七八九]$")) {
+        if (cn.length > 1 && chNum.matches("^[〇零一二三四五六七八九]$")) {
             for (int i = 0; i < cn.length; i++) {
                 cn[i] = (char) (48 + ChnMap.get(cn[i]));
             }
@@ -207,7 +209,6 @@ public class StringUtils {
             try {
                 return Integer.parseInt(num);
             } catch (Exception e) {
-                num = num.replaceAll("两", "二").replaceAll("〇", "零");
                 return chineseNumToInt(num);
             }
         }
