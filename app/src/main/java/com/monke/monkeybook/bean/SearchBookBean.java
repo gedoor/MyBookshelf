@@ -132,7 +132,7 @@ public class SearchBookBean implements Parcelable{
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.trim().replaceAll("　", "") : null;
     }
 
     public String getAuthor() {
@@ -140,7 +140,7 @@ public class SearchBookBean implements Parcelable{
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
     }
 
     public long getWords() {
@@ -235,10 +235,6 @@ public class SearchBookBean implements Parcelable{
 
     public long getAddTime() {
         return this.addTime;
-    }
-
-    public void setAddTime(long addTime) {
-        this.addTime = addTime;
     }
 
     public void setAddTime(Long addTime) {
