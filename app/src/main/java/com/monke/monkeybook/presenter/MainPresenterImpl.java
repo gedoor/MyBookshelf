@@ -121,14 +121,13 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 });
     }
 
-    @Override
-    public void downloadAll() {
+    public void downloadAll(int downloadNum, boolean onlyNew) {
         if (bookShelfBeans == null) {
             return;
         }
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
-                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
                     for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
                         if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
@@ -136,33 +135,8 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                             intent.setAction("addDownload");
                             intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
                             intent.putExtra("start", start);
-                            intent.putExtra("end", chapterNum - 1);
-                            mView.getContext().startService(intent);
-                            break;
-                        }
-                    }
-                }
-            }
-            e.onNext(true);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-    }
-
-    private void downloadAll(int downloadNum) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
-                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-                    int chapterNum = bookShelfBean.getChapterListSize();
-                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
-                            Intent intent = new Intent(mView.getContext(), DownloadService.class);
-                            intent.setAction("addDownload");
-                            intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
-                            intent.putExtra("start", start);
-                            intent.putExtra("end", Math.min(chapterNum - 1, downloadNum));
+                            int end = downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1;
+                            intent.putExtra("end", end);
                             mView.getContext().startService(intent);
                             break;
                         }
@@ -322,7 +296,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 errBooks.clear();
             }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
-                downloadAll(10);
+                downloadAll(10, true);
                 hasUpdate = false;
             }
             queryBookShelf(false, group);
