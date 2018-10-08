@@ -9,12 +9,9 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.preference.PreferenceManager;
 
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.BitmapUtil;
-import com.monke.monkeybook.utils.DensityUtil;
 import com.monke.monkeybook.widget.page.PageMode;
 
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_HEIGHT;
 import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_WIDTH;
 
 public class ReadBookControl {
