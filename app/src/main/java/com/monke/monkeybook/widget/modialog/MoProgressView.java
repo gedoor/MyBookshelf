@@ -1,7 +1,6 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,8 @@ import android.widget.TextView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.ReadAssets;
 import com.victor.loading.rotate.RotateLoading;
-import com.zzhoujay.richtext.RichText;
+
+import ru.noties.markwon.Markwon;
 
 
 /**
@@ -104,9 +104,7 @@ public class MoProgressView extends LinearLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_markdown, this, true);
         TextView tvMarkdown = findViewById(R.id.tv_markdown);
 
-        RichText.fromMarkdown(ReadAssets.getText(context, assetFileName)).into(tvMarkdown);
-        tvMarkdown.setBackgroundColor(Color.WHITE);
-        tvMarkdown.setTextColor(Color.BLACK);
+        Markwon.setMarkdown(tvMarkdown, ReadAssets.getText(context, assetFileName));
     }
 
 }
