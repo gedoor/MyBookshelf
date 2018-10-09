@@ -1,37 +1,15 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Rect;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.CardView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.view.activity.ReplaceRuleActivity;
-import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by GKF on 2018/1/17.

@@ -26,7 +26,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
-import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -125,7 +124,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             }
         }
         if (!TextUtils.isEmpty(books.get(index).getBookInfoBean().getAuthor())) {
-            holder.tvName.setText(String.format("%s(%s)", books.get(index).getBookInfoBean().getName(), books.get(index).getBookInfoBean().getAuthor()));
+            holder.tvName.setText(String.format("%s (%s)", books.get(index).getBookInfoBean().getName(), books.get(index).getBookInfoBean().getAuthor()));
         } else {
             holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         }
@@ -135,18 +134,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
             holder.ivHasNew.setVisibility(View.INVISIBLE);
-        }
-        //进度条
-        holder.mpbDurProgress.setVisibility(View.VISIBLE);
-        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
-        float speed = books.get(index).getChapterListSize() * 1.0f / 60;
-
-        holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
-
-        if (needAnim) {
-            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter() + 1);
-        } else {
-            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
         }
         holder.ibCover.setOnClickListener(v -> {
             if (itemClickListener != null)
@@ -212,7 +199,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
-        MHorProgressBar mpbDurProgress;
         ImageButton ibContent;
         ImageButton ibCover;
         RotateLoading rotateLoading;
@@ -225,7 +211,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
-            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
             ibContent = itemView.findViewById(R.id.ib_content);
             ibCover = itemView.findViewById(R.id.ib_cover);
             rotateLoading = itemView.findViewById(R.id.rl_loading);

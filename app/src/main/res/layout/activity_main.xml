@@ -21,6 +21,7 @@
             android:layout_width="230dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="@color/background_menu"
             app:menu="@menu/menu_drawer" />
 
     </android.support.v4.widget.DrawerLayout>

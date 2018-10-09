@@ -8,8 +8,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -92,9 +92,17 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     protected void initImmersionBar() {
         try {
             if (isImmersionBarEnabled()) {
-                mImmersionBar.transparentStatusBar();
+                if (getSupportActionBar() != null && isNightTheme()) {
+                    View actionBarView = findViewById(getResources().getIdentifier("action_bar", "id", "android"));
+                    mImmersionBar.statusBarColorInt(actionBarView.getSolidColor());
+                } else {
+                    mImmersionBar.transparentStatusBar();
+                }
             } else {
-                mImmersionBar.statusBarColor(R.color.status_bar_bag);
+                if (getSupportActionBar() != null && isNightTheme())
+                    mImmersionBar.statusBarColor(R.color.colorPrimaryDark);
+                else
+                    mImmersionBar.statusBarColor(R.color.status_bar_bag);
             }
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
@@ -111,7 +119,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             }
             mImmersionBar.init();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("MonkBook", e.getLocalizedMessage());
         }
     }
 

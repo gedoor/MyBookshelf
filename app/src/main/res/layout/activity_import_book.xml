@@ -27,8 +27,8 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:text="全选"
-            android:textColor="@color/selector_cb_file" />
+            android:text="@string/select_all"
+            android:textColor="@color/tv_text_default" />
 
         <Button
             android:id="@+id/file_system_btn_add_book"

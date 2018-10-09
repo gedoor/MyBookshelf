@@ -2,10 +2,8 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -44,7 +42,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -52,11 +49,12 @@ import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
-import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+
+import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 import java.util.List;
 
@@ -97,6 +95,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private long exitTime = 0;
     private String bookPx;
     private boolean isRecreate;
+    private boolean resumed = false;
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -107,6 +106,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             group = savedInstanceState.getInt("group");
+            resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
     }
@@ -115,6 +115,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("group", group);
+        outState.putBoolean("resumed", resumed);
     }
 
     @Override
@@ -186,11 +187,26 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     }
 
     @Override
+    protected void onPause() {
+        resumed = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (resumed) {
+            resumed = false;
+            stopBookShelfRefreshAnim();
+        }
+    }
+
+    @Override
     protected void bindEvent() {
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
-            if (!NetworkUtil.isNetWorkAvailable()) {
-                Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
+            mPresenter.queryBookShelf(isNetWorkAvailable(), group);
+            if (!isNetWorkAvailable()) {
+                Toast.makeText(this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
             }
             refreshLayout.setRefreshing(false);
         });
@@ -296,7 +312,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 startActivity(new Intent(this, DownloadActivity.class));
                 break;
             case R.id.action_download_all:
-                if (!NetworkUtil.isNetWorkAvailable())
+                if (!isNetWorkAvailable())
                     Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
                 else
                     mPresenter.downloadAll(0, false);
@@ -305,9 +321,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
                 recreate();
-                break;
-            case R.id.action_change_icon:
-                LauncherIcon.Change();
                 break;
             case R.id.action_clear_cache:
                 new AlertDialog.Builder(this)
@@ -342,6 +355,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("阅读");
         }
     }
 
@@ -487,26 +501,19 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             //更新日志
             moProgressHUD.showAssetMarkdown("updateLog.md");
         }
+    }
 
-        //弃用bug图标
-        PackageManager packageManager = MApplication.getInstance().getPackageManager();
-        ComponentName componentNameBookMain = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.view.activity.WelcomeBookActivity");
-        ComponentName componentNameBook = new ComponentName(MApplication.getInstance(), "com.monke.monkeybook.BookIcon");
-
-        if (packageManager.getComponentEnabledSetting(componentNameBook) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-            //启用
-            packageManager.setComponentEnabledSetting(componentNameBookMain,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-            //禁用
-            packageManager.setComponentEnabledSetting(componentNameBook,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    private void requestPermission() {
+        if (!EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            EasyPermissions.requestPermissions(this, "本软件需要存储权限来缓存书籍信息",
+                    MApplication.RESULT__PERMS, MApplication.PerList);
         }
     }
 
     @Override
     protected void firstRequest() {
         if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
-            if (NetworkUtil.isNetWorkAvailable()) {
+            if (isNetWorkAvailable()) {
                 mPresenter.queryBookShelf(true, group);
             } else {
                 mPresenter.queryBookShelf(false, group);
@@ -517,6 +524,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
         if (!isRecreate) {
             versionUpRun();
+            requestPermission();
             if (TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
                 UpdateManager.getInstance(this).checkUpdate(false);
             }
@@ -538,6 +546,16 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             bookShelfListAdapter.refreshBook(noteUrl);
         } else {
             bookShelfGridAdapter.refreshBook(noteUrl);
+        }
+    }
+
+    private void stopBookShelfRefreshAnim() {
+        List<BookShelfBean> bookShelfBeans = getBookshelfList();
+        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
+            for (BookShelfBean bookShelfBean: bookShelfBeans) {
+                bookShelfBean.setLoading(false);
+                refreshBook(bookShelfBean.getNoteUrl());
+            }
         }
     }
 

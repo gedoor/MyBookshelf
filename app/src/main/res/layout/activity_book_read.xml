@@ -40,7 +40,7 @@
                 android:id="@+id/ll_ISB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
                 <android.support.design.widget.AppBarLayout
@@ -65,7 +65,7 @@
                         android:id="@+id/atv_url"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/background"
+                        android:background="@color/colorPrimary"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
                         android:singleLine="true"
@@ -105,7 +105,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/set_timer"
                     android:src="@drawable/ic_timer_black_24dp_new"
-                    app:backgroundTint="@color/background"
+                    app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
                     app:pressedTranslationZ="2dp" />
@@ -113,7 +113,8 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical">
+                    android:layout_gravity="center_vertical"
+                    app:cardBackgroundColor="@color/background_card">
 
                     <TextView
                         android:id="@+id/tv_read_aloud_timer"
@@ -141,7 +142,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/read_aloud"
                     android:src="@drawable/ic_read_aloud"
-                    app:backgroundTint="@color/background"
+                    app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
                     app:pressedTranslationZ="2dp" />
@@ -158,7 +159,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/auto_next_page"
                     android:src="@drawable/ic_auto_page"
-                    app:backgroundTint="@color/background"
+                    app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
                     app:pressedTranslationZ="2dp" />
@@ -175,7 +176,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/replace_rule_title"
                     android:src="@drawable/ic_find_replace"
-                    app:backgroundTint="@color/background"
+                    app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
                     app:pressedTranslationZ="2dp" />
@@ -192,7 +193,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/night_theme"
                     android:src="@drawable/ic_brightness"
-                    app:backgroundTint="@color/background"
+                    app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
                     app:pressedTranslationZ="2dp" />
@@ -208,7 +209,7 @@
                 android:id="@+id/llNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
                 <!--章节设置-->
                 <LinearLayout
@@ -427,6 +428,7 @@
     <com.monke.mprogressbar.MHorProgressBar
         android:id="@+id/hpb_next_page_progress"
         android:layout_width="match_parent"
+        android:layout_gravity="bottom"
         android:layout_height="3dp"
         android:visibility="invisible"
         app:bgdrawable="@color/btn_bg_press"

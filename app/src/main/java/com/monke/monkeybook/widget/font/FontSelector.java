@@ -23,7 +23,7 @@ public class FontSelector {
     private AlertDialog alertDialog;
 
     public FontSelector(Context context, String selectPath) {
-        builder = new AlertDialog.Builder(context);
+        builder = new AlertDialog.Builder(context, R.style.alertDialogTheme);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.view_recycler_font, null);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         builder.setView(view);

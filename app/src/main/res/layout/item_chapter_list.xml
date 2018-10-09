@@ -23,7 +23,7 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="0.2dp"
-        android:background="#c1c1c1"
+        android:background="@color/bg_divider_line"
         android:layout_gravity="bottom"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>

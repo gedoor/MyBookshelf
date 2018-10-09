@@ -1,9 +1,11 @@
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/background">
+    app:cardBackgroundColor="@color/background_card">
 
     <LinearLayout
         android:id="@+id/ll_content"
