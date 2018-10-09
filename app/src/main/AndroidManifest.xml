@@ -44,6 +44,17 @@
         </activity>
 
         <activity
+            android:name=".view.activity.ReadBookActivity"
+            android:configChanges="locale|keyboardHidden"
+            android:launchMode="singleTask">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".view.activity.QRCodeScanActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
