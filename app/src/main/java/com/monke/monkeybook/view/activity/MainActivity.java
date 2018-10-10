@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -517,7 +518,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
         if (!isRecreate) {
             versionUpRun();
-            if (TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
+            if (!BuildConfig.DEBUG && TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
                 UpdateManager.getInstance(this).checkUpdate(false);
             }
         }
