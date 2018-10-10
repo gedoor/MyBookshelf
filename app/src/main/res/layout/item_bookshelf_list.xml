@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fl_content"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="90dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/iv_cover"
-            android:layout_width="56dp"
-            android:layout_height="80dp"
+            android:layout_width="49dp"
+            android:layout_height="70dp"
             android:scaleType="centerCrop"
             android:src="@drawable/img_cover_default"
             android:transitionName="@string/img_cover" />
@@ -91,22 +91,6 @@
             android:textColor="@color/tv_text_default"
             android:textSize="12sp"
             app:minTextSize="7sp" />
-
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/mpb_durProgress"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/tv_last"
-            android:layout_toEndOf="@+id/iv_cover"
-            app:fontdrawable="@color/d_blue"
-            app:cantouch="false"
-            app:bgdrawable="@color/btn_bg_press"
-            android:visibility="invisible"
-            tools:ignore="RtlHardcoded" />
 
         <ImageButton
             android:id="@+id/ib_content"
