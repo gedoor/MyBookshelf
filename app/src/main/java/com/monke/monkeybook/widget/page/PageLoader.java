@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -865,14 +866,8 @@ public abstract class PageLoader {
      */
     private void drawContent(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
-
         if (mPageMode == PageMode.SCROLL) {
-            if (mSettingManager.bgIsColor()) {
-                canvas.drawColor(mSettingManager.getBgColor());
-            } else {
-                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
-            }
+            bitmap.eraseColor(Color.TRANSPARENT);
         }
 
         //设置总距离
