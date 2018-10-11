@@ -734,7 +734,6 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
         int tipMarginHeight = ScreenUtils.dpToPx(3);
         int tipMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        String percent;
         if (mSettingManager.bgIsColor()) {
             canvas.drawColor(mSettingManager.getBgColor());
         } else {
@@ -744,8 +743,9 @@ public abstract class PageLoader {
 
         float tipBottomTop = tipMarginHeight - mTipPaint.getFontMetrics().ascent;
         float tipBottomBot = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
-        float displayRightEnd = mDisplayWidth - tipMarginWidth;
-        float realDisplayWidth = mDisplayWidth - tipMarginWidth * 2;
+        float displayRightEnd = mDisplayWidth - mMarginRight;
+        boolean hideStatusBar = mSettingManager.getHideStatusBar();
+        boolean showTimeBattery = mSettingManager.getShowTimeBattery();
 
         if (!mCollBook.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? mCollBook.getChapterList(mCurChapterPos).getDurChapterName() : "";
@@ -759,12 +759,12 @@ public abstract class PageLoader {
 
             //初始化标题的参数
             //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
-            if (!mSettingManager.getHideStatusBar()) { //显示状态栏
+            if (!hideStatusBar) { //显示状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        title = TextUtils.ellipsize(title, mTipPaint, realDisplayWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
                     }
                 } else {
                     //绘制总进度
@@ -775,45 +775,45 @@ public abstract class PageLoader {
                     canvas.drawText(page, tipLeft, tipBottomBot, mTipPaint);
                     //绘制标题
                     title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
+                    canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + 2, mTipPaint);
+                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             } else { //隐藏状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        title = TextUtils.ellipsize(title, mTipPaint, realDisplayWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
                     }
                 } else {
                     //绘制标题
-                    float titleTipLength = mSettingManager.getShowTimeBattery() ? realDisplayWidth - mTipPaint.measureText(progress) - tipMarginWidth : realDisplayWidth;
+                    float titleTipLength = showTimeBattery ? mVisibleWidth - mTipPaint.measureText(progress) - tipMarginWidth : mVisibleWidth;
                     title = TextUtils.ellipsize(title, mTipPaint, titleTipLength, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
+                    canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
                     // 绘制页码
-                    canvas.drawText(page, tipMarginWidth, tipBottomBot, mTipPaint);
+                    canvas.drawText(page, mMarginLeft, tipBottomBot, mTipPaint);
                     //绘制总进度
                     float progressTipLeft = displayRightEnd - mTipPaint.measureText(progress);
-                    float progressTipBottom = mSettingManager.getShowTimeBattery() ? tipBottomTop : tipBottomBot;
+                    float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
                     canvas.drawText(progress, progressTipLeft, progressTipBottom, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT) - 2;
-                    canvas.drawRect(tipMarginWidth, tipBottom, displayRightEnd, ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT), mTipPaint);
+                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             }
         }
 
-        int visibleRight = mDisplayWidth - tipMarginWidth;
-        if (mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
+        int visibleRight = (int) displayRightEnd;
+        if (hideStatusBar && showTimeBattery) {
             //绘制当前时间
             String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
-            float timeTipLeft = (mDisplayWidth - mTipPaint.measureText(time)) / 2;
+            float timeTipLeft = (mVisibleWidth - mTipPaint.measureText(time)) / 2;
             canvas.drawText(time, timeTipLeft, tipBottomBot, mTipPaint);
 
             //绘制电池
