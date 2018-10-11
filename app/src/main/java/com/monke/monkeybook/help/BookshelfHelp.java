@@ -154,6 +154,9 @@ public class BookshelfHelp {
                 .replace(".", "");
     }
 
+    /**
+     * 根据目录名获取当前章节
+     */
     public static int getDurChapter(BookShelfBean oldBook, BookShelfBean newBook) {
         int oldChapterSize = oldBook.getChapterListSize();
         int oldChapterIndex = oldBook.getDurChapter();

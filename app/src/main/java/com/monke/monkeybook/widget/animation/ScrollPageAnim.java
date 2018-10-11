@@ -2,9 +2,6 @@ package com.monke.monkeybook.widget.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -56,7 +53,7 @@ public class ScrollPageAnim extends PageAnimation {
         mScrapViews = new ArrayDeque<>(2);
         for (int i = 0; i < 2; ++i) {
             BitmapView view = new BitmapView();
-            view.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+            view.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
             view.srcRect = new Rect(0, 0, mViewWidth, mViewHeight);
             view.destRect = new Rect(0, 0, mViewWidth, mViewHeight);
             view.top = 0;

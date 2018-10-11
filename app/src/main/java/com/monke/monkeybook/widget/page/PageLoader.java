@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -56,7 +57,7 @@ public abstract class PageLoader {
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     public static final int STATUS_HY = 8;              // 换源
     // 默认的显示参数配置
-    private static final int CONTENT_MARGIN_HEIGHT = 6;
+    private static final int CONTENT_MARGIN_HEIGHT = 1;
     public static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
@@ -176,7 +177,7 @@ public abstract class PageLoader {
     }
 
     private void setChapterPageStatus(Integer chapter, Integer status) {
-            mStatus.put(chapter, status);
+        mStatus.put(chapter, status);
     }
 
     private void initData() {
@@ -734,7 +735,6 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
         int tipMarginHeight = ScreenUtils.dpToPx(3);
         int tipMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        String percent;
         if (mSettingManager.bgIsColor()) {
             canvas.drawColor(mSettingManager.getBgColor());
         } else {
@@ -742,87 +742,83 @@ public abstract class PageLoader {
             canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
         }
 
+        float tipBottomTop = tipMarginHeight - mTipPaint.getFontMetrics().ascent;
+        float tipBottomBot = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
+        float displayRightEnd = mDisplayWidth - mMarginRight;
+        boolean hideStatusBar = mSettingManager.getHideStatusBar();
+        boolean showTimeBattery = mSettingManager.getShowTimeBattery();
+
         if (!mCollBook.getChapterList().isEmpty()) {
+            String title = isChapterListPrepare ? mCollBook.getChapterList(mCurChapterPos).getDurChapterName() : "";
+            title = ChapterContentHelp.replaceContent(mCollBook, title);
+            float tipBottom;
+            float tipLeft;
+            String page = (getPageStatus() != STATUS_FINISH) ? ""
+                    : String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
+            String progress = (getPageStatus() != STATUS_FINISH) ? ""
+                    : BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
+
             //初始化标题的参数
             //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
-            if (!mSettingManager.getHideStatusBar()) {
-                float tipBottom = mDisplayHeight - tipMarginHeight - mTipPaint.getFontMetrics().descent;
-                float tipLeft;
+            if (!hideStatusBar) { //显示状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                        percent = ChapterContentHelp.replaceContent(mCollBook, percent);
-                        percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
-                                TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
                     }
                 } else {
                     //绘制总进度
-                    percent = BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
-                    tipLeft = mDisplayWidth - tipMarginWidth - mTipPaint.measureText(percent);
-                    canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    tipLeft = displayRightEnd - mTipPaint.measureText(progress);
+                    canvas.drawText(progress, tipLeft, tipBottomBot, mTipPaint);
                     //绘制页码
-                    percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
-                    tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(percent);
-                    canvas.drawText(percent, tipLeft, tipBottom, mTipPaint);
+                    tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(page);
+                    canvas.drawText(page, tipLeft, tipBottomBot, mTipPaint);
                     //绘制标题
-                    percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                    percent = ChapterContentHelp.replaceContent(mCollBook, percent);
-                    percent = TextUtils.ellipsize(percent, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
+                    title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
+                    canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, tipBottom + ScreenUtils.dpToPx(1), mTextPaint);
+                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
-            } else {
-                float tipBottom = tipMarginHeight - mTipPaint.getFontMetrics().ascent;
+            } else { //隐藏状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                        percent = ChapterContentHelp.replaceContent(mCollBook, percent);
-                        percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
-                                TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
                     }
                 } else {
                     //绘制标题
-                    percent = mCollBook.getChapterList(mCurChapterPos).getDurChapterName();
-                    percent = ChapterContentHelp.replaceContent(mCollBook, percent);
-                    percent = TextUtils.ellipsize(percent, mTipPaint, mDisplayWidth - tipMarginWidth * 2,
-                            TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
-                    //绘制页码
-                    tipBottom = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
-                    percent = String.format("%d/%d", mCurPage.position + 1, mCurPageList.size());
-                    canvas.drawText(percent, tipMarginWidth, tipBottom, mTipPaint);
+                    float titleTipLength = showTimeBattery ? mVisibleWidth - mTipPaint.measureText(progress) - tipMarginWidth : mVisibleWidth;
+                    title = TextUtils.ellipsize(title, mTipPaint, titleTipLength, TextUtils.TruncateAt.END).toString();
+                    canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
+                    // 绘制页码
+                    canvas.drawText(page, mMarginLeft, tipBottomBot, mTipPaint);
                     //绘制总进度
-                    if (mSettingManager.getShowTimeBattery()) {
-                        percent = BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
-                        canvas.drawText(percent, (mDisplayWidth - mTipPaint.measureText(percent)) / 2, tipBottom, mTipPaint);
-                    } else {
-                        float y = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
-                        String readProgress = BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurPageList.size());
-                        float x = mDisplayWidth - tipMarginWidth - mTipPaint.measureText(readProgress) - ScreenUtils.dpToPx(4);
-                        canvas.drawText(readProgress, x, y, mTipPaint);
-                    }
+                    float progressTipLeft = displayRightEnd - mTipPaint.measureText(progress);
+                    float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
+                    canvas.drawText(progress, progressTipLeft, progressTipBottom, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
-                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT - 1);
-                    canvas.drawRect(tipMarginWidth, tipBottom, mDisplayWidth - tipMarginWidth, ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT), mTextPaint);
+                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT) - 2;
+                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             }
         }
 
-        int visibleRight = mDisplayWidth - tipMarginWidth;
-        if (mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
+        int visibleRight = (int) displayRightEnd;
+        if (hideStatusBar && showTimeBattery) {
+            //绘制当前时间
+            String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
+            float timeTipLeft = (mVisibleWidth - mTipPaint.measureText(time)) / 2;
+            canvas.drawText(time, timeTipLeft, tipBottomBot, mTipPaint);
+
             //绘制电池
             int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
-
             int outFrameWidth = (int) mTipPaint.measureText("xxx");
             int outFrameHeight = (int) mTipPaint.getTextSize() - ScreenUtils.dpToPx(2);
 
@@ -859,29 +855,19 @@ public abstract class PageLoader {
             mBatteryPaint.setStyle(Paint.Style.FILL);
             canvas.drawRect(innerFrame, mBatteryPaint);
 
-            //绘制当前时间
-            //底部的字显示的位置Y
-            float y = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
-            String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
-            float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
-            canvas.drawText(time, x, y, mTipPaint);
+            String batLevel = mBatteryLevel + "%";
+            float batTipLeft = outFrameLeft - mTipPaint.measureText(batLevel) - ScreenUtils.dpToPx(4);
+            canvas.drawText(batLevel, batTipLeft, tipBottomBot, mTipPaint);
         }
     }
-
 
     /**
      * 绘制内容
      */
     private void drawContent(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
-
         if (mPageMode == PageMode.SCROLL) {
-            if (mSettingManager.bgIsColor()) {
-                canvas.drawColor(mSettingManager.getBgColor());
-            } else {
-                Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
-            }
+            bitmap.eraseColor(Color.TRANSPARENT);
         }
 
         //设置总距离
@@ -1377,6 +1363,7 @@ public abstract class PageLoader {
                     } else {
                         Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                         wordCount = tempLayout.getLineEnd(0);
+
                     }
 
                     subStr = paragraph.substring(0, wordCount);

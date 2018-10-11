@@ -132,9 +132,6 @@ public class WebBookModelImpl implements IWebBookModel {
                 chapter.setDurChapterIndex(i);
                 chapter.setTag(bookShelfBean.getTag());
                 chapter.setNoteUrl(bookShelfBean.getNoteUrl());
-                if (chapter.getDurChapterName().equals(bookShelfBean.getDurChapterName())) {
-                    bookShelfBean.setDurChapter(i);
-                }
             }
             if (bookShelfBean.getChapterListSize() < chapterList.size()) {
                 bookShelfBean.setHasUpdate(true);

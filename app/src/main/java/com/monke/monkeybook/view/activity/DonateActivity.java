@@ -117,7 +117,7 @@ public class DonateActivity extends MBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            ACache.get(this).put("getZfbHb", "True", ACache.TIME_DAY);
+            ACache.get(this).put("getZfbHb", "True", 3 * ACache.TIME_DAY);
             RxBus.get().post(RxBusTag.GET_ZFB_Hb, true);
         }
     }
