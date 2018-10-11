@@ -37,6 +37,20 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
+        <activity
+            android:name=".view.activity.WelcomeBookActivity"
+            android:enabled="false"
+            android:icon="@mipmap/book_launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
         <activity android:name=".view.activity.WelcomeToReadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -100,8 +114,7 @@
             android:name=".view.activity.ReplaceRuleActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-	    android:theme="@style/CAppTransparentTheme"
-	    android:windowSoftInputMode="stateHidden|adjustPan" />
+            android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.SettingActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
