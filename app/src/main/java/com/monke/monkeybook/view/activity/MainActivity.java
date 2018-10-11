@@ -558,8 +558,10 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         List<BookShelfBean> bookShelfBeans = getBookshelfList();
         if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
             for (BookShelfBean bookShelfBean: bookShelfBeans) {
-                bookShelfBean.setLoading(false);
-                refreshBook(bookShelfBean.getNoteUrl());
+                if (bookShelfBean.isLoading()) {
+                    bookShelfBean.setLoading(false);
+                    refreshBook(bookShelfBean.getNoteUrl());
+                }
             }
         }
     }
