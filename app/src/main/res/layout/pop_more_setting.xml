@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/background_menu"
     android:orientation="vertical">
 
     <View
@@ -14,7 +14,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="310dp"
-        android:background="@color/background">
+        android:background="@color/background_menu">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,14 +24,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/ll_screen_direction"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/background"
+                    android:background="@color/background_menu"
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
@@ -64,14 +64,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/llScreenTimeOut"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/background"
+                    android:background="@color/background_menu"
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
@@ -104,14 +104,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/llJFConvert"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/background"
+                    android:background="@color/background_menu"
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
@@ -145,7 +145,7 @@
                 android:id="@+id/ll_hideStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -166,7 +166,7 @@
                 android:id="@+id/llImmersionBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -188,7 +188,7 @@
                 android:id="@+id/ll_hideNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -208,7 +208,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -228,7 +228,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -249,7 +249,7 @@
                 android:id="@+id/ll_read_aloud_key"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -269,7 +269,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -289,7 +289,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -309,7 +309,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <Switch
@@ -330,7 +330,7 @@
                 android:id="@+id/ll_showTimeBattery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical"
                 android:visibility="gone">
 

@@ -370,29 +370,13 @@ public class BookshelfHelp {
         }
         switch (bookshelfOrder) {
             case "0":
-                Collections.sort(books, (o1, o2) -> {
-                    if (o1.getFinalDate() - o2.getFinalDate() > 0) {
-                        return -1;
-                    } else if (o1.getFinalDate() - o2.getFinalDate() < 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+                Collections.sort(books, (o1, o2) -> Long.compare(o2.getFinalDate(), o1.getFinalDate()));
                 break;
             case "1":
-                Collections.sort(books, (o1, o2) -> {
-                    if (o1.getFinalRefreshData() - o2.getFinalRefreshData() > 0) {
-                        return -1;
-                    } else if (o1.getFinalRefreshData() - o2.getFinalRefreshData() < 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+                Collections.sort(books, (o1, o2) -> Long.compare(o2.getFinalRefreshData(), o1.getFinalRefreshData()));
                 break;
             case "2":
-                Collections.sort(books, (o1, o2) -> o1.getSerialNumber() - o2.getSerialNumber());
+                Collections.sort(books, (o1, o2) -> Integer.compare(o1.getSerialNumber(), o2.getSerialNumber()));
                 break;
         }
     }

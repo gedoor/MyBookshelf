@@ -174,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_gravity="bottom"
-            android:background="#c1c1c1" />
+            android:background="@color/bg_divider_line" />
     </FrameLayout>
 
 </FrameLayout>

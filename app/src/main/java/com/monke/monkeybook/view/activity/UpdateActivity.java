@@ -22,8 +22,8 @@ import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.service.UpdateService;
+import com.monke.monkeybook.utils.MarkdownUtils;
 import com.monke.mprogressbar.MHorProgressBar;
-import ru.noties.markwon.Markwon;
 
 import java.io.File;
 
@@ -85,7 +85,7 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
         if (updateInfo != null) {
-            Markwon.setMarkdown(tvMarkdown, updateInfo.getDetail());
+            MarkdownUtils.setText(tvMarkdown, updateInfo.getDetail());
         }
     }
 

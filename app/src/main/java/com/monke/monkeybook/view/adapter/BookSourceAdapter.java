@@ -100,7 +100,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         if (TextUtils.isEmpty(dataList.get(position).getBookSourceGroup())) {
             holder.cbView.setText(dataList.get(position).getBookSourceName());
         } else {
-            holder.cbView.setText(String.format("%s(%s)", dataList.get(position).getBookSourceName(), dataList.get(position).getBookSourceGroup()));
+            holder.cbView.setText(String.format("%s (%s)", dataList.get(position).getBookSourceName(), dataList.get(position).getBookSourceGroup()));
         }
         holder.cbView.setChecked(dataList.get(position).getEnable());
         holder.cbView.setOnClickListener((View view) -> {

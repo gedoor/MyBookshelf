@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/background_menu"
     android:orientation="vertical">
 
     <View
@@ -211,7 +211,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/background_menu"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -244,7 +244,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景1"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -272,7 +272,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景2"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -299,7 +299,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景3"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -326,7 +326,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景4"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -353,7 +353,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景5"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />

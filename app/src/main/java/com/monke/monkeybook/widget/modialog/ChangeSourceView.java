@@ -124,7 +124,7 @@ public class ChangeSourceView {
         bookTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
-        atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
+        atvTitle.setText(String.format("%s (%s)", bookName, bookAuthor));
         rvSource.startRefresh();
         getSearchBookInDb(bookShelf);
     }

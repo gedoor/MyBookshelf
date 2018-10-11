@@ -13,7 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/colorPrimary"
         android:transitionName="sharedView"
+        android:fitsSystemWindows="true"
         tools:ignore="UnusedAttribute">
 
         <android.support.v7.widget.Toolbar
@@ -37,6 +39,7 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <LinearLayout
@@ -64,6 +67,7 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/vw_version"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp">
@@ -85,6 +89,7 @@
                 android:id="@+id/vw_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -105,6 +110,7 @@
                 android:id="@+id/vw_update_log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -125,6 +131,7 @@
                 android:id="@+id/vw_qq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -145,6 +152,7 @@
                 android:id="@+id/vw_donate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -165,6 +173,7 @@
                 android:id="@+id/vw_scoring"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -185,6 +194,7 @@
                 android:id="@+id/vw_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -205,6 +215,7 @@
                 android:id="@+id/vw_git"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -225,6 +236,7 @@
                 android:id="@+id/vw_home_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -245,6 +257,7 @@
                 android:id="@+id/vw_source_rule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView
@@ -265,6 +278,7 @@
                 android:id="@+id/vw_disclaimer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
                 android:layout_margin="6dp">
 
                 <TextView

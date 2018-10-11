@@ -109,8 +109,10 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
             holder.tvName.setText(chapterListBean.getDurChapterName());
             if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapterListBean)) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                holder.tvName.setAlpha(1);
             } else {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                holder.tvName.setAlpha(0.9f);
             }
             holder.flContent.setOnClickListener(v -> {
                 setIndex(position);

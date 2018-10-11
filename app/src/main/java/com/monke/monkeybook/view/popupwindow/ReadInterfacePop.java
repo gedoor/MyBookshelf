@@ -188,7 +188,7 @@ public class ReadInterfacePop extends PopupWindow {
     private void bindEvent() {
         //翻页模式
         tvPageMode.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
+            AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
                     .setTitle(activity.getString(R.string.page_mode))
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.page_mode), readBookControl.getPageMode(), (dialogInterface, i) -> {
                         readBookControl.setPageMode(i);

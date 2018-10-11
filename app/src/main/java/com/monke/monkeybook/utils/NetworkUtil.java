@@ -7,13 +7,7 @@ import android.net.NetworkInfo;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
