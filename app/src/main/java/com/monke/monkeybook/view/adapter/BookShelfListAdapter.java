@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -193,7 +194,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
+        CardView flContent;
         ImageView ivCover;
         ImageView ivHasNew;
         AutofitTextView tvName;
@@ -205,7 +206,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
         MyViewHolder(View itemView) {
             super(itemView);
-            flContent = itemView.findViewById(R.id.fl_content);
+            flContent = itemView.findViewById(R.id.cv_content);
             ivCover = itemView.findViewById(R.id.iv_cover);
             ivHasNew = itemView.findViewById(R.id.iv_has_new);
             tvName = itemView.findViewById(R.id.tv_name);

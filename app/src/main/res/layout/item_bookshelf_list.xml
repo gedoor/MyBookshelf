@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fl_content"
-    android:layout_width="match_parent"
-    android:layout_height="90dp"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:id="@+id/cv_content"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_margin="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:background="@color/background">
 
         <ImageView
@@ -26,10 +24,10 @@
             android:layout_width="match_parent"
             android:layout_height="26dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/iv_cover"
             android:layout_toStartOf="@+id/fl_has_new"
-            android:paddingEnd="2dp"
+            android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
+            android:paddingEnd="2dp"
             android:singleLine="true"
             android:text="@string/tv_book_name"
             android:textColor="@color/tv_text_default"
@@ -40,25 +38,25 @@
             android:id="@+id/fl_has_new"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:id="@+id/iv_has_new"
-                android:visibility="invisible"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp" />
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
 
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/rl_loading"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
+                android:layout_gravity="center"
                 android:visibility="invisible"
-                app:loading_width="2dp"
                 app:loading_color="@color/tv_text_default"
-                android:layout_gravity="center" />
+                app:loading_width="2dp" />
 
         </FrameLayout>
 
@@ -66,8 +64,8 @@
             android:id="@+id/tv_read"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
             android:layout_below="@+id/tv_name"
+            android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
@@ -81,8 +79,8 @@
             android:id="@+id/tv_last"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
             android:layout_below="@+id/tv_read"
+            android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
@@ -107,10 +105,5 @@
             android:contentDescription="@string/book" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_gravity="bottom"
-        android:background="@color/btn_bg_press" />
+</android.support.v7.widget.CardView>
 
-</FrameLayout>

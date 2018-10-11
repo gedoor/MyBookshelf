@@ -43,6 +43,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.model.BookSourceManage;
@@ -338,6 +339,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
                         .show();
+                break;
+            case R.id.action_change_icon:
+                LauncherIcon.Change();
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
