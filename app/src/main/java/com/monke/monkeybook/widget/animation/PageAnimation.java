@@ -26,6 +26,7 @@ public abstract class PageAnimation {
     protected Direction mDirection = Direction.NONE;
 
     protected boolean isRunning = false;
+    private boolean startAnim = false;
 
     //屏幕的尺寸
     protected int mScreenWidth;
@@ -68,7 +69,11 @@ public abstract class PageAnimation {
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
     }
 
-    public void setStartPoint(float x,float y){
+    public Scroller getScroller() {
+        return mScroller;
+    }
+
+    public void setStartPoint(float x, float y){
         mStartX = x;
         mStartY = y;
 
@@ -88,14 +93,21 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
+    public boolean isStartAnim() {
+        return startAnim;
+    }
+
+    public void setStartAnim(boolean startAnim) {
+        this.startAnim = startAnim;
+    }
+
     /**
      * 开启翻页动画
      */
     public void startAnim(){
-        if (isRunning){
-            return;
-        }
+        startAnim = true;
         isRunning = true;
+        mView.postInvalidate();
     }
 
     public void setDirection(Direction direction){
@@ -109,15 +121,14 @@ public abstract class PageAnimation {
     public void clear(){
         mView = null;
     }
+
     /**
      * 点击事件的处理
-     * @param event
      */
     public abstract boolean onTouchEvent(MotionEvent event);
 
     /**
      * 绘制图形
-     * @param canvas
      */
     public abstract void draw(Canvas canvas);
 
@@ -134,7 +145,6 @@ public abstract class PageAnimation {
 
     /**
      * 获取背景板
-     * @return
      */
     public abstract Bitmap getBgBitmap();
 

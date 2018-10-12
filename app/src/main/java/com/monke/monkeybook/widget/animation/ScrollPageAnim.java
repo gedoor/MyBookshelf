@@ -2,8 +2,6 @@ package com.monke.monkeybook.widget.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -43,8 +41,7 @@ public class ScrollPageAnim extends PageAnimation {
     // 是否处于刷新阶段
     private boolean isRefresh = true;
 
-    public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom,
-                          View view, OnPageChangeListener listener) {
+    public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom , view, listener);
         // 创建两个BitmapView
         initWidget();
@@ -56,7 +53,7 @@ public class ScrollPageAnim extends PageAnimation {
         mScrapViews = new ArrayDeque<>(2);
         for (int i = 0; i < 2; ++i) {
             BitmapView view = new BitmapView();
-            view.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
+            view.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
             view.srcRect = new Rect(0, 0, mViewWidth, mViewHeight);
             view.destRect = new Rect(0, 0, mViewWidth, mViewHeight);
             view.top = 0;
@@ -134,8 +131,8 @@ public class ScrollPageAnim extends PageAnimation {
         while (realEdge < mViewHeight && mActiveViews.size() < 2) {
             // 从废弃的Views中获取一个
             view = mScrapViews.getFirst();
-/*          //擦除其Bitmap(重新创建会不会更好一点)
-            eraseBitmap(view.bitmap,view.bitmap.getWidth(),view.bitmap.getHeight(),0,0);*/
+            //擦除其Bitmap(重新创建会不会更好一点)
+//            eraseBitmap(view.bitmap,view.bitmap.getWidth(),view.bitmap.getHeight(),0,0);
             if (view == null) return;
 
             Bitmap cancelBitmap = mNextBitmap;
@@ -257,29 +254,12 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     /**
-     * 对Bitmap进行擦除
-     *
-     * @param b
-     * @param width
-     * @param height
-     * @param paddingLeft
-     * @param paddingTop
-     */
-    private void eraseBitmap(Bitmap b, int width, int height,
-                             int paddingLeft, int paddingTop) {
-     /*   if (mInitBitmapPix == null) return;
-        b.setPixels(mInitBitmapPix, 0, width, paddingLeft, paddingTop, width, height);*/
-    }
-
-    /**
      * 重置位移
      */
     public void resetBitmap() {
         isRefresh = true;
         // 将所有的Active加入到Scrap中
-        for (BitmapView view : mActiveViews) {
-            mScrapViews.add(view);
-        }
+        mScrapViews.addAll(mActiveViews);
         // 清除所有的Active
         mActiveViews.clear();
         // 重新进行布局
@@ -336,7 +316,6 @@ public class ScrollPageAnim extends PageAnimation {
         return true;
     }
 
-
     BitmapView tmpView;
 
     @Override
@@ -352,8 +331,6 @@ public class ScrollPageAnim extends PageAnimation {
         canvas.translate(0, mMarginTop);
         //裁剪显示区域
         canvas.clipRect(0, 0, mViewWidth, mViewHeight);
-        //设置背景透明
-//        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         //绘制Bitmap
         for (int i = 0; i < mActiveViews.size(); ++i) {
             tmpView = mActiveViews.get(i);
@@ -364,9 +341,10 @@ public class ScrollPageAnim extends PageAnimation {
 
     @Override
     public synchronized void startAnim() {
+        super.startAnim();
         isRunning = true;
-        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity()
-                , 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
+        //惯性滚动
+        mScroller.fling(0, (int) mTouchY, 0, (int) mVelocity.getYVelocity(), 0, 0, Integer.MAX_VALUE * -1, Integer.MAX_VALUE);
     }
 
     @Override

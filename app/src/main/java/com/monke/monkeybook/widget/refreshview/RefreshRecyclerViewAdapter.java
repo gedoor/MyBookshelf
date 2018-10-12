@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.refreshview;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookShelfBean;
 
 public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     private final int LOAD_MORE_TYPE = 2001;
@@ -25,13 +25,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     public interface OnClickTryAgainListener {
         void loadMoreErrorTryAgain();
-    }
-
-    public interface OnItemClickListener {
-
-        void onClick(BookShelfBean bookShelfBean, int index);
-
-        void onLongClick(View view, BookShelfBean bookShelfBean, int index);
     }
 
     public RefreshRecyclerViewAdapter(Boolean needLoadMore) {
@@ -50,25 +43,26 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         }
         if (needNoti) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                notifyItemRangeChanged(getItemCount(), getItemCount() - getItemcount());
+                notifyItemRangeChanged(getItemCount(), getItemCount() - getICount());
             } else {
-                handler.post(() -> notifyDataSetChanged());
+                handler.post(this::notifyDataSetChanged);
             }
         }
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == LOAD_MORE_TYPE) {
             return new LoadMoreViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_refresh_load_more, parent, false));
         } else
-            return onCreateViewholder(parent, viewType);
+            return onCreateIViewHolder(parent, viewType);
     }
 
-    public abstract RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType);
+    public abstract RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == LOAD_MORE_TYPE) {
             if (!loadMoreError) {
                 ((LoadMoreViewHolder) holder).tvLoadMore.setText("正在加载...");
@@ -83,43 +77,42 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
         } else
-            onBindViewholder(holder, position);
+            onBindIViewHolder(holder, position);
     }
 
-    public abstract void onBindViewholder(RecyclerView.ViewHolder holder, int position);
+    public abstract void onBindIViewHolder(RecyclerView.ViewHolder holder, int position);
 
     @Override
     public int getItemViewType(int position) {
-        if (needLoadMore && isRequesting != 1 && !isAll && position == getItemCount() - 1 && getItemcount() > 0) {
+        if (needLoadMore && isRequesting != 1 && !isAll && position == getItemCount() - 1 && getICount() > 0) {
             return LOAD_MORE_TYPE;
         } else {
-            return getItemViewtype(position);
+            return getIViewType(position);
         }
     }
 
-    public abstract int getItemViewtype(int position);
+    public abstract int getIViewType(int position);
 
     @Override
     public int getItemCount() {
-        if (needLoadMore && isRequesting != 1 && !isAll && getItemcount() > 0) {
-            return getItemcount() + 1;
+        if (needLoadMore && isRequesting != 1 && !isAll && getICount() > 0) {
+            return getICount() + 1;
         } else
-            return getItemcount();
+            return getICount();
     }
 
-    public abstract int getItemcount();
+    public abstract int getICount();
 
     public void setIsAll(Boolean isAll, Boolean needNoti) {
         this.isAll = isAll;
         if (needNoti) {
             if (Looper.myLooper() == Looper.getMainLooper()) {
-//                notifyItemRangeChanged(getItemCount(),getItemCount()-getItemCount());
-                if (getItemCount() > getItemcount()) {
-                    notifyItemRangeChanged(getItemCount(), getItemCount() - getItemcount());
+                if (getItemCount() > getICount()) {
+                    notifyItemRangeChanged(getItemCount(), getItemCount() - getICount());
                 } else
                     notifyItemRemoved(getItemCount() + 1);
             } else {
-                handler.post(() -> notifyDataSetChanged());
+                handler.post(this::notifyDataSetChanged);
             }
         }
     }
@@ -136,7 +129,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     public Boolean canLoadMore() {
-        return needLoadMore && isRequesting == 0 && !isAll && getItemcount() > 0;
+        return needLoadMore && isRequesting == 0 && !isAll && getICount() > 0;
     }
 
     public OnClickTryAgainListener getClickTryAgainListener() {
@@ -159,7 +152,7 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
             if (Looper.myLooper() == Looper.getMainLooper()) {
                 notifyDataSetChanged();
             } else {
-                handler.post(() -> notifyDataSetChanged());
+                handler.post(this::notifyDataSetChanged);
             }
         }
     }

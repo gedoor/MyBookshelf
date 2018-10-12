@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
         android:name=".MApplication"
@@ -36,9 +37,10 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity android:name=".view.activity.WelcomeBookActivity"
-            android:icon="@mipmap/book_launcher"
-            android:enabled="false">
+        <activity
+            android:name=".view.activity.WelcomeBookActivity"
+            android:enabled="false"
+            android:icon="@mipmap/book_launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -49,120 +51,114 @@
                 android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity-alias
-            android:name=".BookIcon"
-            android:enabled="false"
-            android:icon="@mipmap/book_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/book_launcher_round"
-            android:targetActivity=".view.activity.WelcomeActivity">
+        <activity android:name=".view.activity.WelcomeToReadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity-alias>
+        </activity>
 
         <activity
             android:name=".view.activity.ReadBookActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden">
+            android:configChanges="locale|keyboardHidden"
+            android:launchMode="singleTask">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".view.activity.SearchBookActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme"
-            android:windowSoftInputMode="stateHidden|adjustUnspecified" />
-        <activity
-            android:name=".view.activity.FindBookActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.ChoiceBookActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.BookDetailActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.ImportBookActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.BookSourceActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.ReplaceRuleActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.SettingActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.AboutActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.DonateActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
-            android:name=".view.activity.SourceEditActivity"
-            android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
-            android:theme="@style/CAppTransparentTheme" />
+
         <activity
             android:name=".view.activity.QRCodeScanActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity
-            android:name=".view.activity.FileFolderActivity"
+            android:name=".view.activity.MainActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".view.activity.SearchBookActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme"
+            android:windowSoftInputMode="stateHidden|adjustUnspecified" />
+        <activity
+            android:name=".view.activity.FindBookActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
             android:theme="@style/CAppTransparentTheme" />
-        <activity android:name=".view.activity.WelcomeToReadActivity" />
+        <activity
+            android:name=".view.activity.ChoiceBookActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.BookDetailActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.ImportBookActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.BookSourceActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.ReplaceRuleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.SettingActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.AboutActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.DonateActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.SourceEditActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
         <activity
             android:name=".view.activity.ReadStyleActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
             android:theme="@style/CAppTransparentTheme" />
-        <activity android:name=".view.activity.DownloadActivity"
+        <activity
+            android:name=".view.activity.DownloadActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity
+            android:name=".view.activity.BookInfoActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
+            android:theme="@style/CAppTransparentTheme" />
+        <activity android:name=".view.activity.UpdateActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask"
             android:theme="@style/CAppTransparentTheme" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
         <service android:name=".service.CheckSourceService" />
+        <service android:name=".service.UpdateService" />
 
         <receiver android:name=".service.MediaButtonIntentReceiver">
             <intent-filter>
@@ -172,7 +168,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="@string/file_provider"
+            android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

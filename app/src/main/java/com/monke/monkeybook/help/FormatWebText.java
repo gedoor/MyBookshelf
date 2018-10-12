@@ -12,13 +12,11 @@ public class FormatWebText {
             return null;
         }
         return str
-                .replace(" ", "")
-                .replace(" ", "")
-                .replace("　", "")
                 .replace("\r", "")
                 .replace("\n", "")
                 .replace("\t", "")
                 .replace("&nbsp;", "")
+                .replaceAll("\\s", " ")
                 .trim();
     }
 
@@ -27,14 +25,15 @@ public class FormatWebText {
             return "";
         }
         return str
-                .replace(" ", "")
-                .replace("  ", "")
-                .replace("&nbsp;", "")
-                .replace("作者", "")
+                .replace("&nbsp;", " ")
+                .replaceAll("\\s", " ")
                 .replace("：", "")
                 .replace(":", "")
                 .replace("(", "")
                 .replace(")", "")
+                .replace("（", "")
+                .replace("）", "")
+                .replaceAll("作.*?者", "")
                 .trim();
     }
 }

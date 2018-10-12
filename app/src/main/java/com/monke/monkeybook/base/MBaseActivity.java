@@ -8,8 +8,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -26,7 +26,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = getSharedPreferences("CONFIG", 0);;
         super.onCreate(savedInstanceState);
         initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -90,26 +90,37 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      * 沉浸状态栏
      */
     protected void initImmersionBar() {
-        if (isImmersionBarEnabled()) {
-            mImmersionBar.transparentStatusBar();
-        } else {
-            mImmersionBar.statusBarColor(R.color.status_bar_bag);
-        }
-        if (isImmersionBarEnabled() && !isNightTheme()) {
-            mImmersionBar.statusBarDarkFont(true, 0.2f);
-        } else {
-            mImmersionBar.statusBarDarkFont(false);
-        }
-        if (ImmersionBar.canNavigationBarDarkFont()) {
-            mImmersionBar.navigationBarColor(R.color.background);
-            if (isNightTheme()) {
-                mImmersionBar.navigationBarDarkFont(false);
+        try {
+            if (isImmersionBarEnabled()) {
+                if (getSupportActionBar() != null && isNightTheme()) {
+                    View actionBarView = findViewById(getResources().getIdentifier("action_bar", "id", "android"));
+                    mImmersionBar.statusBarColorInt(actionBarView.getSolidColor());
+                } else {
+                    mImmersionBar.transparentStatusBar();
+                }
             } else {
-                mImmersionBar.navigationBarDarkFont(true);
+                if (getSupportActionBar() != null && isNightTheme())
+                    mImmersionBar.statusBarColor(R.color.colorPrimaryDark);
+                else
+                    mImmersionBar.statusBarColor(R.color.status_bar_bag);
             }
+            if (isImmersionBarEnabled() && !isNightTheme()) {
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
+            } else {
+                mImmersionBar.statusBarDarkFont(false);
+            }
+            if (ImmersionBar.canNavigationBarDarkFont()) {
+                mImmersionBar.navigationBarColor(R.color.background);
+                if (isNightTheme()) {
+                    mImmersionBar.navigationBarDarkFont(false);
+                } else {
+                    mImmersionBar.navigationBarDarkFont(true);
+                }
+            }
+            mImmersionBar.init();
+        } catch (Exception e) {
+            Log.e("MonkBook", e.getLocalizedMessage());
         }
-        mImmersionBar.init();
-
     }
 
     /**
@@ -133,15 +144,18 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         initNightTheme();
     }
 
-    public void setOrientation() {
-        switch (preferences.getString(getString(R.string.pk_screen_direction), "0")) {
-            case "0":
+    public void setOrientation(int screenDirection) {
+        switch (screenDirection) {
+            case 0:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
                 break;
-            case "1":
+            case 1:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 break;
-            case "2":
+            case 2:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case 3:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
         }

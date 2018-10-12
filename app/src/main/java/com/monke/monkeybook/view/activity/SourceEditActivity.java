@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,13 +24,13 @@ import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
-import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
-import com.monke.monkeybook.view.impl.ISourceEditView;
+import com.monke.monkeybook.presenter.contract.SourceEditContract;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,7 +45,7 @@ import static android.text.TextUtils.isEmpty;
  * 编辑书源
  */
 
-public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> implements ISourceEditView {
+public class SourceEditActivity extends MBaseActivity<SourceEditContract.Presenter> implements SourceEditContract.View {
     private final int REQUEST_QR_IMAGE = 202;
 
     @BindView(R.id.toolbar)
@@ -147,6 +148,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     TextInputEditText tieRuleChapterUrlNext;
     @BindView(R.id.til_ruleChapterUrlNext)
     TextInputLayout tilRuleChapterUrlNext;
+    @BindView(R.id.tie_ruleContentUrlNext)
+    TextInputEditText tieRuleContentUrlNext;
+    @BindView(R.id.til_ruleContentUrlNext)
+    TextInputLayout tilRuleContentUrlNext;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -154,7 +159,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
     private String title;
 
     @Override
-    protected ISourceEditPresenter initInjector() {
+    protected SourceEditContract.Presenter initInjector() {
         return new SourceEditPresenterImpl();
     }
 
@@ -273,6 +278,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         bookSourceBeanN.setRuleSearchUrl(trim(tieRuleSearchUrl.getText().toString()));
         bookSourceBeanN.setHttpUserAgent(trim(tieHttpUserAgent.getText().toString()));
         bookSourceBeanN.setRuleFindUrl(trim(tieRuleFindUrl.getText().toString()));
+        bookSourceBeanN.setRuleContentUrlNext(trim(tieRuleContentUrlNext.getText().toString()));
         bookSourceBeanN.setEnable(enable);
         bookSourceBeanN.setSerialNumber(serialNumber);
         return bookSourceBeanN;
@@ -307,6 +313,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tieRuleSearchUrl.setText(trim(bookSourceBean.getRuleSearchUrl()));
         tieHttpUserAgent.setText(trim(bookSourceBean.getHttpUserAgent()));
         tieRuleFindUrl.setText(trim(bookSourceBean.getRuleFindUrl()));
+        tieRuleContentUrlNext.setText(trim(bookSourceBean.getRuleContentUrlNext()));
     }
 
     private void setHint() {
@@ -334,8 +341,10 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
         tilRuleSearchUrl.setHint("RuleSearchUrl");
         tilHttpUserAgent.setHint("HttpUserAgent");
         tilRuleFindUrl.setHint("RuleFindUrl");
+        tilRuleContentUrlNext.setHint("RuleContentUrlNext");
     }
 
+    @SuppressLint("SetWorldReadable")
     private void shareBookSource() {
         Bitmap bitmap = mPresenter.encodeAsBitmap(getBookSourceStr());
         try {
@@ -345,7 +354,7 @@ public class SourceEditActivity extends MBaseActivity<ISourceEditPresenter> impl
             fOut.flush();
             fOut.close();
             file.setReadable(true, false);
-            Uri contentUri = FileProvider.getUriForFile(this, getString(R.string.file_provider), file);
+            Uri contentUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);

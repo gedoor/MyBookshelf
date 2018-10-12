@@ -1,6 +1,5 @@
 package com.monke.monkeybook.presenter;
 
-import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
@@ -12,12 +11,9 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.FileHelper;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.ReplaceRuleManage;
-import com.monke.monkeybook.presenter.impl.IReplaceRulePresenter;
-import com.monke.monkeybook.view.impl.IReplaceRuleView;
+import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 
 import java.io.File;
 import java.net.URL;
@@ -35,7 +31,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView> implements IReplaceRulePresenter {
+public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
     private BookSourceBean delBookSource;
 
     @Override
@@ -71,7 +67,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView
                     @Override
                     public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
                         mView.refresh();
-                        Snackbar.make(mView.getView(), replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
+                        mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> {
                                     restoreData(replaceRuleBean);
                                 })
@@ -127,15 +123,10 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<IReplaceRuleView
     }
 
     @Override
-    public void importDataS(Uri uri) {
+    public void importDataSLocal(String path) {
         String json;
-        if (uri.toString().startsWith("content://")) {
-            json = FileHelper.readString(uri);
-        } else {
-            String path = uri.getPath();
-            DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = FileHelper.readString(file);
-        }
+        DocumentFile file = DocumentFile.fromFile(new File(path));
+        json = DocumentHelper.readString(file);
         if (!isEmpty(json)) {
             try {
                 List<ReplaceRuleBean> dataS = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {

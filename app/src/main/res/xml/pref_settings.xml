@@ -2,12 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ListPreference
-        android:defaultValue="0"
-        android:entries="@array/screen_direction_list_title"
-        android:entryValues="@array/screen_direction_list_value"
-        android:key="@string/pk_screen_direction"
-        android:title="@string/screen_direction" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_ImmersionStatusBar"
+        android:title="@string/immersion_status_bar" />
 
     <ListPreference
         android:defaultValue="0"
@@ -28,25 +26,41 @@
         android:summary="@string/ps_auto_refresh"
         android:title="@string/pt_auto_refresh" />
 
-    <com.monke.monkeybook.widget.NumberPickerPreference
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_auto_download"
+        android:summary="@string/ps_auto_download"
+        android:title="@string/pt_auto_download" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_default_read"
+        android:summary="@string/ps_default_read"
+        android:title="@string/pt_default_read"/>
+
+    <com.monke.monkeybook.widget.number.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"
-        android:summary="当前线程数 %s"
+        android:summary="@string/threads_num"
         android:title="@string/update_search_threads_num"
-        app:MaxValue="32"
+        app:MaxValue="16"
         app:MinValue="1" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_find_expand_group"
-        android:summary="默认展开第一组发现"
-        android:title="自动展开发现" />
+        android:summary="@string/default_expand_first"
+        android:title="@string/auto_expand_find" />
 
-    <SwitchPreference
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:defaultValue="false"
-        android:key="@string/pk_ImmersionStatusBar"
-        android:title="@string/immersion_status_bar" />
+    <Preference
+        android:key="@string/pk_download_path"
+        android:title="@string/download_path" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/check_update_interval"
+        android:entryValues="@array/check_update_interval_value"
+        android:key="@string/pk_check_update"
+        android:title="@string/check_update_interval" />
 
 </PreferenceScreen>

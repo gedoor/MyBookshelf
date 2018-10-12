@@ -1,6 +1,9 @@
 package com.monke.monkeybook.help;
 
+import android.text.TextUtils;
+
 import com.luhuiguo.chinese.ChineseUtils;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 
@@ -26,39 +29,48 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public static String replaceContent(String content) {
-        String allLine[] = content.split("\r\n\u3000\u3000");
+    public static String replaceContent(BookShelfBean mBook, String content) {
+        String allLine[] = content.split("\n\u3000\u3000");
         //替换
         if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
             StringBuilder contentBuilder = new StringBuilder();
             for (String line : allLine) {
                 for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                    try {
-                        line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                    if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
+                        try {
+                            line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
                 if (line.length() > 0) {
                     if (contentBuilder.length() == 0) {
                         contentBuilder.append(line);
                     } else {
-                        contentBuilder.append("\r\n").append("\u3000\u3000").append(line);
+                        contentBuilder.append("\n").append("\u3000\u3000").append(line);
                     }
                 }
             }
             content = contentBuilder.toString();
             for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
-                if (replaceRule.getRegex().contains("\\n")) {
-                    try {
-                        content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
+                if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
+                    if (!TextUtils.isEmpty(replaceRule.getRegex()) && replaceRule.getRegex().contains("\\n")) {
+                        try {
+                            content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
             }
         }
         return content;
+    }
+
+    private static boolean isUseTo(BookShelfBean mBook, String useTo) {
+        return useTo.contains(mBook.getTag())
+                || useTo.contains(mBook.getBookInfoBean().getName());
     }
 
 }

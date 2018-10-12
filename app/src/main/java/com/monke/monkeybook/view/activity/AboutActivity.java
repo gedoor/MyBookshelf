@@ -20,6 +20,7 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -85,6 +86,11 @@ public class AboutActivity extends MBaseActivity {
     private MoProgressHUD moProgressHUD;
     private String qq = "701903217 788025059";
 
+    public static void startThis(Context context) {
+        Intent intent = new Intent(context, AboutActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected IPresenter initInjector() {
         return null;
@@ -110,8 +116,8 @@ public class AboutActivity extends MBaseActivity {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        tvVersion.setText(String.format(getString(R.string.version_name), MApplication.getVersionName()));
-        tvQq.setText(String.format(getString(R.string.qq_group), qq));
+        tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
+        tvQq.setText(getString(R.string.qq_group, qq));
 
         setTextViewIconColor(tvDisclaimer);
         setTextViewIconColor(tvGit);
@@ -134,16 +140,13 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void bindEvent() {
-        vwDonate.setOnClickListener(view -> {
-            Intent intent = new Intent(this, DonateActivity.class);
-            startActivity(intent);
-        });
+        vwDonate.setOnClickListener(view -> DonateActivity.startThis(this));
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
         vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.this_github_url)));
         vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.source_rule_url)));
         vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.disclaimer_url)));
-        vwUpdate.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.latest_release_url)));
+        vwUpdate.setOnClickListener(view -> UpdateManager.getInstance(this).checkUpdate(true));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -153,9 +156,7 @@ public class AboutActivity extends MBaseActivity {
                 Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
             }
         });
-        vwUpdateLog.setOnClickListener(view -> {
-            moProgressHUD.showAssetMarkdown("updateLog.md");
-        });
+        vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
     }
 
     @Override

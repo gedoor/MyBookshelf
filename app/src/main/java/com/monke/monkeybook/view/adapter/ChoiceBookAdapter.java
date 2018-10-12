@@ -40,12 +40,12 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchbook_item, parent, false));
+    public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_book, parent, false));
     }
 
     @Override
-    public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -56,7 +56,11 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
                             .placeholder(R.drawable.img_cover_default))
                     .into(myViewHolder.ivCover);
         }
-        myViewHolder.tvName.setText(String.format("%s(%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
+        String title = searchBooks.get(position).getName();
+        String author = searchBooks.get(position).getAuthor();
+        if (author != null && author.trim().length() > 0)
+            title = String.format("%s (%s)", title, author);
+        myViewHolder.tvName.setText(title);
         String state = searchBooks.get(position).getState();
         if (state == null || state.length() == 0) {
             myViewHolder.tvState.setVisibility(View.GONE);
@@ -91,7 +95,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvLasted.setText("");
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
-            myViewHolder.tvOrigin.setText(String.format("来源:%s", searchBooks.get(position).getOrigin()));
+            myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
         } else {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         }
@@ -110,12 +114,12 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemViewtype(int position) {
+    public int getIViewType(int position) {
         return 0;
     }
 
     @Override
-    public int getItemcount() {
+    public int getICount() {
         return searchBooks.size();
     }
 
@@ -150,7 +154,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     public void addAll(List<SearchBookBean> newData) {
         if (newData != null && newData.size() > 0) {
-            int position = getItemcount();
+            int position = getICount();
             if (newData.size() > 0) {
                 searchBooks.addAll(newData);
             }

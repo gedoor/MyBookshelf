@@ -36,7 +36,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_download_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_download, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -52,7 +52,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadAdapter.MyView
                         .dontAnimate().placeholder(R.drawable.img_cover_default))
                 .into(holder.ivCover);
         holder.tvName.setText(dataS.get(position).getName());
-        holder.tvDownload.setText(String.format(activity.getString(R.string.un_download), dataS.get(position).getDownload()));
+        holder.tvDownload.setText(activity.getString(R.string.un_download, dataS.get(position).getDownload()));
         holder.ivDel.setOnClickListener(view -> activity.delDownload(dataS.get(position).getNoteUrl()));
     }
 

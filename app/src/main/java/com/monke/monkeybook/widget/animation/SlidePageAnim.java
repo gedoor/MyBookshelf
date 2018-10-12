@@ -95,7 +95,7 @@ public class SlidePageAnim extends HorizonPageAnim {
                 break;
         }
         //滑动速度保持一致
-        int duration =  (400 * Math.abs(dx)) / mScreenWidth;
+        int duration =  (animationSpeed * Math.abs(dx)) / mScreenWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
     }
 }

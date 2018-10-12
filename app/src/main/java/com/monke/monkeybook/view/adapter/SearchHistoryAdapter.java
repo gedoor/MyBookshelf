@@ -34,7 +34,7 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
 
     @Override
     public View getView(FlowLayout parent, int position, final SearchHistoryBean searchHistoryBean) {
-        TextView tv = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchhistory_item,
+        TextView tv = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_history,
                 parent, false);
         tv.setText(searchHistoryBean.getContent());
         tv.setOnClickListener(v -> {
@@ -52,10 +52,10 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
     }
 
     public SearchHistoryBean getItemData(int position){
-        return mTagDatas.get(position);
+        return mTagDataList.get(position);
     }
 
     public int getDataSize(){
-        return mTagDatas.size();
+        return mTagDataList.size();
     }
 }

@@ -4,12 +4,16 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.monke.monkeybook.utils.StringUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 章节列表
@@ -18,6 +22,7 @@ import java.util.Objects;
 public class ChapterListBean implements Parcelable,Cloneable{
 
     private String noteUrl; //对应BookInfoBean noteUrl;
+
     private int durChapterIndex;  //当前章节数
     @Id
     private String durChapterUrl;  //当前章节对应的文章地址
@@ -27,11 +32,8 @@ public class ChapterListBean implements Parcelable,Cloneable{
     private Long start;
     //章节内容在文章中的终止位置(本地)
     private Long end;
-    //是否缓存
-    private Boolean hasCache = false;
-
     @Transient
-    private BookContentBean bookContentBean = new BookContentBean();
+    private static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
     protected ChapterListBean(Parcel in) {
         noteUrl = in.readString();
@@ -41,13 +43,11 @@ public class ChapterListBean implements Parcelable,Cloneable{
         tag = in.readString();
         start = in.readLong();
         end = in.readLong();
-        bookContentBean = in.readParcelable(BookContentBean.class.getClassLoader());
-        hasCache = in.readByte() != 0;
     }
 
-    @Generated(hash = 1638492836)
+    @Generated(hash = 1504053071)
     public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
-            Long start, Long end, Boolean hasCache) {
+            Long start, Long end) {
         this.noteUrl = noteUrl;
         this.durChapterIndex = durChapterIndex;
         this.durChapterUrl = durChapterUrl;
@@ -55,7 +55,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         this.tag = tag;
         this.start = start;
         this.end = end;
-        this.hasCache = hasCache;
     }
 
     @Generated(hash = 1096893365)
@@ -71,8 +70,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         dest.writeString(tag);
         dest.writeLong(start);
         dest.writeLong(end);
-        dest.writeParcelable(bookContentBean, flags);
-        dest.writeByte((byte)(hasCache?1:0));
     }
 
     @Override
@@ -100,8 +97,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         chapterListBean.durChapterUrl = durChapterUrl;
         chapterListBean.durChapterName = durChapterName;
         chapterListBean.tag = tag;
-        chapterListBean.hasCache = hasCache;
-        chapterListBean.bookContentBean = new BookContentBean();
         return chapterListBean;
     }
 
@@ -113,22 +108,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
         } else {
             return false;
         }
-    }
-
-    public BookContentBean getBookContentBean() {
-        return bookContentBean;
-    }
-
-    public void setBookContentBean(BookContentBean bookContentBean) {
-        this.bookContentBean = bookContentBean;
-    }
-
-    public Boolean getHasCache() {
-        return this.hasCache;
-    }
-
-    public void setHasCache(Boolean hasCache) {
-        this.hasCache = hasCache;
     }
 
     public String getTag() {
@@ -145,10 +124,33 @@ public class ChapterListBean implements Parcelable,Cloneable{
 
     public void setDurChapterName(String durChapterName) {
         if (durChapterName != null) {
-            this.durChapterName = durChapterName.replaceAll("^(第[\\d零〇一二两三四五六七八九十百千万\\s]+[章节篇回集])[、，。　：:.\\s]*", "$1 ");
-        } else {
-            this.durChapterName = null;
+            durChapterName = durChapterName.trim();
+            Matcher matcher = chapterNamePattern.matcher(durChapterName);
+            if(matcher.find()) {
+                int num = StringUtils.stringToInt(matcher.group(2));
+                this.durChapterName = num > 0 ? matcher.replaceFirst("第" + num + "章 ") : matcher.replaceFirst("$1 ");
+                return;
+            }
         }
+        this.durChapterName = durChapterName;
+    }
+
+    public String getPureChapterName() {
+        return durChapterName == null ? ""
+            : StringUtils.fullToHalf(durChapterName).replaceAll("\\s", "")
+                .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
+                .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
+                // 所有非字母数字中日韩文字 CJK区+扩展A-F区
+    }
+
+    public int getChapterNum() {
+        if (durChapterName != null) {
+            Matcher matcher = chapterNamePattern.matcher(durChapterName);
+            if (matcher.find()) {
+                return StringUtils.stringToInt(matcher.group(2));
+            }
+        }
+        return -1;
     }
 
     public String getDurChapterUrl() {

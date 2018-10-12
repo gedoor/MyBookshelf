@@ -26,7 +26,7 @@
     <string name="net_error_10001">没有网络</string>
     <string name="net_error_10002">网络连接超时</string>
     <string name="net_error_10003">数据解析失败</string>
-
+    <string name="origin_format">来源: %s</string>
     <string name="read_dur_progress">最近阅读: %s</string>
     <string name="tv_book_name">《%s》</string>
     <string name="book_search_last">最新章节: %s</string>
@@ -43,6 +43,8 @@
     <string name="version_name">Version %s</string>
     <string name="pt_auto_refresh">自动刷新</string>
     <string name="ps_auto_refresh">打开软件时自动更新书籍</string>
+    <string name="pt_auto_download">自动下载最新章节</string>
+    <string name="ps_auto_download">更新书籍时自动下载最新章节</string>
     <string name="backup">备份</string>
     <string name="restore">恢复</string>
     <string name="backup_permission">备份请给与存储权限</string>
@@ -50,7 +52,7 @@
     <string name="ok">确认</string>
     <string name="cancel">取消</string>
     <string name="backup_confirmation">确认备份吗？</string>
-    <string name="backup_message">新备份会替换原有备份。\n备份文件夹Documents</string>
+    <string name="backup_message">新备份会替换原有备份。\n备份文件夹YueDu</string>
     <string name="restore_confirmation">确认恢复吗？</string>
     <string name="restore_message">备份书架会覆盖现有书架。</string>
     <string name="backup_success">备份成功</string>
@@ -101,13 +103,14 @@
     <string name="clear_content">清除缓存</string>
     <string name="action_save">保存</string>
     <string name="edit_book_source">编辑书源</string>
-    <string name="add_book_source">添加书源</string>
+    <string name="disable_book_source">禁用书源</string>
+    <string name="add_book_source">新建书源</string>
     <string name="book_file_selector">添加书籍</string>
     <string name="scan_book_source">扫描</string>
     <string name="copy_source">拷贝书源</string>
     <string name="paste_source">粘贴书源</string>
     <string name="source_rule_s">书源规则说明</string>
-    <string name="update_url">查看最新版本</string>
+    <string name="check_update">检查更新</string>
     <string name="camera_scan">扫描二维码</string>
     <string name="scan_image">扫描本地图片</string>
     <string name="rule_summary">规则说明</string>
@@ -154,6 +157,7 @@
     <string name="import_replace_rule">本地导入</string>
     <string name="import_replace_rule_on_line">网络导入</string>
     <string name="bookshelf_px">书架排序</string>
+    <string name="check_update_interval">检查更新间隔</string>
     <string name="bookshelf_px_0">按阅读时间排序</string>
     <string name="bookshelf_px_1">按更新时间排序</string>
     <string name="bookshelf_px_2">手动排序</string>
@@ -199,7 +203,7 @@
     <string name="search_book_source_num">搜索(共%d个书源)</string>
     <string name="chapter_list_size">目录(%d)</string>
     <string name="text_bold">加粗</string>
-    <string name="custom_font">字体(长按默认)</string>
+    <string name="custom_font">字体</string>
     <string name="text">文字</string>
     <string name="home_page">软件主页</string>
     <string name="right">右</string>
@@ -219,5 +223,36 @@
     <string name="jf_convert_f">简转繁</string>
     <string name="jf_convert_j">繁转简</string>
     <string name="page_mode">翻页模式</string>
+    <string name="nb_file_sub_count">%1$d 项</string>
+    <string name="nb_file_path">存储卡:</string>
+    <string name="nb_file_add_shelf">加入书架</string>
+    <string name="nb_file_add_shelves">加入书架(%1$d)</string>
+    <string name="nb_file_add_succeed">成功添加%1$d本书</string>
+    <string name="fonts_folder">请将字体文件放到SD根目录Fonts文件夹下重新选择</string>
+    <string name="default_font">默认字体</string>
+    <string name="select_font">选择字体</string>
+    <string name="text_size">字号</string>
+    <string name="line_size">行距</string>
+    <string name="paragraph_size">段距</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    <string name="to_top">置顶</string>
+    <string name="auto_expand_find">自动展开发现</string>
+    <string name="default_expand_first">默认展开第一组发现</string>
+    <string name="threads_num">当前线程数 %s</string>
+    <string name="read_aloud_speed">朗读语速</string>
+    <string name="auto_next_page">自动翻页</string>
+    <string name="auto_next_page_stop">停止自动翻页</string>
+    <string name="auto_next_page_speed">自动翻页间隔</string>
+    <string name="book_info">书籍信息</string>
+    <string name="ps_default_read">默认打开书架</string>
+    <string name="pt_default_read">自动跳转最近阅读</string>
+    <string name="use_to">作用于</string>
+    <string name="menu_action_group">分组</string>
+    <string name="download_path">内容缓存路径</string>
+    <string name="sys_file_picker">系统文件选择器</string>
+    <string name="new_version">新版本</string>
+    <string name="download_update">下载更新</string>
+    <string name="aloud_volume_page">朗读时音量键翻页</string>
 
 </resources>

@@ -2,28 +2,32 @@ package com.monke.monkeybook.help;
 
 import android.content.Context;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.utils.FileUtils;
-import com.monke.monkeybook.utils.IOUtils;
+
+import net.ricecode.similarity.JaroWinklerStrategy;
+import net.ricecode.similarity.StringSimilarityService;
+import net.ricecode.similarity.StringSimilarityServiceImpl;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,59 +36,167 @@ import java.util.List;
  */
 
 public class BookshelfHelp {
+
+    private static HashMap<String, HashSet<Integer>> getChapterCaches(){
+        HashMap<String, HashSet<Integer>> temp = new HashMap<>();
+        File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
+        try {
+            String[] booksCached = file.list((dir, name) -> new File(dir, name).isDirectory());
+            for (String bookPath : booksCached) {
+                HashSet<Integer> chapterIndexS = new HashSet<>();
+                file = new File(Constant.BOOK_CACHE_PATH + bookPath);
+                String[] chapters = file.list((dir, name) -> name.matches("^\\d+-.*" + FileHelp.SUFFIX_NB + "$"));
+                for (String chapter : chapters) {
+                    chapterIndexS.add(
+                            Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
+                    );
+                }
+                temp.put(bookPath, chapterIndexS);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    private static HashMap<String, HashSet<Integer>> chapterCaches = getChapterCaches();
+
+    public static String getCachePathName(DownloadChapterBean chapter) {
+        return formatFileName(chapter.getBookName() + "-" + chapter.getTag());
+    }
+
+    public static String getCachePathName(BookInfoBean book) {
+        return formatFileName(book.getName() + "-" + book.getTag());
+    }
+
+    public static void setChapterIsCached(String bookName, ChapterListBean chapter, boolean cached) {
+        setChapterIsCached(bookName + "-" + chapter.getTag(), chapter.getDurChapterIndex(), cached);
+    }
+
+
+    public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
+        bookPathName = formatFileName(bookPathName);
+        if(!chapterCaches.containsKey(bookPathName))
+            chapterCaches.put(bookPathName, new HashSet<>());
+        if (cached)
+            return chapterCaches.get(bookPathName).add(index);
+        else
+            return chapterCaches.get(bookPathName).remove(index);
+    }
+
     /**
-     * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存
-     * 过)
-     * @param folderName : bookId
-     * @param fileName: chapterName
-     * @return
+     * 根据文件名判断是否被缓存过 (因为可能数据库显示被缓存过，但是文件中却没有的情况，所以需要根据文件判断是否被缓存过)
      */
-    public static boolean isChapterCached(String folderName, String fileName){
+    // be careful to use this method, the storage path (folderName) has been changed
+    public static boolean isChapterCached(String folderName, String fileName) {
         File file = new File(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_NB);
-        return file.exists();
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
+        boolean cached = file.exists();
+        if (fileName.matches("^\\d+-")) {
+            int index = Integer.parseInt(fileName.substring(0, fileName.indexOf("-")));
+            setChapterIsCached(folderName, index, cached);
+        }
+        return cached;
+    }
+
+    public static boolean isChapterCached(BookInfoBean book, ChapterListBean chapter) {
+        final String path = getCachePathName(book);
+        return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
+    }
+
+    public static void clearCaches(boolean clearChapterList) {
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH);
+        FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
+        chapterCaches.clear();
+        if (clearChapterList)
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteAll();
     }
 
     /**
      * 删除章节文件
-     * @param folderName : bookId
-     * @param fileName: chapterName
-     * @return
      */
-    public static void delChapter(String folderName, String fileName){
-        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_NB);
+    public static void delChapter(String folderName, String fileName) {
+        FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
     }
 
     /**
      * 存储章节
-     * @param folderName
-     * @param fileName
-     * @param content
      */
-    public static void saveChapterInfo(String folderName,String fileName,String content){
-        File file = getBookFile(folderName, fileName);
+    public static boolean saveChapterInfo(String folderName, String fileName, String content) {
+        if (content == null) {
+            return false;
+        }
+        File file = getBookFile(formatFileName(folderName), formatFileName(fileName));
         //获取流并存储
-        Writer writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
             writer.flush();
+            return true;
         } catch (IOException e) {
+            MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
             e.printStackTrace();
-            IOUtils.close(writer);
+            return false;
         }
     }
 
     /**
      * 创建或获取存储文件
-     * @param folderName
-     * @param fileName
-     * @return
      */
-    public static File getBookFile(String folderName, String fileName){
-        return FileUtils.getFile(Constant.BOOK_CACHE_PATH + folderName
-                + File.separator + fileName + FileUtils.SUFFIX_NB);
+    public static File getBookFile(String folderName, String fileName) {
+        return FileHelp.getFile(Constant.BOOK_CACHE_PATH + folderName
+                + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
+    }
+
+    private static String formatFileName(String fileName) {
+        return fileName.replace("/", "")
+                .replace(":", "")
+                .replace(".", "");
+    }
+
+    /**
+     * 根据目录名获取当前章节
+     */
+    public static int getDurChapter(BookShelfBean oldBook, BookShelfBean newBook) {
+        int oldChapterSize = oldBook.getChapterListSize();
+        int oldChapterIndex = oldBook.getDurChapter();
+        int oldChapterNum = oldBook.getChapterList(oldBook.getDurChapter()).getChapterNum();
+        String oldName = oldBook.getChapterList(oldBook.getDurChapter()).getPureChapterName();
+        int newChapterSize = newBook.getChapterListSize();
+        int min = Math.max(0, Math.min(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) - 10);
+        int max = Math.min(newChapterSize - 1, Math.max(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) + 10);
+        double nameSim = 0;
+        int newIndex = 0;
+        int newNum = 0;
+        if (!oldName.isEmpty()) {
+            StringSimilarityService service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
+            for (int i = min; i <= max; i++) {
+                String newName = newBook.getChapterList(i).getPureChapterName();
+                double temp = service.score(oldName, newName);
+                if (temp > nameSim) {
+                    nameSim = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim < 0.96 && oldChapterNum > 0) {
+            for (int i = min; i <= max; i++) {
+                int temp = newBook.getChapterList(i).getChapterNum();
+                if (temp == oldChapterNum) {
+                    newNum = temp;
+                    newIndex = i;
+                    break;
+                } else if (Math.abs(temp - oldChapterNum) < Math.abs(newNum - oldChapterNum)) {
+                    newNum = temp;
+                    newIndex = i;
+                }
+            }
+        }
+        if (nameSim > 0.96 || Math.abs(newNum - oldChapterNum) < 1) {
+            return newIndex;
+        } else {
+            return Math.min(Math.max(0, newBook.getChapterListSize() - 1), oldChapterIndex);
+        }
     }
 
     public static List<BookShelfBean> getAllBook() {
@@ -94,11 +206,8 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
-                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
                 bookShelfList.remove(i);
                 i--;
             }
@@ -114,8 +223,6 @@ public class BookshelfHelp {
             BookInfoBean bookInfoBean = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
                     .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookShelfList.get(i).getNoteUrl())).limit(1).build().unique();
             if (bookInfoBean != null) {
-                bookInfoBean.setChapterList(getChapterList(bookInfoBean.getNoteUrl()));
-                bookInfoBean.setBookmarkList(getBookmarkList(bookInfoBean.getName()));
                 bookShelfList.get(i).setBookInfoBean(bookInfoBean);
             } else {
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().delete(bookShelfList.get(i));
@@ -143,11 +250,36 @@ public class BookshelfHelp {
         return null;
     }
 
-    public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
+    public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
-        FileUtils.deleteFile(Constant.BOOK_CACHE_PATH + bookShelfBean.getBookInfoBean().getName());
+        if(!keepCaches) {
+            String bookName = bookShelfBean.getBookInfoBean().getName();
+            // 如果书架上有其他同名书籍，只删除本书源的缓存
+            long bookNum = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
+                    .where(BookInfoBeanDao.Properties.Name.eq(bookName)).count();
+            if (bookNum > 0) {
+                FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + getCachePathName(bookShelfBean.getBookInfoBean()));
+                chapterCaches.remove(getCachePathName(bookShelfBean.getBookInfoBean()));
+                return;
+            }
+            // 没有同名书籍，删除本书所有的缓存
+            try {
+                File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
+                String[] bookCaches = file.list((dir, name) -> new File(dir, name).isDirectory() && name.startsWith(bookName + "-"));
+                for (String bookPath: bookCaches) {
+                    FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookPath);
+                    if (chapterCaches.containsKey(bookPath))
+                        chapterCaches.remove(bookPath);
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
+        removeFromBookShelf(bookShelfBean, false);
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
@@ -172,11 +304,13 @@ public class BookshelfHelp {
         bookInfo.setName(searchBookBean.getName());
         bookInfo.setTag(searchBookBean.getTag());
         bookInfo.setOrigin(searchBookBean.getOrigin());
+        bookInfo.setIntroduce(searchBookBean.getIntroduce());
+        bookInfo.setChapterUrl(searchBookBean.getChapterUrl());
         bookShelfBean.setBookInfoBean(bookInfo);
         return bookShelfBean;
     }
 
-    private static List<ChapterListBean> getChapterList(String noteUrl) {
+    public static List<ChapterListBean> getChapterList(String noteUrl) {
         return DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                 .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
@@ -214,13 +348,17 @@ public class BookshelfHelp {
     }
 
     public static String getReadProgress(int durChapterIndex, int chapterAll, int durPageIndex, int durPageAll) {
-        DecimalFormat df = new DecimalFormat("0.00%");
+        DecimalFormat df = new DecimalFormat("0.0%");
         if (chapterAll == 0) {
-            return "0.00%";
+            return "0.0%";
         } else if (durPageAll == 0) {
             return df.format(durChapterIndex * 1.0f / chapterAll);
         }
-        return df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
+        String percent = df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
+        if (percent.equals("100.0%") && (durChapterIndex + 1 != chapterAll || durPageIndex + 1 != durPageAll) ) {
+            percent = "99.9%";
+        }
+        return percent;
     }
 
     /**
@@ -232,29 +370,13 @@ public class BookshelfHelp {
         }
         switch (bookshelfOrder) {
             case "0":
-                Collections.sort(books, (o1, o2) -> {
-                    if (o1.getFinalDate() - o2.getFinalDate() > 0) {
-                        return -1;
-                    } else if (o1.getFinalDate() - o2.getFinalDate() < 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+                Collections.sort(books, (o1, o2) -> Long.compare(o2.getFinalDate(), o1.getFinalDate()));
                 break;
             case "1":
-                Collections.sort(books, (o1, o2) -> {
-                    if (o1.getFinalRefreshData() - o2.getFinalRefreshData() > 0) {
-                        return -1;
-                    } else if (o1.getFinalRefreshData() - o2.getFinalRefreshData() < 0) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+                Collections.sort(books, (o1, o2) -> Long.compare(o2.getFinalRefreshData(), o1.getFinalRefreshData()));
                 break;
             case "2":
-                Collections.sort(books, (o1, o2) -> o1.getSerialNumber() - o2.getSerialNumber());
+                Collections.sort(books, (o1, o2) -> Integer.compare(o1.getSerialNumber(), o2.getSerialNumber()));
                 break;
         }
     }

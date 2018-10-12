@@ -2,7 +2,6 @@
 package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
@@ -18,8 +17,7 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IChoiceBookPresenter;
-import com.monke.monkeybook.view.impl.IChoiceBookView;
+import com.monke.monkeybook.presenter.contract.ChoiceBookContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChoiceBookPresenterImpl extends BasePresenterImpl<IChoiceBookView> implements IChoiceBookPresenter {
+public class ChoiceBookPresenterImpl extends BasePresenterImpl<ChoiceBookContract.View> implements ChoiceBookContract.Presenter {
     private String tag;
     private String url;
     private String title;

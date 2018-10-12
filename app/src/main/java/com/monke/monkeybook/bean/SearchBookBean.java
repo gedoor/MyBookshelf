@@ -13,14 +13,17 @@ import org.greenrobot.greendao.annotation.Transient;
 public class SearchBookBean implements Parcelable{
     @Id
     private String noteUrl;
-    private String coverUrl;
+    private String coverUrl;//封面URL
     private String name;
     private String author;
     private String tag;
-    private String kind;
-    private String origin;
+    private String kind;//分类
+    private String origin;//来源
     private String desc;
     private String lastChapter;
+    private String introduce; //简介
+    private String chapterUrl;//目录URL
+    private Long addTime = 0L;
     @Transient
     private long words;
     @Transient
@@ -48,11 +51,15 @@ public class SearchBookBean implements Parcelable{
         origin = in.readString();
         desc = in.readString();
         originNum = in.readInt();
+        introduce = in.readString();
+        chapterUrl = in.readString();
+        addTime = in.readLong();
     }
 
-    @Generated(hash = 1315866286)
+    @Generated(hash = 1805065778)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
-            String tag, String kind, String origin, String desc, String lastChapter) {
+            String tag, String kind, String origin, String desc, String lastChapter,
+            String introduce, String chapterUrl, Long addTime) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -62,6 +69,9 @@ public class SearchBookBean implements Parcelable{
         this.origin = origin;
         this.desc = desc;
         this.lastChapter = lastChapter;
+        this.introduce = introduce;
+        this.chapterUrl = chapterUrl;
+        this.addTime = addTime;
     }
 
     @Override
@@ -79,6 +89,9 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(origin);
         dest.writeString(desc);
         dest.writeInt(originNum);
+        dest.writeString(introduce);
+        dest.writeString(chapterUrl);
+        dest.writeLong(addTime);
     }
 
     @Override
@@ -119,7 +132,7 @@ public class SearchBookBean implements Parcelable{
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.trim().replaceAll("　", "") : null;
     }
 
     public String getAuthor() {
@@ -127,7 +140,7 @@ public class SearchBookBean implements Parcelable{
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = author != null ? author.trim().replaceAll("[（【】）　]", "") : null;
     }
 
     public long getWords() {
@@ -192,6 +205,8 @@ public class SearchBookBean implements Parcelable{
 
     public void setIsAdd(Boolean isAdd) {
         this.isAdd = isAdd;
+        if(isAdd)
+            this.addTime = System.currentTimeMillis();
     }
 
     public void originNumAdd() {
@@ -200,5 +215,29 @@ public class SearchBookBean implements Parcelable{
 
     public int getOriginNum() {
         return originNum;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public String getChapterUrl() {
+        return this.chapterUrl;
+    }
+
+    public void setChapterUrl(String chapterUrl) {
+        this.chapterUrl = chapterUrl;
+    }
+
+    public long getAddTime() {
+        return this.addTime;
+    }
+
+    public void setAddTime(Long addTime) {
+        this.addTime = addTime;
     }
 }

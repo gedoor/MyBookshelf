@@ -10,8 +10,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.IFindBookPresenter;
-import com.monke.monkeybook.view.impl.IFindBookView;
+import com.monke.monkeybook.presenter.contract.FindBookContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class FindBookPresenterImpl extends BasePresenterImpl<IFindBookView> implements IFindBookPresenter {
+public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
     private final List<FindKindGroupBean> group = new ArrayList<>();
 
     @Override

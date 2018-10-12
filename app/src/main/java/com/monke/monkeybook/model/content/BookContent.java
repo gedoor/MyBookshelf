@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model.content;
 
+import android.text.TextUtils;
+
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -7,71 +9,97 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeElement;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeJson;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;
+import com.monke.monkeybook.model.impl.IHttpGetApi;
 
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import io.reactivex.Observable;
+import retrofit2.Call;
 
 public class BookContent {
     private String tag;
     private BookSourceBean bookSourceBean;
+    private String ruleBookContent;
+    private boolean isAJAX;
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
+        ruleBookContent = bookSourceBean.getRuleBookContent();
+        if (ruleBookContent.startsWith("$")) {
+            isAJAX = true;
+            ruleBookContent = ruleBookContent.substring(1);
+        }
     }
 
     public Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
         return Observable.create(e -> {
+            if (TextUtils.isEmpty(s)) {
+                e.onError(new Throwable("内容获取失败"));
+                e.onComplete();
+                return;
+            }
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(durChapterIndex);
             bookContentBean.setDurChapterUrl(durChapterUrl);
             bookContentBean.setTag(tag);
-            String ruleBookContent = bookSourceBean.getRuleBookContent();
-            if (ruleBookContent.startsWith("$")) {
-                ruleBookContent = ruleBookContent.substring(1);
-            }
-            try {
-                if (ruleBookContent.contains("JSON")) {
-                    JSONObject jsonObject = new JSONObject(s);
-                    AnalyzeJson analyzeJson = new AnalyzeJson(jsonObject);
-                    bookContentBean.setDurChapterContent(analyzeJson.getResult(ruleBookContent));
-                } else {
-                    Document doc = Jsoup.parse(s);
-                    AnalyzeElement analyzeElement = new AnalyzeElement(doc, durChapterUrl);
-                    bookContentBean.setDurChapterContent(analyzeElement.getResult(ruleBookContent));
+
+            WebContentBean webContentBean = analyzeBookContent(s, durChapterUrl);
+            bookContentBean.setDurChapterContent(webContentBean.content);
+            bookContentBean.setRight(webContentBean.isRight);
+
+            while (!TextUtils.isEmpty(webContentBean.nextUrl)) {
+                Call<String> call = DefaultModelImpl.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                        .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                String response = "";
+                try {
+                    response = call.execute().body();
+                } catch (Exception exception) {
+                    if (!e.isDisposed()) {
+                        e.onError(exception);
+                    }
                 }
-                bookContentBean.setRight(true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                ErrorAnalyContentManager.getInstance().writeNewErrorUrl(durChapterUrl);
-                bookContentBean.setDurChapterContent(durChapterUrl.substring(0, durChapterUrl.indexOf('/', 8)) + ex.getMessage());
-                bookContentBean.setRight(false);
+                webContentBean = analyzeBookContent(response, webContentBean.nextUrl);
+                if (!TextUtils.isEmpty(webContentBean.content)) {
+                    bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
+                }
             }
+
             e.onNext(bookContentBean);
             e.onComplete();
         });
     }
 
-    public Observable<BookContentBean> upChapterList(BookContentBean bookContentBean) {
-        return Observable.create(e -> {
-            if (bookContentBean.getRight()) {
-                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
-                if (chapterListBean != null) {
-                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    chapterListBean.setHasCache(true);
-                    DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
-                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
-                }
+    private WebContentBean analyzeBookContent(final String s, final String chapterUrl) {
+        WebContentBean webContentBean = new WebContentBean();
+        try {
+            Document doc = Jsoup.parse(s);
+            AnalyzeElement analyzeElement = new AnalyzeElement(doc, chapterUrl);
+            webContentBean.content = analyzeElement.getResult(ruleBookContent);
+            webContentBean.isRight = true;
+            if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
+                webContentBean.nextUrl = analyzeElement.getResult(bookSourceBean.getRuleContentUrlNext());
             }
-            e.onNext(bookContentBean);
-            e.onComplete();
-        });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            ErrorAnalyContentManager.getInstance().writeNewErrorUrl(chapterUrl);
+            webContentBean.content = chapterUrl.substring(0, chapterUrl.indexOf('/', 8)) + ex.getMessage();
+            webContentBean.isRight = false;
+        }
+        return webContentBean;
+    }
+
+    private class WebContentBean {
+        private String content;
+        private boolean isRight;
+        private String nextUrl;
+
+        private WebContentBean() {
+
+        }
     }
 }

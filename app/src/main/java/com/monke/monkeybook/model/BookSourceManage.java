@@ -2,6 +2,7 @@ package com.monke.monkeybook.model;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -12,10 +13,12 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.AnalyzeRule.AnalyzeHeaders;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 public class BookSourceManage extends BaseModelImpl {
     private static List<BookSourceBean> selectedBookSource;
     private static List<BookSourceBean> allBookSource;
+    public static List<String> groupList = new ArrayList<>();
 
     public static BookSourceManage getInstance() {
         return new BookSourceManage();
@@ -43,9 +47,6 @@ public class BookSourceManage extends BaseModelImpl {
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
         }
-        if (selectedBookSource.size() == 0) {
-            selectedBookSource = getAllBookSource();
-        }
         return selectedBookSource;
     }
 
@@ -54,6 +55,7 @@ public class BookSourceManage extends BaseModelImpl {
             allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
+            upGroupList();
         }
         return allBookSource;
     }
@@ -66,6 +68,7 @@ public class BookSourceManage extends BaseModelImpl {
                 .where(BookSourceBeanDao.Properties.Enable.eq(true))
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
+        upGroupList();
     }
 
     public static void addBookSource(List<BookSourceBean> bookSourceBeans) {
@@ -90,6 +93,16 @@ public class BookSourceManage extends BaseModelImpl {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+    }
+
+    private synchronized static void upGroupList() {
+        groupList.clear();
+        for (BookSourceBean bookSourceBean : allBookSource) {
+            if (!TextUtils.isEmpty(bookSourceBean.getBookSourceGroup()) && !groupList.contains(bookSourceBean.getBookSourceGroup())) {
+                groupList.add(bookSourceBean.getBookSourceGroup());
+            }
+        }
+        Collections.sort(groupList);
     }
 
     public static Observable<Boolean> importSourceFromWww(URL url) {

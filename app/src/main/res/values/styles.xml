@@ -5,12 +5,27 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
+    </style>
+
+    <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/background_card</item>
+        <item name="android:textColor">@color/tv_text_default</item>
+        <item name="android:textColorPrimary">@color/tv_text_default</item>
+        <item name="textColorAlertDialogListItem">@color/tv_text_default</item>
+
+    </style>
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/background_menu</item>
     </style>
 
     <style name="CAppTransparentTheme" parent="CAppTheme">
         <!-- Customize your theme here. -->
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -43,23 +58,5 @@
         <item name="android:windowExitAnimation">@anim/anim_pop_windowmenumore_out</item>
     </style>
 
-    <declare-styleable name="CustomTextView">
-        <attr name="textStrokeColor" format="color" />
-        <attr name="textRadius" format="dimension" />
-        <attr name="textLeftTopRadius" format="dimension" />
-        <attr name="textLeftBottomRadius" format="dimension" />
-        <attr name="textRightTopRadius" format="dimension" />
-        <attr name="textRightBottomRadius" format="dimension" />
-        <attr name="textStrokeWidth" format="dimension" />
-        <attr name="textDrawable" format="reference" />
-        <attr name="textNormalTextColor" format="color" />
-        <attr name="textSelectedTextColor" format="color" />
-        <attr name="textNoLeftStroke" format="boolean"/>
-        <attr name="textNoRightStroke" format="boolean"/>
-        <attr name="textNoTopStroke" format="boolean"/>
-        <attr name="textNoBottomStroke" format="boolean"/>
-        <attr name="textPressedSolidColor" format="color"/>
-        <attr name="textNormalSolidColor" format="color"/>
-        <attr name="textIsSelected" format="boolean" />
-    </declare-styleable>
+
 </resources>

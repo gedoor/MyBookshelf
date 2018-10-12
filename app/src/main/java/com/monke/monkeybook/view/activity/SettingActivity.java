@@ -1,5 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -24,6 +26,9 @@ public class SettingActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
+    public static void startThis(Context context) {
+        context.startActivity(new Intent(context, SettingActivity.class));
+    }
 
     @Override
     protected IPresenter initInjector() {
@@ -45,11 +50,6 @@ public class SettingActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-
-    }
-
-    @Override
-    protected void firstRequest() {
 
     }
 

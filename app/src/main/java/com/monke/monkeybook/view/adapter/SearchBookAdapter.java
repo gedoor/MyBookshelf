@@ -21,6 +21,7 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,13 +48,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewholder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_searchbook_item, parent, false));
+    public RecyclerView.ViewHolder onCreateIViewHolder(ViewGroup parent, int viewType) {
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_book, parent, false));
     }
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewholder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -63,7 +64,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                             .dontAnimate().placeholder(R.drawable.img_cover_default))
                     .into(myViewHolder.ivCover);
         }
-        myViewHolder.tvName.setText(String.format("%s(%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
+        myViewHolder.tvName.setText(String.format("%s (%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
         String state = searchBooks.get(position).getState();
         if (state == null || state.length() == 0) {
             myViewHolder.tvState.setVisibility(View.GONE);
@@ -98,7 +99,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvLasted.setText("");
         if (searchBooks.get(position).getOrigin() != null && searchBooks.get(position).getOrigin().length() > 0) {
             myViewHolder.tvOrigin.setVisibility(View.VISIBLE);
-            myViewHolder.tvOrigin.setText(String.format("来源:%s", searchBooks.get(position).getOrigin()));
+            myViewHolder.tvOrigin.setText(activity.getString(R.string.origin_format, searchBooks.get(position).getOrigin()));
         } else {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         }
@@ -122,12 +123,12 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     @Override
-    public int getItemViewtype(int position) {
+    public int getIViewType(int position) {
         return 0;
     }
 
     @Override
-    public int getItemcount() {
+    public int getICount() {
         return searchBooks.size();
     }
 
@@ -163,27 +164,24 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
+        List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
         if(newDataS!=null && newDataS.size()>0){
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
-            int oldCount = getItemcount();
-            Boolean changed = false;
-            if (searchBooks.size() == 0) {
-                searchBooks.addAll(newDataS);
-                changed = true;
+            if (copyDataS.size() == 0) {
+                copyDataS.addAll(newDataS);
             } else {
                 //已有
                 for (SearchBookBean temp : newDataS) {
                     Boolean hasSame = false;
-                    for (int i = 0; i < searchBooks.size(); i++) {
-                        SearchBookBean searchBook = searchBooks.get(i);
+                    for (int i = 0; i < copyDataS.size(); i++) {
+                        SearchBookBean searchBook = copyDataS.get(i);
                         if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
                             if (temp.getIsAdd()) {
                                 searchBook.setIsAdd(true);
                             }
                             hasSame = true;
                             searchBook.originNumAdd();
-                            notifyItemChanged(i);
                             break;
                         }
                     }
@@ -194,44 +192,40 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 //添加
                 for (SearchBookBean temp : searchBookBeansAdd) {
                     if (temp.getName().equals(keyWord)) {
-                        for (int i = 0; i < searchBooks.size(); i++) {
-                            if (!Objects.equals(keyWord, searchBooks.get(i).getName())) {
-                                searchBooks.add(i, temp);
-                                changed = true;
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            if (!Objects.equals(keyWord, copyDataS.get(i).getName())) {
+                                copyDataS.add(i, temp);
                                 break;
                             }
                         }
                     } else if (temp.getAuthor().contains(keyWord) || temp.getName().contains(keyWord)) {
-                        for (int i = 0; i < searchBooks.size(); i++) {
-                            if (!Objects.equals(keyWord, searchBooks.get(i).getName()) && !Objects.equals(keyWord, searchBooks.get(i).getAuthor())) {
-                                searchBooks.add(i, temp);
-                                changed = true;
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            if (!Objects.equals(keyWord, copyDataS.get(i).getName()) && !Objects.equals(keyWord, copyDataS.get(i).getAuthor())) {
+                                copyDataS.add(i, temp);
                                 break;
                             }
                         }
                     } else {
-                        searchBooks.add(temp);
+                        copyDataS.add(temp);
                     }
                 }
             }
-            if (changed) {
-                notifyDataSetChanged();
-            } else {
-                notifyItemRangeInserted(oldCount, searchBookBeansAdd.size());
-            }
         }
+        searchBooks = copyDataS;
+        activity.runOnUiThread(this::notifyDataSetChanged);
     }
 
     public void clearAll() {
-        if (searchBooks.size() > 0) {
+        int bookSize = searchBooks.size();
+        if (bookSize > 0) {
             try {
                 Glide.with(activity).onDestroy();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            searchBooks.clear();
+            notifyItemRangeRemoved(0, bookSize);
         }
-        searchBooks.clear();
-        notifyDataSetChanged();
     }
 
     public List<SearchBookBean> getSearchBooks() {

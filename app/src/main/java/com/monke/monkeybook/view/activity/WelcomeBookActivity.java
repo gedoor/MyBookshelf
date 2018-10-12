@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +42,11 @@ public class WelcomeBookActivity extends MBaseActivity {
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                startActivityByAnim(new Intent(WelcomeBookActivity.this, MainActivity.class), android.R.anim.fade_in, android.R.anim.fade_out);
+                if (preferences.getBoolean(getString(R.string.pk_default_read), false)) {
+                    startReadActivity();
+                } else {
+                    startBookshelfActivity();
+                }
                 finish();
             }
 
@@ -61,6 +66,16 @@ public class WelcomeBookActivity extends MBaseActivity {
             }
         });
         welAnimator.start();
+    }
+
+    private void startBookshelfActivity() {
+        startActivityByAnim(new Intent(this, MainActivity.class), android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    private void startReadActivity() {
+        Intent intent = new Intent(this, ReadBookActivity.class);
+        intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+        startActivity(intent);
     }
 
     @Override

@@ -33,6 +33,9 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         public final static Property Origin = new Property(6, String.class, "origin", false, "ORIGIN");
         public final static Property Desc = new Property(7, String.class, "desc", false, "DESC");
         public final static Property LastChapter = new Property(8, String.class, "lastChapter", false, "LAST_CHAPTER");
+        public final static Property Introduce = new Property(9, String.class, "introduce", false, "INTRODUCE");
+        public final static Property ChapterUrl = new Property(10, String.class, "chapterUrl", false, "CHAPTER_URL");
+        public final static Property AddTime = new Property(11, Long.class, "addTime", false, "ADD_TIME");
     }
 
 
@@ -56,7 +59,10 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
                 "\"KIND\" TEXT," + // 5: kind
                 "\"ORIGIN\" TEXT," + // 6: origin
                 "\"DESC\" TEXT," + // 7: desc
-                "\"LAST_CHAPTER\" TEXT);"); // 8: lastChapter
+                "\"LAST_CHAPTER\" TEXT," + // 8: lastChapter
+                "\"INTRODUCE\" TEXT," + // 9: introduce
+                "\"CHAPTER_URL\" TEXT," + // 10: chapterUrl
+                "\"ADD_TIME\" INTEGER);"); // 11: addTime
     }
 
     /** Drops the underlying database table. */
@@ -113,6 +119,21 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         if (lastChapter != null) {
             stmt.bindString(9, lastChapter);
         }
+ 
+        String introduce = entity.getIntroduce();
+        if (introduce != null) {
+            stmt.bindString(10, introduce);
+        }
+ 
+        String chapterUrl = entity.getChapterUrl();
+        if (chapterUrl != null) {
+            stmt.bindString(11, chapterUrl);
+        }
+ 
+        Long addTime = entity.getAddTime();
+        if (addTime != null) {
+            stmt.bindLong(12, addTime);
+        }
     }
 
     @Override
@@ -163,6 +184,21 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         if (lastChapter != null) {
             stmt.bindString(9, lastChapter);
         }
+ 
+        String introduce = entity.getIntroduce();
+        if (introduce != null) {
+            stmt.bindString(10, introduce);
+        }
+ 
+        String chapterUrl = entity.getChapterUrl();
+        if (chapterUrl != null) {
+            stmt.bindString(11, chapterUrl);
+        }
+ 
+        Long addTime = entity.getAddTime();
+        if (addTime != null) {
+            stmt.bindLong(12, addTime);
+        }
     }
 
     @Override
@@ -181,7 +217,10 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // kind
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // origin
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // desc
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // lastChapter
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // lastChapter
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // introduce
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // chapterUrl
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11) // addTime
         );
         return entity;
     }
@@ -197,6 +236,9 @@ public class SearchBookBeanDao extends AbstractDao<SearchBookBean, String> {
         entity.setOrigin(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setDesc(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setLastChapter(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setIntroduce(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setChapterUrl(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setAddTime(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
      }
     
     @Override

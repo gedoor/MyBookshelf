@@ -1,9 +1,10 @@
 package com.monke.monkeybook.view.activity;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,26 +15,32 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.SubMenu;
 import android.widget.LinearLayout;
 
+import com.hwangjr.rxbus.RxBus;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
-import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.contract.BookSourceContract;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
-import com.monke.monkeybook.view.impl.IBookSourceView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -42,10 +49,9 @@ import pub.devrel.easypermissions.EasyPermissions;
  * 书源管理
  */
 
-public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> implements IBookSourceView {
+public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     public static final int EDIT_SOURCE = 101;
-    public static final int IMPORT_SOURCE = 102;
-    public static final int RESULT_IMPORT_PERMS = 103;
+    private final int IMPORT_SOURCE = 102;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,16 +62,20 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @BindView(R.id.searchView)
     SearchView searchView;
 
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private boolean selectAll = true;
-
+    private MenuItem groupItem;
+    private SubMenu groupMenu;
     private BookSourceAdapter adapter;
     private MoProgressHUD moProgressHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
+    public static void startThis(Context context) {
+        context.startActivity(new Intent(context, BookSourceActivity.class));
+    }
+
     @Override
-    protected IBookSourcePresenter initInjector() {
+    protected BookSourceContract.Presenter initInjector() {
         return new BookSourcePresenterImpl();
     }
 
@@ -86,6 +96,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
 
     @Override
     protected void onDestroy() {
+        RxBus.get().post(RxBusTag.SOURCE_LIST_CHANGE, true);
         super.onDestroy();
     }
 
@@ -156,20 +167,28 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     public void upSearchView(int size) {
-        searchView.setQueryHint(String.format(getString(R.string.search_book_source_num), size));
+        searchView.setQueryHint(getString(R.string.search_book_source_num, size));
     }
 
     @Override
     public void refreshBookSource() {
         if (isSearch) {
+            String term = "%" + searchView.getQuery() + "%";
             List<BookSourceBean> sourceBeanList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .whereOr(BookSourceBeanDao.Properties.BookSourceName.like("%" + searchView.getQuery() + "%"), BookSourceBeanDao.Properties.BookSourceGroup.like("%" + searchView.getQuery() + "%"))
+                    .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
+                            BookSourceBeanDao.Properties.BookSourceGroup.like(term),
+                            BookSourceBeanDao.Properties.BookSourceUrl.like(term))
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
         } else {
             adapter.resetDataS(BookSourceManage.getAllBookSource());
         }
+    }
+
+    @Override
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
     }
 
     public void delBookSource(BookSourceBean bookSource) {
@@ -185,13 +204,8 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     @Override
-    public View getView() {
-        return llContent;
-    }
-
-    @Override
-    protected void firstRequest() {
-
+    public void showSnackBar(String msg, int length) {
+        Snackbar.make(llContent, msg, length).show();
     }
 
     //设置ToolBar
@@ -210,6 +224,14 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
         return super.onCreateOptionsMenu(menu);
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        groupItem = menu.findItem(R.id.action_group);
+        groupMenu = groupItem.getSubMenu();
+        upGroupMenu();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -225,8 +247,12 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 selectBookSourceFile();
                 break;
             case R.id.action_import_book_source_onLine:
-                moProgressHUD.showInputBox("输入书源网址", getString(R.string.default_source_url),
-                        inputText -> mPresenter.importBookSource(inputText));
+                String cacheUrl = ACache.get(this).getAsString("sourceUrl");
+                moProgressHUD.showInputBox("输入书源网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                        inputText -> {
+                            ACache.get(this).put("sourceUrl", inputText);
+                            mPresenter.importBookSource(inputText);
+                        });
                 break;
             case R.id.action_del_select:
                 mPresenter.delData(adapter.getSelectDataList());
@@ -241,10 +267,24 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                 finish();
                 break;
         }
+        if (item.getGroupId() == R.id.source_group) {
+            searchView.setQuery(item.getTitle(), true);
+        }
         return super.onOptionsItemSelected(item);
     }
 
-
+    public void upGroupMenu() {
+        if (groupMenu == null) return;
+        groupMenu.removeGroup(R.id.source_group);
+        if (BookSourceManage.groupList.size() == 0) {
+            groupItem.setVisible(false);
+        } else {
+            groupItem.setVisible(true);
+            for (String groupName : new ArrayList<>(BookSourceManage.groupList)) {
+                groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
+            }
+        }
+    }
 
     private void addBookSource() {
         Intent intent = new Intent(this, SourceEditActivity.class);
@@ -252,21 +292,39 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     }
 
     private void selectBookSourceFile() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("text/*");//设置类型
-            startActivityForResult(intent, IMPORT_SOURCE);
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
+            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+            filePicker.setItemHeight(30);
+            filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+            filePicker.setOnFilePickListener(s -> {
+                mPresenter.importBookSourceLocal(s);
+            });
+            filePicker.show();
+            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+            filePicker.getSubmitButton().setOnClickListener(view -> {
+                filePicker.dismiss();
+                selectFileSys();
+            });
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    RESULT_IMPORT_PERMS, perms);
+                    MApplication.RESULT__PERMS, MApplication.PerList);
         }
     }
 
-    @AfterPermissionGranted(RESULT_IMPORT_PERMS)
+    private void selectFileSys() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/*");//设置类型
+        startActivityForResult(intent, IMPORT_SOURCE);
+    }
+
+    @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void resultImportPerms() {
         selectBookSourceFile();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -285,7 +343,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
                     break;
                 case IMPORT_SOURCE:
                     if (data != null) {
-                        mPresenter.importBookSource(data.getData());
+                        mPresenter.importBookSourceLocal(FileUtil.getPath(this, data.getData()));
                     }
                     break;
             }
@@ -295,7 +353,7 @@ public class BookSourceActivity extends MBaseActivity<IBookSourcePresenter> impl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (isSearch){
+            if (isSearch) {
                 try {
                     //如果搜索框中有文字，则会先清空文字.
                     mSearchAutoComplete.setText("");

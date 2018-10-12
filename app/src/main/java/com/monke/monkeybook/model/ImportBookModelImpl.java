@@ -6,6 +6,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.impl.IImportBookModel;
 
 import java.io.File;
@@ -31,15 +32,22 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
                 bookShelfBean.setHasUpdate(true);
-                bookShelfBean.setFinalDate(file.lastModified());
+                bookShelfBean.setFinalDate(System.currentTimeMillis());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
 
-                bookShelfBean.getBookInfoBean().setAuthor("佚名");
-                bookShelfBean.getBookInfoBean().setName(file.getName().replace(".txt", "").replace(".TXT", ""));
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
+                String fileName = file.getName().replace(".txt", "").replace(".TXT", "");
+                int authorIndex = fileName.indexOf("作者");
+                if (authorIndex != -1) {
+                    bookShelfBean.getBookInfoBean().setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
+                    bookShelfBean.getBookInfoBean().setName(fileName.substring(0, authorIndex));
+                } else {
+                    bookShelfBean.getBookInfoBean().setAuthor("");
+                    bookShelfBean.getBookInfoBean().setName(fileName);
+                }
+                bookShelfBean.getBookInfoBean().setFinalRefreshData(file.lastModified());
                 bookShelfBean.getBookInfoBean().setCoverUrl("");
                 bookShelfBean.getBookInfoBean().setNoteUrl(file.getAbsolutePath());
                 bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);

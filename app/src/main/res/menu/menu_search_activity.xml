@@ -9,4 +9,18 @@
         android:title="@string/book_source_manage"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_my716"
+        android:checkable="true"
+        android:checked="true"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:title="My716"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_donate"
+        android:icon="@drawable/ic_local_cafe_black_24dp_new"
+        android:title="@string/donate"
+        app:showAsAction="never" />
 </menu>

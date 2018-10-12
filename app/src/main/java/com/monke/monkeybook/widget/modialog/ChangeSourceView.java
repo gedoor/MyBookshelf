@@ -18,6 +18,7 @@ import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,12 +46,14 @@ public class ChangeSourceView {
     private String bookTag;
     private String bookName;
     private String bookAuthor;
+    private BaseActivity activity;
 
     public static ChangeSourceView getInstance(BaseActivity activity, MoProgressView moProgressView) {
         return new ChangeSourceView(activity, moProgressView);
     }
 
     private ChangeSourceView(BaseActivity activity, MoProgressView moProgressView) {
+        this.activity = activity;
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
@@ -67,7 +70,8 @@ public class ChangeSourceView {
         });
         rvSource.setNoDataAndrRefreshErrorView(LayoutInflater.from(context).inflate(R.layout.view_searchbook_no_data, null),
                 viewRefreshError);
-        searchBookModel = new SearchBookModel(activity, new SearchBookModel.OnSearchListener() {
+
+        SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
             @Override
             public void refreshSearchBook() {
                 adapter.reSetSourceAdapter();
@@ -75,20 +79,18 @@ public class ChangeSourceView {
 
             @Override
             public void refreshFinish(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true,true);
             }
 
             @Override
             public void loadMoreFinish(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true);
             }
 
             @Override
             public Boolean checkIsExist(SearchBookBean searchBookBean) {
                 Boolean result = false;
-                for (int i = 0; i < adapter.getItemcount(); i++) {
+                for (int i = 0; i < adapter.getICount(); i++) {
                     if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
                         result = true;
                         break;
@@ -104,7 +106,6 @@ public class ChangeSourceView {
 
             @Override
             public void searchBookError(Boolean value) {
-                saveSearchBook();
                 rvSource.finishRefresh(true);
             }
 
@@ -112,7 +113,8 @@ public class ChangeSourceView {
             public int getItemCount() {
                 return 0;
             }
-        });
+        };
+        searchBookModel = new SearchBookModel(activity, searchListener, true);
     }
 
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
@@ -122,7 +124,7 @@ public class ChangeSourceView {
         bookTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
-        atvTitle.setText(String.format("%s(%s)", bookName, bookAuthor));
+        atvTitle.setText(String.format("%s (%s)", bookName, bookAuthor));
         rvSource.startRefresh();
         getSearchBookInDb(bookShelf);
     }
@@ -146,6 +148,7 @@ public class ChangeSourceView {
                                     searchBookBean.setIsAdd(false);
                                 }
                             }
+                            Collections.sort(searchBookBeans, (s1, s2) -> Long.compare(s2.getAddTime(), s1.getAddTime()));
                             adapter.addAllSourceAdapter(searchBookBeans);
                             rvSource.finishRefresh(true, true);
                         } else {
@@ -170,8 +173,9 @@ public class ChangeSourceView {
         searchBookModel.search(bookName, startThisSearchTime, bookShelfS, false);
     }
 
-    private void addSearchBook(List<SearchBookBean> value) {
+    private synchronized void addSearchBook(List<SearchBookBean> value) {
         if (value.size() > 0) {
+            Collections.sort(value, (s1, s2) -> s2.getTag().equals(bookTag) ? 1 : Long.compare(s2.getAddTime(), s1.getAddTime()) );
             for (SearchBookBean searchBookBean : value) {
                 if (Objects.equals(searchBookBean.getName(), bookName)
                         && (Objects.equals(searchBookBean.getAuthor(), bookAuthor) || Objects.equals(searchBookBean.getAuthor(), "") || Objects.equals(bookAuthor, ""))) {
@@ -180,8 +184,8 @@ public class ChangeSourceView {
                     } else {
                         searchBookBean.setIsAdd(false);
                     }
-                    adapter.addSourceAdapter(searchBookBean);
-                    saveSearchBook();
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                    activity.runOnUiThread(() ->adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
             }
@@ -199,12 +203,6 @@ public class ChangeSourceView {
 
         rvSource.setBaseRefreshListener(this::reSearchBook);
 
-    }
-
-    private void saveSearchBook() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e->{
-            DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplaceInTx(adapter.getSearchBookBeans());
-        }).subscribe();
     }
 
     /**

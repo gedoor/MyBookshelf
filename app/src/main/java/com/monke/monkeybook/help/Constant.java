@@ -2,7 +2,7 @@ package com.monke.monkeybook.help;
 
 import android.support.annotation.StringDef;
 
-import com.monke.monkeybook.utils.FileUtils;
+import com.monke.monkeybook.MApplication;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -15,22 +15,7 @@ import java.util.Map;
  */
 
 public class Constant {
-    /*SharedPreference*/
-    public static final String SHARED_SEX = "sex";
-    public static final String SHARED_SAVE_BOOK_SORT = "book_sort";
-    public static final String SHARED_SAVE_BILLBOARD = "billboard";
-    public static final String SEX_BOY = "boy";
-    public static final String SEX_GIRL = "girl";
 
-    /*URL_BASE*/
-    public static final String API_BASE_URL = "http://api.zhuishushenqi.com";
-    public static final String IMG_BASE_URL = "http://statics.zhuishushenqi.com";
-    //book type
-    public static final String BOOK_TYPE_COMMENT = "normal";
-    public static final String BOOK_TYPE_VOTE = "vote";
-    //book state
-    public static final String BOOK_STATE_NORMAL = "normal";
-    public static final String BOOK_STATE_DISTILLATE = "distillate";
     //Book Date Convert Format
     public static final String FORMAT_BOOK_DATE = "yyyy-MM-dd'T'HH:mm:ss";
     public static final String FORMAT_TIME = "HH:mm";
@@ -38,10 +23,9 @@ public class Constant {
     //RxBus
     public static final int MSG_SELECTOR = 1;
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
-    public static String BOOK_CACHE_PATH = FileUtils.getCachePath()+File.separator
-            + "book_cache"+ File.separator ;
+    public static String BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
     //文件阅读记录保存的路径
-    public static String BOOK_RECORD_PATH = FileUtils.getCachePath() + File.separator
+    public static String BOOK_RECORD_PATH = FileHelp.getCachePath() + File.separator
             + "book_record" + File.separator;
 
 

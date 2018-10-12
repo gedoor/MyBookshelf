@@ -144,7 +144,7 @@ public class RefreshRecyclerView extends FrameLayout {
     }
 
     public void finishRefresh(Boolean needNoti) {
-        finishRefresh(((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getItemcount() == 0, needNoti);
+        finishRefresh(((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0, needNoti);
     }
 
     public void finishRefresh(Boolean isAll, Boolean needNoti) {
@@ -160,7 +160,7 @@ public class RefreshRecyclerView extends FrameLayout {
 
         if (isAll) {
             if (noDataView != null) {
-                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getItemcount() == 0)
+                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0)
                     noDataView.setVisibility(VISIBLE);
                 else
                     noDataView.setVisibility(GONE);
@@ -174,7 +174,7 @@ public class RefreshRecyclerView extends FrameLayout {
     public void finishLoadMore(Boolean isAll, Boolean needNoti) {
         if (isAll) {
             ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(0, false);
-            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(isAll, needNoti);
+            ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(true, needNoti);
         } else {
             ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(0, needNoti);
         }

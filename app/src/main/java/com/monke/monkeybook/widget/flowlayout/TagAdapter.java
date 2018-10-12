@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class TagAdapter<T> {
-    protected List<T> mTagDatas;
+    protected List<T> mTagDataList;
     private OnDataChangedListener mOnDataChangedListener;
     protected HashSet<Integer> mCheckedPosList = new HashSet<Integer>();
 
@@ -17,12 +17,12 @@ public abstract class TagAdapter<T> {
 
     }
 
-    public TagAdapter(List<T> datas) {
-        mTagDatas = datas;
+    public TagAdapter(List<T> dataList) {
+        mTagDataList = dataList;
     }
 
-    public TagAdapter(T[] datas) {
-        mTagDatas = new ArrayList<T>(Arrays.asList(datas));
+    public TagAdapter(T[] dataList) {
+        mTagDataList = new ArrayList<T>(Arrays.asList(dataList));
     }
 
     interface OnDataChangedListener {
@@ -49,9 +49,9 @@ public abstract class TagAdapter<T> {
     }
 
     public synchronized void replaceAll(List<T> newDatas){
-        mTagDatas.clear();
+        mTagDataList.clear();
         if(newDatas != null)
-            mTagDatas.addAll(newDatas);
+            mTagDataList.addAll(newDatas);
         notifyDataChanged();
     }
 
@@ -61,7 +61,7 @@ public abstract class TagAdapter<T> {
 
 
     public int getCount() {
-        return mTagDatas == null ? 0 : mTagDatas.size();
+        return mTagDataList == null ? 0 : mTagDataList.size();
     }
 
     public void notifyDataChanged() {
@@ -69,7 +69,7 @@ public abstract class TagAdapter<T> {
     }
 
     public T getItem(int position) {
-        return mTagDatas.get(position);
+        return mTagDataList.get(position);
     }
 
     public abstract View getView(FlowLayout parent, int position, T t);

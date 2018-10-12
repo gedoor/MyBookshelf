@@ -53,6 +53,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_clear_cache"
+        android:icon="@drawable/ic_clear_all"
+        android:title="@string/clear_content"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_clearBookshelf"
         android:icon="@drawable/ic_clear_all"
         android:title="@string/clear_bookshelf"

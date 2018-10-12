@@ -1,16 +1,14 @@
 package com.monke.monkeybook.view.activity;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,21 +21,21 @@ import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.IPresenter;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.ColorUtil;
+import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.widget.ContentTextView;
-import com.monke.monkeybook.widget.modialog.InputView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadStyleActivity extends MBaseActivity {
     private final int ResultSelectBg = 103;
@@ -47,7 +45,7 @@ public class ReadStyleActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tv_content)
-    ContentTextView tvContent;
+    TextView tvContent;
     @BindView(R.id.tvSelectTextColor)
     TextView tvSelectTextColor;
     @BindView(R.id.tvSelectBgColor)
@@ -66,8 +64,8 @@ public class ReadStyleActivity extends MBaseActivity {
     private int bgColor;
     private Drawable bgDrawable;
     private int bgCustom;
-    private Bitmap bgBitmap;
     private boolean darkStatusIcon;
+    private String bgPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +119,7 @@ public class ReadStyleActivity extends MBaseActivity {
         bgDrawable = readBookControl.getBgDrawable(textDrawableIndex, getContext());
         bgColor = readBookControl.getBgColor(textDrawableIndex);
         darkStatusIcon = readBookControl.getDarkStatusIcon(textDrawableIndex);
+        bgPath = readBookControl.getBgPath(textDrawableIndex);
         upText();
         upBg();
     }
@@ -142,6 +141,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .initialColor(textColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
+                .lightnessSliderOnly()
                 .setOnColorSelectedListener(selectedColor -> {
 
                 })
@@ -172,6 +172,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .initialColor(bgColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                 .density(12)
+                .lightnessSliderOnly()
                 .setOnColorSelectedListener(selectedColor -> {
 
                 })
@@ -201,10 +202,14 @@ public class ReadStyleActivity extends MBaseActivity {
         });
         //选择背景图片
         tvSelectBgImage.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            startActivityForResult(intent, ResultSelectBg);
+            if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, ResultSelectBg);
+            } else {
+                EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
+            }
         });
         //恢复默认
         tvDefault.setOnClickListener(view -> {
@@ -255,18 +260,16 @@ public class ReadStyleActivity extends MBaseActivity {
         readBookControl.setBgCustom(textDrawableIndex, bgCustom);
         readBookControl.setBgColor(textDrawableIndex, bgColor);
         readBookControl.setDarkStatusIcon(textDrawableIndex, darkStatusIcon);
-        if (bgCustom == 2 && bgBitmap != null) {
-            ACache aCache = ACache.get(this);
-            aCache.put("customBg" + textDrawableIndex, bgBitmap);
+        if (bgCustom == 2) {
+            readBookControl.setBgPath(textDrawableIndex, bgPath);
         }
-        setResult(RESULT_OK);
+        readBookControl.initTextDrawableIndex();
+        RxBus.get().post(RxBusTag.UPDATE_READ, false);
         finish();
     }
 
     private void setTextKind(ReadBookControl readBookControl) {
-
         tvContent.setTextSize(readBookControl.getTextSize());
-        tvContent.setLineSpacing(readBookControl.getTextExtra(), readBookControl.getLineMultiplier());
     }
 
     private void upText() {
@@ -281,16 +284,13 @@ public class ReadStyleActivity extends MBaseActivity {
      * 自定义背景
      */
     public void setCustomBg(Uri uri) {
-        ContentResolver cr = getContentResolver();
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
-            ACache aCache = ACache.get(this);
-            aCache.put("customBg", bitmap);
+            bgPath = FileUtil.getPath(this, uri);
+            Bitmap bitmap = BitmapFactory.decodeFile(bgPath);
             bgCustom = 2;
-            bgBitmap = bitmap;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
             upBg();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }

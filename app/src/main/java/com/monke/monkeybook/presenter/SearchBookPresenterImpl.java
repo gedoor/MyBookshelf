@@ -2,6 +2,7 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -17,12 +18,12 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.ISearchBookPresenter;
-import com.monke.monkeybook.view.impl.ISearchBookView;
+import com.monke.monkeybook.presenter.contract.SearchBookContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> implements ISearchBookPresenter {
+public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
     private static final int BOOK = 2;
 
     private Boolean hasSearch = false;   //判断是否搜索过
@@ -45,7 +46,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenterImpl(Context context) {
+    public SearchBookPresenterImpl(Context context, boolean useMy716) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
@@ -98,12 +99,11 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
 
             @Override
             public int getItemCount() {
-                return mView.getSearchBookAdapter().getItemcount();
+                return mView.getSearchBookAdapter().getICount();
             }
         };
-
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener);
+        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener, useMy716);
     }
 
     @Override
@@ -236,6 +236,11 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     }
 
     @Override
+    public void setUseMy716(boolean useMy716) {
+        searchBookModel.setUseMy716(useMy716);
+    }
+
+    @Override
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
             durSearchKey = key;
@@ -250,19 +255,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     //添加书集
     @Override
     public void addBookToShelf(final SearchBookBean searchBookBean) {
-        final BookShelfBean bookShelfResult = new BookShelfBean();
-        bookShelfResult.setNoteUrl(searchBookBean.getNoteUrl());
-        bookShelfResult.setFinalDate(System.currentTimeMillis());
-        bookShelfResult.setDurChapter(0);
-        bookShelfResult.setDurChapterPage(0);
-        bookShelfResult.setTag(searchBookBean.getTag());
-        BookInfoBean bookInfoBean = new BookInfoBean();
-        bookInfoBean.setNoteUrl(searchBookBean.getNoteUrl());
-        bookInfoBean.setAuthor(searchBookBean.getAuthor());
-        bookInfoBean.setCoverUrl(searchBookBean.getCoverUrl());
-        bookInfoBean.setName(searchBookBean.getName());
-        bookInfoBean.setTag(searchBookBean.getTag());
-        bookShelfResult.setBookInfoBean(bookInfoBean);
+        final BookShelfBean bookShelfResult = BookshelfHelp.getBookFromSearchBook(searchBookBean);
         WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
@@ -281,8 +274,8 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
     }
 
     @Override
-    public void upSearchEngineS() {
-        searchBookModel.initSearchEngineS();
+    public void stopSearch() {
+        searchBookModel.stopSearch();
     }
 
     private void saveBookToShelf(final BookShelfBean bookShelfBean) {
@@ -364,4 +357,19 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<ISearchBookView> 
         }
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
+    public void searchBook(String searchKey) {
+        mView.searchBook(searchKey);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
+    public void sourceListChange(Boolean change) {
+        searchBookModel.initSearchEngineS();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})
+    public void getZfbHB(Boolean getZfbHB) {
+        searchBookModel.setUseMy716(getZfbHB);
+        mView.upMenu();
+    }
 }

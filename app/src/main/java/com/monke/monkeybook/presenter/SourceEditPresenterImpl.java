@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -34,9 +33,8 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.ISourceEditPresenter;
+import com.monke.monkeybook.presenter.contract.SourceEditContract;
 import com.monke.monkeybook.utils.BitmapUtil;
-import com.monke.monkeybook.view.impl.ISourceEditView;
 
 import java.util.Hashtable;
 import java.util.Objects;
@@ -51,7 +49,7 @@ import io.reactivex.schedulers.Schedulers;
  * 编辑书源
  */
 
-public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> implements ISourceEditPresenter {
+public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
 
     @Override
     public void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
@@ -72,7 +70,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<ISourceEditView> 
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        Toast.makeText(mView.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

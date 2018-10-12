@@ -1,16 +1,13 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,36 +35,37 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
+import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.ACache;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
+import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
-import com.monke.monkeybook.presenter.impl.IMainPresenter;
-import com.monke.monkeybook.utils.NetworkUtil;
+import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
-import com.monke.monkeybook.view.fragment.SettingsFragment;
-import com.monke.monkeybook.view.impl.IMainView;
+import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
+
+import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends MBaseActivity<IMainPresenter> implements IMainView {
-    private static final int REQUEST_SETTING = 210;
+public class MainActivity extends MBaseActivity<MainContract.Presenter> implements MainContract.View {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
@@ -88,7 +87,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     LinearLayout llContent;
 
     private TextView tvUser;
-
     private Switch swNightTheme;
     private int group;
     private BookShelfGridAdapter bookShelfGridAdapter;
@@ -96,13 +94,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private long exitTime = 0;
     private String bookPx;
-    private ImmersionReceiver immersionReceiver;
+    private boolean isRecreate;
+    private boolean resumed = false;
 
     @Override
-    protected IMainPresenter initInjector() {
+    protected MainContract.Presenter initInjector() {
         return new MainPresenterImpl();
     }
 
@@ -110,6 +108,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             group = savedInstanceState.getInt("group");
+            resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
     }
@@ -118,25 +117,35 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("group", group);
+        outState.putBoolean("resumed", resumed);
     }
 
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
-        IntentFilter filter = new IntentFilter(SettingsFragment.ImmersionAction);
-        immersionReceiver = new ImmersionReceiver();
-        registerReceiver(immersionReceiver, filter);
+    }
 
+    /**
+     * 沉浸状态栏
+     */
+    @Override
+    public void initImmersionBar() {
+        super.initImmersionBar();
     }
 
     @Override
     protected void initData() {
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
+        isRecreate = getIntent().getBooleanExtra("isRecreate", false);
+        getIntent().putExtra("isRecreate", true);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
+    }
+
+    private List<BookShelfBean> getBookshelfList() {
         if (viewIsList) {
-            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
+            return bookShelfListAdapter.getBooks();
         } else {
-            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
+            return bookShelfGridAdapter.getBooks();
         }
     }
 
@@ -157,11 +166,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         initDrawer();
         upGroup(group);
         moProgressHUD = new MoProgressHUD(this);
-
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         if (viewIsList) {
+            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
             rvBookshelf.setAdapter(bookShelfListAdapter);
             rvBookshelf.setLayoutManager(new LinearLayoutManager(this));
         } else {
+            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
             rvBookshelf.setAdapter(bookShelfGridAdapter);
             rvBookshelf.setLayoutManager(new GridLayoutManager(this, 3));
         }
@@ -178,18 +189,36 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
+    protected void onPause() {
+        resumed = true;
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (resumed) {
+            resumed = false;
+            stopBookShelfRefreshAnim();
+        }
+    }
+
+    @Override
     protected void bindEvent() {
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.queryBookShelf(NetworkUtil.isNetWorkAvailable(), group);
-            if (!NetworkUtil.isNetWorkAvailable()) {
-                Toast.makeText(MainActivity.this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
+            mPresenter.queryBookShelf(isNetWorkAvailable(), group);
+            if (!isNetWorkAvailable()) {
+                Toast.makeText(this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
             }
             refreshLayout.setRefreshing(false);
         });
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         if (bookPx.equals("2")) {
             itemTouchHelpCallback.setDragEnable(true);
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
+            itemTouchHelper.attachToRecyclerView(rvBookshelf);
+        } else {
+            itemTouchHelpCallback.setDragEnable(false);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
             itemTouchHelper.attachToRecyclerView(rvBookshelf);
         }
@@ -203,14 +232,15 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     }
 
-    private RefreshRecyclerViewAdapter.OnItemClickListener getAdapterListener() {
-        return new RefreshRecyclerViewAdapter.OnItemClickListener() {
+    private OnItemClickListenerTwo getAdapterListener() {
+        return new OnItemClickListenerTwo() {
             @Override
-            public void onClick(BookShelfBean bookShelfBean, int index) {
+            public void onClick(View view, int index) {
+                BookShelfBean bookShelfBean = getBookshelfList().get(index);
                 bookShelfBean.setHasUpdate(false);
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
-                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
+                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 try {
@@ -223,20 +253,20 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             }
 
             @Override
-            public void onLongClick(View animView, BookShelfBean bookShelfBean, int index) {
+            public void onLongClick(View view, int index) {
                 Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-                intent.putExtra("from", BookDetailPresenterImpl.FROM_BOOKSHELF);
+                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
+                BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
+                startActivityByAnim(intent, view, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
             }
         };
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem pauseMenu = menu.getItem(6);
+        MenuItem pauseMenu = menu.findItem(R.id.action_list_grid);
         if (viewIsList) {
             pauseMenu.setTitle(R.string.action_grid);
         } else {
@@ -251,7 +281,6 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         getMenuInflater().inflate(R.menu.menu_main_activity, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
 
     /**
      * 菜单事件
@@ -271,11 +300,11 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.action_add_local:
-                if (EasyPermissions.hasPermissions(this, perms)) {
-                    startActivity(new Intent(this, FileFolderActivity.class));
+                if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+                    startActivity(new Intent(this, ImportBookActivity.class));
                 } else {
                     EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                            FILE_SELECT_RESULT, perms);
+                            FILE_SELECT_RESULT, MApplication.PerList);
                 }
                 break;
             case R.id.action_add_url:
@@ -285,15 +314,23 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                 startActivity(new Intent(this, DownloadActivity.class));
                 break;
             case R.id.action_download_all:
-                mPresenter.downloadAll();
+                if (!isNetWorkAvailable())
+                    Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
+                else
+                    mPresenter.downloadAll(0, false);
                 break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
                 editor.apply();
                 recreate();
                 break;
-            case R.id.action_change_icon:
-                LauncherIcon.Change();
+            case R.id.action_clear_cache:
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.clear_content)
+                        .setMessage("是否同时删除已下载的书籍目录？")
+                        .setPositiveButton("是", (dialog, which) -> BookshelfHelp.clearCaches(true))
+                        .setNegativeButton("否", (dialogInterface, i) -> BookshelfHelp.clearCaches(false))
+                        .show();
                 break;
             case R.id.action_clearBookshelf:
                 new AlertDialog.Builder(this)
@@ -302,6 +339,9 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
                         .show();
+                break;
+            case R.id.action_change_icon:
+                LauncherIcon.Change();
                 break;
             case android.R.id.home:
                 if (drawer.isDrawerOpen(GravityCompat.START)
@@ -320,6 +360,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("阅读");
         }
     }
 
@@ -371,6 +412,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             }
         });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
+            drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_group_zg:
                     upGroup(0);
@@ -379,19 +421,19 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     upGroup(1);
                     break;
                 case R.id.action_book_source_manage:
-                    startActivity(new Intent(MainActivity.this, BookSourceActivity.class));
+                    new Handler().postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
                 case R.id.action_replace_rule:
-                    startActivity(new Intent(MainActivity.this, ReplaceRuleActivity.class));
+                    new Handler().postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
                     break;
                 case R.id.action_setting:
-                    startActivityForResult(new Intent(MainActivity.this, SettingActivity.class), REQUEST_SETTING);
+                    new Handler().postDelayed(() -> SettingActivity.startThis(this), 200);
                     break;
                 case R.id.action_about:
-                    startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                    new Handler().postDelayed(() -> AboutActivity.startThis(this), 200);
                     break;
                 case R.id.action_donate:
-                    startActivity(new Intent(MainActivity.this, DonateActivity.class));
+                    new Handler().postDelayed(() -> DonateActivity.startThis(this), 200);
                     break;
                 case R.id.action_backup:
                     backup();
@@ -404,14 +446,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     setNightTheme(!isNightTheme());
                     break;
             }
-            drawer.closeDrawers();
             return true;
         });
     }
 
     //备份
     private void backup() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
@@ -420,7 +461,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
-                    BACKUP_RESULT, perms);
+                    BACKUP_RESULT, MApplication.PerList);
         }
     }
 
@@ -431,7 +472,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     //恢复
     private void restore() {
-        if (EasyPermissions.hasPermissions(this, perms)) {
+        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
@@ -440,7 +481,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
-                    RESTORE_RESULT, perms);
+                    RESTORE_RESULT, MApplication.PerList);
         }
     }
 
@@ -451,7 +492,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
 
     @AfterPermissionGranted(FILE_SELECT_RESULT)
     private void fileSelectResult() {
-        startActivityByAnim(new Intent(MainActivity.this, FileFolderActivity.class), 0, 0);
+        startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
     }
 
     private void versionUpRun() {
@@ -467,20 +508,31 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
         }
     }
 
-    private boolean haveRefresh() {
-        boolean isRecreate = getIntent().getBooleanExtra("isRecreate", false);
-        getIntent().putExtra("isRecreate", true);
-        return preferences.getBoolean(getString(R.string.pk_auto_refresh), false) && !isRecreate;
+    private void requestPermission() {
+        if (!EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+            EasyPermissions.requestPermissions(this, "本软件需要存储权限来缓存书籍信息",
+                    MApplication.RESULT__PERMS, MApplication.PerList);
+        }
     }
 
     @Override
     protected void firstRequest() {
-        versionUpRun();
-        if (NetworkUtil.isNetWorkAvailable()) {
-            mPresenter.queryBookShelf(haveRefresh(), group);
+        if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
+            if (isNetWorkAvailable()) {
+                mPresenter.queryBookShelf(true, group);
+            } else {
+                mPresenter.queryBookShelf(false, group);
+                Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
+            }
         } else {
             mPresenter.queryBookShelf(false, group);
-            Toast.makeText(this, "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
+        }
+        if (!isRecreate) {
+            versionUpRun();
+            requestPermission();
+            if (!BuildConfig.DEBUG && TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
+                UpdateManager.getInstance(this).checkUpdate(false);
+            }
         }
     }
 
@@ -499,6 +551,18 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
             bookShelfListAdapter.refreshBook(noteUrl);
         } else {
             bookShelfGridAdapter.refreshBook(noteUrl);
+        }
+    }
+
+    private void stopBookShelfRefreshAnim() {
+        List<BookShelfBean> bookShelfBeans = getBookshelfList();
+        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
+            for (BookShelfBean bookShelfBean: bookShelfBeans) {
+                if (bookShelfBean.isLoading()) {
+                    bookShelfBean.setLoading(false);
+                    refreshBook(bookShelfBean.getNoteUrl());
+                }
+            }
         }
     }
 
@@ -558,9 +622,13 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     }
 
     @Override
+    public void recreate(){
+        super.recreate();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(immersionReceiver);
     }
 
     public void exit() {
@@ -575,27 +643,7 @@ public class MainActivity extends MBaseActivity<IMainPresenter> implements IMain
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_SETTING:
-                if (!bookPx.equals(preferences.getString(getString(R.string.pk_bookshelf_px), "0"))) {
-                    recreate();
-                }
-                break;
-        }
 
-    }
-
-    /**
-     * 沉浸状态栏广播
-     */
-    class ImmersionReceiver extends BroadcastReceiver {
-        @SuppressLint("DefaultLocale")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getString("data")).equals("Immersion_Change")) {
-                initImmersionBar();
-            }
-        }
     }
 
 }

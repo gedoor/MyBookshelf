@@ -166,14 +166,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/btn_bg_press_2" />
+                android:background="@color/btn_bg_press" />
 
             <TextView
                 android:id="@+id/tv_intro"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:clickable="true"
                 android:focusable="true"
                 android:paddingBottom="5dp"
@@ -190,7 +190,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/btn_bg_press_2" />
+                android:background="@color/btn_bg_press" />
 
             <FrameLayout
                 android:layout_width="match_parent"

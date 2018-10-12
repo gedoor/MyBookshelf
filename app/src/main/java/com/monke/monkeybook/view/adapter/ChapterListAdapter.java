@@ -15,6 +15,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.widget.ChapterListView;
 
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
 
     public void upChapterList(ChapterListBean chapterListBean) {
         if (bookShelfBean.getChapterListSize() > chapterListBean.getDurChapterIndex()) {
-            bookShelfBean.getChapterList(chapterListBean.getDurChapterIndex()).setHasCache(chapterListBean.getHasCache());
             if (tabPosition == 0 && !isSearch) {
                 notifyItemChanged(chapterListBean.getDurChapterIndex());
             }
@@ -65,10 +65,6 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 if (tabPosition == 0) {
                     for (ChapterListBean chapterListBean : bookShelfBean.getChapterList()) {
                         if (chapterListBean.getDurChapterName().contains(key)) {
-                            chapterListBeans.add(chapterListBean);
-                        } else if (chapterListBean.getBookContentBean() != null
-                                && chapterListBean.getBookContentBean().getDurChapterContent() != null
-                                && chapterListBean.getBookContentBean().getDurChapterContent().contains(key)) {
                             chapterListBeans.add(chapterListBean);
                         }
                     }
@@ -103,7 +99,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     @NonNull
     @Override
     public ThisViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_chapterlist, parent, false));
+        return new ThisViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false));
     }
 
     @Override
@@ -111,10 +107,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (tabPosition == 0) {
             ChapterListBean chapterListBean = isSearch ? chapterListBeans.get(position) : bookShelfBean.getChapterList(position);
             holder.tvName.setText(chapterListBean.getDurChapterName());
-            if (chapterListBean.getHasCache()) {
+            if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), chapterListBean)) {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                holder.tvName.setAlpha(1);
             } else {
                 holder.tvName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                holder.tvName.setAlpha(0.9f);
             }
             holder.flContent.setOnClickListener(v -> {
                 setIndex(position);

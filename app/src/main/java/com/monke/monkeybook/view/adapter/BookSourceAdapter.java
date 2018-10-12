@@ -61,6 +61,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         notifyDataSetChanged();
         activity.upDateSelectAll();
         activity.upSearchView(dataList.size());
+        activity.upGroupMenu();
     }
 
     private void allDataList(List<BookSourceBean> bookSourceBeanList) {
@@ -90,7 +91,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_book_source_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_source, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -99,7 +100,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         if (TextUtils.isEmpty(dataList.get(position).getBookSourceGroup())) {
             holder.cbView.setText(dataList.get(position).getBookSourceName());
         } else {
-            holder.cbView.setText(String.format("%s(%s)", dataList.get(position).getBookSourceName(), dataList.get(position).getBookSourceGroup()));
+            holder.cbView.setText(String.format("%s (%s)", dataList.get(position).getBookSourceName(), dataList.get(position).getBookSourceGroup()));
         }
         holder.cbView.setChecked(dataList.get(position).getEnable());
         holder.cbView.setOnClickListener((View view) -> {

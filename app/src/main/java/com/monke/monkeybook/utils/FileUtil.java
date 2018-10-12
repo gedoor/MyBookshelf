@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,6 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 @SuppressLint("NewApi")
@@ -37,6 +41,44 @@ public final class FileUtil {
             Log.e(TAG, "Could not get SD directory", ioe);
         }
         return sdCardDirectory;
+    }
+
+    public static ArrayList<String> getStorageData(Context pContext) {
+
+        final StorageManager storageManager = (StorageManager) pContext.getSystemService(Context.STORAGE_SERVICE);
+
+        try {
+
+            final Method getVolumeList = storageManager.getClass().getMethod("getVolumeList");
+
+            final Class<?> storageValumeClazz = Class.forName("android.os.storage.StorageVolume");
+            final Method getPath = storageValumeClazz.getMethod("getPath");
+
+            final Object invokeVolumeList = getVolumeList.invoke(storageManager);
+            final int length = Array.getLength(invokeVolumeList);
+
+            ArrayList<String> list = new ArrayList<>();
+            for (int i = 0; i < length; i++) {
+                final Object storageValume = Array.get(invokeVolumeList, i);//得到StorageVolume对象
+                final String path = (String) getPath.invoke(storageValume);
+
+                list.add(path);
+            }
+
+            return list;
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -65,7 +107,6 @@ public final class FileUtil {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri) {
-
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
@@ -83,8 +124,13 @@ public final class FileUtil {
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
-
                 final String id = DocumentsContract.getDocumentId(uri);
+                final String[] split = id.split(":");
+                final String type = split[0];
+                if ("raw".equalsIgnoreCase(type)) { //处理某些机型（比如Goole Pixel ）ID是raw:/storage/emulated/0/Download/c20f8664da05ab6b4644913048ea8c83.mp4
+                    return split[1];
+                }
+
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
@@ -146,6 +192,8 @@ public final class FileUtil {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
+        } catch (Exception e){
+            e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();

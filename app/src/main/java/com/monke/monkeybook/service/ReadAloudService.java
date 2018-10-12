@@ -39,7 +39,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static android.text.TextUtils.isEmpty;
-import static com.monke.monkeybook.MApplication.DEBUG;
 
 /**
  * Created by GKF on 2018/1/2.
@@ -76,6 +75,7 @@ public class ReadAloudService extends Service {
     private int timeMinute = 0;
     private boolean timerEnable = false;
     private Timer mTimer;
+    private TimerTask timerTask;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
@@ -83,6 +83,8 @@ public class ReadAloudService extends Service {
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences preference;
     private int speechRate;
+    private String title;
+    private String text;
 
     public ReadAloudService() {
     }
@@ -94,7 +96,17 @@ public class ReadAloudService extends Service {
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (!pause) {
+                    Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+                    setTimerIntent.setAction(ActionSetTimer);
+                    setTimerIntent.putExtra("minute", -1);
+                    startService(setTimerIntent);
+                }
+            }
+        };
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initFocusRequest();
         }
@@ -124,7 +136,10 @@ public class ReadAloudService extends Service {
                         updateTimer(intent.getIntExtra("minute", 10));
                         break;
                     case ActionNewReadAloud:
-                        newReadAloud(intent.getStringExtra("content"), intent.getBooleanExtra("aloudButton", false));
+                        newReadAloud(intent.getStringExtra("content"),
+                                intent.getBooleanExtra("aloudButton", false),
+                                intent.getStringExtra("title"),
+                                intent.getStringExtra("text"));
                         break;
                 }
             }
@@ -132,11 +147,13 @@ public class ReadAloudService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void newReadAloud(String content, Boolean aloudButton) {
+    private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
         if (content == null) {
             stopSelf();
             return;
         }
+        this.text = text;
+        this.title = title;
         nowSpeak = 0;
         contentList.clear();
         String[] splitSpeech = content.split("\n");
@@ -194,11 +211,13 @@ public class ReadAloudService extends Service {
     /**
      * 朗读
      */
-    public static void play(Context context, Boolean aloudButton, String content) {
+    public static void play(Context context, Boolean aloudButton, String content, String title, String text) {
         Intent readAloudIntent = new Intent(context, ReadAloudService.class);
         readAloudIntent.setAction(ActionNewReadAloud);
         readAloudIntent.putExtra("aloudButton", aloudButton);
         readAloudIntent.putExtra("content", content);
+        readAloudIntent.putExtra("title", title);
+        readAloudIntent.putExtra("text", text);
         context.startService(readAloudIntent);
     }
 
@@ -207,6 +226,7 @@ public class ReadAloudService extends Service {
      */
     public static void stop(Context context) {
         if (running) {
+            running = false;
             Intent intent = new Intent(context, ReadAloudService.class);
             intent.setAction(ActionDoneService);
             context.startService(intent);
@@ -290,17 +310,7 @@ public class ReadAloudService extends Service {
     private void setTimer() {
         if (mTimer == null) {
             mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (!pause) {
-                        Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                        setTimerIntent.setAction(ActionSetTimer);
-                        setTimerIntent.putExtra("minute", -1);
-                        startService(setTimerIntent);
-                    }
-                }
-            }, 60000, 60000);
+            mTimer.schedule(timerTask, 60000, 60000);
         }
     }
 
@@ -326,20 +336,23 @@ public class ReadAloudService extends Service {
      * 更新通知
      */
     private void updateNotification() {
-        String title;
+        if (text == null)
+            text = getString(R.string.read_aloud_s);
+        String nTitle;
         if (pause) {
-            title = getString(R.string.read_aloud_pause);
+            nTitle = getString(R.string.read_aloud_pause);
         } else if (timeMinute > 0 && timeMinute <= 60) {
-            title = String.format(getString(R.string.read_aloud_timer), timeMinute);
+            nTitle = getString(R.string.read_aloud_timer, timeMinute);
         } else {
-            title = getString(R.string.read_aloud_t);
+            nTitle = getString(R.string.read_aloud_t);
         }
-        RxBus.get().post(RxBusTag.ALOUD_TIMER, title);
+        nTitle += ": " + title;
+        RxBus.get().post(RxBusTag.ALOUD_TIMER, nTitle);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
                 .setOngoing(true)
-                .setContentTitle(title)
-                .setContentText(getString(R.string.read_aloud_s))
+                .setContentTitle(nTitle)
+                .setContentText(text)
                 .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.stop), getThisServicePendingIntent(ActionDoneService));
         if (pause) {
@@ -513,7 +526,6 @@ public class ReadAloudService extends Service {
     class AudioFocusChangeListener implements AudioManager.OnAudioFocusChangeListener {
         @Override
         public void onAudioFocusChange(int focusChange) {
-            if (DEBUG) Log.v(TAG, "focusChange: " + focusChange);
             switch (focusChange) {
                 case AudioManager.AUDIOFOCUS_GAIN:
                     // 重新获得焦点,  可做恢复播放，恢复后台音量的操作

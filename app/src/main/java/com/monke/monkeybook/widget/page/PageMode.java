@@ -6,5 +6,5 @@ package com.monke.monkeybook.widget.page;
  */
 
 public enum PageMode {
-    COVER, SIMULATION, NONE, SCROLL
+    COVER, SIMULATION, NONE, SCROLL, SLIDE
 }

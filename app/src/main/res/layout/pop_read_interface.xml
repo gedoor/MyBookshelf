@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/background_menu"
     android:orientation="vertical">
 
     <View
@@ -12,151 +12,194 @@
         android:layout_height="0.8dp"
         android:background="@color/btn_bg_press" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
+        <TextView
+            android:id="@+id/fl_text_Bold"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp">
+            android:layout_weight="4"
+            android:background="@drawable/selector_pop_font_bg"
+            android:gravity="center"
+            android:text="@string/text_bold"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/fl_text_smaller"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="A-"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/tv_dur_text_size"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="字号"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/fl_text_bigger"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="A+"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/fl_text_Bold"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="@string/text_bold"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/fl_text_font"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="7"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="@string/custom_font"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
+        <TextView
+            android:id="@+id/fl_text_font"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp">
+            android:layout_weight="4"
+            android:background="@drawable/selector_pop_font_bg"
+            android:gravity="center"
+            android:text="@string/custom_font"
+            android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/fl_line_smaller"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="L-"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/tv_dur_line_size"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:gravity="center"
-                android:text="间距"
-                tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/tvPageMode"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="6"
+            android:background="@drawable/selector_pop_font_bg"
+            android:gravity="center"
+            android:text="@string/page_mode"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/fl_line_bigger"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="L+"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+    </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/btn_bg_press" />
 
-            <TextView
-                android:id="@+id/tvPageMode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="12"
-                android:background="@drawable/selector_pop_font_bg"
-                android:gravity="center"
-                android:text="@string/page_mode"
-                android:textSize="14sp"
-                tools:ignore="HardcodedText" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/text_size" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbTextSize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/line_size"
+            tools:ignore="RtlHardcoded" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbLineSize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/paragraph_size"
+            tools:ignore="RtlHardcoded" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbParagraphSize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/btn_bg_press" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/padding" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/top" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbPaddingTop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/bottom"
+            tools:ignore="RtlHardcoded" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbPaddingBottom"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/left"
+            tools:ignore="RtlHardcoded" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbPaddingLeft"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/right"
+            tools:ignore="RtlHardcoded" />
+
+        <com.monke.monkeybook.widget.number.NumberButton
+            android:id="@+id/nbPaddingRight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
 
     </LinearLayout>
 
@@ -168,93 +211,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:orientation="vertical"
-        android:padding="5dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/padding" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/top" />
-
-            <com.monke.monkeybook.widget.NumberButton
-                android:id="@+id/nbPaddingTop"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/selector_pop_font_bg" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/bottom" />
-
-            <com.monke.monkeybook.widget.NumberButton
-                android:id="@+id/nbPaddingBottom"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/selector_pop_font_bg" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/left" />
-
-            <com.monke.monkeybook.widget.NumberButton
-                android:id="@+id/nbPaddingLeft"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/selector_pop_font_bg" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/right" />
-
-            <com.monke.monkeybook.widget.NumberButton
-                android:id="@+id/nbPaddingRight"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:background="@drawable/selector_pop_font_bg" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="@color/btn_bg_press" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/background_menu"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -287,7 +244,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景1"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -315,7 +272,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景2"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -342,7 +299,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景3"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -369,7 +326,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景4"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />
@@ -396,7 +353,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:contentDescription="背景5"
-                    android:src="@color/background"
+                    android:src="@color/background_menu"
                     app:civ_border_color="@color/tv_text_default"
                     app:civ_border_width="1dp"
                     tools:ignore="HardcodedText" />

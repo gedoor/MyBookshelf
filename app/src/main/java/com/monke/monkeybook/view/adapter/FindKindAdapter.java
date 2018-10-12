@@ -1,7 +1,5 @@
 package com.monke.monkeybook.view.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +7,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
-import com.monke.monkeybook.view.activity.ChoiceBookActivity;
 import com.monke.monkeybook.view.activity.FindBookActivity;
 
 import java.util.ArrayList;
@@ -84,7 +80,7 @@ public class FindKindAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_find_group, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_group, parent, false);
             groupViewHolder = new GroupViewHolder();
             groupViewHolder.tvTitle = convertView.findViewById(R.id.tv_kind_name);
             convertView.setTag(groupViewHolder);
@@ -99,7 +95,7 @@ public class FindKindAdapter extends BaseExpandableListAdapter {
     public View getChildView(int i, int i1, boolean b, View convertView, ViewGroup parent) {
         ChildViewHolder childViewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_find_kind, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_kind, parent, false);
             childViewHolder = new ChildViewHolder();
             childViewHolder.tvTitle = convertView.findViewById(R.id.tv_kind_name);
             convertView.setTag(childViewHolder);

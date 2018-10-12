@@ -48,8 +48,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         public final static Property RuleChapterList = new Property(21, String.class, "ruleChapterList", false, "RULE_CHAPTER_LIST");
         public final static Property RuleChapterName = new Property(22, String.class, "ruleChapterName", false, "RULE_CHAPTER_NAME");
         public final static Property RuleContentUrl = new Property(23, String.class, "ruleContentUrl", false, "RULE_CONTENT_URL");
-        public final static Property RuleBookContent = new Property(24, String.class, "ruleBookContent", false, "RULE_BOOK_CONTENT");
-        public final static Property HttpUserAgent = new Property(25, String.class, "httpUserAgent", false, "HTTP_USER_AGENT");
+        public final static Property RuleContentUrlNext = new Property(24, String.class, "ruleContentUrlNext", false, "RULE_CONTENT_URL_NEXT");
+        public final static Property RuleBookContent = new Property(25, String.class, "ruleBookContent", false, "RULE_BOOK_CONTENT");
+        public final static Property HttpUserAgent = new Property(26, String.class, "httpUserAgent", false, "HTTP_USER_AGENT");
     }
 
 
@@ -89,8 +90,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
                 "\"RULE_CHAPTER_LIST\" TEXT," + // 21: ruleChapterList
                 "\"RULE_CHAPTER_NAME\" TEXT," + // 22: ruleChapterName
                 "\"RULE_CONTENT_URL\" TEXT," + // 23: ruleContentUrl
-                "\"RULE_BOOK_CONTENT\" TEXT," + // 24: ruleBookContent
-                "\"HTTP_USER_AGENT\" TEXT);"); // 25: httpUserAgent
+                "\"RULE_CONTENT_URL_NEXT\" TEXT," + // 24: ruleContentUrlNext
+                "\"RULE_BOOK_CONTENT\" TEXT," + // 25: ruleBookContent
+                "\"HTTP_USER_AGENT\" TEXT);"); // 26: httpUserAgent
     }
 
     /** Drops the underlying database table. */
@@ -215,14 +217,19 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(24, ruleContentUrl);
         }
  
+        String ruleContentUrlNext = entity.getRuleContentUrlNext();
+        if (ruleContentUrlNext != null) {
+            stmt.bindString(25, ruleContentUrlNext);
+        }
+ 
         String ruleBookContent = entity.getRuleBookContent();
         if (ruleBookContent != null) {
-            stmt.bindString(25, ruleBookContent);
+            stmt.bindString(26, ruleBookContent);
         }
  
         String httpUserAgent = entity.getHttpUserAgent();
         if (httpUserAgent != null) {
-            stmt.bindString(26, httpUserAgent);
+            stmt.bindString(27, httpUserAgent);
         }
     }
 
@@ -342,14 +349,19 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             stmt.bindString(24, ruleContentUrl);
         }
  
+        String ruleContentUrlNext = entity.getRuleContentUrlNext();
+        if (ruleContentUrlNext != null) {
+            stmt.bindString(25, ruleContentUrlNext);
+        }
+ 
         String ruleBookContent = entity.getRuleBookContent();
         if (ruleBookContent != null) {
-            stmt.bindString(25, ruleBookContent);
+            stmt.bindString(26, ruleBookContent);
         }
  
         String httpUserAgent = entity.getHttpUserAgent();
         if (httpUserAgent != null) {
-            stmt.bindString(26, httpUserAgent);
+            stmt.bindString(27, httpUserAgent);
         }
     }
 
@@ -385,8 +397,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
             cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // ruleChapterList
             cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // ruleChapterName
             cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // ruleContentUrl
-            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // ruleBookContent
-            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25) // httpUserAgent
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // ruleContentUrlNext
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25), // ruleBookContent
+            cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26) // httpUserAgent
         );
         return entity;
     }
@@ -417,8 +430,9 @@ public class BookSourceBeanDao extends AbstractDao<BookSourceBean, String> {
         entity.setRuleChapterList(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
         entity.setRuleChapterName(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
         entity.setRuleContentUrl(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
-        entity.setRuleBookContent(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
-        entity.setHttpUserAgent(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setRuleContentUrlNext(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setRuleBookContent(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
+        entity.setHttpUserAgent(cursor.isNull(offset + 26) ? null : cursor.getString(offset + 26));
      }
     
     @Override

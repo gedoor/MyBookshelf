@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -10,45 +9,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import com.kyleduo.switchbutton.SwitchButton;
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.monke.monkeybook.view.fragment.SettingsFragment.ImmersionAction;
 
 public class MoreSettingPop extends PopupWindow {
 
     @BindView(R.id.sb_click_all_next)
-    SwitchButton sbClickAllNext;
-    @BindView(R.id.sb_key)
-    SwitchButton sbKey;
+    Switch sbClickAllNext;
     @BindView(R.id.sb_click)
-    SwitchButton sbClick;
+    Switch sbClick;
     @BindView(R.id.sb_show_title)
-    SwitchButton sbShowTitle;
+    Switch sbShowTitle;
     @BindView(R.id.sb_showTimeBattery)
-    SwitchButton sbShowTimeBattery;
+    Switch sbShowTimeBattery;
     @BindView(R.id.sb_hideStatusBar)
-    SwitchButton sbHideStatusBar;
+    Switch sbHideStatusBar;
     @BindView(R.id.ll_hideStatusBar)
     LinearLayout llHideStatusBar;
     @BindView(R.id.ll_showTimeBattery)
     LinearLayout llShowTimeBattery;
     @BindView(R.id.sb_hideNavigationBar)
-    SwitchButton sbHideNavigationBar;
+    Switch sbHideNavigationBar;
     @BindView(R.id.ll_hideNavigationBar)
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
-    SwitchButton sbShowLine;
+    Switch sbShowLine;
     @BindView(R.id.sbImmersionBar)
-    SwitchButton sbImmersionBar;
+    Switch sbImmersionBar;
     @BindView(R.id.llImmersionBar)
     LinearLayout llImmersionBar;
     @BindView(R.id.llScreenTimeOut)
@@ -59,6 +57,16 @@ public class MoreSettingPop extends PopupWindow {
     TextView tvJFConvert;
     @BindView(R.id.llJFConvert)
     LinearLayout llJFConvert;
+    @BindView(R.id.tv_screen_direction)
+    TextView tvScreenDirection;
+    @BindView(R.id.ll_screen_direction)
+    LinearLayout llScreenDirection;
+    @BindView(R.id.sw_volume_next_page)
+    Switch swVolumeNextPage;
+    @BindView(R.id.sw_read_aloud_key)
+    Switch swReadAloudKey;
+    @BindView(R.id.ll_read_aloud_key)
+    LinearLayout llReadAloudKey;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -95,41 +103,69 @@ public class MoreSettingPop extends PopupWindow {
 
     private void bindEvent() {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setHideStatusBar(isChecked);
-            initData();
-            changeProListener.refresh();
+            if (buttonView.isPressed()) {
+                readBookControl.setHideStatusBar(isChecked);
+                changeProListener.refresh();
+                upView();
+            }
         });
         sbHideNavigationBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setHideNavigationBar(isChecked);
-            initData();
-            changeProListener.recreate();
+            if (buttonView.isPressed()) {
+                readBookControl.setHideNavigationBar(isChecked);
+                initData();
+                changeProListener.recreate();
+            }
         });
-        sbKey.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanKeyTurn(isChecked));
-        sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setCanClickTurn(isChecked));
-        sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> readBookControl.setClickAllNext(isChecked));
+        swVolumeNextPage.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                readBookControl.setCanKeyTurn(b);
+                upView();
+            }
+        });
+        swReadAloudKey.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                readBookControl.setAloudCanKeyTurn(b);
+            }
+        });
+        sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                readBookControl.setCanClickTurn(isChecked);
+            }
+        });
+        sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (buttonView.isPressed()) {
+                readBookControl.setClickAllNext(isChecked);
+            }
+        });
 
         sbShowTitle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setShowTitle(isChecked);
-            readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.refresh();
+            if (buttonView.isPressed()) {
+                readBookControl.setShowTitle(isChecked);
+                readBookControl.setLineChange(System.currentTimeMillis());
+                changeProListener.refresh();
+            }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setShowTimeBattery(isChecked);
-            readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.refresh();
+            if (buttonView.isPressed()) {
+                readBookControl.setShowTimeBattery(isChecked);
+                readBookControl.setLineChange(System.currentTimeMillis());
+                changeProListener.refresh();
+            }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setShowLine(isChecked);
-            readBookControl.setLineChange(System.currentTimeMillis());
-            changeProListener.refresh();
+            if (buttonView.isPressed()) {
+                readBookControl.setShowLine(isChecked);
+                readBookControl.setLineChange(System.currentTimeMillis());
+                changeProListener.refresh();
+            }
         });
         sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            readBookControl.setImmersionStatusBar(isChecked);
-            readBookControl.setLineChange(System.currentTimeMillis());
-            Intent intent = new Intent(ImmersionAction);
-            intent.putExtra("data", "Immersion_Change");
-            activity.sendBroadcast(intent);
-            changeProListener.refresh();
+            if (buttonView.isPressed()) {
+                readBookControl.setImmersionStatusBar(isChecked);
+                readBookControl.setLineChange(System.currentTimeMillis());
+                RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
+                changeProListener.refresh();
+            }
         });
         llScreenTimeOut.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
@@ -149,7 +185,19 @@ public class MoreSettingPop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
-                        changeProListener.refresh();
+                        changeProListener.recreate();
+                        dialogInterface.dismiss();
+                    })
+                    .create();
+            dialog.show();
+        });
+        llScreenDirection.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.screen_direction))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_direction_list_title), readBookControl.getScreenDirection(), (dialogInterface, i) -> {
+                        readBookControl.setScreenDirection(i);
+                        upScreenDirection(i);
+                        changeProListener.recreate();
                         dialogInterface.dismiss();
                     })
                     .create();
@@ -158,31 +206,50 @@ public class MoreSettingPop extends PopupWindow {
     }
 
     private void initData() {
+        upScreenDirection(readBookControl.getScreenDirection());
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
-        sbHideStatusBar.setCheckedImmediatelyNoEvent(readBookControl.getHideStatusBar());
-        sbHideNavigationBar.setCheckedImmediatelyNoEvent(readBookControl.getHideNavigationBar());
-        sbKey.setCheckedImmediatelyNoEvent(readBookControl.getCanKeyTurn());
-        sbClick.setCheckedImmediatelyNoEvent(readBookControl.getCanClickTurn());
-        sbClickAllNext.setCheckedImmediatelyNoEvent(readBookControl.getClickAllNext());
-        sbShowTitle.setCheckedImmediatelyNoEvent(readBookControl.getShowTitle());
-        sbShowTimeBattery.setCheckedImmediatelyNoEvent(readBookControl.getShowTimeBattery());
-        sbShowLine.setCheckedImmediatelyNoEvent(readBookControl.getShowLine());
-        sbImmersionBar.setCheckedImmediatelyNoEvent(readBookControl.getImmersionStatusBar());
+        swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
+        swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
+        sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
+        sbHideNavigationBar.setChecked(readBookControl.getHideNavigationBar());
+        sbClick.setChecked(readBookControl.getCanClickTurn());
+        sbClickAllNext.setChecked(readBookControl.getClickAllNext());
+        sbShowTitle.setChecked(readBookControl.getShowTitle());
+        sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
+        sbShowLine.setChecked(readBookControl.getShowLine());
+        sbImmersionBar.setChecked(readBookControl.getImmersionStatusBar());
+        upView();
+    }
+
+    private void upView() {
         if (readBookControl.getHideStatusBar()) {
             llShowTimeBattery.setVisibility(View.VISIBLE);
         } else {
             llShowTimeBattery.setVisibility(View.GONE);
         }
-
+        if (readBookControl.getCanKeyTurn()) {
+            llReadAloudKey.setVisibility(View.VISIBLE);
+        } else {
+            llReadAloudKey.setVisibility(View.GONE);
+        }
     }
 
     private void upScreenTimeOut(int screenTimeOut) {
         tvScreenTimeOut.setText(activity.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
     }
 
-    private void upFConvert(int fConvert){
+    private void upFConvert(int fConvert) {
         tvJFConvert.setText(activity.getResources().getStringArray(R.array.convert_s)[fConvert]);
+    }
+
+    private void upScreenDirection(int screenDirection) {
+        String[] screenDirectionListTitle = activity.getResources().getStringArray(R.array.screen_direction_list_title);
+        if (screenDirection >= screenDirectionListTitle.length) {
+            tvScreenDirection.setText(screenDirectionListTitle[0]);
+        } else {
+            tvScreenDirection.setText(screenDirectionListTitle[screenDirection]);
+        }
     }
 
 }

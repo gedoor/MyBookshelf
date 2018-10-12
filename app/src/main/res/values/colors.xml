@@ -13,9 +13,20 @@
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
     <color name="d_blue">#82A6F5</color>
+    <color name="translucent">#99343434</color>
+    <color name="gray">#b8b8b8</color>
+    <color name="light_pink">#fb9090</color>
+    <color name="light_white">#EEEEEE</color>
+    <color name="light_coffee">#A58D5E</color>
+    <color name="light_red">#EC4A48</color>
+    <color name="light_blue">#039BE5</color>
+    <color name="light_translucent">#23000000</color>
+    <color name="common_gray">#EEEEEE</color>
+    <color name="darker_gray">#aaaaaaaa</color>
 
 
     <color name="background">#f4f4f4</color>
+    <color name="background_card">#f4f4f4</color>
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
@@ -29,10 +40,6 @@
 
     <color name="tv_btn_normal_black">#737373</color>
     <color name="tv_btn_press_black">#adadad</color>
-    <color name="tv_btn_black">#343434</color>
-    <color name="bg_library">#f1f1f1</color>
-
-    <color name="bg_chapter">#ffffff</color>
 
     <color name="tv_text_default">#1e1e1e</color>
 
@@ -46,12 +53,6 @@
 
     <color name="welcome">#00000000</color>
 
-    <!-- 自定义header背景色 -->
-    <color name="bg_head">#FF0F4AAA</color>
-    <!-- 灰色背景 -->
-    <color name="bg_grey">#FFE5E5E5</color>
-    <!-- 白色背景 -->
-    <color name="bg_white">#FFFFFFFF</color>
     <!-- 分格线背景色 -->
     <color name="bg_divider_line">#FFD4D4D4</color>
     <!--statusBarBackground-->

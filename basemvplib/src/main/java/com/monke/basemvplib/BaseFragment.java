@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
-import com.trello.rxlifecycle2.components.RxFragment;
 
-public abstract class BaseFragment<T extends IPresenter> extends RxFragment implements IView {
+public abstract class BaseFragment<T extends IPresenter> extends com.trello.rxlifecycle2.components.support.RxFragment implements IView {
     protected View view;
     protected Bundle savedInstanceState;
     @Nullable

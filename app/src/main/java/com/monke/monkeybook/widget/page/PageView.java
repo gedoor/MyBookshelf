@@ -1,21 +1,18 @@
 package com.monke.monkeybook.widget.page;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
@@ -30,13 +27,11 @@ import java.util.Objects;
 
 
 /**
- * Created by Administrator on 2016/8/29 0029.
- * 原作者的GitHub Project Path:(https://github.com/PeachBlossom/treader)
  * 绘制页面显示内容的类
  */
 public class PageView extends View {
 
-    private final static String TAG = "BookPageWidget";
+    private final static String TAG = PageView.class.getSimpleName();
 
     private ReadBookActivity activity;
 
@@ -47,9 +42,10 @@ public class PageView extends View {
     private int mStartX = 0;
     private int mStartY = 0;
     private boolean isMove = false;
+    private int mPageIndex;
+    private int mChapterIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private PageMode mPageMode = PageMode.SIMULATION;
     // 是否允许点击
     private boolean canTouch = true;
     // 唤醒菜单的区域
@@ -107,25 +103,27 @@ public class PageView extends View {
 
     //设置翻页的模式
     void setPageMode(PageMode pageMode, int marginTop, int marginBottom) {
-        mPageMode = pageMode;
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
         if (!readBookControl.getHideStatusBar()) {
             marginTop = marginTop + statusBarHeight;
         }
-        switch (mPageMode) {
+        switch (pageMode) {
             case SIMULATION:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
             case COVER:
                 mPageAnim = new CoverPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
+            case SLIDE:
+                mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
+                break;
             case NONE:
                 mPageAnim = new NonePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
                 break;
             case SCROLL:
                 mPageAnim = new ScrollPageAnim(mViewWidth, mViewHeight, 0,
-                        marginTop, marginBottom,this, mPageAnimListener);
+                        marginTop, marginBottom, this, mPageAnimListener);
                 break;
             default:
                 mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
@@ -206,31 +204,28 @@ public class PageView extends View {
             }
         }
         mPageAnim.startAnim();
-        this.postInvalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-        //绘制背景
-        if (readBookControl.bgIsColor()) {
-            canvas.drawColor(readBookControl.getBgColor());
-        } else {
-            canvas.drawBitmap(readBookControl.getBgBitmap(mViewWidth, mViewHeight), 0, 0, null);
-        }
-
         //绘制动画
         if (mPageAnim != null) {
             mPageAnim.draw(canvas);
         }
-
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
 
-        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) return true;
+        if (mPageAnim == null) {
+            return true;
+        }
+
+        if (!canTouch && event.getAction() != MotionEvent.ACTION_DOWN) {
+            return true;
+        }
 
         int x = (int) event.getX();
         int y = (int) event.getY();
@@ -269,6 +264,10 @@ public class PageView extends View {
                         }
                         return true;
                     }
+
+                    if (!readBookControl.getCanClickTurn()) {
+                        return true;
+                    }
                 }
                 mPageAnim.onTouchEvent(event);
                 break;
@@ -278,26 +277,29 @@ public class PageView extends View {
 
     /**
      * 判断是否存在上一页
-     *
-     * @return
      */
     private boolean hasPrevPage() {
-        mTouchListener.prePage();
-        return mPageLoader.prev();
+        if (mPageLoader.prev()) {
+            return true;
+        } else {
+            Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     /**
      * 判断是否下一页存在
-     *
-     * @return
      */
     private boolean hasNextPage() {
-        mTouchListener.nextPage();
-        return mPageLoader.next();
+        if (mPageLoader.next()) {
+            return true;
+        } else {
+            Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
     private void pageCancel() {
-        mTouchListener.cancel();
         mPageLoader.pageCancel();
     }
 
@@ -306,8 +308,20 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
+            if (mPageAnim.isStartAnim() && !mPageAnim.getScroller().computeScrollOffset()) {
+                mPageAnim.setStartAnim(false);
+                if (mPageLoader.getPagePos() != mPageIndex | mPageLoader.getChapterPos() != mChapterIndex) {
+                    mPageLoader.pagingEnd();
+                }
+            }
         }
         super.computeScroll();
+
+    }
+
+    public void upPagePos(int chapterPos, int pagePos) {
+        mChapterIndex = chapterPos;
+        mPageIndex = pagePos;
     }
 
     //如果滑动状态没有停止就取消状态，重新设置Anim的触碰点
@@ -327,38 +341,45 @@ public class PageView extends View {
         this.mTouchListener = mTouchListener;
     }
 
+    /**
+     * 重置滚动位移
+     */
+    public void resetScroll() {
+        if (mPageAnim instanceof ScrollPageAnim) {
+            ((ScrollPageAnim) mPageAnim).resetBitmap();
+        }
+    }
+
+    /**
+     * 绘制下一页
+     */
     public void drawNextPage() {
         if (!isPrepare) return;
 
         if (mPageAnim instanceof HorizonPageAnim) {
             ((HorizonPageAnim) mPageAnim).changePage();
         }
-        mPageLoader.drawPage(getNextBitmap(), false);
+        mPageLoader.drawPage(getNextBitmap());
     }
 
     /**
      * 绘制当前页。
-     *
-     * @param isUpdate
      */
-    public void drawCurPage(boolean isUpdate) {
+    public void drawCurPage() {
         if (!isPrepare) return;
 
-        if (!isUpdate) {
-            if (mPageAnim instanceof ScrollPageAnim) {
-                ((ScrollPageAnim) mPageAnim).resetBitmap();
-            }
-        }
         if (mPageLoader != null) {
-            mPageLoader.drawPage(getNextBitmap(), isUpdate);
+            mPageLoader.drawPage(getNextBitmap());
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mPageAnim.abortAnim();
-        mPageAnim.clear();
+        if (mPageAnim != null) {
+            mPageAnim.abortAnim();
+            mPageAnim.clear();
+        }
 
         mPageLoader = null;
         mPageAnim = null;
@@ -393,11 +414,5 @@ public class PageView extends View {
         boolean onTouch();
 
         void center();
-
-        void prePage();
-
-        void nextPage();
-
-        void cancel();
     }
 }

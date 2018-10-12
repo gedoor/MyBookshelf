@@ -36,6 +36,18 @@
             android:title="@string/copy_text"
             app:showAsAction="ifRoom" />
 
+        <item
+            android:id="@+id/disable_book_source"
+            android:icon="@drawable/ic_cancel"
+            android:title="@string/disable_book_source"
+            app:showAsAction="ifRoom" />
+
     </group>
+
+    <item
+        android:id="@+id/action_book_info"
+        android:icon="@drawable/ic_toc"
+        android:title="@string/book_info"
+        app:showAsAction="never" />
 
 </menu>

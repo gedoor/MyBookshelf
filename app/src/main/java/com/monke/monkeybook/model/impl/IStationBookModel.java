@@ -3,11 +3,13 @@ package com.monke.monkeybook.model.impl;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 
 public interface IStationBookModel {
 
@@ -29,12 +31,16 @@ public interface IStationBookModel {
     /**
      * 网络解析图书目录
      */
-    Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean);
+    Observable<List<ChapterListBean>> getChapterList(final BookShelfBean bookShelfBean);
+
 
     /**
-     * 章节缓存
+     * 获取章节
+     * @param scheduler　执行进程
+     * @param durChapterUrl　章节地址
+     * @param durChapterIndex　章节序号
      */
-    Observable<BookContentBean> getBookContent(final String durChapterUrl, final int durChapterIndex);
+    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, final int durChapterIndex);
 
 
 }

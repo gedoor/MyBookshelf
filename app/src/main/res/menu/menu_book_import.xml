@@ -2,8 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_import_book"
-        android:title="@string/import_select_book"
-        app:showAsAction="ifRoom" />
+
 </menu>

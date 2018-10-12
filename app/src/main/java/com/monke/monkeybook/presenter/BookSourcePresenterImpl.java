@@ -1,6 +1,5 @@
 package com.monke.monkeybook.presenter;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
@@ -16,12 +15,11 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.FileHelper;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.presenter.impl.IBookSourcePresenter;
+import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.service.CheckSourceService;
-import com.monke.monkeybook.view.impl.IBookSourceView;
 
 import java.io.File;
 import java.net.URL;
@@ -39,7 +37,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> implements IBookSourcePresenter {
+public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
     private BookSourceBean delBookSource;
     private Snackbar progressSnackBar;
 
@@ -79,7 +77,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        Snackbar.make(mView.getView(), delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
+                        mView.getSnackBar(delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
                                 .setAction("恢复", view -> {
                                     restoreBookSource(delBookSource);
                                 })
@@ -139,27 +137,6 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
     }
 
     @Override
-    public void importBookSource(Uri uri) {
-        String json;
-        if (uri.toString().startsWith("content://")) {
-            json = FileHelper.readString(uri);
-        } else {
-            String path = uri.getPath();
-            DocumentFile file = DocumentFile.fromFile(new File(path));
-            json = FileHelper.readString(file);
-        }
-        if (!isEmpty(json)) {
-            showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
-            BookSourceManage.importBookSourceO(json)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(getImportObserver());
-        } else {
-            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
     public void importBookSource(String sourceUrl) {
         URL url;
         try {
@@ -169,9 +146,25 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
             return;
         }
-        showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
+        mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
         BookSourceManage.importSourceFromWww(url)
                 .subscribe(getImportObserver());
+    }
+
+    @Override
+    public void importBookSourceLocal(String path) {
+        String json;
+        DocumentFile file = DocumentFile.fromFile(new File(path));
+        json = DocumentHelper.readString(file);
+        if (!isEmpty(json)) {
+            mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
+            BookSourceManage.importBookSourceO(json)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(getImportObserver());
+        } else {
+            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private SimpleObserver<Boolean> getImportObserver() {
@@ -180,21 +173,17 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
             public void onNext(Boolean aBoolean) {
                 if (aBoolean) {
                     mView.refreshBookSource();
-                    showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
+                    mView.showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
                 } else {
-                    showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
+                    mView.showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                showSnackBar(e.getMessage(), Snackbar.LENGTH_SHORT);
+                mView.showSnackBar(e.getMessage(), Snackbar.LENGTH_SHORT);
             }
         };
-    }
-
-    private void showSnackBar(String msg, int length) {
-        Snackbar.make(mView.getView(), msg, length).show();
     }
 
     private String getProgressStr(int state) {
@@ -227,10 +216,10 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<IBookSourceView> 
         mView.refreshBookSource();
 
         if (state == -1) {
-            showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
+            mView.showSnackBar("校验完成", Snackbar.LENGTH_SHORT);
         } else {
             if (progressSnackBar == null) {
-                progressSnackBar = Snackbar.make(mView.getView(), getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
+                progressSnackBar = mView.getSnackBar(getProgressStr(state), Snackbar.LENGTH_INDEFINITE);
                 progressSnackBar.setAction(mView.getContext().getString(R.string.cancel), view -> CheckSourceService.stop(mView.getContext()));
             } else {
                 progressSnackBar.setText(getProgressStr(state));

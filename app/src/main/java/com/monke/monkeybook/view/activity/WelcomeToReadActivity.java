@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.widget.ImageView;
 
+import com.monke.basemvplib.AppActivityManager;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -19,8 +20,6 @@ public class WelcomeToReadActivity extends MBaseActivity {
     @BindView(R.id.iv_bg)
     ImageView ivBg;
 
-    private ValueAnimator welAnimator;
-
     @Override
     protected IPresenter initInjector() {
         return null;
@@ -29,22 +28,9 @@ public class WelcomeToReadActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
-
-    }
-
-    @Override
-    protected void initData() {
-        welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
-        welAnimator.setStartDelay(500);
-    }
-
-    @Override
-    protected void bindView() {
         ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void bindEvent() {
+        ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
+        welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {
             float alpha = (Float) animation.getAnimatedValue();
             ivBg.setAlpha(alpha);
@@ -52,9 +38,7 @@ public class WelcomeToReadActivity extends MBaseActivity {
         welAnimator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Intent intent = new Intent(WelcomeToReadActivity.this, ReadBookActivity.class);
-                intent.putExtra("from", ReadBookPresenterImpl.OPEN_FROM_APP);
-                startActivity(intent);
+                startReadActivity();
                 finish();
             }
 
@@ -73,11 +57,18 @@ public class WelcomeToReadActivity extends MBaseActivity {
 
             }
         });
+        welAnimator.start();
+    }
+
+    private void startReadActivity() {
+        Intent intent = new Intent(this, ReadBookActivity.class);
+        intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+        startActivity(intent);
     }
 
     @Override
-    protected void firstRequest() {
-        welAnimator.start();
+    protected void initData() {
+
     }
 
 }

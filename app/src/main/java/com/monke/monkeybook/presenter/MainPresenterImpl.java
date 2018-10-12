@@ -4,6 +4,7 @@ package com.monke.monkeybook.presenter;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -24,10 +25,9 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IMainPresenter;
+import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.view.impl.IMainView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.net.URL;
@@ -40,18 +40,20 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements IMainPresenter {
+public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
     private int group;
-    private boolean isRestore = false;
+    private boolean hasUpdate = false;
+    private List<String> errBooks = new ArrayList<>();
 
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
         this.group = group;
-        if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
-            mView.activityRefreshView();
+        if(needRefresh) {
+            hasUpdate = false;
+            errBooks.clear();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> bookShelfList = BookshelfHelp.getBooksByGroup(group);
@@ -102,8 +104,7 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                     @Override
                     public void onNext(Boolean value) {
                         if (value) {
-                            isRestore = true;
-                            mView.onRestore(mView.getContext().getString(R.string.restore_success));
+                            mView.dismissHUD();
                             queryBookShelf(true, group);
                         } else {
                             mView.dismissHUD();
@@ -120,17 +121,26 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                 });
     }
 
-    @Override
-    public void downloadAll() {
+    public void downloadAll(int downloadNum, boolean onlyNew) {
+        if (bookShelfBeans == null) {
+            return;
+        }
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            for (BookShelfBean bookShelfBean : bookShelfBeans) {
-                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
-                    Intent intent = new Intent(mView.getContext(), DownloadService.class);
-                    intent.setAction("addDownload");
-                    intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
-                    intent.putExtra("start", bookShelfBean.getDurChapter());
-                    intent.putExtra("end", bookShelfBean.getChapterListSize() - 1);
-                    mView.getContext().startService(intent);
+            for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
+                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
+                    int chapterNum = bookShelfBean.getChapterListSize();
+                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
+                        if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
+                            Intent intent = new Intent(mView.getContext(), DownloadService.class);
+                            intent.setAction("addDownload");
+                            intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
+                            intent.putExtra("start", start);
+                            int end = downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1;
+                            intent.putExtra("end", end);
+                            mView.getContext().startService(intent);
+                            break;
+                        }
+                    }
                 }
             }
             e.onNext(true);
@@ -245,7 +255,8 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
-            if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
                 WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
@@ -261,13 +272,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
                                     value.setErrorMsg(null);
                                 }
                                 bookShelfBean.setLoading(false);
+                                if (chapterNum < bookShelfBean.getChapterListSize())
+                                    hasUpdate = true;
                                 mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
                             }
 
                             @Override
                             public void onError(Throwable e) {
-                                Toast.makeText(mView.getContext(), String.format("%s %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()), Toast.LENGTH_SHORT).show();
+                                errBooks.add(bookShelfBean.getBookInfoBean().getName());
+                                Log.w("MonkBook", String.format("%s: %s", bookShelfBean.getBookInfoBean().getName(), e.getMessage()));
                                 bookShelfBean.setLoading(false);
                                 mView.refreshBook(bookShelfBean.getNoteUrl());
                                 refreshBookshelf();
@@ -276,14 +290,16 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             } else {
                 refreshBookshelf();
             }
-        } else {
-            if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
-                queryBookShelf(false, group);
-                if (isRestore) {
-                    isRestore = false;
-                    mView.dismissHUD();
-                }
+        } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
+            if(errBooks.size() > 0) {
+                Toast.makeText(mView.getContext(), TextUtils.join("、", errBooks) + " 更新失败！", Toast.LENGTH_SHORT).show();
+                errBooks.clear();
             }
+            if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
+                downloadAll(10, true);
+                hasUpdate = false;
+            }
+            queryBookShelf(false, group);
         }
     }
 
@@ -315,5 +331,15 @@ public class MainPresenterImpl extends BasePresenterImpl<IMainView> implements I
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false, group);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
+    public void initImmersionBar(Boolean immersion) {
+        mView.initImmersionBar();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
+    public void updatePx(Boolean px) {
+        mView.recreate();
     }
 }

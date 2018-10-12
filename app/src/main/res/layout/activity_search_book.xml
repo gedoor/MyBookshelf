@@ -34,7 +34,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -108,5 +108,19 @@
 
         </LinearLayout>
 
-    </FrameLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabSearchStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="30dp"
+            android:src="@drawable/ic_stop_black_24dp"
+            app:elevation="5dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="right|bottom" />
+
+    </RelativeLayout>
+
 </LinearLayout>

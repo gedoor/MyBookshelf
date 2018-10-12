@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/background_menu"
     android:orientation="vertical">
 
     <View
@@ -13,8 +13,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@color/background">
+        android:layout_height="310dp"
+        android:background="@color/background_menu">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,14 +24,54 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_screen_direction"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/background_menu"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="@string/screen_direction"
+                        android:textColor="@color/tv_text_default" />
+
+                    <TextView
+                        android:id="@+id/tv_screen_direction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/screen_unspecified"
+                        android:textColor="@color/tv_text_default" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/llScreenTimeOut"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/background"
+                    android:background="@color/background_menu"
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
@@ -64,14 +104,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/llJFConvert"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:background="@color/background"
+                    android:background="@color/background_menu"
                     android:orientation="horizontal"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp">
@@ -105,34 +145,15 @@
                 android:id="@+id/ll_hideStatusBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_hideStatusBar"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/pt_hide_status_bar"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_hideStatusBar"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/pt_hide_status_bar"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/pt_hide_status_bar"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -145,35 +166,16 @@
                 android:id="@+id/llImmersionBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical"
                 android:visibility="visible">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sbImmersionBar"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/immersion_status_bar"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sbImmersionBar"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/immersion_status_bar"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/immersion_status_bar"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -186,34 +188,15 @@
                 android:id="@+id/ll_hideNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_hideNavigationBar"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/pt_hide_navigation_bar"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_hideNavigationBar"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/pt_hide_navigation_bar"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/pt_hide_navigation_bar"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -225,34 +208,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_show_title"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/showTitle"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_show_title"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/volume_open_page"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/showTitle"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -264,34 +228,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sw_volume_next_page"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/volume_open_page"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/volume_open_page"
-                        android:textColor="@color/tv_text_default" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
 
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_key"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/volume_open_page"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_read_aloud_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_menu"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/sw_read_aloud_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/aloud_volume_page"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -303,34 +269,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_click"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/click_open_page"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_click"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/click_open_page"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/click_open_page"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -342,34 +289,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_click_all_next"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/click_all_next_page"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_click_all_next"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/click_all_next_page"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/click_all_next_page"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -381,35 +309,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_showLine"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/showLine"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_showLine"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/showLine"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/showLine"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -422,35 +330,16 @@
                 android:id="@+id/ll_showTimeBattery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background"
+                android:background="@color/background_menu"
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <LinearLayout
+                <Switch
+                    android:id="@+id/sb_showTimeBattery"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@color/background"
-                    android:orientation="horizontal"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:text="@string/showTimeBattery"
-                        android:textColor="@color/tv_text_default" />
-
-                    <com.kyleduo.switchbutton.SwitchButton
-                        android:id="@+id/sb_showTimeBattery"
-                        android:layout_width="47dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center_vertical"
-                        android:contentDescription="@string/showTimeBattery"
-                        app:kswBackColor="@drawable/selector_switch_button"
-                        app:kswThumbColor="@color/background" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/showTimeBattery"/>
 
                 <View
                     android:layout_width="match_parent"

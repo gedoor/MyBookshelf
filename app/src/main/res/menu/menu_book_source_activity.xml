@@ -3,17 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.activity.BookSourceActivity">
 
-    <item
-        android:id="@+id/action_add_book_source"
-        android:icon="@drawable/ic_add_black_24dp_new"
-        android:title="@string/add_book_source"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_select_all"
         android:icon="@drawable/ic_done_all_black_24dp_new"
         android:title="@string/select_all"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/action_group"
+        android:icon="@drawable/ic_group"
+        android:title="@string/menu_action_group"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
+
+        <menu>
+            <group android:id="@+id/source_group">
+
+            </group>
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/action_add_book_source"
+        android:icon="@drawable/ic_add_black_24dp_new"
+        android:title="@string/add_book_source"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_local"

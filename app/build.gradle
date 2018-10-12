@@ -7,7 +7,7 @@ static def increasedVersionCode() {
 }
 
 def name = "MONKOVEL"
-def version = "1.6." + increasedVersionCode()
+def version = "2.0." + increasedVersionCode()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 def gitTag = "git tag " + version
 
@@ -31,7 +31,7 @@ if (keystoreFilepath) {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
     signingConfigs {
         myConfig {
             storeFile keyFile
@@ -87,7 +87,6 @@ ext {
 }
 dependencies {
     api project(':basemvplib')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
 
     //fireBase
@@ -133,9 +132,6 @@ dependencies {
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    //markdownView
-    implementation 'com.zzhoujay.richtext:richtext:3.0.7'
-
     //SwitchButton
     implementation 'com.kyleduo.switchbutton:library:2.0.0'
 
@@ -147,7 +143,7 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
 
     //简易权限获取
-    implementation 'pub.devrel:easypermissions:1.2.0'
+    implementation 'pub.devrel:easypermissions:1.3.0'
 
     //二维码
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
@@ -155,13 +151,21 @@ dependencies {
     //颜色选择
     implementation 'com.github.QuadFlask:colorpicker:0.0.13'
 
+    //文件目录选择
+    implementation('com.github.gedoor.AndroidPicker:FilePicker:1.6.2') {
+        exclude group: 'com.android.support'
+    }
+
     //简繁转换
     implementation 'com.luhuiguo:chinese-utils:1.0'
+
+    //字符串比较
+    implementation 'net.ricecode:string-similarity:1.0.0'
 
 }
 
 greendao {
-    schemaVersion 29
+    schemaVersion 40
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }

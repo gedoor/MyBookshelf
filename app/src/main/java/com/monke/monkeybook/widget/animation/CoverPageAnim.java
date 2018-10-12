@@ -37,10 +37,10 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void drawMove(Canvas canvas) {
-
+        int dis;
         switch (mDirection){
             case NEXT:
-                int dis = (int) (mViewWidth - mStartX + mTouchX);
+                dis = (int) (mViewWidth - mStartX + mTouchX);
                 if (dis > mViewWidth){
                     dis = mViewWidth;
                 }
@@ -53,17 +53,21 @@ public class CoverPageAnim extends HorizonPageAnim {
                 addShadow(dis,canvas);
                 break;
             default:
-                mSrcRect.left = (int) (mViewWidth - mTouchX);
-                mDestRect.right = (int) mTouchX;
+                dis = (int) (mTouchX - mStartX);
+                if (dis > mViewWidth){
+                    dis = mViewWidth;
+                }
+                mSrcRect.left = mViewWidth - dis;
+                mDestRect.right = dis;
                 canvas.drawBitmap(mCurBitmap,0,0,null);
                 canvas.drawBitmap(mNextBitmap,mSrcRect,mDestRect,null);
-                addShadow((int) mTouchX,canvas);
+                addShadow(dis,canvas);
                 break;
         }
     }
 
     //添加阴影
-    public void addShadow(int left,Canvas canvas) {
+    private void addShadow(int left, Canvas canvas) {
         mBackShadowDrawableLR.setBounds(left, 0, left + 30 , mScreenHeight);
         mBackShadowDrawableLR.draw(canvas);
     }
@@ -71,7 +75,7 @@ public class CoverPageAnim extends HorizonPageAnim {
     @Override
     public void startAnim() {
         super.startAnim();
-        int dx = 0;
+        int dx;
         switch (mDirection){
             case NEXT:
                 if (isCancel){
@@ -86,15 +90,15 @@ public class CoverPageAnim extends HorizonPageAnim {
                 break;
             default:
                 if (isCancel){
-                    dx = (int) -mTouchX;
+                    dx = (int) -(mTouchX-mStartX);
                 }else{
-                    dx = (int) (mViewWidth - mTouchX);
+                    dx = (int) (mViewWidth - (mTouchX-mStartX));
                 }
                 break;
         }
 
         //滑动速度保持一致
-        int duration = (400 * Math.abs(dx)) / mViewWidth;
+        int duration = (animationSpeed * Math.abs(dx)) / mViewWidth;
         mScroller.startScroll((int) mTouchX, 0, dx, 0, duration);
     }
 }

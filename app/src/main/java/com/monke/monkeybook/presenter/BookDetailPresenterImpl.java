@@ -16,24 +16,18 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
-import com.monke.monkeybook.presenter.impl.IBookDetailPresenter;
-import com.monke.monkeybook.view.impl.IBookDetailView;
+import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> implements IBookDetailPresenter {
+public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
     public final static int FROM_SEARCH = 2;
 
@@ -42,8 +36,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
     private BookShelfBean bookShelf;
     private Boolean inBookShelf = false;
 
-    public BookDetailPresenterImpl(Intent intent) {
-        openFrom = intent.getIntExtra("from", FROM_BOOKSHELF);
+    @Override
+    public void initData(Intent intent) {
+        openFrom = intent.getIntExtra("openFrom", FROM_BOOKSHELF);
         if (openFrom == FROM_BOOKSHELF) {
             String key = intent.getStringExtra("data_key");
             bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
@@ -63,6 +58,10 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     @Override
     public void initBookFormSearch(SearchBookBean searchBookBean) {
+        if (searchBookBean == null) {
+            mView.finish();
+            return;
+        }
         searchBook = searchBookBean;
         inBookShelf = searchBookBean.getIsAdd();
         bookShelf = BookshelfHelp.getBookFromSearchBook(searchBookBean);
@@ -185,10 +184,17 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         }
     }
 
+    /**
+     * 换源
+     */
     @Override
     public void changeBookSource(SearchBookBean searchBookBean) {
         BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
         bookShelfBean.setSerialNumber(bookShelf.getSerialNumber());
+        bookShelfBean.setLastChapterName(bookShelf.getLastChapterName());
+        bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
+        bookShelfBean.setDurChapter(bookShelf.getDurChapter());
+        bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
         WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
                 .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
@@ -196,14 +202,6 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelf.getDurChapter() > bookShelfBean.getChapterListSize() - 1) {
-                            bookShelfBean.setDurChapter(bookShelfBean.getChapterListSize() - 1);
-                        } else {
-                            bookShelfBean.setDurChapter(bookShelf.getDurChapter());
-                        }
-                        if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
-                            bookShelfBean.setHasUpdate(false);
-                        }
                         saveChangedBook(bookShelfBean);
                     }
 
@@ -217,6 +215,13 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
 
     private void saveChangedBook(BookShelfBean bookShelfBean) {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            if (bookShelfBean.getChapterListSize() <= bookShelf.getChapterListSize()) {
+                bookShelfBean.setHasUpdate(false);
+            }
+            bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
+            bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
+            bookShelfBean.setDurChapterName(bookShelfBean.getChapterList(bookShelfBean.getDurChapter()).getDurChapterName());
+            bookShelfBean.setGroup(bookShelf.getGroup());
             BookshelfHelp.removeFromBookShelf(bookShelf);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
             e.onNext(bookShelfBean);
@@ -253,4 +258,9 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<IBookDetailView> 
         RxBus.get().unregister(this);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
+    public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
+        mView.updateView();
+    }
 }

@@ -18,6 +18,8 @@ import com.monke.monkeybook.utils.BitmapUtil;
 
 public abstract class HorizonPageAnim extends PageAnimation{
     private static final String TAG = "HorizonPageAnim";
+    //动画速度
+    protected static final int animationSpeed = 300;
 
     protected Bitmap mCurBitmap;
     protected Bitmap mNextBitmap;
@@ -36,12 +38,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
     private boolean noNext = false;
 
     public HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
-        this(w, h, 0, 0, 0, view, listener);
-    }
-
-    public HorizonPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom,
-                           View view, OnPageChangeListener listener) {
-        super(w, h, marginWidth, marginTop, marginBottom, view,listener);
+        super(w, h, view,listener);
         //创建图片
         mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
         mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
@@ -148,11 +145,7 @@ public abstract class HorizonPageAnim extends PageAnimation{
                 break;
             case MotionEvent.ACTION_UP:
                 if (!isMove){
-                    if (x > mScreenWidth / 2 || readBookControl.getClickAllNext()){
-                        isNext = true;
-                    }else{
-                        isNext = false;
-                    }
+                    isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
 
                     if (isNext) {
                         //判断是否下一页存在
