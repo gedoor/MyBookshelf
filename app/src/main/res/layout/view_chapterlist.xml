@@ -83,15 +83,20 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.HackRecyclerView
-            android:id="@+id/rv_list"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fastScrollEnabled="true"
-            app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
-            app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
+            android:background="@color/background">
+
+            <com.monke.monkeybook.widget.refreshview.scroller.FastScrollRecyclerView
+                android:id="@+id/rv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:handleColor="@color/tv_text_button_pre"
+                app:bubbleColor="@color/tv_text_button_deep_pre"
+                app:trackColor="@color/bg_divider_line" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 </FrameLayout>

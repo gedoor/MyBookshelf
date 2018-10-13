@@ -41,4 +41,15 @@
         <attr name="layout_refresh_error" format="reference"/>
         <attr name="layout_refresh_loading" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="FastScroller">
+        <attr name="fadeScrollbar" format="boolean" />
+        <attr name="showBubble" format="boolean" />
+        <attr name="showTrack" format="boolean" />
+        <attr name="trackColor" format="color" />
+        <attr name="handleColor" format="color" />
+        <attr name="bubbleColor" format="color" />
+        <attr name="bubbleTextColor" format="color" />
+    </declare-styleable>
+
 </resources>
