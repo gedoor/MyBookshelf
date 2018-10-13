@@ -98,7 +98,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 bookShelf = BookshelfHelp.getBook(mView.getNoteUrl());
             }
             if (bookShelf == null) {
-                bookShelf = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).limit(1).unique();
+                List<BookShelfBean> beans = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().orderDesc(BookShelfBeanDao.Properties.FinalDate).limit(1).list();
+                if (beans != null && beans.size() > 0) {
+                    bookShelf = beans.get(0);
+                }
             }
             if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
                 mView.finish();
