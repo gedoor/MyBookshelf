@@ -26,7 +26,9 @@
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_cover_default"
-                android:contentDescription="@string/img_cover" />
+                android:contentDescription="@string/img_cover"
+                android:transitionName="img_cover"
+                tools:ignore="UnusedAttribute" />
 
         </android.support.v7.widget.CardView>
 
