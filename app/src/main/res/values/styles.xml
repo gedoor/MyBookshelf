@@ -1,6 +1,10 @@
 <resources>
+
     <!-- Base application theme. -->
-    <style name="CAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="CAppTheme" parent="Base.AppTheme">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -58,5 +62,7 @@
         <item name="android:windowExitAnimation">@anim/anim_pop_windowmenumore_out</item>
     </style>
 
-
+    <style name="NopaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
 </resources>

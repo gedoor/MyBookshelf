@@ -9,14 +9,21 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -58,6 +66,7 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,6 +79,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
     private static final int REQUEST_CODE_SIGN_IN = 14;
+    private static String[] mTitles = new String[]{"书架", "发现"};
 
     @BindView(R.id.drawer)
     DrawerLayout drawer;
@@ -85,6 +95,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     LinearLayout mainView;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+    @BindView(R.id.card_search)
+    CardView cardSearch;
+    @BindView(R.id.tab_layout_main)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager_main)
+    ViewPager viewPager;
 
     private TextView tvUser;
     private Switch swNightTheme;
@@ -176,7 +192,26 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             rvBookshelf.setAdapter(bookShelfGridAdapter);
             rvBookshelf.setLayoutManager(new GridLayoutManager(this, 3));
         }
+
+        BookListTabAdapter bookListTabAdapter = new BookListTabAdapter(getSupportFragmentManager());
+        ArrayList<ViewPagerFragment> mViewPagerFragments = new ArrayList<>();
+
+        for (int i = 0; i < mTitles.length; i++) {
+            mViewPagerFragments.add(ViewPagerFragment.newInstance(mTitles[i]));
+        }
+
+        bookListTabAdapter.setTitles(mTitles);
+        bookListTabAdapter.setFragments(mViewPagerFragments);
+
+        viewPager.setAdapter(bookListTabAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
+                toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out));
     }
+
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -646,4 +681,58 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
+    //tab适配器
+    class BookListTabAdapter extends FragmentPagerAdapter {
+
+        private String[] titles;
+        private ArrayList<ViewPagerFragment> viewPagerFragments;
+
+        public BookListTabAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void setTitles(String[] titles) {
+            this.titles = titles;
+        }
+
+        public void setFragments(ArrayList<ViewPagerFragment> viewPagerFragments) {
+            this.viewPagerFragments = viewPagerFragments;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return viewPagerFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return viewPagerFragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+    }
+
+    public static class ViewPagerFragment extends Fragment {
+
+        private static final String KEY = "extra";
+        private String mMessage;
+
+        public static ViewPagerFragment newInstance(String extra) {
+            Bundle args = new Bundle();
+            args.putString(KEY, extra);
+            ViewPagerFragment fragment = new ViewPagerFragment();
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.activity_welcome, container, false);
+            return view;
+        }
+    }
 }
