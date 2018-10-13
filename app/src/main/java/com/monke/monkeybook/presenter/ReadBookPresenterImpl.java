@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -75,6 +76,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     private ExecutorService executorService;
     private Scheduler scheduler;
     private List<String> downloadingChapterList = new ArrayList<>();
+    private Handler handler = new Handler();
 
     public ReadBookPresenterImpl() {
         executorService = Executors.newFixedThreadPool(10);
@@ -128,14 +130,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-                            Timer timer = new Timer();
-                            timer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
-                                    d.dispose();
-                                    timer.cancel();
-                                }
+                            handler.postDelayed(() -> {
+                                DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                                d.dispose();
                             }, 30*1000);
                         }
 
