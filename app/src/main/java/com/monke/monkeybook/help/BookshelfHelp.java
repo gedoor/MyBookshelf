@@ -159,6 +159,8 @@ public class BookshelfHelp {
      */
     public static int getDurChapter(BookShelfBean oldBook, BookShelfBean newBook) {
         int oldChapterSize = oldBook.getChapterListSize();
+        if (oldChapterSize == 0)
+            return 0;
         int oldChapterIndex = oldBook.getDurChapter();
         int oldChapterNum = oldBook.getChapterList(oldBook.getDurChapter()).getChapterNum();
         String oldName = oldBook.getChapterList(oldBook.getDurChapter()).getPureChapterName();

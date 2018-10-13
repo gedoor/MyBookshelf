@@ -26,7 +26,7 @@ import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
  */
 
 public class NetPageLoader extends PageLoader {
-    private static final String TAG = "PageFactory";
+    private static final String TAG = "NetPageLoader";
 
     public NetPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);

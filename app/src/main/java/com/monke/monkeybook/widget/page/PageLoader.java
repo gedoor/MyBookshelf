@@ -215,7 +215,7 @@ public abstract class PageLoader {
     public void initPaint() {
         Typeface typeface;
         try {
-            if (mSettingManager.getFontPath() != null || "".equals(mSettingManager.getFontPath())) {
+            if (!TextUtils.isEmpty(mSettingManager.getFontPath())) {
                 typeface = Typeface.createFromFile(mSettingManager.getFontPath());
             } else {
                 typeface = Typeface.SANS_SERIF;
@@ -733,18 +733,19 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     private void drawBackground(Bitmap bitmap) {
         Canvas canvas = new Canvas(bitmap);
-        int tipMarginHeight = ScreenUtils.dpToPx(3);
-        int tipMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         if (mSettingManager.bgIsColor()) {
             canvas.drawColor(mSettingManager.getBgColor());
         } else {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
             canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
         }
-
-        float tipBottomTop = tipMarginHeight - mTipPaint.getFontMetrics().ascent;
-        float tipBottomBot = mDisplayHeight - mTipPaint.getFontMetrics().descent - tipMarginHeight;
-        float displayRightEnd = mDisplayWidth - mMarginRight;
+        int defMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
+        Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
+        final float tipMarginHeight = (defMarginHeight + fontMetrics.top - fontMetrics.bottom) / 2;
+        final float tipBottomTop = tipMarginHeight - fontMetrics.top;
+        final float tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
+        final float tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
+        final float displayRightEnd = mDisplayWidth - mMarginRight;
         boolean hideStatusBar = mSettingManager.getHideStatusBar();
         boolean showTimeBattery = mSettingManager.getShowTimeBattery();
 
@@ -772,15 +773,15 @@ public abstract class PageLoader {
                     tipLeft = displayRightEnd - mTipPaint.measureText(progress);
                     canvas.drawText(progress, tipLeft, tipBottomBot, mTipPaint);
                     //绘制页码
-                    tipLeft = tipLeft - tipMarginWidth - mTipPaint.measureText(page);
+                    tipLeft = tipLeft - tipDistance - mTipPaint.measureText(page);
                     canvas.drawText(page, tipLeft, tipBottomBot, mTipPaint);
                     //绘制标题
-                    title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipMarginWidth, TextUtils.TruncateAt.END).toString();
+                    title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipDistance, TextUtils.TruncateAt.END).toString();
                     canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
-                    tipBottom = mDisplayHeight - ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
+                    tipBottom = mDisplayHeight - defMarginHeight;
                     canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             } else { //隐藏状态栏
@@ -792,7 +793,7 @@ public abstract class PageLoader {
                     }
                 } else {
                     //绘制标题
-                    float titleTipLength = showTimeBattery ? mVisibleWidth - mTipPaint.measureText(progress) - tipMarginWidth : mVisibleWidth;
+                    float titleTipLength = showTimeBattery ? mVisibleWidth - mTipPaint.measureText(progress) - tipDistance : mVisibleWidth;
                     title = TextUtils.ellipsize(title, mTipPaint, titleTipLength, TextUtils.TruncateAt.END).toString();
                     canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
                     // 绘制页码
@@ -804,7 +805,7 @@ public abstract class PageLoader {
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
-                    tipBottom = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT) - 2;
+                    tipBottom = defMarginHeight - 2;
                     canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             }
@@ -814,15 +815,15 @@ public abstract class PageLoader {
         if (hideStatusBar && showTimeBattery) {
             //绘制当前时间
             String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
-            float timeTipLeft = (mVisibleWidth - mTipPaint.measureText(time)) / 2;
+            float timeTipLeft = (mDisplayWidth - mTipPaint.measureText(time)) / 2;
             canvas.drawText(time, timeTipLeft, tipBottomBot, mTipPaint);
 
             //绘制电池
-            int visibleBottom = mDisplayHeight - tipMarginHeight - ScreenUtils.dpToPx(2);
             int outFrameWidth = (int) mTipPaint.measureText("xxx");
-            int outFrameHeight = (int) mTipPaint.getTextSize() - ScreenUtils.dpToPx(2);
+            int outFrameHeight = (int) mTipPaint.getTextSize() - ScreenUtils.dpToPx(4);
+            int visibleBottom = mDisplayHeight - (defMarginHeight - outFrameHeight) / 2;
 
-            int polarHeight = ScreenUtils.dpToPx(6);
+            int polarHeight = ScreenUtils.dpToPx(4);
             int polarWidth = ScreenUtils.dpToPx(2);
             int border = 1;
             int innerMargin = 1;
@@ -830,8 +831,7 @@ public abstract class PageLoader {
             //电极的制作
             int polarLeft = visibleRight - polarWidth;
             int polarTop = visibleBottom - (outFrameHeight + polarHeight) / 2;
-            Rect polar = new Rect(polarLeft, polarTop, visibleRight,
-                    polarTop + polarHeight - ScreenUtils.dpToPx(2));
+            Rect polar = new Rect(polarLeft, polarTop, visibleRight, polarTop + polarHeight);
 
             mBatteryPaint.setColor(mTextColor);
             mBatteryPaint.setStyle(Paint.Style.FILL);
@@ -840,7 +840,7 @@ public abstract class PageLoader {
             //外框的制作
             int outFrameLeft = polarLeft - outFrameWidth;
             int outFrameTop = visibleBottom - outFrameHeight;
-            int outFrameBottom = visibleBottom - ScreenUtils.dpToPx(2);
+            int outFrameBottom = visibleBottom;
             Rect outFrame = new Rect(outFrameLeft, outFrameTop, polarLeft, outFrameBottom);
 
             mBatteryPaint.setStyle(Paint.Style.STROKE);
@@ -875,6 +875,8 @@ public abstract class PageLoader {
         int para = mTextPara + (int) mTextPaint.getTextSize();
         int titleInterval = mTitleInterval + (int) mTitlePaint.getTextSize();
         int titlePara = mTitlePara + (int) mTextPaint.getTextSize();
+        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+        float textHeight = fontMetrics.descent - fontMetrics.ascent;
 
         if (getPageStatus() != STATUS_FINISH) {
             //绘制字体
@@ -908,8 +910,6 @@ public abstract class PageLoader {
             for (int i = 0; i < tempLayout.getLineCount(); i++) {
                 linesData.add(tip.substring(tempLayout.getLineStart(i), tempLayout.getLineEnd(i)));
             }
-            Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-            float textHeight = fontMetrics.ascent - fontMetrics.descent;
             float pivotY = (mDisplayHeight - (textHeight + interval) * linesData.size()) / 3;
             for (String str : linesData) {
                 float textWidth = mTextPaint.measureText(str);
@@ -918,7 +918,7 @@ public abstract class PageLoader {
                 pivotY += interval;
             }
         } else {
-            float top = contentMarginHeight - mTextPaint.getFontMetrics().ascent;
+            float top = contentMarginHeight - fontMetrics.ascent;
             if (mPageMode != PageMode.SCROLL) {
                 top += mSettingManager.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
             }
@@ -950,10 +950,8 @@ public abstract class PageLoader {
                 str = mCurPage.lines.get(i);
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                 float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
-                //drawScaledText(canvas,str,width,mTextPaint,top);
 
                 if (needScale(str)) {
-                    //canvas.drawText(str, mMarginLeft, top, mTextPaint);
                     drawScaledText(canvas, str, width, mTextPaint, top);
                 } else {
                     canvas.drawText(str, mMarginLeft, top, mTextPaint);
@@ -1491,15 +1489,9 @@ public abstract class PageLoader {
      * 根据当前状态，决定是否能够翻页
      */
     private boolean canTurnPage() {
-
-        if (!isChapterListPrepare) {
-            return false;
-        }
-
-        if (getPageStatus() == STATUS_PARSE_ERROR || getPageStatus() == STATUS_PARING) {
-            return false;
-        }
-        return true;
+        return isChapterListPrepare
+                && getPageStatus() != STATUS_PARSE_ERROR
+                && getPageStatus() != STATUS_PARING;
     }
 
     /*****************************************interface*****************************************/
