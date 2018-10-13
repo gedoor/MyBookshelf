@@ -5,7 +5,7 @@
     <color name="background_menu">#282828</color>
 
     <color name="colorPrimary">#464646</color>
-    <color name="colorPrimaryDark">#363636</color>
+    <color name="colorPrimaryDark">#464646</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="bg_divider_line">#363636</color>
