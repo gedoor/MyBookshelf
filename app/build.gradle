@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 static def increasedVersionCode() {
     return (int) (System.currentTimeMillis() / 1000 / 60 / 60 - 17141)
@@ -62,7 +62,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.myConfig
+            /*signingConfig signingConfigs.myConfig*/
             applicationIdSuffix '.debug'
             versionNameSuffix ' debug'
             buildConfigField "boolean", "IS_RELEASE", "false"
@@ -170,4 +170,5 @@ greendao {
     targetGenDir 'src/main/java'
 }
 
-apply plugin: 'com.google.gms.google-services'
+
+//apply plugin: 'com.google.gms.google-services'
