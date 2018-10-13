@@ -1179,9 +1179,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public String getNoteUrl() {
-        if (isEmpty(noteUrl)) {
-            noteUrl = readBookControl.getLastNoteUrl();
-        }
         return noteUrl;
     }
 
