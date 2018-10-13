@@ -280,7 +280,7 @@ public class DownloadService extends Service {
                         @Override
                         public void onComplete() {
                             if (isStartDownload) {
-                                new Handler().postDelayed(() -> {
+                               handler.postDelayed(() -> {
                                     if (isStartDownload) {
                                         toDownload();
                                     } else {
