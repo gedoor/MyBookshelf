@@ -123,6 +123,7 @@ public abstract class PageLoader {
     private int mMarginLeft;
     private int mMarginRight;
     private int contentMarginHeight;
+    private int defaultMarginWidth;
     //字体的颜色
     private int mTextColor;
     //标题的大小
@@ -188,6 +189,7 @@ public abstract class PageLoader {
         mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
         mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
         contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
+        defaultMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         // 配置文字有关的参数
         setUpTextParams();
     }
@@ -740,7 +742,9 @@ public abstract class PageLoader {
         final float tipBottomTop = tipMarginHeight - fontMetrics.top;
         final float tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         final float tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        final float displayRightEnd = mDisplayWidth - mMarginRight;
+        final float tipMarginWidth = mSettingManager.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
+        final float displayRightEnd = mDisplayWidth - tipMarginWidth;
+        final float tipVisibleWidth = mDisplayWidth - tipMarginWidth * 2;
         boolean hideStatusBar = mSettingManager.getHideStatusBar();
         boolean showTimeBattery = mSettingManager.getShowTimeBattery();
 
@@ -760,8 +764,8 @@ public abstract class PageLoader {
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
                     }
                 } else {
                     //绘制总进度
@@ -772,27 +776,27 @@ public abstract class PageLoader {
                     canvas.drawText(page, tipLeft, tipBottomBot, mTipPaint);
                     //绘制标题
                     title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipDistance, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, mMarginLeft, tipBottomBot, mTipPaint);
+                    canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - defMarginHeight;
-                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
+                    canvas.drawRect(tipMarginWidth, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             } else { //隐藏状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
-                        title = TextUtils.ellipsize(title, mTipPaint, mVisibleWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
+                        title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
+                        canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
                     }
                 } else {
                     //绘制标题
-                    float titleTipLength = showTimeBattery ? mVisibleWidth - mTipPaint.measureText(progress) - tipDistance : mVisibleWidth;
+                    float titleTipLength = showTimeBattery ? tipVisibleWidth - mTipPaint.measureText(progress) - tipDistance : tipVisibleWidth;
                     title = TextUtils.ellipsize(title, mTipPaint, titleTipLength, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, mMarginLeft, tipBottomTop, mTipPaint);
+                    canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
                     // 绘制页码
-                    canvas.drawText(page, mMarginLeft, tipBottomBot, mTipPaint);
+                    canvas.drawText(page, tipMarginWidth, tipBottomBot, mTipPaint);
                     //绘制总进度
                     float progressTipLeft = displayRightEnd - mTipPaint.measureText(progress);
                     float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
@@ -801,7 +805,7 @@ public abstract class PageLoader {
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = defMarginHeight - 2;
-                    canvas.drawRect(mMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
+                    canvas.drawRect(tipMarginWidth, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             }
         }
