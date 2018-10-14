@@ -45,7 +45,7 @@ public class BookshelfHelp {
 
     public static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
-    private static HashMap<String, HashSet<Integer>> getChapterCaches(){
+    private static HashMap<String, HashSet<Integer>> getChapterCaches() {
         HashMap<String, HashSet<Integer>> temp = new HashMap<>();
         File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
         try {
@@ -81,10 +81,9 @@ public class BookshelfHelp {
         setChapterIsCached(bookName + "-" + chapter.getTag(), chapter.getDurChapterIndex(), cached);
     }
 
-
     public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
         bookPathName = formatFileName(bookPathName);
-        if(!chapterCaches.containsKey(bookPathName))
+        if (!chapterCaches.containsKey(bookPathName))
             chapterCaches.put(bookPathName, new HashSet<>());
         if (cached)
             return chapterCaches.get(bookPathName).add(index);
@@ -138,6 +137,7 @@ public class BookshelfHelp {
         File file = getBookFile(formatFileName(folderName), formatFileName(fileName));
         //获取流并存储
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(fileName.substring(fileName.indexOf("-") + 1) + "\n");
             writer.write(content);
             writer.flush();
             return true;
@@ -264,7 +264,7 @@ public class BookshelfHelp {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
-        if(!keepCaches) {
+        if (!keepCaches) {
             String bookName = bookShelfBean.getBookInfoBean().getName();
             // 如果书架上有其他同名书籍，只删除本书源的缓存
             long bookNum = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
@@ -278,7 +278,7 @@ public class BookshelfHelp {
             try {
                 File file = FileHelp.getFolder(Constant.BOOK_CACHE_PATH);
                 String[] bookCaches = file.list((dir, name) -> new File(dir, name).isDirectory() && name.startsWith(bookName + "-"));
-                for (String bookPath: bookCaches) {
+                for (String bookPath : bookCaches) {
                     FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookPath);
                     chapterCaches.remove(bookPath);
                 }
@@ -370,7 +370,7 @@ public class BookshelfHelp {
             return df.format(durChapterIndex * 1.0f / chapterAll);
         }
         String percent = df.format(durChapterIndex * 1.0f / chapterAll + 1.0f / chapterAll * (durPageIndex + 1) / durPageAll);
-        if (percent.equals("100.0%") && (durChapterIndex + 1 != chapterAll || durPageIndex + 1 != durPageAll) ) {
+        if (percent.equals("100.0%") && (durChapterIndex + 1 != chapterAll || durPageIndex + 1 != durPageAll)) {
             percent = "99.9%";
         }
         return percent;
