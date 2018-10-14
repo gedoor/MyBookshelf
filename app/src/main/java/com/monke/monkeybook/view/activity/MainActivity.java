@@ -259,7 +259,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
-                startActivityByAnim(intent, view, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
         };
     }
