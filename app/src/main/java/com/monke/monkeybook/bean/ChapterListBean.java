@@ -13,7 +13,8 @@ import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.monke.monkeybook.help.BookshelfHelp.chapterNamePattern;
 
 /**
  * 章节列表
@@ -32,8 +33,6 @@ public class ChapterListBean implements Parcelable,Cloneable{
     private Long start;
     //章节内容在文章中的终止位置(本地)
     private Long end;
-    @Transient
-    private static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
     protected ChapterListBean(Parcel in) {
         noteUrl = in.readString();

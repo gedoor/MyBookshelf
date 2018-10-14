@@ -2,13 +2,8 @@ package com.monke.monkeybook.model.content;
 
 import android.text.TextUtils;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.ErrorAnalyContentManager;

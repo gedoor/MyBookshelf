@@ -371,6 +371,12 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value;
                         mView.changeSourceFinish();
+                        String tag = bookShelf.getTag();
+                        if (tag != My716.TAG) {
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByUrl(tag);
+                            bookSourceBean.increaseWeightBySelection();
+                            BookshelfHelp.saveBookSource(bookSourceBean);
+                        }
                     }
 
                     @Override

@@ -178,6 +178,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
+                    .orderDesc(BookSourceBeanDao.Properties.Weight)
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
@@ -297,9 +298,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             filePicker.setBackgroundColor(getResources().getColor(R.color.background));
             filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
             filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-            filePicker.setOnFilePickListener(s -> {
-                mPresenter.importBookSourceLocal(s);
-            });
+            filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
             filePicker.show();
             filePicker.getSubmitButton().setText(R.string.sys_file_picker);
             filePicker.getSubmitButton().setOnClickListener(view -> {

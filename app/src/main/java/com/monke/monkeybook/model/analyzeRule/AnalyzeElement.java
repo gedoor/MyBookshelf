@@ -118,8 +118,8 @@ public class AnalyzeElement {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("getElements", e.getMessage());
+            // e.printStackTrace();
+            // Log.e("getElements", rule + e.getMessage());
         }
         return elements;
     }

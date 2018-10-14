@@ -14,6 +14,8 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseIntArray;
+import android.widget.Toast;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -28,7 +30,6 @@ import com.monke.monkeybook.utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -36,8 +37,6 @@ import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
-import static android.widget.Toast.LENGTH_SHORT;
-import static android.widget.Toast.makeText;
 import static com.monke.monkeybook.bean.BookShelfBean.LOCAL_TAG;
 
 /**
@@ -100,7 +99,7 @@ public abstract class PageLoader {
 
     /*****************params**************************/
     // 当前的状态
-    protected HashMap<Integer, Integer> mStatus = new HashMap<>();
+    private SparseIntArray mStatus = new SparseIntArray();
     //errorMsg
     private String errorMsg;
     // 判断章节列表是否加载完成
@@ -165,11 +164,7 @@ public abstract class PageLoader {
     }
 
     private int getChapterPageStatus(Integer chapter) {
-        if(mStatus.containsKey(chapter)) {
-            return mStatus.get(chapter);
-        } else {
-            return STATUS_LOADING;
-        }
+        return mStatus.get(chapter, STATUS_LOADING);
     }
 
     public void setChapterPageStatus(Integer status) {
@@ -221,7 +216,7 @@ public abstract class PageLoader {
                 typeface = Typeface.SANS_SERIF;
             }
         } catch (Exception e) {
-            makeText(mContext, "字体文件未找,到恢复默认字体", LENGTH_SHORT).show();
+            Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
             mSettingManager.setReadBookFont(null);
             typeface = Typeface.SANS_SERIF;
         }

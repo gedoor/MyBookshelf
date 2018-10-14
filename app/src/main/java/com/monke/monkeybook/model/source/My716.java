@@ -69,6 +69,7 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
                     SearchBookBean searchBookBean = new SearchBookBean();
                     searchBookBean.setTag(TAG);
+                    searchBookBean.setWeight(Integer.MAX_VALUE);
                     searchBookBean.setOrigin(TAG);
                     searchBookBean.setKind(book.get("cat").getAsString());
                     searchBookBean.setName(book.get("title").getAsString());
