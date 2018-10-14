@@ -50,8 +50,6 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -373,7 +371,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         mView.changeSourceFinish();
                         String tag = bookShelf.getTag();
                         if (tag != My716.TAG) {
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByUrl(tag);
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
                             bookSourceBean.increaseWeightBySelection();
                             BookshelfHelp.saveBookSource(bookSourceBean);
                         }

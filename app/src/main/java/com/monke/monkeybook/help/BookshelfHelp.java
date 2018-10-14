@@ -376,9 +376,9 @@ public class BookshelfHelp {
         return percent;
     }
 
-    public static BookSourceBean getBookSourceByUrl(String url) {
+    public static BookSourceBean getBookSourceByTag(String tag) {
         return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url)).unique();
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).unique();
     }
 
     public static int guessChapterNum(String name) {

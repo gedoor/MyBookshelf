@@ -22,8 +22,6 @@ import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 
-import org.greenrobot.greendao.query.WhereCondition;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -140,7 +138,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             allDataList(BookSourceManage.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
             int maxWeight = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .orderDesc(BookSourceBeanDao.Properties.Weight).limit(1).unique().getWeight();
+                    .orderRaw("-WEIGHT ASC").limit(1).unique().getWeight();
             moveData.setWeight(maxWeight + 1);
             BookshelfHelp.saveBookSource(moveData);
             dataList.remove(position);

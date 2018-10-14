@@ -240,7 +240,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                         mView.updateView();
                         String tag = bookShelf.getTag();
                         if (tag != My716.TAG) {
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByUrl(tag);
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
                             bookSourceBean.increaseWeightBySelection();
                             BookshelfHelp.saveBookSource(bookSourceBean);
                         }

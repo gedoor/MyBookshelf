@@ -178,7 +178,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
-                    .orderDesc(BookSourceBeanDao.Properties.Weight)
+                    .orderRaw("-WEIGHT ASC")
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
