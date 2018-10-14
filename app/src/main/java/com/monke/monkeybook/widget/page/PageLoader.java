@@ -742,9 +742,10 @@ public abstract class PageLoader {
         final float tipBottomTop = tipMarginHeight - fontMetrics.top;
         final float tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         final float tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        final float tipMarginWidth = mSettingManager.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
-        final float displayRightEnd = mDisplayWidth - tipMarginWidth;
-        final float tipVisibleWidth = mDisplayWidth - tipMarginWidth * 2;
+        final float tipMarginLeft = mSettingManager.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
+        final float tipMarginRight = mSettingManager.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
+        final float displayRightEnd = mDisplayWidth - tipMarginRight;
+        final float tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
         boolean hideStatusBar = mSettingManager.getHideStatusBar();
         boolean showTimeBattery = mSettingManager.getShowTimeBattery();
 
@@ -765,7 +766,7 @@ public abstract class PageLoader {
                     if (isChapterListPrepare) {
                         //绘制标题
                         title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
+                        canvas.drawText(title, tipMarginLeft, tipBottomBot, mTipPaint);
                     }
                 } else {
                     //绘制总进度
@@ -776,27 +777,27 @@ public abstract class PageLoader {
                     canvas.drawText(page, tipLeft, tipBottomBot, mTipPaint);
                     //绘制标题
                     title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipDistance, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, tipMarginWidth, tipBottomBot, mTipPaint);
+                    canvas.drawText(title, tipMarginLeft, tipBottomBot, mTipPaint);
                 }
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - defMarginHeight;
-                    canvas.drawRect(tipMarginWidth, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
+                    canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             } else { //隐藏状态栏
                 if (getPageStatus() != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
                         title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
-                        canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
+                        canvas.drawText(title, tipMarginLeft, tipBottomTop, mTipPaint);
                     }
                 } else {
                     //绘制标题
                     float titleTipLength = showTimeBattery ? tipVisibleWidth - mTipPaint.measureText(progress) - tipDistance : tipVisibleWidth;
                     title = TextUtils.ellipsize(title, mTipPaint, titleTipLength, TextUtils.TruncateAt.END).toString();
-                    canvas.drawText(title, tipMarginWidth, tipBottomTop, mTipPaint);
+                    canvas.drawText(title, tipMarginLeft, tipBottomTop, mTipPaint);
                     // 绘制页码
-                    canvas.drawText(page, tipMarginWidth, tipBottomBot, mTipPaint);
+                    canvas.drawText(page, tipMarginLeft, tipBottomBot, mTipPaint);
                     //绘制总进度
                     float progressTipLeft = displayRightEnd - mTipPaint.measureText(progress);
                     float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
@@ -805,7 +806,7 @@ public abstract class PageLoader {
                 if (mSettingManager.getShowLine()) {
                     //绘制分隔线
                     tipBottom = defMarginHeight - 2;
-                    canvas.drawRect(tipMarginWidth, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
+                    canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             }
         }
