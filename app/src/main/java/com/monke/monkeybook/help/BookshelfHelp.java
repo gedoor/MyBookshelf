@@ -1,5 +1,6 @@
 package com.monke.monkeybook.help;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -70,11 +71,11 @@ public class BookshelfHelp {
     private static HashMap<String, HashSet<Integer>> chapterCaches = getChapterCaches();
 
     public static String getCachePathName(DownloadChapterBean chapter) {
-        return formatFileName(chapter.getBookName() + "-" + chapter.getTag());
+        return formatFolderName(chapter.getBookName() + "-" + chapter.getTag());
     }
 
     public static String getCachePathName(BookInfoBean book) {
-        return formatFileName(book.getName() + "-" + book.getTag());
+        return formatFolderName(book.getName() + "-" + book.getTag());
     }
 
     public static void setChapterIsCached(String bookName, ChapterListBean chapter, boolean cached) {
@@ -82,7 +83,7 @@ public class BookshelfHelp {
     }
 
     public static boolean setChapterIsCached(String bookPathName, Integer index, boolean cached) {
-        bookPathName = formatFileName(bookPathName);
+        bookPathName = formatFolderName(bookPathName);
         if (!chapterCaches.containsKey(bookPathName))
             chapterCaches.put(bookPathName, new HashSet<>());
         if (cached)
@@ -134,7 +135,7 @@ public class BookshelfHelp {
         if (content == null) {
             return false;
         }
-        File file = getBookFile(formatFileName(folderName), formatFileName(fileName));
+        File file = getBookFile(formatFolderName(folderName), formatFileName(fileName));
         //获取流并存储
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(fileName.substring(fileName.indexOf("-") + 1) + "\n");
@@ -156,8 +157,18 @@ public class BookshelfHelp {
                 + File.separator + formatFileName(fileName) + FileHelp.SUFFIX_NB);
     }
 
+    @SuppressLint("DefaultLocale")
     private static String formatFileName(String fileName) {
+        int pos = fileName.indexOf("-");
+        int index = Integer.parseInt(fileName.substring(0, pos));
+        fileName = String.format("%05d", index) + fileName.substring(pos);
         return fileName.replace("/", "")
+                .replace(":", "")
+                .replace(".", "");
+    }
+
+    private static String formatFolderName(String folderName) {
+        return folderName.replace("/", "")
                 .replace(":", "")
                 .replace(".", "");
     }
