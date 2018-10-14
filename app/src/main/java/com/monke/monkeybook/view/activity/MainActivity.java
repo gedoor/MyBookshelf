@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -37,7 +39,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +67,8 @@ import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
+import com.monke.monkeybook.view.fragment.BookListFragment;
+import com.monke.monkeybook.view.fragment.FindBookFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
@@ -87,12 +94,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.refreshLayout)
+    /*@BindView(R.id.refreshLayout)
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.rv_bookshelf)
-    RecyclerView rvBookshelf;
+    RecyclerView rvBookshelf;*/
     @BindView(R.id.main_view)
-    LinearLayout mainView;
+    CoordinatorLayout mainView;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.card_search)
@@ -111,9 +118,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
-    private String bookPx;
     private boolean isRecreate;
     private boolean resumed = false;
+    private BookListTabAdapter bookListTabAdapter;
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -154,15 +161,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         isRecreate = getIntent().getBooleanExtra("isRecreate", false);
         getIntent().putExtra("isRecreate", true);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-    }
-
-    private List<BookShelfBean> getBookshelfList() {
-        if (viewIsList) {
-            return bookShelfListAdapter.getBooks();
-        } else {
-            return bookShelfGridAdapter.getBooks();
-        }
     }
 
     private boolean getNeedAnim() {
@@ -180,25 +178,24 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         setSupportActionBar(toolbar);
         setupActionBar();
         initDrawer();
+        initTabLayout();
         upGroup(group);
         moProgressHUD = new MoProgressHUD(this);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-        if (viewIsList) {
-            bookShelfListAdapter = new BookShelfListAdapter(this, getNeedAnim());
-            rvBookshelf.setAdapter(bookShelfListAdapter);
-            rvBookshelf.setLayoutManager(new LinearLayoutManager(this));
-        } else {
-            bookShelfGridAdapter = new BookShelfGridAdapter(this, getNeedAnim());
-            rvBookshelf.setAdapter(bookShelfGridAdapter);
-            rvBookshelf.setLayoutManager(new GridLayoutManager(this, 3));
-        }
 
-        BookListTabAdapter bookListTabAdapter = new BookListTabAdapter(getSupportFragmentManager());
-        ArrayList<ViewPagerFragment> mViewPagerFragments = new ArrayList<>();
 
-        for (int i = 0; i < mTitles.length; i++) {
-            mViewPagerFragments.add(ViewPagerFragment.newInstance(mTitles[i]));
-        }
+        //点击跳转搜索页
+        cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
+                toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out));
+    }
+
+    //初始化Tablayout和ViewPager
+    private void initTabLayout(){
+        bookListTabAdapter = new BookListTabAdapter(this,getSupportFragmentManager());
+        ArrayList<Fragment> mViewPagerFragments = new ArrayList<>();
+
+        //把Fragment添加到Viewpager
+        mViewPagerFragments.add(new BookListFragment());
+        mViewPagerFragments.add(new FindBookFragment());
 
         bookListTabAdapter.setTitles(mTitles);
         bookListTabAdapter.setFragments(mViewPagerFragments);
@@ -206,12 +203,44 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         viewPager.setAdapter(bookListTabAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        //TabLayout使用自定义Item
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(bookListTabAdapter.getTabView(i,mTitles[i]));
+                if (tab.getCustomView() != null) {
+                    View tabView = (View) tab.getCustomView().getParent();
+                    tabView.setTag(i);
+                    //设置第一个Item的点击事件(当下标为0时触发)
+                    if (i==0){
+                        tabView.setOnClickListener(view -> {
+                            if (tabView.isSelected()){
+                                //切换书架
+                                upGroup(group+1>1?0:group+1);
 
-        cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
-                toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out));
+                                //更新Item文字
+                                //Toast.makeText(this, "点击"+(group+1>1?0:group+1), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
     }
 
+    private void updateTabItemText(int group){
+        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        //首先移除原先View
+        final ViewParent customParent= tab.getCustomView().getParent();
+        if (customParent != null) {
+            ((ViewGroup) customParent).removeView(tab.getCustomView());
+        }
 
+        tab.setCustomView(bookListTabAdapter.getTabView(0,group==1?"养肥区":"追更区"));
+        View tabView = (View) tab.getCustomView().getParent();
+        tabView.setTag(0);
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -223,80 +252,11 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         }
     }
 
-    @Override
-    protected void onPause() {
-        resumed = true;
-        super.onPause();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (resumed) {
-            resumed = false;
-            stopBookShelfRefreshAnim();
-        }
-    }
 
     @Override
     protected void bindEvent() {
-        refreshLayout.setOnRefreshListener(() -> {
-            mPresenter.queryBookShelf(isNetWorkAvailable(), group);
-            if (!isNetWorkAvailable()) {
-                Toast.makeText(this, "无网络，请打开网络后再试。", Toast.LENGTH_SHORT).show();
-            }
-            refreshLayout.setRefreshing(false);
-        });
-        MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
-        if (bookPx.equals("2")) {
-            itemTouchHelpCallback.setDragEnable(true);
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
-            itemTouchHelper.attachToRecyclerView(rvBookshelf);
-        } else {
-            itemTouchHelpCallback.setDragEnable(false);
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
-            itemTouchHelper.attachToRecyclerView(rvBookshelf);
-        }
-        if (viewIsList) {
-            bookShelfListAdapter.setItemClickListener(getAdapterListener());
-            itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfListAdapter.getItemTouchCallbackListener());
-        } else {
-            bookShelfGridAdapter.setItemClickListener(getAdapterListener());
-            itemTouchHelpCallback.setOnItemTouchCallbackListener(bookShelfGridAdapter.getItemTouchCallbackListener());
-        }
 
-    }
-
-    private OnItemClickListenerTwo getAdapterListener() {
-        return new OnItemClickListenerTwo() {
-            @Override
-            public void onClick(View view, int index) {
-                BookShelfBean bookShelfBean = getBookshelfList().get(index);
-                bookShelfBean.setHasUpdate(false);
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-                Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
-                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
-                String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
-                try {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
-                } catch (CloneNotSupportedException e) {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                    e.printStackTrace();
-                }
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-
-            @Override
-            public void onLongClick(View view, int index) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
-                String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
-                startActivityByAnim(intent, view, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        };
     }
 
     @Override
@@ -325,7 +285,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         SharedPreferences.Editor editor = preferences.edit();
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_search:
+            /*case R.id.action_search:
                 //点击搜索
                 startActivityByAnim(new Intent(this, SearchBookActivity.class),
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
@@ -333,7 +293,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             case R.id.action_library:
                 startActivityByAnim(new Intent(this, FindBookActivity.class),
                         toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
-                break;
+                break;*/
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
                     startActivity(new Intent(this, ImportBookActivity.class));
@@ -420,14 +380,17 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             this.group = group;
             mPresenter.queryBookShelf(false, group);
         }
-        switch (group) {
+        //更换Tab文字
+        updateTabItemText(group);
+
+        /*switch (group) {
             case 1:
                 navigationView.setCheckedItem(R.id.action_group_yf);
                 break;
             default:
                 navigationView.setCheckedItem(R.id.action_group_zg);
                 break;
-        }
+        }*/
     }
 
     //侧边栏按钮
@@ -449,12 +412,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
-                case R.id.action_group_zg:
+                /*case R.id.action_group_zg:
                     upGroup(0);
                     break;
                 case R.id.action_group_yf:
                     upGroup(1);
-                    break;
+                    break;*/
                 case R.id.action_book_source_manage:
                     new Handler().postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
@@ -573,33 +536,14 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     @Override
     public void refreshBookShelf(List<BookShelfBean> bookShelfBeanList) {
-        if (viewIsList) {
-            bookShelfListAdapter.replaceAll(bookShelfBeanList, bookPx);
-        } else {
-            bookShelfGridAdapter.replaceAll(bookShelfBeanList, bookPx);
-        }
+
     }
 
     @Override
     public void refreshBook(String noteUrl) {
-        if (viewIsList) {
-            bookShelfListAdapter.refreshBook(noteUrl);
-        } else {
-            bookShelfGridAdapter.refreshBook(noteUrl);
-        }
+
     }
 
-    private void stopBookShelfRefreshAnim() {
-        List<BookShelfBean> bookShelfBeans = getBookshelfList();
-        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
-            for (BookShelfBean bookShelfBean: bookShelfBeans) {
-                if (bookShelfBean.isLoading()) {
-                    bookShelfBean.setLoading(false);
-                    refreshBook(bookShelfBean.getNoteUrl());
-                }
-            }
-        }
-    }
 
     @Override
     public void activityRefreshView() {
@@ -668,7 +612,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Snackbar.make(rvBookshelf, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(viewPager, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
         } else {
             finish();
@@ -683,20 +627,29 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     //tab适配器
     class BookListTabAdapter extends FragmentPagerAdapter {
+        private Context context;
 
         private String[] titles;
-        private ArrayList<ViewPagerFragment> viewPagerFragments;
+        private ArrayList<Fragment> viewPagerFragments;
 
-        public BookListTabAdapter(FragmentManager fm) {
+        public BookListTabAdapter(Context context, FragmentManager fm) {
             super(fm);
+            this.context = context;
         }
 
         public void setTitles(String[] titles) {
             this.titles = titles;
         }
 
-        public void setFragments(ArrayList<ViewPagerFragment> viewPagerFragments) {
+        public void setFragments(ArrayList<Fragment> viewPagerFragments) {
             this.viewPagerFragments = viewPagerFragments;
+        }
+
+        public View getTabView(int position,String text){
+            View view = LayoutInflater.from(context).inflate(R.layout.item_tablayout, null);
+            TextView tv= (TextView) view.findViewById(R.id.text_item_layout);
+            tv.setText(text);
+            return view;
         }
 
         @Override
@@ -712,27 +665,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         @Override
         public CharSequence getPageTitle(int position) {
             return titles[position];
-        }
-    }
-
-    public static class ViewPagerFragment extends Fragment {
-
-        private static final String KEY = "extra";
-        private String mMessage;
-
-        public static ViewPagerFragment newInstance(String extra) {
-            Bundle args = new Bundle();
-            args.putString(KEY, extra);
-            ViewPagerFragment fragment = new ViewPagerFragment();
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.activity_welcome, container, false);
-            return view;
         }
     }
 }

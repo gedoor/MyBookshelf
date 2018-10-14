@@ -1,7 +1,7 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/drawer_menu_book_group">
+    <!--<group android:id="@+id/drawer_menu_book_group">
         <item
             android:id="@+id/action_group_zg"
             android:checkable="true"
@@ -14,7 +14,7 @@
             android:checkable="true"
             android:icon="@drawable/ic_bookshelf"
             android:title="@string/group_yf" />
-    </group>
+    </group>-->
 
     <group android:id="@+id/drawer_menu_book_source">
         <item
