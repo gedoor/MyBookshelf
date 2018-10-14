@@ -30,7 +30,7 @@ if (keystoreFilepath) {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.2'
     signingConfigs {
         myConfig {
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 10000 + gitCommits
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
@@ -83,7 +83,7 @@ android {
 }
 
 ext {
-    support_library_version = '27.1.1'
+    support_library_version = '28.0.0'
 }
 dependencies {
     api project(':basemvplib')

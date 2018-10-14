@@ -49,6 +49,7 @@
             app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabBackground="@color/colorPrimary"
+            app:tabIndicatorFullWidth="false"
             app:tabIndicatorColor="@color/azure" />
     </android.support.design.widget.AppBarLayout>
 

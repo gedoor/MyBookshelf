@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_content"
-    android:fitsSystemWindows="true"
-    android:background="@color/background"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-
-    <!--<Spinner
-        android:id="@+id/spinner_item_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>-->
-    <TextView
-    android:id="@+id/text_item_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"/>
+    android:background="#00000000"
+    android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/text_item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center" />
 
 </RelativeLayout>
 
