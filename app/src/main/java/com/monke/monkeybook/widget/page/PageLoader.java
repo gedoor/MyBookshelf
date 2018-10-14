@@ -1311,9 +1311,7 @@ public abstract class PageLoader {
         try {
             boolean showTitle = true; // 是否展示标题
             String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-            if (mCollBook.getTag().equals(LOCAL_TAG)) {
-                br.readLine();
-            }
+            br.readLine(); //去除标题行
             if (!mSettingManager.getShowTitle()) {
                 showTitle = false;
                 paragraph = null;
