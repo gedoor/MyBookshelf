@@ -31,7 +31,7 @@ if (keystoreFilepath) {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
     signingConfigs {
         myConfig {
             storeFile keyFile
