@@ -105,18 +105,6 @@
                             android:textColor="#dfdfdf"
                             android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/tv_group"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_tv_first_button"
-                            android:paddingStart="6dp"
-                            android:paddingEnd="6dp"
-                            android:text="@string/group_zg"
-                            android:textColor="#ffffff"
-                            android:textSize="14sp" />
-
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -231,6 +219,19 @@
                         android:gravity="center"
                         android:text="@string/start_read"
                         android:textColor="#ffffff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_group"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_book_detail_shelf_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:text="@string/group_zg"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="15sp" />
                 </LinearLayout>
 
