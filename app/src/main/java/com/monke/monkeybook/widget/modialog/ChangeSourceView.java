@@ -187,6 +187,7 @@ public class ChangeSourceView {
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {
         if (value.size() > 0) {
+            Collections.sort(value, this::compareSearchBooks);
             for (SearchBookBean searchBookBean : value) {
                 if (Objects.equals(searchBookBean.getName(), bookName)
                         && (Objects.equals(searchBookBean.getAuthor(), bookAuthor) || Objects.equals(searchBookBean.getAuthor(), "") || Objects.equals(bookAuthor, ""))) {
@@ -207,7 +208,6 @@ public class ChangeSourceView {
                         }
                     }
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
-                    Collections.sort(value, this::compareSearchBooks);
                     activity.runOnUiThread(() ->adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
