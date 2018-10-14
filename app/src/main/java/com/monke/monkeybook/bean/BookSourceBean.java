@@ -71,6 +71,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         bookSourceGroup = in.readString();
         checkUrl = in.readString();
         serialNumber = in.readInt();
+        weight = in.readInt();
         enable = in.readByte() != 0;
 
         ruleFindUrl = in.readString();
@@ -246,9 +247,9 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.weight = weight;
     }
 
-    // 换源时选择的源权重+5
+    // 换源时选择的源权重+500
     public void increaseWeightBySelection() {
-        this.weight += 5;
+        this.weight += 500;
     }
 
     public void increaseWeight(int increase) {

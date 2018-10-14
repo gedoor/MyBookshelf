@@ -53,13 +53,13 @@
 
     <item
         android:id="@+id/action_reset_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/refresh_default"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_check_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/check_book_source"
         app:showAsAction="never" />
 

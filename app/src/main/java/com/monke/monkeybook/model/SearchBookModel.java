@@ -118,6 +118,7 @@ public class SearchBookModel {
             return;
         }
         searchEngineIndex++;
+        long startTime = System.currentTimeMillis();
         if (searchEngineIndex < searchEngineS.size()) {
             SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
             if (searchEngine.getHasMore()) {
@@ -138,6 +139,8 @@ public class SearchBookModel {
                                     searchSuccessNum++;
                                     if (searchBookBeans.size() > 0) {
                                         for (SearchBookBean temp : searchBookBeans) {
+                                            int searchTime = (int) (System.currentTimeMillis() - startTime) / 1000;
+                                            temp.setSearchTime(searchTime);
                                             for (BookShelfBean bookShelfBean : bookShelfS) {
                                                 if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
                                                     temp.setIsAdd(true);

@@ -61,6 +61,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
+
 public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
@@ -118,7 +120,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                         if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
-                                String.format("%d-%s", chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName()))
+                                chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName())
                                 && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
                             DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                             e.onNext(chapterIndex);
@@ -371,9 +373,21 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         mView.changeSourceFinish();
                         String tag = bookShelf.getTag();
                         if (tag != My716.TAG) {
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                            bookSourceBean.increaseWeightBySelection();
-                            BookshelfHelp.saveBookSource(bookSourceBean);
+                            try {
+                                long currentTime = System.currentTimeMillis();
+                                String bookName = bookShelf.getBookInfoBean().getName();
+                                BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
+                                if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
+                                    savedSource.getBookSource().increaseWeight(-450);
+                                BookshelfHelp.saveBookSource(savedSource.getBookSource());
+                                savedSource.setBookName(bookName);
+                                savedSource.setSaveTime(currentTime);
+                                savedSource.setBookSource(bookSourceBean);
+                                bookSourceBean.increaseWeightBySelection();
+                                BookshelfHelp.saveBookSource(bookSourceBean);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 

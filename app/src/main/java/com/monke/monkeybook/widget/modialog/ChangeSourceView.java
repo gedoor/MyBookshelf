@@ -52,6 +52,7 @@ public class ChangeSourceView {
     private String bookAuthor;
     private int shelfLastChapter;
     private BaseActivity activity;
+    public static SavedSource savedSource = new SavedSource();
 
     public static ChangeSourceView getInstance(BaseActivity activity, MoProgressView moProgressView) {
         return new ChangeSourceView(activity, moProgressView);
@@ -196,16 +197,21 @@ public class ChangeSourceView {
                     } else {
                         searchBookBean.setIsAdd(false);
                     }
-                    if (shelfLastChapter > 0) {
+                    boolean saveBookSource = false;
+                    BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(searchBookBean.getTag());
+                    if (searchBookBean.getSearchTime() < 60 && bookSourceBean != null) {
+                        bookSourceBean.increaseWeight(100 / (10 + searchBookBean.getSearchTime()));
+                        saveBookSource = true;
+                    }
+                    if (shelfLastChapter > 0 && bookSourceBean != null) {
                         int lastChapter = BookshelfHelp.guessChapterNum(searchBookBean.getLastChapter());
                         if (lastChapter > shelfLastChapter) {
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(searchBookBean.getTag());
-                            if (bookSourceBean != null) {
-                                int increase = (int) Math.ceil((lastChapter - shelfLastChapter) / 100);
-                                bookSourceBean.increaseWeight(increase);
-                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
-                            }
+                            bookSourceBean.increaseWeight(100);
+                            saveBookSource = true;
                         }
+                    }
+                    if (saveBookSource) {
+                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                     activity.runOnUiThread(() ->adapter.addSourceAdapter(searchBookBean));
@@ -238,17 +244,54 @@ public class ChangeSourceView {
         void changeSource(SearchBookBean searchBookBean);
     }
 
+    public static class SavedSource {
+        String bookName;
+        long saveTime;
+        BookSourceBean bookSource;
+
+        public SavedSource() {
+            this.bookName = "";
+            saveTime = 0;
+        }
+
+        public String getBookName() {
+            return this.bookName;
+        }
+
+        public void setBookName(String bookName) {
+            this.bookName = bookName;
+        }
+
+        public long getSaveTime() {
+            return saveTime;
+        }
+
+        public void setSaveTime(long saveTime) {
+            this.saveTime = saveTime;
+        }
+
+        public BookSourceBean getBookSource() {
+            return bookSource;
+        }
+
+        public void setBookSource(BookSourceBean bookSource) {
+            this.bookSource = bookSource;
+        }
+    }
+
     private int compareSearchBooks(SearchBookBean s1, SearchBookBean s2) {
-        if (s2.getTag().equals(bookTag))
+        boolean s1tag = s1.getTag().equals(bookTag);
+        boolean s2tag = s2.getTag().equals(bookTag);
+        if (s2tag && !s1tag)
             return 1;
-        else if (s1.getTag().equals(bookTag))
+        else if (s1tag && !s2tag)
             return -1;
         int result = Long.compare(s2.getAddTime(), s1.getAddTime());
         if (result != 0)
             return result;
-        result = Integer.compare(s2.getWeight(), s1.getWeight());
+        result = Integer.compare(s2.getLastChapterNum(), s1.getLastChapterNum());
         if (result != 0)
             return result;
-        return Integer.compare(s2.getLastChapterNum(), s1.getLastChapterNum());
+        return Integer.compare(s2.getWeight(), s1.getWeight());
     }
 }

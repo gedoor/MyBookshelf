@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.page;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -13,6 +14,7 @@ import android.view.ViewConfiguration;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
@@ -42,6 +44,7 @@ public class PageView extends View {
     private int mStartX = 0;
     private int mStartY = 0;
     private boolean isMove = false;
+    private boolean actionFromEdge = false;
     private int mPageIndex;
     private int mChapterIndex;
     // 初始化参数
@@ -227,10 +230,20 @@ public class PageView extends View {
             return true;
         }
 
+        if (actionFromEdge) {
+            if (event.getAction() == MotionEvent.ACTION_UP)
+                actionFromEdge = false;
+            return true;
+        }
+
         int x = (int) event.getX();
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(20) || event.getRawY() > Resources.getSystem().getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(20)) {
+                    actionFromEdge = true;
+                    return true;
+                }
                 mStartX = x;
                 mStartY = y;
                 isMove = false;

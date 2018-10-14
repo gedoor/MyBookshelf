@@ -39,6 +39,8 @@ public class SearchBookBean implements Parcelable{
     private int weight = -1;
     @Transient
     private int lastChapterNum = -2;
+    @Transient
+    private int searchTime = Integer.MAX_VALUE;
 
     public SearchBookBean(){
 
@@ -272,5 +274,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public int getSearchTime() {
+        return searchTime;
+    }
+
+    public void setSearchTime(int searchTime) {
+        this.searchTime = searchTime;
     }
 }
