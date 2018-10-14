@@ -88,12 +88,14 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_person_outline_24dp"/>
+                            android:layout_width="18sp"
+                            android:layout_height="18sp"
+                            android:src="@drawable/ic_person_outline_24dp"
+                            android:contentDescription="@string/author" />
 
                         <TextView
                             android:id="@+id/tv_author"
