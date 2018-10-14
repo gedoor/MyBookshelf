@@ -1,20 +1,24 @@
 package com.monke.monkeybook.help;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookInfoBeanDao;
 import com.monke.monkeybook.dao.BookShelfBeanDao;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.BookmarkBeanDao;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.utils.StringUtils;
 
 import net.ricecode.similarity.JaroWinklerStrategy;
 import net.ricecode.similarity.StringSimilarityService;
@@ -29,6 +33,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by GKF on 2018/1/18.
@@ -36,6 +42,8 @@ import java.util.List;
  */
 
 public class BookshelfHelp {
+
+    public static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
 
     private static HashMap<String, HashSet<Integer>> getChapterCaches(){
         HashMap<String, HashSet<Integer>> temp = new HashMap<>();
@@ -159,6 +167,8 @@ public class BookshelfHelp {
      */
     public static int getDurChapter(BookShelfBean oldBook, BookShelfBean newBook) {
         int oldChapterSize = oldBook.getChapterListSize();
+        if (oldChapterSize == 0)
+            return 0;
         int oldChapterIndex = oldBook.getDurChapter();
         int oldChapterNum = oldBook.getChapterList(oldBook.getDurChapter()).getChapterNum();
         String oldName = oldBook.getChapterList(oldBook.getDurChapter()).getPureChapterName();
@@ -270,8 +280,7 @@ public class BookshelfHelp {
                 String[] bookCaches = file.list((dir, name) -> new File(dir, name).isDirectory() && name.startsWith(bookName + "-"));
                 for (String bookPath: bookCaches) {
                     FileHelp.deleteFile(Constant.BOOK_CACHE_PATH + bookPath);
-                    if (chapterCaches.containsKey(bookPath))
-                        chapterCaches.remove(bookPath);
+                    chapterCaches.remove(bookPath);
                 }
             } catch (Exception e) {
             }
@@ -280,6 +289,12 @@ public class BookshelfHelp {
 
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         removeFromBookShelf(bookShelfBean, false);
+    }
+
+    public static void saveBookSource(BookSourceBean bookSourceBean) {
+        if (bookSourceBean != null) {
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+        }
     }
 
     public static void saveBookToShelf(BookShelfBean bookShelfBean) {
@@ -359,6 +374,21 @@ public class BookshelfHelp {
             percent = "99.9%";
         }
         return percent;
+    }
+
+    public static BookSourceBean getBookSourceByTag(String tag) {
+        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).unique();
+    }
+
+    public static int guessChapterNum(String name) {
+        if (TextUtils.isEmpty(name) || name.matches("第.*?卷.*?第.*[章节回]"))
+            return -1;
+        Matcher matcher = chapterNamePattern.matcher(name);
+        if (matcher.find()) {
+            return StringUtils.stringToInt(matcher.group(2));
+        }
+        return -1;
     }
 
     /**

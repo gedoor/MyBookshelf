@@ -26,6 +26,8 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String checkUrl;
     @OrderBy
     private int serialNumber;
+    @OrderBy
+    private int weight = 0;
     private boolean enable;
     private String ruleFindUrl;
     private String ruleSearchUrl;
@@ -94,8 +96,8 @@ public class BookSourceBean implements Parcelable, Cloneable {
         httpUserAgent = in.readString();
     }
 
-    @Generated(hash = 2055894182)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String checkUrl, int serialNumber,
+    @Generated(hash = 1575328468)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String checkUrl, int serialNumber, int weight,
             boolean enable, String ruleFindUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName, String ruleSearchAuthor,
             String ruleSearchKind, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookName,
             String ruleBookAuthor, String ruleChapterUrl, String ruleChapterUrlNext, String ruleCoverUrl, String ruleIntroduce,
@@ -106,6 +108,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.bookSourceGroup = bookSourceGroup;
         this.checkUrl = checkUrl;
         this.serialNumber = serialNumber;
+        this.weight = weight;
         this.enable = enable;
         this.ruleFindUrl = ruleFindUrl;
         this.ruleSearchUrl = ruleSearchUrl;
@@ -145,8 +148,8 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(bookSourceGroup);
         parcel.writeString(checkUrl);
         parcel.writeInt(serialNumber);
+        parcel.writeInt(weight);
         parcel.writeByte((byte) (enable ? 1 : 0));
-
         parcel.writeString(ruleFindUrl);
         parcel.writeString(ruleSearchUrl);
         parcel.writeString(ruleSearchList);
@@ -233,6 +236,23 @@ public class BookSourceBean implements Parcelable, Cloneable {
 
     public void setSerialNumber(int serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    // 换源时选择的源权重+5
+    public void increaseWeightBySelection() {
+        this.weight += 5;
+    }
+
+    public void increaseWeight(int increase) {
+        this.weight += increase;
     }
 
     public boolean getEnable() {

@@ -15,10 +15,12 @@ import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -236,6 +238,12 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                         bookShelf = value;
                         mView.updateView();
+                        String tag = bookShelf.getTag();
+                        if (tag != My716.TAG) {
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
+                            bookSourceBean.increaseWeightBySelection();
+                            BookshelfHelp.saveBookSource(bookSourceBean);
+                        }
                     }
 
                     @Override

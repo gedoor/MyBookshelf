@@ -4,6 +4,9 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.model.source.My716;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -32,6 +35,10 @@ public class SearchBookBean implements Parcelable{
     private Boolean isAdd = false;
     @Transient
     private int originNum = 1;
+    @Transient
+    private int weight = -1;
+    @Transient
+    private int lastChapterNum = -2;
 
     public SearchBookBean(){
 
@@ -165,6 +172,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setLastChapter(String lastChapter) {
         this.lastChapter = lastChapter;
+
+    }
+
+    public int getLastChapterNum() {
+        if (lastChapterNum == -2)
+            this.lastChapterNum = BookshelfHelp.guessChapterNum(lastChapter);
+        return lastChapterNum;
     }
 
     public String getKind() {
@@ -239,5 +253,24 @@ public class SearchBookBean implements Parcelable{
 
     public void setAddTime(Long addTime) {
         this.addTime = addTime;
+    }
+
+    public int getWeight() {
+        if (weight == -1) {
+            if (tag == My716.TAG)
+                this.weight = Integer.MAX_VALUE;
+            else {
+                BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
+                if (source != null)
+                    this.weight = source.getWeight();
+                else
+                    this.weight = 0;
+            }
+        }
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 }

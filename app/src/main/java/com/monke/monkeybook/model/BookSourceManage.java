@@ -44,6 +44,7 @@ public class BookSourceManage extends BaseModelImpl {
         if (selectedBookSource == null) {
             selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                    .orderRaw("-WEIGHT ASC")
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
         }
@@ -53,6 +54,7 @@ public class BookSourceManage extends BaseModelImpl {
     public static List<BookSourceBean> getAllBookSource() {
         if (allBookSource == null) {
             allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .orderRaw("-WEIGHT ASC")
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             upGroupList();
@@ -62,10 +64,12 @@ public class BookSourceManage extends BaseModelImpl {
 
     public static void refreshBookSource() {
         allBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .orderRaw("-WEIGHT ASC")
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
         selectedBookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                 .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                .orderRaw("-WEIGHT ASC")
                 .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                 .list();
         upGroupList();
