@@ -61,6 +61,7 @@ public class ReadBookControl {
     private int paddingTop;
     private int paddingRight;
     private int paddingBottom;
+    private Boolean tipMarginChange;
 
     private SharedPreferences readPreference;
 
@@ -107,6 +108,7 @@ public class ReadBookControl {
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
         this.pageMode = readPreference.getInt("pageMode", 0);
         this.screenDirection = readPreference.getInt("screenDirection", 0);
+        this.tipMarginChange = readPreference.getBoolean("tipMarginChange", false);
 
         initTextDrawableIndex();
     }
@@ -670,6 +672,17 @@ public class ReadBookControl {
         this.screenDirection = screenDirection;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("screenDirection", screenDirection);
+        editor.apply();
+    }
+
+    public Boolean getTipMarginChange() {
+        return tipMarginChange;
+    }
+
+    public void setTipMarginChange(Boolean tipMarginChange) {
+        this.tipMarginChange = tipMarginChange;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putBoolean("tipMarginChange", tipMarginChange);
         editor.apply();
     }
 }

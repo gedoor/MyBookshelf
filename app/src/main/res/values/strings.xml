@@ -254,5 +254,6 @@
     <string name="new_version">新版本</string>
     <string name="download_update">下载更新</string>
     <string name="aloud_volume_page">朗读时音量键翻页</string>
+    <string name="tip_margin_change">Tip边距跟随边距调整</string>
 
 </resources>
