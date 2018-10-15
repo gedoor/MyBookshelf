@@ -38,7 +38,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
-                    android:text="搜索书籍" />
+                    android:text="搜索书名、作者" />
             </android.support.v7.widget.CardView>
         </android.support.v7.widget.Toolbar>
 
