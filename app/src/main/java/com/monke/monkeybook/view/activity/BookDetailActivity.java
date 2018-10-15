@@ -24,6 +24,7 @@ import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
@@ -48,6 +49,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvName;
     @BindView(R.id.tv_author)
     TextView tvAuthor;
+    @BindView(R.id.tv_update)
+    TextView tvUpdate;
     @BindView(R.id.tv_origin)
     TextView tvOrigin;
     @BindView(R.id.iv_web)
@@ -133,11 +136,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvChapter.setText(getString(R.string.read_dur_progress, mPresenter.getBookShelf().getDurChapterName()));
                 tvShelf.setText("移出书架");
                 tvRead.setText("继续阅读");
+                setTvUpdate(mPresenter.getBookShelf().getAllowUpdate(), true);
                 tvShelf.setOnClickListener(v -> {
                     //从书架移出
                     mPresenter.removeFromBookShelf();
                 });
             } else {
+                setTvUpdate(false, false);
                 tvChapter.setText(getString(R.string.book_search_last, mPresenter.getBookShelf().getLastChapterName()));
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");
@@ -198,6 +203,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
     }
 
+    private void setTvUpdate(boolean update, boolean show) {
+        tvUpdate.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (show) {
+            tvUpdate.setText(update ? R.string.allow_update : R.string.disable_update);
+            tvUpdate.setTextColor(getResources().getColor(update ? R.color.white : R.color.darker_gray));
+        }
+    }
+
     @Override
     protected void firstRequest() {
         super.firstRequest();
@@ -247,6 +260,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvLoading.setVisibility(View.VISIBLE);
             tvLoading.setText("加载中...");
             tvLoading.setOnClickListener(null);
+            setTvUpdate(false, false);
         }
         if (!this.isFinishing()) {
             if (TextUtils.isEmpty(customCoverPath)) {
@@ -298,6 +312,15 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
             if (mPresenter.getInBookShelf()) {
                 mPresenter.addToBookShelf();
+            }
+        });
+
+        tvUpdate.setOnClickListener(view -> {
+            boolean update = !mPresenter.getBookShelf().getAllowUpdate();
+            mPresenter.getBookShelf().setAllowUpdate(update);
+            setTvUpdate(update, true);
+            if (mPresenter.getInBookShelf()) {
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(mPresenter.getBookShelf());
             }
         });
 
