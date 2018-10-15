@@ -39,6 +39,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
     private String lastChapterName;
     private Integer chapterListSize = 0;
     private String customCoverPath;
+    private Boolean allowUpdate = true;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -74,13 +75,14 @@ public class BookShelfBean implements Parcelable, Cloneable {
         lastChapterName = in.readString();
         chapterListSize = in.readInt();
         customCoverPath = in.readString();
+        allowUpdate = in.readByte()!=0;
     }
 
-    @Generated(hash = 229342711)
+    @Generated(hash = 1626436040)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
             Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber,
             Long finalRefreshData, Integer group, String durChapterName, String lastChapterName,
-            Integer chapterListSize, String customCoverPath) {
+            Integer chapterListSize, String customCoverPath, Boolean allowUpdate) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -95,6 +97,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.lastChapterName = lastChapterName;
         this.chapterListSize = chapterListSize;
         this.customCoverPath = customCoverPath;
+        this.allowUpdate = allowUpdate;
     }
 
     @Override
@@ -112,6 +115,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         dest.writeString(lastChapterName);
         dest.writeInt(chapterListSize);
         dest.writeString(customCoverPath);
+        dest.writeByte((byte) (allowUpdate ? 1 : 0));
     }
 
     @Override
@@ -297,5 +301,13 @@ public class BookShelfBean implements Parcelable, Cloneable {
 
     public void setCustomCoverPath(String customCoverPath) {
         this.customCoverPath = customCoverPath;
+    }
+
+    public Boolean getAllowUpdate() {
+        return allowUpdate == null ? true : allowUpdate;
+    }
+
+    public void setAllowUpdate(Boolean allowUpdate) {
+        this.allowUpdate = allowUpdate;
     }
 }

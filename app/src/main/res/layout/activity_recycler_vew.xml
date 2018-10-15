@@ -10,6 +10,7 @@
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -34,7 +35,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:handleColor="@color/tv_text_button_pre"
+            app:handleColor="@color/darker_gray"
             app:bubbleColor="@color/tv_text_button_deep_pre"
             app:trackColor="@color/bg_divider_line" />
 

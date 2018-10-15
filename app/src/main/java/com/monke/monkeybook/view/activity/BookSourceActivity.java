@@ -166,6 +166,14 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         saveDate(adapter.getDataList());
     }
 
+    private void revertSelection() {
+        for (BookSourceBean bookSourceBean : adapter.getDataList()) {
+            bookSourceBean.setEnable(!bookSourceBean.getEnable());
+        }
+        adapter.notifyDataSetChanged();
+        saveDate(adapter.getDataList());
+    }
+
     public void upSearchView(int size) {
         searchView.setQueryHint(getString(R.string.search_book_source_num, size));
     }
@@ -254,6 +262,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                             ACache.get(this).put("sourceUrl", inputText);
                             mPresenter.importBookSource(inputText);
                         });
+                break;
+            case R.id.action_revert_selection:
+                revertSelection();
                 break;
             case R.id.action_del_select:
                 mPresenter.delData(adapter.getSelectDataList());

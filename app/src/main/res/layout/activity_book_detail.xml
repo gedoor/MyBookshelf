@@ -108,6 +108,17 @@
                             android:textColor="#dfdfdf"
                             android:textSize="14sp" />
 
+                        <TextView
+                            android:id="@+id/tv_update"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/selector_tv_first_button"
+                            android:paddingStart="6dp"
+                            android:paddingEnd="6dp"
+                            android:text="@string/allow_update"
+                            android:textColor="#ffffff"
+                            android:textSize="14sp" />
+
                     </LinearLayout>
 
                     <LinearLayout
