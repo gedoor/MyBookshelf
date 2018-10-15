@@ -41,6 +41,7 @@ public class UpdateService extends Service {
     private UpdateInfoBean updateInfo;
     private boolean interceptFlag = false;
     private Disposable disposableDown;
+    private int count = 0;
 
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateService.class);
@@ -87,12 +88,19 @@ public class UpdateService extends Service {
                         downloadApk(updateInfo.getUrl());
                         break;
                     case stopDownload:
-                        interceptFlag = true;
+                        stopDownload();
                         break;
                 }
             }
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void stopDownload() {
+        interceptFlag = true;
+        if (count == 0) {
+            stopSelf();
+        }
     }
 
     @Nullable
@@ -149,7 +157,6 @@ public class UpdateService extends Service {
             File apkFile = new File(apkFilePath);
             FileOutputStream fos = new FileOutputStream(apkFile);
 
-            int count = 0;
             byte buf[] = new byte[1024];
             int numread;
             do {
