@@ -259,6 +259,46 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
+    private OnItemClickListenerTwo getAdapterListener() {
+        return new OnItemClickListenerTwo() {
+            @Override
+            public void onClick(View view, int index) {
+                BookShelfBean bookShelfBean = getBookshelfList().get(index);
+                bookShelfBean.setHasUpdate(false);
+                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
+                Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
+                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+                String key = String.valueOf(System.currentTimeMillis());
+                intent.putExtra("data_key", key);
+                try {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
+                } catch (CloneNotSupportedException e) {
+                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
+                    e.printStackTrace();
+                }
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+
+            @Override
+            public void onLongClick(View view, int index) {
+                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
+                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
+                String key = String.valueOf(System.currentTimeMillis());
+                intent.putExtra("data_key", key);
+                BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        };
+    }
+
+    private List<BookShelfBean> getBookshelfList() {
+        if (viewIsList) {
+            return bookShelfListAdapter.getBooks();
+        } else {
+            return bookShelfGridAdapter.getBooks();
+        }
+    }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem pauseMenu = menu.findItem(R.id.action_list_grid);
