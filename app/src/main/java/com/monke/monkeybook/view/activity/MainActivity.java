@@ -94,10 +94,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     NavigationView navigationView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    /*@BindView(R.id.refreshLayout)
-    SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.rv_bookshelf)
-    RecyclerView rvBookshelf;*/
     @BindView(R.id.main_view)
     CoordinatorLayout mainView;
     @BindView(R.id.ll_content)
@@ -112,8 +108,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private TextView tvUser;
     private Switch swNightTheme;
     private int group;
-    private BookShelfGridAdapter bookShelfGridAdapter;
-    private BookShelfListAdapter bookShelfListAdapter;
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
@@ -259,45 +253,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
-    private OnItemClickListenerTwo getAdapterListener() {
-        return new OnItemClickListenerTwo() {
-            @Override
-            public void onClick(View view, int index) {
-                BookShelfBean bookShelfBean = getBookshelfList().get(index);
-                bookShelfBean.setHasUpdate(false);
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
-                Intent intent = new Intent(MainActivity.this, ReadBookActivity.class);
-                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
-                String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
-                try {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean.clone());
-                } catch (CloneNotSupportedException e) {
-                    BitIntentDataManager.getInstance().putData(key, bookShelfBean);
-                    e.printStackTrace();
-                }
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
 
-            @Override
-            public void onLongClick(View view, int index) {
-                Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
-                String key = String.valueOf(System.currentTimeMillis());
-                intent.putExtra("data_key", key);
-                BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
-                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        };
-    }
-
-    private List<BookShelfBean> getBookshelfList() {
-        if (viewIsList) {
-            return bookShelfListAdapter.getBooks();
-        } else {
-            return bookShelfGridAdapter.getBooks();
-        }
-    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -325,15 +281,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         SharedPreferences.Editor editor = preferences.edit();
         int id = item.getItemId();
         switch (id) {
-            /*case R.id.action_search:
-                //点击搜索
-                startActivityByAnim(new Intent(this, SearchBookActivity.class),
-                        toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
-                break;
-            case R.id.action_library:
-                startActivityByAnim(new Intent(this, FindBookActivity.class),
-                        toolbar, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
-                break;*/
+
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
                     startActivity(new Intent(this, ImportBookActivity.class));
@@ -423,14 +371,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         //更换Tab文字
         updateTabItemText(group);
 
-        /*switch (group) {
-            case 1:
-                navigationView.setCheckedItem(R.id.action_group_yf);
-                break;
-            default:
-                navigationView.setCheckedItem(R.id.action_group_zg);
-                break;
-        }*/
     }
 
     //侧边栏按钮
@@ -452,12 +392,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
-                /*case R.id.action_group_zg:
-                    upGroup(0);
-                    break;
-                case R.id.action_group_yf:
-                    upGroup(1);
-                    break;*/
                 case R.id.action_book_source_manage:
                     new Handler().postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;

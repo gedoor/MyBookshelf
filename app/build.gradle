@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 static def increasedVersionCode() {
     return (int) (System.currentTimeMillis() / 1000 / 60 / 60 - 17141)
@@ -170,4 +170,4 @@ greendao {
 }
 
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
