@@ -255,8 +255,8 @@
     <string name="download_update">下载更新</string>
     <string name="aloud_volume_page">朗读时音量键翻页</string>
     <string name="tip_margin_change">Tip边距跟随边距调整</string>
-    <string name="disable_update">禁止更新</string>
-    <string name="allow_update">允许更新</string>
+    <string name="disable_update">完结</string>
+    <string name="allow_update">连载</string>
     <string name="revert_selection">反转选择</string>
 
 </resources>
