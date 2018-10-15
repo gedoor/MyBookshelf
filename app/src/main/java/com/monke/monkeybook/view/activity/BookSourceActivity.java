@@ -166,6 +166,14 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         saveDate(adapter.getDataList());
     }
 
+    private void revertSelection() {
+        for (BookSourceBean bookSourceBean : adapter.getDataList()) {
+            bookSourceBean.setEnable(!bookSourceBean.getEnable());
+        }
+        adapter.notifyDataSetChanged();
+        saveDate(adapter.getDataList());
+    }
+
     public void upSearchView(int size) {
         searchView.setQueryHint(getString(R.string.search_book_source_num, size));
     }
@@ -178,6 +186,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     .whereOr(BookSourceBeanDao.Properties.BookSourceName.like(term),
                             BookSourceBeanDao.Properties.BookSourceGroup.like(term),
                             BookSourceBeanDao.Properties.BookSourceUrl.like(term))
+                    .orderRaw("-WEIGHT ASC")
                     .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
                     .list();
             adapter.resetDataS(sourceBeanList);
@@ -254,6 +263,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                             mPresenter.importBookSource(inputText);
                         });
                 break;
+            case R.id.action_revert_selection:
+                revertSelection();
+                break;
             case R.id.action_del_select:
                 mPresenter.delData(adapter.getSelectDataList());
                 break;
@@ -296,11 +308,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
             filePicker.setBackgroundColor(getResources().getColor(R.color.background));
             filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setItemHeight(30);
             filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-            filePicker.setOnFilePickListener(s -> {
-                mPresenter.importBookSourceLocal(s);
-            });
+            filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
             filePicker.show();
             filePicker.getSubmitButton().setText(R.string.sys_file_picker);
             filePicker.getSubmitButton().setOnClickListener(view -> {

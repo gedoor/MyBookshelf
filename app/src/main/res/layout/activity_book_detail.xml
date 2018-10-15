@@ -90,11 +90,19 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="18sp"
+                            android:layout_height="18sp"
+                            android:paddingRight="2dp"
+                            android:src="@drawable/ic_person_outline_24dp"
+                            android:contentDescription="@string/author" />
 
                         <TextView
                             android:id="@+id/tv_author"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:lines="1"
@@ -103,16 +111,15 @@
                             android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/tv_group"
+                            android:id="@+id/tv_update"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/selector_tv_first_button"
                             android:paddingStart="6dp"
                             android:paddingEnd="6dp"
-                            android:text="@string/group_zg"
+                            android:text="@string/allow_update"
                             android:textColor="#ffffff"
                             android:textSize="14sp" />
-
 
                     </LinearLayout>
 
@@ -124,12 +131,19 @@
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp">
 
+                        <ImageView
+                            android:id="@+id/iv_web"
+                            android:layout_width="18sp"
+                            android:layout_height="18sp"
+                            android:paddingRight="2dp"
+                            android:src="@drawable/ic_web_outline_24dp"
+                            android:contentDescription="@string/origin" />
+
                         <TextView
                             android:id="@+id/tv_origin"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
                             android:lines="1"
                             android:paddingRight="6dp"
                             android:text="@string/origin"
@@ -228,6 +242,19 @@
                         android:gravity="center"
                         android:text="@string/start_read"
                         android:textColor="#ffffff"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_group"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_book_detail_shelf_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:text="@string/group_zg"
+                        android:textColor="@color/tv_text_default"
                         android:textSize="15sp" />
                 </LinearLayout>
 

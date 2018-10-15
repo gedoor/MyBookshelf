@@ -66,6 +66,7 @@ public class DownloadService extends Service {
     private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
     private ExecutorService executorService;
     private Scheduler scheduler;
+    private Handler handler = new Handler();
 
     @Override
     public void onCreate() {
@@ -236,9 +237,7 @@ public class DownloadService extends Service {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 e.onNext(!BookshelfHelp.isChapterCached(
-                        BookshelfHelp.getCachePathName(data),
-                        String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName())
-                ));
+                        BookshelfHelp.getCachePathName(data), data.getDurChapterIndex(), data.getDurChapterName()));
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
@@ -259,16 +258,11 @@ public class DownloadService extends Service {
                     .subscribe(new Observer<Boolean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-                            Timer timer = new Timer();
-                            timer.schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    if (!d.isDisposed()) {
-                                        d.dispose();
-                                        timer.cancel();
-                                    }
+                            handler.postDelayed(() -> {
+                                if (!d.isDisposed()) {
+                                    d.dispose();
                                 }
-                            }, 30*1000);
+                            }, 30 * 1000);
                         }
 
                         @Override
@@ -284,7 +278,7 @@ public class DownloadService extends Service {
                         @Override
                         public void onComplete() {
                             if (isStartDownload) {
-                                new Handler().postDelayed(() -> {
+                               handler.postDelayed(() -> {
                                     if (isStartDownload) {
                                         toDownload();
                                     } else {

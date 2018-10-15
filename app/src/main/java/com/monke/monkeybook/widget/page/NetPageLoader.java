@@ -26,7 +26,7 @@ import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
  */
 
 public class NetPageLoader extends PageLoader {
-    private static final String TAG = "PageFactory";
+    private static final String TAG = "NetPageLoader";
 
     public NetPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);
@@ -84,7 +84,7 @@ public class NetPageLoader extends PageLoader {
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
         @SuppressLint("DefaultLocale")
         File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
-                String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
+                chapter.getDurChapterIndex(), chapter.getDurChapterName());
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
@@ -95,7 +95,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     protected boolean hasChapterData(ChapterListBean chapter) {
         return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
-                String.format("%d-%s", chapter.getDurChapterIndex(), chapter.getDurChapterName()));
+                chapter.getDurChapterIndex(), chapter.getDurChapterName());
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {

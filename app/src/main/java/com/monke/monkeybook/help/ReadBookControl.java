@@ -55,13 +55,13 @@ public class ReadBookControl {
     private Boolean showTimeBattery;
     private Boolean showLine;
     private long lineChange;
-    private String lastNoteUrl;
     private Boolean darkStatusIcon;
     private int screenTimeOut;
     private int paddingLeft;
     private int paddingTop;
     private int paddingRight;
     private int paddingBottom;
+    private Boolean tipMarginChange;
 
     private SharedPreferences readPreference;
 
@@ -101,7 +101,6 @@ public class ReadBookControl {
         this.showTimeBattery = readPreference.getBoolean("showTimeBattery", true);
         this.showLine = readPreference.getBoolean("showLine", true);
         this.lineChange = readPreference.getLong("lineChange", System.currentTimeMillis());
-        this.lastNoteUrl = readPreference.getString("lastNoteUrl", "");
         this.screenTimeOut = readPreference.getInt("screenTimeOut", 0);
         this.paddingLeft = readPreference.getInt("paddingLeft", DEFAULT_MARGIN_WIDTH);
         this.paddingTop = readPreference.getInt("paddingTop", 0);
@@ -109,6 +108,7 @@ public class ReadBookControl {
         this.paddingBottom = readPreference.getInt("paddingBottom", 0);
         this.pageMode = readPreference.getInt("pageMode", 0);
         this.screenDirection = readPreference.getInt("screenDirection", 0);
+        this.tipMarginChange = readPreference.getBoolean("tipMarginChange", false);
 
         initTextDrawableIndex();
     }
@@ -297,17 +297,6 @@ public class ReadBookControl {
     public void setImmersionStatusBar(boolean immersionStatusBar) {
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("immersionStatusBar", immersionStatusBar);
-        editor.apply();
-    }
-
-    public String getLastNoteUrl() {
-        return lastNoteUrl;
-    }
-
-    public void setLastNoteUrl(String lastNoteUrl) {
-        this.lastNoteUrl = lastNoteUrl;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putString("lastNoteUrl", lastNoteUrl);
         editor.apply();
     }
 
@@ -683,6 +672,17 @@ public class ReadBookControl {
         this.screenDirection = screenDirection;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putInt("screenDirection", screenDirection);
+        editor.apply();
+    }
+
+    public Boolean getTipMarginChange() {
+        return tipMarginChange;
+    }
+
+    public void setTipMarginChange(Boolean tipMarginChange) {
+        this.tipMarginChange = tipMarginChange;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putBoolean("tipMarginChange", tipMarginChange);
         editor.apply();
     }
 }

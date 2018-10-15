@@ -159,10 +159,8 @@ public class WebBookModelImpl implements IWebBookModel {
                         .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
                 if (chapterListBean != null) {
                     bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    if (BookshelfHelp.saveChapterInfo(bookName + "-" + tag,
-                            String.format("%d-%s", chapterListBean.getDurChapterIndex(), chapterListBean.getDurChapterName()),
-                            bookContentBean.getDurChapterContent())) {
-                        BookshelfHelp.setChapterIsCached(bookName, chapterListBean, true);
+                    if (BookshelfHelp.saveChapterInfo(bookName + "-" + tag, chapterListBean.getDurChapterIndex(),
+                            chapterListBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
                         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
                         RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
                         e.onNext(bookContentBean);

@@ -4,12 +4,12 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 
 import butterknife.BindView;
@@ -33,7 +33,16 @@ public class WelcomeActivity extends MBaseActivity {
             return;
         }
         setContentView(R.layout.activity_welcome);
+
+        new Thread(() -> {
+            try {
+                DbHelper.getInstance().getmDaoSession();
+            } catch (Exception e) {
+            }
+        }).start();
+
         ButterKnife.bind(this);
+
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {

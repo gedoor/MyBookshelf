@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/background_menu"
@@ -41,16 +40,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="@string/screen_direction"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/screen_direction" />
 
                     <TextView
                         android:id="@+id/tv_screen_direction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/screen_unspecified"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/screen_unspecified" />
 
                 </LinearLayout>
 
@@ -81,16 +78,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="@string/keep_light"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/keep_light" />
 
                     <TextView
                         android:id="@+id/tv_screen_time_out"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/keep_light"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/keep_light" />
 
                 </LinearLayout>
 
@@ -121,16 +116,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="@string/jf_convert"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/jf_convert" />
 
                     <TextView
                         android:id="@+id/tvJFConvert"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@string/keep_light"
-                        android:textColor="@color/tv_text_default" />
+                        android:text="@string/keep_light" />
 
                 </LinearLayout>
 
@@ -340,6 +333,26 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:text="@string/showTimeBattery"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_menu"
+                android:orientation="vertical">
+
+                <Switch
+                    android:id="@+id/sb_tip_margin_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="@string/tip_margin_change"/>
 
                 <View
                     android:layout_width="match_parent"

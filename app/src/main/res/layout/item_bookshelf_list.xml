@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_content"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:layout_margin="5dp">
+    android:layout_height="80dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background">
 
-        <ImageView
-            android:id="@+id/iv_cover"
-            android:layout_width="49dp"
-            android:layout_height="70dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_cover_default"
-            android:transitionName="@string/img_cover" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_cover"
+            android:layout_width="56dp"
+            android:layout_height="80dp">
+
+            <ImageView
+                android:id="@+id/iv_cover"
+                android:layout_width="56dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_cover_default"
+                android:contentDescription="@string/img_cover"
+                android:transitionName="img_cover"
+                tools:ignore="UnusedAttribute" />
+
+        </android.support.v7.widget.CardView>
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_name"
@@ -25,7 +38,7 @@
             android:layout_height="26dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/fl_has_new"
-            android:layout_toEndOf="@+id/iv_cover"
+            android:layout_toEndOf="@+id/cv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
             android:singleLine="true"
@@ -66,14 +79,14 @@
             android:layout_height="20dp"
             android:layout_below="@+id/tv_name"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/iv_cover"
+            android:layout_toEndOf="@+id/cv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
             android:singleLine="true"
             android:text="@string/read_dur_progress"
             android:textColor="@color/tv_text_default"
             android:textSize="12sp"
-            app:minTextSize="7sp" />
+            app:minTextSize="10sp" />
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/tv_last"
@@ -81,28 +94,31 @@
             android:layout_height="20dp"
             android:layout_below="@+id/tv_read"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/iv_cover"
+            android:layout_toEndOf="@+id/cv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
             android:singleLine="true"
             android:text="@string/book_search_last"
             android:textColor="@color/tv_text_default"
             android:textSize="12sp"
-            app:minTextSize="7sp" />
+            app:minTextSize="10sp" />
 
-        <ImageButton
-            android:id="@+id/ib_content"
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/mpb_durProgress"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_ib_pre"
-            android:contentDescription="@string/book" />
+            android:layout_height="3dp"
+            android:layout_below="@+id/tv_last"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="12dp"
+            android:layout_toEndOf="@+id/cv_cover"
+            android:visibility="invisible"
+            app:bgdrawable="@color/btn_bg_press"
+            app:cantouch="false"
+            app:fontdrawable="@color/d_blue"
+            tools:ignore="RtlHardcoded" />
 
-        <ImageButton
-            android:id="@+id/ib_cover"
-            android:layout_width="56dp"
-            android:layout_height="80dp"
-            android:background="@drawable/bg_ib_pre"
-            android:contentDescription="@string/book" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

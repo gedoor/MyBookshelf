@@ -12,7 +12,7 @@
 
         <item
             android:id="@+id/action_refresh"
-            android:icon="@drawable/ic_refresh_black_24dp_new"
+            android:icon="@drawable/ic_refresh_black_24dp"
             android:title="@string/refresh"
             app:showAsAction="ifRoom" />
 

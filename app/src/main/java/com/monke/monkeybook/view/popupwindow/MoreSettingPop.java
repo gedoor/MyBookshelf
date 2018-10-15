@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
@@ -67,6 +68,8 @@ public class MoreSettingPop extends PopupWindow {
     Switch swReadAloudKey;
     @BindView(R.id.ll_read_aloud_key)
     LinearLayout llReadAloudKey;
+    @BindView(R.id.sb_tip_margin_change)
+    Switch sbTipMarginChange;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -167,6 +170,12 @@ public class MoreSettingPop extends PopupWindow {
                 changeProListener.refresh();
             }
         });
+        sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (compoundButton.isPressed()) {
+                readBookControl.setTipMarginChange(b);
+                changeProListener.refresh();
+            }
+        });
         llScreenTimeOut.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setTitle(activity.getString(R.string.keep_light))
@@ -219,6 +228,7 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
         sbImmersionBar.setChecked(readBookControl.getImmersionStatusBar());
+        sbTipMarginChange.setChecked(readBookControl.getTipMarginChange());
         upView();
     }
 

@@ -10,6 +10,7 @@
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -25,14 +26,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.HackRecyclerView
-        android:id="@+id/recycler_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:fastScrollEnabled="true"
-        app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-        app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
-        app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-        app:fastScrollVerticalTrackDrawable="@drawable/line_drawable" />
+        android:layout_height="match_parent"
+        android:background="@color/background">
+
+        <com.monke.monkeybook.widget.refreshview.scroller.FastScrollRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:handleColor="@color/darker_gray"
+            app:bubbleColor="@color/tv_text_button_deep_pre"
+            app:trackColor="@color/bg_divider_line" />
+
+    </RelativeLayout>
 
 </LinearLayout>

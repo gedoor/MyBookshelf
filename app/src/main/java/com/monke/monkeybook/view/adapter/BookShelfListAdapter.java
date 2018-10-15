@@ -27,6 +27,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
+import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -106,9 +107,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.flContent.setVisibility(View.VISIBLE);
         }
-        holder.ibContent.setContentDescription(String.format("%s, 最新章节: %s",
-                books.get(index).getBookInfoBean().getName(),
-                books.get(index).getLastChapterName()));
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
                 Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
@@ -136,22 +134,34 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.ivHasNew.setVisibility(View.INVISIBLE);
         }
-        holder.ibCover.setOnClickListener(v -> {
+        //进度条
+        holder.mpbDurProgress.setVisibility(View.VISIBLE);
+        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
+        float speed = books.get(index).getChapterListSize() * 1.0f / 60;
+
+        holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
+
+        if (needAnim) {
+            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter() + 1);
+        } else {
+            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
+        }
+        holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
         });
-        holder.ibCover.setOnLongClickListener(v -> {
+        holder.ivCover.setOnLongClickListener(v -> {
             if (itemClickListener != null) {
                 itemClickListener.onLongClick(v, index);
             }
             return true;
         });
-        holder.ibContent.setOnClickListener(v -> {
+        holder.flContent.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
         });
         if (!Objects.equals(bookshelfPx, "2")) {
-            holder.ibContent.setOnLongClickListener(v -> {
+            holder.flContent.setOnLongClickListener(v -> {
                 if (itemClickListener != null) {
                     itemClickListener.onLongClick(v, index);
                 }
@@ -200,9 +210,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
-        ImageButton ibContent;
-        ImageButton ibCover;
+        View ibContent;
         RotateLoading rotateLoading;
+        MHorProgressBar mpbDurProgress;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -213,8 +223,8 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
             ibContent = itemView.findViewById(R.id.ib_content);
-            ibCover = itemView.findViewById(R.id.ib_cover);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
+            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
         }
     }
 

@@ -46,6 +46,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_revert_selection"
+        android:icon="@drawable/ic_swap_outline_24dp"
+        android:title="@string/revert_selection"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_del_select"
         android:icon="@drawable/ic_clear_all"
         android:title="@string/del_select"
@@ -53,13 +59,13 @@
 
     <item
         android:id="@+id/action_reset_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/refresh_default"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_check_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp_new"
+        android:icon="@drawable/ic_refresh_black_24dp"
         android:title="@string/check_book_source"
         app:showAsAction="never" />
 
