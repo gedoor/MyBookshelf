@@ -2,6 +2,7 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
@@ -28,6 +29,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
 
 public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
@@ -240,9 +243,21 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                         mView.updateView();
                         String tag = bookShelf.getTag();
                         if (tag != My716.TAG) {
-                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                            bookSourceBean.increaseWeightBySelection();
-                            BookshelfHelp.saveBookSource(bookSourceBean);
+                            try {
+                                long currentTime = System.currentTimeMillis();
+                                String bookName = bookShelf.getBookInfoBean().getName();
+                                BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
+                                if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
+                                    savedSource.getBookSource().increaseWeight(-450);
+                                BookshelfHelp.saveBookSource(savedSource.getBookSource());
+                                savedSource.setBookName(bookName);
+                                savedSource.setSaveTime(currentTime);
+                                savedSource.setBookSource(bookSourceBean);
+                                bookSourceBean.increaseWeightBySelection();
+                                BookshelfHelp.saveBookSource(bookSourceBean);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
 

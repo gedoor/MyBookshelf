@@ -50,6 +50,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvAuthor;
     @BindView(R.id.tv_origin)
     TextView tvOrigin;
+    @BindView(R.id.iv_web)
+    ImageView ivWeb;
     @BindView(R.id.tv_chapter)
     TextView tvChapter;
     @BindView(R.id.tv_intro)
@@ -152,9 +154,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvIntro.startAnimation(animShowInfo);
             }
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
+                ivWeb.setVisibility(View.VISIBLE);
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText(getString(R.string.origin_format, mPresenter.getBookShelf().getBookInfoBean().getOrigin()));
+                tvOrigin.setText(mPresenter.getBookShelf().getBookInfoBean().getOrigin());
             } else {
+                ivWeb.setVisibility(View.GONE);
                 tvOrigin.setVisibility(View.GONE);
             }
             if (!this.isFinishing()) {

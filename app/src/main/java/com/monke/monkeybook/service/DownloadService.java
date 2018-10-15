@@ -237,9 +237,7 @@ public class DownloadService extends Service {
             isProgress(data);
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 e.onNext(!BookshelfHelp.isChapterCached(
-                        BookshelfHelp.getCachePathName(data),
-                        String.format("%d-%s", data.getDurChapterIndex(), data.getDurChapterName())
-                ));
+                        BookshelfHelp.getCachePathName(data), data.getDurChapterIndex(), data.getDurChapterName()));
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {

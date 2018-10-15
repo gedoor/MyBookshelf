@@ -94,12 +94,13 @@
                         <ImageView
                             android:layout_width="18sp"
                             android:layout_height="18sp"
+                            android:paddingRight="2dp"
                             android:src="@drawable/ic_person_outline_24dp"
                             android:contentDescription="@string/author" />
 
                         <TextView
                             android:id="@+id/tv_author"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:lines="1"
@@ -117,12 +118,19 @@
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp">
 
+                        <ImageView
+                            android:id="@+id/iv_web"
+                            android:layout_width="18sp"
+                            android:layout_height="18sp"
+                            android:paddingRight="2dp"
+                            android:src="@drawable/ic_web_outline_24dp"
+                            android:contentDescription="@string/origin" />
+
                         <TextView
                             android:id="@+id/tv_origin"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
                             android:lines="1"
                             android:paddingRight="6dp"
                             android:text="@string/origin"
