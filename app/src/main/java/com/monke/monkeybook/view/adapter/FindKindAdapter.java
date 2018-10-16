@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,10 @@ import java.util.List;
 
 public class FindKindAdapter extends BaseExpandableListAdapter {
     private List<FindKindGroupBean> dataList;
-    private FindBookActivity activity;
+    private Activity activity;
     private OnGroupExpandedListener mOnGroupExpandedListener;
 
-    public FindKindAdapter(FindBookActivity activity) {
+    public FindKindAdapter(Activity activity) {
         this.activity = activity;
         dataList = new ArrayList<>();
     }

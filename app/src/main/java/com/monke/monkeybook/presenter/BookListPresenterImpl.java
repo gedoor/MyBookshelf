@@ -25,6 +25,7 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -40,7 +41,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
+public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
@@ -67,12 +68,10 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     public void onNext(List<BookShelfBean> value) {
                         if (null != value) {
                             bookShelfBeans = value;
-                            //mView.refreshBookShelf(bookShelfBeans);
-                            //更新书架并刷新
-                            RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, group);
-                            /*if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
+                            mView.refreshBookShelf(bookShelfBeans);
+                            if (needRefresh && NetworkUtil.isNetWorkAvailable()) {
                                 startRefreshBook();
-                            }*/
+                            }
                         }
                     }
 
@@ -84,44 +83,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 });
     }
 
-    @Override
-    public void backupData() {
-        DataBackup.getInstance().run();
-    }
-
-    @Override
-    public void restoreData() {
-        mView.onRestore(mView.getContext().getString(R.string.on_restore));
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (DataRestore.getInstance().run()) {
-                e.onNext(true);
-            } else {
-                e.onNext(false);
-            }
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        if (value) {
-                            mView.dismissHUD();
-                            queryBookShelf(true, group);
-                        } else {
-                            mView.dismissHUD();
-                            Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mView.dismissHUD();
-                        Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
 
     public void downloadAll(int downloadNum, boolean onlyNew) {
         if (bookShelfBeans == null) {
@@ -153,65 +114,6 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 .subscribe();
     }
 
-    @Override
-    public void addBookUrl(String bookUrl) {
-        if (TextUtils.isEmpty(bookUrl.trim())) return;
-        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            URL url = new URL(bookUrl);
-            BookInfoBean temp = DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().queryBuilder()
-                    .where(BookInfoBeanDao.Properties.NoteUrl.eq(bookUrl)).limit(1).build().unique();
-            if (temp != null) {
-                e.onNext(null);
-            } else {
-                BookShelfBean bookShelfBean = new BookShelfBean();
-                bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
-                bookShelfBean.setNoteUrl(url.toString());
-                bookShelfBean.setDurChapter(0);
-                bookShelfBean.setDurChapterPage(0);
-                bookShelfBean.setFinalDate(System.currentTimeMillis());
-                e.onNext(bookShelfBean);
-            }
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        if (bookShelfBean != null) {
-                            getBook(bookShelfBean);
-                        } else {
-                            Toast.makeText(mView.getContext(), "已在书架中", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "网址格式不对", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    @Override
-    public void clearBookshelf() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            BookshelfHelp.clearBookshelf();
-            e.onNext(true);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        queryBookShelf(false, group);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 
     private void getBook(BookShelfBean bookShelfBean) {
         WebBookModelImpl.getInstance()
@@ -257,7 +159,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
-            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && bookShelfBean.getAllowUpdate()) {
+            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
                 int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
@@ -329,16 +231,18 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
-    public void initImmersionBar(Boolean immersion) {
-        mView.initImmersionBar();
-    }
-
-    /*@Subscribe(thread = EventThread.MAIN_THREAD,
+    @Subscribe(thread = EventThread.MAIN_THREAD,
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false, group);
-    }*/
+
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.REFRESH_BOOK_LIST)})
+    public void reFlashBookList(Integer group) {
+        queryBookShelf(true, group);
+        mView.updateGroup(group);
+    }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {

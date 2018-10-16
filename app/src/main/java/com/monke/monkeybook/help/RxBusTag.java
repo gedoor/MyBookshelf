@@ -4,6 +4,8 @@ package com.monke.monkeybook.help;
 public class RxBusTag {
     public final static String HAD_ADD_BOOK = "add_book";
     public final static String HAD_REMOVE_BOOK = "remove_book";
+    public final static String REFRESH_BOOK_LIST = "reflash_book";
+    public final static String UPDATE_GROUP = "UPDATE_GROUP";
     public final static String UPDATE_BOOK_PROGRESS = "update_book_progress";
     public final static String PAUSE_DOWNLOAD_LISTENER = "pause_download_listener";
     public final static String PROGRESS_DOWNLOAD_LISTENER = "progress_download_listener";

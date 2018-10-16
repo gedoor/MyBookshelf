@@ -5,17 +5,19 @@
     android:id="@+id/ifl_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#77000000"
+    android:background="#00000000"
     android:clickable="true"
     android:focusable="true"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <FrameLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_gravity="center"
         android:layout_margin="40dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
         android:clickable="true"
         android:focusable="true">
 
@@ -270,6 +272,6 @@
                     android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>
-    </FrameLayout>
+    </android.support.v7.widget.CardView>
 
 </FrameLayout>

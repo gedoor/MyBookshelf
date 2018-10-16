@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="10dp">
 
     <View
@@ -11,12 +12,14 @@
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/fl_content"
-        android:layout_width="100dp"
-        android:layout_height="139dp"
+        android:layout_width="85dp"
+        android:layout_height="124dp"
         android:layout_gravity="center"
         android:visibility="invisible">
+
+
 
         <ImageView
             android:id="@+id/iv_cover"
@@ -45,33 +48,33 @@
                 app:bgdrawable="@color/white"
                 android:visibility="invisible"
                 tools:ignore="RtlHardcoded" />
-
             <FrameLayout
                 android:id="@+id/fl_has_new"
                 android:layout_width="26dp"
-                android:layout_height="26dp">
+                android:layout_height="26dp"
+                android:layout_alignParentRight="true">
 
                 <ImageView
                     android:id="@+id/iv_has_new"
-                    android:visibility="invisible"
                     android:layout_width="26dp"
                     android:layout_height="26dp"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_circle_red_24dp" />
+                    android:padding="8dp"
+                    android:src="@drawable/ic_circle_red_24dp"
+                    android:visibility="invisible" />
 
                 <com.victor.loading.rotate.RotateLoading
                     android:id="@+id/rl_loading"
                     android:layout_width="26dp"
                     android:layout_height="26dp"
+                    android:layout_gravity="center"
                     android:visibility="invisible"
-                    app:loading_width="2dp"
                     app:loading_color="@color/white"
-                    android:layout_gravity="center" />
+                    app:loading_width="2dp" />
 
             </FrameLayout>
 
-
         </LinearLayout>
+
 
         <ImageButton
             android:id="@+id/ib_content"
@@ -79,29 +82,33 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_ib_pre" />
 
-        <LinearLayout
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_gravity="center"
+        tools:ignore="RelativeOverlap"
+        android:background="#00000000"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="26dp"
-            android:layout_gravity="bottom"
-            android:background="#7f000000"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:singleLine="true"
+            android:text="ss"
+            android:textSize="12sp"
+            app:minTextSize="10sp" />
 
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:singleLine="true"
-                android:textColor="#ffffff"
-                android:textSize="12sp"
-                app:minTextSize="10sp" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="0dp"

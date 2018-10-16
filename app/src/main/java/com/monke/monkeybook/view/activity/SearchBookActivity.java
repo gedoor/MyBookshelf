@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,6 +78,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -210,7 +212,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
         searchView.setQueryHint("搜索书名、作者");
-        searchView.onActionViewExpanded();
+        //获取到TextView的控件
+        mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+
+        //searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
