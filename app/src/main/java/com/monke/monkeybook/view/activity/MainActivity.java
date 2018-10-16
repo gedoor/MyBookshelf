@@ -124,6 +124,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(null);
     }
 
     @Override
