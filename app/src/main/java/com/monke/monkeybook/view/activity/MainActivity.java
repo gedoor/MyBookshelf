@@ -264,9 +264,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
             case R.id.action_add_url:
                 moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
                 break;
-            case R.id.action_download:
-                startActivity(new Intent(this, DownloadActivity.class));
-                break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
                     Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
@@ -369,6 +366,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
                     break;
                 case R.id.action_replace_rule:
                     new Handler().postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
+                    break;
+                case R.id.action_download:
+                    new Handler().postDelayed(() -> DownloadActivity.startThis(this), 200);
                     break;
                 case R.id.action_setting:
                     new Handler().postDelayed(() -> SettingActivity.startThis(this), 200);
