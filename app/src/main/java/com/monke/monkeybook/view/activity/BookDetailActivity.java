@@ -233,7 +233,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText(getString(R.string.origin_format, mPresenter.getBookShelf().getBookInfoBean().getOrigin()));
+                tvOrigin.setText(mPresenter.getBookShelf().getBookInfoBean().getOrigin());
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -245,7 +245,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             author = mPresenter.getSearchBook().getAuthor();
             if (mPresenter.getSearchBook().getOrigin() != null && mPresenter.getSearchBook().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText(getString(R.string.origin_format, mPresenter.getSearchBook().getOrigin()));
+                tvOrigin.setText(mPresenter.getSearchBook().getOrigin());
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -326,7 +326,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(),
                 searchBookBean -> {
-                    tvOrigin.setText(getString(R.string.origin_format, searchBookBean.getOrigin()));
+                    tvOrigin.setText(searchBookBean.getOrigin());
                     tvLoading.setVisibility(View.VISIBLE);
                     tvLoading.setText("加载中...");
                     tvLoading.setOnClickListener(null);
