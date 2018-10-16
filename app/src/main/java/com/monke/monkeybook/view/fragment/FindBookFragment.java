@@ -1,12 +1,12 @@
 package com.monke.monkeybook.view.fragment;
 
 import android.content.Intent;
-import android.view.KeyEvent;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.presenter.FindBookPresenterImpl;

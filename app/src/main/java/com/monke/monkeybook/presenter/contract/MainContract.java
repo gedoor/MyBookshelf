@@ -15,19 +15,6 @@ public interface MainContract {
         void initImmersionBar();
 
         /**
-         * 刷新书架书籍小说信息 更新UI
-         * @param bookShelfBeanList 书架
-         */
-        void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
-
-        void refreshBook(String noteUrl);
-
-        /**
-         * 执行刷新书架小说信息
-         */
-        void activityRefreshView();
-
-        /**
          * 取消弹出框
          */
         void dismissHUD();
@@ -54,13 +41,10 @@ public interface MainContract {
     }
 
     interface Presenter extends IPresenter {
-        void queryBookShelf(Boolean needRefresh, int group);
 
         void backupData();
 
         void restoreData();
-
-        void downloadAll(int num, boolean onlyNew);
 
         void addBookUrl(String bookUrl);
 

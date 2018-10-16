@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.FindKindGroupBean;
-import com.monke.monkeybook.view.activity.FindBookActivity;
 
 import java.util.ArrayList;
 import java.util.List;

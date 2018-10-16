@@ -1,10 +1,7 @@
 package com.monke.monkeybook.view.fragment;
 
-import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,15 +9,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hwangjr.rxbus.RxBus;
-import com.monke.basemvplib.BaseFragment;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
@@ -29,12 +23,14 @@ import com.monke.monkeybook.presenter.BookListPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.view.activity.BookDetailActivity;
+import com.monke.monkeybook.view.activity.MainActivity;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,9 +46,9 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     private boolean viewIsList;
     private String bookPx;
-    private boolean isRecreate;
     private int group;
     private boolean resumed = false;
+    private boolean isRecreate;
 
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
@@ -88,10 +84,10 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     protected void initData() {
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-        isRecreate = getActivity().getIntent().getBooleanExtra("isRecreate", false);
-        firstRequest();
+        isRecreate = ((MainActivity) Objects.requireNonNull(getActivity())).isRecreate();
     }
 
+    @Override
     protected void firstRequest() {
         if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
             if (isNetWorkAvailable()) {
@@ -187,7 +183,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
 
-                startActivityByAnim(intent,view,"img_cover",android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivityByAnim(intent,android.R.anim.fade_in, android.R.anim.fade_out);
 
             }
         };

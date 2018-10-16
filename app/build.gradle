@@ -62,7 +62,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            /*signingConfig signingConfigs.myConfig*/
+            signingConfig signingConfigs.myConfig
             applicationIdSuffix '.debug'
             versionNameSuffix ' debug'
             buildConfigField "boolean", "IS_RELEASE", "false"
@@ -168,6 +168,5 @@ greendao {
     daoPackage 'com.monke.monkeybook.dao'
     targetGenDir 'src/main/java'
 }
-
 
 apply plugin: 'com.google.gms.google-services'

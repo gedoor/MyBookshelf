@@ -83,8 +83,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 });
     }
 
-
-    public void downloadAll(int downloadNum, boolean onlyNew) {
+    private void downloadAll(int downloadNum, boolean onlyNew) {
         if (bookShelfBeans == null) {
             return;
         }
@@ -112,33 +111,6 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-    }
-
-
-    private void getBook(BookShelfBean bookShelfBean) {
-        WebBookModelImpl.getInstance()
-                .getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
-                .flatMap(this::saveBookToShelfO)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
-                    @Override
-                    public void onNext(BookShelfBean value) {
-                        if (value.getBookInfoBean().getChapterUrl() == null) {
-                            Toast.makeText(mView.getContext(), "添加书籍失败", Toast.LENGTH_SHORT).show();
-                        } else {
-                            //成功   //发送RxBus
-                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
-                            Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "添加书籍失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     private int getThreadsNum() {
@@ -235,17 +207,26 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
             tags = {@Tag(RxBusTag.HAD_ADD_BOOK), @Tag(RxBusTag.HAD_REMOVE_BOOK), @Tag(RxBusTag.UPDATE_BOOK_PROGRESS)})
     public void hadAddOrRemoveBook(BookShelfBean bookShelfBean) {
         queryBookShelf(false, group);
+    }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_GROUP)})
+    public void updateGroup(Integer group) {
+        this.group = group;
+        mView.updateGroup(group);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.REFRESH_BOOK_LIST)})
-    public void reFlashBookList(Integer group) {
-        queryBookShelf(true, group);
-        mView.updateGroup(group);
+    public void reFlashBookList(Boolean needRefresh) {
+        queryBookShelf(needRefresh, group);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
         mView.recreate();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.DOWNLOAD_ALL)})
+    public void downloadAll(Integer downloadNum) {
+        downloadAll(downloadNum, true);
     }
 }
