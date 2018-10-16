@@ -28,12 +28,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
-    private final List<FindKindGroupBean> group = new ArrayList<>();
 
     @Override
     public void initData() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            group.clear();
+        Observable.create((ObservableOnSubscribe<List<FindKindGroupBean>>) e -> {
+            List<FindKindGroupBean> group = new ArrayList<>();
             for (BookSourceBean sourceBean : BookSourceManage.getAllBookSource()) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
@@ -54,17 +53,16 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                     group.add(groupBean);
                 }
             }
-            e.onNext(true);
+            e.onNext(group);
             e.onComplete();
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
+                .subscribe(new SimpleObserver<List<FindKindGroupBean>>() {
                     @Override
-                    public void onNext(Boolean value) {
+                    public void onNext(List<FindKindGroupBean> value) {
                         //执行刷新界面
-                        mView.updateUI(group);
-
+                        mView.updateUI(value);
                     }
 
                     @Override

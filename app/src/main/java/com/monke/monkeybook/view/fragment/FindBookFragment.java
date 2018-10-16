@@ -67,7 +67,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public void updateUI(List<FindKindGroupBean> group) {
+    public synchronized void updateUI(List<FindKindGroupBean> group) {
         if (group.size() > 0) {
             adapter.resetDataS(group);
             if (autoExpandGroup() || group.size() == 1) {
