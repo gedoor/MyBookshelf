@@ -57,6 +57,7 @@ import com.monke.monkeybook.view.fragment.FindBookFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -507,7 +508,10 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
         if (mo) {
             return true;
-        } else {
+        } else if (tabLayout.getSelectedTabPosition() != 0){
+            Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+            return true;
+        }else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawers();
