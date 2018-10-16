@@ -85,7 +85,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
-    private static final int REQUEST_CODE_SIGN_IN = 14;
     private static String[] mTitles = new String[]{"书架", "发现"};
 
     @BindView(R.id.drawer)
@@ -96,8 +95,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     Toolbar toolbar;
     @BindView(R.id.main_view)
     CoordinatorLayout mainView;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
     @BindView(R.id.card_search)
     CardView cardSearch;
     @BindView(R.id.tab_layout_main)
@@ -105,7 +102,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @BindView(R.id.view_pager_main)
     ViewPager viewPager;
 
-    private TextView tvUser;
     private Switch swNightTheme;
     private int group;
     private boolean viewIsList;
@@ -281,7 +277,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         SharedPreferences.Editor editor = preferences.edit();
         int id = item.getItemId();
         switch (id) {
-
             case R.id.action_add_local:
                 if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
                     startActivity(new Intent(this, ImportBookActivity.class));
@@ -343,7 +338,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle("阅读");
         }
     }
 
@@ -377,7 +371,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
-        tvUser = headerView.findViewById(R.id.tv_user);
+        //tvUser = headerView.findViewById(R.id.tv_user);
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);

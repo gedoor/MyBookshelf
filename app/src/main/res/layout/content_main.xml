@@ -5,17 +5,15 @@
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main">
+    android:background="@null"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@null"
         tools:ignore="UnusedAttribute">
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/NopaddingToolbar"
@@ -53,35 +51,11 @@
             app:tabIndicatorColor="@color/azure" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager_main"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_bookshelf"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:bg_color="#00000000"
-                app:font_color="#767676"
-                app:second_color="#c1c1c1"
-                app:second_max_progress="80dp"
-                app:speed="2dp" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </android.support.design.widget.CoordinatorLayout>

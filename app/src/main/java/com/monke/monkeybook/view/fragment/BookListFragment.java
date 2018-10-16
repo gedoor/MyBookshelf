@@ -177,6 +177,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                     e.printStackTrace();
                 }
                 startActivityByAnim(intent,android.R.anim.fade_in, android.R.anim.fade_out);
+                //Toast.makeText(getContext(),"点击",0).show();
             }
 
             @Override

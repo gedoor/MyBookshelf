@@ -27,6 +27,7 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
         AppActivityManager.getInstance().add(this);
         initSDK();
         onCreateActivity();
+        getWindow().setBackgroundDrawable(null);
         mPresenter = initInjector();
         attachView();
         initData();
