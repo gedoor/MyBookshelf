@@ -116,7 +116,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
                 Intent intent = new Intent(ChoiceBookActivity.this, BookDetailActivity.class);
                 intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_SEARCH);
                 intent.putExtra("data", searchBookBean);
-                startActivityByAnim(intent, animView, "img_cover", android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
