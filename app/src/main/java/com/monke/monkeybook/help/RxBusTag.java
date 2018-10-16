@@ -28,4 +28,5 @@ public class RxBusTag {
     public final static String GET_ZFB_Hb = "getZfbHb";
     public final static String UPDATE_APK_STATE = "updateApkState";
     public final static String DOWNLOAD_ALL = "downloadAll";
+    public final static String UPDATE_BOOK_SOURCE = "updateBookSource";
 }

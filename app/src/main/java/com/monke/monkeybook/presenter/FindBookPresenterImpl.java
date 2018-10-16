@@ -1,14 +1,21 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
+import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
+import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
 
@@ -24,13 +31,9 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
     private final List<FindKindGroupBean> group = new ArrayList<>();
 
     @Override
-    public void detachView() {
-        RxBus.get().unregister(this);
-    }
-
-    @Override
     public void initData() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            group.clear();
             for (BookSourceBean sourceBean : BookSourceManage.getAllBookSource()) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
@@ -71,4 +74,20 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                 });
     }
 
+    @Override
+    public void attachView(@NonNull IView iView) {
+        super.attachView(iView);
+        RxBus.get().register(this);
+    }
+
+    @Override
+    public void detachView() {
+        RxBus.get().unregister(this);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(RxBusTag.UPDATE_BOOK_SOURCE)})
+    public void hadAddOrRemoveBook(Object object) {
+        initData();
+    }
 }
