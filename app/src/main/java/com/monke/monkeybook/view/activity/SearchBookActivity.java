@@ -30,6 +30,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
+import com.monke.monkeybook.utils.SoftInputUtil;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
@@ -186,6 +187,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 DonateActivity.startThis(this);
                 break;
             case android.R.id.home:
+                SoftInputUtil.hideIMM(this, getCurrentFocus());
                 finish();
                 break;
         }
