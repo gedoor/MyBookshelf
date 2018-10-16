@@ -1,6 +1,11 @@
 package com.monke.monkeybook.view.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,14 +23,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View{
+public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.expandable_list)
     ExpandableListView expandableList;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+
+    Unbinder unbinder;
 
     private FindKindAdapter adapter;
 
@@ -39,6 +49,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         super.bindView();
         ButterKnife.bind(this, view);
         initExpandableList();
+        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        refreshLayout.setOnRefreshListener(() -> {
+            mPresenter.initData();
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     @Override
@@ -65,7 +80,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
     }
 
-    private void initExpandableList(){
+    private void initExpandableList() {
         adapter = new FindKindAdapter(getActivity());
         expandableList.setAdapter(adapter);
         tvEmpty.setText(R.string.find_empty);
@@ -102,4 +117,17 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         return result;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

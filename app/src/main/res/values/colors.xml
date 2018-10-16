@@ -26,7 +26,7 @@
 
 
     <color name="background">#f4f4f4</color>
-    <color name="background_card">#f4f4f4</color>
+    <color name="background_card">#cfcfcf</color>
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
