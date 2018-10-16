@@ -90,7 +90,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //fireBase
-    implementation 'com.google.firebase:firebase-core:16.0.4'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     //support
