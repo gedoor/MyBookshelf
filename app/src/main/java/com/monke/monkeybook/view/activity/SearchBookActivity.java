@@ -213,7 +213,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
-        searchView.setQueryHint("搜索书名、作者");
+        searchView.setQueryHint(getString(R.string.search_book_key));
         //获取到TextView的控件
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 
