@@ -156,28 +156,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llImmersionBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_menu"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <Switch
-                    android:id="@+id/sbImmersionBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:text="@string/immersion_status_bar"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.8dp"
-                    android:background="@color/btn_bg_press" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/ll_hideNavigationBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

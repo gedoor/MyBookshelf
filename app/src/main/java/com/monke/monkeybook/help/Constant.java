@@ -27,6 +27,7 @@ public class Constant {
     //文件阅读记录保存的路径
     public static String BOOK_RECORD_PATH = FileHelp.getCachePath() + File.separator
             + "book_record" + File.separator;
+    public static final String[] BOOK_GROUPS = new String[]{"追更区", "养肥区", "完结区"};
 
 
     //BookType
