@@ -214,4 +214,15 @@ public class StringUtils {
         }
         return -1;
     }
+
+    /**
+     * 判断是否为空
+     * @param str
+     */
+    public static boolean isEmpty(String str){
+        if (str!=null&&!"".equals(str))
+            return false;
+        else
+            return true;
+    }
 }
