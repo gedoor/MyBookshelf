@@ -60,10 +60,6 @@ public class AboutActivity extends MBaseActivity {
     TextView tvMail;
     @BindView(R.id.vw_mail)
     CardView vwMail;
-    @BindView(R.id.tv_source_rule)
-    TextView tvSourceRule;
-    @BindView(R.id.vw_source_rule)
-    CardView vwSourceRule;
     @BindView(R.id.tv_update)
     TextView tvUpdate;
     @BindView(R.id.vw_update)
@@ -126,7 +122,6 @@ public class AboutActivity extends MBaseActivity {
         setTextViewIconColor(tvMail);
         setTextViewIconColor(tvQq);
         setTextViewIconColor(tvScoring);
-        setTextViewIconColor(tvSourceRule);
         setTextViewIconColor(tvUpdate);
         setTextViewIconColor(tvUpdateLog);
         setTextViewIconColor(tvVersion);
@@ -144,8 +139,7 @@ public class AboutActivity extends MBaseActivity {
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
         vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.this_github_url)));
-        vwSourceRule.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.source_rule_url)));
-        vwDisclaimer.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.disclaimer_url)));
+        vwDisclaimer.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("disclaimer.md"));
         vwUpdate.setOnClickListener(view -> UpdateManager.getInstance(this).checkUpdate(true));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {

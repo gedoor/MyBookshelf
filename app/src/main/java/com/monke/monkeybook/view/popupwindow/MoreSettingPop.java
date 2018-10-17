@@ -7,16 +7,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 

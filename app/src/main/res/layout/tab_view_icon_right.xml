@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp"
+    android:gravity="center"
+    >
+    <TextView
+        android:id="@+id/tabtext"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:text="TAB"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/tabicon"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
+</LinearLayout>

@@ -12,6 +12,10 @@
         <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
     </style>
 
+    <style name="NavigationViewStyle">
+        <item name="android:listPreferredItemHeightSmall">44dp</item>
+    </style>
+
     <style name="alertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:background">@color/background_card</item>
