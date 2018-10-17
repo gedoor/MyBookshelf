@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,7 +79,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -150,7 +148,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.action_search);
         }
     }
@@ -400,15 +398,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     protected void onDestroy() {
         super.onDestroy();
         explosionField.clear();
-        hideKeyboard();
-    }
-
-    private void hideKeyboard() {
-        View view = getWindow().peekDecorView();
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 
     @Override
