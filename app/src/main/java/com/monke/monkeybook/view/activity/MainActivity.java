@@ -210,6 +210,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void updateTabItemText(int group){
         TabLayout.Tab tab = mTlIndicator.getTabAt(0);
         //首先移除原先View
+        assert tab != null;
         final ViewParent customParent= tab.getCustomView().getParent();
         if (customParent != null) {
             ((ViewGroup) customParent).removeView(tab.getCustomView());
