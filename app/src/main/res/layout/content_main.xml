@@ -5,14 +5,15 @@
     android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@null"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_main">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:theme="@style/AppTheme.AppBarOverlay"
         tools:ignore="UnusedAttribute">
 
         <android.support.v7.widget.Toolbar
@@ -30,7 +31,7 @@
                 android:id="@+id/card_search"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                app:cardBackgroundColor="#dddddd"
+                app:cardBackgroundColor="@color/background_card"
                 app:cardElevation="0dp">
 
                 <TextView
@@ -38,29 +39,31 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="11dp"
                     android:gravity="center_vertical"
-                    android:text="搜索书名、作者" />
+                    android:text="搜索" />
             </android.support.v7.widget.CardView>
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout_main"
+            android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            app:tabBackground="@color/colorPrimary"
+            android:layout_height="32dp"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@color/azure"
-            app:tabMode="fixed" />
+            app:tabMode="fixed"
+            app:tabBackground="@color/colorPrimary"
+            app:tabIndicatorColor="@color/darker_gray" />
     </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
 
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tab_vp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
