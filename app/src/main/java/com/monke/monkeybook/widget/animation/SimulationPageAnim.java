@@ -14,7 +14,7 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created by newbiechen on 17-7-24.  仿真翻页
  */
 
 public class SimulationPageAnim extends HorizonPageAnim{
@@ -88,7 +88,7 @@ public class SimulationPageAnim extends HorizonPageAnim{
         switch (mDirection){
             case NEXT:
                 calcPoints();
-                drawCurrentPageArea(canvas, mCurBitmap, mPath0);
+                drawCurrentPageArea(canvas, mCurBitmap, mPath0);//绘制翻页时的正面页
                 drawNextPageAreaAndShadow(canvas, mNextBitmap);
                 drawCurrentPageShadow(canvas);
                 drawCurrentBackArea(canvas, mCurBitmap);
@@ -282,7 +282,11 @@ public class SimulationPageAnim extends HorizonPageAnim{
         canvas.save();
         try {
             canvas.clipPath(mPath0);
-            canvas.clipPath(mPath1, Region.Op.INTERSECT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas.clipPath(mPath1);
+            } else {
+                canvas.clipPath(mPath1, Region.Op.INTERSECT);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -349,7 +353,12 @@ public class SimulationPageAnim extends HorizonPageAnim{
         float rotateDegrees;
         canvas.save();
         try {
-            canvas.clipPath(mPath0, Region.Op.XOR);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas.clipOutPath(mPath0);
+            } else {
+                canvas.clipPath(mPath0, Region.Op.XOR);
+            }
+
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -385,9 +394,15 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mPath1.close();
         canvas.save();
         try {
-            canvas.clipPath(mPath0, Region.Op.XOR);
-            canvas.clipPath(mPath1, Region.Op.INTERSECT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas.clipOutPath(mPath0);
+            } else {
+                canvas.clipPath(mPath0, Region.Op.XOR);
+            }
+
+            canvas.clipPath(mPath1);
         } catch (Exception e) {
+
         }
 
         if (mIsRTandLB) {
@@ -449,7 +464,12 @@ public class SimulationPageAnim extends HorizonPageAnim{
         canvas.save();
         try {
             canvas.clipPath(mPath0);
-            canvas.clipPath(mPath1, Region.Op.INTERSECT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                canvas.clipPath(mPath1);
+            } else {
+                canvas.clipPath(mPath1, Region.Op.INTERSECT);
+            }
+            //canvas.clipPath(mPath1, Region.Op.INTERSECT);
         } catch (Exception e) {
         }
 
@@ -475,6 +495,11 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mPath0.close();
 
         canvas.save();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            canvas.clipOutPath(path);
+        } else {
+            canvas.clipPath(path, Region.Op.XOR);
+        }
         canvas.drawBitmap(bitmap, 0, 0, null);
         try {
             canvas.restore();
