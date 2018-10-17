@@ -42,7 +42,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     public int createLayoutId() {
-        return R.layout.fragment_expandable_list_vew;
+        return R.layout.fragment_book_find;
     }
 
     @Override
