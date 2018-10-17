@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -186,7 +188,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab != null) {
-                tab.setCustomView(tabFragmentPageAdapter.getTabView(i,mTitles[i]));
+                tab.setCustomView(tab_icon(mTitles[i], null));
                 if (tab.getCustomView() != null) {
                     View tabView = (View) tab.getCustomView().getParent();
                     tabView.setTag(i);
@@ -213,9 +215,24 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             ((ViewGroup) customParent).removeView(tab.getCustomView());
         }
 
-        tab.setCustomView(tabFragmentPageAdapter.getTabView(0,BOOK_GROUPS[group]));
+        tab.setCustomView(tab_icon(BOOK_GROUPS[group], R.drawable.ic_arrow_drop_down_black_24dp));
         View tabView = (View) tab.getCustomView().getParent();
         tabView.setTag(0);
+    }
+
+    private View tab_icon(String name,Integer iconID){
+        View tabView =  LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right,null);
+        TextView tv = tabView.findViewById(R.id.tabtext);
+        tv.setText(name);
+        ImageView im = tabView.findViewById(R.id.tabicon);
+        if (iconID != null) {
+            im.setVisibility(View.VISIBLE);
+            im.setImageResource(iconID);
+            im.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            im.setVisibility(View.GONE);
+        }
+        return tabView;
     }
 
     @Override

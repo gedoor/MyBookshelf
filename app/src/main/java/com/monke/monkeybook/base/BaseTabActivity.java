@@ -91,11 +91,5 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
             return mTitleList.get(position);
         }
 
-        public View getTabView(int position, String text){
-            View view = LayoutInflater.from(BaseTabActivity.this).inflate(R.layout.item_tablayout, null);
-            TextView tv= (TextView) view.findViewById(R.id.text_item_layout);
-            tv.setText(text);
-            return view;
-        }
     }
 }
