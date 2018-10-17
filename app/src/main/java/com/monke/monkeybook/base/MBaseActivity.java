@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
@@ -26,7 +27,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = getSharedPreferences("CONFIG", 0);;
+        preferences = MApplication.getInstance().getConfigPreferences();
         super.onCreate(savedInstanceState);
         initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

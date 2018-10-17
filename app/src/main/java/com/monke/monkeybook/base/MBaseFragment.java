@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.monke.basemvplib.BaseFragment;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.MApplication;
 
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mPresenter = initInjector();
-        preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("CONFIG", 0);
+        preferences = MApplication.getInstance().getConfigPreferences();
         attachView();
         super.onCreate(savedInstanceState);
     }
