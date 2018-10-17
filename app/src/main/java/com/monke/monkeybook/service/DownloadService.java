@@ -433,6 +433,7 @@ public class DownloadService extends Service {
             if (totalChapters > 0)
                 new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载"+totalChapters+"章", Toast.LENGTH_SHORT).show());
         }
+        cancelDownload();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PAUSE_DOWNLOAD)})
