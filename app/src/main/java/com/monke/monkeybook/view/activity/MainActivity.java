@@ -150,6 +150,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         return isRecreate;
     }
 
+    public int getGroup() {
+        return group;
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return super.dispatchTouchEvent(ev);
