@@ -31,6 +31,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
 import com.monke.monkeybook.presenter.contract.SourceEditContract;
+import com.monke.monkeybook.utils.SoftInputUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -426,6 +427,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 openRuleSummary();
                 break;
             case android.R.id.home:
+                SoftInputUtil.hideIMM(this, getCurrentFocus());
                 finish();
                 break;
         }

@@ -31,6 +31,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
+import com.monke.monkeybook.utils.SoftInputUtil;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
@@ -187,6 +188,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 DonateActivity.startThis(this);
                 break;
             case android.R.id.home:
+                SoftInputUtil.hideIMM(this, getCurrentFocus());
                 finish();
                 break;
         }
@@ -212,7 +214,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
-        searchView.setQueryHint("搜索书名、作者");
+        searchView.setQueryHint(getString(R.string.search_book_key));
         //获取到TextView的控件
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 

@@ -46,10 +46,6 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     Switch sbShowLine;
-    @BindView(R.id.sbImmersionBar)
-    Switch sbImmersionBar;
-    @BindView(R.id.llImmersionBar)
-    LinearLayout llImmersionBar;
     @BindView(R.id.llScreenTimeOut)
     LinearLayout llScreenTimeOut;
     @BindView(R.id.tv_screen_time_out)
@@ -76,9 +72,6 @@ public class MoreSettingPop extends PopupWindow {
 
     public interface OnChangeProListener {
         void keepScreenOnChange(int keepScreenOn);
-
-        void refresh();
-
         void recreate();
     }
 
@@ -108,7 +101,7 @@ public class MoreSettingPop extends PopupWindow {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
-                changeProListener.refresh();
+                changeProListener.recreate();
                 upView();
             }
         });
@@ -145,35 +138,27 @@ public class MoreSettingPop extends PopupWindow {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTitle(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTimeBattery(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowLine(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
-            }
-        });
-        sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (buttonView.isPressed()) {
-                readBookControl.setImmersionStatusBar(isChecked);
-                readBookControl.setLineChange(System.currentTimeMillis());
-                RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setTipMarginChange(b);
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
@@ -227,7 +212,6 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setChecked(readBookControl.getShowTitle());
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
-        sbImmersionBar.setChecked(readBookControl.getImmersionStatusBar());
         sbTipMarginChange.setChecked(readBookControl.getTipMarginChange());
         upView();
     }

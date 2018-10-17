@@ -17,6 +17,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
+import com.monke.monkeybook.utils.SoftInputUtil;
 
 /**
  * 对话框
@@ -152,7 +153,7 @@ public class MoProgressHUD {
     public void dismiss() {
         //消失动画
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
-            hideIMM(rootView);
+            SoftInputUtil.hideIMM(context, rootView);
             if (!isFinishing) {
                 new Handler().post(() -> {
                     outAnim.setAnimationListener(outAnimListener);
@@ -189,14 +190,6 @@ public class MoProgressHUD {
             }
         }
         return false;
-    }
-
-    //隐藏输入法
-    private void hideIMM(View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 
     /**

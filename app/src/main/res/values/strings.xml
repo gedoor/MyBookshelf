@@ -258,5 +258,6 @@
     <string name="disable_update">完结</string>
     <string name="allow_update">连载</string>
     <string name="revert_selection">反转选择</string>
+    <string name="search_book_key">搜索书名、作者</string>
 
 </resources>

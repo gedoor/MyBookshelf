@@ -69,7 +69,9 @@ public class UpdateService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        disposableDown.dispose();
+        if (disposableDown != null) {
+            disposableDown.dispose();
+        }
         stopForeground(true);
         RxBus.get().post(RxBusTag.UPDATE_APK_STATE, -1);
         RxBus.get().unregister(this);

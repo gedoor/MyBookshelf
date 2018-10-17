@@ -508,14 +508,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
 
             @Override
-            public void refresh() {
-                initImmersionBar();
-                if (mPageLoader != null) {
-                    mPageLoader.refreshUi();
-                }
-            }
-
-            @Override
             public void recreate() {
                 ReadBookActivity.this.recreate();
             }

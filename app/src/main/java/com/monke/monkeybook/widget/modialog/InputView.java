@@ -43,7 +43,9 @@ public class InputView {
         this.onInputOk = onInputOk;
         tvTitle.setText(title);
         if (defaultValue != null) {
+            etInput.setTextSize(2, 16); // 2 --> sp
             etInput.setText(defaultValue);
+            etInput.setSelectAllOnFocus(true);
         }
     }
 

@@ -86,11 +86,6 @@
             android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustUnspecified" />
         <activity
-            android:name=".view.activity.FindBookActivity"
-            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
-        <activity
             android:name=".view.activity.ChoiceBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"

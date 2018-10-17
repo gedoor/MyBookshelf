@@ -1,4 +1,4 @@
-package com.monke.monkeybook.view.fragment;
+package com.monke.monkeybook.base;
 
 import android.app.ActivityOptions;
 import android.content.Intent;

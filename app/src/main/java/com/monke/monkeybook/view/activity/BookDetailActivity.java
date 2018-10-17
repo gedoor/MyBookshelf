@@ -36,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
+import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.presenter.BookDetailPresenterImpl.FROM_BOOKSHELF;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
@@ -131,7 +132,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         if (null != mPresenter.getBookShelf()) {
             tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
-            tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
+            tvGroup.setText(BOOK_GROUPS[mPresenter.getBookShelf().getGroup()]);
             if (mPresenter.getInBookShelf()) {
                 tvChapter.setText(getString(R.string.read_dur_progress, mPresenter.getBookShelf().getDurChapterName()));
                 tvShelf.setText("移出书架");
@@ -233,7 +234,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
             if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText(getString(R.string.origin_format, mPresenter.getBookShelf().getBookInfoBean().getOrigin()));
+                tvOrigin.setText(mPresenter.getBookShelf().getBookInfoBean().getOrigin());
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -245,7 +246,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             author = mPresenter.getSearchBook().getAuthor();
             if (mPresenter.getSearchBook().getOrigin() != null && mPresenter.getSearchBook().getOrigin().length() > 0) {
                 tvOrigin.setVisibility(View.VISIBLE);
-                tvOrigin.setText(getString(R.string.origin_format, mPresenter.getSearchBook().getOrigin()));
+                tvOrigin.setText(mPresenter.getSearchBook().getOrigin());
             } else {
                 tvOrigin.setVisibility(View.GONE);
             }
@@ -304,12 +305,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
 
         tvGroup.setOnClickListener(view -> {
-            if (mPresenter.getBookShelf().getGroup() == 0) {
-                mPresenter.getBookShelf().setGroup(1);
-            } else {
-                mPresenter.getBookShelf().setGroup(0);
-            }
-            tvGroup.setText(BookshelfHelp.getGroupName(this, mPresenter.getBookShelf().getGroup()));
+            int nextGroup = (mPresenter.getBookShelf().getGroup() + 1) % BOOK_GROUPS.length;
+            mPresenter.getBookShelf().setGroup(nextGroup);
+            tvGroup.setText(BOOK_GROUPS[nextGroup]);
             if (mPresenter.getInBookShelf()) {
                 mPresenter.addToBookShelf();
             }
@@ -326,7 +324,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
         tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(),
                 searchBookBean -> {
-                    tvOrigin.setText(getString(R.string.origin_format, searchBookBean.getOrigin()));
+                    tvOrigin.setText(searchBookBean.getOrigin());
                     tvLoading.setVisibility(View.VISIBLE);
                     tvLoading.setText("加载中...");
                     tvLoading.setOnClickListener(null);

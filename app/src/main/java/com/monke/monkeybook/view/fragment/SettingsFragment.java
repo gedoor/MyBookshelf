@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
         if (preference.getKey().equals(getString(R.string.pk_download_path))) {
             if (!EasyPermissions.hasPermissions(mContext, MApplication.PerList)) {
-                EasyPermissions.requestPermissions(this, "自定义缓存路径需要存储权限", 0, MApplication.PerList);
+                EasyPermissions.requestPermissions(getActivity(), "自定义缓存路径需要存储权限", 0, MApplication.PerList);
                 return true;
             }
             FilePicker picker = new FilePicker(getActivity(), FilePicker.DIRECTORY);
