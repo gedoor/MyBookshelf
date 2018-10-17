@@ -38,6 +38,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     Unbinder unbinder;
 
     private FindKindAdapter adapter;
+    private int lastExpandedPosition = -1;
 
     @Override
     public int createLayoutId() {
@@ -85,11 +86,26 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         expandableList.setAdapter(adapter);
         tvEmpty.setText(R.string.find_empty);
         expandableList.setEmptyView(tvEmpty);
-        adapter.setOnGroupExpandedListener(this::expandOnlyOne);
+        adapter.setOnGroupExpandedListener(this::setExpandedPosition);
         //  设置分组项的点击监听事件
         expandableList.setOnGroupClickListener((parent, v, groupPosition, id) -> {
-            // 请务必返回 false，否则分组不会展开
-            return false;
+            boolean result;
+            if (groupPosition == lastExpandedPosition) {
+                result = expandableList.collapseGroup(groupPosition);
+                if (result) {
+                    lastExpandedPosition = -1;
+                }
+                return result;
+            }
+            if (lastExpandedPosition != -1 && groupPosition != lastExpandedPosition) {
+                if (expandableList.collapseGroup(lastExpandedPosition))
+                    lastExpandedPosition = -1;
+            }
+            expandableList.smoothScrollToPosition(groupPosition);
+            result = expandableList.expandGroup(groupPosition);
+            if (result)
+                lastExpandedPosition = groupPosition;
+            return result;
         });
 
         //  设置子选项点击监听事件
@@ -105,16 +121,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         });
     }
 
-    // 每次展开一个分组后，关闭其他的分组
-    private boolean expandOnlyOne(int expandedPosition) {
-        boolean result = true;
-        int groupLength = expandableList.getExpandableListAdapter().getGroupCount();
-        for (int i = 0; i < groupLength; i++) {
-            if (i != expandedPosition && expandableList.isGroupExpanded(i)) {
-                result &= expandableList.collapseGroup(i);
-            }
-        }
-        return result;
+    private void setExpandedPosition(int expandedPosition) {
+        lastExpandedPosition = expandedPosition;
     }
 
     @Override
