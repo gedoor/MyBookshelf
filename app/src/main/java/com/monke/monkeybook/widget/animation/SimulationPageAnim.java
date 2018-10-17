@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Region;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.view.View;
 
 /**
@@ -474,12 +475,11 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mPath0.close();
 
         canvas.save();
-        canvas.clipPath(path, Region.Op.XOR);
         canvas.drawBitmap(bitmap, 0, 0, null);
         try {
             canvas.restore();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }

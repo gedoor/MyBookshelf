@@ -15,6 +15,8 @@ import com.monke.basemvplib.BaseFragment;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
 
+import java.util.Objects;
+
 public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T> implements IView {
     public final static String start_share_ele= "start_with_share_ele";
     public SharedPreferences preferences;
@@ -23,7 +25,7 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mPresenter = initInjector();
-        preferences = getActivity().getSharedPreferences("CONFIG", 0);
+        preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("CONFIG", 0);
         attachView();
         super.onCreate(savedInstanceState);
     }
@@ -35,7 +37,7 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
 
     protected void startActivityByAnim(Intent intent, int animIn, int animExit) {
         startActivity(intent);
-        getActivity().overridePendingTransition(animIn, animExit);
+        Objects.requireNonNull(getActivity()).overridePendingTransition(animIn, animExit);
     }
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
