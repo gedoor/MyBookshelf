@@ -44,7 +44,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @BindView(R.id.local_book_rv_content)
     RecyclerView rvBookshelf;
 
-    private MainActivity activity;
     private boolean viewIsList;
     private String bookPx;
     private int group;
@@ -74,11 +73,13 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     protected void initData() {
-        activity = (MainActivity) getActivity();
+        MainActivity activity = (MainActivity) getActivity();
+        if (activity != null) {
+            isRecreate = activity.isRecreate();
+            group = activity.getGroup();
+        }
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-        isRecreate = activity.isRecreate();
-        group = activity.getGroup();
     }
 
     @Override
