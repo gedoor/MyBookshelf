@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         tools:ignore="UnusedAttribute">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/NopaddingToolbar"
@@ -45,17 +46,21 @@
             android:id="@+id/tab_layout_main"
             android:layout_width="match_parent"
             android:layout_height="38dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
             app:tabBackground="@color/colorPrimary"
-            app:tabIndicatorColor="@color/azure" />
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/azure"
+            app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_main"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
