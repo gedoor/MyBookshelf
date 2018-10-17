@@ -37,10 +37,12 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.Strings;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
@@ -163,7 +165,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected List<String> createTabTitles() {
-        return Arrays.asList("书架", "发现");
+        return Arrays.asList(mTitles);
     }
 
     @Override
@@ -197,7 +199,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         tabView.setOnClickListener(view -> {
                             if (tabView.isSelected()){
                                 //切换书架
-                                upGroup((group + 1) % BOOK_GROUPS.length);
+                                PopupMenu popupMenu = new PopupMenu(this, view);
+                                for (int j = 0; j < BOOK_GROUPS.length; j++) {
+                                    popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
+                                }
+                                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                                    upGroup(menuItem.getOrder());
+                                    return true;
+                                });
+                                popupMenu.show();
                             }
                         });
                     }
