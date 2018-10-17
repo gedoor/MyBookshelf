@@ -76,9 +76,6 @@ public class MoreSettingPop extends PopupWindow {
 
     public interface OnChangeProListener {
         void keepScreenOnChange(int keepScreenOn);
-
-        void refresh();
-
         void recreate();
     }
 
@@ -108,7 +105,7 @@ public class MoreSettingPop extends PopupWindow {
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
-                changeProListener.refresh();
+                changeProListener.recreate();
                 upView();
             }
         });
@@ -145,21 +142,21 @@ public class MoreSettingPop extends PopupWindow {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTitle(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTimeBattery(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowLine(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -167,13 +164,13 @@ public class MoreSettingPop extends PopupWindow {
                 readBookControl.setImmersionStatusBar(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
                 RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setTipMarginChange(b);
-                changeProListener.refresh();
+                changeProListener.recreate();
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
