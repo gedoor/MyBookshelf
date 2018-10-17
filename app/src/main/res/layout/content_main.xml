@@ -51,17 +51,10 @@
             app:tabIndicatorColor="@color/azure"
             app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-    <android.support.v4.view.ViewPager
+      <android.support.v4.view.ViewPager
         android:id="@+id/view_pager_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
