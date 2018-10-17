@@ -30,7 +30,7 @@ if (keystoreFilepath) {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     buildToolsVersion '28.0.3'
     signingConfigs {
         myConfig {
@@ -44,7 +44,7 @@ android {
     defaultConfig {
         applicationId "com.gedoor.monkeybook"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 10000 + gitCommits
         versionName version
         project.ext.set("archivesBaseName", name + "_" + version)
@@ -83,7 +83,7 @@ android {
 }
 
 ext {
-    support_library_version = '27.1.1'
+    support_library_version = '28.0.0'
 }
 dependencies {
     api project(':basemvplib')
@@ -95,10 +95,11 @@ dependencies {
 
     //support
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
     implementation "com.android.support:cardview-v7:$support_library_version"
     implementation "com.android.support:support-compat:$support_library_version"
+    implementation "com.android.support:support-media-compat:$support_library_version"
+    implementation "com.android.support:support-v4:$support_library_version"
     implementation 'com.google.code.gson:gson:2.8.2'
 
     //GreenDao
@@ -142,7 +143,7 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
 
     //简易权限获取
-    implementation 'pub.devrel:easypermissions:1.3.0'
+    implementation 'pub.devrel:easypermissions:2.0.0'
 
     //二维码
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
