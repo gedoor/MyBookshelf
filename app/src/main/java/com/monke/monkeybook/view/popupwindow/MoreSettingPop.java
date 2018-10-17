@@ -46,10 +46,6 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llHideNavigationBar;
     @BindView(R.id.sb_showLine)
     Switch sbShowLine;
-    @BindView(R.id.sbImmersionBar)
-    Switch sbImmersionBar;
-    @BindView(R.id.llImmersionBar)
-    LinearLayout llImmersionBar;
     @BindView(R.id.llScreenTimeOut)
     LinearLayout llScreenTimeOut;
     @BindView(R.id.tv_screen_time_out)
@@ -159,14 +155,6 @@ public class MoreSettingPop extends PopupWindow {
                 changeProListener.recreate();
             }
         });
-        sbImmersionBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (buttonView.isPressed()) {
-                readBookControl.setImmersionStatusBar(isChecked);
-                readBookControl.setLineChange(System.currentTimeMillis());
-                RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-                changeProListener.recreate();
-            }
-        });
         sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setTipMarginChange(b);
@@ -224,7 +212,6 @@ public class MoreSettingPop extends PopupWindow {
         sbShowTitle.setChecked(readBookControl.getShowTitle());
         sbShowTimeBattery.setChecked(readBookControl.getShowTimeBattery());
         sbShowLine.setChecked(readBookControl.getShowLine());
-        sbImmersionBar.setChecked(readBookControl.getImmersionStatusBar());
         sbTipMarginChange.setChecked(readBookControl.getTipMarginChange());
         upView();
     }

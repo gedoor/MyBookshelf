@@ -67,6 +67,7 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View {
@@ -194,7 +195,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         tabView.setOnClickListener(view -> {
                             if (tabView.isSelected()){
                                 //切换书架
-                                upGroup(group+1>1?0:group+1);
+                                upGroup((group + 1) % BOOK_GROUPS.length);
                             }
                         });
                     }
@@ -212,7 +213,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             ((ViewGroup) customParent).removeView(tab.getCustomView());
         }
 
-        tab.setCustomView(tabFragmentPageAdapter.getTabView(0,group==1?"养肥区":"追更区"));
+        tab.setCustomView(tabFragmentPageAdapter.getTabView(0,BOOK_GROUPS[group]));
         View tabView = (View) tab.getCustomView().getParent();
         tabView.setTag(0);
     }

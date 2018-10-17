@@ -46,11 +46,11 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
+            android:layout_height="32dp"
             app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabBackground="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorAccent" />
+            app:tabIndicatorColor="@color/darker_gray" />
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
