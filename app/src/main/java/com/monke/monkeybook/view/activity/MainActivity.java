@@ -43,6 +43,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.BaseTabActivity;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -57,6 +58,8 @@ import com.monke.monkeybook.view.fragment.FindBookFragment;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -66,7 +69,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
-public class MainActivity extends MBaseActivity<MainContract.Presenter> implements MainContract.View {
+public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
@@ -85,10 +88,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     LinearLayout llContent;
     @BindView(R.id.card_search)
     CardView cardSearch;
-    @BindView(R.id.tab_layout_main)
-    TabLayout tabLayout;
-    @BindView(R.id.view_pager_main)
-    ViewPager viewPager;
 
     private TextView tvUser;
     private Switch swNightTheme;
@@ -99,7 +98,6 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     private long exitTime = 0;
     private boolean isRecreate;
     private boolean resumed = false;
-    private BookListTabAdapter bookListTabAdapter;
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -125,6 +123,7 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
     }
 
     /**
@@ -151,9 +150,22 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         return super.dispatchTouchEvent(ev);
     }
 
+    /**************abstract***********/
+    @Override
+    protected List<Fragment> createTabFragments() {
+        BookListFragment bookListFragment = new BookListFragment();
+        FindBookFragment findBookFragment = new FindBookFragment();
+        return Arrays.asList(bookListFragment, findBookFragment);
+    }
+
+    @Override
+    protected List<String> createTabTitles() {
+        return Arrays.asList("书架", "发现");
+    }
+
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
+        super.bindView();
         setSupportActionBar(toolbar);
         setupActionBar();
         initDrawer();
@@ -168,24 +180,12 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     //初始化TabLayout和ViewPager
     private void initTabLayout(){
-        bookListTabAdapter = new BookListTabAdapter(this,getSupportFragmentManager());
-        ArrayList<Fragment> mViewPagerFragments = new ArrayList<>();
-
-        //把Fragment添加到Viewpager
-        mViewPagerFragments.add(new BookListFragment());
-        mViewPagerFragments.add(new FindBookFragment());
-
-        bookListTabAdapter.setTitles(mTitles);
-        bookListTabAdapter.setFragments(mViewPagerFragments);
-
-        viewPager.setAdapter(bookListTabAdapter);
-        tabLayout.setupWithViewPager(viewPager);
 
         //TabLayout使用自定义Item
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
+        for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
+            TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab != null) {
-                tab.setCustomView(bookListTabAdapter.getTabView(i,mTitles[i]));
+                tab.setCustomView(tabFragmentPageAdapter.getTabView(i,mTitles[i]));
                 if (tab.getCustomView() != null) {
                     View tabView = (View) tab.getCustomView().getParent();
                     tabView.setTag(i);
@@ -205,14 +205,14 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
     }
 
     private void updateTabItemText(int group){
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
+        TabLayout.Tab tab = mTlIndicator.getTabAt(0);
         //首先移除原先View
         final ViewParent customParent= tab.getCustomView().getParent();
         if (customParent != null) {
             ((ViewGroup) customParent).removeView(tab.getCustomView());
         }
 
-        tab.setCustomView(bookListTabAdapter.getTabView(0,group==1?"养肥区":"追更区"));
+        tab.setCustomView(tabFragmentPageAdapter.getTabView(0,group==1?"养肥区":"追更区"));
         View tabView = (View) tab.getCustomView().getParent();
         tabView.setTag(0);
     }
@@ -508,8 +508,8 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
         if (mo) {
             return true;
-        } else if (tabLayout.getSelectedTabPosition() != 0){
-            Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+        } else if (mTlIndicator.getSelectedTabPosition() != 0){
+            Objects.requireNonNull(mTlIndicator.getTabAt(0)).select();
             return true;
         }else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -536,7 +536,9 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Snackbar.make(viewPager, "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+            if (getCurrentFocus() != null) {
+                Snackbar.make(getCurrentFocus(), "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+            }
             exitTime = System.currentTimeMillis();
         } else {
             finish();
@@ -549,46 +551,4 @@ public class MainActivity extends MBaseActivity<MainContract.Presenter> implemen
 
     }
 
-    //tab适配器
-    class BookListTabAdapter extends FragmentPagerAdapter {
-        private Context context;
-
-        private String[] titles;
-        private ArrayList<Fragment> viewPagerFragments;
-
-        public BookListTabAdapter(Context context, FragmentManager fm) {
-            super(fm);
-            this.context = context;
-        }
-
-        public void setTitles(String[] titles) {
-            this.titles = titles;
-        }
-
-        public void setFragments(ArrayList<Fragment> viewPagerFragments) {
-            this.viewPagerFragments = viewPagerFragments;
-        }
-
-        public View getTabView(int position,String text){
-            View view = LayoutInflater.from(context).inflate(R.layout.item_tablayout, null);
-            TextView tv= (TextView) view.findViewById(R.id.text_item_layout);
-            tv.setText(text);
-            return view;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return viewPagerFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return viewPagerFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
-        }
-    }
 }

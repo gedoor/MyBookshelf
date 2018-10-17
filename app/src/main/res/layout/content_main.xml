@@ -44,7 +44,7 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout_main"
+            android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             app:tabGravity="fill"
@@ -60,28 +60,10 @@
         android:orientation="vertical">
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager_main"
+            android:id="@+id/tab_vp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_bookshelf"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:bg_color="#00000000"
-                app:font_color="#767676"
-                app:second_color="#c1c1c1"
-                app:second_max_progress="80dp"
-                app:speed="2dp" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

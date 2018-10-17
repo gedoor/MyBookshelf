@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
@@ -23,6 +26,8 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     protected TabLayout mTlIndicator;
     @BindView(R.id.tab_vp)
     protected ViewPager mVp;
+    /**************Adapter***************/
+    protected TabFragmentPageAdapter tabFragmentPageAdapter;
     /************Params*******************/
     private List<Fragment> mFragmentList;
     private List<String> mTitleList;
@@ -46,8 +51,8 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
 
         checkParamsIsRight();
 
-        TabFragmentPageAdapter adapter = new TabFragmentPageAdapter(getSupportFragmentManager());
-        mVp.setAdapter(adapter);
+        tabFragmentPageAdapter = new TabFragmentPageAdapter(getSupportFragmentManager());
+        mVp.setAdapter(tabFragmentPageAdapter);
         mVp.setOffscreenPageLimit(3);
         mTlIndicator.setupWithViewPager(mVp);
     }
@@ -65,7 +70,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     }
 
     /******************inner class*****************/
-    class TabFragmentPageAdapter extends FragmentPagerAdapter {
+    public class TabFragmentPageAdapter extends FragmentPagerAdapter {
 
         public TabFragmentPageAdapter(FragmentManager fm) {
             super(fm);
@@ -84,6 +89,13 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
         @Override
         public CharSequence getPageTitle(int position) {
             return mTitleList.get(position);
+        }
+
+        public View getTabView(int position, String text){
+            View view = LayoutInflater.from(BaseTabActivity.this).inflate(R.layout.item_tablayout, null);
+            TextView tv= (TextView) view.findViewById(R.id.text_item_layout);
+            tv.setText(text);
+            return view;
         }
     }
 }
