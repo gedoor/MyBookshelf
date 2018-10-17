@@ -329,11 +329,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     private void upGroup(int group) {
-        if (this.group != group) {
-            this.group = group;
-            RxBus.get().post(RxBusTag.UPDATE_GROUP, group);
-            RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
-        }
+        this.group = group;
+        RxBus.get().post(RxBusTag.UPDATE_GROUP, group);
+        RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
         //更换Tab文字
         updateTabItemText(group);
 
