@@ -65,4 +65,4 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</android.support.design.widget.CoordinatorLayout> 
