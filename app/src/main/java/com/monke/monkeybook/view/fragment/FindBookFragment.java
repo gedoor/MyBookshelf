@@ -78,7 +78,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     private boolean autoExpandGroup() {
-        return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
+        if (isAdded()) {
+            return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
+        }else {
+            return false;
+        }
     }
 
     private void initExpandableList() {
