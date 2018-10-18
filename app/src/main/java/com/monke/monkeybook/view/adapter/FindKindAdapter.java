@@ -1,21 +1,20 @@
 package com.monke.monkeybook.view.adapter;
 
-import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.adapter.BaseRecyclerViewAdapter;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.GroupItem;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.holder.BaseExpandAbleViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +66,13 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
     @Override
     public void onBindGroupHolder(MyViewHolder holder, int groupPos, int position, FindKindGroupBean groupData) {
         holder.textView.setText(groupData.getGroupName());
+        GroupItem item = getAllDatas().get(groupPos).getGroupItem();
+        if (item.isExpand()) {
+            holder.imageView.setImageResource(R.drawable.ic_remove_black_24dp);
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_add_black_24dp_new);
+        }
+
     }
 
     /**
@@ -79,10 +85,14 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
 
     public class MyViewHolder extends BaseExpandAbleViewHolder {
         TextView textView;
+        AppCompatImageView imageView;
 
         public MyViewHolder(Context ctx, View itemView, int viewType) {
             super(ctx, itemView, viewType);
             textView = itemView.findViewById(R.id.tv_kind_name);
+            if (viewType == VIEW_TYPE_PARENT) {
+                imageView = itemView.findViewById(R.id.iv_group);
+            }
         }
 
         /**

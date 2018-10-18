@@ -39,6 +39,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     Unbinder unbinder;
 
     private FindKindAdapter adapter;
+    private int lastExpandedPosition = 0;
 
     @Override
     public int createLayoutId() {
@@ -72,7 +73,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (group.size() > 0) {
             adapter.setAllDatas(group);
             if (autoExpandGroup() || group.size() == 1) {
-                adapter.expandGroup(0);
+                adapter.expandGroup(lastExpandedPosition);
+                expandableList.smoothScrollToPosition(lastExpandedPosition);
             }
         }
     }
@@ -111,7 +113,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
      */
     @Override
     public void onGroupItemClick(int position, int groupPosition, View view) {
-
+        lastExpandedPosition = groupPosition;
     }
 
     @Override

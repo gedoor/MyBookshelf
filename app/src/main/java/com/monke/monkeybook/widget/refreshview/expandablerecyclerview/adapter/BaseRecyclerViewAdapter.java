@@ -123,47 +123,35 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
         final int cp = getChildPosition(gp, position);
         if (item != null && item instanceof GroupItem) {
             onBindGroupHolder(holder,gp, position, (T) ((GroupItem) item).getGroupData());
-            holder.groupView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != itemClickListener) {
-                        itemClickListener.onGroupItemClick(position,gp, holder.groupView);
-                    }
-                    if (item instanceof GroupItem && ((GroupItem) item).isExpand()) {
-                        collapseGroup(position);
-                    } else {
-                        expandGroup(position);
-                    }
+            holder.groupView.setOnClickListener(v -> {
+                if (null != itemClickListener) {
+                    itemClickListener.onGroupItemClick(position,gp, holder.groupView);
+                }
+                if (item instanceof GroupItem && ((GroupItem) item).isExpand()) {
+                    collapseGroup(position);
+                } else {
+                    expandGroup(position);
                 }
             });
-            holder.groupView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (null != itemLongClickListener) {
-                        itemLongClickListener.onGroupItemLongClick(position,gp, holder.groupView);
-                    }
-                    return true;
+            holder.groupView.setOnLongClickListener(v -> {
+                if (null != itemLongClickListener) {
+                    itemLongClickListener.onGroupItemLongClick(position,gp, holder.groupView);
                 }
+                return true;
             });
         } else {
             onBindChildpHolder(holder,gp,cp, position, (S) item);
-            holder.childView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (null != itemClickListener) {
-                        itemClickListener.onChildItemClick(position,gp, cp, holder.childView);
-                    }
+            holder.childView.setOnClickListener(v -> {
+                if (null != itemClickListener) {
+                    itemClickListener.onChildItemClick(position,gp, cp, holder.childView);
                 }
             });
-            holder.childView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    if (null != itemLongClickListener) {
-                        int gp = getGroupPosition(position);
-                        itemLongClickListener.onChildItemLongClick(position,gp,cp, holder.childView);
-                    }
-                    return true;
+            holder.childView.setOnLongClickListener(v -> {
+                if (null != itemLongClickListener) {
+                    int gp1 = getGroupPosition(position);
+                    itemLongClickListener.onChildItemLongClick(position, gp1,cp, holder.childView);
                 }
+                return true;
             });
         }
     }
@@ -223,21 +211,21 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
 
         List<BaseItem> tempChilds;
         if (((GroupItem) item).hasChilds()) {
+            if (groupExpandedListener != null) {
+                groupExpandedListener.onGroupExpanded(position);
+            }
             tempChilds = ((GroupItem) item).getChildDatas();
             ((GroupItem) item).onExpand();
             if(canExpandAll()){
                 showingDatas.addAll(position + 1, tempChilds);
                 notifyItemRangeInserted(position+1,tempChilds.size());
-                notifyItemRangeChanged(position+1,showingDatas.size()-(position+1));
+                notifyItemRangeChanged(position,showingDatas.size()-(position+1));
             }else {
                 int tempPsi = showingDatas.indexOf(item);
                 showingDatas.addAll(tempPsi + 1, tempChilds);
                 notifyItemRangeInserted(tempPsi+1,tempChilds.size());
-                notifyItemRangeChanged(tempPsi+1,showingDatas.size()-(tempPsi+1));
+                notifyItemRangeChanged(tempPsi,showingDatas.size()-(tempPsi+1));
             }
-        }
-        if (groupExpandedListener != null) {
-            groupExpandedListener.onGroupExpanded(position);
         }
     }
 
@@ -259,14 +247,14 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
         int tempSize = showingDatas.size();
         List<BaseItem> tempChilds;
         if (((GroupItem) item).hasChilds()) {
+            if (groupCollapseListener != null) {
+                groupCollapseListener.onGroupCollapse(position);
+            }
             tempChilds = ((GroupItem) item).getChildDatas();
             ((GroupItem) item).onExpand();
             showingDatas.removeAll(tempChilds);
             notifyItemRangeRemoved(position+1,tempChilds.size());
-            notifyItemRangeChanged(position+1,tempSize-(position+1));
-            if (groupCollapseListener != null) {
-                groupCollapseListener.onGroupCollapse(position);
-            }
+            notifyItemRangeChanged(position,tempSize-(position+1));
             return position;
         }
         return -1;
