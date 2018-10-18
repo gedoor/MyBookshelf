@@ -500,12 +500,11 @@ public class SimulationPageAnim extends HorizonPageAnim{
         } else {
             canvas.clipPath(path, Region.Op.XOR);
         }
-        //canvas.clipPath(path, Region.Op.XOR);
         canvas.drawBitmap(bitmap, 0, 0, null);
         try {
             canvas.restore();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
