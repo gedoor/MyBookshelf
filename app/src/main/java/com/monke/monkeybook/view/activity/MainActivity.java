@@ -112,7 +112,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(null);
     }
 
     @Override

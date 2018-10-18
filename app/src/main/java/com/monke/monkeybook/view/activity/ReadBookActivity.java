@@ -187,7 +187,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
-        getWindow().setBackgroundDrawable(null);
         screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
         mHandler = new Handler();
         keepScreenRunnable = this::unKeepScreenOn;
