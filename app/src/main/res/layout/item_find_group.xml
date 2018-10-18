@@ -11,6 +11,6 @@
         android:layout_marginStart="25dp"
         android:padding="10dp"
         android:singleLine="true"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 </LinearLayout>
