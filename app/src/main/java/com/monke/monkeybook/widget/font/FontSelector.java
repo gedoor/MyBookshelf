@@ -79,7 +79,10 @@ public class FontSelector {
         try {
             DocumentHelper.createDirIfNotExist(fontPath);
             File file = new File(fontPath);
-            return file.listFiles(pathName -> pathName.getName().endsWith(".TTF") || pathName.getName().endsWith(".ttf"));
+            return file.listFiles(pathName -> pathName.getName().endsWith(".TTF")
+                    || pathName.getName().endsWith(".ttf")
+                    || pathName.getName().endsWith(".otf")
+                    || pathName.getName().endsWith("OTF"));
         } catch (Exception e) {
             return null;
         }
