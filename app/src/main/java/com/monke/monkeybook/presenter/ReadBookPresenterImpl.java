@@ -40,6 +40,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ImportBookModelImpl;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.model.source.My716;
@@ -178,10 +179,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     BookSourceBean bookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                             .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookShelf.getTag())).unique();
                     bookSource.setEnable(false);
-                    if (TextUtils.isEmpty(bookSource.getBookSourceGroup()))
-                        bookSource.setBookSourceGroup("禁用");
-                    mView.toast("已禁用" + bookSource.getBookSourceName());
+                    bookSource.addGroup("禁用");
                     DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSource);
+                    BookSourceManage.refreshBookSource();
+                    mView.toast("已禁用" + bookSource.getBookSourceName());
                     break;
             }
         } catch (Exception e) {

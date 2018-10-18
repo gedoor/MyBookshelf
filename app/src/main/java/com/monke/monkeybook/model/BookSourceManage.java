@@ -1,6 +1,7 @@
 package com.monke.monkeybook.model;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.DaoSession;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
@@ -101,11 +103,17 @@ public class BookSourceManage extends BaseModelImpl {
 
     private synchronized static void upGroupList() {
         groupList.clear();
-        for (BookSourceBean bookSourceBean : allBookSource) {
-            if (!TextUtils.isEmpty(bookSourceBean.getBookSourceGroup()) && !groupList.contains(bookSourceBean.getBookSourceGroup())) {
-                groupList.add(bookSourceBean.getBookSourceGroup());
+        String sql = "SELECT DISTINCT " + BookSourceBeanDao.Properties.BookSourceGroup.columnName + " FROM " + BookSourceBeanDao.TABLENAME;
+        Cursor cursor = DbHelper.getInstance().getmDaoSession().getDatabase().rawQuery(sql, null);
+        cursor.moveToFirst();
+        do {
+            String group = cursor.getString(0);
+            if (TextUtils.isEmpty(group) || TextUtils.isEmpty(group.trim())) continue;
+            for (String item: group.split("\\s*[,;，；]\\s*")) {
+                if (TextUtils.isEmpty(item) || groupList.contains(item)) continue;
+                groupList.add(item);
             }
-        }
+        } while (cursor.moveToNext());
         Collections.sort(groupList);
         RxBus.get().post(RxBusTag.UPDATE_BOOK_SOURCE, new Object());
     }
@@ -125,7 +133,7 @@ public class BookSourceManage extends BaseModelImpl {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
-                    if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
+                    if (bookSourceBean.containsGroup("删除")) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
                                 .buildDelete().executeDeleteWithoutDetachingEntities();

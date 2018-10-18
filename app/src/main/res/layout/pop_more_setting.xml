@@ -146,6 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/pt_hide_status_bar"/>
 
                 <View
@@ -167,6 +168,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/pt_hide_navigation_bar"/>
 
                 <View
@@ -187,6 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/showTitle"/>
 
                 <View
@@ -207,6 +210,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/volume_open_page"/>
 
                 <View
@@ -228,6 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/aloud_volume_page"/>
 
                 <View
@@ -248,6 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/click_open_page"/>
 
                 <View
@@ -268,6 +274,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/click_all_next_page"/>
 
                 <View
@@ -288,6 +295,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/showLine"/>
 
                 <View
@@ -310,6 +318,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/showTimeBattery"/>
 
                 <View
@@ -330,6 +339,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
+                    android:textColor="@color/menu_color_default"
                     android:text="@string/tip_margin_change"/>
 
                 <View
