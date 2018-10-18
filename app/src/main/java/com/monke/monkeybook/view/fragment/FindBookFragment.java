@@ -3,33 +3,36 @@ package com.monke.monkeybook.view.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.bean.FindKindBean;
-import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.presenter.FindBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
 import com.monke.monkeybook.view.activity.ChoiceBookActivity;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.listener.OnRecyclerViewListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View {
+public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.expandable_list)
-    ExpandableListView expandableList;
+    RecyclerView expandableList;
     @BindView(R.id.tv_empty)
     TextView tvEmpty;
     @BindView(R.id.refresh_layout)
@@ -68,11 +71,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public synchronized void updateUI(List<FindKindGroupBean> group) {
+    public synchronized void updateUI(List<RecyclerViewData> group) {
         if (group.size() > 0) {
-            adapter.resetDataS(group);
+            adapter.setAllDatas(group);
             if (autoExpandGroup() || group.size() == 1) {
-                expandableList.expandGroup(0);
+//                expandableList.expandGroup(0);
             }
         }
     }
@@ -86,44 +89,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     private void initExpandableList() {
-        adapter = new FindKindAdapter(getActivity());
+        expandableList.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new FindKindAdapter(getActivity(), new ArrayList<>());
+        adapter.setOnItemClickListener(this);
         expandableList.setAdapter(adapter);
         tvEmpty.setText(R.string.find_empty);
-        expandableList.setEmptyView(tvEmpty);
+//        expandableList.setEmptyView(tvEmpty);
         adapter.setOnGroupExpandedListener(this::setExpandedPosition);
-        //  设置分组项的点击监听事件
-        expandableList.setOnGroupClickListener((parent, v, groupPosition, id) -> {
-            boolean result;
-            if (groupPosition == lastExpandedPosition) {
-                result = expandableList.collapseGroup(groupPosition);
-                if (result) {
-                    lastExpandedPosition = -1;
-                }
-                return result;
-            }
-            if (lastExpandedPosition != -1 && groupPosition != lastExpandedPosition) {
-                if (expandableList.collapseGroup(lastExpandedPosition))
-                    lastExpandedPosition = -1;
-            }
-            expandableList.smoothScrollToPositionFromTop(groupPosition, 0, 100);
-            expandableList.setSelection(groupPosition);
-            result = expandableList.expandGroup(groupPosition);
-            if (result)
-                lastExpandedPosition = groupPosition;
-            return result;
-        });
-
-        //  设置子选项点击监听事件
-        expandableList.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-            FindKindBean kindBean = adapter.getDataList().get(groupPosition).getChildren().get(childPosition);
-
-            Intent intent = new Intent(getContext(), ChoiceBookActivity.class);
-            intent.putExtra("url", kindBean.getKindUrl());
-            intent.putExtra("title", kindBean.getKindName());
-            intent.putExtra("tag", kindBean.getTag());
-            startActivityByAnim(intent, v, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
-            return true;
-        });
     }
 
     private void setExpandedPosition(int expandedPosition) {
@@ -142,5 +114,24 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    /**
+     * position 当前在列表中的position
+     */
+    @Override
+    public void onGroupItemClick(int position, int groupPosition, View view) {
+
+    }
+
+    @Override
+    public void onChildItemClick(int position, int groupPosition, int childPosition, View view) {
+        FindKindBean kindBean = (FindKindBean) adapter.getAllDatas().get(groupPosition).getChild(childPosition);
+
+        Intent intent = new Intent(getContext(), ChoiceBookActivity.class);
+        intent.putExtra("url", kindBean.getKindUrl());
+        intent.putExtra("title", kindBean.getKindName());
+        intent.putExtra("tag", kindBean.getTag());
+        startActivityByAnim(intent, view, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

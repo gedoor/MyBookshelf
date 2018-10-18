@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.adapter.BaseRecyclerViewAdapter;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.holder.BaseExpandAbleViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,109 +23,63 @@ import java.util.List;
  * 书源Adapter
  */
 
-public class FindKindAdapter extends BaseExpandableListAdapter {
-    private List<FindKindGroupBean> dataList;
-    private Activity activity;
+public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, FindKindBean, FindKindAdapter.MyViewHolder> {
+    private Context context;
     private OnGroupExpandedListener mOnGroupExpandedListener;
+    private LayoutInflater mInflater;
 
-    public FindKindAdapter(Activity activity) {
-        this.activity = activity;
-        dataList = new ArrayList<>();
-    }
-
-    public void resetDataS(List<FindKindGroupBean> dataS) {
-        this.dataList = dataS;
-        notifyDataSetChanged();
-    }
-
-    public List<FindKindGroupBean> getDataList() {
-        return dataList;
+    public FindKindAdapter(Context context, List<RecyclerViewData> datas) {
+        super(context, datas);
+        this.context = context;
+        mInflater = LayoutInflater.from(context);
     }
 
     public void setOnGroupExpandedListener(OnGroupExpandedListener onGroupExpandedListener) {
         mOnGroupExpandedListener = onGroupExpandedListener;
     }
 
+    /**
+     * return groupView
+     *
+     * @param parent
+     */
     @Override
-    public int getGroupCount() {
-        return dataList.size();
+    public View getGroupView(ViewGroup parent) {
+        return mInflater.inflate(R.layout.item_find_group,parent,false);
     }
 
+    /**
+     * return childView
+     *
+     * @param parent
+     */
     @Override
-    public int getChildrenCount(int i) {
-        return dataList.get(i).getChildrenCount();
+    public View getChildView(ViewGroup parent) {
+        return mInflater.inflate(R.layout.item_find_kind,parent,false);
     }
 
+    /**
+     * return <VH extends BaseViewHolder> instance
+     */
     @Override
-    public Object getGroup(int i) {
-        return dataList.get(i);
+    public MyViewHolder createRealViewHolder(Context ctx, View view, int viewType) {
+        return new MyViewHolder(ctx, view, viewType);
     }
 
+    /**
+     * onBind groupData to groupView
+     */
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return dataList.get(groupPosition).getChildren().get(childPosition);
+    public void onBindGroupHolder(MyViewHolder holder, int groupPos, int position, FindKindGroupBean groupData) {
+        holder.textView.setText(groupData.getGroupName());
     }
 
+    /**
+     * onBind childData to childView
+     */
     @Override
-    public long getGroupId(int i) {
-        return i;
-    }
-
-    @Override
-    public long getChildId(int i, int i1) {
-        return i1;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return true;
-    }
-
-    @Override
-    public View getGroupView(int i, boolean b, View convertView, ViewGroup parent) {
-        GroupViewHolder groupViewHolder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_group, parent, false);
-            groupViewHolder = new GroupViewHolder();
-            groupViewHolder.tvTitle = convertView.findViewById(R.id.tv_kind_name);
-            convertView.setTag(groupViewHolder);
-        } else {
-            groupViewHolder = (GroupViewHolder) convertView.getTag();
-        }
-        groupViewHolder.tvTitle.setText(dataList.get(i).getGroupName());
-        return convertView;
-    }
-
-    @Override
-    public View getChildView(int i, int i1, boolean b, View convertView, ViewGroup parent) {
-        ChildViewHolder childViewHolder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_kind, parent, false);
-            childViewHolder = new ChildViewHolder();
-            childViewHolder.tvTitle = convertView.findViewById(R.id.tv_kind_name);
-            convertView.setTag(childViewHolder);
-        } else {
-            childViewHolder = (ChildViewHolder) convertView.getTag();
-        }
-        childViewHolder.tvTitle.setText(dataList.get(i).getChildren().get(i1).getKindName());
-        return convertView;
-    }
-
-    @Override
-    public boolean isChildSelectable(int i, int i1) {
-        return true;
-    }
-
-    @Override
-    public void onGroupExpanded(int groupPosition) {
-        if (mOnGroupExpandedListener != null) {
-            mOnGroupExpandedListener.onGroupExpanded(groupPosition);
-        }
-    }
-
-    @Override
-    public void onGroupCollapsed(int groupPosition) {
-
+    public void onBindChildpHolder(MyViewHolder holder, int groupPos, int childPos, int position, FindKindBean childData) {
+        holder.textView.setText(childData.getKindName());
     }
 
     public interface OnGroupExpandedListener {
@@ -131,11 +90,28 @@ public class FindKindAdapter extends BaseExpandableListAdapter {
         void onGroupExpanded(int groupPosition);
     }
 
-    private static class GroupViewHolder {
-        TextView tvTitle;
-    }
+    public class MyViewHolder extends BaseExpandAbleViewHolder {
+        TextView textView;
 
-    private static class ChildViewHolder {
-        TextView tvTitle;
+        public MyViewHolder(Context ctx, View itemView, int viewType) {
+            super(ctx, itemView, viewType);
+            textView = itemView.findViewById(R.id.tv_kind_name);
+        }
+
+        /**
+         * return ChildView root layout id
+         */
+        @Override
+        public int getChildViewResId() {
+            return R.id.ll_content;
+        }
+
+        /**
+         * return GroupView root layout id
+         */
+        @Override
+        public int getGroupViewResId() {
+            return R.id.ll_content;
+        }
     }
 }
