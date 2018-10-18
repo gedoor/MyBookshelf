@@ -32,6 +32,8 @@ import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -173,22 +175,31 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 if (TextUtils.isEmpty(mPresenter.getBookShelf().getCustomCoverPath())) {
                     Glide.with(this).load(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl())
                             .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                    .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                                    .placeholder(R.drawable.img_cover_default))
+                            .into(ivCover);
+                    Glide.with(this).load(mPresenter.getBookShelf().getBookInfoBean().getCoverUrl())
+                            .apply(new RequestOptions()
+                                    .dontAnimate()
+                                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                    .placeholder(R.drawable.img_cover_gs))
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                            .into(ivBlurCover);
                 } else if (mPresenter.getBookShelf().getCustomCoverPath().startsWith("http")) {
                     Glide.with(this).load(mPresenter.getBookShelf().getCustomCoverPath())
                             .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                     .placeholder(R.drawable.img_cover_default)).into(ivCover);
+                    Glide.with(this).load(mPresenter.getBookShelf().getCustomCoverPath())
+                            .apply(new RequestOptions()
+                                    .dontAnimate()
+                                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                                    .placeholder(R.drawable.img_cover_gs))
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                            .into(ivBlurCover);
                 } else {
                     ivCover.setImageBitmap(BitmapFactory.decodeFile(mPresenter.getBookShelf().getCustomCoverPath()));
                 }
 
-                Glide.with(this).load(mPresenter.getBookShelf().getCustomCoverPath())
-                        .apply(new RequestOptions()
-                                .dontAnimate()
-                                .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                .placeholder(R.drawable.img_cover_gs))
-                        .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
-                        .into(ivBlurCover);
+
             }
         }
         tvLoading.startAnimation(animHideLoading);
@@ -276,7 +287,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 Glide.with(this).load(coverUrl)
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                 .placeholder(R.drawable.img_cover_default)).into(ivCover);
-            } else if (customCoverPath.startsWith("http")) {
+            } else if (Objects.requireNonNull(customCoverPath).startsWith("http")) {
                 Glide.with(this).load(customCoverPath)
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                 .placeholder(R.drawable.img_cover_default)).into(ivCover);
