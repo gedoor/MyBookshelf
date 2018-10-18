@@ -459,10 +459,9 @@ public class BookSourceBean implements Parcelable, Cloneable {
     }
 
     private void upGroupList() {
-        if (TextUtils.isEmpty(bookSourceGroup)) {
-            groupList = new ArrayList<>();
-        } else {
-            for (String group: bookSourceGroup.split("\\s*[,;，；]\\s*")) {
+        groupList = new ArrayList<>();
+        if (!TextUtils.isEmpty(bookSourceGroup)) {
+            for (String group : bookSourceGroup.split("\\s*[,;，；]\\s*")) {
                 group = group.trim();
                 if (TextUtils.isEmpty(group) || groupList.contains(group)) continue;
                 groupList.add(group);
