@@ -47,6 +47,8 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
      */
     private List<List<S>> childDatas;
 
+    private boolean canExpandAll;
+
     private OnRecyclerViewListener.OnItemClickListener itemClickListener;
     private OnRecyclerViewListener.OnItemLongClickListener itemLongClickListener;
 
@@ -320,7 +322,11 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
      * if return true Allow all expand otherwise Only one can be expand at the same time
      * */
     public boolean canExpandAll() {
-        return true;
+        return canExpandAll;
+    }
+
+    public void setCanExpandAll(boolean canExpandAll) {
+        this.canExpandAll = canExpandAll;
     }
 
     /**

@@ -92,6 +92,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         adapter.setOnItemClickListener(this);
         expandableList.setAdapter(adapter);
         adapter.setOnGroupExpandedListener(this::setExpandedPosition);
+        adapter.setCanExpandAll(false);
     }
 
     private void setExpandedPosition(int expandedPosition) {
