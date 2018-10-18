@@ -176,14 +176,14 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                                 RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                                 mView.updateView();
                             } else {
-                                Toast.makeText(MApplication.getInstance(), "移出书架失败!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MApplication.getInstance(), "删除书籍失败!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
-                            Toast.makeText(MApplication.getInstance(), "移出书架失败!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MApplication.getInstance(), "删除书籍失败!", Toast.LENGTH_SHORT).show();
                         }
                     });
         }

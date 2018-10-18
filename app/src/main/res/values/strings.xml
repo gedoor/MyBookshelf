@@ -148,7 +148,7 @@
     <string name="import_select_book">导入选择书籍</string>
     <string name="update_search_threads_num">更新和搜索线程数</string>
     <string name="change_icon">切换图标</string>
-    <string name="remove_from_bookshelf">移出书架</string>
+    <string name="remove_from_bookshelf">删除书籍</string>
     <string name="start_read">开始阅读</string>
     <string name="data_loading">加载数据中…</string>
     <string name="book_intro">内容简介</string>
@@ -255,9 +255,10 @@
     <string name="download_update">下载更新</string>
     <string name="aloud_volume_page">朗读时音量键翻页</string>
     <string name="tip_margin_change">Tip边距跟随边距调整</string>
-    <string name="disable_update">完结</string>
-    <string name="allow_update">连载</string>
+    <string name="disable_update">禁止更新</string>
+    <string name="allow_update">允许更新</string>
     <string name="revert_selection">反转选择</string>
     <string name="search_book_key">搜索书名、作者</string>
+    <string name="faq">常见问题</string>
 
 </resources>

@@ -134,8 +134,9 @@ public class BookshelfHelp {
         File file = getBookFile(folderName, index, fileName);
         //获取流并存储
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(fileName.substring(fileName.indexOf("-") + 1) + "\n");
+            writer.write(fileName + "\n\n");
             writer.write(content);
+            writer.write("\n\n");
             writer.flush();
             setChapterIsCached(folderName, index, true);
             return true;

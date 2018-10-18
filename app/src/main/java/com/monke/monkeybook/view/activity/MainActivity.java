@@ -51,6 +51,7 @@ import com.monke.monkeybook.base.BaseTabActivity;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
@@ -567,6 +568,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             }
             exitTime = System.currentTimeMillis();
         } else {
+            DataBackup.getInstance().autosave();
             finish();
         }
     }

@@ -18,6 +18,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ReplaceRuleManage;
 import com.monke.monkeybook.utils.FileUtil;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by GKF on 2018/1/30.
@@ -35,6 +37,26 @@ public class DataBackup {
 
     public static DataBackup getInstance() {
         return new DataBackup();
+    }
+
+
+    public void autosave() {
+        long currentTime = System.currentTimeMillis();
+        if (EasyPermissions.hasPermissions(MApplication.getInstance(), MApplication.PerList)) {
+            long lastBackupTime = (long) SharedPreferencesUtil.getData(MApplication.getInstance(), "BackupTime", 0L);
+            if (currentTime - lastBackupTime > 24 * 3600 * 1000) {
+                DocumentHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "YueDu");
+                String dirPath = FileUtil.getSdCardPath() + "/YueDu";
+                DocumentHelper.createDirIfNotExist(dirPath, "autosave");
+                dirPath += "/autosave";
+                backupBookShelf(dirPath);
+                backupBookSource(dirPath);
+                backupSearchHistory(dirPath);
+                backupReplaceRule(dirPath);
+                backupConfig(dirPath);
+                SharedPreferencesUtil.saveData(MApplication.getInstance(), "BackupTime", currentTime);
+            }
+        }
     }
 
     public void run() {

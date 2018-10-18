@@ -137,7 +137,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
                 tvChapter.setText(getString(R.string.read_dur_progress, mPresenter.getBookShelf().getDurChapterName()));
-                tvShelf.setText("移出书架");
+                tvShelf.setText(R.string.remove_from_bookshelf);
                 tvRead.setText("继续阅读");
                 setTvUpdate(mPresenter.getBookShelf().getAllowUpdate(), true);
                 tvShelf.setOnClickListener(v -> {

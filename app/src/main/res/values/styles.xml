@@ -10,6 +10,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
+        <item name="android:itemTextAppearance">@style/MenuItemTextStyle</item>
     </style>
 
     <style name="NavigationViewStyle">
@@ -23,6 +24,11 @@
         <item name="android:textColorPrimary">@color/tv_text_default</item>
         <item name="textColorAlertDialogListItem">@color/tv_text_default</item>
 
+    </style>
+
+    <style name="MenuItemTextStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/menu_color_default</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
