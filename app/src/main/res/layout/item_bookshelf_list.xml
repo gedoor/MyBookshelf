@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_content"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:layout_margin="5dp"
-    android:background="@null"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="5dp"
+    android:background="#00000000"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
 
             <ImageView
                 android:id="@+id/iv_cover"
@@ -35,6 +32,7 @@
             android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
             android:paddingEnd="2dp"
+            android:includeFontPadding="false"
             android:singleLine="true"
             android:text="@string/tv_book_name"
             android:textColor="@color/tv_text_default"
@@ -75,6 +73,7 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
+            android:layout_marginTop="5dp"
             android:paddingEnd="2dp"
             android:singleLine="true"
             android:text="@string/read_dur_progress"
@@ -97,23 +96,27 @@
             android:textSize="12sp"
             app:minTextSize="10sp" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_last"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_toEndOf="@+id/iv_cover">
+
         <com.monke.mprogressbar.MHorProgressBar
             android:id="@+id/mpb_durProgress"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_below="@+id/tv_last"
-            android:layout_alignParentEnd="true"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginRight="12dp"
-            android:layout_toEndOf="@+id/iv_cover"
+            android:layout_height="1.5dp"
             android:visibility="invisible"
             app:bgdrawable="@color/btn_bg_press"
+            android:layout_alignParentBottom="true"
             app:cantouch="false"
             app:fontdrawable="@color/d_blue"
             tools:ignore="RtlHardcoded" />
-
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</RelativeLayout>
 
