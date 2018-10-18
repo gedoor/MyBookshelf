@@ -29,5 +29,20 @@ public interface OnRecyclerViewListener {
         void onChildItemLongClick(int position, int groupPosition, int childPosition, View view);
     }
 
+    interface OnGroupExpandedListener {
+        /**
+         * 分组展开
+         * @param groupPosition 分组的位置
+         */
+        void onGroupExpanded(int groupPosition);
+    }
+
+    interface OnGroupCollapseListener {
+        /**
+         * 分组收起
+         * @param groupPosition 分组的位置
+         */
+        void onGroupCollapse(int groupPosition);
+    }
 
 }

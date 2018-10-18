@@ -51,12 +51,23 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
 
     private OnRecyclerViewListener.OnItemClickListener itemClickListener;
     private OnRecyclerViewListener.OnItemLongClickListener itemLongClickListener;
+    private OnRecyclerViewListener.OnGroupCollapseListener groupCollapseListener;
+    private OnRecyclerViewListener.OnGroupExpandedListener groupExpandedListener;
 
     public void setOnItemClickListener(OnRecyclerViewListener.OnItemClickListener listener) {
         this.itemClickListener = listener;
     }
+
     public void setOnItemLongClickListener(OnRecyclerViewListener.OnItemLongClickListener longClickListener){
         this.itemLongClickListener = longClickListener;
+    }
+
+    public void setGroupCollapseListener(OnRecyclerViewListener.OnGroupCollapseListener groupCollapseListener) {
+        this.groupCollapseListener = groupCollapseListener;
+    }
+
+    public void setGroupExpandedListener(OnRecyclerViewListener.OnGroupExpandedListener groupExpandedListener) {
+        this.groupExpandedListener = groupExpandedListener;
     }
 
     public BaseRecyclerViewAdapter(Context ctx, List<RecyclerViewData> datas) {
@@ -225,6 +236,9 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
                 notifyItemRangeChanged(tempPsi+1,showingDatas.size()-(tempPsi+1));
             }
         }
+        if (groupExpandedListener != null) {
+            groupExpandedListener.onGroupExpanded(position);
+        }
     }
 
     /**
@@ -250,6 +264,9 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
             showingDatas.removeAll(tempChilds);
             notifyItemRangeRemoved(position+1,tempChilds.size());
             notifyItemRangeChanged(position+1,tempSize-(position+1));
+            if (groupCollapseListener != null) {
+                groupCollapseListener.onGroupCollapse(position);
+            }
             return position;
         }
         return -1;

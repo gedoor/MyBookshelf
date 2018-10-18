@@ -25,17 +25,12 @@ import java.util.List;
 
 public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, FindKindBean, FindKindAdapter.MyViewHolder> {
     private Context context;
-    private OnGroupExpandedListener mOnGroupExpandedListener;
     private LayoutInflater mInflater;
 
     public FindKindAdapter(Context context, List<RecyclerViewData> datas) {
         super(context, datas);
         this.context = context;
         mInflater = LayoutInflater.from(context);
-    }
-
-    public void setOnGroupExpandedListener(OnGroupExpandedListener onGroupExpandedListener) {
-        mOnGroupExpandedListener = onGroupExpandedListener;
     }
 
     /**
@@ -80,14 +75,6 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
     @Override
     public void onBindChildpHolder(MyViewHolder holder, int groupPos, int childPos, int position, FindKindBean childData) {
         holder.textView.setText(childData.getKindName());
-    }
-
-    public interface OnGroupExpandedListener {
-        /**
-         * 分组展开
-         * @param groupPosition 分组的位置
-         */
-        void onGroupExpanded(int groupPosition);
     }
 
     public class MyViewHolder extends BaseExpandAbleViewHolder {

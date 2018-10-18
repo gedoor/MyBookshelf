@@ -39,7 +39,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     Unbinder unbinder;
 
     private FindKindAdapter adapter;
-    private int lastExpandedPosition = -1;
 
     @Override
     public int createLayoutId() {
@@ -91,12 +90,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         adapter = new FindKindAdapter(getActivity(), new ArrayList<>());
         adapter.setOnItemClickListener(this);
         expandableList.setAdapter(adapter);
-        adapter.setOnGroupExpandedListener(this::setExpandedPosition);
         adapter.setCanExpandAll(false);
-    }
-
-    private void setExpandedPosition(int expandedPosition) {
-        lastExpandedPosition = expandedPosition;
     }
 
     @Override
