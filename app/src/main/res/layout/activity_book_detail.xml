@@ -32,7 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#70000000"
+            android:background="#88000000"
             android:orientation="vertical">
 
             <LinearLayout
@@ -170,6 +170,11 @@
                         android:text="@string/read_dur_progress"
                         android:textColor="#ffffff"
                         android:textSize="13sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
 
                     <RadioGroup
                         android:id="@+id/rg_book_group"
