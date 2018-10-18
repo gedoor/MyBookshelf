@@ -40,15 +40,15 @@ public class DataBackup {
     }
 
 
-    public void autosave() {
+    public void autoSave() {
         long currentTime = System.currentTimeMillis();
         if (EasyPermissions.hasPermissions(MApplication.getInstance(), MApplication.PerList)) {
             long lastBackupTime = (long) SharedPreferencesUtil.getData(MApplication.getInstance(), "BackupTime", 0L);
             if (currentTime - lastBackupTime > 24 * 3600 * 1000) {
                 DocumentHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "YueDu");
                 String dirPath = FileUtil.getSdCardPath() + "/YueDu";
-                DocumentHelper.createDirIfNotExist(dirPath, "autosave");
-                dirPath += "/autosave";
+                DocumentHelper.createDirIfNotExist(dirPath, "autoSave");
+                dirPath += "/autoSave";
                 backupBookShelf(dirPath);
                 backupBookSource(dirPath);
                 backupSearchHistory(dirPath);
