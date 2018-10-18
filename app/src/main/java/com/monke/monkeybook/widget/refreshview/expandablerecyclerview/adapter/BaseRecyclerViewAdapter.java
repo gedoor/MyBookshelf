@@ -186,7 +186,7 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
      * expandGroup
      * @param position showingDatas position
      */
-    private void expandGroup(int position) {
+    public void expandGroup(int position) {
         Object item = showingDatas.get(position);
         if (null == item) {
             return;

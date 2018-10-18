@@ -33,8 +33,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     LinearLayout llContent;
     @BindView(R.id.expandable_list)
     RecyclerView expandableList;
-    @BindView(R.id.tv_empty)
-    TextView tvEmpty;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
 
@@ -75,7 +73,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (group.size() > 0) {
             adapter.setAllDatas(group);
             if (autoExpandGroup() || group.size() == 1) {
-//                expandableList.expandGroup(0);
+                adapter.expandGroup(0);
             }
         }
     }
@@ -93,8 +91,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         adapter = new FindKindAdapter(getActivity(), new ArrayList<>());
         adapter.setOnItemClickListener(this);
         expandableList.setAdapter(adapter);
-        tvEmpty.setText(R.string.find_empty);
-//        expandableList.setEmptyView(tvEmpty);
         adapter.setOnGroupExpandedListener(this::setExpandedPosition);
     }
 
@@ -104,7 +100,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
