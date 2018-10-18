@@ -207,11 +207,17 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     }
 
     private void setTvUpdate(boolean update, boolean show) {
-//        tvUpdate.setVisibility(show ? View.VISIBLE : View.GONE);
-//        if (show) {
-//            tvUpdate.setText(update ? R.string.allow_update : R.string.disable_update);
-//            tvUpdate.setTextColor(getResources().getColor(update ? R.color.white : R.color.darker_gray));
-//        }
+        switch (mPresenter.getBookShelf().getGroup()) {
+            case 0:
+                rbZg.setChecked(true);
+                break;
+            case 1:
+                rbYf.setChecked(true);
+                break;
+            case 2:
+                rbWj.setChecked(true);
+                break;
+        }
     }
 
     @Override
