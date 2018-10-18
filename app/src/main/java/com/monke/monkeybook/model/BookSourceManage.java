@@ -168,7 +168,7 @@ public class BookSourceManage extends BaseModelImpl {
 
                                         @Override
                                         public void onError(Throwable e) {
-                                            Toast.makeText(context, "默认书源加载失败.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, "默认书源加载失败." + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } catch (Exception e) {
