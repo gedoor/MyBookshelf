@@ -121,7 +121,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
     }
 
-
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
@@ -138,7 +137,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvName.setText(mPresenter.getBookShelf().getBookInfoBean().getName());
             tvAuthor.setText(mPresenter.getBookShelf().getBookInfoBean().getAuthor());
             if (mPresenter.getInBookShelf()) {
-                tvChapter.setText(getString(R.string.read_dur_progress, mPresenter.getBookShelf().getDurChapterName()));
+                tvChapter.setText(mPresenter.getBookShelf().getDurChapterName());
                 tvShelf.setText(R.string.remove_from_bookshelf);
                 tvRead.setText("继续阅读");
                 setTvUpdate(mPresenter.getBookShelf().getAllowUpdate(), true);
@@ -148,7 +147,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 });
             } else {
                 setTvUpdate(false, false);
-                tvChapter.setText(getString(R.string.book_search_last, mPresenter.getBookShelf().getLastChapterName()));
+                tvChapter.setText(mPresenter.getBookShelf().getLastChapterName());
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
@@ -163,13 +162,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvIntro.setVisibility(View.VISIBLE);
                 tvIntro.startAnimation(animShowInfo);
             }
-            if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
-                ivWeb.setVisibility(View.VISIBLE);
-                tvOrigin.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getOrigin())) {
                 tvOrigin.setText(mPresenter.getBookShelf().getBookInfoBean().getOrigin());
             } else {
-                ivWeb.setVisibility(View.GONE);
-                tvOrigin.setVisibility(View.GONE);
+                tvOrigin.setText(R.string.local);
             }
             if (!this.isFinishing()) {
                 if (TextUtils.isEmpty(mPresenter.getBookShelf().getCustomCoverPath())) {
@@ -251,11 +247,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             customCoverPath = mPresenter.getBookShelf().getCustomCoverPath();
             name = mPresenter.getBookShelf().getBookInfoBean().getName();
             author = mPresenter.getBookShelf().getBookInfoBean().getAuthor();
-            if (mPresenter.getBookShelf().getBookInfoBean().getOrigin() != null && mPresenter.getBookShelf().getBookInfoBean().getOrigin().length() > 0) {
-                tvOrigin.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getOrigin())) {
                 tvOrigin.setText(mPresenter.getBookShelf().getBookInfoBean().getOrigin());
             } else {
-                tvOrigin.setVisibility(View.GONE);
+                tvOrigin.setText(R.string.local);
             }
             updateView();
         } else {
@@ -263,13 +258,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             coverUrl = mPresenter.getSearchBook().getCoverUrl();
             name = mPresenter.getSearchBook().getName();
             author = mPresenter.getSearchBook().getAuthor();
-            if (mPresenter.getSearchBook().getOrigin() != null && mPresenter.getSearchBook().getOrigin().length() > 0) {
-                tvOrigin.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(mPresenter.getSearchBook().getOrigin())) {
                 tvOrigin.setText(mPresenter.getSearchBook().getOrigin());
-            } else {
-                tvOrigin.setVisibility(View.GONE);
             }
-            tvChapter.setText(getString(R.string.book_search_last, mPresenter.getSearchBook().getLastChapter()));
+            tvChapter.setText(mPresenter.getSearchBook().getLastChapter());
             tvIntro.setText(mPresenter.getSearchBook().getIntroduce());
             tvShelf.setText("放入书架");
             tvRead.setText("开始阅读");
