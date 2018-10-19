@@ -31,7 +31,7 @@
                 android:background="@color/background"
                 android:orientation="horizontal">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/iv_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,7 +42,8 @@
                     android:clickable="true"
                     android:contentDescription="@string/back"
                     android:focusable="true"
-                    android:src="@drawable/ic_arrow_back_black_24dp" />
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    app:tint="@color/tv_text_default"/>
 
                 <android.support.design.widget.TabLayout
                     android:id="@+id/toolbar_tab"

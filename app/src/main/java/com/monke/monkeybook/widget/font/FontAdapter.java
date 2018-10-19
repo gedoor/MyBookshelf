@@ -44,8 +44,6 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
             holder.tvFont.setText(fileList.get(position).getName());
             if (fileList.get(position).getAbsolutePath().equals(selectPath)) {
                 holder.ivChecked.setVisibility(View.VISIBLE);
-                holder.ivChecked.getDrawable().mutate();
-                holder.ivChecked.getDrawable().setColorFilter(context.getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
             } else {
                 holder.ivChecked.setVisibility(View.INVISIBLE);
             }

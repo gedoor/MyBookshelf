@@ -95,8 +95,6 @@ public class ChapterListView extends FrameLayout {
             public void onAnimationStart(Animation animation) {
                 flBg.setOnClickListener(null);
                 changeListener.animIn();
-                ivBack.getDrawable().mutate();
-                ivBack.getDrawable().setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             }
 
             @Override

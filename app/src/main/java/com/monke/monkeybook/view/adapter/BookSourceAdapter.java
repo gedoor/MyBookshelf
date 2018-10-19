@@ -111,8 +111,6 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             activity.saveDate(dataList.get(position));
             activity.upDateSelectAll();
         });
-        holder.editView.getDrawable().mutate();
-        holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.editView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, SourceEditActivity.class);
             String key = String.valueOf(System.currentTimeMillis());
@@ -125,15 +123,11 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             }
             activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
         });
-        holder.delView.getDrawable().mutate();
-        holder.delView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.delView.setOnClickListener(view -> {
             activity.delBookSource(dataList.get(position));
             dataList.remove(position);
             notifyDataSetChanged();
         });
-        holder.topView.getDrawable().mutate();
-        holder.topView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.topView.setOnClickListener(view -> {
             allDataList(BookSourceManage.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
