@@ -1766,7 +1766,7 @@ public class ImmersionBar {
      * 设置暗色导航栏按钮
      */
     private int setNavigationBarLightFont(int uiFlags) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBarParams.navigationBardarkFont) {
+        if (canNavigationBarDarkFont() && mBarParams.navigationBardarkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         } else {
             return uiFlags;
