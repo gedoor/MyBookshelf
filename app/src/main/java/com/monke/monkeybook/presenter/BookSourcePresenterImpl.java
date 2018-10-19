@@ -86,7 +86,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mView.getContext(), "删除失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         mView.refreshBookSource();
                     }
                 });
@@ -111,7 +111,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mView.getContext(), "删除失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
