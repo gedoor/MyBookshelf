@@ -40,6 +40,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/screen_direction" />
 
                     <TextView
@@ -47,6 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/screen_unspecified" />
 
                 </LinearLayout>
@@ -78,6 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/keep_light" />
 
                     <TextView
@@ -85,6 +88,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/keep_light" />
 
                 </LinearLayout>
@@ -116,6 +120,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/jf_convert" />
 
                     <TextView
@@ -123,6 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:textColor="@color/menu_color_default"
                         android:text="@string/keep_light" />
 
                 </LinearLayout>
