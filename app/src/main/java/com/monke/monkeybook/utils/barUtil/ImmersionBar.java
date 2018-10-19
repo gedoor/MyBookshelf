@@ -1,5 +1,6 @@
 package com.monke.monkeybook.utils.barUtil;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -1732,6 +1733,7 @@ public class ImmersionBar {
      * @return the int
      */
 
+    @SuppressLint("ObsoleteSdkInt")
     private int hideBar(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             switch (mBarParams.barHide) {
@@ -1936,7 +1938,7 @@ public class ImmersionBar {
             Class clazz = window.getClass();
             try {
                 int darkModeFlag;
-                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                @SuppressLint("PrivateApi") Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
