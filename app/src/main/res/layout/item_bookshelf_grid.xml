@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <View
         android:layout_width="0dp"
@@ -15,11 +15,9 @@
     <RelativeLayout
         android:id="@+id/fl_content"
         android:layout_width="85dp"
-        android:layout_height="124dp"
+        android:layout_height="116dp"
         android:layout_gravity="center"
         android:visibility="invisible">
-
-
 
         <ImageView
             android:id="@+id/iv_cover"
@@ -30,30 +28,42 @@
             android:transitionName="img_cover"
             tools:ignore="UnusedAttribute" />
 
-            <FrameLayout
-                android:id="@+id/fl_has_new"
+        <FrameLayout
+            android:id="@+id/fl_has_new"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            tools:ignore="RtlHardcoded">
+
+            <ImageView
+                android:id="@+id/iv_has_new"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_alignParentRight="true">
+                android:padding="8dp"
+                android:src="@drawable/ic_circle_red_24dp"
+                android:visibility="invisible" />
 
-                <ImageView
-                    android:id="@+id/iv_has_new"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_circle_red_24dp"
-                    android:visibility="invisible" />
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/rl_loading"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:loading_color="@color/white"
+                app:loading_width="2dp" />
 
-                <com.victor.loading.rotate.RotateLoading
-                    android:id="@+id/rl_loading"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:visibility="invisible"
-                    app:loading_color="@color/white"
-                    app:loading_width="2dp" />
+        </FrameLayout>
 
-            </FrameLayout>
+        <com.monke.mprogressbar.MHorProgressBar
+            android:id="@+id/mpb_durProgress"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"
+            app:bgdrawable="@color/white"
+            app:cantouch="false"
+            app:fontdrawable="@color/d_blue"
+            tools:ignore="RtlHardcoded" />
 
         <ImageButton
             android:id="@+id/ib_content"
@@ -63,41 +73,18 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_name"
         android:layout_width="match_parent"
-        android:layout_height="29dp"
-        android:layout_gravity="center"
-        tools:ignore="RelativeOverlap"
-        android:background="#00000000"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/mpb_durProgress"
-            android:layout_width="85dp"
-            android:layout_height="3dp"
-            android:layout_alignParentTop="true"
-            app:fontdrawable="@color/d_blue"
-            app:cantouch="false"
-            app:bgdrawable="@color/white"
-            android:visibility="invisible"
-            tools:ignore="RtlHardcoded" />
-
-
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:gravity="center"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:singleLine="true"
-            android:text="ss"
-            android:textSize="12sp"
-            app:minTextSize="10sp" />
-
-    </LinearLayout>
+        android:layout_height="26dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:singleLine="true"
+        android:text="ss"
+        android:textSize="12sp"
+        app:minTextSize="10sp" />
 
     <View
         android:layout_width="0dp"
