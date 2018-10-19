@@ -2,6 +2,7 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -33,6 +34,10 @@ public class MoreSettingPop extends PopupWindow {
     Switch sbShowTimeBattery;
     @BindView(R.id.sb_hideStatusBar)
     Switch sbHideStatusBar;
+    @BindView(R.id.reNavbarcolor)
+    TextView reNavbarcolor;
+    @BindView(R.id.reNavbarcolor_val)
+    TextView reNavbarcolor_val;
     @BindView(R.id.ll_hideStatusBar)
     LinearLayout llHideStatusBar;
     @BindView(R.id.ll_showTimeBattery)
@@ -176,8 +181,20 @@ public class MoreSettingPop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
-                        changeProListener.recreate();
                         dialogInterface.dismiss();
+                        changeProListener.recreate();
+                    })
+                    .create();
+            dialog.show();
+        });
+        reNavbarcolor_val.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.re_navigation_bar_color))
+                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.NavbarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
+                        readBookControl.setNavbarColor(i);
+                        upNavbarColor(i);
+                        dialogInterface.dismiss();
+                        changeProListener.recreate();
                     })
                     .create();
             dialog.show();
@@ -188,8 +205,8 @@ public class MoreSettingPop extends PopupWindow {
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_direction_list_title), readBookControl.getScreenDirection(), (dialogInterface, i) -> {
                         readBookControl.setScreenDirection(i);
                         upScreenDirection(i);
-                        changeProListener.recreate();
                         dialogInterface.dismiss();
+                        changeProListener.recreate();
                     })
                     .create();
             dialog.show();
@@ -200,10 +217,16 @@ public class MoreSettingPop extends PopupWindow {
         upScreenDirection(readBookControl.getScreenDirection());
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
+        upNavbarColor(readBookControl.getNavbarColor());
         swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setChecked(readBookControl.getHideNavigationBar());
+        if(readBookControl.getHideNavigationBar()){
+            reNavbarcolor_val.setEnabled(false);
+            reNavbarcolor.setTextColor(Color.GRAY);
+            reNavbarcolor_val.setTextColor(Color.GRAY);
+        }
         sbClick.setChecked(readBookControl.getCanClickTurn());
         sbClickAllNext.setChecked(readBookControl.getClickAllNext());
         sbShowTitle.setChecked(readBookControl.getShowTitle());
@@ -232,6 +255,10 @@ public class MoreSettingPop extends PopupWindow {
 
     private void upFConvert(int fConvert) {
         tvJFConvert.setText(activity.getResources().getStringArray(R.array.convert_s)[fConvert]);
+    }
+
+    private void upNavbarColor(int nColor) {
+        reNavbarcolor_val.setText(activity.getResources().getStringArray(R.array.NavbarColors)[nColor]);
     }
 
     private void upScreenDirection(int screenDirection) {
