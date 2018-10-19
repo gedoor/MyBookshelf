@@ -127,7 +127,7 @@ public class BookshelfHelp {
     /**
      * 存储章节
      */
-    public static boolean saveChapterInfo(String folderName, int index, String fileName, String content) {
+    public static synchronized boolean saveChapterInfo(String folderName, int index, String fileName, String content) {
         if (content == null) {
             return false;
         }
