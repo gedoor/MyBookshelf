@@ -280,7 +280,7 @@ public abstract class PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
-        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
+        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()), mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
         skipToChapter(mCurChapterPos);
     }
 
@@ -359,6 +359,7 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定章节
+     *
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
@@ -426,7 +427,7 @@ public abstract class PageLoader {
         mPageView.setContentDescription(getContent(getPagePos()));
         mPageView.upPagePos(mCurChapterPos, mCurPage.position);
         mCollBook.setDurChapter(mCurChapterPos);
-        mCollBook.setDurChapterPage( mCurPage.position);
+        mCollBook.setDurChapterPage(mCurPage.position);
         mPageChangeListener.onPageChange(mCurChapterPos, getPagePos());
     }
 
@@ -594,7 +595,7 @@ public abstract class PageLoader {
 
                 // 防止记录页的页号，大于当前最大页号
                 pagePos = (mCurPageList != null && mCurPageList.size() > 1) ?
-                        Math.min(pagePos, mCurPageList.size() - 1) : 0 ;
+                        Math.min(pagePos, mCurPageList.size() - 1) : 0;
                 mCurPage = getCurPage(pagePos);
                 mCancelPage = mCurPage;
                 // 切换状态
@@ -685,7 +686,7 @@ public abstract class PageLoader {
     /**
      * 加载页面列表
      */
-    private List<TxtPage> loadPageList(int chapterPos) throws Exception {
+    private List<TxtPage> loadPageList(int chapterPos) {
         // 获取章节
         ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
         // 判断章节是否存在
@@ -693,8 +694,13 @@ public abstract class PageLoader {
             return null;
         }
         // 获取章节的文本流
-        BufferedReader reader = getChapterReader(chapter);
-        return loadPageList(chapter, reader);
+        try {
+            BufferedReader reader = getChapterReader(chapter);
+            return loadPageList(chapter, reader);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -1047,7 +1053,7 @@ public abstract class PageLoader {
         mCurChapterPos = prevChapter;
 
         // 当前章缓存为下一章
-        if(getChapterPageStatus(mLastChapterPos) == STATUS_FINISH || getChapterPageStatus(mLastChapterPos) == STATUS_EMPTY)
+        if (getChapterPageStatus(mLastChapterPos) == STATUS_FINISH || getChapterPageStatus(mLastChapterPos) == STATUS_EMPTY)
             mNextPageList = mCurPageList;
         else {
             mNextPageList = null;
@@ -1100,7 +1106,7 @@ public abstract class PageLoader {
 
         mCancelPage = mCurPage;
         // 解析下一章数据
-        if (parseNextChapter() && mCurPageList != null && mCurPageList.size() > 0) {
+        if (parseNextChapter() && mCurPageList.size() > 0) {
             mCurPage = mCurPageList.get(0);
         } else {
             mCurPage = new TxtPage();
@@ -1136,7 +1142,7 @@ public abstract class PageLoader {
         mCurChapterPos = nextChapter;
 
         // 将当前章的页面列表，作为上一章缓存
-        if(getChapterPageStatus(mLastChapterPos) == STATUS_FINISH || getChapterPageStatus(mLastChapterPos) == STATUS_EMPTY)
+        if (getChapterPageStatus(mLastChapterPos) == STATUS_FINISH || getChapterPageStatus(mLastChapterPos) == STATUS_EMPTY)
             mPrePageList = mCurPageList;
         else
             mPrePageList = null;
@@ -1149,7 +1155,7 @@ public abstract class PageLoader {
             chapterChangeCallback();
         } else {
             // 处理页面解析
-            dealLoadPageList(nextChapter);
+            dealLoadPageList(mCurChapterPos);
         }
         // 预加载下一页面
         preLoadNextChapter();
@@ -1157,27 +1163,19 @@ public abstract class PageLoader {
     }
 
     void dealLoadPageList(int chapterPos) {
-        try {
-            mCurPageList = loadPageList(chapterPos);
-            if (mCurPageList != null) {
-                if (mCurPageList.isEmpty()) {
-                    setChapterPageStatus(chapterPos, STATUS_EMPTY);
-                    // 添加一个空数据
-                    TxtPage page = new TxtPage();
-                    page.lines = new ArrayList<>(1);
-                    mCurPageList.add(page);
-                } else {
-                    setChapterPageStatus(chapterPos, STATUS_FINISH);
-                }
+        mCurPageList = loadPageList(chapterPos);
+        if (mCurPageList != null) {
+            if (mCurPageList.isEmpty()) {
+                setChapterPageStatus(chapterPos, STATUS_EMPTY);
+                // 添加一个空数据
+                TxtPage page = new TxtPage();
+                page.lines = new ArrayList<>(1);
+                mCurPageList.add(page);
             } else {
-                setChapterPageStatus(chapterPos, STATUS_LOADING);
+                setChapterPageStatus(chapterPos, STATUS_FINISH);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            mCurPageList = null;
-            setChapterPageStatus(chapterPos, STATUS_ERROR);
-            Log.e("MonkeyBook", e.getLocalizedMessage());
-            errorMsg = "未知错误";
+        } else {
+            setChapterPageStatus(chapterPos, STATUS_LOADING);
         }
 
         // 回调
@@ -1198,8 +1196,7 @@ public abstract class PageLoader {
         int nextChapter = mCurChapterPos + 1;
 
         // 如果不存在下一章，且下一章没有数据，则不进行加载。
-        if (!hasNextChapter()
-                || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
+        if (!hasNextChapter() || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
             return;
         }
 
@@ -1209,24 +1206,24 @@ public abstract class PageLoader {
         }
 
         //调用异步进行预加载加载
-        Single.create((SingleOnSubscribe<List<TxtPage>>) e -> e.onSuccess(loadPageList(nextChapter)))
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<TxtPage>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mPreLoadDisposable = d;
-                    }
-
-                    @Override
-                    public void onSuccess(List<TxtPage> pages) {
-                        mNextPageList = pages;
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //无视错误
-                    }
-                });
+//        Single.create((SingleOnSubscribe<List<TxtPage>>) e -> e.onSuccess(loadPageList(nextChapter)))
+//                .compose(RxUtils::toSimpleSingle)
+//                .subscribe(new SingleObserver<List<TxtPage>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        mPreLoadDisposable = d;
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(List<TxtPage> pages) {
+//                        mNextPageList = pages;
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        //无视错误
+//                    }
+//                });
     }
 
     /**

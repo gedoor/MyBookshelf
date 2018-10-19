@@ -95,12 +95,13 @@
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:layout_width="18sp"
                             android:layout_height="18sp"
                             android:contentDescription="@string/author"
                             android:paddingRight="2dp"
                             android:src="@drawable/ic_person_outline_24dp"
+                            app:tint="@android:color/white"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                         <TextView
@@ -125,13 +126,14 @@
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/iv_web"
                             android:layout_width="18sp"
                             android:layout_height="18sp"
                             android:contentDescription="@string/origin"
                             android:paddingRight="2dp"
                             android:src="@drawable/ic_web_outline_24dp"
+                            app:tint="@android:color/white"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
                         <TextView
@@ -160,22 +162,39 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_chapter"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:singleLine="true"
-                        android:text="@string/read_dur_progress"
-                        android:textColor="#ffffff"
-                        android:textSize="13sp" />
+                        android:paddingBottom="3dp">
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/iv_last"
+                            android:layout_width="18sp"
+                            android:layout_height="18sp"
+                            android:contentDescription="@string/origin"
+                            android:paddingRight="2dp"
+                            android:src="@drawable/ic_list_black_24dp_new"
+                            app:tint="@android:color/white"
+                            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                        <TextView
+                            android:id="@+id/tv_chapter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:text="@string/read_dur_progress"
+                            android:textColor="#ffffff"
+                            android:textSize="13sp" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <RadioGroup
                         android:id="@+id/rg_book_group"
@@ -187,6 +206,7 @@
                             android:id="@+id/rb_zg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="3dp"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
                             android:checked="true"
@@ -200,6 +220,7 @@
                             android:id="@+id/rb_yf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="3dp"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
                             android:paddingStart="6dp"
@@ -212,6 +233,7 @@
                             android:id="@+id/rb_wj"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="3dp"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
                             android:paddingStart="6dp"
