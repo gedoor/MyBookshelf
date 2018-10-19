@@ -126,6 +126,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         holder.delView.setOnClickListener(view -> {
             activity.delBookSource(dataList.get(position));
             dataList.remove(position);
+            activity.upSearchView(dataList.size());
             notifyDataSetChanged();
         });
         holder.topView.setOnClickListener(view -> {
