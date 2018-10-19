@@ -57,7 +57,7 @@
         <com.monke.mprogressbar.MHorProgressBar
             android:id="@+id/mpb_durProgress"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="2dp"
             android:layout_alignParentBottom="true"
             android:visibility="invisible"
             app:bgdrawable="@color/white"
