@@ -65,8 +65,6 @@ public class FileHolder extends ViewHolderImpl<File> {
 
         if (BookshelfHelp.getBook(file.getAbsolutePath()) != null){
             mIvIcon.setImageResource(R.drawable.ic_book_has);
-            mIvIcon.getDrawable().mutate();
-            mIvIcon.getDrawable().setColorFilter(getContext().getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             mIvIcon.setVisibility(View.VISIBLE);
             mCbSelect.setVisibility(View.GONE);
         } else {

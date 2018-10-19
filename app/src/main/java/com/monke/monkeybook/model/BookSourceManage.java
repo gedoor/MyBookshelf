@@ -1,6 +1,7 @@
 package com.monke.monkeybook.model;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.DaoSession;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
@@ -103,7 +105,10 @@ public class BookSourceManage extends BaseModelImpl {
         groupList.clear();
         for (BookSourceBean bookSourceBean : allBookSource) {
             if (!TextUtils.isEmpty(bookSourceBean.getBookSourceGroup()) && !groupList.contains(bookSourceBean.getBookSourceGroup())) {
-                groupList.add(bookSourceBean.getBookSourceGroup());
+                for (String item: bookSourceBean.getBookSourceGroup().split("\\s*[,;，；]\\s*")) {
+                    if (TextUtils.isEmpty(item) || groupList.contains(item)) continue;
+                    groupList.add(item);
+                }
             }
         }
         Collections.sort(groupList);
@@ -125,7 +130,7 @@ public class BookSourceManage extends BaseModelImpl {
                 List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
-                    if (Objects.equals(bookSourceBean.getBookSourceGroup(), "删除")) {
+                    if (bookSourceBean.containsGroup("删除")) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                                 .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
                                 .buildDelete().executeDeleteWithoutDetachingEntities();
@@ -168,7 +173,7 @@ public class BookSourceManage extends BaseModelImpl {
 
                                         @Override
                                         public void onError(Throwable e) {
-                                            Toast.makeText(context, "默认书源加载失败.", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, "默认书源加载失败." + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         } catch (Exception e) {

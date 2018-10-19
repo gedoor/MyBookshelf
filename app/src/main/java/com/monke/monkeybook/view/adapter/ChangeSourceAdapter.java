@@ -92,8 +92,6 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         } else {
             myViewHolder.tvLastChapter.setText(searchBookBeans.get(position).getLastChapter());
         }
-        myViewHolder.ivChecked.getDrawable().mutate();
-        myViewHolder.ivChecked.setColorFilter(mContext.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (searchBookBeans.get(position).getIsAdd()) {
             myViewHolder.ivChecked.setVisibility(View.VISIBLE);
         } else {

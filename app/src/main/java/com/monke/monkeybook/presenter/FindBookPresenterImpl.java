@@ -11,13 +11,13 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
+import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
 
     @Override
     public void initData() {
-        Observable.create((ObservableOnSubscribe<List<FindKindGroupBean>>) e -> {
-            List<FindKindGroupBean> group = new ArrayList<>();
+        Observable.create((ObservableOnSubscribe<List<RecyclerViewData>>) e -> {
+            List<RecyclerViewData> group = new ArrayList<>();
             for (BookSourceBean sourceBean : BookSourceManage.getAllBookSource()) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
@@ -49,8 +49,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                     FindKindGroupBean groupBean = new FindKindGroupBean();
                     groupBean.setGroupName(sourceBean.getBookSourceName());
                     groupBean.setChildrenCount(kindA.length);
-                    groupBean.setChildren(children);
-                    group.add(groupBean);
+                    group.add(new RecyclerViewData(groupBean,children,false));
                 }
             }
             e.onNext(group);
@@ -58,9 +57,9 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<FindKindGroupBean>>() {
+                .subscribe(new SimpleObserver<List<RecyclerViewData>>() {
                     @Override
-                    public void onNext(List<FindKindGroupBean> value) {
+                    public void onNext(List<RecyclerViewData> value) {
                         //执行刷新界面
                         mView.updateUI(value);
                     }

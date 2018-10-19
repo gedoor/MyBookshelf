@@ -78,6 +78,10 @@ public class AboutActivity extends MBaseActivity {
     TextView tvHomePage;
     @BindView(R.id.vw_home_page)
     CardView vwHomePage;
+    @BindView(R.id.tv_faq)
+    TextView tvFaq;
+    @BindView(R.id.vw_faq)
+    CardView vwFaq;
 
     private MoProgressHUD moProgressHUD;
     private String qq = "701903217 788025059";
@@ -125,7 +129,7 @@ public class AboutActivity extends MBaseActivity {
         setTextViewIconColor(tvUpdate);
         setTextViewIconColor(tvUpdateLog);
         setTextViewIconColor(tvVersion);
-
+        setTextViewIconColor(tvFaq);
     }
 
     private void setTextViewIconColor(TextView textView) {
@@ -151,6 +155,7 @@ public class AboutActivity extends MBaseActivity {
             }
         });
         vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
+        vwFaq.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("faq.md"));
     }
 
     @Override

@@ -79,11 +79,7 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
             activity.upDateSelectAll();
             activity.saveDataS();
         });
-        holder.editView.getDrawable().mutate();
-        holder.editView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.editView.setOnClickListener(view -> activity.editReplaceRule(dataList.get(position)));
-        holder.delView.getDrawable().mutate();
-        holder.delView.getDrawable().setColorFilter(activity.getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         holder.delView.setOnClickListener(view -> {
             activity.delData(dataList.get(position));
             dataList.remove(position);

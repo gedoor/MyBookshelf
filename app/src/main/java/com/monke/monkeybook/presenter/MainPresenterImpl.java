@@ -1,17 +1,14 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
@@ -26,14 +23,8 @@ import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
-import com.monke.monkeybook.service.DownloadService;
-import com.monke.monkeybook.utils.NetworkUtil;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -132,7 +123,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
-                        RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, false);
+                        RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
                     }
 
                     @Override

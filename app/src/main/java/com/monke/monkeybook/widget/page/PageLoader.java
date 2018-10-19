@@ -1317,11 +1317,11 @@ public abstract class PageLoader {
             while (showTitle || (paragraph = br.readLine()) != null) {
                 paragraph = ChapterContentHelp.replaceContent(mCollBook, paragraph);
                 paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
+                paragraph = paragraph.replaceAll("\\s", " ").trim();
+                // 如果只有换行符，那么就不执行
+                if (paragraph.equals("")) continue;
                 // 重置段落
                 if (!showTitle) {
-                    paragraph = paragraph.replaceAll("\\s", " ").trim();
-                    // 如果只有换行符，那么就不执行
-                    if (paragraph.equals("")) continue;
                     paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
                 }
                 int wordCount;

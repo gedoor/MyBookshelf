@@ -36,6 +36,7 @@ public class PageView extends View {
     private final static String TAG = PageView.class.getSimpleName();
 
     private ReadBookActivity activity;
+    private Snackbar snackbar;
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
@@ -295,7 +296,7 @@ public class PageView extends View {
         if (mPageLoader.prev()) {
             return true;
         } else {
-            Snackbar.make(this, "没有上一页", Snackbar.LENGTH_SHORT).show();
+            showSnackBar("没有上一页");
             return false;
         }
     }
@@ -307,9 +308,18 @@ public class PageView extends View {
         if (mPageLoader.next()) {
             return true;
         } else {
-            Snackbar.make(this, "没有下一页", Snackbar.LENGTH_SHORT).show();
+            showSnackBar("没有下一页");
             return false;
         }
+    }
+
+    private void showSnackBar(String msg) {
+        if (snackbar == null) {
+            snackbar = Snackbar.make(this, msg, Snackbar.LENGTH_SHORT);
+        } else {
+            snackbar.setText(msg);
+        }
+        snackbar.show();
     }
 
     private void pageCancel() {

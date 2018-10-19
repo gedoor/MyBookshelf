@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -97,10 +98,14 @@ public class UpdateActivity extends MBaseActivity {
     protected void bindView() {
         super.bindView();
         tvInstallUpdate.setOnClickListener(view -> {
-            String url = updateInfo.getUrl();
-            String fileName = url.substring(url.lastIndexOf("/"));
-            File apkFile = new File(UpdateManager.getSavePath(fileName));
-            UpdateManager.getInstance(this).installApk(apkFile);
+            if (updateInfo != null) {
+                String url = updateInfo.getUrl();
+                String fileName = url.substring(url.lastIndexOf("/"));
+                File apkFile = new File(UpdateManager.getSavePath(fileName));
+                UpdateManager.getInstance(this).installApk(apkFile);
+            } else {
+                Toast.makeText(this, "没有获取到更新地址", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

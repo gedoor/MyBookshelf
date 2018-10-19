@@ -105,6 +105,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/set_timer"
                     android:src="@drawable/ic_timer_black_24dp_new"
+                    android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
@@ -142,6 +143,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/read_aloud"
                     android:src="@drawable/ic_read_aloud"
+                    android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
@@ -159,6 +161,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/auto_next_page"
                     android:src="@drawable/ic_auto_page"
+                    android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
@@ -176,6 +179,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/replace_rule_title"
                     android:src="@drawable/ic_find_replace"
+                    android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
@@ -193,6 +197,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/night_theme"
                     android:src="@drawable/ic_brightness"
+                    android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
                     app:fabSize="mini"
@@ -291,13 +296,14 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/ivCList"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/table_of_contents"
                             android:src="@drawable/ic_list_black_24dp_new_read"
+                            app:tint="@color/tv_text_default"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -326,13 +332,14 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/ivAdjust"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
                             android:src="@drawable/ic_tune_black_24dp_new"
+                            app:tint="@color/tv_text_default"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -361,13 +368,14 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/ivInterface"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/interface_setting"
                             android:src="@drawable/ic_font_black_24dp_new"
+                            app:tint="@color/tv_text_default"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -396,13 +404,14 @@
                         android:orientation="vertical"
                         android:paddingBottom="7dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/ivSetting"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/setting"
                             android:src="@drawable/ic_setting_hollow_black_24dp_new"
+                            app:tint="@color/tv_text_default"
                             tools:ignore="NestedWeights" />
 
                         <TextView
@@ -428,8 +437,8 @@
     <com.monke.mprogressbar.MHorProgressBar
         android:id="@+id/hpb_next_page_progress"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom"
         android:layout_height="3dp"
+        android:layout_gravity="bottom"
         android:visibility="invisible"
         app:bgdrawable="@color/btn_bg_press"
         app:cantouch="false"

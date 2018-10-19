@@ -197,7 +197,7 @@ public class CheckSourceService extends Service {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver());
                 } catch (Exception exception) {
-                    sourceBean.setBookSourceGroup("失效");
+                    sourceBean.addGroup("失效");
                     BookSourceManage.addBookSource(sourceBean);
                     BookSourceManage.refreshBookSource();
                     nextCheck();
@@ -212,7 +212,7 @@ public class CheckSourceService extends Service {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver());
                 } catch (Exception e) {
-                    sourceBean.setBookSourceGroup("失效");
+                    sourceBean.addGroup("失效");
                     BookSourceManage.addBookSource(sourceBean);
                     BookSourceManage.refreshBookSource();
                     nextCheck();
@@ -240,8 +240,8 @@ public class CheckSourceService extends Service {
 
                 @Override
                 public void onNext(Object value) {
-                    if (Objects.equals(sourceBean.getBookSourceGroup(), "失效")) {
-                        sourceBean.setBookSourceGroup("");
+                    if (sourceBean.containsGroup("失效")) {
+                        sourceBean.removeGroup("失效");
                         BookSourceManage.addBookSource(sourceBean);
                         BookSourceManage.refreshBookSource();
                     }
@@ -250,7 +250,7 @@ public class CheckSourceService extends Service {
 
                 @Override
                 public void onError(Throwable e) {
-                    sourceBean.setBookSourceGroup("失效");
+                    sourceBean.addGroup("失效");
                     sourceBean.setSerialNumber(10000+checkIndex);
                     BookSourceManage.addBookSource(sourceBean);
                     BookSourceManage.refreshBookSource();

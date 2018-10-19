@@ -47,23 +47,16 @@
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
             app:tabBackground="@color/colorPrimary"
-            app:tabIndicatorColor="@color/darker_gray" />
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/darker_gray"
+            app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tab_vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/tab_vp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>
