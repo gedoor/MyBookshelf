@@ -73,6 +73,11 @@ public class PageView extends View {
         public void pageCancel() {
             PageView.this.pageCancel();
         }
+
+        @Override
+        public void nextPage() {
+            autoNextPage();
+        }
     };
 
     //点击监听
