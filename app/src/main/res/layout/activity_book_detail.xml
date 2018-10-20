@@ -44,7 +44,7 @@
                 <ImageView
                     android:id="@+id/iv_cover"
                     android:layout_width="90dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="130dp"
                     android:contentDescription="@string/img_cover"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_cover_default" />
@@ -64,10 +64,10 @@
                         android:paddingTop="3dp"
                         android:paddingBottom="3dp">
 
-                        <me.grantland.widget.AutofitTextView
+                        <TextView
                             android:id="@+id/tv_name"
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -75,7 +75,6 @@
                             android:text="@string/tv_book_name"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
-                            app:minTextSize="14sp"
                             tools:ignore="RtlHardcoded" />
 
                         <ImageView
