@@ -23,13 +23,13 @@ import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.service.UpdateService;
-import com.monke.monkeybook.utils.MarkdownUtils;
 import com.monke.mprogressbar.MHorProgressBar;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.noties.markwon.Markwon;
 
 public class UpdateActivity extends MBaseActivity {
 
@@ -87,10 +87,9 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
         if (updateInfo != null) {
-            MarkdownUtils.setText(tvMarkdown, updateInfo.getDetail());
+            Markwon.setMarkdown(tvMarkdown, updateInfo.getDetail());
         }
     }
-
 
     /**
      * 控件绑定

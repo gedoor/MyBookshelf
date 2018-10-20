@@ -1,5 +1,11 @@
 <resources>
 
+    <!-- Base application theme. -->
+    <style name="CAppTheme" parent="Base.AppTheme">
+        <!-- Customize your theme here. -->
+
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark">
