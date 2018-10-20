@@ -135,7 +135,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                             @Override
                             public void onNext(BookShelfBean value) {
                                 if (value.getErrorMsg() != null) {
-                                    Toast.makeText(mView.getContext(), value.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                                    showToast(value.getErrorMsg());
                                     value.setErrorMsg(null);
                                 }
                                 bookShelfBean.setLoading(false);
@@ -159,7 +159,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
             if(errBooks.size() > 0) {
-                Toast.makeText(mView.getContext(), TextUtils.join("、", errBooks) + " 更新失败！", Toast.LENGTH_SHORT).show();
+                showToast(TextUtils.join("、", errBooks) + " 更新失败！");
                 errBooks.clear();
             }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
@@ -167,6 +167,12 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 hasUpdate = false;
             }
             queryBookShelf(false, group);
+        }
+    }
+
+    private void showToast(String msg) {
+        if (mView.getContext() != null) {
+            Toast.makeText(mView.getContext(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 
