@@ -17,7 +17,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 import java.lang.reflect.Method;
@@ -134,24 +133,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     protected boolean isImmersionBarEnabled() {
         return preferences.getBoolean("immersionStatusBar", false);
-    }
-
-    /**
-     * @return 修改导航栏颜色
-     */
-    protected void changeNavbarColor() {
-        int colorInt = preferences.getInt("navBarColorInt", 0);
-        mImmersionBar.hideBarDivider();
-        if(colorInt == 0){
-            mImmersionBar.navigationBarDarkFont(false,0.2f);
-            mImmersionBar.navigationBarColor(R.color.black);
-        }else if(colorInt == 1){
-            mImmersionBar.navigationBarDarkFont(true,0.2f);
-            mImmersionBar.navigationBarColor(R.color.white);
-        }else{
-            mImmersionBar.navigationBarDarkFont(true,0.2f);
-            mImmersionBar.navigationBarColorInt(ReadBookControl.getInstance().getBgColor());
-        }
     }
 
     /**

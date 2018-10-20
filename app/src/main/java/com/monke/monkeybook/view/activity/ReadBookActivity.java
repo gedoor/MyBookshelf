@@ -283,6 +283,24 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         screenOffTimerStart();
     }
 
+    /**
+     * 修改导航栏颜色
+     */
+    private void changeNavbarColor() {
+        int colorInt = preferences.getInt("navBarColorInt", 0);
+        mImmersionBar.hideBarDivider();
+        if(colorInt == 0){
+            mImmersionBar.navigationBarDarkFont(false,0.2f);
+            mImmersionBar.navigationBarColor(R.color.black);
+        }else if(colorInt == 1){
+            mImmersionBar.navigationBarDarkFont(true,0.2f);
+            mImmersionBar.navigationBarColor(R.color.white);
+        }else{
+            mImmersionBar.navigationBarDarkFont(true,0.2f);
+            mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
+        }
+    }
+
     private void unKeepScreenOn() {
         keepScreenOn(false);
     }
