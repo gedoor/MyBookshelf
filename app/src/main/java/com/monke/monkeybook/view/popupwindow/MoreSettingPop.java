@@ -68,12 +68,15 @@ public class MoreSettingPop extends PopupWindow {
     LinearLayout llReadAloudKey;
     @BindView(R.id.sb_tip_margin_change)
     Switch sbTipMarginChange;
+    @BindView(R.id.llNavigationBarColor)
+    LinearLayout llNavigationBarColor;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     public interface OnChangeProListener {
         void keepScreenOnChange(int keepScreenOn);
+
         void recreate();
     }
 
@@ -187,7 +190,7 @@ public class MoreSettingPop extends PopupWindow {
                     .create();
             dialog.show();
         });
-        reNavbarcolor_val.setOnClickListener(view -> {
+        llNavigationBarColor.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity)
                     .setTitle(activity.getString(R.string.re_navigation_bar_color))
                     .setSingleChoiceItems(activity.getResources().getStringArray(R.array.NavbarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
@@ -222,7 +225,7 @@ public class MoreSettingPop extends PopupWindow {
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setChecked(readBookControl.getHideNavigationBar());
-        if(readBookControl.getHideNavigationBar()){
+        if (readBookControl.getHideNavigationBar()) {
             reNavbarcolor_val.setEnabled(false);
             reNavbarcolor.setTextColor(Color.GRAY);
             reNavbarcolor_val.setTextColor(Color.GRAY);
