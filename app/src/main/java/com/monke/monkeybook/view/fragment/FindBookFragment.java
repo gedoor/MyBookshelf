@@ -74,7 +74,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             lastExpandedPosition = Math.min(lastExpandedPosition, group.size() - 1);
             if (autoExpandGroup()) {
                 adapter.expandGroup(lastExpandedPosition);
-                expandableList.smoothScrollToPosition(lastExpandedPosition);
             }
         } else {
             adapter.clearAll();
