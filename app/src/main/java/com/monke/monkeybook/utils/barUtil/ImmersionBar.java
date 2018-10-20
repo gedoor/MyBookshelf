@@ -377,7 +377,22 @@ public class ImmersionBar {
     }
 
     /**
-     * 导航栏颜色
+     * 隐藏导航栏分线
+     *
+     * @return the immersion bar
+     */
+    public ImmersionBar hideBarDivider(){
+        mBarParams.navigationBarDivider = false;
+        return this;
+    }
+
+    public ImmersionBar showBarDivider(){
+        mBarParams.navigationBarDivider = false;
+        return this;
+    }
+
+    /**
+     * 显示导航栏分线
      *
      * @param navigationBarColor the navigation bar color 导航栏颜色
      * @return the immersion bar
@@ -1506,9 +1521,12 @@ public class ImmersionBar {
         else
             mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     Color.TRANSPARENT, mBarParams.statusBarAlpha));  //设置状态栏颜色
-        if (mBarParams.navigationBarEnable)
+        if (mBarParams.navigationBarEnable) {
             mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                     mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
+            if (Build.VERSION.SDK_INT >= 28 && !mBarParams.navigationBarDivider)
+                    mWindow.setNavigationBarDividerColor(Color.TRANSPARENT);
+        }
         return uiFlags;
     }
 

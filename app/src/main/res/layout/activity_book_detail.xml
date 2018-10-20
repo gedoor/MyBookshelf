@@ -227,6 +227,7 @@
                             android:paddingEnd="6dp"
                             android:text="养肥"
                             android:textColor="#ffffff"
+                            android:layout_marginLeft="3dp"
                             android:textSize="13sp" />
 
                         <RadioButton
@@ -240,6 +241,7 @@
                             android:paddingEnd="6dp"
                             android:text="完结"
                             android:textColor="#ffffff"
+                            android:layout_marginLeft="3dp"
                             android:textSize="13sp" />
 
                     </RadioGroup>
