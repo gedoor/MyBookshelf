@@ -87,6 +87,12 @@ public abstract class BaseRecyclerViewAdapter<T,S,VH extends BaseExpandAbleViewH
         this.notifyDataSetChanged();
     }
 
+    public void clearAll() {
+        this.allDatas.clear();
+        setShowingDatas();
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return null == showingDatas ? 0 : showingDatas.size();
