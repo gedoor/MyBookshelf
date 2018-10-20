@@ -216,7 +216,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         //获取到TextView的控件
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 
-        //searchView.onActionViewExpanded();
+        searchView.onActionViewExpanded();
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -306,9 +306,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void searchBook(String searchKey) {
         if (!TextUtils.isEmpty(searchKey)) {
-            mSearchAutoComplete.setText(searchKey);
-            searchView.clearFocus();
-            toSearch();
+            searchView.setQuery(searchKey, true);
             showHistory = false;
         } else {
             showHistory = true;

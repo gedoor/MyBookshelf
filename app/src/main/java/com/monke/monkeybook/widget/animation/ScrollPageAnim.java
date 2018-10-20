@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class ScrollPageAnim extends PageAnimation {
 
     // 是否处于刷新阶段
     private boolean isRefresh = true;
+    //是否移动了
+    private boolean isMove = false;
 
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom , view, listener);
@@ -269,6 +272,7 @@ public class ScrollPageAnim extends PageAnimation {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         int x = (int) event.getX();
         int y = (int) event.getY();
 
@@ -283,6 +287,7 @@ public class ScrollPageAnim extends PageAnimation {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                isMove = false;
                 isRunning = false;
                 // 设置起始点
                 setStartPoint(x, y);
@@ -290,12 +295,21 @@ public class ScrollPageAnim extends PageAnimation {
                 abortAnim();
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (!isMove) {
+                    isMove = Math.abs(mStartX - x) > slop || Math.abs(mStartY - y) > slop;
+                }
                 mVelocity.computeCurrentVelocity(VELOCITY_DURATION);
                 isRunning = true;
                 // 进行刷新
                 mView.postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
+                if (!isMove) {
+                    if (mListener != null) {
+                        mListener.nextPage();
+                    }
+                }
+
                 isRunning = false;
                 // 开启动画
                 startAnim();

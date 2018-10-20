@@ -16,22 +16,15 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.dao.BookInfoBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.help.DataBackup;
-import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.contract.BookListContract;
-import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -84,7 +77,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
     }
 
     private void downloadAll(int downloadNum, boolean onlyNew) {
-        if (bookShelfBeans == null) {
+        if (bookShelfBeans == null || mView.getContext() == null) {
             return;
         }
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
@@ -113,16 +106,14 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 .subscribe();
     }
 
-    private int getThreadsNum() {
-        threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
-        return threadsNum;
-    }
-
     private void startRefreshBook() {
-        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
-            refreshIndex = -1;
-            for (int i = 1; i <= getThreadsNum(); i++) {
-                refreshBookshelf();
+        if (mView.getContext() != null) {
+            threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
+            if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
+                refreshIndex = -1;
+                for (int i = 1; i <= threadsNum; i++) {
+                    refreshBookshelf();
+                }
             }
         }
     }
@@ -144,7 +135,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                             @Override
                             public void onNext(BookShelfBean value) {
                                 if (value.getErrorMsg() != null) {
-                                    Toast.makeText(mView.getContext(), value.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                                    showToast(value.getErrorMsg());
                                     value.setErrorMsg(null);
                                 }
                                 bookShelfBean.setLoading(false);
@@ -168,7 +159,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
             if(errBooks.size() > 0) {
-                Toast.makeText(mView.getContext(), TextUtils.join("、", errBooks) + " 更新失败！", Toast.LENGTH_SHORT).show();
+                showToast(TextUtils.join("、", errBooks) + " 更新失败！");
                 errBooks.clear();
             }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
@@ -176,6 +167,12 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 hasUpdate = false;
             }
             queryBookShelf(false, group);
+        }
+    }
+
+    private void showToast(String msg) {
+        if (mView.getContext() != null) {
+            Toast.makeText(mView.getContext(), msg, Toast.LENGTH_SHORT).show();
         }
     }
 

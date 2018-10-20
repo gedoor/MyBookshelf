@@ -162,6 +162,7 @@ dependencies {
     //字符串比较
     implementation 'net.ricecode:string-similarity:1.0.0'
 
+    implementation 'ru.noties:markwon:2.0.0'
 }
 
 greendao {

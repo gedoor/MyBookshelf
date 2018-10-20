@@ -268,10 +268,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
             } else if (readBookControl.getHideStatusBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
+                changeNavbarColor();
             } else if (readBookControl.getHideNavigationBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
             } else {
                 mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
+                changeNavbarColor();
             }
 
         }
@@ -279,6 +281,27 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mImmersionBar.init();
         keepScreenOn(screenTimeOut != 0);
         screenOffTimerStart();
+    }
+
+    /**
+     * 修改导航栏颜色
+     */
+    private void changeNavbarColor() {
+        mImmersionBar.hideBarDivider();
+        switch (readBookControl.getNavbarColor()) {
+            case 1:
+                mImmersionBar.navigationBarDarkFont(false,0.2f);
+                mImmersionBar.navigationBarColor(R.color.black);
+                break;
+            case 2:
+                mImmersionBar.navigationBarDarkFont(true,0.2f);
+                mImmersionBar.navigationBarColor(R.color.white);
+                break;
+            case 3:
+                mImmersionBar.navigationBarDarkFont(true,0.2f);
+                mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
+                break;
+        }
     }
 
     private void unKeepScreenOn() {
@@ -316,15 +339,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             hpbNextPageProgress.setMaxProgress(nextPageTime);
             mHandler.postDelayed(upHpbNextPage, upHpbInterval);
             fabAutoPage.setImageResource(R.drawable.ic_auto_page_stop);
-            fabAutoPage.getDrawable().mutate();
-            fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page_stop));
             mHandler.postDelayed(autoPageRunnable, nextPageTime);
         } else {
             hpbNextPageProgress.setVisibility(View.INVISIBLE);
             fabAutoPage.setImageResource(R.drawable.ic_auto_page);
-            fabAutoPage.getDrawable().mutate();
-            fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
             fabAutoPage.setContentDescription(getString(R.string.auto_next_page));
         }
     }
@@ -403,15 +422,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         setupActionBar();
         mPresenter.initData(this);
         llISB.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
-        //图标眷色
-        ivCList.getDrawable().mutate();
-        ivCList.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivAdjust.getDrawable().mutate();
-        ivAdjust.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivInterface.getDrawable().mutate();
-        ivInterface.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
-        ivSetting.getDrawable().mutate();
-        ivSetting.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         if (isNightTheme()) {
             fabNightTheme.setImageResource(R.drawable.ic_daytime_24dp);
         } else {
@@ -509,6 +519,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void recreate() {
+                moreSettingPop.dismiss();
                 ReadBookActivity.this.recreate();
             }
         });
@@ -705,13 +716,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
 
         //朗读定时
-        fabReadAloudTimer.getDrawable().mutate();
-        fabReadAloudTimer.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(this));
 
         //朗读
-        fabReadAloud.getDrawable().mutate();
-        fabReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabReadAloud.setOnClickListener(view -> onMediaButton());
         //长按停止朗读
         fabReadAloud.setOnLongClickListener(view -> {
@@ -725,8 +732,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
 
         //自动翻页
-        fabAutoPage.getDrawable().mutate();
-        fabAutoPage.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabAutoPage.setOnClickListener(view -> {
             if (ReadAloudService.running) {
                 Toast.makeText(this, "朗读正在运行,不能自动翻页", Toast.LENGTH_SHORT).show();
@@ -741,8 +746,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
 
         //替换
-        fabReplaceRule.getDrawable().mutate();
-        fabReplaceRule.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabReplaceRule.setOnClickListener(view -> {
             popMenuOut();
             ReplaceRuleActivity.startThis(this);
@@ -753,8 +756,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
 
         //夜间模式
-        fabNightTheme.getDrawable().mutate();
-        fabNightTheme.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         fabNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         fabNightTheme.setOnLongClickListener(view -> {
             Toast.makeText(this, getString(R.string.night_theme), Toast.LENGTH_SHORT).show();
@@ -1012,8 +1013,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 fabReadAloud.setImageResource(R.drawable.ic_read_aloud);
                 llReadAloudTimer.setVisibility(View.INVISIBLE);
         }
-        fabReadAloud.getDrawable().mutate();
-        fabReadAloud.getDrawable().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override

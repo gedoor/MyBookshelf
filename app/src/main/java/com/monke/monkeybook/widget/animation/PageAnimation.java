@@ -165,8 +165,12 @@ public abstract class PageAnimation {
 
     public interface OnPageChangeListener {
         boolean hasPrev();
+
         boolean hasNext();
+
         void pageCancel();
+
+        void nextPage();
     }
 
 }

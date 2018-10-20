@@ -1,5 +1,6 @@
 package com.monke.monkeybook.utils.barUtil;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -376,7 +377,22 @@ public class ImmersionBar {
     }
 
     /**
-     * 导航栏颜色
+     * 隐藏导航栏分线
+     *
+     * @return the immersion bar
+     */
+    public ImmersionBar hideBarDivider(){
+        mBarParams.navigationBarDivider = false;
+        return this;
+    }
+
+    public ImmersionBar showBarDivider(){
+        mBarParams.navigationBarDivider = false;
+        return this;
+    }
+
+    /**
+     * 显示导航栏分线
      *
      * @param navigationBarColor the navigation bar color 导航栏颜色
      * @return the immersion bar
@@ -1505,9 +1521,12 @@ public class ImmersionBar {
         else
             mWindow.setStatusBarColor(ColorUtils.blendARGB(mBarParams.statusBarColor,
                     Color.TRANSPARENT, mBarParams.statusBarAlpha));  //设置状态栏颜色
-        if (mBarParams.navigationBarEnable)
+        if (mBarParams.navigationBarEnable) {
             mWindow.setNavigationBarColor(ColorUtils.blendARGB(mBarParams.navigationBarColor,
                     mBarParams.navigationBarColorTransform, mBarParams.navigationBarAlpha));  //设置导航栏颜色
+            if (Build.VERSION.SDK_INT >= 28 && !mBarParams.navigationBarDivider)
+                    mWindow.setNavigationBarDividerColor(Color.TRANSPARENT);
+        }
         return uiFlags;
     }
 
@@ -1682,28 +1701,32 @@ public class ImmersionBar {
                 mBarParams.navigationStatusObserver = new ContentObserver(new Handler()) {
                     @Override
                     public void onChange(boolean selfChange) {
-                        int navigationBarIsMin = Settings.System.getInt(mActivity.getContentResolver(),
-                                NAVIGATIONBAR_IS_MIN, 0);
-                        if (navigationBarIsMin == 1) {
-                            //导航键隐藏了
-                            mBarParams.navigationBarView.setVisibility(View.GONE);
-                            mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
-                        } else {
-                            //导航键显示了
-                            mBarParams.navigationBarView.setVisibility(View.VISIBLE);
-                            if (!mBarParams.systemWindows) {
-                                if (mConfig.isNavigationAtBottom())
-                                    mContentView.setPadding(0, mContentView.getPaddingTop(), 0, mConfig.getNavigationBarHeight());
-                                else
-                                    mContentView.setPadding(0, mContentView.getPaddingTop(), mConfig.getNavigationBarWidth(), 0);
-                            } else
+                        if (mActivity != null && mActivity.getContentResolver() != null) {
+                            int navigationBarIsMin = Settings.System.getInt(mActivity.getContentResolver(),
+                                    NAVIGATIONBAR_IS_MIN, 0);
+                            if (navigationBarIsMin == 1) {
+                                //导航键隐藏了
+                                mBarParams.navigationBarView.setVisibility(View.GONE);
                                 mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
+                            } else {
+                                //导航键显示了
+                                mBarParams.navigationBarView.setVisibility(View.VISIBLE);
+                                if (!mBarParams.systemWindows) {
+                                    if (mConfig.isNavigationAtBottom())
+                                        mContentView.setPadding(0, mContentView.getPaddingTop(), 0, mConfig.getNavigationBarHeight());
+                                    else
+                                        mContentView.setPadding(0, mContentView.getPaddingTop(), mConfig.getNavigationBarWidth(), 0);
+                                } else
+                                    mContentView.setPadding(0, mContentView.getPaddingTop(), 0, 0);
+                            }
                         }
                     }
                 };
+                if (mActivity != null && mActivity.getContentResolver() != null && mBarParams.navigationStatusObserver != null) {
+                    mActivity.getContentResolver().registerContentObserver(Settings.System.getUriFor
+                            (NAVIGATIONBAR_IS_MIN), true, mBarParams.navigationStatusObserver);
+                }
             }
-            mActivity.getContentResolver().registerContentObserver(Settings.System.getUriFor
-                    (NAVIGATIONBAR_IS_MIN), true, mBarParams.navigationStatusObserver);
         }
     }
 
@@ -1714,7 +1737,8 @@ public class ImmersionBar {
     private void unRegisterEMUI3_x() {
         if ((OSUtils.isEMUI3_1() || OSUtils.isEMUI3_0()) && mConfig.hasNavigtionBar()
                 && mBarParams.navigationBarEnable && mBarParams.navigationBarWithKitkatEnable) {
-            if (mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
+            if (mActivity != null && mActivity.getContentResolver() != null &&
+                    mBarParams.navigationStatusObserver != null && mBarParams.navigationBarView != null)
                 mActivity.getContentResolver().unregisterContentObserver(mBarParams.navigationStatusObserver);
         }
     }
@@ -1727,6 +1751,7 @@ public class ImmersionBar {
      * @return the int
      */
 
+    @SuppressLint("ObsoleteSdkInt")
     private int hideBar(int uiFlags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             switch (mBarParams.barHide) {
@@ -1766,7 +1791,7 @@ public class ImmersionBar {
      * 设置暗色导航栏按钮
      */
     private int setNavigationBarLightFont(int uiFlags) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mBarParams.navigationBardarkFont) {
+        if (canNavigationBarDarkFont() && mBarParams.navigationBardarkFont) {
             return uiFlags | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         } else {
             return uiFlags;
@@ -1931,7 +1956,7 @@ public class ImmersionBar {
             Class clazz = window.getClass();
             try {
                 int darkModeFlag;
-                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                @SuppressLint("PrivateApi") Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);

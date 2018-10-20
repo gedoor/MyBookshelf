@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -22,13 +23,13 @@ import com.monke.monkeybook.bean.UpdateInfoBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.service.UpdateService;
-import com.monke.monkeybook.utils.MarkdownUtils;
 import com.monke.mprogressbar.MHorProgressBar;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.noties.markwon.Markwon;
 
 public class UpdateActivity extends MBaseActivity {
 
@@ -53,6 +54,7 @@ public class UpdateActivity extends MBaseActivity {
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateActivity.class);
         intent.putExtra("updateInfo", updateInfoBean);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -85,10 +87,9 @@ public class UpdateActivity extends MBaseActivity {
     protected void initData() {
         updateInfo = getIntent().getParcelableExtra("updateInfo");
         if (updateInfo != null) {
-            MarkdownUtils.setText(tvMarkdown, updateInfo.getDetail());
+            Markwon.setMarkdown(tvMarkdown, updateInfo.getDetail());
         }
     }
-
 
     /**
      * 控件绑定
@@ -97,10 +98,14 @@ public class UpdateActivity extends MBaseActivity {
     protected void bindView() {
         super.bindView();
         tvInstallUpdate.setOnClickListener(view -> {
-            String url = updateInfo.getUrl();
-            String fileName = url.substring(url.lastIndexOf("/"));
-            File apkFile = new File(UpdateManager.getSavePath(fileName));
-            UpdateManager.getInstance(this).installApk(apkFile);
+            if (updateInfo != null) {
+                String url = updateInfo.getUrl();
+                String fileName = url.substring(url.lastIndexOf("/"));
+                File apkFile = new File(UpdateManager.getSavePath(fileName));
+                UpdateManager.getInstance(this).installApk(apkFile);
+            } else {
+                Toast.makeText(this, "没有获取到更新地址", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

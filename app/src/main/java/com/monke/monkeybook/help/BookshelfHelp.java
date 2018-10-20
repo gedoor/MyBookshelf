@@ -52,7 +52,7 @@ public class BookshelfHelp {
             for (String bookPath : booksCached) {
                 HashSet<Integer> chapterIndexS = new HashSet<>();
                 file = new File(Constant.BOOK_CACHE_PATH + bookPath);
-                String[] chapters = file.list((dir, name) -> name.matches("^\\d{5,}-.*\\." + FileHelp.SUFFIX_NB + "$"));
+                String[] chapters = file.list((dir, name) -> name.matches("^\\d{5,}-.*" + FileHelp.SUFFIX_NB + "$"));
                 for (String chapter : chapters) {
                     chapterIndexS.add(
                             Integer.parseInt(chapter.substring(0, chapter.indexOf('-')))
@@ -127,7 +127,7 @@ public class BookshelfHelp {
     /**
      * 存储章节
      */
-    public static boolean saveChapterInfo(String folderName, int index, String fileName, String content) {
+    public static synchronized boolean saveChapterInfo(String folderName, int index, String fileName, String content) {
         if (content == null) {
             return false;
         }

@@ -67,6 +67,8 @@ public class BarParams implements Cloneable {
     public OnKeyboardListener onKeyboardListener;   //软键盘监听类
     public ContentObserver navigationStatusObserver;  //emui3.1监听器
 
+    public boolean navigationBarDivider = true;     //显示导航栏Divider
+
     @Override
     protected BarParams clone() {
         BarParams barParams = null;

@@ -120,7 +120,7 @@ public class SearchBookModel {
         searchEngineIndex++;
         long startTime = System.currentTimeMillis();
         if (searchEngineIndex < searchEngineS.size()) {
-            SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
+            final SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
             if (searchEngine.getHasMore()) {
                 WebBookModelImpl.getInstance()
                         .searchOtherBook(content, page, searchEngine.getTag())
@@ -150,6 +150,8 @@ public class SearchBookModel {
                                         }
                                         if (!searchListener.checkIsExist(searchBookBeans.get(0))) {
                                             searchListener.loadMoreSearchBook(searchBookBeans);
+                                        } else {
+                                            searchEngine.setHasMore(false);
                                         }
                                     } else {
                                         searchEngine.setHasMore(false);
@@ -161,6 +163,7 @@ public class SearchBookModel {
                             @Override
                             public void onError(Throwable e) {
                                 e.printStackTrace();
+                                searchEngine.setHasMore(false);
                                 searchOnEngine(content, bookShelfS, searchTime);
                             }
 
@@ -184,11 +187,14 @@ public class SearchBookModel {
                     } else {
                         if (page == 1) {
                             searchListener.refreshFinish(false);
-                        } else if (page < 3) {
-                            searchListener.loadMoreFinish(false);
-                        } else {
-                            searchListener.loadMoreFinish(true);
                         }
+                        for (SearchEngine engine : searchEngineS) {
+                            if (engine.hasMore) {
+                                searchListener.loadMoreFinish(false);
+                                return;
+                            }
+                        }
+                        searchListener.loadMoreFinish(true);
                     }
                 }
             });

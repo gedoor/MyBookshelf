@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -13,11 +14,12 @@
         android:layout_weight="1"
         android:padding="5dp" />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_checked"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_check_black_24dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:tint="@color/tv_text_default" />
 
 </LinearLayout>

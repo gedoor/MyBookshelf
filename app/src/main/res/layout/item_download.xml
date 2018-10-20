@@ -26,8 +26,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="5dp"
+            android:paddingRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry">
 
             <me.grantland.widget.AutofitTextView
@@ -55,13 +55,14 @@
         </LinearLayout>
 
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_delete"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_margin="16dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_delete_forever_black_24dp" />
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_delete_forever_black_24dp"
+            app:tint="@color/tv_text_default" />
 
 
     </LinearLayout>

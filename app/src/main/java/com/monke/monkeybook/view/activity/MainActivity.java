@@ -228,12 +228,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         View tabView =  LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right,null);
         TextView tv = tabView.findViewById(R.id.tabtext);
         tv.setText(name);
-        tv.setTextColor(getResources().getColor(R.color.tv_text_default));
         ImageView im = tabView.findViewById(R.id.tabicon);
         if (iconID != null) {
             im.setVisibility(View.VISIBLE);
             im.setImageResource(iconID);
-            im.getDrawable().mutate().setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
         } else {
             im.setVisibility(View.GONE);
         }
