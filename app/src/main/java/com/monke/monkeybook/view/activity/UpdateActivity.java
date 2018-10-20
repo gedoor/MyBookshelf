@@ -54,6 +54,7 @@ public class UpdateActivity extends MBaseActivity {
     public static void startThis(Context context, UpdateInfoBean updateInfoBean) {
         Intent intent = new Intent(context, UpdateActivity.class);
         intent.putExtra("updateInfo", updateInfoBean);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
