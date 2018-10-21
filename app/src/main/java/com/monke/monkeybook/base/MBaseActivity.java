@@ -26,12 +26,11 @@ import java.lang.reflect.Method;
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
-    public SharedPreferences preferences;
+    public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = MApplication.getInstance().getConfigPreferences();
         super.onCreate(savedInstanceState);
         initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
