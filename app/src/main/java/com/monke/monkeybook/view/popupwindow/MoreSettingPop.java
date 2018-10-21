@@ -218,11 +218,6 @@ public class MoreSettingPop extends PopupWindow {
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
         sbHideNavigationBar.setChecked(readBookControl.getHideNavigationBar());
-        if (readBookControl.getHideNavigationBar()) {
-            reNavbarcolor_val.setEnabled(false);
-            reNavbarcolor.setTextColor(Color.GRAY);
-            reNavbarcolor_val.setTextColor(Color.GRAY);
-        }
         sbClick.setChecked(readBookControl.getCanClickTurn());
         sbClickAllNext.setChecked(readBookControl.getClickAllNext());
         sbShowTitle.setChecked(readBookControl.getShowTitle());
@@ -242,6 +237,11 @@ public class MoreSettingPop extends PopupWindow {
             llReadAloudKey.setVisibility(View.VISIBLE);
         } else {
             llReadAloudKey.setVisibility(View.GONE);
+        }
+        if (readBookControl.getHideNavigationBar()) {
+            llNavigationBarColor.setVisibility(View.GONE);
+        } else {
+            llNavigationBarColor.setVisibility(View.VISIBLE);
         }
     }
 
