@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.BuildConfig;
@@ -99,16 +98,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            group = savedInstanceState.getInt("group");
             resumed = savedInstanceState.getBoolean("resumed");
         }
+        group = preferences.getInt("bookshelfGroup", 0);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("group", group);
         outState.putBoolean("resumed", resumed);
     }
 
@@ -349,6 +347,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     private void upGroup(int group) {
+        if (this.group != group) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("bookshelfGroup", group);
+            editor.apply();
+        }
         this.group = group;
         RxBus.get().post(RxBusTag.UPDATE_GROUP, group);
         RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
