@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 public abstract class ViewHolderImpl<T> implements IViewHolder<T> {
     private View view;
     private Context context;
+
     /****************************************************/
     protected abstract int getItemLayoutId();
 
@@ -24,15 +25,15 @@ public abstract class ViewHolderImpl<T> implements IViewHolder<T> {
         return view;
     }
 
-    protected <V extends View> V findById(int id){
+    protected <V extends View> V findById(int id) {
         return (V) view.findViewById(id);
     }
 
-    protected Context getContext(){
+    protected Context getContext() {
         return context;
     }
 
-    protected View getItemView(){
+    protected View getItemView() {
         return view;
     }
 

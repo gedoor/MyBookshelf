@@ -122,19 +122,6 @@ public class BatteryView extends View {
     }
 
     /**
-     * 设置电池电量
-     *
-     * @param power
-     */
-    public void setPower(int power) {
-        this.mPower = power;
-        if (mPower < 0) {
-            mPower = 100;
-        }
-        invalidate();//刷新VIEW
-    }
-
-    /**
      * 设置电池颜色
      *
      * @param color
@@ -151,5 +138,18 @@ public class BatteryView extends View {
      */
     public int getPower() {
         return mPower;
+    }
+
+    /**
+     * 设置电池电量
+     *
+     * @param power
+     */
+    public void setPower(int power) {
+        this.mPower = power;
+        if (mPower < 0) {
+            mPower = 100;
+        }
+        invalidate();//刷新VIEW
     }
 }

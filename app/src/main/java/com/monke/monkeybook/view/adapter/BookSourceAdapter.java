@@ -1,7 +1,6 @@
 package com.monke.monkeybook.view.adapter;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
@@ -138,12 +136,12 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             BookshelfHelp.saveBookSource(moveData);
             dataList.remove(position);
             notifyItemInserted(0);
-            dataList.add(0,moveData);
+            dataList.add(0, moveData);
             notifyItemRemoved(position + 1);
 
-            if (dataList.size() != allDataList.size()){
-                for (int i = 0;i < allDataList.size();i++){
-                    if (moveData.equals(allDataList.get(i))){
+            if (dataList.size() != allDataList.size()) {
+                for (int i = 0; i < allDataList.size(); i++) {
+                    if (moveData.equals(allDataList.get(i))) {
                         index = i;
                         break;
                     }
@@ -151,7 +149,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
                 BookSourceBean moveDataA = allDataList.get(index);
                 allDataList.remove(index);
                 notifyItemInserted(0);
-                allDataList.add(0,moveDataA);
+                allDataList.add(0, moveDataA);
                 notifyItemRemoved(index + 1);
             }
             notifyDataSetChanged();

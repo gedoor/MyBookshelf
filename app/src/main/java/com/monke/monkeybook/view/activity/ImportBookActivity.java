@@ -161,7 +161,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     }
 
     @Override
-    protected void firstRequest () {
+    protected void firstRequest() {
         super.firstRequest();
         mCurFragment = mLocalFragment;
     }

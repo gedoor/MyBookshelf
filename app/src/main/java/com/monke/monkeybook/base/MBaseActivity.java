@@ -24,10 +24,10 @@ import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import java.lang.reflect.Method;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
-    public SharedPreferences preferences;
-    protected ImmersionBar mImmersionBar;
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;
+    public SharedPreferences preferences;
+    protected ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,14 +204,18 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     public void showSnackBar(String msg) {
-        showSnackBar(msg, Snackbar.LENGTH_SHORT);
-    }
-
-    public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(getCurrentFocus(), msg, length);
+        showSnackBar(getCurrentFocus(), msg);
     }
 
     public void showSnackBar(String msg, int length) {
-        Snackbar.make(getCurrentFocus(), msg, length).show();
+        showSnackBar(getCurrentFocus(), msg, length);
+    }
+
+    public void showSnackBar(View view, String msg) {
+        showSnackBar(view, msg, Snackbar.LENGTH_SHORT);
+    }
+
+    public void showSnackBar(View view, String msg, int length) {
+        Snackbar.make(view, msg, length).show();
     }
 }

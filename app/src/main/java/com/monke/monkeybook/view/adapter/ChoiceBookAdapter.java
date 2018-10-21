@@ -24,13 +24,6 @@ import java.util.List;
 public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
     private List<SearchBookBean> searchBooks;
-
-    public interface OnItemClickListener {
-        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
-
-        void clickItem(View animView, int position, SearchBookBean searchBookBean);
-    }
-
     private OnItemClickListener itemClickListener;
 
     public ChoiceBookAdapter(Activity activity) {
@@ -123,31 +116,6 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
-        ImageView ivCover;
-        TextView tvName;
-        TextView tvState;
-        TextView tvWords;
-        TextView tvKind;
-        TextView tvLasted;
-        TextView tvAddShelf;
-        TextView tvOrigin;
-
-        MyViewHolder(View itemView) {
-            super(itemView);
-            flContent = itemView.findViewById(R.id.fl_content);
-            ivCover = itemView.findViewById(R.id.iv_cover);
-            tvName = itemView.findViewById(R.id.tv_name);
-            tvState = itemView.findViewById(R.id.tv_state);
-            tvWords = itemView.findViewById(R.id.tv_words);
-            tvLasted = itemView.findViewById(R.id.tv_lasted);
-            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
-            tvKind = itemView.findViewById(R.id.tv_kind);
-            tvOrigin = itemView.findViewById(R.id.tv_origin);
-        }
-    }
-
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
@@ -173,5 +141,36 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     public List<SearchBookBean> getSearchBooks() {
         return searchBooks;
+    }
+
+    public interface OnItemClickListener {
+        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
+
+        void clickItem(View animView, int position, SearchBookBean searchBookBean);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        FrameLayout flContent;
+        ImageView ivCover;
+        TextView tvName;
+        TextView tvState;
+        TextView tvWords;
+        TextView tvKind;
+        TextView tvLasted;
+        TextView tvAddShelf;
+        TextView tvOrigin;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            flContent = itemView.findViewById(R.id.fl_content);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvState = itemView.findViewById(R.id.tv_state);
+            tvWords = itemView.findViewById(R.id.tv_words);
+            tvLasted = itemView.findViewById(R.id.tv_lasted);
+            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
+            tvKind = itemView.findViewById(R.id.tv_kind);
+            tvOrigin = itemView.findViewById(R.id.tv_origin);
+        }
     }
 }

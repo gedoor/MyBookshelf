@@ -51,12 +51,6 @@ public class ReadAdjustPop extends PopupWindow {
     private OnAdjustListener adjustListener;
     private SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
 
-    public interface OnAdjustListener {
-        void changeSpeechRate(int speechRate);
-
-        void speechRateFollowSys();
-    }
-
     public ReadAdjustPop(ReadBookActivity readBookActivity, OnAdjustListener adjustListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.activity = readBookActivity;
@@ -207,12 +201,6 @@ public class ReadAdjustPop extends PopupWindow {
         });
     }
 
-    public void setScreenBrightness(int value) {
-        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
-        params.screenBrightness = value * 1.0f / 255f;
-        (activity).getWindow().setAttributes(params);
-    }
-
     public void setScreenBrightness() {
         WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
@@ -228,6 +216,12 @@ public class ReadAdjustPop extends PopupWindow {
             e.printStackTrace();
         }
         return value;
+    }
+
+    public void setScreenBrightness(int value) {
+        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
+        params.screenBrightness = value * 1.0f / 255f;
+        (activity).getWindow().setAttributes(params);
     }
 
     private void saveLight() {
@@ -263,5 +257,11 @@ public class ReadAdjustPop extends PopupWindow {
         if (!isFollowSys) {
             setScreenBrightness(light);
         }
+    }
+
+    public interface OnAdjustListener {
+        void changeSpeechRate(int speechRate);
+
+        void speechRateFollowSys();
     }
 }

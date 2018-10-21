@@ -104,7 +104,7 @@ public class BookChapter {
 
         private String nextUrl;
 
-        private WebChapterBean(T data,String nextUrl){
+        private WebChapterBean(T data, String nextUrl) {
             this.data = data;
             this.nextUrl = nextUrl;
         }

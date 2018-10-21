@@ -14,16 +14,8 @@ import com.monke.monkeybook.R;
 public class CheckAddShelfPop extends PopupWindow {
     private Context mContext;
     private View view;
-
-    public interface OnItemClickListener {
-        void clickExit();
-
-        void clickAddShelf();
-    }
-
     private OnItemClickListener itemClick;
     private String bookName;
-
     public CheckAddShelfPop(Context context, @NonNull String bookName, @NonNull OnItemClickListener itemClick) {
         super(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mContext = context;
@@ -51,5 +43,11 @@ public class CheckAddShelfPop extends PopupWindow {
         TextView tvAddShelf = view.findViewById(R.id.tv_done);
         tvAddShelf.setText("放入书架");
         tvAddShelf.setOnClickListener(v -> itemClick.clickAddShelf());
+    }
+
+    public interface OnItemClickListener {
+        void clickExit();
+
+        void clickAddShelf();
     }
 }

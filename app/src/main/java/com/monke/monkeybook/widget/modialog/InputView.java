@@ -24,10 +24,6 @@ public class InputView {
     private OnInputOk onInputOk;
     private Context context;
 
-    public static InputView getInstance(MoProgressView moProgressView) {
-        return new InputView(moProgressView);
-    }
-
     private InputView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
@@ -36,6 +32,10 @@ public class InputView {
             onInputOk.setInputText(etInput.getText().toString());
             moProgressHUD.dismiss();
         });
+    }
+
+    public static InputView getInstance(MoProgressView moProgressView) {
+        return new InputView(moProgressView);
     }
 
     void showInputView(final OnInputOk onInputOk, MoProgressHUD moProgressHUD, String title, String defaultValue) {

@@ -39,7 +39,7 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
      */
     @Override
     public View getGroupView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_group,parent,false);
+        return mInflater.inflate(R.layout.item_find_group, parent, false);
     }
 
     /**
@@ -49,7 +49,7 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
      */
     @Override
     public View getChildView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_kind,parent,false);
+        return mInflater.inflate(R.layout.item_find_kind, parent, false);
     }
 
     /**

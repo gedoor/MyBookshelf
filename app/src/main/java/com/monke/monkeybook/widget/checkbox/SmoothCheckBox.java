@@ -65,6 +65,24 @@ public class SmoothCheckBox extends View implements Checkable {
         init(attrs);
     }
 
+    private static int getGradientColor(int startColor, int endColor, float percent) {
+        int startA = Color.alpha(startColor);
+        int startR = Color.red(startColor);
+        int startG = Color.green(startColor);
+        int startB = Color.blue(startColor);
+
+        int endA = Color.alpha(endColor);
+        int endR = Color.red(endColor);
+        int endG = Color.green(endColor);
+        int endB = Color.blue(endColor);
+
+        int currentA = (int) (startA * (1 - percent) + endA * percent);
+        int currentR = (int) (startR * (1 - percent) + endR * percent);
+        int currentG = (int) (startG * (1 - percent) + endG * percent);
+        int currentB = (int) (startB * (1 - percent) + endB * percent);
+        return Color.argb(currentA, currentR, currentG, currentB);
+    }
+
     private void init(AttributeSet attrs) {
 
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SmoothCheckBox);
@@ -135,11 +153,6 @@ public class SmoothCheckBox extends View implements Checkable {
     }
 
     @Override
-    public void toggle() {
-        this.setChecked(!isChecked());
-    }
-
-    @Override
     public void setChecked(boolean checked) {
         mChecked = checked;
         reset();
@@ -149,8 +162,14 @@ public class SmoothCheckBox extends View implements Checkable {
         }
     }
 
+    @Override
+    public void toggle() {
+        this.setChecked(!isChecked());
+    }
+
     /**
      * checked with animation
+     *
      * @param checked checked
      * @param animate change with animation
      */
@@ -350,24 +369,6 @@ public class SmoothCheckBox extends View implements Checkable {
             mTickDrawing = true;
             postInvalidate();
         }, mAnimDuration);
-    }
-
-    private static int getGradientColor(int startColor, int endColor, float percent) {
-        int startA = Color.alpha(startColor);
-        int startR = Color.red(startColor);
-        int startG = Color.green(startColor);
-        int startB = Color.blue(startColor);
-
-        int endA = Color.alpha(endColor);
-        int endR = Color.red(endColor);
-        int endG = Color.green(endColor);
-        int endB = Color.blue(endColor);
-
-        int currentA = (int) (startA * (1 - percent) + endA * percent);
-        int currentR = (int) (startR * (1 - percent) + endR * percent);
-        int currentG = (int) (startG * (1 - percent) + endG * percent);
-        int currentB = (int) (startB * (1 - percent) + endB * percent);
-        return Color.argb(currentA, currentR, currentG, currentB);
     }
 
     public void setOnCheckedChangeListener(OnCheckedChangeListener l) {

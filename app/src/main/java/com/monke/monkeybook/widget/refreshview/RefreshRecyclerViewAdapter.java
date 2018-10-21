@@ -23,10 +23,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private OnClickTryAgainListener clickTryAgainListener;
 
-    public interface OnClickTryAgainListener {
-        void loadMoreErrorTryAgain();
-    }
-
     public RefreshRecyclerViewAdapter(Boolean needLoadMore) {
         this.needLoadMore = needLoadMore;
         handler = new Handler();
@@ -117,17 +113,6 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
         }
     }
 
-    class LoadMoreViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout llLoadMore;
-        TextView tvLoadMore;
-
-        public LoadMoreViewHolder(View itemView) {
-            super(itemView);
-            llLoadMore = itemView.findViewById(R.id.ll_loadmore);
-            tvLoadMore = itemView.findViewById(R.id.tv_loadmore);
-        }
-    }
-
     public Boolean canLoadMore() {
         return needLoadMore && isRequesting == 0 && !isAll && getICount() > 0;
     }
@@ -154,6 +139,21 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
             } else {
                 handler.post(this::notifyDataSetChanged);
             }
+        }
+    }
+
+    public interface OnClickTryAgainListener {
+        void loadMoreErrorTryAgain();
+    }
+
+    class LoadMoreViewHolder extends RecyclerView.ViewHolder {
+        FrameLayout llLoadMore;
+        TextView tvLoadMore;
+
+        public LoadMoreViewHolder(View itemView) {
+            super(itemView);
+            llLoadMore = itemView.findViewById(R.id.ll_loadmore);
+            tvLoadMore = itemView.findViewById(R.id.tv_loadmore);
         }
     }
 }

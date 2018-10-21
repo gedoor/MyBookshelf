@@ -70,19 +70,6 @@ public class ReadInterfacePop extends PopupWindow {
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-
-    public interface OnChangeProListener {
-        void upPageMode();
-
-        void upTextSize();
-
-        void upMargin();
-
-        void bgChange();
-
-        void refresh();
-    }
-
     private OnChangeProListener changeProListener;
 
     public ReadInterfacePop(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
@@ -328,6 +315,18 @@ public class ReadInterfacePop extends PopupWindow {
                 break;
         }
         readBookControl.setTextDrawableIndex(index);
+    }
+
+    public interface OnChangeProListener {
+        void upPageMode();
+
+        void upTextSize();
+
+        void upMargin();
+
+        void bgChange();
+
+        void refresh();
     }
 
 }

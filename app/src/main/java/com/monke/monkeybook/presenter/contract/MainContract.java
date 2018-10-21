@@ -16,6 +16,7 @@ public interface MainContract {
 
         /**
          * 刷新错误
+         *
          * @param error 错误
          */
         void refreshError(String error);

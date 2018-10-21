@@ -42,13 +42,13 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         }
     };
 
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
-        return itemTouchCallbackListener;
-    }
-
     public ReplaceRuleAdapter(ReplaceRuleActivity activity) {
         this.activity = activity;
         dataList = new ArrayList<>();
+    }
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
     }
 
     public void resetDataS(List<ReplaceRuleBean> dataList) {

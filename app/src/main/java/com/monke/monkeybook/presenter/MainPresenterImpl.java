@@ -182,12 +182,12 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
     public void initImmersionBar(Boolean immersion) {
         mView.initImmersionBar();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
         mView.recreate();
     }

@@ -20,7 +20,7 @@ import com.monke.monkeybook.MApplication;
 import java.util.Objects;
 
 public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T> implements IView {
-    public final static String start_share_ele= "start_with_share_ele";
+    public final static String start_share_ele = "start_with_share_ele";
     public SharedPreferences preferences;
     protected T mPresenter;
 
@@ -44,7 +44,7 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.putExtra(start_share_ele,true);
+            intent.putExtra(start_share_ele, true);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, transitionName);
             startActivity(intent, options.toBundle());
         } else {

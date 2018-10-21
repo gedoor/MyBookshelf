@@ -68,7 +68,7 @@ public class FontAdapter extends Adapter<FontAdapter.MyViewHolder> {
                 try {
                     Typeface.createFromFile(file);
                     fileList.add(file);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

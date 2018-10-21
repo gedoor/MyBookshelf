@@ -112,7 +112,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
             Hashtable<EncodeHintType, Object> hst = new Hashtable();
             hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600,hst);
+            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600, hst);
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             bitmap = barcodeEncoder.createBitmap(result);
         } catch (WriterException e) {
@@ -132,10 +132,10 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
 
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            int[] pixels = new int[width*height];
-            bitmap.getPixels(pixels,0,width,0,0,width,height);
+            int[] pixels = new int[width * height];
+            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
-            RGBLuminanceSource source = new RGBLuminanceSource(width,height,pixels);
+            RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             Reader reader = new MultiFormatReader();
             Result result;

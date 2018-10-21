@@ -73,13 +73,6 @@ public class MoreSettingPop extends PopupWindow {
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-
-    public interface OnChangeProListener {
-        void keepScreenOnChange(int keepScreenOn);
-
-        void recreate();
-    }
-
     private OnChangeProListener changeProListener;
 
     @SuppressLint("InflateParams")
@@ -271,6 +264,12 @@ public class MoreSettingPop extends PopupWindow {
         } else {
             tvScreenDirection.setText(screenDirectionListTitle[screenDirection]);
         }
+    }
+
+    public interface OnChangeProListener {
+        void keepScreenOnChange(int keepScreenOn);
+
+        void recreate();
     }
 
 }

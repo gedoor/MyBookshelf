@@ -58,7 +58,7 @@ public class DataRestore {
             String key = entry.getKey();
             SharedPreferencesUtil.saveData(key, v);
         }
-   }
+    }
 
     private void restoreBookShelf(String file) throws Exception {
         String json = DocumentHelper.readString("myBookShelf.json", file);

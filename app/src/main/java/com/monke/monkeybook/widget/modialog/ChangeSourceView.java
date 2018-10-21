@@ -36,10 +36,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ChangeSourceView {
+    public static SavedSource savedSource = new SavedSource();
     private TextView atvTitle;
     private ImageButton ibtStop;
     private RefreshRecyclerView rvSource;
-
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
     private OnClickSource onClickSource;
@@ -52,11 +52,6 @@ public class ChangeSourceView {
     private String bookAuthor;
     private int shelfLastChapter;
     private MBaseActivity activity;
-    public static SavedSource savedSource = new SavedSource();
-
-    public static ChangeSourceView getInstance(MBaseActivity activity, MoProgressView moProgressView) {
-        return new ChangeSourceView(activity, moProgressView);
-    }
 
     private ChangeSourceView(MBaseActivity activity, MoProgressView moProgressView) {
         this.activity = activity;
@@ -88,7 +83,7 @@ public class ChangeSourceView {
             @Override
             public void refreshFinish(Boolean value) {
                 ibtStop.setVisibility(View.INVISIBLE);
-                rvSource.finishRefresh(true,true);
+                rvSource.finishRefresh(true, true);
             }
 
             @Override
@@ -126,6 +121,10 @@ public class ChangeSourceView {
             }
         };
         searchBookModel = new SearchBookModel(activity, searchListener, true);
+    }
+
+    public static ChangeSourceView getInstance(MBaseActivity activity, MoProgressView moProgressView) {
+        return new ChangeSourceView(activity, moProgressView);
     }
 
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
@@ -214,7 +213,7 @@ public class ChangeSourceView {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
-                    activity.runOnUiThread(() ->adapter.addSourceAdapter(searchBookBean));
+                    activity.runOnUiThread(() -> adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
             }
@@ -235,6 +234,22 @@ public class ChangeSourceView {
         rvSource.setBaseRefreshListener(this::reSearchBook);
         ibtStop.setOnClickListener(v -> searchBookModel.stopSearch());
 
+    }
+
+    private int compareSearchBooks(SearchBookBean s1, SearchBookBean s2) {
+        boolean s1tag = s1.getTag().equals(bookTag);
+        boolean s2tag = s2.getTag().equals(bookTag);
+        if (s2tag && !s1tag)
+            return 1;
+        else if (s1tag && !s2tag)
+            return -1;
+        int result = Long.compare(s2.getAddTime(), s1.getAddTime());
+        if (result != 0)
+            return result;
+        result = Integer.compare(s2.getLastChapterNum(), s1.getLastChapterNum());
+        if (result != 0)
+            return result;
+        return Integer.compare(s2.getWeight(), s1.getWeight());
     }
 
     /**
@@ -277,21 +292,5 @@ public class ChangeSourceView {
         public void setBookSource(BookSourceBean bookSource) {
             this.bookSource = bookSource;
         }
-    }
-
-    private int compareSearchBooks(SearchBookBean s1, SearchBookBean s2) {
-        boolean s1tag = s1.getTag().equals(bookTag);
-        boolean s2tag = s2.getTag().equals(bookTag);
-        if (s2tag && !s1tag)
-            return 1;
-        else if (s1tag && !s2tag)
-            return -1;
-        int result = Long.compare(s2.getAddTime(), s1.getAddTime());
-        if (result != 0)
-            return result;
-        result = Integer.compare(s2.getLastChapterNum(), s1.getLastChapterNum());
-        if (result != 0)
-            return result;
-        return Integer.compare(s2.getWeight(), s1.getWeight());
     }
 }

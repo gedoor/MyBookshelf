@@ -18,7 +18,7 @@ import retrofit2.http.Url;
 public interface IHttpGetApi {
     @GET
     Observable<Response<String>> getWebContent(@Url String url,
-                                     @HeaderMap Map<String, String> headers);
+                                               @HeaderMap Map<String, String> headers);
 
     @GET
     Observable<Response<String>> searchBook(@Url String url,
@@ -27,5 +27,5 @@ public interface IHttpGetApi {
 
     @GET
     Call<String> getWebContentCall(@Url String url,
-                                         @HeaderMap Map<String, String> headers);
+                                   @HeaderMap Map<String, String> headers);
 }

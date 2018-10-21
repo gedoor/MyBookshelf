@@ -49,31 +49,12 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         notifyDataSetChanged();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int index);
-    }
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
     }
 
     public List<SearchBookBean> getSearchBookBeans() {
         return searchBookBeans;
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder{
-        LinearLayout llContent;
-        TextView tvBookSource;
-        TextView tvLastChapter;
-        ImageView ivChecked;
-
-        MyViewHolder(View itemView) {
-            super(itemView);
-            llContent = itemView.findViewById(R.id.ll_content);
-            tvBookSource = itemView.findViewById(R.id.tv_source_name);
-            tvLastChapter = itemView.findViewById(R.id.tv_lastChapter);
-            ivChecked = itemView.findViewById(R.id.iv_checked);
-        }
     }
 
     @Override
@@ -111,5 +92,24 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public int getICount() {
         return searchBookBeans.size();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int index);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout llContent;
+        TextView tvBookSource;
+        TextView tvLastChapter;
+        ImageView ivChecked;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            llContent = itemView.findViewById(R.id.ll_content);
+            tvBookSource = itemView.findViewById(R.id.tv_source_name);
+            tvLastChapter = itemView.findViewById(R.id.tv_lastChapter);
+            ivChecked = itemView.findViewById(R.id.iv_checked);
+        }
     }
 }

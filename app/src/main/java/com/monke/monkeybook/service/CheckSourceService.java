@@ -40,9 +40,9 @@ import io.reactivex.schedulers.Schedulers;
 import static com.monke.monkeybook.help.RxBusTag.CHECK_SOURCE_STATE;
 
 public class CheckSourceService extends Service {
-    private static final int notificationId = 3333;
     public static final String ActionStartService = "startService";
     public static final String ActionDoneService = "doneService";
+    private static final int notificationId = 3333;
     private static final String ActionOpenActivity = "openActivity";
 
     private List<BookSourceBean> bookSourceBeanList;
@@ -51,6 +51,24 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
+
+    /**
+     * 启动服务
+     */
+    public static void start(Context context) {
+        Intent intent = new Intent(context, CheckSourceService.class);
+        intent.setAction(ActionStartService);
+        context.startService(intent);
+    }
+
+    /**
+     * 停止服务
+     */
+    public static void stop(Context context) {
+        Intent intent = new Intent(context, CheckSourceService.class);
+        intent.setAction(ActionDoneService);
+        context.startService(intent);
+    }
 
     @Override
     public void onCreate() {
@@ -90,24 +108,6 @@ public class CheckSourceService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    /**
-     * 启动服务
-     */
-    public static void start(Context context) {
-        Intent intent = new Intent(context, CheckSourceService.class);
-        intent.setAction(ActionStartService);
-        context.startService(intent);
-    }
-
-    /**
-     * 停止服务
-     */
-    public static void stop(Context context) {
-        Intent intent = new Intent(context, CheckSourceService.class);
-        intent.setAction(ActionDoneService);
-        context.startService(intent);
     }
 
     private void doneService() {
@@ -234,7 +234,7 @@ public class CheckSourceService extends Service {
                                 checkSource = null;
                             }
                         }
-                    }, 60*1000);
+                    }, 60 * 1000);
                 }
 
                 @Override
@@ -250,7 +250,7 @@ public class CheckSourceService extends Service {
                 @Override
                 public void onError(Throwable e) {
                     sourceBean.addGroup("失效");
-                    sourceBean.setSerialNumber(10000+checkIndex);
+                    sourceBean.setSerialNumber(10000 + checkIndex);
                     BookSourceManage.addBookSource(sourceBean);
                     BookSourceManage.refreshBookSource();
                     nextCheck();

@@ -48,6 +48,28 @@ class BarConfig {
     }
 
     @TargetApi(14)
+    private static boolean hasNavBar(Activity activity) {
+        WindowManager windowManager = activity.getWindowManager();
+        Display d = windowManager.getDefaultDisplay();
+
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            d.getRealMetrics(realDisplayMetrics);
+        }
+
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        d.getMetrics(displayMetrics);
+
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+    }
+
+    @TargetApi(14)
     private int getActionBarHeight(Context context) {
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -86,28 +108,6 @@ class BarConfig {
             }
         }
         return result;
-    }
-
-    @TargetApi(14)
-    private static boolean hasNavBar(Activity activity) {
-        WindowManager windowManager = activity.getWindowManager();
-        Display d = windowManager.getDefaultDisplay();
-
-        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            d.getRealMetrics(realDisplayMetrics);
-        }
-
-        int realHeight = realDisplayMetrics.heightPixels;
-        int realWidth = realDisplayMetrics.widthPixels;
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        d.getMetrics(displayMetrics);
-
-        int displayHeight = displayMetrics.heightPixels;
-        int displayWidth = displayMetrics.widthPixels;
-
-        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
     }
 
     private int getInternalDimensionSize(Resources res, String key) {
@@ -203,14 +203,14 @@ class BarConfig {
             Point realSize = new Point();
             display.getSize(size);
             display.getRealSize(realSize);
-            boolean  result  = realSize.y!=size.y;
-            return realSize.y!=size.y;
-        }else {
+            boolean result = realSize.y != size.y;
+            return realSize.y != size.y;
+        } else {
             boolean menu = ViewConfiguration.get(activity).hasPermanentMenuKey();
             boolean back = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-            if(menu || back) {
+            if (menu || back) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }

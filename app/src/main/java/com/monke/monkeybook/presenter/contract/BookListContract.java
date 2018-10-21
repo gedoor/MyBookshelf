@@ -14,6 +14,7 @@ public interface BookListContract {
 
         /**
          * 刷新书架书籍小说信息 更新UI
+         *
          * @param bookShelfBeanList 书架
          */
         void refreshBookShelf(List<BookShelfBean> bookShelfBeanList);
@@ -22,6 +23,7 @@ public interface BookListContract {
 
         /**
          * 刷新错误
+         *
          * @param error 错误
          */
         void refreshError(String error);

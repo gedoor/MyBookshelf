@@ -28,14 +28,14 @@ public class EditReplaceRuleView {
     private Context context;
     private ReplaceRuleBean replaceRuleBean;
 
-    public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
-        return new EditReplaceRuleView(moProgressView);
-    }
-
     private EditReplaceRuleView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
+    }
+
+    public static EditReplaceRuleView getInstance(MoProgressView moProgressView) {
+        return new EditReplaceRuleView(moProgressView);
     }
 
     void showEditReplaceRule(ReplaceRuleBean replaceRuleBean, final OnSaveReplaceRule saveReplaceRule, MoProgressHUD moProgressHUD) {

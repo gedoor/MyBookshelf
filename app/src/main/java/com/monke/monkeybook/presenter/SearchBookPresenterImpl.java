@@ -298,7 +298,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     }
 
     private void saveSearchBookToDb(String bookName) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e->{
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (SearchBookBean searchBookBean : mView.getSearchBookAdapter().getSearchBooks()) {
                 if (Objects.equals(searchBookBean.getName(), bookName)) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);

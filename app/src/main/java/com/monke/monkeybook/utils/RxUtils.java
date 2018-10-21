@@ -14,17 +14,17 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RxUtils {
 
-    public static <T> SingleSource<T> toSimpleSingle(Single<T> upstream){
+    public static <T> SingleSource<T> toSimpleSingle(Single<T> upstream) {
         return upstream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static <T> ObservableSource<T> toSimpleSingle(Observable<T> upstream){
+    public static <T> ObservableSource<T> toSimpleSingle(Observable<T> upstream) {
         return upstream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static <T,R> TwoTuple<T,R> twoTuple(T first,R second){
+    public static <T, R> TwoTuple<T, R> twoTuple(T first, R second) {
         return new TwoTuple<T, R>(first, second);
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -362,6 +363,16 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
+    }
+
+    @Override
+    public void showSnackBar(String msg, int length) {
+        super.showSnackBar(llContent, msg, length);
     }
 
 }

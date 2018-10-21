@@ -28,8 +28,6 @@ public interface ReplaceRuleContract {
 
         Snackbar getSnackBar(String msg, int length);
 
-        void showSnackBar(String msg, int length);
-
         void toast(String msg);
     }
 

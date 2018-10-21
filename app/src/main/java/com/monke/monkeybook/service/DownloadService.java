@@ -49,16 +49,14 @@ public class DownloadService extends Service {
     public static final String pauseAction = "pauseAction";
     public static final String startAction = "startAction";
     public static final String addDownloadAction = "addDownload";
-    private final int notificationId = 19931118;
-
-    private SharedPreferences preferences;
-
-    public static Boolean isStartDownload = false;
-    private Boolean isDownloading = false;
-    private Boolean isFinish = false;
     private final static int ADD = 1;
     private final static int REMOVE = 2;
     private final static int CHECK = 3;
+    public static Boolean isStartDownload = false;
+    private final int notificationId = 19931118;
+    private SharedPreferences preferences;
+    private Boolean isDownloading = false;
+    private Boolean isFinish = false;
     private int totalChapters = 0;
     private int threadsNum;
     private List<DownloadChapterBean> downloadingChapter = new ArrayList<>();
@@ -276,7 +274,7 @@ public class DownloadService extends Service {
                         @Override
                         public void onComplete() {
                             if (isStartDownload) {
-                               handler.postDelayed(() -> {
+                                handler.postDelayed(() -> {
                                     if (isStartDownload) {
                                         toDownload();
                                     } else {
@@ -429,7 +427,7 @@ public class DownloadService extends Service {
             isFinish = true;
             stopSelf();
             if (totalChapters > 0)
-                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载"+totalChapters+"章", Toast.LENGTH_SHORT).show());
+                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), "共下载" + totalChapters + "章", Toast.LENGTH_SHORT).show());
         }
         cancelDownload();
     }
