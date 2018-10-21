@@ -21,7 +21,6 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 

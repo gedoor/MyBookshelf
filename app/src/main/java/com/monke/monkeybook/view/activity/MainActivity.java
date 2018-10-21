@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -207,7 +205,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
             }
         }
-
     }
 
     private void updateTabItemText(int group){
@@ -287,7 +284,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
-                    Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
+                    toast("网络连接不可用，无法下载！");
                 else
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 1000);
                 break;
@@ -364,7 +361,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
-        //tvUser = headerView.findViewById(R.id.tv_user);
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -495,7 +491,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public void refreshError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        toast(error);
     }
 
     @Override
@@ -506,11 +502,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     public void onRestore(String msg) {
         moProgressHUD.showLoading(msg);
-    }
-
-    @Override
-    public SharedPreferences getPreferences() {
-        return preferences;
     }
 
     @Override
@@ -528,7 +519,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else if (mTlIndicator.getSelectedTabPosition() != 0){
             Objects.requireNonNull(mTlIndicator.getTabAt(0)).select();
             return true;
-        }else {
+        } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawers();
@@ -541,6 +532,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
+    /*
     @Override
     public void recreate(){
         super.recreate();
@@ -550,11 +542,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     protected void onDestroy() {
         super.onDestroy();
     }
+*/
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             if (getCurrentFocus() != null) {
-                Snackbar.make(getCurrentFocus(), "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+                showSnackBar("再按一次退出程序");
             }
             exitTime = System.currentTimeMillis();
         } else {

@@ -25,7 +25,6 @@ import com.monke.monkeybook.view.activity.BookSourceActivity;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -56,7 +55,7 @@ public class CheckSourceService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences preference = getSharedPreferences("CONFIG", 0);
+        SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
         threadsNum = preference.getInt(this.getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);

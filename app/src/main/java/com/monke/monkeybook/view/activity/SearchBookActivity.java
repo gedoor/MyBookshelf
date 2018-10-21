@@ -20,16 +20,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.help.ACache;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.SoftInputUtil;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
@@ -69,6 +71,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
     private boolean useMy716;
+    private String searchKey;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -221,9 +224,18 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                toSearch();
-                searchView.clearFocus();
-                return false;
+                if (TextUtils.isEmpty(query))
+                    return false;
+                searchKey = query.trim();
+                if (!searchKey.toLowerCase().startsWith("set:")) {
+                    toSearch();
+                    searchView.clearFocus();
+                    return false;
+                } else {
+                    parseSecretCode(searchKey);
+                    finish();
+                    return false;
+                }
             }
 
             @Override
@@ -296,7 +308,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         showHistory = llSearchHistory.getVisibility() == View.VISIBLE;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -315,12 +326,27 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         openOrCloseHistory(showHistory);
     }
 
+    private void parseSecretCode(String code) {
+        code = code.toLowerCase().replaceAll("^set:", "").trim();
+        String[] param = code.split("\\s+");
+        String msg = null;
+        switch (param[0]) {
+            case "show_nav_shelves":
+                boolean enable = param.length == 1 || !param[1].equals("false");
+                SharedPreferencesUtil.saveData("showNavShelves", enable);
+                msg = "已" + (enable ? "启" : "禁") + "用侧边栏书架！";
+                RxBus.get().post(RxBusTag.UPDATE_PX, true);
+                break;
+        }
+        if (msg != null)
+            toast(msg);
+    }
+
     /**
      * 开始搜索
      */
     private void toSearch() {
-        if (searchView.getQuery().toString().trim().length() > 0) {
-            final String key = searchView.getQuery().toString().trim();
+        if (!TextUtils.isEmpty(searchKey)) {
             mPresenter.setHasSearch(true);
             mPresenter.insertSearchHistory();
             //执行搜索请求
@@ -328,7 +354,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 mPresenter.initPage();
                 rfRvSearchBooks.startRefresh();
                 fabSearchStop.show();
-                mPresenter.toSearchBooks(key, false);
+                mPresenter.toSearchBooks(searchKey, false);
             }, 300);
         }
     }
@@ -348,7 +374,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void insertSearchHistorySuccess(SearchHistoryBean searchHistoryBean) {
         //搜索历史插入或者修改成功
-        mPresenter.querySearchHistory(searchView.getQuery().toString().trim());
+        mPresenter.querySearchHistory(searchKey);
     }
 
     @Override
@@ -404,8 +430,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     @Override
-    public void addBookShelfFailed(String massage) {
-        Toast.makeText(this, massage, Toast.LENGTH_SHORT).show();
+    public void addBookShelfFailed(String message) {
+        toast(message);
     }
 
     @Override

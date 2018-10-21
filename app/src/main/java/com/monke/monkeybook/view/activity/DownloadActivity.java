@@ -152,7 +152,7 @@ public class DownloadActivity extends MBaseActivity {
             pauseMenu.setIcon(R.drawable.ic_pause1);
             pauseMenu.setTitle(R.string.pause);
         }
-        pauseMenu.getIcon().mutate();
+        // pauseMenu.getIcon().mutate();
         pauseMenu.getIcon().setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }

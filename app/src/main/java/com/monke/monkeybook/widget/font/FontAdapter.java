@@ -1,7 +1,6 @@
 package com.monke.monkeybook.widget.font;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

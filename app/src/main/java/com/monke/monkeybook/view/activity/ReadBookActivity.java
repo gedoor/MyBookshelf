@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.MApplication;
@@ -69,7 +67,6 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.text.TextUtils.isEmpty;
 import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
@@ -453,7 +450,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void speechRateFollowSys() {
                 if (ReadAloudService.running) {
                     ReadAloudService.stop(ReadBookActivity.this);
-                    Toast.makeText(ReadBookActivity.this, "跟随系统需要重新开始朗读", Toast.LENGTH_SHORT).show();
+                    toast("跟随系统需要重新开始朗读");
                 }
             }
         });
@@ -711,7 +708,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+                toast(R.string.can_not_open);
             }
         });
 
@@ -723,10 +720,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         //长按停止朗读
         fabReadAloud.setOnLongClickListener(view -> {
             if (ReadAloudService.running) {
-                Toast.makeText(this, getString(R.string.aloud_stop), Toast.LENGTH_SHORT).show();
+                toast(R.string.aloud_stop);
                 ReadAloudService.stop(this);
             } else {
-                Toast.makeText(this, getString(R.string.read_aloud), Toast.LENGTH_SHORT).show();
+                toast(R.string.read_aloud);
             }
             return true;
         });
@@ -734,14 +731,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         //自动翻页
         fabAutoPage.setOnClickListener(view -> {
             if (ReadAloudService.running) {
-                Toast.makeText(this, "朗读正在运行,不能自动翻页", Toast.LENGTH_SHORT).show();
+                toast("朗读正在运行,不能自动翻页");
                 return;
             }
             autoPage = !autoPage;
             autoPage();
         });
         fabAutoPage.setOnLongClickListener(view -> {
-            Toast.makeText(this, getString(R.string.auto_next_page), Toast.LENGTH_SHORT).show();
+            toast(R.string.auto_next_page);
             return true;
         });
 
@@ -751,14 +748,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             ReplaceRuleActivity.startThis(this);
         });
         fabReplaceRule.setOnLongClickListener(view -> {
-            Toast.makeText(this, getString(R.string.replace_rule_title), Toast.LENGTH_SHORT).show();
+            toast(R.string.replace_rule_title);
             return true;
         });
 
         //夜间模式
         fabNightTheme.setOnClickListener(view -> setNightTheme(!isNightTheme()));
         fabNightTheme.setOnLongClickListener(view -> {
-            Toast.makeText(this, getString(R.string.night_theme), Toast.LENGTH_SHORT).show();
+            toast(R.string.night_theme);
             return true;
         });
 
@@ -979,11 +976,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         llMenuBottom.startAnimation(menuBottomIn);
     }
 
-    @Override
-    public void toast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
     /**
      * 更新朗读状态
      */
@@ -1097,7 +1089,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     return true;
                 } else if (ReadAloudService.running && aloudStatus == PLAY) {
                     ReadAloudService.pause(this);
-                    Toast.makeText(this, R.string.read_aloud_pause, Toast.LENGTH_SHORT).show();
+                    toast(R.string.read_aloud_pause);
                     return true;
                 } else {
                     finish();
@@ -1246,9 +1238,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @AfterPermissionGranted(MApplication.RESULT__PERMS)
     private void onResultOpenOtherPerms() {
         if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            Toast.makeText(this, "获取权限成功", Toast.LENGTH_SHORT).show();
+            toast("获取权限成功");
         } else {
-            Toast.makeText(this, "未获取到权限", Toast.LENGTH_SHORT).show();
+            toast("未获取到权限");
         }
     }
 

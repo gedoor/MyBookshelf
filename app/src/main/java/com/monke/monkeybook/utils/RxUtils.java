@@ -1,15 +1,11 @@
 package com.monke.monkeybook.utils;
 
 
-
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
 
 /**

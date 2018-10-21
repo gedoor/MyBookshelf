@@ -33,8 +33,6 @@ import com.monke.monkeybook.view.activity.DownloadActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -80,7 +78,7 @@ public class DownloadService extends Service {
         //发送通知
         startForeground(notificationId, builder.build());
         RxBus.get().register(this);
-        preferences = getSharedPreferences("CONFIG", 0);
+        preferences = MApplication.getInstance().getConfigPreferences();
         threadsNum = preferences.getInt(this.getString(R.string.pk_threads_num), 6);
         executorService = Executors.newFixedThreadPool(threadsNum);
         scheduler = Schedulers.from(executorService);

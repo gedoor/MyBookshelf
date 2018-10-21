@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.monke.basemvplib.BaseFragment;
 import com.monke.basemvplib.impl.IPresenter;
@@ -81,5 +82,9 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
         if (null != mPresenter) {
             mPresenter.detachView();
         }
+    }
+
+    public void toast(String msg) {
+        Toast.makeText(this.getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 }

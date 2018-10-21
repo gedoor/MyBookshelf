@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -258,7 +257,7 @@ public class ReadInterfacePop extends PopupWindow {
         //长按清除字体
         fl_text_font.setOnLongClickListener(view -> {
             clearFontPath();
-            Toast.makeText(activity, R.string.clear_font, Toast.LENGTH_SHORT).show();
+            activity.toast(R.string.clear_font);
             return true;
         });
 

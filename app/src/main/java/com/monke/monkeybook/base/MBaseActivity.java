@@ -8,10 +8,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
@@ -24,6 +26,8 @@ import java.lang.reflect.Method;
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     public SharedPreferences preferences;
     protected ImmersionBar mImmersionBar;
+    public static final int SUCCESS = 1;
+    public static final int ERROR = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
             }
         }
@@ -174,4 +177,41 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    public void toast(String msg) {
+        toast(msg, Toast.LENGTH_SHORT, 0);
+    }
+
+    public void toast(String msg, int state) {
+        toast(msg, Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(int strId) {
+        toast(strId, 0);
+    }
+
+    public void toast(int strId, int state) {
+        toast(getString(strId), Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(String msg, int length, int state) {
+        Toast toast = Toast.makeText(this, msg, length);
+        if (state == SUCCESS) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.success), PorterDuff.Mode.SRC_IN);
+        } else if (state == ERROR) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.error), PorterDuff.Mode.SRC_IN);
+        }
+        toast.show();
+    }
+
+    public void showSnackBar(String msg) {
+        showSnackBar(msg, Snackbar.LENGTH_SHORT);
+    }
+
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(getCurrentFocus(), msg, length);
+    }
+
+    public void showSnackBar(String msg, int length) {
+        Snackbar.make(getCurrentFocus(), msg, length).show();
+    }
 }

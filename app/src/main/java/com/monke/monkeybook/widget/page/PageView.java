@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +35,6 @@ public class PageView extends View {
     private final static String TAG = PageView.class.getSimpleName();
 
     private ReadBookActivity activity;
-    private Snackbar snackbar;
 
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
@@ -301,7 +299,7 @@ public class PageView extends View {
         if (mPageLoader.prev()) {
             return true;
         } else {
-            showSnackBar("没有上一页");
+            activity.showSnackBar("没有上一页");
             return false;
         }
     }
@@ -313,18 +311,9 @@ public class PageView extends View {
         if (mPageLoader.next()) {
             return true;
         } else {
-            showSnackBar("没有下一页");
+            activity.showSnackBar("没有下一页");
             return false;
         }
-    }
-
-    private void showSnackBar(String msg) {
-        if (snackbar == null) {
-            snackbar = Snackbar.make(this, msg, Snackbar.LENGTH_SHORT);
-        } else {
-            snackbar.setText(msg);
-        }
-        snackbar.show();
     }
 
     private void pageCancel() {

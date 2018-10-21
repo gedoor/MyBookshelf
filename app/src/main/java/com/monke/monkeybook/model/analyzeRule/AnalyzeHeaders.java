@@ -16,7 +16,7 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeHeaders {
-    private static SharedPreferences preferences = MApplication.getInstance().getSharedPreferences("CONFIG", 0);
+    private static SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
 
     public static Map<String, String> getMap(String userAgent) {
         Map<String, String> headerMap = new HashMap<>();

@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -49,6 +49,7 @@ public class ReadAdjustPop extends PopupWindow {
     private int light;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnAdjustListener adjustListener;
+    private SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
 
     public interface OnAdjustListener {
         void changeSpeechRate(int speechRate);
@@ -230,7 +231,6 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private void saveLight() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("light", light);
         editor.putBoolean("isfollowsys", isFollowSys);
@@ -238,12 +238,10 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private int getLight() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getInt("light", getScreenBrightness());
     }
 
     private Boolean getIsFollowSys() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getBoolean("isfollowsys", true);
     }
 

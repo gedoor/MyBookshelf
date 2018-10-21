@@ -3,7 +3,6 @@ package com.monke.monkeybook.presenter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -54,13 +53,13 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
+                        mView.dismissHUD();
                         if (value) {
-                            mView.dismissHUD();
                             //更新书架并刷新
-                            RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, true);
+                            mView.toast(R.string.restore_success);
+                            RxBus.get().post(RxBusTag.UPDATE_PX, true);
                         } else {
-                            mView.dismissHUD();
-                            Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
+                            mView.toast(R.string.restore_fail);
                         }
                     }
 
@@ -68,7 +67,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.dismissHUD();
-                        Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
+                        mView.toast(R.string.restore_fail);
                     }
                 });
     }
@@ -101,13 +100,13 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                         if (bookShelfBean != null) {
                             getBook(bookShelfBean);
                         } else {
-                            Toast.makeText(mView.getContext(), "已在书架中", Toast.LENGTH_SHORT).show();
+                            mView.toast("已在书架中");
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "网址格式不对", Toast.LENGTH_SHORT).show();
+                        mView.toast("网址格式不对");
                     }
                 });
     }
@@ -128,7 +127,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                     }
                 });
     }
@@ -144,17 +143,17 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     @Override
                     public void onNext(BookShelfBean value) {
                         if (value.getBookInfoBean().getChapterUrl() == null) {
-                            Toast.makeText(mView.getContext(), "添加书籍失败", Toast.LENGTH_SHORT).show();
+                            mView.toast("添加书籍失败");
                         } else {
                             //成功   //发送RxBus
                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
-                            Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
+                            mView.toast("添加书籍成功");
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "添加书籍失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("添加书籍失败" + e.getMessage());
                     }
                 });
     }

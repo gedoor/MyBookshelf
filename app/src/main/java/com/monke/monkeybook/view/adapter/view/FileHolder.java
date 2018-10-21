@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.adapter.view;
 
-import android.graphics.PorterDuff;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;

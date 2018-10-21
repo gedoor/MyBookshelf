@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -23,7 +22,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
@@ -265,7 +263,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                                     @Override
                                     public void onError(Throwable e) {
                                         e.printStackTrace();
-                                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                                        mView.toast("文本打开失败！");
                                     }
                                 });
                     }
@@ -273,7 +271,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                        mView.toast("文本打开失败！");
                     }
                 });
     }
@@ -316,7 +314,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("换源失败！" + e.getMessage());
                         mView.finishContent();
                     }
                 });
@@ -395,7 +393,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                         mView.finishContent();
                     }
                 });

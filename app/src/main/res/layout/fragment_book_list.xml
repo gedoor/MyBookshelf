@@ -13,8 +13,8 @@
             android:id="@+id/local_book_rv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:bg_color="#00000000"
-            app:font_color="#767676"
+            app:bg_color="@color/transparent"
+            app:font_color="@color/tv_text_default"
             app:second_color="#c1c1c1"
             app:second_max_progress="80dp"
             app:speed="2dp" />

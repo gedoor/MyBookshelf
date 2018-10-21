@@ -1,20 +1,18 @@
 package com.monke.monkeybook.model;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
-import com.monke.monkeybook.dao.DaoSession;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
@@ -24,7 +22,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -156,24 +153,24 @@ public class BookSourceManage extends BaseModelImpl {
         });
     }
 
-    public static void initDefaultBookSource(Context context) {
+    public static void initDefaultBookSource(MBaseActivity activity) {
         if (getAllBookSource() == null || getAllBookSource().size() == 0) {
-            new AlertDialog.Builder(context)
+            new AlertDialog.Builder(activity)
                     .setTitle("加载默认书源")
                     .setMessage("当前书源为空,是否加载默认书源?")
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                         try {
-                            URL url = new URL(context.getString(R.string.default_source_url));
+                            URL url = new URL(activity.getString(R.string.default_source_url));
                             BookSourceManage.importSourceFromWww(url)
                                     .subscribe(new SimpleObserver<Boolean>() {
                                         @Override
                                         public void onNext(Boolean aBoolean) {
-                                            Toast.makeText(context, "默认书源加载成功.", Toast.LENGTH_SHORT).show();
+                                            activity.toast("默认书源加载成功.");
                                         }
 
                                         @Override
                                         public void onError(Throwable e) {
-                                            Toast.makeText(context, "默认书源加载失败." + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            activity.toast("默认书源加载失败.");
                                         }
                                     });
                         } catch (Exception e) {

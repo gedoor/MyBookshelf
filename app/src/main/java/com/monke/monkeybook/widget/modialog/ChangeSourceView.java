@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -51,14 +51,14 @@ public class ChangeSourceView {
     private String bookName;
     private String bookAuthor;
     private int shelfLastChapter;
-    private BaseActivity activity;
+    private MBaseActivity activity;
     public static SavedSource savedSource = new SavedSource();
 
-    public static ChangeSourceView getInstance(BaseActivity activity, MoProgressView moProgressView) {
+    public static ChangeSourceView getInstance(MBaseActivity activity, MoProgressView moProgressView) {
         return new ChangeSourceView(activity, moProgressView);
     }
 
-    private ChangeSourceView(BaseActivity activity, MoProgressView moProgressView) {
+    private ChangeSourceView(MBaseActivity activity, MoProgressView moProgressView) {
         this.activity = activity;
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();

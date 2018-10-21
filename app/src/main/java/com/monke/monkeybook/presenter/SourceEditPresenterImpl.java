@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -70,7 +69,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getLocalizedMessage());
                     }
                 });
     }
@@ -100,7 +99,7 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
             BookSourceBean bookSourceBean = gson.fromJson(bookSourceStr, BookSourceBean.class);
             mView.setText(bookSourceBean);
         } catch (Exception e) {
-            Toast.makeText(mView.getContext(), "数据格式不对", Toast.LENGTH_SHORT).show();
+            mView.toast("数据格式不对");
         }
     }
 
@@ -146,12 +145,12 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
                 setText(result.getText());
             } catch (NotFoundException | ChecksumException | FormatException e) {
                 e.printStackTrace();
-                Toast.makeText(mView.getContext(), "解析图片错误", Toast.LENGTH_SHORT).show();
+                mView.toast("解析图片错误");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mView.getContext(), "图片获取错误", Toast.LENGTH_SHORT).show();
+            mView.toast("图片获取错误");
         }
 
     }

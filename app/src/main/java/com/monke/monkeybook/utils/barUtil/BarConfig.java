@@ -16,8 +16,6 @@ import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 
-import java.lang.reflect.Method;
-
 /**
  * Created by geyifeng on 2017/5/11.
  */
