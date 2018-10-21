@@ -28,6 +28,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     public static final int ERROR = -1;
     public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected ImmersionBar mImmersionBar;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +216,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     public void showSnackBar(View view, String msg, int length) {
-        Snackbar.make(view, msg, length).show();
+        if (snackbar == null) {
+            snackbar = Snackbar.make(view, msg, length);
+        } else {
+            snackbar.setText(msg);
+            snackbar.setDuration(length);
+        }
+        snackbar.show();
     }
 }
