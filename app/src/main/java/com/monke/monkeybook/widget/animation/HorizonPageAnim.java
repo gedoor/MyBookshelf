@@ -164,6 +164,12 @@ public abstract class HorizonPageAnim extends PageAnimation {
             case MotionEvent.ACTION_CANCEL:
                 isCancel = true;
                 mListener.pageCancel();
+                // 开启翻页效果
+                if (!noNext) {
+                    startAnim();
+                    mView.invalidate();
+                }
+                break;
         }
         return true;
     }
