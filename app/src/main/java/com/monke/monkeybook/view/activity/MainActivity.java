@@ -64,7 +64,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
-public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View {
+public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallBackValue {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
@@ -131,10 +131,12 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
     }
 
+    @Override
     public boolean isRecreate() {
         return isRecreate;
     }
 
+    @Override
     public int getGroup() {
         return group;
     }
@@ -534,18 +536,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             return super.onKeyDown(keyCode, event);
         }
     }
-
-    /*
-    @Override
-    public void recreate(){
-        super.recreate();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-*/
 
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
