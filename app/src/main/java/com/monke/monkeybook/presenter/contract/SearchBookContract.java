@@ -31,7 +31,7 @@ public interface SearchBookContract {
 
         void setUseMy716(boolean useMy716);
 
-        void toSearchBooks(String key,Boolean fromError);
+        void toSearchBooks(String key, Boolean fromError);
 
         void addBookToShelf(final SearchBookBean searchBookBean);
 

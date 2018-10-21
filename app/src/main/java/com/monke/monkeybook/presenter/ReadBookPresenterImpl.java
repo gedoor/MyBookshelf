@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -23,7 +22,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
@@ -120,14 +118,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     public synchronized void loadContent(final int chapterIndex) {
         if (null != bookShelf && bookShelf.getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                        if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
-                                chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName())
-                                && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
-                            DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
-                            e.onNext(chapterIndex);
-                        }
-                        e.onComplete();
-                    })
+                if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelf.getBookInfoBean()),
+                        chapterIndex, bookShelf.getChapterList(chapterIndex).getDurChapterName())
+                        && !DownloadingList(CHECK, bookShelf.getChapterList(chapterIndex).getDurChapterUrl())) {
+                    DownloadingList(ADD, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
+                    e.onNext(chapterIndex);
+                }
+                e.onComplete();
+            })
                     .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(scheduler, bookShelf.getBookInfoBean().getName(), bookShelf.getChapterList(index).getDurChapterUrl(), index, bookShelf.getTag()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
@@ -137,7 +135,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                             handler.postDelayed(() -> {
                                 DownloadingList(REMOVE, bookShelf.getChapterList(chapterIndex).getDurChapterUrl());
                                 d.dispose();
-                            }, 30*1000);
+                            }, 30 * 1000);
                         }
 
                         @SuppressLint("DefaultLocale")
@@ -265,7 +263,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                                     @Override
                                     public void onError(Throwable e) {
                                         e.printStackTrace();
-                                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                                        mView.toast("文本打开失败！");
                                     }
                                 });
                     }
@@ -273,7 +271,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(MApplication.getInstance(), "文本打开失败！", Toast.LENGTH_SHORT).show();
+                        mView.toast("文本打开失败！");
                     }
                 });
     }
@@ -316,7 +314,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("换源失败！" + e.getMessage());
                         mView.finishContent();
                     }
                 });
@@ -395,7 +393,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                         mView.finishContent();
                     }
                 });
@@ -521,17 +519,13 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         });
     }
 
-    public interface OnAddListener {
-        void addSuccess();
-    }
-
-    /////////////////////////////////////////////////
-
     @Override
     public void attachView(@NonNull IView iView) {
         super.attachView(iView);
         RxBus.get().register(this);
     }
+
+    /////////////////////////////////////////////////
 
     @Override
     public void detachView() {
@@ -539,14 +533,14 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         RxBus.get().unregister(this);
     }
 
-    /////////////////////RxBus////////////////////////
-
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
     public void chapterChange(ChapterListBean chapterListBean) {
         if (bookShelf != null && bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
             mView.chapterChange(chapterListBean);
         }
     }
+
+    /////////////////////RxBus////////////////////////
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.MEDIA_BUTTON)})
     public void onMediaButton(String command) {
@@ -578,6 +572,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_TIMER)})
     public void upAloudTimer(String timer) {
         mView.upAloudTimer(timer);
+    }
+
+    public interface OnAddListener {
+        void addSuccess();
     }
 
 

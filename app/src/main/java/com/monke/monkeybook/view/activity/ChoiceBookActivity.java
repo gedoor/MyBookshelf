@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
@@ -191,7 +190,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     public void addBookShelfFailed(String massage) {
-        Toast.makeText(this, massage, Toast.LENGTH_SHORT).show();
+        toast(massage, ERROR);
     }
 
     @Override

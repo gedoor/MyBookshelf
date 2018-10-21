@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -67,14 +66,14 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         }
     };
 
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
-        return itemTouchCallbackListener;
-    }
-
     public BookShelfGridAdapter(Activity activity, Boolean needAnim) {
         this.activity = activity;
         this.needAnim = needAnim;
         books = new ArrayList<>();
+    }
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
     }
 
     public void refreshBook(String noteUrl) {
@@ -156,9 +155,9 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
                 }
                 return true;
             });
-        } else if (books.get(index).getSerialNumber() != index){
+        } else if (books.get(index).getSerialNumber() != index) {
             books.get(index).setSerialNumber(index);
-            new Thread(){
+            new Thread() {
                 public void run() {
                     DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index));
                 }

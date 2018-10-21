@@ -14,7 +14,9 @@ public interface OnRecyclerViewListener {
      * 单击事件
      */
     interface OnItemClickListener {
-        /** position 当前在列表中的position*/
+        /**
+         * position 当前在列表中的position
+         */
         void onGroupItemClick(int position, int groupPosition, View view);
 
         void onChildItemClick(int position, int groupPosition, int childPosition, View view);
@@ -32,6 +34,7 @@ public interface OnRecyclerViewListener {
     interface OnGroupExpandedListener {
         /**
          * 分组展开
+         *
          * @param groupPosition 分组的位置
          */
         void onGroupExpanded(int groupPosition);
@@ -40,6 +43,7 @@ public interface OnRecyclerViewListener {
     interface OnGroupCollapseListener {
         /**
          * 分组收起
+         *
          * @param groupPosition 分组的位置
          */
         void onGroupCollapse(int groupPosition);

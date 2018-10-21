@@ -16,7 +16,7 @@ public interface IStationBookModel {
     /**
      * 发现书籍
      */
-     Observable<List<SearchBookBean>> findBook(String url, int page);
+    Observable<List<SearchBookBean>> findBook(String url, int page);
 
     /**
      * 搜索书籍
@@ -36,9 +36,10 @@ public interface IStationBookModel {
 
     /**
      * 获取章节
-     * @param scheduler　执行进程
-     * @param durChapterUrl　章节地址
-     * @param durChapterIndex　章节序号
+     *
+     * @param scheduler       　执行进程
+     * @param durChapterUrl   　章节地址
+     * @param durChapterIndex 　章节序号
      */
     Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, final int durChapterIndex);
 

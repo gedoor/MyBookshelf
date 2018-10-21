@@ -5,7 +5,7 @@ public class LocBookShelfBean {
     private Boolean isNew;
     private BookShelfBean bookShelfBean;
 
-    public LocBookShelfBean(Boolean isNew,BookShelfBean bookShelfBean){
+    public LocBookShelfBean(Boolean isNew, BookShelfBean bookShelfBean) {
         this.isNew = isNew;
         this.bookShelfBean = bookShelfBean;
     }

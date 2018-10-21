@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.adapter;
 
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,13 +42,13 @@ public class ReplaceRuleAdapter extends RecyclerView.Adapter<ReplaceRuleAdapter.
         }
     };
 
-    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
-        return itemTouchCallbackListener;
-    }
-
     public ReplaceRuleAdapter(ReplaceRuleActivity activity) {
         this.activity = activity;
         dataList = new ArrayList<>();
+    }
+
+    public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
+        return itemTouchCallbackListener;
     }
 
     public void resetDataS(List<ReplaceRuleBean> dataList) {

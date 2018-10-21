@@ -57,9 +57,9 @@ public class AnalyzeSearchUrl {
         if (matcher.find()) {
             String[] pages = matcher.group(0).split(",");
             if (searchPage <= pages.length) {
-                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[searchPage-1].trim());
+                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
             } else {
-                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[pages.length-1].trim());
+                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
             }
         }
         return urlStr;

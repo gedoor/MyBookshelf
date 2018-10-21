@@ -195,11 +195,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         }
     }
 
-    @Override
-    public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(llContent, msg, length);
-    }
-
     public void delBookSource(BookSourceBean bookSource) {
         mPresenter.delData(bookSource);
     }
@@ -210,11 +205,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     public void saveDate(List<BookSourceBean> date) {
         mPresenter.saveData(date);
-    }
-
-    @Override
-    public void showSnackBar(String msg, int length) {
-        Snackbar.make(llContent, msg, length).show();
     }
 
     //设置ToolBar
@@ -373,6 +363,16 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
+    }
+
+    @Override
+    public void showSnackBar(String msg, int length) {
+        super.showSnackBar(llContent, msg, length);
     }
 
 }

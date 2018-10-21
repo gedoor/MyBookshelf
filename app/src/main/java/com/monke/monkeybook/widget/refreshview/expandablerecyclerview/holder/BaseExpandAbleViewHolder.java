@@ -1,10 +1,10 @@
 package com.monke.monkeybook.widget.refreshview.expandablerecyclerview.holder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
 /**
  * author：Drawthink
  * describe：BaseViewHolder
@@ -24,7 +24,7 @@ public abstract class BaseExpandAbleViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         switch (viewType) {
             case VIEW_TYPE_PARENT:
-                groupView = (ViewGroup)itemView.findViewById(getGroupViewResId());
+                groupView = (ViewGroup) itemView.findViewById(getGroupViewResId());
                 break;
             case VIEW_TYPE_CHILD:
                 childView = (ViewGroup) itemView.findViewById(getChildViewResId());
@@ -39,7 +39,7 @@ public abstract class BaseExpandAbleViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * return GroupView root layout id
-     * */
+     */
     public abstract int getGroupViewResId();
 
 

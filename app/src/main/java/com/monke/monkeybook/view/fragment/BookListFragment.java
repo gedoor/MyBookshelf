@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
-public class BookListFragment extends MBaseFragment<BookListContract.Presenter> implements BookListContract.View{
+public class BookListFragment extends MBaseFragment<BookListContract.Presenter> implements BookListContract.View {
 
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
@@ -56,6 +56,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
+            group = savedInstanceState.getInt("group");
             resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
@@ -72,22 +73,18 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     }
 
     @Override
-    protected void initData() {
-        MainActivity activity = (MainActivity) getActivity();
-        if (activity != null) {
-            isRecreate = activity.isRecreate();
-            group = activity.getGroup();
-        }
-        viewIsList = preferences.getBoolean("bookshelfIsList", true);
-        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-    }
-
-    @Override
     protected void bindView() {
         super.bindView();
         ButterKnife.bind(this, view);
         setUpAdapter();
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+    }
+
+    @Override
+    protected void initData() {
+        viewIsList = preferences.getBoolean("bookshelfIsList", true);
+        bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
+        isRecreate = ((MainActivity) Objects.requireNonNull(getActivity())).isRecreate();
     }
 
     @Override
@@ -134,7 +131,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     }
 
 
-    private void setUpAdapter(){
+    private void setUpAdapter() {
         if (viewIsList) {
             bookShelfListAdapter = new BookShelfListAdapter(getActivity(), getNeedAnim());
             rvBookshelf.setAdapter(bookShelfListAdapter);
@@ -175,8 +172,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                     BitIntentDataManager.getInstance().putData(key, bookShelfBean);
                     e.printStackTrace();
                 }
-                startActivityByAnim(intent,android.R.anim.fade_in, android.R.anim.fade_out);
-                //Toast.makeText(getContext(),"点击",0).show();
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }
 
             @Override
@@ -187,7 +183,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));
 
-                startActivityByAnim(intent,android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
 
             }
         };
@@ -212,7 +208,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     private void stopBookShelfRefreshAnim() {
         List<BookShelfBean> bookShelfBeans = getBookshelfList();
         if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
-            for (BookShelfBean bookShelfBean: bookShelfBeans) {
+            for (BookShelfBean bookShelfBean : bookShelfBeans) {
                 if (bookShelfBean.isLoading()) {
                     bookShelfBean.setLoading(false);
                     refreshBook(bookShelfBean.getNoteUrl());

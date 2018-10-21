@@ -387,7 +387,7 @@ public class ImmersionBar {
     }
 
     public ImmersionBar showBarDivider(){
-        mBarParams.navigationBarDivider = false;
+        mBarParams.navigationBarDivider = true;
         return this;
     }
 

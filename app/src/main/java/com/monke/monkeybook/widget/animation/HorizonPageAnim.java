@@ -12,10 +12,9 @@ import android.view.ViewConfiguration;
  */
 
 public abstract class HorizonPageAnim extends PageAnimation {
-    private static final String TAG = "HorizonPageAnim";
     //动画速度
     protected static final int animationSpeed = 300;
-
+    private static final String TAG = "HorizonPageAnim";
     protected Bitmap mCurBitmap;
     protected Bitmap mNextBitmap;
     //是否取消翻页
@@ -33,7 +32,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     private boolean noNext = false;
 
     public HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
-        super(w, h, view,listener);
+        super(w, h, view, listener);
         //创建图片
         mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
         mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);

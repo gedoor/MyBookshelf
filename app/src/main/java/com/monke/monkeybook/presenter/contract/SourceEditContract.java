@@ -30,5 +30,7 @@ public interface SourceEditContract {
         String getBookSourceStr();
 
         void saveSuccess();
+
+        void toast(String msg);
     }
 }

@@ -1,10 +1,5 @@
 package com.monke.monkeybook.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +9,11 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class BitmapUtil {
     private static final String TAG = "BitmapUtil";

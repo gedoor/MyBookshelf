@@ -9,11 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
@@ -301,7 +300,7 @@ public class MoProgressHUD {
     /**
      * 换源
      */
-    public void showChangeSource(BaseActivity activity, BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
+    public void showChangeSource(MBaseActivity activity, BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
         initCenter();
         initAnimation();
         canBack = true;

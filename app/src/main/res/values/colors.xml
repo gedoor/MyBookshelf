@@ -24,6 +24,9 @@
     <color name="common_gray">#EEEEEE</color>
     <color name="darker_gray">#aaaaaaaa</color>
 
+    <color name="error">#eb4333</color>
+    <color name="success">#439b53</color>
+
 
     <color name="background">#f4f4f4</color>
     <color name="background_card">#dedede</color>
@@ -42,6 +45,7 @@
     <color name="tv_btn_press_black">#adadad</color>
 
     <color name="tv_text_default">#1e1e1e</color>
+    <color name="tv_text_book_detail">#dfdfdf</color>
 
     <color name="menu_color_default">#383838</color>
 

@@ -14,42 +14,19 @@ import android.view.View;
 import com.monke.monkeybook.R;
 
 public class RefreshProgressBar extends View {
+    int a = 1;
     private int maxProgress = 100;
     private int durProgress = 0;
-
     private int secondMaxProgress = 100;
     private int secondDurProgress = 0;
-
     private int bgColor = 0x00000000;
     private int secondColor = 0xFFC1C1C1;
     private int fontColor = 0xFF363636;
-
     private int speed = 1;
     private int secondFinalProgress = 0;
-
     private Paint paint;
-
     private Handler handler;
-
     private Boolean isAutoLoading = false;
-
-    public Boolean getIsAutoLoading() {
-        return isAutoLoading;
-    }
-
-    public void setIsAutoLoading(Boolean loading) {
-        if(loading && getVisibility() != View.VISIBLE){
-            setVisibility(View.VISIBLE);
-        }
-        isAutoLoading = loading;
-        if(!isAutoLoading){
-            secondDurProgress = 0;
-            secondFinalProgress = 0;
-        }
-        maxProgress = 0;
-
-        invalidate();
-    }
 
     public RefreshProgressBar(Context context) {
         this(context, null);
@@ -63,6 +40,24 @@ public class RefreshProgressBar extends View {
         super(context, attrs, defStyleAttr);
 
         init(context, attrs, defStyleAttr);
+    }
+
+    public Boolean getIsAutoLoading() {
+        return isAutoLoading;
+    }
+
+    public void setIsAutoLoading(Boolean loading) {
+        if (loading && getVisibility() != View.VISIBLE) {
+            setVisibility(View.VISIBLE);
+        }
+        isAutoLoading = loading;
+        if (!isAutoLoading) {
+            secondDurProgress = 0;
+            secondFinalProgress = 0;
+        }
+        maxProgress = 0;
+
+        invalidate();
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -83,7 +78,6 @@ public class RefreshProgressBar extends View {
         a.recycle();
     }
 
-    int a = 1;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -92,7 +86,7 @@ public class RefreshProgressBar extends View {
         Rect bgRect = new Rect(0, 0, getMeasuredWidth(), getMeasuredHeight());
         canvas.drawRect(bgRect, paint);
 
-        if (secondDurProgress > 0 && secondMaxProgress>0) {
+        if (secondDurProgress > 0 && secondMaxProgress > 0) {
             int secondDur = secondDurProgress;
             if (secondDur < 0) {
                 secondDur = 0;
@@ -106,7 +100,7 @@ public class RefreshProgressBar extends View {
             canvas.drawRect(secondRect, paint);
         }
 
-        if (durProgress > 0 && maxProgress>0) {
+        if (durProgress > 0 && maxProgress > 0) {
             paint.setColor(fontColor);
             RectF fontRectF = new RectF(0, 0, getMeasuredWidth() * 1.0f * (durProgress * 1.0f / maxProgress), getMeasuredHeight());
             canvas.drawRect(fontRectF, paint);
@@ -125,7 +119,7 @@ public class RefreshProgressBar extends View {
                 secondDurProgress = secondMaxProgress;
             secondFinalProgress = secondDurProgress;
             invalidate();
-        }else{
+        } else {
             if (secondDurProgress != secondFinalProgress) {
                 if (secondDurProgress > secondFinalProgress) {
                     secondDurProgress -= speed;
@@ -140,7 +134,7 @@ public class RefreshProgressBar extends View {
                 }
                 this.invalidate();
             }
-            if(secondDurProgress==0 && durProgress==0 && secondFinalProgress==0 && getVisibility()==View.VISIBLE){
+            if (secondDurProgress == 0 && durProgress == 0 && secondFinalProgress == 0 && getVisibility() == View.VISIBLE) {
                 setVisibility(View.INVISIBLE);
             }
         }
@@ -221,36 +215,36 @@ public class RefreshProgressBar extends View {
         }
     }
 
-    public void setBgColor(int bgColor) {
-        this.bgColor = bgColor;
-    }
-
-    public void setSecondColor(int secondColor) {
-        this.secondColor = secondColor;
-    }
-
-    public void setFontColor(int fontColor) {
-        this.fontColor = fontColor;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
     public int getBgColor() {
         return bgColor;
+    }
+
+    public void setBgColor(int bgColor) {
+        this.bgColor = bgColor;
     }
 
     public int getSecondColor() {
         return secondColor;
     }
 
+    public void setSecondColor(int secondColor) {
+        this.secondColor = secondColor;
+    }
+
     public int getFontColor() {
         return fontColor;
     }
 
+    public void setFontColor(int fontColor) {
+        this.fontColor = fontColor;
+    }
+
     public int getSpeed() {
         return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public int getSecondFinalProgress() {

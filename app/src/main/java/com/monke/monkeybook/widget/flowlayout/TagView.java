@@ -6,8 +6,8 @@ import android.widget.Checkable;
 import android.widget.FrameLayout;
 
 public class TagView extends FrameLayout implements Checkable {
-    private boolean isChecked;
     private static final int[] CHECK_STATE = new int[]{android.R.attr.state_checked};
+    private boolean isChecked;
 
     public TagView(Context context) {
         super(context);
@@ -26,6 +26,13 @@ public class TagView extends FrameLayout implements Checkable {
         return states;
     }
 
+    /**
+     * @return The current checked state of the view
+     */
+    @Override
+    public boolean isChecked() {
+        return isChecked;
+    }
 
     /**
      * Change the checked state of the view
@@ -38,14 +45,6 @@ public class TagView extends FrameLayout implements Checkable {
             this.isChecked = checked;
             refreshDrawableState();
         }
-    }
-
-    /**
-     * @return The current checked state of the view
-     */
-    @Override
-    public boolean isChecked() {
-        return isChecked;
     }
 
     /**

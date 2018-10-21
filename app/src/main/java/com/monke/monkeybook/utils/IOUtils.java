@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class IOUtils {
 
-    public static void close(Closeable closeable){
+    public static void close(Closeable closeable) {
         if (closeable == null) return;
         try {
             closeable.close();

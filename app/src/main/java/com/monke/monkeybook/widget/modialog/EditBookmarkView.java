@@ -31,14 +31,14 @@ public class EditBookmarkView {
     private Context context;
     private BookmarkBean bookmarkBean;
 
-    public static EditBookmarkView getInstance(MoProgressView moProgressView) {
-        return new EditBookmarkView(moProgressView);
-    }
-
     private EditBookmarkView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
+    }
+
+    public static EditBookmarkView getInstance(MoProgressView moProgressView) {
+        return new EditBookmarkView(moProgressView);
     }
 
     void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {

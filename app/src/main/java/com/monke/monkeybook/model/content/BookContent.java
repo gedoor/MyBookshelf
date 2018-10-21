@@ -4,9 +4,9 @@ import android.text.TextUtils;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
-import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
 import org.jsoup.Jsoup;

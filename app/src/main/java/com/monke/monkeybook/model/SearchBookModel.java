@@ -1,10 +1,10 @@
 package com.monke.monkeybook.model;
 
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
-import com.monke.basemvplib.BaseActivity;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -27,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class SearchBookModel {
-    private BaseActivity activity;
+    private MBaseActivity activity;
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS = new ArrayList<>();
     private int threadsNum;
@@ -38,11 +38,11 @@ public class SearchBookModel {
     private OnSearchListener searchListener;
     private boolean useMy716;
 
-    public SearchBookModel(BaseActivity activity, OnSearchListener searchListener, boolean useMy716) {
+    public SearchBookModel(MBaseActivity activity, OnSearchListener searchListener, boolean useMy716) {
         this.activity = activity;
         this.searchListener = searchListener;
         this.useMy716 = useMy716;
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", 0);
+        SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
         threadsNum = preference.getInt(activity.getString(R.string.pk_threads_num), 6);
         compositeDisposable = new CompositeDisposable();
         initSearchEngineS();
@@ -101,7 +101,7 @@ public class SearchBookModel {
             searchListener.refreshSearchBook();
         }
         if (searchEngineS.size() == 0) {
-            Toast.makeText(activity, "没有选中任何书源", Toast.LENGTH_SHORT).show();
+            activity.toast("没有选中任何书源");
             searchListener.refreshFinish(true);
             searchListener.loadMoreFinish(true);
             return;

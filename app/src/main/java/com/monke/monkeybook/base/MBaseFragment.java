@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.monke.basemvplib.BaseFragment;
 import com.monke.basemvplib.impl.IPresenter;
@@ -19,7 +20,7 @@ import com.monke.monkeybook.MApplication;
 import java.util.Objects;
 
 public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T> implements IView {
-    public final static String start_share_ele= "start_with_share_ele";
+    public final static String start_share_ele = "start_with_share_ele";
     public SharedPreferences preferences;
     protected T mPresenter;
 
@@ -43,7 +44,7 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
 
     protected void startActivityByAnim(Intent intent, @NonNull View view, @NonNull String transitionName, int animIn, int animExit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            intent.putExtra(start_share_ele,true);
+            intent.putExtra(start_share_ele, true);
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, transitionName);
             startActivity(intent, options.toBundle());
         } else {
@@ -81,5 +82,9 @@ public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T
         if (null != mPresenter) {
             mPresenter.detachView();
         }
+    }
+
+    public void toast(String msg) {
+        Toast.makeText(this.getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 }

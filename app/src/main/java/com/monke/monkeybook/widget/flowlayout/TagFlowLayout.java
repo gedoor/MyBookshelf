@@ -18,14 +18,16 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChangedListener {
+    private static final String TAG = "TagFlowLayout";
+    private static final String KEY_CHOOSE_POS = "key_choose_pos";
+    private static final String KEY_DEFAULT = "key_default";
     private TagAdapter mTagAdapter;
     private boolean mAutoSelectEffect = true;
     private int mSelectedMax = -1;//-1为不限制数量
-    private static final String TAG = "TagFlowLayout";
     private MotionEvent mMotionEvent;
-
     private Set<Integer> mSelectedView = new HashSet<Integer>();
-
+    private OnSelectListener mOnSelectListener;
+    private OnTagClickListener mOnTagClickListener;
 
     public TagFlowLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -47,6 +49,10 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         this(context, null);
     }
 
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -62,35 +68,14 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public interface OnSelectListener {
-        void onSelected(Set<Integer> selectPosSet);
-    }
-
-    private OnSelectListener mOnSelectListener;
-
     public void setOnSelectListener(OnSelectListener onSelectListener) {
         mOnSelectListener = onSelectListener;
         if (mOnSelectListener != null) setClickable(true);
     }
 
-    public interface OnTagClickListener {
-        boolean onTagClick(View view, int position, FlowLayout parent);
-    }
-
-    private OnTagClickListener mOnTagClickListener;
-
     public void setOnTagClickListener(OnTagClickListener onTagClickListener) {
         mOnTagClickListener = onTagClickListener;
         if (onTagClickListener != null) setClickable(true);
-    }
-
-
-    public void setAdapter(TagAdapter adapter) {
-        mTagAdapter = adapter;
-        mTagAdapter.setOnDataChangedListener(this);
-        mSelectedView.clear();
-        changeAdapter();
-
     }
 
     private void changeAdapter() {
@@ -203,10 +188,13 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         return mTagAdapter;
     }
 
+    public void setAdapter(TagAdapter adapter) {
+        mTagAdapter = adapter;
+        mTagAdapter.setOnDataChangedListener(this);
+        mSelectedView.clear();
+        changeAdapter();
 
-    private static final String KEY_CHOOSE_POS = "key_choose_pos";
-    private static final String KEY_DEFAULT = "key_default";
-
+    }
 
     @Override
     protected Parcelable onSaveInstanceState() {
@@ -276,8 +264,11 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         changeAdapter();
     }
 
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+    public interface OnSelectListener {
+        void onSelected(Set<Integer> selectPosSet);
+    }
+
+    public interface OnTagClickListener {
+        boolean onTagClick(View view, int position, FlowLayout parent);
     }
 }

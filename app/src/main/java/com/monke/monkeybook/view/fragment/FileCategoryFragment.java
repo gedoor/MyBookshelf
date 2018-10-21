@@ -146,7 +146,7 @@ public class FileCategoryFragment extends BaseFileFragment {
     }
 
     private void setTextViewIconColor(TextView textView) {
-        textView.getCompoundDrawables()[0].mutate();
+        // textView.getCompoundDrawables()[0].mutate();
         textView.getCompoundDrawables()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 

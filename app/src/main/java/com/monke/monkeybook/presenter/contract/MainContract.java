@@ -1,12 +1,7 @@
 package com.monke.monkeybook.presenter.contract;
 
-import android.content.SharedPreferences;
-
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.bean.BookShelfBean;
-
-import java.util.List;
 
 public interface MainContract {
 
@@ -21,6 +16,7 @@ public interface MainContract {
 
         /**
          * 刷新错误
+         *
          * @param error 错误
          */
         void refreshError(String error);
@@ -35,9 +31,11 @@ public interface MainContract {
          */
         void onRestore(String msg);
 
-        SharedPreferences getPreferences();
-
         void recreate();
+
+        void toast(String msg);
+
+        void toast(int strId);
     }
 
     interface Presenter extends IPresenter {
