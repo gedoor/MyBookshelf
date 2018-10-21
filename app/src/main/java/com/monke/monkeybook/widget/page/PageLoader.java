@@ -13,7 +13,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.widget.Toast;
 
@@ -36,8 +35,6 @@ import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
-
-import static com.monke.monkeybook.bean.BookShelfBean.LOCAL_TAG;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -1127,8 +1124,6 @@ public abstract class PageLoader {
      */
     boolean parseCurChapter() {
         dealLoadPageList(mCurChapterPos);
-        // 预加载下一页面
-        preLoadNextChapter();
         return mCurPageList != null;
     }
 
@@ -1157,8 +1152,6 @@ public abstract class PageLoader {
             // 处理页面解析
             dealLoadPageList(mCurChapterPos);
         }
-        // 预加载下一页面
-        preLoadNextChapter();
         return mCurPageList != null;
     }
 
@@ -1187,13 +1180,17 @@ public abstract class PageLoader {
             mPageChangeListener.onChapterChange(mCurChapterPos);
             mPageChangeListener.onPageCountChange(mCurPageList != null ? mCurPageList.size() : 0);
         }
+//        if (mNextPageList == null) {
+//            // 预加载下一章节
+//            preLoadNextChapter();
+//        }
     }
 
     /**
      * 预加载下一章
      */
     private void preLoadNextChapter() {
-        int nextChapter = mCurChapterPos + 1;
+        final int nextChapter = mCurChapterPos + 1;
 
         // 如果不存在下一章，且下一章没有数据，则不进行加载。
         if (!hasNextChapter() || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
@@ -1206,24 +1203,26 @@ public abstract class PageLoader {
         }
 
         //调用异步进行预加载加载
-//        Single.create((SingleOnSubscribe<List<TxtPage>>) e -> e.onSuccess(loadPageList(nextChapter)))
-//                .compose(RxUtils::toSimpleSingle)
-//                .subscribe(new SingleObserver<List<TxtPage>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        mPreLoadDisposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(List<TxtPage> pages) {
-//                        mNextPageList = pages;
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        //无视错误
-//                    }
-//                });
+        Single.create((SingleOnSubscribe<List<TxtPage>>) e -> e.onSuccess(loadPageList(nextChapter)))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<TxtPage>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mPreLoadDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(List<TxtPage> pages) {
+                        if (nextChapter == mCurChapterPos + 1) {
+                            mNextPageList = pages;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //无视错误
+                    }
+                });
     }
 
     /**
