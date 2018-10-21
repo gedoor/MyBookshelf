@@ -15,6 +15,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     //动画速度
     protected static final int animationSpeed = 300;
     private static final String TAG = "HorizonPageAnim";
+    protected Bitmap mPreBitmap;
     protected Bitmap mCurBitmap;
     protected Bitmap mNextBitmap;
     //是否取消翻页
@@ -34,6 +35,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     public HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
         //创建图片
+        mPreBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
         mCurBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
         mNextBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
     }
@@ -145,7 +147,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         }
                     }
                 } else {
-                    isCancel = Math.abs(mLastX - mStartX) < slop * 5 || isCancel;
+                    isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
                 }
 
                 // 是否取消翻页
@@ -159,6 +161,9 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     mView.invalidate();
                 }
                 break;
+            case MotionEvent.ACTION_CANCEL:
+                isCancel = true;
+                mListener.pageCancel();
         }
         return true;
     }
