@@ -21,13 +21,12 @@ import java.util.Objects;
 
 public abstract class MBaseFragment<T extends IPresenter> extends BaseFragment<T> implements IView {
     public final static String start_share_ele = "start_with_share_ele";
-    public SharedPreferences preferences;
+    public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected T mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mPresenter = initInjector();
-        preferences = MApplication.getInstance().getConfigPreferences();
         attachView();
         super.onCreate(savedInstanceState);
     }

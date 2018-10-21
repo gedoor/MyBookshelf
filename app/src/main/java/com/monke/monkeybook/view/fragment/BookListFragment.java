@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -46,17 +47,18 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     private boolean viewIsList;
     private String bookPx;
-    private int group;
     private boolean resumed = false;
     private boolean isRecreate;
+    private int group;
 
     private BookShelfGridAdapter bookShelfGridAdapter;
     private BookShelfListAdapter bookShelfListAdapter;
 
+    private CallBackValue callBackValue;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            group = savedInstanceState.getInt("group");
             resumed = savedInstanceState.getBoolean("resumed");
         }
         super.onCreate(savedInstanceState);
@@ -73,6 +75,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callBackValue = (CallBackValue) getActivity();
+    }
+
+    @Override
     protected void bindView() {
         super.bindView();
         ButterKnife.bind(this, view);
@@ -84,11 +92,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     protected void initData() {
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
         bookPx = preferences.getString(getString(R.string.pk_bookshelf_px), "0");
-        isRecreate = ((MainActivity) Objects.requireNonNull(getActivity())).isRecreate();
+        isRecreate = callBackValue != null && callBackValue.isRecreate();
     }
 
     @Override
     protected void firstRequest() {
+        group = callBackValue != null ? callBackValue.getGroup() : 0;
         if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
             if (isNetWorkAvailable()) {
                 mPresenter.queryBookShelf(true, group);
@@ -253,6 +262,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public SharedPreferences getPreferences() {
         return preferences;
+    }
+
+    public interface CallBackValue {
+        boolean isRecreate();
+
+        int getGroup();
     }
 
 }
