@@ -87,7 +87,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
-    private boolean isRecreate;
     private boolean resumed = false;
 
     @Override
@@ -126,8 +125,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected void initData() {
-        isRecreate = getIntent().getBooleanExtra("isRecreate", false);
-        getIntent().putExtra("isRecreate", true);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
     }
 
