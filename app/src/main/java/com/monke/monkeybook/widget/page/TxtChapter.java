@@ -11,6 +11,10 @@ class TxtChapter {
     private List<TxtPage> txtPageList;
     private int mStatus;
 
+    TxtChapter(int position) {
+        this.position = position;
+    }
+
     TxtChapter(int position, List<TxtPage> txtPageList) {
         this.position = position;
         this.txtPageList = txtPageList;
@@ -18,6 +22,10 @@ class TxtChapter {
 
     public int getPosition() {
         return position;
+    }
+
+    public void setTxtPageList(List<TxtPage> txtPageList) {
+        this.txtPageList = txtPageList;
     }
 
     public List<TxtPage> getTxtPageList() {

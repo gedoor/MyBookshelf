@@ -1059,7 +1059,7 @@ public abstract class PageLoader {
         }
         // 章节切换
         chapterChangeCallback();
-        return mCurChapter != null;
+        return mCurChapter.getTxtPageList() != null;
     }
 
     /**
@@ -1168,7 +1168,7 @@ public abstract class PageLoader {
     private void chapterChangeCallback() {
         if (mPageChangeListener != null) {
             mPageChangeListener.onChapterChange(mCurChapterPos);
-            mPageChangeListener.onPageCountChange(mCurChapter.size());
+            mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.size() : 0);
         }
         if (mNextChapter == null) {
             // 预加载下一章节
@@ -1286,7 +1286,7 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      */
     private TxtChapter loadPageList(ChapterListBean chapter, BufferedReader br) {
-        TxtChapter txtChapter = null;
+        TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1386,7 +1386,7 @@ public abstract class PageLoader {
                 //重置Lines
                 lines.clear();
                 setChapterPageStatus(chapter.getDurChapterIndex(), STATUS_FINISH);
-                txtChapter = new TxtChapter(chapter.getDurChapterIndex(), pages);
+                txtChapter.setTxtPageList(pages);
             }
         } catch (Exception e) {
             e.printStackTrace();
