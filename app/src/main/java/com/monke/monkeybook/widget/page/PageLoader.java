@@ -1059,7 +1059,7 @@ public abstract class PageLoader {
         }
         // 章节切换
         chapterChangeCallback();
-        return mCurChapter.getTxtPageList() != null;
+        return mCurChapter != null;
     }
 
     /**
@@ -1386,6 +1386,7 @@ public abstract class PageLoader {
                 //重置Lines
                 lines.clear();
                 setChapterPageStatus(chapter.getDurChapterIndex(), STATUS_FINISH);
+                txtChapter.setmStatus(STATUS_FINISH);
                 txtChapter.setTxtPageList(pages);
             }
         } catch (Exception e) {
