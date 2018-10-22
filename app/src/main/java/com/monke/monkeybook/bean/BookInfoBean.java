@@ -4,6 +4,8 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.monke.monkeybook.R;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -12,6 +14,8 @@ import org.greenrobot.greendao.annotation.Transient;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.monke.monkeybook.utils.StringUtils.getString;
 
 /**
  * 书本信息
@@ -178,7 +182,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public String getOrigin() {
-        return this.origin;
+        return origin == null && tag.equals(BookShelfBean.LOCAL_TAG) ? getString(R.string.local) : origin;
     }
 
     public void setOrigin(String origin) {

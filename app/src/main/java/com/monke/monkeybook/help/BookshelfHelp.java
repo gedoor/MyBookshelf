@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 public class BookshelfHelp {
 
     public static Pattern chapterNamePattern = Pattern.compile("^(.*?第([\\d零〇一二两三四五六七八九十百千万０-９\\s]+)[章节篇回集])[、，。　：:.\\s]*");
+    private static HashMap<String, HashSet<Integer>> chapterCaches = getChapterCaches();
 
     private static HashMap<String, HashSet<Integer>> getChapterCaches() {
         HashMap<String, HashSet<Integer>> temp = new HashMap<>();
@@ -65,8 +66,6 @@ public class BookshelfHelp {
         }
         return temp;
     }
-
-    private static HashMap<String, HashSet<Integer>> chapterCaches = getChapterCaches();
 
     public static String getCachePathName(DownloadChapterBean chapter) {
         return formatFolderName(chapter.getBookName() + "-" + chapter.getTag());
@@ -157,7 +156,7 @@ public class BookshelfHelp {
 
     @SuppressLint("DefaultLocale")
     private static String formatFileName(int index, String fileName) {
-        return  String.format("%05d-%s", index, formatFolderName(fileName));
+        return String.format("%05d-%s", index, formatFolderName(fileName));
     }
 
     private static String formatFolderName(String folderName) {

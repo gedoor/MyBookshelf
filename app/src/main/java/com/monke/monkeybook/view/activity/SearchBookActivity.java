@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -218,8 +219,18 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         searchView.setQueryHint(getString(R.string.search_book_key));
         //获取到TextView的控件
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-
+        mSearchAutoComplete.setPadding(15, 0, 0, 0);
         searchView.onActionViewExpanded();
+	LinearLayout editFrame = searchView.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
+        ImageView closeButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        ImageView goButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame.getLayoutParams();
+        params.setMargins(20, 0, 10, 0);
+        editFrame.setLayoutParams(params);
+        closeButton.setScaleX(0.9f);
+        closeButton.setScaleY(0.9f);
+        closeButton.setPadding(0,0,0,0);
+        goButton.setPadding(0,0,0,0);
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

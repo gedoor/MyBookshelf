@@ -73,10 +73,9 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                     searchBookBean.setOrigin(TAG);
                     searchBookBean.setKind(book.get("cat").getAsString());
                     searchBookBean.setName(book.get("title").getAsString());
-                    searchBookBean.setNoteUrl("http://api.zhuishushenqi.com/atoc?view=summary&book=" + book.get("_id").getAsString());
-                    searchBookBean.setName(book.get("title").getAsString());
                     searchBookBean.setAuthor(book.get("author").getAsString());
-                    searchBookBean.setLastChapter(book.get("lastChapter").getAsString());
+                    searchBookBean.setNoteUrl("http://api.zhuishushenqi.com/atoc?view=summary&book=" + book.get("_id").getAsString());
+                    searchBookBean.setLastChapter(book.get("lastChapter").getAsString().replaceAll("^\\s*正文[卷：\\s]+", ""));
                     searchBookBean.setCoverUrl("http://statics.zhuishushenqi.com" + book.get("cover").getAsString());
                     searchBookBean.setIntroduce(book.get("shortIntro").getAsString());
 

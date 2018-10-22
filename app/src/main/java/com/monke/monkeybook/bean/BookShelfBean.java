@@ -75,7 +75,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         lastChapterName = in.readString();
         chapterListSize = in.readInt();
         customCoverPath = in.readString();
-        allowUpdate = in.readByte()!=0;
+        allowUpdate = in.readByte()!=0 && !tag.equals(LOCAL_TAG);
     }
 
     @Generated(hash = 1626436040)
