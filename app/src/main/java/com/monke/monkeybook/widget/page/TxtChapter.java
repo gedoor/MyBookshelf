@@ -1,70 +1,42 @@
 package com.monke.monkeybook.widget.page;
 
+import java.util.List;
+
 /**
- * Created by newbiechen on 17-7-1.
+ * 章节
  */
 
-public class TxtChapter {
+class TxtChapter {
+    private int position;
+    private List<TxtPage> txtPageList;
+    private int mStatus;
 
-    //章节所属的小说(网络)
-    String bookId;
-    //章节的链接(网络)
-    String link;
-
-    //章节名(共用)
-    String title;
-
-    //章节内容在文章中的起始位置(本地)
-    long start;
-    //章节内容在文章中的终止位置(本地)
-    long end;
-
-    public String getBookId() {
-        return bookId;
+    TxtChapter(int position, List<TxtPage> txtPageList) {
+        this.position = position;
+        this.txtPageList = txtPageList;
     }
 
-    public void setBookId(String id) {
-        this.bookId = id;
+    public int getPosition() {
+        return position;
     }
 
-    public String getLink() {
-        return link;
+    public List<TxtPage> getTxtPageList() {
+        return txtPageList;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public int size() {
+        return txtPageList != null ? txtPageList.size() : 0;
     }
 
-    public String getTitle() {
-        return title;
+    public TxtPage get(int page) {
+        return txtPageList.get(page);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int getmStatus() {
+        return mStatus;
     }
 
-    public long getStart() {
-        return start;
-    }
-
-    public void setStart(long start) {
-        this.start = start;
-    }
-
-    public long getEnd() {
-        return end;
-    }
-
-    public void setEnd(long end) {
-        this.end = end;
-    }
-
-    @Override
-    public String toString() {
-        return "TxtChapter{" +
-                "title='" + title + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                '}';
+    public void setmStatus(int mStatus) {
+        this.mStatus = mStatus;
     }
 }

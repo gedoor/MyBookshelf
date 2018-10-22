@@ -3,7 +3,6 @@ package com.monke.monkeybook.widget.page;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.Void;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
@@ -13,7 +12,6 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
@@ -62,7 +60,6 @@ public class LocalPageLoader extends PageLoader {
     private Charset mCharset;
 
     private Disposable mChapterDisp = null;
-    private List<ChapterListBean> mChapterList = new ArrayList<>();
 
     public LocalPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);
@@ -76,8 +73,8 @@ public class LocalPageLoader extends PageLoader {
      *
      * @throws IOException
      */
-    private void loadChapters() throws IOException {
-        List<TxtChapter> chapters = new ArrayList<>();
+    private List<ChapterListBean> loadChapters() throws IOException {
+        List<ChapterListBean> mChapterList = new ArrayList<>();
         //获取文件流
         RandomAccessFile bookStream = new RandomAccessFile(mBookFile, "r");
         //寻找匹配文章标题的正则表达式，判断是否存在章节名
@@ -117,66 +114,66 @@ public class LocalPageLoader extends PageLoader {
 
                         if (curOffset == 0) { //如果当前对整个文件的偏移位置为0的话，那么就是序章
                             //创建序章
-                            TxtChapter preChapter = new TxtChapter();
-                            preChapter.title = "序章";
-                            preChapter.start = 0;
-                            preChapter.end = chapterContent.getBytes(mCharset).length; //获取String的byte值,作为最终值
+                            ChapterListBean preChapter = new ChapterListBean();
+                            preChapter.setDurChapterName("序章");
+                            preChapter.setStart(0L);
+                            preChapter.setEnd((long) chapterContent.getBytes(mCharset).length); //获取String的byte值,作为最终值
 
                             //如果序章大小大于30才添加进去
-                            if (preChapter.end - preChapter.start > 30) {
-                                chapters.add(preChapter);
+                            if (preChapter.getEnd() - preChapter.getStart() > 30) {
+                                mChapterList.add(preChapter);
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
-                            curChapter.title = matcher.group();
-                            curChapter.start = preChapter.end;
-                            chapters.add(curChapter);
+                            ChapterListBean curChapter = new ChapterListBean();
+                            curChapter.setDurChapterName(matcher.group());
+                            curChapter.setStart(preChapter.getEnd());
+                            mChapterList.add(curChapter);
                         } else {  //否则就block分割之后，上一个章节的剩余内容
                             //获取上一章节
-                            TxtChapter lastChapter = chapters.get(chapters.size() - 1);
+                            ChapterListBean lastChapter = mChapterList.get(mChapterList.size() - 1);
                             //将当前段落添加上一章去
-                            lastChapter.end += chapterContent.getBytes(mCharset).length;
+                            lastChapter.setEnd(lastChapter.getEnd() + chapterContent.getBytes(mCharset).length);
 
                             //如果章节内容太小，则移除
-                            if (lastChapter.end - lastChapter.start < 30) {
-                                chapters.remove(lastChapter);
+                            if (lastChapter.getEnd() - lastChapter.getStart() < 30) {
+                                mChapterList.remove(lastChapter);
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
-                            curChapter.title = matcher.group();
-                            curChapter.start = lastChapter.end;
-                            chapters.add(curChapter);
+                            ChapterListBean curChapter = new ChapterListBean();
+                            curChapter.setDurChapterName(matcher.group());
+                            curChapter.setStart(lastChapter.getEnd());
+                            mChapterList.add(curChapter);
                         }
                     } else {
                         //是否存在章节
-                        if (chapters.size() != 0) {
+                        if (mChapterList.size() != 0) {
                             //获取章节内容
                             String chapterContent = blockContent.substring(seekPos, matcher.start());
                             seekPos += chapterContent.length();
 
                             //获取上一章节
-                            TxtChapter lastChapter = chapters.get(chapters.size() - 1);
-                            lastChapter.end = lastChapter.start + chapterContent.getBytes(mCharset).length;
+                            ChapterListBean lastChapter = mChapterList.get(mChapterList.size() - 1);
+                            lastChapter.setEnd(lastChapter.getStart() + chapterContent.getBytes(mCharset).length);
 
                             //如果章节内容太小，则移除
-                            if (lastChapter.end - lastChapter.start < 30) {
-                                chapters.remove(lastChapter);
+                            if (lastChapter.getEnd() - lastChapter.getStart() < 30) {
+                                mChapterList.remove(lastChapter);
                             }
 
                             //创建当前章节
-                            TxtChapter curChapter = new TxtChapter();
-                            curChapter.title = matcher.group();
-                            curChapter.start = lastChapter.end;
-                            chapters.add(curChapter);
+                            ChapterListBean curChapter = new ChapterListBean();
+                            curChapter.setDurChapterName(matcher.group());
+                            curChapter.setStart(lastChapter.getEnd());
+                            mChapterList.add(curChapter);
                         }
                         //如果章节不存在则创建章节
                         else {
-                            TxtChapter curChapter = new TxtChapter();
-                            curChapter.title = matcher.group();
-                            curChapter.start = 0;
-                            chapters.add(curChapter);
+                            ChapterListBean curChapter = new ChapterListBean();
+                            curChapter.setDurChapterName(matcher.group());
+                            curChapter.setStart(0L);
+                            mChapterList.add(curChapter);
                         }
                     }
                 }
@@ -203,21 +200,21 @@ public class LocalPageLoader extends PageLoader {
                                 break;
                             }
                         }
-                        TxtChapter chapter = new TxtChapter();
-                        chapter.title = "第" + blockPos + "章" + "(" + chapterPos + ")";
-                        chapter.start = curOffset + chapterOffset + 1;
-                        chapter.end = curOffset + end;
-                        chapters.add(chapter);
+                        ChapterListBean chapter = new ChapterListBean();
+                        chapter.setDurChapterName("第" + blockPos + "章" + "(" + chapterPos + ")");
+                        chapter.setStart(curOffset + chapterOffset + 1);
+                        chapter.setEnd(curOffset + end);
+                        mChapterList.add(chapter);
                         //减去已经被分配的长度
                         strLength = strLength - (end - chapterOffset);
                         //设置偏移的位置
                         chapterOffset = end;
                     } else {
-                        TxtChapter chapter = new TxtChapter();
-                        chapter.title = "第" + blockPos + "章" + "(" + chapterPos + ")";
-                        chapter.start = curOffset + chapterOffset + 1;
-                        chapter.end = curOffset + length;
-                        chapters.add(chapter);
+                        ChapterListBean chapter = new ChapterListBean();
+                        chapter.setDurChapterName("第" + blockPos + "章" + "(" + chapterPos + ")");
+                        chapter.setStart(curOffset + chapterOffset + 1);
+                        chapter.setEnd(curOffset + length);
+                        mChapterList.add(chapter);
                         strLength = 0;
                     }
                 }
@@ -228,8 +225,8 @@ public class LocalPageLoader extends PageLoader {
 
             if (hasChapter) {
                 //设置上一章的结尾
-                TxtChapter lastChapter = chapters.get(chapters.size() - 1);
-                lastChapter.end = curOffset;
+                ChapterListBean lastChapter = mChapterList.get(mChapterList.size() - 1);
+                lastChapter.setEnd(curOffset);
             }
 
             //当添加的block太多的时候，执行GC
@@ -239,21 +236,18 @@ public class LocalPageLoader extends PageLoader {
             }
         }
 
-        for (int i = 0; i < chapters.size(); i++) {
-            TxtChapter chapter = chapters.get(i);
-            ChapterListBean bean = new ChapterListBean();
+        for (int i = 0; i < mChapterList.size(); i++) {
+            ChapterListBean bean = mChapterList.get(i);
             bean.setDurChapterIndex(i);
             bean.setNoteUrl(mCollBook.getNoteUrl());
-            bean.setDurChapterUrl(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + i + chapter.title));
-            bean.setDurChapterName(chapter.title);
-            bean.setStart(chapter.start);
-            bean.setEnd(chapter.end);
-            mChapterList.add(bean);
+            bean.setDurChapterUrl(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + i + bean.getDurChapterName()));
         }
         IOUtils.close(bookStream);
 
         System.gc();
         System.runFinalization();
+
+        return mChapterList;
     }
 
     /**
@@ -322,16 +316,15 @@ public class LocalPageLoader extends PageLoader {
         mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
 
         Long lastModified = mBookFile.lastModified();
-        mChapterList = mCollBook.getChapterList();
 
         // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate() && mChapterList.size() > 0) {
+        if (!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0) {
 
             isChapterListPrepare = true;
 
             //提示目录加载完成
             if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(mChapterList);
+                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
             }
 
             // 加载并显示当前章节
@@ -339,32 +332,31 @@ public class LocalPageLoader extends PageLoader {
 
         } else {
             // 通过RxJava异步处理分章事件
-            Single.create((SingleOnSubscribe<Void>) e -> {
-                loadChapters();
-                e.onSuccess(new Void());
+            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
+                e.onSuccess(loadChapters());
             }).compose(RxUtils::toSimpleSingle)
                     .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SingleObserver<Void>() {
+                    .subscribe(new SingleObserver<List<ChapterListBean>>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             mChapterDisp = d;
                         }
 
                         @Override
-                        public void onSuccess(Void value) {
+                        public void onSuccess(List<ChapterListBean> value) {
                             mChapterDisp = null;
                             isChapterListPrepare = true;
 
                             // 存储章节到数据库
-                            mCollBook.getBookInfoBean().setChapterList(mChapterList);
+                            mCollBook.getBookInfoBean().setChapterList(value);
                             mCollBook.setFinalRefreshData(lastModified);
 
-                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(mChapterList);
+                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
                             DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
 
                             // 提示目录加载完成
                             if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(mChapterList);
+                                mPageChangeListener.onCategoryFinish(value);
                             }
 
                             // 加载并显示当前章节
