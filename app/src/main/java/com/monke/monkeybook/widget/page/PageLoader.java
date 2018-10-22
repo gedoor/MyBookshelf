@@ -318,6 +318,14 @@ public abstract class PageLoader {
     }
 
     /**
+     * 跳转到指定章节
+     * @param pos:从 0 开始。
+     */
+    public void skipToChapter(int pos) {
+        skipToChapter(pos, 0);
+    }
+
+    /**
      * 跳转到指定章节页
      */
     public void skipToChapter(int chapterPos, int pagePos) {
@@ -343,15 +351,6 @@ public abstract class PageLoader {
 
         // 打开指定章节
         openChapter(pagePos);
-    }
-
-    /**
-     * 跳转到指定章节
-     *
-     * @param pos:从 0 开始。
-     */
-    public void skipToChapter(int pos) {
-        skipToChapter(pos, 0);
     }
 
     /**
