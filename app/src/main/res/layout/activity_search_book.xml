@@ -41,8 +41,6 @@
                     app:searchIcon="@null"
                     app:queryBackground="@null"
                     app:submitBackground="@null"
-                    app:closeIcon="@null"
-                    app:goIcon="@null"
                     tools:ignore="UnusedAttribute" />
             </android.support.v7.widget.CardView>
 

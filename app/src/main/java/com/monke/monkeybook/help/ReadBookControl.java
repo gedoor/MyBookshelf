@@ -45,6 +45,7 @@ public class ReadBookControl {
     private Boolean hideNavigationBar;
     private String fontPath;
     private int textConvert;
+    private int navBarColor;
     private Boolean textBold;
     private Boolean canClickTurn;
     private Boolean canKeyTurn;
@@ -109,6 +110,7 @@ public class ReadBookControl {
         this.pageMode = readPreference.getInt("pageMode", 0);
         this.screenDirection = readPreference.getInt("screenDirection", 0);
         this.tipMarginChange = readPreference.getBoolean("tipMarginChange", false);
+        this.navBarColor = readPreference.getInt("navBarColorInt", 0);
 
         initTextDrawableIndex();
     }
@@ -361,6 +363,18 @@ public class ReadBookControl {
         editor.putInt("textConvertInt", textConvert);
         editor.apply();
     }
+
+    public void setNavbarColor(int navBarColor) {
+        this.navBarColor = navBarColor;
+        SharedPreferences.Editor editor = readPreference.edit();
+        editor.putInt("navBarColorInt", navBarColor);
+        editor.apply();
+    }
+
+    public int getNavbarColor() {
+        return navBarColor;
+    }
+
 
     public void setTextBold(boolean textBold) {
         this.textBold = textBold;

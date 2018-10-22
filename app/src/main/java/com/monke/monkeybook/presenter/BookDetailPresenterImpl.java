@@ -2,8 +2,6 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -13,7 +11,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -119,7 +116,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                         mView.getBookShelfError();
                     }
                 });
@@ -144,14 +141,14 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
                                 mView.updateView();
                             } else {
-                                Toast.makeText(MApplication.getInstance(), "放入书架失败!", Toast.LENGTH_SHORT).show();
+                                mView.toast("放入书架失败!");
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
-                            Toast.makeText(MApplication.getInstance(), "放入书架失败!", Toast.LENGTH_SHORT).show();
+                            mView.toast("放入书架失败!");
                         }
                     });
         }
@@ -176,14 +173,14 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                                 RxBus.get().post(RxBusTag.HAD_REMOVE_BOOK, bookShelf);
                                 mView.updateView();
                             } else {
-                                Toast.makeText(MApplication.getInstance(), "删除书籍失败!", Toast.LENGTH_SHORT).show();
+                                mView.toast("删除书籍失败！");
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
                             e.printStackTrace();
-                            Toast.makeText(MApplication.getInstance(), "删除书籍失败!", Toast.LENGTH_SHORT).show();
+                            mView.toast("删除书籍失败！");
                         }
                     });
         }
@@ -213,7 +210,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                     @Override
                     public void onError(Throwable e) {
                         mView.updateView();
-                        Toast.makeText(MApplication.getInstance(), "换源失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("换源失败！" + e.getMessage());
                     }
                 });
     }
@@ -265,7 +262,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.updateView();
-                        Toast.makeText(MApplication.getInstance(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                     }
                 });
     }

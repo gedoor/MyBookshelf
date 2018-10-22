@@ -2,23 +2,20 @@ package com.monke.monkeybook.presenter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
@@ -103,7 +100,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel((BaseActivity) context, onSearchListener, useMy716);
+        searchBookModel = new SearchBookModel((MBaseActivity) context, onSearchListener, useMy716);
     }
 
     @Override
@@ -301,7 +298,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     }
 
     private void saveSearchBookToDb(String bookName) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e->{
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             for (SearchBookBean searchBookBean : mView.getSearchBookAdapter().getSearchBooks()) {
                 if (Objects.equals(searchBookBean.getName(), bookName)) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);

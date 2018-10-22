@@ -8,10 +8,12 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
@@ -22,12 +24,14 @@ import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import java.lang.reflect.Method;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
-    public SharedPreferences preferences;
+    public static final int SUCCESS = 1;
+    public static final int ERROR = -1;
+    public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected ImmersionBar mImmersionBar;
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferences = MApplication.getInstance().getConfigPreferences();
         super.onCreate(savedInstanceState);
         initNightTheme();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -81,7 +85,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.mutate();
                 drawable.setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
             }
         }
@@ -174,4 +177,51 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
+    public void toast(String msg) {
+        toast(msg, Toast.LENGTH_SHORT, 0);
+    }
+
+    public void toast(String msg, int state) {
+        toast(msg, Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(int strId) {
+        toast(strId, 0);
+    }
+
+    public void toast(int strId, int state) {
+        toast(getString(strId), Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(String msg, int length, int state) {
+        Toast toast = Toast.makeText(this, msg, length);
+        if (state == SUCCESS) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.success), PorterDuff.Mode.SRC_IN);
+        } else if (state == ERROR) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.error), PorterDuff.Mode.SRC_IN);
+        }
+        toast.show();
+    }
+
+    public void showSnackBar(String msg) {
+        showSnackBar(getCurrentFocus(), msg);
+    }
+
+    public void showSnackBar(String msg, int length) {
+        showSnackBar(getCurrentFocus(), msg, length);
+    }
+
+    public void showSnackBar(View view, String msg) {
+        showSnackBar(view, msg, Snackbar.LENGTH_SHORT);
+    }
+
+    public void showSnackBar(View view, String msg, int length) {
+        if (snackbar == null) {
+            snackbar = Snackbar.make(view, msg, length);
+        } else {
+            snackbar.setText(msg);
+            snackbar.setDuration(length);
+        }
+        snackbar.show();
+    }
 }

@@ -124,18 +124,18 @@ public class NumberPickerPreference extends DialogPreference {
     }
 
     /**
+     * @return current value
+     */
+    public int getValue() {
+        return this.numValue;
+    }
+
+    /**
      * @param value which will be stored in SharedPreferences
      */
     private void setValue(int value) {
         this.numValue = value;
         persistInt(this.numValue);
-    }
-
-    /**
-     * @return current value
-     */
-    public int getValue() {
-        return this.numValue;
     }
 
     /**

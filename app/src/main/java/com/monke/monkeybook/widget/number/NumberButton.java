@@ -67,13 +67,13 @@ public class NumberButton extends FrameLayout implements View.OnClickListener {
         }
     }
 
-    public NumberButton setFormat(String pattern) {
-        decimalFormat = new DecimalFormat(pattern);
+    public NumberButton setNumber(float number) {
+        tvNumber.setText(decimalFormat.format(number));
         return this;
     }
 
-    public NumberButton setNumber(float number) {
-        tvNumber.setText(decimalFormat.format(number));
+    public NumberButton setFormat(String pattern) {
+        decimalFormat = new DecimalFormat(pattern);
         return this;
     }
 

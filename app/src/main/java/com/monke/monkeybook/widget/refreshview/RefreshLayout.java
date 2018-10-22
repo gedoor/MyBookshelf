@@ -21,13 +21,11 @@ import com.monke.monkeybook.R;
 
 public class RefreshLayout extends FrameLayout {
 
-    private static final String TAG = "RefreshLayout";
-
     protected static final int STATUS_LOADING = 0;
     protected static final int STATUS_FINISH = 1;
     protected static final int STATUS_ERROR = 2;
     protected static final int STATUS_EMPTY = 3;
-
+    private static final String TAG = "RefreshLayout";
     private Context mContext;
 
     private int mEmptyViewId;
@@ -43,11 +41,11 @@ public class RefreshLayout extends FrameLayout {
     private int mStatus = 0;
 
     public RefreshLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public RefreshLayout(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public RefreshLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -57,16 +55,16 @@ public class RefreshLayout extends FrameLayout {
         initView();
     }
 
-    private void initAttrs(AttributeSet attrs){
+    private void initAttrs(AttributeSet attrs) {
         TypedArray typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.RefreshLayout);
-        mEmptyViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_empty,R.layout.view_empty);
-        mErrorViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_error,R.layout.view_net_error);
-        mLoadingViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_loading,R.layout.view_loading);
+        mEmptyViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_empty, R.layout.view_empty);
+        mErrorViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_error, R.layout.view_net_error);
+        mLoadingViewId = typedArray.getResourceId(R.styleable.RefreshLayout_layout_refresh_loading, R.layout.view_loading);
 
         typedArray.recycle();
     }
 
-    private void initView(){
+    private void initView() {
 
         //添加在empty、error、loading 情况下的布局
         mEmptyView = inflateView(mEmptyViewId);
@@ -80,7 +78,7 @@ public class RefreshLayout extends FrameLayout {
         //设置监听器
         mErrorView.setOnClickListener(
                 (view) -> {
-                    if (mListener != null){
+                    if (mListener != null) {
                         toggleStatus(STATUS_LOADING);
                         mListener.onReload();
                     }
@@ -97,7 +95,7 @@ public class RefreshLayout extends FrameLayout {
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
-        if (getChildCount() == 4){
+        if (getChildCount() == 4) {
             mContentView = child;
         }
     }
@@ -138,43 +136,43 @@ public class RefreshLayout extends FrameLayout {
         super.addView(child, index, params);
     }
 
-    public void showLoading(){
-        if (mStatus != STATUS_LOADING){
+    public void showLoading() {
+        if (mStatus != STATUS_LOADING) {
             toggleStatus(STATUS_LOADING);
         }
     }
 
-    public void showFinish(){
-        if (mStatus == STATUS_LOADING){
+    public void showFinish() {
+        if (mStatus == STATUS_LOADING) {
             toggleStatus(STATUS_FINISH);
         }
     }
 
-    public void showError(){
-        if (mStatus != STATUS_ERROR){
+    public void showError() {
+        if (mStatus != STATUS_ERROR) {
             toggleStatus(STATUS_ERROR);
         }
     }
 
-    public void showEmpty(){
-        if (mStatus != STATUS_EMPTY){
+    public void showEmpty() {
+        if (mStatus != STATUS_EMPTY) {
             toggleStatus(STATUS_EMPTY);
         }
     }
 
     //视图根据状态切换
-    private void toggleStatus(int status){
-        switch (status){
+    private void toggleStatus(int status) {
+        switch (status) {
             case STATUS_LOADING:
                 mLoadingView.setVisibility(VISIBLE);
                 mEmptyView.setVisibility(GONE);
                 mErrorView.setVisibility(GONE);
-                if (mContentView != null){
+                if (mContentView != null) {
                     mContentView.setVisibility(GONE);
                 }
                 break;
             case STATUS_FINISH:
-                if (mContentView != null){
+                if (mContentView != null) {
                     mContentView.setVisibility(VISIBLE);
                 }
                 mLoadingView.setVisibility(GONE);
@@ -185,7 +183,7 @@ public class RefreshLayout extends FrameLayout {
                 mErrorView.setVisibility(VISIBLE);
                 mLoadingView.setVisibility(GONE);
                 mEmptyView.setVisibility(GONE);
-                if (mContentView != null){
+                if (mContentView != null) {
                     mContentView.setVisibility(GONE);
                 }
                 break;
@@ -193,7 +191,7 @@ public class RefreshLayout extends FrameLayout {
                 mEmptyView.setVisibility(VISIBLE);
                 mErrorView.setVisibility(GONE);
                 mLoadingView.setVisibility(GONE);
-                if (mContentView != null){
+                if (mContentView != null) {
                     mContentView.setVisibility(GONE);
                 }
                 break;
@@ -201,17 +199,17 @@ public class RefreshLayout extends FrameLayout {
         mStatus = status;
     }
 
-    protected int getStatus(){
+    protected int getStatus() {
         return mStatus;
     }
 
-    public void setOnReloadingListener(OnReloadingListener listener){
+    public void setOnReloadingListener(OnReloadingListener listener) {
         mListener = listener;
     }
 
-    private View inflateView(int id){
+    private View inflateView(int id) {
         return LayoutInflater.from(mContext)
-                .inflate(id,this,false);
+                .inflate(id, this, false);
     }
 
     //数据存储
@@ -231,7 +229,22 @@ public class RefreshLayout extends FrameLayout {
         toggleStatus(savedState.status);
     }
 
+    //添加错误重新加载的监听
+    public interface OnReloadingListener {
+        void onReload();
+    }
+
     static class SavedState extends BaseSavedState {
+        public static final Creator<SavedState> CREATOR
+                = new Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         int status;
 
         SavedState(Parcelable superState) {
@@ -248,21 +261,5 @@ public class RefreshLayout extends FrameLayout {
             super.writeToParcel(out, flags);
             out.writeInt(status);
         }
-
-        public static final Creator<SavedState> CREATOR
-                = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
-    }
-
-    //添加错误重新加载的监听
-    public interface OnReloadingListener{
-        void onReload();
     }
 }

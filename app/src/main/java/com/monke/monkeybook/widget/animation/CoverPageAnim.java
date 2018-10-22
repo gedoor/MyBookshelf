@@ -19,7 +19,7 @@ public class CoverPageAnim extends HorizonPageAnim {
         super(w, h, view, listener);
         mSrcRect = new Rect(0, 0, mViewWidth, mViewHeight);
         mDestRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        int[] mBackShadowColors = new int[] { 0x66000000,0x00000000};
+        int[] mBackShadowColors = new int[]{0x66000000, 0x00000000};
         mBackShadowDrawableLR = new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT, mBackShadowColors);
         mBackShadowDrawableLR.setGradientType(GradientDrawable.LINEAR_GRADIENT);
@@ -27,10 +27,10 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void drawStatic(Canvas canvas) {
-        if (isCancel){
+        if (isCancel) {
             mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
             canvas.drawBitmap(mCurBitmap, 0, 0, null);
-        }else {
+        } else {
             canvas.drawBitmap(mNextBitmap, 0, 0, null);
         }
     }
@@ -38,37 +38,37 @@ public class CoverPageAnim extends HorizonPageAnim {
     @Override
     public void drawMove(Canvas canvas) {
         int dis;
-        switch (mDirection){
+        switch (mDirection) {
             case NEXT:
                 dis = (int) (mViewWidth - mStartX + mTouchX);
-                if (dis > mViewWidth){
+                if (dis > mViewWidth) {
                     dis = mViewWidth;
                 }
                 //计算bitmap截取的区域
                 mSrcRect.left = mViewWidth - dis;
                 //计算bitmap在canvas显示的区域
                 mDestRect.right = dis;
-                canvas.drawBitmap(mNextBitmap,0,0,null);
-                canvas.drawBitmap(mCurBitmap,mSrcRect,mDestRect,null);
-                addShadow(dis,canvas);
+                canvas.drawBitmap(mNextBitmap, 0, 0, null);
+                canvas.drawBitmap(mCurBitmap, mSrcRect, mDestRect, null);
+                addShadow(dis, canvas);
                 break;
             default:
                 dis = (int) (mTouchX - mStartX);
-                if (dis > mViewWidth){
+                if (dis > mViewWidth) {
                     dis = mViewWidth;
                 }
                 mSrcRect.left = mViewWidth - dis;
                 mDestRect.right = dis;
-                canvas.drawBitmap(mCurBitmap,0,0,null);
-                canvas.drawBitmap(mNextBitmap,mSrcRect,mDestRect,null);
-                addShadow(dis,canvas);
+                canvas.drawBitmap(mCurBitmap, 0, 0, null);
+                canvas.drawBitmap(mNextBitmap, mSrcRect, mDestRect, null);
+                addShadow(dis, canvas);
                 break;
         }
     }
 
     //添加阴影
     private void addShadow(int left, Canvas canvas) {
-        mBackShadowDrawableLR.setBounds(left, 0, left + 30 , mScreenHeight);
+        mBackShadowDrawableLR.setBounds(left, 0, left + 30, mScreenHeight);
         mBackShadowDrawableLR.draw(canvas);
     }
 
@@ -76,23 +76,23 @@ public class CoverPageAnim extends HorizonPageAnim {
     public void startAnim() {
         super.startAnim();
         int dx;
-        switch (mDirection){
+        switch (mDirection) {
             case NEXT:
-                if (isCancel){
+                if (isCancel) {
                     int dis = (int) ((mViewWidth - mStartX) + mTouchX);
-                    if (dis > mViewWidth){
+                    if (dis > mViewWidth) {
                         dis = mViewWidth;
                     }
                     dx = mViewWidth - dis;
-                }else{
+                } else {
                     dx = (int) -(mTouchX + (mViewWidth - mStartX));
                 }
                 break;
             default:
-                if (isCancel){
-                    dx = (int) -(mTouchX-mStartX);
-                }else{
-                    dx = (int) (mViewWidth - (mTouchX-mStartX));
+                if (isCancel) {
+                    dx = (int) -(mTouchX - mStartX);
+                } else {
+                    dx = (int) (mViewWidth - (mTouchX - mStartX));
                 }
                 break;
         }

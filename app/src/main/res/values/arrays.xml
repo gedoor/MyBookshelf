@@ -20,6 +20,13 @@
         <item>@string/jf_convert_f</item>
     </string-array>
 
+    <string-array name="NavbarColors">
+        <item>自动</item>
+        <item>黑色</item>
+        <item>白色</item>
+        <item>跟随背景</item>
+    </string-array>
+
     <string-array name="screen_time_out">
         <item>默认</item>
         <item>1分钟</item>

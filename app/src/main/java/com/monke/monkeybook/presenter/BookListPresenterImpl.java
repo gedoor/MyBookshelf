@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -16,22 +15,15 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
-import com.monke.monkeybook.dao.BookInfoBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.help.DataBackup;
-import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.contract.BookListContract;
-import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -52,7 +44,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
     @Override
     public void queryBookShelf(final Boolean needRefresh, final int group) {
         this.group = group;
-        if(needRefresh) {
+        if (needRefresh) {
             hasUpdate = false;
             errBooks.clear();
         }
@@ -84,7 +76,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
     }
 
     private void downloadAll(int downloadNum, boolean onlyNew) {
-        if (bookShelfBeans == null) {
+        if (bookShelfBeans == null || mView.getContext() == null) {
             return;
         }
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
@@ -92,7 +84,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
                     for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if(!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
+                        if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
                             Intent intent = new Intent(mView.getContext(), DownloadService.class);
                             intent.setAction("addDownload");
                             intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
@@ -113,16 +105,14 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 .subscribe();
     }
 
-    private int getThreadsNum() {
-        threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
-        return threadsNum;
-    }
-
     private void startRefreshBook() {
-        if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
-            refreshIndex = -1;
-            for (int i = 1; i <= getThreadsNum(); i++) {
-                refreshBookshelf();
+        if (mView.getContext() != null) {
+            threadsNum = mView.getPreferences().getInt(mView.getContext().getString(R.string.pk_threads_num), 6);
+            if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
+                refreshIndex = -1;
+                for (int i = 1; i <= threadsNum; i++) {
+                    refreshBookshelf();
+                }
             }
         }
     }
@@ -144,7 +134,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                             @Override
                             public void onNext(BookShelfBean value) {
                                 if (value.getErrorMsg() != null) {
-                                    Toast.makeText(mView.getContext(), value.getErrorMsg(), Toast.LENGTH_SHORT).show();
+                                    mView.toast(value.getErrorMsg());
                                     value.setErrorMsg(null);
                                 }
                                 bookShelfBean.setLoading(false);
@@ -164,11 +154,12 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                             }
                         });
             } else {
+
                 refreshBookshelf();
             }
         } else if (refreshIndex >= bookShelfBeans.size() + threadsNum - 1) {
-            if(errBooks.size() > 0) {
-                Toast.makeText(mView.getContext(), TextUtils.join("、", errBooks) + " 更新失败！", Toast.LENGTH_SHORT).show();
+            if (errBooks.size() > 0) {
+                mView.toast(TextUtils.join("、", errBooks) + " 更新失败！");
                 errBooks.clear();
             }
             if (hasUpdate && mView.getPreferences().getBoolean(mView.getContext().getString(R.string.pk_auto_download), false)) {
@@ -209,24 +200,24 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
         queryBookShelf(false, group);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_GROUP)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_GROUP)})
     public void updateGroup(Integer group) {
         this.group = group;
         mView.updateGroup(group);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.REFRESH_BOOK_LIST)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.REFRESH_BOOK_LIST)})
     public void reFlashBookList(Boolean needRefresh) {
         queryBookShelf(needRefresh, group);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
         mView.recreate();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.DOWNLOAD_ALL)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.DOWNLOAD_ALL)})
     public void downloadAll(Integer downloadNum) {
-        downloadAll(downloadNum, true);
+        downloadAll(downloadNum, false);
     }
 }

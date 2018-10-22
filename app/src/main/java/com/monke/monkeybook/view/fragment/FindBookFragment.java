@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseFragment;
@@ -72,17 +71,19 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public synchronized void updateUI(List<RecyclerViewData> group) {
         if (group.size() > 0) {
             adapter.setAllDatas(group);
-            if (autoExpandGroup() || group.size() == 1) {
+            lastExpandedPosition = Math.min(lastExpandedPosition, group.size() - 1);
+            if (autoExpandGroup()) {
                 adapter.expandGroup(lastExpandedPosition);
-                expandableList.smoothScrollToPosition(lastExpandedPosition);
             }
+        } else {
+            adapter.clearAll();
         }
     }
 
     private boolean autoExpandGroup() {
         if (isAdded()) {
             return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
-        }else {
+        } else {
             return false;
         }
     }

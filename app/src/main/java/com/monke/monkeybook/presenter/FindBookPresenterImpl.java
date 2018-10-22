@@ -10,6 +10,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
@@ -33,7 +34,9 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
     public void initData() {
         Observable.create((ObservableOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
-            for (BookSourceBean sourceBean : BookSourceManage.getAllBookSource()) {
+            boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
+            List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManage.getAllBookSource() : BookSourceManage.getSelectedBookSource();
+            for (BookSourceBean sourceBean : sourceBeans) {
                 if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
                     String kindA[] = sourceBean.getRuleFindUrl().split("&&");
                     List<FindKindBean> children = new ArrayList<>();
@@ -49,7 +52,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                     FindKindGroupBean groupBean = new FindKindGroupBean();
                     groupBean.setGroupName(sourceBean.getBookSourceName());
                     groupBean.setChildrenCount(kindA.length);
-                    group.add(new RecyclerViewData(groupBean,children,false));
+                    group.add(new RecyclerViewData(groupBean, children, false));
                 }
             }
             e.onNext(group);

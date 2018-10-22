@@ -2,7 +2,6 @@ package com.monke.monkeybook.presenter;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -91,13 +90,13 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        Toast.makeText(mView.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        mView.toast("删除成功");
                         mView.refresh();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                        mView.toast("删除失败");
                     }
                 });
     }
@@ -133,12 +132,12 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                 }.getType());
                 ReplaceRuleManage.addDataS(dataS);
                 mView.refresh();
-                Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
+                mView.toast("导入成功");
             } catch (Exception e) {
-                Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
+                mView.toast("格式不对");
             }
         } else {
-            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
+            mView.toast("文件读取失败");
         }
     }
 
@@ -149,7 +148,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
             url = new URL(sourceUrl);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
+            mView.toast("URL格式不对");
             return;
         }
         ReplaceRuleManage.importReplaceRuleFromWww(url)
@@ -158,15 +157,15 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                     public void onNext(Boolean aBoolean) {
                         if (aBoolean) {
                             mView.refresh();
-                            Toast.makeText(mView.getContext(), "导入成功", Toast.LENGTH_SHORT).show();
+                            mView.toast("导入成功");
                         } else {
-                            Toast.makeText(mView.getContext(), "格式不对", Toast.LENGTH_SHORT).show();
+                            mView.toast("格式不对");
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                     }
                 });
     }

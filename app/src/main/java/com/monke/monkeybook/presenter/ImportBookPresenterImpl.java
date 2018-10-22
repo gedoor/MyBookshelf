@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ImportBookPresenterImpl extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
 
     @Override
-    public void importBooks(List<File> books){
+    public void importBooks(List<File> books) {
         Observable.fromIterable(books)
                 .flatMap(file -> ImportBookModelImpl.getInstance().importBook(file))
                 .subscribeOn(Schedulers.io())
@@ -30,8 +30,8 @@ public class ImportBookPresenterImpl extends BasePresenterImpl<ImportBookContrac
                 .subscribe(new SimpleObserver<LocBookShelfBean>() {
                     @Override
                     public void onNext(LocBookShelfBean value) {
-                        if(value.getNew()){
-                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK,value.getBookShelfBean());
+                        if (value.getNew()) {
+                            RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value.getBookShelfBean());
                         }
                     }
 

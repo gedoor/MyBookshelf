@@ -4,22 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.monke.monkeybook.MApplication;
+
 public class SharedPreferencesUtil {
     //存储的sharedpreferences文件名
-    public static final String FILE_NAME = "CONFIG";
+    private final static SharedPreferences sharedPreferences = MApplication.getInstance().getConfigPreferences();
 
     /**
      * 保存数据到文件
      *
-     * @param context
      * @param key
      * @param data
      */
-    public static void saveData(Context context, String key, Object data) {
+    public static void saveData(String key, Object data) {
 
         String type = data.getClass().getSimpleName();
-        SharedPreferences sharedPreferences = context
-                .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+
         Editor editor = sharedPreferences.edit();
 
         if ("Integer".equals(type)) {
@@ -45,8 +45,6 @@ public class SharedPreferencesUtil {
      */
     public static void deleteData(Context context, String key) {
 
-        SharedPreferences sharedPreferences = context
-                .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         Editor editor = sharedPreferences.edit();
 
         editor.remove(key);
@@ -65,9 +63,6 @@ public class SharedPreferencesUtil {
     public static Object getData(Context context, String key, Object defValue) {
 
         String type = defValue.getClass().getSimpleName();
-        SharedPreferences sharedPreferences = context.getSharedPreferences
-                (FILE_NAME, Context.MODE_PRIVATE);
-
         //defValue为为默认值，如果当前获取不到数据就返回它
         if ("Integer".equals(type)) {
             return sharedPreferences.getInt(key, (Integer) defValue);
@@ -90,8 +85,6 @@ public class SharedPreferencesUtil {
      * @param context
      */
     public static void clearData(Context context) {
-        SharedPreferences sharedPreferences = context
-                .getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();
     }
 

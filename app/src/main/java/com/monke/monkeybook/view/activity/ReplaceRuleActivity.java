@@ -274,18 +274,13 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     @Override
-    public Snackbar getSnackBar(String msg, int length) {
-        return Snackbar.make(llContent, msg, length);
-    }
-
-    @Override
-    public void showSnackBar(String msg, int length) {
-        Snackbar.make(llContent, msg, length).show();
-    }
-
-    @Override
     protected void onDestroy() {
         RxBus.get().post(RxBusTag.UPDATE_READ, false);
         super.onDestroy();
+    }
+
+    @Override
+    public Snackbar getSnackBar(String msg, int length) {
+        return Snackbar.make(llContent, msg, length);
     }
 }

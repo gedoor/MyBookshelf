@@ -14,15 +14,12 @@ import android.view.View;
  */
 
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private static final String TAG = "DividerItemDecoration";
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
-
-    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-
-    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
-
     private Drawable mDrawable;
 
     public DividerItemDecoration(Context context) {
@@ -40,10 +37,10 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    private int getLayoutManagerType(RecyclerView rv){
+    private int getLayoutManagerType(RecyclerView rv) {
         RecyclerView.LayoutManager manager = rv.getLayoutManager();
 
-        if (!(manager instanceof LinearLayoutManager)){
+        if (!(manager instanceof LinearLayoutManager)) {
             throw new IllegalArgumentException("only supply linearLayoutManager");
         }
         return ((LinearLayoutManager) manager).getOrientation();

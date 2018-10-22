@@ -3,7 +3,6 @@ package com.monke.monkeybook.presenter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -86,7 +85,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("删除失败");
                         mView.refreshBookSource();
                     }
                 });
@@ -105,13 +104,13 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {
-                        Toast.makeText(mView.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                        mView.toast("删除成功");
                         mView.refreshBookSource();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "删除失败\n" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("删除失败");
                     }
                 });
     }
@@ -143,7 +142,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
             url = new URL(sourceUrl);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(mView.getContext(), "URL格式不对", Toast.LENGTH_SHORT).show();
+            mView.toast("URL格式不对");
             return;
         }
         mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
@@ -163,7 +162,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getImportObserver());
         } else {
-            Toast.makeText(mView.getContext(), "文件读取失败", Toast.LENGTH_SHORT).show();
+            mView.toast("文件读取失败");
         }
     }
 

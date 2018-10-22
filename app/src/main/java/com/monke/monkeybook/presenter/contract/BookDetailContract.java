@@ -42,5 +42,7 @@ public interface BookDetailContract {
         void getBookShelfError();
 
         void finish();
+
+        void toast(String msg);
     }
 }

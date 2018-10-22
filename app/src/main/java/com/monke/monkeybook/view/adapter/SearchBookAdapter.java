@@ -21,7 +21,6 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,13 +31,6 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
     private List<SearchBookBean> searchBooks;
-
-    public interface OnItemClickListener {
-        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
-
-        void clickItem(View animView, int position, SearchBookBean searchBookBean);
-    }
-
     private OnItemClickListener itemClickListener;
 
     public SearchBookAdapter(Activity activity) {
@@ -132,40 +124,13 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        FrameLayout flContent;
-        ImageView ivCover;
-        TextView tvName;
-        TextView tvState;
-        TextView tvWords;
-        TextView tvKind;
-        TextView tvLasted;
-        TextView tvAddShelf;
-        TextView tvOrigin;
-        TextView tvOriginNum;
-
-        MyViewHolder(View itemView) {
-            super(itemView);
-            flContent = itemView.findViewById(R.id.fl_content);
-            ivCover = itemView.findViewById(R.id.iv_cover);
-            tvName = itemView.findViewById(R.id.tv_name);
-            tvState = itemView.findViewById(R.id.tv_state);
-            tvWords = itemView.findViewById(R.id.tv_words);
-            tvLasted = itemView.findViewById(R.id.tv_lasted);
-            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
-            tvKind = itemView.findViewById(R.id.tv_kind);
-            tvOrigin = itemView.findViewById(R.id.tv_origin);
-            tvOriginNum = itemView.findViewById(R.id.tv_origin_num);
-        }
-    }
-
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
     public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
         List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
-        if(newDataS!=null && newDataS.size()>0){
+        if (newDataS != null && newDataS.size() > 0) {
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
@@ -242,6 +207,39 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
+    }
+
+    public interface OnItemClickListener {
+        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
+
+        void clickItem(View animView, int position, SearchBookBean searchBookBean);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        FrameLayout flContent;
+        ImageView ivCover;
+        TextView tvName;
+        TextView tvState;
+        TextView tvWords;
+        TextView tvKind;
+        TextView tvLasted;
+        TextView tvAddShelf;
+        TextView tvOrigin;
+        TextView tvOriginNum;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            flContent = itemView.findViewById(R.id.fl_content);
+            ivCover = itemView.findViewById(R.id.iv_cover);
+            tvName = itemView.findViewById(R.id.tv_name);
+            tvState = itemView.findViewById(R.id.tv_state);
+            tvWords = itemView.findViewById(R.id.tv_words);
+            tvLasted = itemView.findViewById(R.id.tv_lasted);
+            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
+            tvKind = itemView.findViewById(R.id.tv_kind);
+            tvOrigin = itemView.findViewById(R.id.tv_origin);
+            tvOriginNum = itemView.findViewById(R.id.tv_origin_num);
+        }
     }
 
 }

@@ -44,12 +44,13 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/iv_has_new"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_circle_red_24dp"
+                app:tint="@color/colorAccent"
                 android:visibility="invisible" />
 
             <com.victor.loading.rotate.RotateLoading

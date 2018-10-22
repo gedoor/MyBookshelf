@@ -190,6 +190,47 @@
                 android:background="@color/background_menu"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:id="@+id/llNavigationBarColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/background_menu"
+                    android:orientation="horizontal"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <TextView
+                        android:id="@+id/reNavbarcolor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:textColor="@color/menu_color_default"
+                        android:text="@string/re_navigation_bar_color" />
+
+                    <TextView
+                        android:id="@+id/reNavbarcolor_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/menu_color_default"
+                        android:text="黑色" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.8dp"
+                    android:background="@color/btn_bg_press" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background_menu"
+                android:orientation="vertical">
+
                 <Switch
                     android:id="@+id/sb_show_title"
                     android:layout_width="match_parent"

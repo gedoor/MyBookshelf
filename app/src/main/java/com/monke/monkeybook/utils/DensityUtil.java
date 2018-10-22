@@ -19,8 +19,7 @@ public class DensityUtil {
      * @param
      * @return
      */
-    public static int dp2px(Context context, float dpVal)
-    {
+    public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
     }
@@ -32,8 +31,7 @@ public class DensityUtil {
      * @param
      * @return
      */
-    public static int sp2px(Context context, float spVal)
-    {
+    public static int sp2px(Context context, float spVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 spVal, context.getResources().getDisplayMetrics());
     }
@@ -45,8 +43,7 @@ public class DensityUtil {
      * @param pxVal
      * @return
      */
-    public static float px2dp(Context context, float pxVal)
-    {
+    public static float px2dp(Context context, float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -58,11 +55,11 @@ public class DensityUtil {
      * @param pxVal
      * @return
      */
-    public static float px2sp(Context context, float pxVal)
-    {
+    public static float px2sp(Context context, float pxVal) {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
-    public static Point getDisplayPoint(Context context){
+
+    public static Point getDisplayPoint(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -71,18 +68,18 @@ public class DensityUtil {
         try {
             c = Class.forName("android.view.Display");
             @SuppressWarnings("unchecked")
-            Method method = c.getMethod("getRealMetrics",DisplayMetrics.class);
+            Method method = c.getMethod("getRealMetrics", DisplayMetrics.class);
             method.invoke(display, displayMetrics);
-            return new Point(displayMetrics.widthPixels ,displayMetrics.heightPixels );
-        }catch(Exception e){
+            return new Point(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         DisplayMetrics dm = new DisplayMetrics();
-        ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return new Point(dm.widthPixels ,dm.heightPixels);
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return new Point(dm.widthPixels, dm.heightPixels);
     }
 
-    public static int getWindowWidth(Context context){
+    public static int getWindowWidth(Context context) {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();

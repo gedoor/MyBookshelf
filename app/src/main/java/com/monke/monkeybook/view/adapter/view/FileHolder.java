@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.adapter.view;
 
-import android.graphics.PorterDuff;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -31,8 +30,9 @@ public class FileHolder extends ViewHolderImpl<File> {
     private TextView mTvDate;
     private TextView mTvSubCount;
 
-    private HashMap<File,Boolean> mSelectedMap;
-    public FileHolder(HashMap<File,Boolean> selectedMap){
+    private HashMap<File, Boolean> mSelectedMap;
+
+    public FileHolder(HashMap<File, Boolean> selectedMap) {
         mSelectedMap = selectedMap;
     }
 
@@ -51,19 +51,18 @@ public class FileHolder extends ViewHolderImpl<File> {
     @Override
     public void onBind(File data, int pos) {
         //判断是文件还是文件夹
-        if (data.isDirectory()){
+        if (data.isDirectory()) {
             setFolder(data);
-        }
-        else {
+        } else {
             setFile(data);
         }
         mCbSelect.setClickable(false);
     }
 
-    private void setFile(File file){
+    private void setFile(File file) {
         //选择
 
-        if (BookshelfHelp.getBook(file.getAbsolutePath()) != null){
+        if (BookshelfHelp.getBook(file.getAbsolutePath()) != null) {
             mIvIcon.setImageResource(R.drawable.ic_book_has);
             mIvIcon.setVisibility(View.VISIBLE);
             mCbSelect.setVisibility(View.GONE);
@@ -82,7 +81,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
     }
 
-    public void setFolder(File folder){
+    public void setFolder(File folder) {
         //图片
         mIvIcon.setVisibility(View.VISIBLE);
         mCbSelect.setVisibility(View.GONE);
@@ -93,7 +92,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mLlBrief.setVisibility(View.GONE);
         mTvSubCount.setVisibility(View.VISIBLE);
 
-        mTvSubCount.setText(getContext().getString(R.string.nb_file_sub_count,folder.list().length));
+        mTvSubCount.setText(getContext().getString(R.string.nb_file_sub_count, folder.list().length));
     }
 
     @Override

@@ -52,6 +52,12 @@
         android:summary="@string/default_expand_first"
         android:title="@string/auto_expand_find" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="showAllFind"
+        android:summary="@string/ps_show_all_find"
+        android:title="@string/pt_show_all_find"/>
+
     <Preference
         android:key="@string/pk_download_path"
         android:title="@string/download_path" />

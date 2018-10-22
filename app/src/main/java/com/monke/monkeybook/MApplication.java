@@ -23,10 +23,10 @@ public class MApplication extends Application {
     public final static String channelIdReadAloud = "channel_read_aloud";
     public final static String[] PerList = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     public final static int RESULT__PERMS = 263;
+    public static String downloadPath;
     private static MApplication instance;
     private static String versionName;
     private static int versionCode;
-    public static String downloadPath;
     private SharedPreferences configPreferences;
 
     public static MApplication getInstance() {
@@ -66,7 +66,7 @@ public class MApplication extends Application {
 
     public void setDownloadPath(String downloadPath) {
         MApplication.downloadPath = downloadPath;
-        Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache"+ File.separator ;
+        Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
         editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
         editor.apply();

@@ -13,16 +13,11 @@ import com.monke.monkeybook.widget.flowlayout.TagAdapter;
 import java.util.ArrayList;
 
 public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
+    private SearchHistoryAdapter.OnItemClickListener onItemClickListener;
+
     public SearchHistoryAdapter() {
         super(new ArrayList<>());
     }
-
-    public interface OnItemClickListener{
-        void itemClick(SearchHistoryBean searchHistoryBean);
-
-        void itemLongClick(int index);
-    }
-    private SearchHistoryAdapter.OnItemClickListener onItemClickListener;
 
     public OnItemClickListener getListener() {
         return onItemClickListener;
@@ -38,12 +33,12 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
                 parent, false);
         tv.setText(searchHistoryBean.getContent());
         tv.setOnClickListener(v -> {
-            if(null != onItemClickListener){
+            if (null != onItemClickListener) {
                 onItemClickListener.itemClick(searchHistoryBean);
             }
         });
         tv.setOnLongClickListener(view -> {
-            if(null != onItemClickListener){
+            if (null != onItemClickListener) {
                 onItemClickListener.itemLongClick(position);
             }
             return true;
@@ -51,11 +46,17 @@ public class SearchHistoryAdapter extends TagAdapter<SearchHistoryBean> {
         return tv;
     }
 
-    public SearchHistoryBean getItemData(int position){
+    public SearchHistoryBean getItemData(int position) {
         return mTagDataList.get(position);
     }
 
-    public int getDataSize(){
+    public int getDataSize() {
         return mTagDataList.size();
+    }
+
+    public interface OnItemClickListener {
+        void itemClick(SearchHistoryBean searchHistoryBean);
+
+        void itemLongClick(int index);
     }
 }

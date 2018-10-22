@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 public class ReadAssets {
 
-    public static String getText(Context context, String fileName){
+    public static String getText(Context context, String fileName) {
         try {
             //Return an AssetManager instance for your application's package
             InputStream is = context.getAssets().open(fileName);

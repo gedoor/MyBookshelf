@@ -18,7 +18,7 @@ public class MarkdownUtils {
         String emPtn = "\\*([^*]+)\\*";
         boolean isInList = false;
         StringBuilder builder = new StringBuilder();
-        for (String line: text.split("\\n")) {
+        for (String line : text.split("\\n")) {
             Matcher listMtc = listPtn.matcher(line);
             Matcher headMtc = headPtn.matcher(line);
             boolean isList = listMtc.find();

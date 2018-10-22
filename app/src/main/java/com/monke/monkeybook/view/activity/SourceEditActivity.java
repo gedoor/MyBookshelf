@@ -17,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,7 +24,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.BuildConfig;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -216,7 +214,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
     private void saveBookSource() {
         if (isEmpty(tieBookSourceName.getText().toString().trim()) || isEmpty(tieBookSourceUrl.getText().toString().trim())) {
-            Toast.makeText(MApplication.getInstance(), "书源名称和URL不能为空", Toast.LENGTH_SHORT).show();
+            toast("书源名称和URL不能为空", ERROR);
             return;
         }
         mPresenter.saveSource(getBookSource(), bookSourceBean);
@@ -225,7 +223,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     public void saveSuccess() {
         bookSourceBean = getBookSource();
-        Toast.makeText(MApplication.getInstance(), "保存成功", Toast.LENGTH_SHORT).show();
+        toast("保存成功");
         setResult(RESULT_OK);
         finish();
     }
@@ -380,7 +378,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+            toast(R.string.can_not_open, ERROR);
         }
     }
 

@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
@@ -49,12 +49,7 @@ public class ReadAdjustPop extends PopupWindow {
     private int light;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnAdjustListener adjustListener;
-
-    public interface OnAdjustListener {
-        void changeSpeechRate(int speechRate);
-
-        void speechRateFollowSys();
-    }
+    private SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
 
     public ReadAdjustPop(ReadBookActivity readBookActivity, OnAdjustListener adjustListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -206,12 +201,6 @@ public class ReadAdjustPop extends PopupWindow {
         });
     }
 
-    public void setScreenBrightness(int value) {
-        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
-        params.screenBrightness = value * 1.0f / 255f;
-        (activity).getWindow().setAttributes(params);
-    }
-
     public void setScreenBrightness() {
         WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
@@ -229,8 +218,13 @@ public class ReadAdjustPop extends PopupWindow {
         return value;
     }
 
+    public void setScreenBrightness(int value) {
+        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
+        params.screenBrightness = value * 1.0f / 255f;
+        (activity).getWindow().setAttributes(params);
+    }
+
     private void saveLight() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("light", light);
         editor.putBoolean("isfollowsys", isFollowSys);
@@ -238,12 +232,10 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     private int getLight() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getInt("light", getScreenBrightness());
     }
 
     private Boolean getIsFollowSys() {
-        SharedPreferences preference = activity.getSharedPreferences("CONFIG", Context.MODE_PRIVATE);
         return preference.getBoolean("isfollowsys", true);
     }
 
@@ -265,5 +257,11 @@ public class ReadAdjustPop extends PopupWindow {
         if (!isFollowSys) {
             setScreenBrightness(light);
         }
+    }
+
+    public interface OnAdjustListener {
+        void changeSpeechRate(int speechRate);
+
+        void speechRateFollowSys();
     }
 }

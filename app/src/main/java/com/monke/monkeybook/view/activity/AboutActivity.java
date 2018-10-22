@@ -14,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
@@ -133,7 +132,6 @@ public class AboutActivity extends MBaseActivity {
     }
 
     private void setTextViewIconColor(TextView textView) {
-        textView.getCompoundDrawablesRelative()[0].mutate();
         textView.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
@@ -151,7 +149,7 @@ public class AboutActivity extends MBaseActivity {
             ClipData clipData = ClipData.newPlainText(null, qq);
             if (clipboard != null) {
                 clipboard.setPrimaryClip(clipData);
-                Toast.makeText(this, R.string.copy_complete, Toast.LENGTH_SHORT).show();
+                toast(R.string.copy_complete);
             }
         });
         vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
@@ -170,7 +168,7 @@ public class AboutActivity extends MBaseActivity {
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, R.string.can_not_open, Toast.LENGTH_SHORT).show();
+            toast(R.string.can_not_open, ERROR);
         }
     }
 

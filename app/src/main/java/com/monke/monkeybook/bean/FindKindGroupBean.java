@@ -1,7 +1,5 @@
 package com.monke.monkeybook.bean;
 
-import java.util.List;
-
 public class FindKindGroupBean {
     private String groupName;
     private int childrenCount;

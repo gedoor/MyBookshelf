@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
@@ -160,7 +159,7 @@ public class ReadStyleActivity extends MBaseActivity {
                     textColor = Color.parseColor(inputText);
                     upText();
                 } catch (Exception e) {
-                    Toast.makeText(this, "颜色值错误", Toast.LENGTH_SHORT).show();
+                    toast("颜色值错误", ERROR);
                 }
             });
             return true;
@@ -195,7 +194,7 @@ public class ReadStyleActivity extends MBaseActivity {
                     bgCustom = 1;
                     upBg();
                 } catch (Exception e) {
-                    Toast.makeText(this, "颜色值错误", Toast.LENGTH_SHORT).show();
+                    toast("颜色值错误", ERROR);
                 }
             });
             return true;
@@ -292,7 +291,7 @@ public class ReadStyleActivity extends MBaseActivity {
             upBg();
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            toast(e.getMessage(), ERROR);
         }
     }
 

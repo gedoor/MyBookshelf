@@ -15,15 +15,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ErrorAnalyContentManager {
-    private ErrorAnalyContentManager(){
-
-    }
     private static ErrorAnalyContentManager instance;
 
-    public static ErrorAnalyContentManager getInstance(){
-        if(instance == null){
-            synchronized (ErrorAnalyContentManager.class){
-                if(instance == null){
+    private ErrorAnalyContentManager() {
+
+    }
+
+    public static ErrorAnalyContentManager getInstance() {
+        if (instance == null) {
+            synchronized (ErrorAnalyContentManager.class) {
+                if (instance == null) {
                     instance = new ErrorAnalyContentManager();
                 }
             }
@@ -31,25 +32,25 @@ public class ErrorAnalyContentManager {
         return instance;
     }
 
-    public void writeNewErrorUrl(final String url){
+    public void writeNewErrorUrl(final String url) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
             File dir = new File(filePath);
-            if(!dir.exists()){
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            File file2 = new File(filePath,"ErrorAnalyUrlsDetail.txt");
-            if(!file2.exists()) {
+            File file2 = new File(filePath, "ErrorAnalyUrlsDetail.txt");
+            if (!file2.exists()) {
                 file2.createNewFile();
             }
-            FileOutputStream fileOutputStream2 = new FileOutputStream(file2,true);
-            fileOutputStream2.write((url+"    \r\n").getBytes());
+            FileOutputStream fileOutputStream2 = new FileOutputStream(file2, true);
+            fileOutputStream2.write((url + "    \r\n").getBytes());
             fileOutputStream2.flush();
             fileOutputStream2.close();
             ///////////////////////////////////////////////////////////////////////
-            File file1 = new File(filePath,"ErrorAnalyUrls.txt");
-            if(!file1.exists()) {
+            File file1 = new File(filePath, "ErrorAnalyUrls.txt");
+            if (!file1.exists()) {
                 file1.createNewFile();
             }
             FileInputStream inputStream = new FileInputStream(file1);
@@ -61,9 +62,9 @@ public class ErrorAnalyContentManager {
             inputStream.close();
             arrayOutputStream.close();
             String content = new String(arrayOutputStream.toByteArray());
-            if(!content.contains(url.substring(0,url.indexOf('/',8)))){
-                FileOutputStream fileOutputStream1 = new FileOutputStream(file1,true);
-                fileOutputStream1.write((url.substring(0,url.indexOf('/',8))+"    \r\n").getBytes());
+            if (!content.contains(url.substring(0, url.indexOf('/', 8)))) {
+                FileOutputStream fileOutputStream1 = new FileOutputStream(file1, true);
+                fileOutputStream1.write((url.substring(0, url.indexOf('/', 8)) + "    \r\n").getBytes());
                 fileOutputStream1.flush();
                 fileOutputStream1.close();
             }
@@ -85,20 +86,20 @@ public class ErrorAnalyContentManager {
                 });
     }
 
-    public void writeMayByNetError(final String url){
+    public void writeMayByNetError(final String url) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             String filePath = MApplication.getInstance().getExternalFilesDir("").getPath();
             File dir = new File(filePath);
-            if(!dir.exists()){
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            File file = new File(filePath,"ErrorNetUrl.txt");
-            if(!file.exists()) {
+            File file = new File(filePath, "ErrorNetUrl.txt");
+            if (!file.exists()) {
                 file.createNewFile();
             }
-            FileOutputStream fileOutputStream2 = new FileOutputStream(file,true);
-            fileOutputStream2.write((url+"    \r\n").getBytes());
+            FileOutputStream fileOutputStream2 = new FileOutputStream(file, true);
+            fileOutputStream2.write((url + "    \r\n").getBytes());
             fileOutputStream2.flush();
             fileOutputStream2.close();
             e.onNext(true);

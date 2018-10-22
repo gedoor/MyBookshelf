@@ -15,10 +15,9 @@ import android.view.View;
  * Created by newbiechen on 2017/10/8.
  */
 
-public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
-{
+public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
 
-    private static final int[] ATTRS = new int[] { android.R.attr.listDivider };
+    private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
     private Drawable mWidthDivider;
     private Drawable mHeightDivider;
 
@@ -29,7 +28,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
         a.recycle();
     }
 
-    public DividerGridItemDecoration(Context context, @DrawableRes int widthDividerRes,@DrawableRes int heightDividerRes){
+    public DividerGridItemDecoration(Context context, @DrawableRes int widthDividerRes, @DrawableRes int heightDividerRes) {
         mWidthDivider = context.getDrawable(widthDividerRes);
         mHeightDivider = context.getDrawable(heightDividerRes);
     }
@@ -46,8 +45,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             spanCount = ((GridLayoutManager) layoutManager).getSpanCount();
-        }
-        else if (layoutManager instanceof StaggeredGridLayoutManager) {
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             spanCount = ((StaggeredGridLayoutManager) layoutManager)
                     .getSpanCount();
         }
@@ -94,11 +92,10 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
                                  int childCount) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            if ((pos + 1) % spanCount == 0){
+            if ((pos + 1) % spanCount == 0) {
                 return true;
             }
-        }
-        else if (layoutManager instanceof StaggeredGridLayoutManager) {
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
 
             int orientation = ((StaggeredGridLayoutManager) layoutManager)
                     .getOrientation();
@@ -107,8 +104,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
                 if ((pos + 1) % spanCount == 0) {
                     return true;
                 }
-            }
-            else {
+            } else {
                 childCount = childCount - childCount % spanCount;
                 // 如果是最后一列，则不需要绘制右边
                 if (pos >= childCount)
@@ -125,8 +121,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
             childCount = childCount - childCount % spanCount;
             if (pos >= childCount)// 如果是最后一行，则不需要绘制底部
                 return true;
-        }
-        else if (layoutManager instanceof StaggeredGridLayoutManager) {
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
 
             int orientation = ((StaggeredGridLayoutManager) layoutManager)
                     .getOrientation();
@@ -136,8 +131,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
                 // 如果是最后一行，则不需要绘制底部
                 if (pos >= childCount)
                     return true;
-            }
-            else {
+            } else {
                 // 如果是最后一行，则不需要绘制底部
                 if ((pos + 1) % spanCount == 0) {
                     return true;
@@ -159,8 +153,7 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration
         // 如果是最后一列，则不需要绘制右边
         else if (isLastColumn(parent, itemPosition, spanCount, childCount)) {
             outRect.set(0, 0, 0, mWidthDivider.getIntrinsicHeight());
-        }
-        else {
+        } else {
             outRect.set(0, 0, mHeightDivider.getIntrinsicWidth(),
                     mWidthDivider.getIntrinsicHeight());
         }

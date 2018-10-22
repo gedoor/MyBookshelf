@@ -21,8 +21,6 @@ public class BarParams implements Cloneable {
     public int navigationBarColor = Color.BLACK;  //导航栏颜色
     @FloatRange(from = 0f, to = 1f)
     public float statusBarAlpha = 0.0f;           //状态栏透明度
-    @FloatRange(from = 0f, to = 1f)
-    float navigationBarAlpha = 0.0f;       //导航栏透明度
     public boolean fullScreen = false;            //有导航栏的情况，全屏显示
     public boolean fullScreenTemp = fullScreen;
     public BarHide barHide = BarHide.FLAG_SHOW_BAR;  //隐藏Bar
@@ -66,6 +64,9 @@ public class BarParams implements Cloneable {
     public KeyboardPatch keyboardPatch;        //软键盘监听类
     public OnKeyboardListener onKeyboardListener;   //软键盘监听类
     public ContentObserver navigationStatusObserver;  //emui3.1监听器
+    public boolean navigationBarDivider = true;     //显示导航栏Divider
+    @FloatRange(from = 0f, to = 1f)
+    float navigationBarAlpha = 0.0f;       //导航栏透明度
 
     @Override
     protected BarParams clone() {

@@ -38,10 +38,89 @@ public class RefreshRecyclerView extends FrameLayout {
     private float durTouchY = -1000000;
     private Timer timer;
     private BaseRefreshListener baseRefreshListener;
-
-    public LinearLayout getHeader() {
-        return llHeader;
-    }
+    private OnLoadMoreListener loadMoreListener;
+    private OnTouchListener refreshTouchListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    durTouchX = event.getX();
+                    durTouchY = event.getY();
+                    upLongClickTimer();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (durTouchX == -1000000) {
+                        durTouchX = event.getX();
+                        upLongClickTimer();
+                    }
+                    if (durTouchY == -1000000)
+                        durTouchY = event.getY();
+                    double deltaX = Math.sqrt((event.getX() - durTouchX) * (event.getX() - durTouchX) + (event.getY() - durTouchY) * (event.getY() - durTouchY));
+                    if (deltaX > 10 && timer != null) { // 移动大于10像素
+                        timer.cancel();
+                        timer = null;
+                    }
+                    if (!isLongClickModule) {
+                        float dY = event.getY() - durTouchY;  //>0下拉
+                        durTouchY = event.getY();
+                        if (baseRefreshListener != null && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0 && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress()) {
+                            if (rpb.getVisibility() != View.VISIBLE) {
+                                rpb.setVisibility(View.VISIBLE);
+                            }
+                            if (recyclerView.getAdapter().getItemCount() > 0) {
+                                if (0 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()) {
+                                    rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                                }
+                            } else {
+                                rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                            }
+                            return rpb.getSecondDurProgress() > 0;
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (!isLongClickModule && baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
+                        if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0) {
+                            if (baseRefreshListener instanceof OnRefreshWithProgressListener) {
+                                //带有进度的
+                                //执行刷新响应
+                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
+                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
+                                rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
+                                baseRefreshListener.startRefresh();
+                                if (noDataView != null) {
+                                    noDataView.setVisibility(GONE);
+                                }
+                                if (refreshErrorView != null) {
+                                    refreshErrorView.setVisibility(GONE);
+                                }
+                            } else {
+                                //不带进度的
+                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
+                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
+                                baseRefreshListener.startRefresh();
+                                if (noDataView != null) {
+                                    noDataView.setVisibility(GONE);
+                                }
+                                if (refreshErrorView != null) {
+                                    refreshErrorView.setVisibility(GONE);
+                                }
+                                rpb.setIsAutoLoading(true);
+                            }
+                        } else {
+                            if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() != 1)
+                                rpb.setSecondDurProgressWithAnim(0);
+                        }
+                    }
+                    isLongClickModule = false;
+                    durTouchX = -1000000;
+                    durTouchY = -1000000;
+                    break;
+            }
+            return false;
+        }
+    };
 
     public RefreshRecyclerView(Context context) {
         this(context, null);
@@ -72,11 +151,13 @@ public class RefreshRecyclerView extends FrameLayout {
         addView(view);
     }
 
+    public LinearLayout getHeader() {
+        return llHeader;
+    }
+
     public void setBaseRefreshListener(BaseRefreshListener baseRefreshListener) {
         this.baseRefreshListener = baseRefreshListener;
     }
-
-    private OnLoadMoreListener loadMoreListener;
 
     public void setLoadMoreListener(OnLoadMoreListener loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
@@ -196,7 +277,7 @@ public class RefreshRecyclerView extends FrameLayout {
         recyclerView.setAdapter(refreshRecyclerViewAdapter);
     }
 
-    public void setRefreshRecyclerViewAdapter(View headerView ,RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
+    public void setRefreshRecyclerViewAdapter(View headerView, RefreshRecyclerViewAdapter refreshRecyclerViewAdapter, RecyclerView.LayoutManager layoutManager) {
         refreshRecyclerViewAdapter.setClickTryAgainListener(() -> {
             if (loadMoreListener != null)
                 loadMoreListener.loadMoreErrorTryAgain();
@@ -240,88 +321,5 @@ public class RefreshRecyclerView extends FrameLayout {
             }
         }, 100);
     }
-
-    private OnTouchListener refreshTouchListener = new OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_DOWN:
-                    durTouchX = event.getX();
-                    durTouchY = event.getY();
-                    upLongClickTimer();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (durTouchX == -1000000) {
-                        durTouchX = event.getX();
-                        upLongClickTimer();
-                    }
-                    if (durTouchY == -1000000)
-                        durTouchY = event.getY();
-                    double deltaX = Math.sqrt((event.getX() - durTouchX) * (event.getX() - durTouchX) + (event.getY() - durTouchY) * (event.getY() - durTouchY));
-                    if (deltaX > 10 && timer != null) { // 移动大于10像素
-                        timer.cancel();
-                        timer = null;
-                    }
-                    if (!isLongClickModule) {
-                        float dY = event.getY() - durTouchY;  //>0下拉
-                        durTouchY = event.getY();
-                        if (baseRefreshListener != null && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0 && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress()) {
-                            if (rpb.getVisibility() != View.VISIBLE) {
-                                rpb.setVisibility(View.VISIBLE);
-                            }
-                            if (recyclerView.getAdapter().getItemCount() > 0) {
-                                if (0 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()) {
-                                    rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
-                                }
-                            } else {
-                                rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
-                            }
-                            return rpb.getSecondDurProgress() > 0;
-                        }
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    if (!isLongClickModule && baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
-                        if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0) {
-                            if (baseRefreshListener instanceof OnRefreshWithProgressListener) {
-                                //带有进度的
-                                //执行刷新响应
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
-                                rpb.setMaxProgress(((OnRefreshWithProgressListener) baseRefreshListener).getMaxProgress());
-                                baseRefreshListener.startRefresh();
-                                if (noDataView != null) {
-                                    noDataView.setVisibility(GONE);
-                                }
-                                if (refreshErrorView != null) {
-                                    refreshErrorView.setVisibility(GONE);
-                                }
-                            } else {
-                                //不带进度的
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsAll(false, false);
-                                ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).setIsRequesting(1, true);
-                                baseRefreshListener.startRefresh();
-                                if (noDataView != null) {
-                                    noDataView.setVisibility(GONE);
-                                }
-                                if (refreshErrorView != null) {
-                                    refreshErrorView.setVisibility(GONE);
-                                }
-                                rpb.setIsAutoLoading(true);
-                            }
-                        } else {
-                            if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() != 1)
-                                rpb.setSecondDurProgressWithAnim(0);
-                        }
-                    }
-                    isLongClickModule = false;
-                    durTouchX = -1000000;
-                    durTouchY = -1000000;
-                    break;
-            }
-            return false;
-        }
-    };
 
 }

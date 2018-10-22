@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.BaseTabActivity;
@@ -150,7 +149,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                                 //删除选中的文件
                                 mCurFragment.deleteCheckedFiles();
                                 //提示删除文件成功
-                                Toast.makeText(ImportBookActivity.this, "删除文件成功", Toast.LENGTH_SHORT).show();
+                                toast("删除文件成功");
                             })
                             .setNegativeButton(getResources().getString(R.string.cancel), null)
                             .show();
@@ -162,7 +161,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
     }
 
     @Override
-    protected void firstRequest () {
+    protected void firstRequest() {
         super.firstRequest();
         mCurFragment = mLocalFragment;
     }

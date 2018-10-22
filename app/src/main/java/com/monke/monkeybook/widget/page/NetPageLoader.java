@@ -117,7 +117,7 @@ public class NetPageLoader extends PageLoader {
     boolean parseCurChapter() {
         boolean isRight = super.parseCurChapter();
         if (mPageChangeListener != null) {
-            for (int i=mCurChapterPos; i < mCurChapterPos + 5; i++) {
+            for (int i = mCurChapterPos; i < mCurChapterPos + 5; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
                     mPageChangeListener.requestChapters(i);
                 }
@@ -131,7 +131,7 @@ public class NetPageLoader extends PageLoader {
     boolean parseNextChapter() {
         boolean isRight = super.parseNextChapter();
         if (mPageChangeListener != null) {
-            for (int i=mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
+            for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
                     mPageChangeListener.requestChapters(i);
                 }
@@ -143,7 +143,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     void dealLoadPageList(int chapterPos) {
         super.dealLoadPageList(chapterPos);
-        if(!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && getPageStatus() == STATUS_LOADING) {
+        if (!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && getPageStatus() == STATUS_LOADING) {
             chapterError("网络连接不可用");
         }
     }

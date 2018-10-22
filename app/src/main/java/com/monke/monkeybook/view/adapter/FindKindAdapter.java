@@ -39,7 +39,7 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
      */
     @Override
     public View getGroupView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_group,parent,false);
+        return mInflater.inflate(R.layout.item_find_group, parent, false);
     }
 
     /**
@@ -49,7 +49,7 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
      */
     @Override
     public View getChildView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_kind,parent,false);
+        return mInflater.inflate(R.layout.item_find_kind, parent, false);
     }
 
     /**
@@ -68,11 +68,10 @@ public class FindKindAdapter extends BaseRecyclerViewAdapter<FindKindGroupBean, 
         holder.textView.setText(groupData.getGroupName());
         GroupItem item = getAllDatas().get(groupPos).getGroupItem();
         if (item.isExpand()) {
-            holder.imageView.setImageResource(R.drawable.ic_remove_black_24dp);
+            holder.imageView.setImageResource(R.drawable.ic_expand_less_24dp);
         } else {
-            holder.imageView.setImageResource(R.drawable.ic_add_black_24dp_new);
+            holder.imageView.setImageResource(R.drawable.ic_expand_more_24dp);
         }
-
     }
 
     /**

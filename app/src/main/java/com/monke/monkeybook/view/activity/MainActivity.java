@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -35,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.BuildConfig;
@@ -67,7 +64,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
-public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View {
+public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallBackValue {
     private static final int BACKUP_RESULT = 11;
     private static final int RESTORE_RESULT = 12;
     private static final int FILE_SELECT_RESULT = 13;
@@ -90,7 +87,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private ActionBarDrawerToggle mDrawerToggle;
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
-    private boolean isRecreate;
     private boolean resumed = false;
 
     @Override
@@ -101,16 +97,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            group = savedInstanceState.getInt("group");
             resumed = savedInstanceState.getBoolean("resumed");
         }
+        group = preferences.getInt("bookshelfGroup", 0);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("group", group);
         outState.putBoolean("resumed", resumed);
     }
 
@@ -130,15 +125,15 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected void initData() {
-        isRecreate = getIntent().getBooleanExtra("isRecreate", false);
-        getIntent().putExtra("isRecreate", true);
         viewIsList = preferences.getBoolean("bookshelfIsList", true);
     }
 
+    @Override
     public boolean isRecreate() {
         return isRecreate;
     }
 
+    @Override
     public int getGroup() {
         return group;
     }
@@ -207,7 +202,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
             }
         }
-
     }
 
     private void updateTabItemText(int group){
@@ -287,7 +281,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())
-                    Toast.makeText(this, "网络连接不可用，无法下载！", Toast.LENGTH_SHORT).show();
+                    toast("网络连接不可用，无法下载！");
                 else
                     RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 1000);
                 break;
@@ -352,6 +346,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     private void upGroup(int group) {
+        if (this.group != group) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("bookshelfGroup", group);
+            editor.apply();
+        }
         this.group = group;
         RxBus.get().post(RxBusTag.UPDATE_GROUP, group);
         RxBus.get().post(RxBusTag.REFRESH_BOOK_LIST, false);
@@ -364,7 +363,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
-        //tvUser = headerView.findViewById(R.id.tv_user);
         ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
@@ -495,7 +493,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public void refreshError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        toast(error);
     }
 
     @Override
@@ -506,11 +504,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     public void onRestore(String msg) {
         moProgressHUD.showLoading(msg);
-    }
-
-    @Override
-    public SharedPreferences getPreferences() {
-        return preferences;
     }
 
     @Override
@@ -528,7 +521,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         } else if (mTlIndicator.getSelectedTabPosition() != 0){
             Objects.requireNonNull(mTlIndicator.getTabAt(0)).select();
             return true;
-        }else {
+        } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawers();
@@ -541,20 +534,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         }
     }
 
-    @Override
-    public void recreate(){
-        super.recreate();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             if (getCurrentFocus() != null) {
-                Snackbar.make(getCurrentFocus(), "再按一次退出程序", Snackbar.LENGTH_SHORT).show();
+                showSnackBar("再按一次退出程序");
             }
             exitTime = System.currentTimeMillis();
         } else {

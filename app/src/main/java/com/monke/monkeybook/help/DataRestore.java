@@ -2,7 +2,6 @@ package com.monke.monkeybook.help;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
@@ -10,9 +9,11 @@ import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ReplaceRuleManage;
-import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.FileUtil;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
+import com.monke.monkeybook.utils.XmlUtils;
 
+import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -38,19 +39,24 @@ public class DataRestore {
     }
 
     private void restoreConfig(String dirPath) {
-        String json = DocumentHelper.readString("config.json", dirPath);
-        if (json != null) {
-            try {
-                Map<String, ?> entries = new Gson().fromJson(json, new TypeToken<Map<String, ?>>() {
+        Map<String, ?> entries = null;
+        try (FileInputStream ins = new FileInputStream(dirPath + "/config.xml")) {
+            entries = XmlUtils.readMapXml(ins);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (entries == null || entries.isEmpty()) {
+            String json = DocumentHelper.readString("config.json", dirPath);
+            if (json != null) {
+                entries = new Gson().fromJson(json, new TypeToken<Map<String, ?>>() {
                 }.getType());
-                for (Map.Entry<String, ?> entry : entries.entrySet()) {
-                    Object v = entry.getValue();
-                    String key = entry.getKey();
-                    SharedPreferencesUtil.saveData(MApplication.getInstance(), key, v);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        }
+        if (entries == null || entries.isEmpty()) return;
+        for (Map.Entry<String, ?> entry : entries.entrySet()) {
+            Object v = entry.getValue();
+            String key = entry.getKey();
+            SharedPreferencesUtil.saveData(key, v);
         }
     }
 
@@ -75,9 +81,6 @@ public class DataRestore {
         if (json != null) {
             List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
             }.getType());
-            for (int i = 0; i < bookSourceBeans.size(); i++) {
-                bookSourceBeans.get(i).setSerialNumber(i + 1);
-            }
             BookSourceManage.addBookSource(bookSourceBeans);
         }
     }

@@ -3,7 +3,6 @@ package com.monke.monkeybook.presenter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -54,13 +53,12 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean value) {
+                        mView.dismissHUD();
                         if (value) {
-                            mView.dismissHUD();
                             //更新书架并刷新
                             mView.recreate();
                         } else {
-                            mView.dismissHUD();
-                            Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
+                            mView.toast(R.string.restore_fail);
                         }
                     }
 
@@ -68,7 +66,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.dismissHUD();
-                        Toast.makeText(mView.getContext(), R.string.restore_fail, Toast.LENGTH_LONG).show();
+                        mView.toast(R.string.restore_fail);
                     }
                 });
     }
@@ -101,13 +99,13 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                         if (bookShelfBean != null) {
                             getBook(bookShelfBean);
                         } else {
-                            Toast.makeText(mView.getContext(), "已在书架中", Toast.LENGTH_SHORT).show();
+                            mView.toast("已在书架中");
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "网址格式不对", Toast.LENGTH_SHORT).show();
+                        mView.toast("网址格式不对");
                     }
                 });
     }
@@ -128,7 +126,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast(e.getMessage());
                     }
                 });
     }
@@ -144,7 +142,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                     @Override
                     public void onNext(BookShelfBean value) {
                         if (value.getBookInfoBean().getChapterUrl() == null) {
-                            Toast.makeText(mView.getContext(), "添加书籍失败", Toast.LENGTH_SHORT).show();
+                            mView.toast("添加书籍失败");
                         } else {
                             //成功   //发送RxBus
                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
@@ -154,7 +152,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(mView.getContext(), "添加书籍失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        mView.toast("添加书籍失败" + e.getMessage());
                     }
                 });
     }
@@ -183,12 +181,12 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
     public void initImmersionBar(Boolean immersion) {
         mView.initImmersionBar();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD,tags = {@Tag(RxBusTag.UPDATE_PX)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
         mView.recreate();
     }
