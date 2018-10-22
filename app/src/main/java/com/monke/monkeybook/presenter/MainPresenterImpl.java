@@ -146,7 +146,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                         } else {
                             //成功   //发送RxBus
                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelfBean);
-                            Toast.makeText(mView.getContext(), "添加书籍成功", Toast.LENGTH_SHORT).show();
+                            mView.toast("添加书籍成功");
                         }
                     }
 
