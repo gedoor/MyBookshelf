@@ -61,9 +61,8 @@ public class LocalPageLoader extends PageLoader {
 
     private Disposable mChapterDisp = null;
 
-    public LocalPageLoader(PageView pageView, BookShelfBean collBook) {
+    LocalPageLoader(PageView pageView, BookShelfBean collBook) {
         super(pageView, collBook);
-        setChapterPageStatus(STATUS_PARING);
     }
 
     /**

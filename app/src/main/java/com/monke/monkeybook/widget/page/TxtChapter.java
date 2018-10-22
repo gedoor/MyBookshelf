@@ -9,7 +9,7 @@ import java.util.List;
 class TxtChapter {
     private int position;
     private List<TxtPage> txtPageList;
-    private int mStatus;
+    private int status;
 
     TxtChapter(int position) {
         this.position = position;
@@ -36,15 +36,18 @@ class TxtChapter {
         return txtPageList != null ? txtPageList.size() : 0;
     }
 
-    public TxtPage get(int page) {
-        return txtPageList.get(page);
+    public TxtPage getPage(int page) {
+        if (txtPageList != null && page >= 0 && page < txtPageList.size()) {
+            return txtPageList.get(page);
+        }
+        return null;
     }
 
-    public int getmStatus() {
-        return mStatus;
+    public int getStatus() {
+        return status;
     }
 
-    public void setmStatus(int mStatus) {
-        this.mStatus = mStatus;
+    public void setStatus(int mStatus) {
+        this.status = mStatus;
     }
 }
