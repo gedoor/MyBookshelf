@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -1262,7 +1263,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onResume() {
         super.onResume();
         batInfoReceiver = new ThisBatInfoReceiver();
-        batInfoReceiver.registerReceiverBatInfo();
+        batInfoReceiver.registerThis();
         screenOffTimerStart();
         if (mPageLoader != null) {
             mPageLoader.updateBattery(BatteryUtil.getLevel(this));
@@ -1278,8 +1279,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onPause() {
         super.onPause();
         if (batInfoReceiver != null) {
-            unregisterReceiver(batInfoReceiver);
-            batInfoReceiver = null;
+            batInfoReceiver.unregisterThis();
         }
     }
 
@@ -1287,8 +1287,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onDestroy() {
         super.onDestroy();
         if (batInfoReceiver != null) {
-            unregisterReceiver(batInfoReceiver);
-            batInfoReceiver = null;
+            batInfoReceiver.unregisterThis();
         }
         ReadAloudService.stop(this);
         if (mPageLoader != null) {
@@ -1340,13 +1339,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
         }
 
-        public void registerReceiverBatInfo() {
+        public void registerThis() {
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_TIME_TICK);
             filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-            registerReceiver(batInfoReceiver, filter);
+            LocalBroadcastManager.getInstance(ReadBookActivity.this).registerReceiver(batInfoReceiver, filter);
         }
 
+        public void unregisterThis() {
+            LocalBroadcastManager.getInstance(ReadBookActivity.this).unregisterReceiver(batInfoReceiver);
+            batInfoReceiver = null;
+        }
     }
 
 }
