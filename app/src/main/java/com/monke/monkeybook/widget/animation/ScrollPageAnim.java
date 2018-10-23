@@ -43,6 +43,8 @@ public class ScrollPageAnim extends PageAnimation {
     // 底部填充
     private Iterator<BitmapView> downIt;
     private Iterator<BitmapView> upIt;
+    //是否翻阅下一页。true表示翻到下一页，false表示上一页。
+    private boolean isNext = false;
 
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
@@ -300,8 +302,15 @@ public class ScrollPageAnim extends PageAnimation {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!isMove) {
-                    if (mListener != null) {
-                        mListener.nextPage();
+                    isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
+                    if (isNext) {
+                        if (mListener != null) {
+                            mListener.nextPage();
+                        }
+                    } else {
+                        if (mListener != null) {
+                            mListener.prevPage();
+                        }
                     }
                 }
 

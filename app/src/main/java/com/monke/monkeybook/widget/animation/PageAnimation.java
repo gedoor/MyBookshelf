@@ -170,6 +170,8 @@ public abstract class PageAnimation {
         void pageCancel();
 
         void nextPage();
+
+        void prevPage();
     }
 
 }

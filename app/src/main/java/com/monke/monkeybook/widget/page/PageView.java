@@ -80,6 +80,11 @@ public class PageView extends View {
         public void nextPage() {
             autoNextPage();
         }
+
+        @Override
+        public void prevPage() {
+            autoPrevPage();
+        }
     };
 
     public PageView(Context context) {
@@ -155,8 +160,12 @@ public class PageView extends View {
     }
 
     public boolean autoPrevPage() {
-        //滚动暂时不支持自动翻页
         if (mPageAnim instanceof ScrollPageAnim) {
+            if (hasPrevPage()) {
+                resetScroll();
+                drawCurPage();
+                return true;
+            }
             return false;
         } else {
             startPageAnim(PageAnimation.Direction.PRE);
@@ -166,11 +175,12 @@ public class PageView extends View {
 
     public boolean autoNextPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            if (mPageLoader.getPagePos() < mPageLoader.getPageSize() - 1) {
-                mPageLoader.skipToPage(mPageLoader.getPagePos() + 1);
+            if (hasNextPage()) {
+                resetScroll();
+                drawCurPage();
                 return true;
             }
-            return mPageLoader.skipNextChapter();
+            return false;
         } else {
             startPageAnim(PageAnimation.Direction.NEXT);
             return true;
