@@ -312,6 +312,7 @@ public abstract class PageLoader {
 
     /**
      * 跳转到指定章节
+     *
      * @param pos:从 0 开始。
      */
     public void skipToChapter(int pos) {
@@ -650,11 +651,18 @@ public abstract class PageLoader {
             return txtChapter;
         }
         // 获取章节的文本流
+        BufferedReader reader = null;
+        List<TxtPage> pages = null;
         try {
-            BufferedReader reader = getChapterReader(chapter);
-            return loadPageList(chapter, reader);
+            reader = getChapterReader(chapter);
+            pages = loadPageList(chapter, reader);
         } catch (Exception e) {
+            IOUtils.close(reader);
             e.printStackTrace();
+        }
+        if (pages != null) {
+            txtChapter.setTxtPageList(pages);
+            txtChapter.setStatus(STATUS_FINISH);
         }
         return txtChapter;
     }
@@ -1249,115 +1257,106 @@ public abstract class PageLoader {
      * @param chapter：章节信息
      * @param br：章节的文本流
      */
-    private TxtChapter loadPageList(ChapterListBean chapter, BufferedReader br) {
-        TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
+    private List<TxtPage> loadPageList(ChapterListBean chapter, BufferedReader br) throws Exception {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
-        try {
-            boolean showTitle = true; // 是否展示标题
-            String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-            br.readLine(); //去除标题行
-            if (!mSettingManager.getShowTitle()) {
-                showTitle = false;
-                paragraph = null;
-            }
-            while (showTitle || (paragraph = br.readLine()) != null) {
-                paragraph = ChapterContentHelp.replaceContent(mCollBook, paragraph);
-                paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
-                paragraph = paragraph.replaceAll("\\s", " ").trim();
-                // 如果只有换行符，那么就不执行
-                if (paragraph.equals("")) continue;
-                // 重置段落
-                if (!showTitle) {
-                    paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
-                }
-                int wordCount;
-                String subStr;
-                while (paragraph.length() > 0) {
-                    //当前空间，是否容得下一行文字
-                    if (showTitle) {
-                        rHeight -= mTitlePaint.getTextSize();
-                    } else {
-                        rHeight -= mTextPaint.getTextSize();
-                    }
-                    // 一页已经填充满了，创建 TextPage
-                    if (rHeight <= 0) {
-                        // 创建Page
-                        TxtPage page = new TxtPage();
-                        page.position = pages.size();
-                        page.title = chapter.getDurChapterName();
-                        page.lines = new ArrayList<>(lines);
-                        page.titleLines = titleLinesCount;
-                        pages.add(page);
-                        // 重置Lines
-                        lines.clear();
-                        rHeight = mVisibleHeight - contentMarginHeight * 2;
-                        titleLinesCount = 0;
-
-                        continue;
-                    }
-
-                    //测量一行占用的字节数
-                    if (showTitle) {
-                        Layout tempLayout = new StaticLayout(paragraph, mTitlePaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                        wordCount = tempLayout.getLineEnd(0);
-                    } else {
-                        Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                        wordCount = tempLayout.getLineEnd(0);
-
-                    }
-
-                    subStr = paragraph.substring(0, wordCount);
-                    if (!subStr.equals("\n")) {
-                        //将一行字节，存储到lines中
-                        lines.add(subStr);
-
-                        //设置段落间距
-                        if (showTitle) {
-                            titleLinesCount += 1;
-                            rHeight -= mTitleInterval;
-                        } else {
-                            rHeight -= mTextInterval;
-                        }
-                    }
-                    //裁剪
-                    paragraph = paragraph.substring(wordCount);
-                }
-
-                //增加段落的间距
-                if (!showTitle && lines.size() != 0) {
-                    rHeight = rHeight - mTextPara + mTextInterval;
-                }
-
-                if (showTitle) {
-                    rHeight = rHeight - mTitlePara + mTitleInterval;
-                    showTitle = false;
-                }
-            }
-
-            if (lines.size() != 0) {
-                //创建Page
-                TxtPage page = new TxtPage();
-                page.position = pages.size();
-                page.title = chapter.getDurChapterName();
-                page.lines = new ArrayList<>(lines);
-                page.titleLines = titleLinesCount;
-                pages.add(page);
-                //重置Lines
-                lines.clear();
-                txtChapter.setStatus(STATUS_FINISH);
-                txtChapter.setTxtPageList(pages);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.close(br);
+        boolean showTitle = true; // 是否展示标题
+        String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
+        br.readLine(); //去除标题行
+        if (!mSettingManager.getShowTitle()) {
+            showTitle = false;
+            paragraph = null;
         }
-        return txtChapter;
+        while (showTitle || (paragraph = br.readLine()) != null) {
+            paragraph = ChapterContentHelp.replaceContent(mCollBook, paragraph);
+            paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
+            paragraph = paragraph.replaceAll("\\s", " ").trim();
+            // 如果只有换行符，那么就不执行
+            if (paragraph.equals("")) continue;
+            // 重置段落
+            if (!showTitle) {
+                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
+            }
+            int wordCount;
+            String subStr;
+            while (paragraph.length() > 0) {
+                //当前空间，是否容得下一行文字
+                if (showTitle) {
+                    rHeight -= mTitlePaint.getTextSize();
+                } else {
+                    rHeight -= mTextPaint.getTextSize();
+                }
+                // 一页已经填充满了，创建 TextPage
+                if (rHeight <= 0) {
+                    // 创建Page
+                    TxtPage page = new TxtPage();
+                    page.position = pages.size();
+                    page.title = chapter.getDurChapterName();
+                    page.lines = new ArrayList<>(lines);
+                    page.titleLines = titleLinesCount;
+                    pages.add(page);
+                    // 重置Lines
+                    lines.clear();
+                    rHeight = mVisibleHeight - contentMarginHeight * 2;
+                    titleLinesCount = 0;
+
+                    continue;
+                }
+
+                //测量一行占用的字节数
+                if (showTitle) {
+                    Layout tempLayout = new StaticLayout(paragraph, mTitlePaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                    wordCount = tempLayout.getLineEnd(0);
+                } else {
+                    Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
+                    wordCount = tempLayout.getLineEnd(0);
+
+                }
+
+                subStr = paragraph.substring(0, wordCount);
+                if (!subStr.equals("\n")) {
+                    //将一行字节，存储到lines中
+                    lines.add(subStr);
+
+                    //设置段落间距
+                    if (showTitle) {
+                        titleLinesCount += 1;
+                        rHeight -= mTitleInterval;
+                    } else {
+                        rHeight -= mTextInterval;
+                    }
+                }
+                //裁剪
+                paragraph = paragraph.substring(wordCount);
+            }
+
+            //增加段落的间距
+            if (!showTitle && lines.size() != 0) {
+                rHeight = rHeight - mTextPara + mTextInterval;
+            }
+
+            if (showTitle) {
+                rHeight = rHeight - mTitlePara + mTitleInterval;
+                showTitle = false;
+            }
+        }
+
+        if (lines.size() != 0) {
+            //创建Page
+            TxtPage page = new TxtPage();
+            page.position = pages.size();
+            page.title = chapter.getDurChapterName();
+            page.lines = new ArrayList<>(lines);
+            page.titleLines = titleLinesCount;
+            pages.add(page);
+            //重置Lines
+            lines.clear();
+        }
+        return pages;
     }
 
     private void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
