@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -34,8 +35,6 @@ import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
-
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +76,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvChangeOrigin;
     @BindView(R.id.rg_book_group)
     RadioGroup rgBookGroup;
+    @BindView(R.id.tv_chapter_size)
+    TextView tvChapterSize;
+    @BindView(R.id.rb_zdy)
+    RadioButton rbZdy;
 
     private Animation animHideLoading;
     private Animation animShowInfo;
@@ -157,6 +160,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             } else {
                 setTvUpdate(false, false);
                 tvChapter.setText(bookShelfBean.getLastChapterName()); // last
+
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
@@ -206,6 +210,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     ivCover.setImageBitmap(BitmapFactory.decodeFile(customCoverPath));
                 }
             }
+            upChapterSizeTv();
         } else {
             bookInfoBean = null;
         }
@@ -241,6 +246,15 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         }
     }
 
+    @SuppressLint("DefaultLocale")
+    private void upChapterSizeTv() {
+        if (bookShelfBean.getChapterListSize() > 0) {
+            tvChapterSize.setText(String.format("(%d)", bookShelfBean.getChapterListSize()));
+        } else {
+            tvChapterSize.setText("");
+        }
+    }
+
     private void initView() {
         for (int i = 0; i < 3; i++) {
             ((RadioButton) rgBookGroup.getChildAt(i)).setText(BOOK_GROUPS[i].substring(0, 2));
@@ -272,12 +286,12 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 Glide.with(this).load(coverUrl)
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                 .placeholder(R.drawable.img_cover_default)).into(ivCover);
-                }
-                Glide.with(this).load(coverUrl)
-                        .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                                .placeholder(R.drawable.img_cover_gs))
-                        .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
-                        .into(ivBlurCover);
+            }
+            Glide.with(this).load(coverUrl)
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                            .placeholder(R.drawable.img_cover_gs))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                    .into(ivBlurCover);
         }
     }
 

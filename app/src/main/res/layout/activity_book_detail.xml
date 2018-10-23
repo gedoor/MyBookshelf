@@ -108,7 +108,7 @@
 
                         <TextView
                             android:id="@+id/tv_author"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
@@ -119,12 +119,6 @@
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@color/transparent" />
 
                         <TextView
                             android:id="@+id/tv_update"
@@ -162,7 +156,7 @@
 
                         <TextView
                             android:id="@+id/tv_origin"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
@@ -173,12 +167,6 @@
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@color/transparent" />
 
                         <TextView
                             android:id="@+id/tv_change_origin"
@@ -216,8 +204,9 @@
 
                         <TextView
                             android:id="@+id/tv_chapter"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:includeFontPadding="false"
                             android:paddingTop="3dp"
@@ -226,6 +215,13 @@
                             android:text="@string/read_dur_progress"
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/tv_chapter_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/tv_text_book_detail"
+                            android:textSize="13sp"/>
                     </LinearLayout>
 
                     <View
