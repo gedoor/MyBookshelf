@@ -852,7 +852,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_copy_text:
                 popMenuOut();
                 if (mPageLoader != null) {
-                    moProgressHUD.showText(mPageLoader.getContent(mPageLoader.getPagePos()));
+                    moProgressHUD.showText(mPageLoader.getContent(mPageLoader.getCurPagePos()));
                 }
                 break;
             case R.id.disable_book_source:
@@ -1228,9 +1228,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             default:
                 ReadBookActivity.this.popMenuOut();
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
-                    ReadAloudService.play(this, true, mPageLoader.getContent(mPageLoader.getPagePos()),
+                    ReadAloudService.play(this, true, mPageLoader.getContent(mPageLoader.getCurPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getChapterPos()))
+                            ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
                     );
                 }
         }

@@ -336,7 +336,7 @@ public class PageView extends View {
             mPageAnim.scrollAnim();
             if (mPageAnim.isStartAnim() && !mPageAnim.getScroller().computeScrollOffset()) {
                 mPageAnim.setStartAnim(false);
-                if (mPageLoader.getPagePos() != mPageIndex | mPageLoader.getChapterPos() != mChapterIndex) {
+                if (mPageLoader.getCurPagePos() != mPageIndex | mPageLoader.getCurChapterPos() != mChapterIndex) {
                     mPageLoader.pagingEnd();
                 }
             }
@@ -385,7 +385,7 @@ public class PageView extends View {
         if (mPageAnim instanceof HorizonPageAnim) {
             ((HorizonPageAnim) mPageAnim).changePage();
         }
-        mPageLoader.drawPage(getNextBitmap());
+        mPageLoader.drawPage(getBgBitmap(), getNextBitmap(), 0);
     }
 
     /**
@@ -395,7 +395,7 @@ public class PageView extends View {
         if (!isPrepare) return;
 
         if (mPageLoader != null) {
-            mPageLoader.drawPage(getNextBitmap());
+            mPageLoader.drawPage(getBgBitmap(), getNextBitmap(), 0);
         }
     }
 
