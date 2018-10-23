@@ -287,15 +287,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mImmersionBar.hideBarDivider();
         switch (readBookControl.getNavbarColor()) {
             case 1:
-                mImmersionBar.navigationBarDarkFont(false,0.2f);
+                mImmersionBar.navigationBarDarkFont(false, 0.2f);
                 mImmersionBar.navigationBarColor(R.color.black);
                 break;
             case 2:
-                mImmersionBar.navigationBarDarkFont(true,0.2f);
+                mImmersionBar.navigationBarDarkFont(true, 0.2f);
                 mImmersionBar.navigationBarColor(R.color.white);
                 break;
             case 3:
-                mImmersionBar.navigationBarDarkFont(true,0.2f);
+                mImmersionBar.navigationBarDarkFont(true, 0.2f);
                 mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
                 break;
         }

@@ -55,7 +55,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String ruleBookContent;
     private String httpUserAgent;
     @Transient
-    private ArrayList<String> groupList;
+    private transient ArrayList<String> groupList;
 
 
     @Transient
@@ -457,7 +457,10 @@ public class BookSourceBean implements Parcelable, Cloneable {
     }
 
     private void upGroupList() {
-        groupList = new ArrayList<>();
+        if (groupList == null)
+            groupList = new ArrayList<>();
+        else
+            groupList.clear();
         if (!TextUtils.isEmpty(bookSourceGroup)) {
             for (String group : bookSourceGroup.split("\\s*[,;，；]\\s*")) {
                 group = group.trim();

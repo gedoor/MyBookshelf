@@ -258,8 +258,8 @@ public class SearchBookBean implements Parcelable{
     }
 
     public int getWeight() {
-        if (weight == -1) {
-            if (tag == My716.TAG)
+        if (weight < 0) {
+            if (tag.equals(My716.TAG))
                 this.weight = Integer.MAX_VALUE;
             else {
                 BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);

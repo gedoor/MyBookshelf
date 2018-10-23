@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,7 +24,6 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -153,7 +153,7 @@ public class ChangeSourceView {
                     public void onNext(List<SearchBookBean> searchBookBeans) {
                         if (searchBookBeans.size() > 0) {
                             for (SearchBookBean searchBookBean : searchBookBeans) {
-                                if (Objects.equals(searchBookBean.getTag(), bookShelf.getTag())) {
+                                if (searchBookBean.getTag().equals(bookShelf.getTag())) {
                                     searchBookBean.setIsAdd(true);
                                 } else {
                                     searchBookBean.setIsAdd(false);
@@ -189,9 +189,9 @@ public class ChangeSourceView {
         if (value.size() > 0) {
             Collections.sort(value, this::compareSearchBooks);
             for (SearchBookBean searchBookBean : value) {
-                if (Objects.equals(searchBookBean.getName(), bookName)
-                        && (Objects.equals(searchBookBean.getAuthor(), bookAuthor) || Objects.equals(searchBookBean.getAuthor(), "") || Objects.equals(bookAuthor, ""))) {
-                    if (Objects.equals(searchBookBean.getTag(), bookTag)) {
+                if (searchBookBean.getName().equals(bookName)
+                        && (searchBookBean.getAuthor().equals(bookAuthor) || TextUtils.isEmpty(searchBookBean.getAuthor()) || TextUtils.isEmpty(bookAuthor))) {
+                    if (searchBookBean.getTag().equals(bookTag)) {
                         searchBookBean.setIsAdd(true);
                     } else {
                         searchBookBean.setIsAdd(false);

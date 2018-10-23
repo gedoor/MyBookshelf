@@ -24,14 +24,12 @@ import com.monke.monkeybook.presenter.BookListPresenterImpl;
 import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.view.activity.BookDetailActivity;
-import com.monke.monkeybook.view.activity.MainActivity;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.adapter.BookShelfGridAdapter;
 import com.monke.monkeybook.view.adapter.BookShelfListAdapter;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,18 +95,13 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     protected void firstRequest() {
-        group = callBackValue != null ? callBackValue.getGroup() : 0;
-        if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false) & !isRecreate) {
-            if (isNetWorkAvailable()) {
-                mPresenter.queryBookShelf(true, group);
-            } else {
-                mPresenter.queryBookShelf(false, group);
-                Toast.makeText(getContext(), "无网络，自动刷新失败！", Toast.LENGTH_SHORT).show();
-            }
+        group = preferences.getInt("bookshelfGroup", 0);
+        if (preferences.getBoolean(getString(R.string.pk_auto_refresh), false)
+                && !isRecreate && isNetWorkAvailable() && group != 2) {
+            mPresenter.queryBookShelf(true, group);
         } else {
             mPresenter.queryBookShelf(false, group);
         }
-
     }
 
     @Override

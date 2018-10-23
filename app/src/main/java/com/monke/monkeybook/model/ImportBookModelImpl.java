@@ -2,6 +2,8 @@
 package com.monke.monkeybook.model;
 
 import com.monke.basemvplib.BaseModelImpl;
+import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -12,6 +14,8 @@ import com.monke.monkeybook.model.impl.IImportBookModel;
 import java.io.File;
 
 import io.reactivex.Observable;
+
+import static com.monke.monkeybook.utils.StringUtils.getString;
 
 public class ImportBookModelImpl extends BaseModelImpl implements IImportBookModel {
 
@@ -26,8 +30,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
 
             boolean isNew = false;
 
-            BookShelfBean bookShelfBean;
-            bookShelfBean = BookshelfHelp.getBook(file.getAbsolutePath());
+            BookShelfBean bookShelfBean = BookshelfHelp.getBook(file.getAbsolutePath());
             if (bookShelfBean == null) {
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
@@ -37,22 +40,25 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
+                bookShelfBean.setAllowUpdate(false);
 
+                BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
                 String fileName = file.getName().replace(".txt", "").replace(".TXT", "");
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
-                    bookShelfBean.getBookInfoBean().setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
-                    bookShelfBean.getBookInfoBean().setName(fileName.substring(0, authorIndex));
+                    bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
+                    bookInfoBean.setName(fileName.substring(0, authorIndex));
                 } else {
-                    bookShelfBean.getBookInfoBean().setAuthor("");
-                    bookShelfBean.getBookInfoBean().setName(fileName);
+                    bookInfoBean.setAuthor("");
+                    bookInfoBean.setName(fileName);
                 }
-                bookShelfBean.getBookInfoBean().setFinalRefreshData(file.lastModified());
-                bookShelfBean.getBookInfoBean().setCoverUrl("");
-                bookShelfBean.getBookInfoBean().setNoteUrl(file.getAbsolutePath());
-                bookShelfBean.getBookInfoBean().setTag(BookShelfBean.LOCAL_TAG);
+                bookInfoBean.setFinalRefreshData(file.lastModified());
+                bookInfoBean.setCoverUrl("");
+                bookInfoBean.setNoteUrl(file.getAbsolutePath());
+                bookInfoBean.setTag(BookShelfBean.LOCAL_TAG);
+                bookInfoBean.setOrigin(getString(R.string.local));
 
-                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelfBean.getBookInfoBean());
+                DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookInfoBean);
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
             }
             e.onNext(new LocBookShelfBean(isNew, bookShelfBean));
