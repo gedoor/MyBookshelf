@@ -3,6 +3,7 @@ package com.monke.monkeybook.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.monke.monkeybook.R;
 
@@ -182,7 +183,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public String getOrigin() {
-        return origin == null && tag.equals(BookShelfBean.LOCAL_TAG) ? getString(R.string.local) : origin;
+        return TextUtils.isEmpty(origin) && tag.equals(BookShelfBean.LOCAL_TAG) ? getString(R.string.local) : origin;
     }
 
     public void setOrigin(String origin) {

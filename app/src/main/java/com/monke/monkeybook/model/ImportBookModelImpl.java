@@ -31,7 +31,6 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
             boolean isNew = false;
 
             BookShelfBean bookShelfBean = BookshelfHelp.getBook(file.getAbsolutePath());
-            BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
             if (bookShelfBean == null) {
                 isNew = true;
                 bookShelfBean = new BookShelfBean();
@@ -43,6 +42,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
                 bookShelfBean.setAllowUpdate(false);
 
+                BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
                 String fileName = file.getName().replace(".txt", "").replace(".TXT", "");
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
