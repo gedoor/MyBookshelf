@@ -2,8 +2,8 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -17,10 +17,10 @@ import com.monke.monkeybook.utils.barUtil.ImmersionBar;
  */
 
 public class EditReplaceRuleView {
-    private TextInputEditText tieReplaceSummary;
-    private TextInputEditText tieReplaceRule;
-    private TextInputEditText tieReplaceTo;
-    private TextInputEditText tieUseTo;
+    private AppCompatEditText tieReplaceSummary;
+    private AppCompatEditText tieReplaceRule;
+    private AppCompatEditText tieReplaceTo;
+    private AppCompatEditText tieUseTo;
 
     private MoProgressHUD moProgressHUD;
     private MoProgressView moProgressView;
