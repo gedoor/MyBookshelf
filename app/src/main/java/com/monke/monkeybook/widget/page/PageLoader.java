@@ -567,7 +567,7 @@ public abstract class PageLoader {
             }
             // 如果章节从未打开
             if (!isChapterOpen) {
-                pagePos = Math.max(Math.min(pagePos, mCurChapter.size() - 1), 0);
+                pagePos = Math.max(Math.min(pagePos, mCurChapter.getPageSize() - 1), 0);
                 mCurPage = getCurPage(pagePos);
                 mCancelPage = mCurPage;
                 // 切换状态
@@ -628,14 +628,14 @@ public abstract class PageLoader {
     }
 
     public int getPageSize() {
-        return mCurChapter.size();
+        return mCurChapter.getPageSize();
     }
 
     /**
      * 获取正文
      */
     public String getContent(int pagePos) {
-        if (mCurChapter.getStatus() != STATUS_FINISH || mCurChapter.size() <= pagePos) {
+        if (mCurChapter.getStatus() != STATUS_FINISH || mCurChapter.getPageSize() <= pagePos) {
             return null;
         }
         TxtPage txtPage = mCurChapter.getPage(pagePos);
@@ -724,9 +724,9 @@ public abstract class PageLoader {
             float tipBottom;
             float tipLeft;
             String page = (getPageStatus() != STATUS_FINISH) ? ""
-                    : String.format("%d/%d", mCurPage.position + 1, mCurChapter.size());
+                    : String.format("%d/%d", mCurPage.position + 1, mCurChapter.getPageSize());
             String progress = (getPageStatus() != STATUS_FINISH) ? ""
-                    : BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurChapter.size());
+                    : BookshelfHelp.getReadProgress(mCurChapterPos, mCollBook.getChapterListSize(), mCurPage.position, mCurChapter.getPageSize());
 
             //初始化标题的参数
             //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
@@ -1072,7 +1072,7 @@ public abstract class PageLoader {
 
         mCancelPage = mCurPage;
         // 解析下一章数据
-        if (parseNextChapter() && mCurChapter.size() > 0) {
+        if (parseNextChapter() && mCurChapter.getPageSize() > 0) {
             mCurPage = mCurChapter.getPage(0);
         } else {
             mCurPage = new TxtPage();
@@ -1141,7 +1141,7 @@ public abstract class PageLoader {
     private void chapterChangeCallback() {
         if (mPageChangeListener != null) {
             mPageChangeListener.onChapterChange(mCurChapterPos);
-            mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.size() : 0);
+            mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
         }
         if (mNextChapter == null) {
             // 预加载下一章节
@@ -1203,7 +1203,7 @@ public abstract class PageLoader {
                 }
             }
         } else if (mCurChapter.getTxtPageList() == null
-                || (mCurPage.position == mCurChapter.size() - 1
+                || (mCurPage.position == mCurChapter.getPageSize() - 1
                 && mCurChapterPos < mLastChapterPos)) {  // 加载上一章取消了
 
             if (mNextChapter != null) {
@@ -1405,7 +1405,7 @@ public abstract class PageLoader {
      */
     private TxtPage getCurPage(int pos) {
         if (mCurChapter != null) {
-            return mCurChapter.getPage(Math.max(Math.min(pos, mCurChapter.size() - 1), 0));
+            return mCurChapter.getPage(Math.max(Math.min(pos, mCurChapter.getPageSize() - 1), 0));
         }
         return null;
     }
@@ -1414,7 +1414,7 @@ public abstract class PageLoader {
      * 获取上一个章节的最后一页
      */
     private TxtPage getPrevLastPage() {
-        int pos = mCurChapter.size() - 1;
+        int pos = mCurChapter.getPageSize() - 1;
         return mCurChapter.getPage(pos);
     }
 

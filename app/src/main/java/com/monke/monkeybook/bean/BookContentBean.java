@@ -23,20 +23,8 @@ public class BookContentBean implements Parcelable{
 
     private Boolean isRight = true;
 
-    private List<String> lineContent = new ArrayList<>();
-
-    private long lineChange;
-
     public BookContentBean(){
 
-    }
-
-    public long getLineChange() {
-        return lineChange;
-    }
-
-    public void setLineChange(long lineChange) {
-        this.lineChange = lineChange;
     }
 
     protected BookContentBean(Parcel in) {
@@ -44,7 +32,6 @@ public class BookContentBean implements Parcelable{
         durChapterIndex = in.readInt();
         durChapterContent = in.readString();
         tag = in.readString();
-        lineContent = in.createStringArrayList();
         isRight = in.readByte()!=0;
         noteUrl = in.readString();
     }
@@ -55,7 +42,6 @@ public class BookContentBean implements Parcelable{
         dest.writeInt(durChapterIndex);
         dest.writeString(durChapterContent);
         dest.writeString(tag);
-        dest.writeStringList(lineContent);
         dest.writeByte((byte) (isRight ? 1 : 0));
         dest.writeString(noteUrl);
     }
@@ -109,14 +95,6 @@ public class BookContentBean implements Parcelable{
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public List<String> getLineContent() {
-        return lineContent;
-    }
-
-    public void setLineContent(List<String> lineContent) {
-        this.lineContent = lineContent;
     }
 
     public Boolean getRight() {
