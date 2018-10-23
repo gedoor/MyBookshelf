@@ -86,7 +86,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     private MoProgressHUD moProgressHUD;
     private String author;
     private BookShelfBean bookShelfBean;
-    private BookInfoBean bookInfoBean;
     private String coverUrl;
 
     @Override
@@ -142,6 +141,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     public void updateView() {
         bookShelfBean = mPresenter.getBookShelf();
+        BookInfoBean bookInfoBean;
         if (null != bookShelfBean) {
             bookInfoBean = bookShelfBean.getBookInfoBean();
             tvName.setText(bookInfoBean.getName());
@@ -159,8 +159,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 });
             } else {
                 setTvUpdate(false, false);
-                tvChapter.setText(bookShelfBean.getLastChapterName()); // last
-
+                if (!TextUtils.isEmpty(bookShelfBean.getLastChapterName())) {
+                    tvChapter.setText(bookShelfBean.getLastChapterName()); // last
+                }
                 tvShelf.setText("放入书架");
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
@@ -211,8 +212,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 }
             }
             upChapterSizeTv();
-        } else {
-            bookInfoBean = null;
         }
         tvLoading.startAnimation(animHideLoading);
         tvLoading.setOnClickListener(null);
