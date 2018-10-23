@@ -81,15 +81,12 @@ public abstract class PageLoader {
     private TextPaint mTipPaint;
     // 绘制标题的画笔
     private TextPaint mTitlePaint;
-    // 绘制背景颜色的画笔(用来擦除需要重绘的部分)
-    private Paint mBgPaint;
     // 绘制小说内容的画笔
     private TextPaint mTextPaint;
     // 阅读器的配置选项
     private ReadBookControl mSettingManager;
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
-
 
     private Disposable mPreLoadDisposable;
 
@@ -228,10 +225,6 @@ public abstract class PageLoader {
         int bold = mSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
         mTextPaint.setTypeface(Typeface.create(typeface, bold));
         mTextPaint.setAntiAlias(true);
-
-        // 绘制背景的画笔
-        mBgPaint = new Paint();
-        mBgPaint.setColor(mBgColor);
 
         // 绘制电池的画笔
         mBatteryPaint = new Paint();
@@ -450,8 +443,6 @@ public abstract class PageLoader {
         mTipPaint.setColor(mTextColor);
         mTitlePaint.setColor(mTextColor);
         mTextPaint.setColor(mTextColor);
-
-        mBgPaint.setColor(mBgColor);
 
         skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
@@ -939,7 +930,7 @@ public abstract class PageLoader {
     /**
      * 屏幕大小变化处理
      */
-    public void prepareDisplay(int w, int h) {
+    void prepareDisplay(int w, int h) {
         // 获取PageView的宽高
         mDisplayWidth = w;
         mDisplayHeight = h;
@@ -978,7 +969,7 @@ public abstract class PageLoader {
     /**
      * 翻阅上一页
      */
-    public boolean prev() {
+    boolean prev() {
         // 以下情况禁止翻页
         if (!canTurnPage()) {
             return false;
@@ -1156,7 +1147,7 @@ public abstract class PageLoader {
         final int nextChapter = mCurChapterPos + 1;
 
         // 如果不存在下一章，且下一章没有数据，则不进行加载。
-        if (!hasNextChapter() || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
+        if (mNextChapter != null || !hasNextChapter() || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
             return;
         }
 
