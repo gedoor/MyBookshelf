@@ -26,7 +26,7 @@
             android:id="@+id/disable_book_source"
             android:icon="@drawable/ic_cancel"
             android:title="@string/disable_book_source"
-            app:showAsAction="ifRoom" />
+            app:showAsAction="never" />
 
     </group>
 
