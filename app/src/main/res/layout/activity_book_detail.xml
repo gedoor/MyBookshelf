@@ -248,7 +248,8 @@
                             android:paddingBottom="1dp"
                             android:includeFontPadding="false"
                             android:textColor="@color/white"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            tools:ignore="RtlHardcoded" />
 
                         <RadioButton
                             android:id="@+id/rb_yf"
@@ -263,7 +264,8 @@
                             android:paddingBottom="1dp"
                             android:includeFontPadding="false"
                             android:textColor="@color/white"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            tools:ignore="RtlHardcoded" />
 
                         <RadioButton
                             android:id="@+id/rb_wj"
@@ -278,7 +280,8 @@
                             android:paddingBottom="1dp"
                             android:includeFontPadding="false"
                             android:textColor="@color/white"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            tools:ignore="RtlHardcoded" />
 
                         <RadioButton
                             android:id="@+id/rb_zdy"
