@@ -686,14 +686,15 @@ public abstract class PageLoader {
 
     /**
      * 绘制页面
+     * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
     public void drawPage(Bitmap bgBitmap, Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
         TxtPage txtPage;
-        if (pageOnCur == 0) {
+        if (pageOnCur == 0) { //当前页
             txtChapter = mCurChapter;
             txtPage = mCurPage;
-        } else if (pageOnCur < 0) {
+        } else if (pageOnCur < 0) { //上一页
             if (mCurPage.position > 0) {
                 txtChapter = mCurChapter;
                 txtPage = mCurChapter.getPage(mCurPage.position - 1);
@@ -701,7 +702,7 @@ public abstract class PageLoader {
                 txtChapter = mPreChapter;
                 txtPage = mPreChapter.getPage(mPreChapter.getPageSize() - 1);
             }
-        } else {
+        } else { //下一页
             if (mCurPage.position + 1 < mCurChapter.getPageSize()) {
                 txtChapter = mCurChapter;
                 txtPage = mCurChapter.getPage(mCurPage.position + 1);
