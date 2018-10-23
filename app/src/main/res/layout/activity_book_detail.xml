@@ -38,20 +38,22 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.monke.monkeybook.widget.FilletImageView
                     android:id="@+id/iv_cover"
                     android:layout_width="90dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="130dp"
+                    android:layout_margin="3dp"
                     android:contentDescription="@string/img_cover"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_cover_default" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingLeft="10dp"
                     android:paddingTop="3dp"
@@ -224,15 +226,12 @@
                             android:textSize="13sp"/>
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
                     <RadioGroup
                         android:id="@+id/rg_book_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -298,11 +297,6 @@
                             android:visibility="invisible" />
 
                     </RadioGroup>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
                 </LinearLayout>
             </LinearLayout>
