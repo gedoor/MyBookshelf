@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -51,6 +52,7 @@ public class CheckSourceService extends Service {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
+    private Handler handler = new Handler();
 
     /**
      * 启动服务
@@ -192,7 +194,7 @@ public class CheckSourceService extends Service {
                     bookShelfBean.setDurChapter(0);
                     bookShelfBean.setDurChapterPage(0);
                     WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
-                            .subscribeOn(Schedulers.io())
+                            .subscribeOn(scheduler)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver());
                 } catch (Exception exception) {
@@ -224,15 +226,11 @@ public class CheckSourceService extends Service {
                 @Override
                 public void onSubscribe(Disposable d) {
                     compositeDisposable.add(d);
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            if (!d.isDisposed()) {
-                                d.dispose();
-                                nextCheck();
-                                checkSource = null;
-                            }
+                    handler.postDelayed(() -> {
+                        if (!d.isDisposed()) {
+                            d.dispose();
+                            nextCheck();
+                            checkSource = null;
                         }
                     }, 60 * 1000);
                 }
