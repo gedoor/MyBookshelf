@@ -385,12 +385,12 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     @Override
-    public Bitmap getBgBitmap() {
+    public Bitmap getBgBitmap(int pageOnCur) {
         return mBgBitmap;
     }
 
     @Override
-    public Bitmap getNextBitmap() {
+    public Bitmap getContentBitmap(int pageOnCur) {
         return mNextBitmap;
     }
 

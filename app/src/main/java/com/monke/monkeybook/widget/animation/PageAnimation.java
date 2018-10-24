@@ -144,13 +144,15 @@ public abstract class PageAnimation {
 
     /**
      * 获取背景板
+     * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
-    public abstract Bitmap getBgBitmap();
+    public abstract Bitmap getBgBitmap(int pageOnCur);
 
     /**
      * 获取内容显示版面
+     * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
-    public abstract Bitmap getNextBitmap();
+    public abstract Bitmap getContentBitmap(int pageOnCur);
 
     public enum Direction {
         NONE(true), NEXT(true), PRE(true), UP(false), DOWN(false);
