@@ -37,8 +37,8 @@ class TxtChapter {
     }
 
     public TxtPage getPage(int page) {
-        if (txtPageList != null && page >= 0 && page < txtPageList.size()) {
-            return txtPageList.get(page);
+        if (txtPageList != null) {
+            return txtPageList.get(Math.max(0, Math.min(page, txtPageList.size() - 1)));
         }
         return null;
     }

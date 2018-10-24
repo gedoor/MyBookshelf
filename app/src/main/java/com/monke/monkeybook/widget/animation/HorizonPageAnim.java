@@ -43,10 +43,18 @@ public abstract class HorizonPageAnim extends PageAnimation {
     /**
      * 转换页面，在显示下一章的时候，必须首先调用此方法
      */
-    public void changePage() {
-        Bitmap bitmap = mCurBitmap;
-        mCurBitmap = mNextBitmap;
-        mNextBitmap = bitmap;
+    @Override
+    public void changePageEnd() {
+        switch (mDirection) {
+            case NEXT:
+                mPreBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                mCurBitmap = mNextBitmap.copy(Bitmap.Config.RGB_565, true);
+                break;
+            case PRE:
+                mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                mCurBitmap = mPreBitmap.copy(Bitmap.Config.RGB_565, true);
+                break;
+        }
     }
 
     public abstract void drawStatic(Canvas canvas);
@@ -55,6 +63,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        changePage = false;
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         //获取点击位置
         int x = (int) event.getX();
@@ -176,26 +185,27 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public void draw(Canvas canvas) {
+        changePage = false;
         if (isRunning) {
             drawMove(canvas);
         } else {
             if (!isCancel) {
                 switch (mDirection) {
                     case NEXT:
-                        mPreBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
-                        mCurBitmap = mNextBitmap.copy(Bitmap.Config.RGB_565, true);
+                        canvas.drawBitmap(mNextBitmap, 0, 0, null);
+                        changePage = true;
+                        break;
+                    case PRE:
+                        canvas.drawBitmap(mPreBitmap, 0, 0, null);
+                        changePage = true;
                         break;
                     default:
-                        mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
-                        mCurBitmap = mPreBitmap.copy(Bitmap.Config.RGB_565, true);
+                        canvas.drawBitmap(mCurBitmap, 0, 0, null);
+                        changePage = true;
                         break;
                 }
+
             }
-            canvas.drawBitmap(mCurBitmap, 0, 0, null);
-//            if (isCancel) {
-//                mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
-//            }
-//            drawStatic(canvas);
         }
     }
 

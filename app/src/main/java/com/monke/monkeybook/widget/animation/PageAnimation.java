@@ -25,7 +25,6 @@ public abstract class PageAnimation {
     //移动方向
     protected Direction mDirection = Direction.NONE;
 
-    protected boolean isRunning = false;
     //屏幕的尺寸
     protected int mScreenWidth;
     protected int mScreenHeight;
@@ -45,7 +44,9 @@ public abstract class PageAnimation {
     //上一个触碰点
     protected float mLastX;
     protected float mLastY;
-    private boolean startAnim = false;
+
+    protected boolean isRunning = false;
+    protected boolean changePage = false;
 
     public PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
         this(w, h, 0, 0, 0, view, listener);
@@ -92,19 +93,18 @@ public abstract class PageAnimation {
         return isRunning;
     }
 
-    public boolean isStartAnim() {
-        return startAnim;
+    public boolean isChangePage() {
+        return changePage;
     }
 
-    public void setStartAnim(boolean startAnim) {
-        this.startAnim = startAnim;
+    public void setChangePage(boolean changePage) {
+        this.changePage = changePage;
     }
 
     /**
      * 开启翻页动画
      */
     public void startAnim() {
-        startAnim = true;
         isRunning = true;
         mView.postInvalidate();
     }
@@ -142,6 +142,8 @@ public abstract class PageAnimation {
      */
     public abstract void abortAnim();
 
+    public abstract void changePageEnd();
+
     /**
      * 获取背景板
      * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
@@ -165,6 +167,8 @@ public abstract class PageAnimation {
     }
 
     public interface OnPageChangeListener {
+        void changePage(Direction direction);
+
         boolean hasPrev();
 
         boolean hasNext();

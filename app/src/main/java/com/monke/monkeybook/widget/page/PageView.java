@@ -62,6 +62,11 @@ public class PageView extends View {
     // 动画监听类
     private PageAnimation.OnPageChangeListener mPageAnimListener = new PageAnimation.OnPageChangeListener() {
         @Override
+        public void changePage(PageAnimation.Direction direction) {
+//            mPageLoader.pagingEnd(direction);
+        }
+
+        @Override
         public boolean hasPrev() {
             return PageView.this.hasPrevPage();
         }
@@ -334,11 +339,9 @@ public class PageView extends View {
         //进行滑动
         if (mPageAnim != null) {
             mPageAnim.scrollAnim();
-            if (mPageAnim.isStartAnim() && !mPageAnim.getScroller().computeScrollOffset()) {
-                mPageAnim.setStartAnim(false);
-//                if (mPageLoader.getCurPagePos() != mPageIndex | mPageLoader.getCurChapterPos() != mChapterIndex) {
-                    mPageLoader.pagingEnd(mPageAnim.getDirection());
-//                }
+            if (mPageAnim.isChangePage() && !mPageAnim.getScroller().computeScrollOffset()) {
+                mPageAnim.changePageEnd();
+                mPageLoader.pagingEnd(mPageAnim.getDirection());
             }
         }
         super.computeScroll();
@@ -392,6 +395,9 @@ public class PageView extends View {
 
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
+            mPageAnim.setDirection(PageAnimation.Direction.NONE);
+            mPageAnim.setChangePage(true);
+            invalidate();
         }
     }
 
