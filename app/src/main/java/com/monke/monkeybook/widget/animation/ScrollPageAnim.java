@@ -305,11 +305,11 @@ public class ScrollPageAnim extends PageAnimation {
                     isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
                     if (isNext) {
                         if (mListener != null) {
-                            mListener.nextPage();
+                            mListener.autoNextPage();
                         }
                     } else {
                         if (mListener != null) {
-                            mListener.prevPage();
+                            mListener.autoPrevPage();
                         }
                     }
                 }

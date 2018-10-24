@@ -179,10 +179,23 @@ public abstract class HorizonPageAnim extends PageAnimation {
         if (isRunning) {
             drawMove(canvas);
         } else {
-            if (isCancel) {
-                mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+            if (!isCancel) {
+                switch (mDirection) {
+                    case NEXT:
+                        mPreBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                        mCurBitmap = mNextBitmap.copy(Bitmap.Config.RGB_565, true);
+                        break;
+                    default:
+                        mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                        mCurBitmap = mPreBitmap.copy(Bitmap.Config.RGB_565, true);
+                        break;
+                }
             }
-            drawStatic(canvas);
+            canvas.drawBitmap(mCurBitmap, 0, 0, null);
+//            if (isCancel) {
+//                mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+//            }
+//            drawStatic(canvas);
         }
     }
 
@@ -213,11 +226,23 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public Bitmap getBgBitmap(int pageOnCur) {
-        return mNextBitmap;
+//        return mNextBitmap;
+        if (pageOnCur < 0) {
+            return mPreBitmap;
+        } else if (pageOnCur > 0) {
+            return mNextBitmap;
+        }
+        return mCurBitmap;
     }
 
     @Override
     public Bitmap getContentBitmap(int pageOnCur) {
-        return mNextBitmap;
+//        return mNextBitmap;
+        if (pageOnCur < 0) {
+            return mPreBitmap;
+        } else if (pageOnCur > 0) {
+            return mNextBitmap;
+        }
+        return mCurBitmap;
     }
 }

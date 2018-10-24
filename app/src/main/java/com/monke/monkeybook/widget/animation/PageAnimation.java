@@ -171,9 +171,9 @@ public abstract class PageAnimation {
 
         void pageCancel();
 
-        void nextPage();
+        void autoNextPage();
 
-        void prevPage();
+        void autoPrevPage();
     }
 
 }
