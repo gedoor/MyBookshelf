@@ -697,7 +697,7 @@ public abstract class PageLoader {
         } else if (pageOnCur < 0) { //上一页
             if (mCurPage.position > 0) {
                 txtChapter = mCurChapter;
-                txtPage = mCurChapter.getPage(mCurPage.position - 1);
+                txtPage = mCurPage;
             } else {
                 txtChapter = mPreChapter;
                 txtPage = mPreChapter.getPage(mPreChapter.getPageSize() - 1);

@@ -404,7 +404,7 @@ public class PageView extends View {
         if (mPageAnim instanceof HorizonPageAnim) {
             ((HorizonPageAnim) mPageAnim).changePage();
         }
-        mPageLoader.drawPage(getBgBitmap(1), getContentBitmap(1), 0);
+        mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
     }
 
     @Override
