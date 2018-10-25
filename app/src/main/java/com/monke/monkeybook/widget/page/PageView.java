@@ -342,6 +342,7 @@ public class PageView extends View {
             if (mPageAnim.isChangePage() && !mPageAnim.getScroller().computeScrollOffset()) {
                 mPageAnim.changePageEnd();
                 mPageLoader.pagingEnd(mPageAnim.getDirection());
+                mPageAnim.setDirection(PageAnimation.Direction.NONE);
             }
         }
         super.computeScroll();
@@ -395,7 +396,6 @@ public class PageView extends View {
 
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
-            mPageAnim.setDirection(PageAnimation.Direction.NONE);
             mPageAnim.setChangePage(true);
             invalidate();
         }

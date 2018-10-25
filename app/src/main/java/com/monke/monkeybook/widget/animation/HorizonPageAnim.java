@@ -204,7 +204,8 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         changePage = true;
                         break;
                 }
-
+            } else {
+                canvas.drawBitmap(mCurBitmap, 0, 0, null);
             }
         }
     }

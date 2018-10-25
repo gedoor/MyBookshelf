@@ -27,25 +27,12 @@ public class CoverPageAnim extends HorizonPageAnim {
 
     @Override
     public void drawStatic(Canvas canvas) {
-        if (!isCancel) {
-            switch (mDirection) {
-                case NEXT:
-                    mPreBitmap = mCurBitmap;
-                    mCurBitmap = mNextBitmap;
-                    break;
-                default:
-                    mNextBitmap = mCurBitmap;
-                    mCurBitmap = mPreBitmap;
-                    break;
-            }
+        if (isCancel) {
+            mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+            canvas.drawBitmap(mCurBitmap, 0, 0, null);
+        } else {
+            canvas.drawBitmap(mNextBitmap, 0, 0, null);
         }
-        canvas.drawBitmap(mCurBitmap, 0, 0, null);
-//        if (isCancel) {
-//            mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
-//            canvas.drawBitmap(mCurBitmap, 0, 0, null);
-//        } else {
-//            canvas.drawBitmap(mNextBitmap, 0, 0, null);
-//        }
     }
 
     @Override

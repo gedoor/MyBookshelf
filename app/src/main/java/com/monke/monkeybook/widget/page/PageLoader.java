@@ -402,46 +402,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 翻页完成
-     */
-    public void pagingEnd(PageAnimation.Direction direction) {
-        switch (direction) {
-            case NEXT:
-                mPageView.drawNextPage();
-                if (mCurPagePos < mCurChapter.getPageSize() - 1) {
-                    mCurPagePos = mCurPagePos + 1;
-                } else {
-                    mCurChapterPos = mCurChapterPos + 1;
-                    mPreChapter = mCurChapter;
-                    mCurChapter = mNextChapter;
-                    mNextChapter = null;
-                    parseNextChapter();
-                    mCurPagePos = 0;
-                }
-                break;
-            case PRE:
-                mPageView.drawPrevPage();
-                if (mCurPagePos > 0) {
-                    mCurPagePos = mCurPagePos - 1;
-                } else {
-                    mCurChapterPos = mCurChapterPos - 1;
-                    mCurPagePos = 0;
-                    mNextChapter = mCurChapter;
-                    mCurChapter = mPreChapter;
-                    mPreChapter = null;
-                    parsePrevChapter();
-                    mCurPagePos = mCurChapter.getPageSize() - 1;
-                }
-                break;
-        }
-        mPageView.setContentDescription(getContent(getCurPagePos()));
-        mPageView.upPagePos(mCurChapterPos, mCurPagePos);
-        mCollBook.setDurChapter(mCurChapterPos);
-        mCollBook.setDurChapterPage(mCurPagePos);
-        mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos());
-    }
-
-    /**
      * 更新时间
      */
     public void updateTime() {
@@ -570,69 +530,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 打开当前章节指定页
-     */
-    public synchronized void openChapter(int pagePos) {
-        isFirstOpen = false;
-
-        if (!mPageView.isPrepare()) {
-            return;
-        }
-
-        if (mCurChapter == null) {
-            mCurChapter = new TxtChapter(mCurChapterPos);
-        }
-
-        // 如果章节目录没有准备好
-        if (!isChapterListPrepare) {
-            mCurChapter.setStatus(STATUS_LOADING);
-            mPageView.drawCurPage();
-            return;
-        }
-
-        // 如果获取到的章节目录为空
-        if (mCollBook.getChapterList().isEmpty()) {
-            mCurChapter.setStatus(STATUS_CATEGORY_EMPTY);
-            mPageView.drawCurPage();
-            return;
-        }
-
-        if (parseCurChapter()) {
-            if (goPagePos != 0) {
-                pagePos = goPagePos;
-                isChapterOpen = false;
-            }
-            mCurPagePos = pagePos;
-//            // 如果章节从未打开
-//            if (!isChapterOpen) {
-//                pagePos = Math.max(Math.min(pagePos, mCurChapter.getPageSize() - 1), 0);
-//                mCurPage = getCurPage(pagePos);
-//                mCancelPage = mCurPage;
-//                // 切换状态
-//                isChapterOpen = true;
-//                // 章节切换
-//                chapterChangeCallback();
-//            } else {
-//                mCurPage = getCurPage(0);
-//            }
-        } //else {
-//            mCurPage = new TxtPage();
-//        }
-        upOtherPage();
-        mPageView.drawCurPage();
-        pagingEnd(PageAnimation.Direction.NONE);
-    }
-
-    public void upOtherPage() {
-        if (mCurPagePos> 0 || mCurChapter.getPosition() > 0) {
-            mPageView.drawPrevPage();
-        }
-        if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
-            mPageView.drawNextPage();
-        }
-    }
-
-    /**
      * 更新状态
      */
     public void setStatus(int status) {
@@ -739,6 +636,109 @@ public abstract class PageLoader {
     protected abstract boolean hasChapterData(ChapterListBean chapter);
 
     /**
+     * 打开当前章节指定页
+     */
+    public synchronized void openChapter(int pagePos) {
+        isFirstOpen = false;
+
+        if (!mPageView.isPrepare()) {
+            return;
+        }
+
+        if (mCurChapter == null) {
+            mCurChapter = new TxtChapter(mCurChapterPos);
+        }
+
+        // 如果章节目录没有准备好
+        if (!isChapterListPrepare) {
+            mCurChapter.setStatus(STATUS_LOADING);
+            mPageView.drawCurPage();
+            return;
+        }
+
+        // 如果获取到的章节目录为空
+        if (mCollBook.getChapterList().isEmpty()) {
+            mCurChapter.setStatus(STATUS_CATEGORY_EMPTY);
+            mPageView.drawCurPage();
+            return;
+        }
+
+        if (parseCurChapter()) {
+            if (goPagePos != 0) {
+                pagePos = goPagePos;
+                isChapterOpen = false;
+            }
+            mCurPagePos = pagePos;
+//            // 如果章节从未打开
+//            if (!isChapterOpen) {
+//                pagePos = Math.max(Math.min(pagePos, mCurChapter.getPageSize() - 1), 0);
+//                mCurPage = getCurPage(pagePos);
+//                mCancelPage = mCurPage;
+//                // 切换状态
+//                isChapterOpen = true;
+//                // 章节切换
+//                chapterChangeCallback();
+//            } else {
+//                mCurPage = getCurPage(0);
+//            }
+        } //else {
+//            mCurPage = new TxtPage();
+//        }
+        upOtherPage();
+        mPageView.drawCurPage();
+        pagingEnd(PageAnimation.Direction.NONE);
+    }
+
+    public void upOtherPage() {
+        if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
+            mPageView.drawPrevPage();
+        }
+        if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
+            mPageView.drawNextPage();
+        }
+    }
+
+    /**
+     * 翻页完成
+     */
+    public void pagingEnd(PageAnimation.Direction direction) {
+        switch (direction) {
+            case NEXT:
+                if (mCurPagePos < mCurChapter.getPageSize() - 1) {
+                    mCurPagePos = mCurPagePos + 1;
+                } else {
+                    mCurChapterPos = mCurChapterPos + 1;
+                    mPreChapter = mCurChapter;
+                    mCurChapter = mNextChapter;
+                    mNextChapter = null;
+                    parseNextChapter();
+                    mCurPagePos = 0;
+                }
+                mPageView.drawNextPage();
+                break;
+            case PRE:
+                if (mCurPagePos > 0) {
+                    mCurPagePos = mCurPagePos - 1;
+                } else {
+                    mCurChapterPos = mCurChapterPos - 1;
+                    mCurPagePos = 0;
+                    mNextChapter = mCurChapter;
+                    mCurChapter = mPreChapter;
+                    mPreChapter = null;
+                    parsePrevChapter();
+                    mCurPagePos = mCurChapter.getPageSize() - 1;
+                }
+                mPageView.drawPrevPage();
+                break;
+        }
+        mPageView.setContentDescription(getContent(getCurPagePos()));
+        mPageView.upPagePos(mCurChapterPos, mCurPagePos);
+        mCollBook.setDurChapter(mCurChapterPos);
+        mCollBook.setDurChapterPage(mCurPagePos);
+        mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos());
+    }
+
+    /**
      * 绘制页面
      * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
@@ -754,7 +754,7 @@ public abstract class PageLoader {
         } else if (pageOnCur < 0) { //上一页
             if (mCurPagePos > 0) {
                 txtChapter = mCurChapter;
-                txtPage = mCurChapter.getPage(mCurPagePos);
+                txtPage = mCurChapter.getPage(mCurPagePos - 1);
             } else {
                 txtChapter = mPreChapter;
                 txtPage = mPreChapter.getPage(mPreChapter.getPageSize() - 1);
@@ -1039,24 +1039,24 @@ public abstract class PageLoader {
 
 
 //        if (!isChapterOpen) {
-            // 展示加载界面
+        // 展示加载界面
 //            mPageView.drawCurPage();
-            // 如果在 display 之前调用过 openChapter 肯定是无法打开的。
-            // 所以需要通过 display 再重新调用一次。
+        // 如果在 display 之前调用过 openChapter 肯定是无法打开的。
+        // 所以需要通过 display 再重新调用一次。
 //            if (!isFirstOpen) {
-                // 打开书籍
+        // 打开书籍
 //                openChapter(mCollBook.getDurChapterPage());
 //            }
 //        } else {
-            // 如果章节已显示，那么就重新计算页面
-            if (getPageStatus() == STATUS_FINISH) {
-                mCurChapter = dealLoadPageList(mCurChapterPos);
-                // 重新设置文章指针的位置
+        // 如果章节已显示，那么就重新计算页面
+        if (getPageStatus() == STATUS_FINISH) {
+            mCurChapter = dealLoadPageList(mCurChapterPos);
+            // 重新设置文章指针的位置
 //                mCurPage = getCurPage(mCurPage.position);
-                // 章节切换
-                chapterChangeCallback();
-            }
-            mPageView.drawCurPage();
+            // 章节切换
+            chapterChangeCallback();
+        }
+        mPageView.drawCurPage();
 //        }
     }
 
