@@ -159,11 +159,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                     isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
                 }
 
-                // 是否取消翻页
-                if (isCancel) {
-                    mListener.pageCancel();
-                }
-
                 // 开启翻页效果
                 if (!noNext) {
                     startAnim();
@@ -172,7 +167,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 break;
             case MotionEvent.ACTION_CANCEL:
                 isCancel = true;
-                mListener.pageCancel();
                 // 开启翻页效果
                 if (!noNext) {
                     startAnim();
