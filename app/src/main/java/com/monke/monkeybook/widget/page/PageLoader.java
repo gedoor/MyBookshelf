@@ -22,7 +22,6 @@ import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.IOUtils;
-import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
@@ -30,11 +29,6 @@ import com.monke.monkeybook.widget.animation.PageAnimation;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by newbiechen on 17-7-1.
@@ -54,25 +48,25 @@ public abstract class PageLoader {
     public static final int STATUS_HY = 8;              // 换源
     // 默认的显示参数配置
     private static final int CONTENT_MARGIN_HEIGHT = 1;
-    public static final int DEFAULT_MARGIN_HEIGHT = 20;
+    private static final int DEFAULT_MARGIN_HEIGHT = 20;
     public static final int DEFAULT_MARGIN_WIDTH = 15;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 1;
 
     // 书本对象
-    protected BookShelfBean mCollBook;
+    BookShelfBean mCollBook;
     // 监听器
-    protected OnPageChangeListener mPageChangeListener;
+    OnPageChangeListener mPageChangeListener;
 
     private Context mContext;
     // 页面显示类
-    protected PageView mPageView;
+    PageView mPageView;
     // 当前显示的页
 //    private TxtPage mCurPage;
     // 上一章的页面列表缓存
     private TxtChapter mPreChapter;
     // 当前章节的页面列表
-    private TxtChapter mCurChapter;
+    TxtChapter mCurChapter;
     // 下一章的页面列表缓存
     private TxtChapter mNextChapter;
 
@@ -85,20 +79,13 @@ public abstract class PageLoader {
     // 绘制小说内容的画笔
     private TextPaint mTextPaint;
     // 阅读器的配置选项
-    private ReadBookControl mSettingManager;
-    // 被遮盖的页，或者认为被取消显示的页
-    private TxtPage mCancelPage;
-
-    private Disposable mPreLoadDisposable;
+    private ReadBookControl readBookControl;
 
     /*****************params**************************/
     //errorMsg
     private String errorMsg;
     // 判断章节列表是否加载完成
-    protected boolean isChapterListPrepare;
-
-    // 是否打开过章节
-    private boolean isChapterOpen;
+    boolean isChapterListPrepare;
     private boolean isClose;
     // 页面的翻页效果模式
     private PageMode mPageMode;
@@ -115,8 +102,7 @@ public abstract class PageLoader {
     private int mMarginRight;
     private int contentMarginHeight;
     private int defaultMarginWidth;
-    //字体的颜色
-    private int mTextColor;
+
     //标题的大小
     private int mTitleSize;
     //字体的大小
@@ -130,13 +116,10 @@ public abstract class PageLoader {
     private int mTitlePara;
     //电池的百分比
     private int mBatteryLevel;
-    //当前页面的背景
-    private int mBgColor;
 
     // 当前章
     int mCurChapterPos;
-    private int mCurPagePos;
-    private int goPagePos = 0;
+    int mCurPagePos;
 
     /*****************************init params*******************************/
     public PageLoader(PageView pageView, BookShelfBean collBook) {
@@ -152,21 +135,21 @@ public abstract class PageLoader {
         // 初始化画笔
         initPaint();
         // 初始化PageView
-        initPageView();
+        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
     }
 
     private void initData() {
         // 获取配置管理器
-        mSettingManager = ReadBookControl.getInstance();
+        readBookControl = ReadBookControl.getInstance();
         // 获取配置参数
-        mPageMode = mSettingManager.getPageMode(mSettingManager.getPageMode());
+        mPageMode = readBookControl.getPageMode(readBookControl.getPageMode());
         // 初始化参数
-        mMarginTop = mSettingManager.getHideStatusBar()
-                ? ScreenUtils.dpToPx(mSettingManager.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
-                : ScreenUtils.dpToPx(mSettingManager.getPaddingTop());
-        mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
-        mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
-        mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
+        mMarginTop = readBookControl.getHideStatusBar()
+                ? ScreenUtils.dpToPx(readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
+                : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
+        mMarginBottom = ScreenUtils.dpToPx(readBookControl.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+        mMarginLeft = ScreenUtils.dpToPx(readBookControl.getPaddingLeft());
+        mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
         contentMarginHeight = ScreenUtils.dpToPx(CONTENT_MARGIN_HEIGHT);
         defaultMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
         // 配置文字有关的参数
@@ -178,32 +161,32 @@ public abstract class PageLoader {
      */
     private void setUpTextParams() {
         // 文字大小
-        mTextSize = ScreenUtils.spToPx(mSettingManager.getTextSize());
+        mTextSize = ScreenUtils.spToPx(readBookControl.getTextSize());
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
         // 行间距(大小为字体的一半)
-        mTextInterval = (int) (mTextSize / 2 * mSettingManager.getLineMultiplier());
-        mTitleInterval = (int) (mTitleSize / 2 * mSettingManager.getLineMultiplier());
+        mTextInterval = (int) (mTextSize / 2 * readBookControl.getLineMultiplier());
+        mTitleInterval = (int) (mTitleSize / 2 * readBookControl.getLineMultiplier());
         // 段落间距(大小为字体的高度)
-        mTextPara = (int) (mTextSize / 2 * mSettingManager.getLineMultiplier() * mSettingManager.getParagraphSize());
-        mTitlePara = (int) (mTitleSize / 2 * mSettingManager.getLineMultiplier() * mSettingManager.getParagraphSize());
+        mTextPara = (int) (mTextSize / 2 * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize());
+        mTitlePara = (int) (mTitleSize / 2 * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize());
     }
 
     public void initPaint() {
         Typeface typeface;
         try {
-            if (!TextUtils.isEmpty(mSettingManager.getFontPath())) {
-                typeface = Typeface.createFromFile(mSettingManager.getFontPath());
+            if (!TextUtils.isEmpty(readBookControl.getFontPath())) {
+                typeface = Typeface.createFromFile(readBookControl.getFontPath());
             } else {
                 typeface = Typeface.SANS_SERIF;
             }
         } catch (Exception e) {
             Toast.makeText(mContext, "字体文件未找,到恢复默认字体", Toast.LENGTH_SHORT).show();
-            mSettingManager.setReadBookFont(null);
+            readBookControl.setReadBookFont(null);
             typeface = Typeface.SANS_SERIF;
         }
         // 绘制提示的画笔
         mTipPaint = new TextPaint();
-        mTipPaint.setColor(mTextColor);
+        mTipPaint.setColor(readBookControl.getTextColor());
         mTipPaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
         mTipPaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTipPaint.setTypeface(Typeface.create(typeface, Typeface.NORMAL));
@@ -212,7 +195,7 @@ public abstract class PageLoader {
 
         // 绘制标题的画笔
         mTitlePaint = new TextPaint();
-        mTitlePaint.setColor(mTextColor);
+        mTitlePaint.setColor(readBookControl.getTextColor());
         mTitlePaint.setTextSize(mTitleSize);
         mTitlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mTitlePaint.setTypeface(Typeface.create(typeface, Typeface.BOLD));
@@ -220,9 +203,9 @@ public abstract class PageLoader {
 
         // 绘制页面内容的画笔
         mTextPaint = new TextPaint();
-        mTextPaint.setColor(mTextColor);
+        mTextPaint.setColor(readBookControl.getTextColor());
         mTextPaint.setTextSize(mTextSize);
-        int bold = mSettingManager.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
+        int bold = readBookControl.getTextBold() ? Typeface.BOLD : Typeface.NORMAL;
         mTextPaint.setTypeface(Typeface.create(typeface, bold));
         mTextPaint.setAntiAlias(true);
 
@@ -235,9 +218,71 @@ public abstract class PageLoader {
         setPageStyle();
     }
 
-    private void initPageView() {
-        //配置参数
+    /**
+     * 设置文字相关参数
+     */
+    public void setTextSize() {
+        // 设置文字相关参数
+        setUpTextParams();
+
+        // 设置画笔的字体大小
+        mTextPaint.setTextSize(mTextSize);
+        // 设置标题的字体大小
+        mTitlePaint.setTextSize(mTitleSize);
+
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+    }
+
+    /**
+     * 设置页面样式
+     */
+    public void setPageStyle() {
+
+        mTipPaint.setColor(readBookControl.getTextColor());
+        mTitlePaint.setColor(readBookControl.getTextColor());
+        mTextPaint.setColor(readBookControl.getTextColor());
+
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+    }
+
+    /**
+     * 设置翻页动画
+     */
+    public void setPageMode(PageMode pageMode) {
+        mPageMode = pageMode;
+
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
+
+        // 重新绘制当前页
+        mPageView.resetScroll();
+        drawPage();
+    }
+
+    /**
+     * 设置内容与屏幕的间距 单位为 px
+     */
+    public void upMargin() {
+        mMarginTop = readBookControl.getHideStatusBar()
+                ? ScreenUtils.dpToPx(readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
+                : ScreenUtils.dpToPx(readBookControl.getPaddingTop());
+        mMarginBottom = ScreenUtils.dpToPx(readBookControl.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
+        mMarginLeft = ScreenUtils.dpToPx(readBookControl.getPaddingLeft());
+        mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
+
+        prepareDisplay(mDisplayWidth, mDisplayHeight);
+
+        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+    }
+
+    /**
+     * 设置页面切换监听
+     */
+    public void setOnPageChangeListener(OnPageChangeListener listener) {
+        mPageChangeListener = listener;
+        // 如果目录加载完之后才设置监听器，那么会默认回调
+        if (isChapterListPrepare) {
+            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+        }
     }
 
     /**
@@ -246,7 +291,7 @@ public abstract class PageLoader {
     public void refreshUi() {
         initData();
         initPaint();
-        initPageView();
+        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
         skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
@@ -272,7 +317,6 @@ public abstract class PageLoader {
      * 跳转到上一章
      */
     public boolean skipPreChapter() {
-        goPagePos = 0;
         if (!hasPrevChapter()) {
             return false;
         }
@@ -287,6 +331,8 @@ public abstract class PageLoader {
 
         mPageView.resetScroll();
         drawPage();
+        chapterChangeCallback();
+        pagingEnd(PageAnimation.Direction.NONE);
         return true;
     }
 
@@ -294,12 +340,13 @@ public abstract class PageLoader {
      * 跳转到下一章
      */
     public boolean skipNextChapter() {
-        goPagePos = 0;
         if (!hasNextChapter()) {
             return false;
         }
 
         //载入下一章
+        mCurChapterPos = mCurChapterPos + 1;
+        mCurPagePos = 0;
         mPreChapter = mCurChapter;
         mCurChapter = mNextChapter;
         mNextChapter = null;
@@ -307,6 +354,8 @@ public abstract class PageLoader {
 
         mPageView.resetScroll();
         drawPage();
+        chapterChangeCallback();
+        pagingEnd(PageAnimation.Direction.NONE);
         return true;
     }
 
@@ -323,13 +372,10 @@ public abstract class PageLoader {
      * 跳转到指定章节页
      */
     public void skipToChapter(int chapterPos, int pagePos) {
-        goPagePos = pagePos;
         // 设置参数
         mCurChapterPos = chapterPos;
-        // 如果当前下一章缓存正在执行，则取消
-        if (mPreLoadDisposable != null) {
-            mPreLoadDisposable.dispose();
-        }
+        mCurPagePos = pagePos;
+
         // 将上一章的缓存设置为null
         if (mPreChapter != null && mPreChapter.getPosition() != chapterPos - 1) {
             mPreChapter = null;
@@ -379,7 +425,7 @@ public abstract class PageLoader {
      * 翻到下一页,无动画
      */
     public boolean noAnimationToNextPage() {
-        if (getCurPagePos() < getPageSize() - 1) {
+        if (getCurPagePos() < mCurChapter.getPageSize() - 1) {
             skipToPage(getCurPagePos() + 1);
             return true;
         }
@@ -390,7 +436,7 @@ public abstract class PageLoader {
      * 更新时间
      */
     public void updateTime() {
-        if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
+        if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             drawPage();
         }
     }
@@ -401,83 +447,11 @@ public abstract class PageLoader {
     public boolean updateBattery(int level) {
         mBatteryLevel = level;
 
-        if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
+        if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             drawPage();
             return true;
         }
         return false;
-    }
-
-    /**
-     * 设置文字相关参数
-     */
-    public void setTextSize() {
-        // 设置文字相关参数
-        setUpTextParams();
-
-        // 设置画笔的字体大小
-        mTextPaint.setTextSize(mTextSize);
-        // 设置标题的字体大小
-        mTitlePaint.setTextSize(mTitleSize);
-
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-    }
-
-    /**
-     * 设置页面样式
-     */
-    public void setPageStyle() {
-
-        // 设置当前颜色样式
-        mTextColor = mSettingManager.getTextColor();
-        mBgColor = mSettingManager.getBgColor();
-
-        mTipPaint.setColor(mTextColor);
-        mTitlePaint.setColor(mTextColor);
-        mTextPaint.setColor(mTextColor);
-
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-    }
-
-    /**
-     * 设置翻页动画
-     */
-    public void setPageMode(PageMode pageMode) {
-        mPageMode = pageMode;
-
-        mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
-
-        // 重新绘制当前页
-        mPageView.resetScroll();
-        drawPage();
-    }
-
-    /**
-     * 设置内容与屏幕的间距 单位为 px
-     */
-    public void upMargin() {
-        mMarginTop = mSettingManager.getHideStatusBar()
-                ? ScreenUtils.dpToPx(mSettingManager.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
-                : ScreenUtils.dpToPx(mSettingManager.getPaddingTop());
-        mMarginBottom = ScreenUtils.dpToPx(mSettingManager.getPaddingBottom() + DEFAULT_MARGIN_HEIGHT);
-        mMarginLeft = ScreenUtils.dpToPx(mSettingManager.getPaddingLeft());
-        mMarginRight = ScreenUtils.dpToPx(mSettingManager.getPaddingRight());
-
-        prepareDisplay(mDisplayWidth, mDisplayHeight);
-
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-    }
-
-    /**
-     * 设置页面切换监听
-     */
-    public void setOnPageChangeListener(OnPageChangeListener listener) {
-        mPageChangeListener = listener;
-
-        // 如果目录加载完之后才设置监听器，那么会默认回调
-        if (isChapterListPrepare) {
-            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
-        }
     }
 
     /**
@@ -508,20 +482,6 @@ public abstract class PageLoader {
         return mCurPagePos;
     }
 
-    public void finishContent(int chapterIndex) {
-        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != STATUS_FINISH) {
-            openChapter(mCurPagePos);
-        }
-        if (chapterIndex == mCurChapterPos - 1) {
-            parsePrevChapter();
-            mPageView.drawPrevPage();
-        }
-        if (chapterIndex == mCurChapterPos + 1) {
-            parseNextChapter();
-            mPageView.drawNextPage();
-        }
-    }
-
     /**
      * 更新状态
      */
@@ -540,32 +500,8 @@ public abstract class PageLoader {
         drawPage();
     }
 
-    /**
-     * 关闭书本
-     */
-    public void closeBook() {
-        isChapterListPrepare = false;
-        isClose = true;
-
-        if (mPreLoadDisposable != null) {
-            mPreLoadDisposable.dispose();
-        }
-        mPreChapter = null;
-        mCurChapter = null;
-        mNextChapter = null;
-        mPageView = null;
-    }
-
     public boolean isClose() {
         return isClose;
-    }
-
-    public boolean isChapterOpen() {
-        return isChapterOpen;
-    }
-
-    public int getPageSize() {
-        return mCurChapter.getPageSize();
     }
 
     /**
@@ -581,35 +517,6 @@ public abstract class PageLoader {
             s.append(txtPage.lines.get(i));
         }
         return s.toString();
-    }
-
-    /**
-     * 加载页面列表
-     */
-    private TxtChapter loadPageList(int chapterPos) {
-        TxtChapter txtChapter = new TxtChapter(chapterPos);
-        txtChapter.setStatus(STATUS_LOADING);
-        // 获取章节
-        ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
-        // 判断章节是否存在
-        if (!hasChapterData(chapter)) {
-            return txtChapter;
-        }
-        // 获取章节的文本流
-        BufferedReader reader = null;
-        List<TxtPage> pages = null;
-        try {
-            reader = getChapterReader(chapter);
-            pages = loadPageList(chapter, reader);
-        } catch (Exception e) {
-            IOUtils.close(reader);
-            e.printStackTrace();
-        }
-        if (pages != null) {
-            txtChapter.setTxtPageList(pages);
-            txtChapter.setStatus(STATUS_FINISH);
-        }
-        return txtChapter;
     }
 
     /**
@@ -630,14 +537,10 @@ public abstract class PageLoader {
     /**
      * 打开当前章节指定页
      */
-    public synchronized void openChapter(int pagePos) {
-
+    void openChapter(int pagePos) {
+        mCurPagePos = pagePos;
         if (!mPageView.isPrepare()) {
             return;
-        }
-
-        if (mCurChapter == null) {
-            mCurChapter = new TxtChapter(mCurChapterPos);
         }
 
         // 如果章节目录没有准备好
@@ -654,21 +557,13 @@ public abstract class PageLoader {
             return;
         }
 
-        if (parseCurChapter()) {
-            if (goPagePos != 0) {
-                pagePos = goPagePos;
-                isChapterOpen = false;
-            }
-            mCurPagePos = pagePos;
-        }
+        parseCurChapter();
         drawPage();
+        chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
     }
 
     public void drawPage() {
-        if (mCurChapter == null) {
-            mCurChapter = new TxtChapter(mCurChapterPos);
-        }
         if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
             mPageView.drawPrevPage();
         }
@@ -681,7 +576,7 @@ public abstract class PageLoader {
     /**
      * 翻页完成
      */
-    public void pagingEnd(PageAnimation.Direction direction) {
+    void pagingEnd(PageAnimation.Direction direction) {
         if (!isChapterListPrepare) {
             return;
         }
@@ -696,6 +591,7 @@ public abstract class PageLoader {
                     mCurChapter = mNextChapter;
                     mNextChapter = null;
                     parseNextChapter();
+                    chapterChangeCallback();
                 }
                 mPageView.drawNextPage();
                 break;
@@ -709,6 +605,7 @@ public abstract class PageLoader {
                     mCurChapter = mPreChapter;
                     mPreChapter = null;
                     parsePrevChapter();
+                    chapterChangeCallback();
                 }
                 mPageView.drawPrevPage();
                 break;
@@ -756,7 +653,6 @@ public abstract class PageLoader {
             drawBackground(bgBitmap, txtChapter, txtPage);
             drawContent(bitmap, txtChapter, txtPage);
         }
-
     }
 
     /**
@@ -765,11 +661,11 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     private void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         Canvas canvas = new Canvas(bitmap);
-        if (mSettingManager.bgIsColor()) {
-            canvas.drawColor(mSettingManager.getBgColor());
+        if (readBookControl.bgIsColor()) {
+            canvas.drawColor(readBookControl.getBgColor());
         } else {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-            canvas.drawBitmap(mSettingManager.getBgBitmap(), null, mDestRect, null);
+            canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
         }
         int defMarginHeight = ScreenUtils.dpToPx(DEFAULT_MARGIN_HEIGHT);
         Paint.FontMetrics fontMetrics = mTipPaint.getFontMetrics();
@@ -777,12 +673,12 @@ public abstract class PageLoader {
         final float tipBottomTop = tipMarginHeight - fontMetrics.top;
         final float tipBottomBot = mDisplayHeight - fontMetrics.bottom - tipMarginHeight;
         final float tipDistance = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
-        final float tipMarginLeft = mSettingManager.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
-        final float tipMarginRight = mSettingManager.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
+        final float tipMarginLeft = readBookControl.getTipMarginChange() ? mMarginLeft : defaultMarginWidth;
+        final float tipMarginRight = readBookControl.getTipMarginChange() ? mMarginRight : defaultMarginWidth;
         final float displayRightEnd = mDisplayWidth - tipMarginRight;
         final float tipVisibleWidth = mDisplayWidth - tipMarginLeft - tipMarginRight;
-        boolean hideStatusBar = mSettingManager.getHideStatusBar();
-        boolean showTimeBattery = mSettingManager.getShowTimeBattery();
+        boolean hideStatusBar = readBookControl.getHideStatusBar();
+        boolean showTimeBattery = readBookControl.getShowTimeBattery();
 
         if (!mCollBook.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? mCollBook.getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
@@ -814,7 +710,7 @@ public abstract class PageLoader {
                     title = TextUtils.ellipsize(title, mTipPaint, tipLeft - tipDistance, TextUtils.TruncateAt.END).toString();
                     canvas.drawText(title, tipMarginLeft, tipBottomBot, mTipPaint);
                 }
-                if (mSettingManager.getShowLine()) {
+                if (readBookControl.getShowLine()) {
                     //绘制分隔线
                     tipBottom = mDisplayHeight - defMarginHeight;
                     canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
@@ -838,7 +734,7 @@ public abstract class PageLoader {
                     float progressTipBottom = showTimeBattery ? tipBottomTop : tipBottomBot;
                     canvas.drawText(progress, progressTipLeft, progressTipBottom, mTipPaint);
                 }
-                if (mSettingManager.getShowLine()) {
+                if (readBookControl.getShowLine()) {
                     //绘制分隔线
                     tipBottom = defMarginHeight - 2;
                     canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
@@ -868,7 +764,7 @@ public abstract class PageLoader {
             int polarTop = visibleBottom - (outFrameHeight + polarHeight) / 2;
             Rect polar = new Rect(polarLeft, polarTop, visibleRight, polarTop + polarHeight);
 
-            mBatteryPaint.setColor(mTextColor);
+            mBatteryPaint.setColor(readBookControl.getTextColor());
             mBatteryPaint.setStyle(Paint.Style.FILL);
             canvas.drawRect(polar, mBatteryPaint);
 
@@ -955,7 +851,7 @@ public abstract class PageLoader {
         } else {
             float top = contentMarginHeight - fontMetrics.ascent;
             if (mPageMode != PageMode.SCROLL) {
-                top += mSettingManager.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
+                top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
             }
 
             //对标题进行绘制
@@ -1012,17 +908,13 @@ public abstract class PageLoader {
 
         // 获取内容显示位置的大小
         mVisibleWidth = mDisplayWidth - mMarginLeft - mMarginRight;
-        mVisibleHeight = mSettingManager.getHideStatusBar()
+        mVisibleHeight = readBookControl.getHideStatusBar()
                 ? mDisplayHeight - mMarginTop - mMarginBottom
                 : mDisplayHeight - mMarginTop - mMarginBottom - mPageView.getStatusBarHeight();
 
         // 重置 PageMode
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
-        if (getPageStatus() == STATUS_FINISH) {
-            mCurChapter = dealLoadPageList(mCurChapterPos);
-            chapterChangeCallback();
-        }
-        drawPage();
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -1130,11 +1022,34 @@ public abstract class PageLoader {
         return txtChapter;
     }
 
-    private void chapterChangeCallback() {
-        if (mPageChangeListener != null) {
-            mPageChangeListener.onChapterChange(mCurChapterPos);
-            mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
+
+    /**
+     * 加载页面列表
+     */
+    private TxtChapter loadPageList(int chapterPos) {
+        TxtChapter txtChapter = new TxtChapter(chapterPos);
+        txtChapter.setStatus(STATUS_LOADING);
+        // 获取章节
+        ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
+        // 判断章节是否存在
+        if (!hasChapterData(chapter)) {
+            return txtChapter;
         }
+        // 获取章节的文本流
+        BufferedReader reader = null;
+        List<TxtPage> pages = null;
+        try {
+            reader = getChapterReader(chapter);
+            pages = loadPageList(chapter, reader);
+        } catch (Exception e) {
+            IOUtils.close(reader);
+            e.printStackTrace();
+        }
+        if (pages != null) {
+            txtChapter.setTxtPageList(pages);
+            txtChapter.setStatus(STATUS_FINISH);
+        }
+        return txtChapter;
     }
 
     /**
@@ -1153,13 +1068,13 @@ public abstract class PageLoader {
         boolean showTitle = true; // 是否展示标题
         String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
         br.readLine(); //去除标题行
-        if (!mSettingManager.getShowTitle()) {
+        if (!readBookControl.getShowTitle()) {
             showTitle = false;
             paragraph = null;
         }
         while (showTitle || (paragraph = br.readLine()) != null) {
             paragraph = ChapterContentHelp.replaceContent(mCollBook, paragraph);
-            paragraph = ChapterContentHelp.toTraditional(mSettingManager, paragraph);
+            paragraph = ChapterContentHelp.toTraditional(readBookControl, paragraph);
             paragraph = paragraph.replaceAll("\\s", " ").trim();
             // 如果只有换行符，那么就不执行
             if (paragraph.equals("")) continue;
@@ -1276,6 +1191,13 @@ public abstract class PageLoader {
         return line != null && line.length() != 0 && line.charAt(line.length() - 1) != '\n';
     }
 
+    private void chapterChangeCallback() {
+        if (mPageChangeListener != null) {
+            mPageChangeListener.onChapterChange(mCurChapterPos);
+            mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
+        }
+    }
+
     /**
      * 根据当前状态，决定是否能够翻页
      */
@@ -1283,6 +1205,19 @@ public abstract class PageLoader {
         return isChapterListPrepare
                 && getPageStatus() != STATUS_PARSE_ERROR
                 && getPageStatus() != STATUS_PARING;
+    }
+
+    /**
+     * 关闭书本
+     */
+    public void closeBook() {
+        isChapterListPrepare = false;
+        isClose = true;
+
+        mPreChapter = null;
+        mCurChapter = null;
+        mNextChapter = null;
+        mPageView = null;
     }
 
     /*****************************************interface*****************************************/

@@ -177,7 +177,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public void draw(Canvas canvas) {
-        changePage = false;
         if (isRunning) {
             drawMove(canvas);
         } else {
@@ -237,7 +236,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public Bitmap getContentBitmap(int pageOnCur) {
-//        return mNextBitmap;
         if (pageOnCur < 0) {
             return mPreBitmap;
         } else if (pageOnCur > 0) {

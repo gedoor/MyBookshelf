@@ -254,9 +254,9 @@ public class PageView extends View {
 
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
-            if (mPageAnim instanceof HorizonPageAnim) {
-                mPageAnim.setChangePage(true);
-            }
+//            if (mPageAnim instanceof HorizonPageAnim) {
+//                mPageAnim.setChangePage(true);
+//            }
             invalidate();
         }
     }

@@ -53,6 +53,7 @@ import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.page.NetPageLoader;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
 import com.monke.mprogressbar.MHorProgressBar;
@@ -1179,7 +1180,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public void finishContent(int index) {
         if (mPageLoader != null) {
-            mPageLoader.finishContent(index);
+            ((NetPageLoader) mPageLoader).finishContent(index);
         }
     }
 

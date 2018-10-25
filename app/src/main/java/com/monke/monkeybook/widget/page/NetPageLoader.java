@@ -42,11 +42,8 @@ public class NetPageLoader extends PageLoader {
                 mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
             }
 
-            // 如果章节未打开
-            if (!isChapterOpen()) {
-                // 打开章节
-                skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-            }
+            // 打开章节
+            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
         } else {
             WebBookModelImpl.getInstance().getChapterList(mCollBook)
                     .subscribeOn(Schedulers.io())
@@ -80,6 +77,23 @@ public class NetPageLoader extends PageLoader {
         }
     }
 
+    /**
+     * @param chapterIndex
+     */
+    public void finishContent(int chapterIndex) {
+        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != STATUS_FINISH) {
+            openChapter(mCurPagePos);
+        }
+        if (chapterIndex == mCurChapterPos - 1) {
+            parsePrevChapter();
+            mPageView.drawPrevPage();
+        }
+        if (chapterIndex == mCurChapterPos + 1) {
+            parseNextChapter();
+            mPageView.drawNextPage();
+        }
+    }
+
     @Override
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
         @SuppressLint("DefaultLocale")
@@ -105,17 +119,15 @@ public class NetPageLoader extends PageLoader {
     // 装载上一章节的内容
     @Override
     boolean parsePrevChapter() {
-        boolean isRight = super.parsePrevChapter();
         if (mPageChangeListener != null && mCurChapterPos >= 1 && shouldRequestChapter(mCurChapterPos - 1)) {
             mPageChangeListener.requestChapters(mCurChapterPos - 1);
         }
-        return isRight;
+        return super.parsePrevChapter();
     }
 
     // 装载当前章内容。
     @Override
     boolean parseCurChapter() {
-        boolean isRight = super.parseCurChapter();
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos - 1; i < mCurChapterPos + 5; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
@@ -123,13 +135,12 @@ public class NetPageLoader extends PageLoader {
                 }
             }
         }
-        return isRight;
+        return super.parseCurChapter();
     }
 
     // 装载下一章节的内容
     @Override
     boolean parseNextChapter() {
-        boolean isRight = super.parseNextChapter();
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
@@ -137,7 +148,7 @@ public class NetPageLoader extends PageLoader {
                 }
             }
         }
-        return isRight;
+        return super.parseNextChapter();
     }
 
     @Override
