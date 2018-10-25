@@ -185,17 +185,15 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 switch (mDirection) {
                     case NEXT:
                         canvas.drawBitmap(mNextBitmap, 0, 0, null);
-                        changePage = true;
                         break;
                     case PRE:
                         canvas.drawBitmap(mPreBitmap, 0, 0, null);
-                        changePage = true;
                         break;
                     default:
                         canvas.drawBitmap(mCurBitmap, 0, 0, null);
-                        changePage = true;
                         break;
                 }
+                changePage = true;
             } else {
                 canvas.drawBitmap(mCurBitmap, 0, 0, null);
             }

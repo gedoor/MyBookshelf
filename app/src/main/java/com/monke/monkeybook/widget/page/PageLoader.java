@@ -513,9 +513,11 @@ public abstract class PageLoader {
             openChapter(mCurPagePos);
         }
         if (chapterIndex == mCurChapterPos - 1) {
+            parsePrevChapter();
             mPageView.drawPrevPage();
         }
         if (chapterIndex == mCurChapterPos + 1) {
+            parseNextChapter();
             mPageView.drawNextPage();
         }
     }
@@ -548,11 +550,10 @@ public abstract class PageLoader {
         if (mPreLoadDisposable != null) {
             mPreLoadDisposable.dispose();
         }
-
+        mPreChapter = null;
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
-//        mCurPage = null;
     }
 
     public boolean isClose() {
@@ -1134,49 +1135,6 @@ public abstract class PageLoader {
             mPageChangeListener.onChapterChange(mCurChapterPos);
             mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
         }
-        if (mNextChapter == null) {
-            // 预加载下一章节
-            preLoadNextChapter();
-        }
-    }
-
-    /**
-     * 预加载下一章
-     */
-    private void preLoadNextChapter() {
-        final int nextChapter = mCurChapterPos + 1;
-
-        // 如果不存在下一章，且下一章没有数据，则不进行加载。
-        if (mNextChapter != null || !hasNextChapter() || !hasChapterData(mCollBook.getChapterList(nextChapter))) {
-            return;
-        }
-
-        //如果之前正在加载则取消
-        if (mPreLoadDisposable != null) {
-            mPreLoadDisposable.dispose();
-        }
-
-        //调用异步进行预加载加载
-        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(loadPageList(nextChapter)))
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<TxtChapter>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mPreLoadDisposable = d;
-                    }
-
-                    @Override
-                    public void onSuccess(TxtChapter txtChapter) {
-                        if (txtChapter.getPosition() == mCurChapterPos + 1) {
-                            mNextChapter = txtChapter;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        //无视错误
-                    }
-                });
     }
 
     /**
