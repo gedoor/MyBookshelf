@@ -1344,11 +1344,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_TIME_TICK);
             filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-            LocalBroadcastManager.getInstance(ReadBookActivity.this).registerReceiver(batInfoReceiver, filter);
+            ReadBookActivity.this.registerReceiver(batInfoReceiver, filter);
         }
 
         public void unregisterThis() {
-            LocalBroadcastManager.getInstance(ReadBookActivity.this).unregisterReceiver(batInfoReceiver);
+            ReadBookActivity.this.unregisterReceiver(batInfoReceiver);
             batInfoReceiver = null;
         }
     }
