@@ -78,12 +78,12 @@ public class PageView extends View {
 
         @Override
         public void autoNextPage() {
-            autoNextPage();
+            PageView.this.autoNextPage();
         }
 
         @Override
         public void autoPrevPage() {
-            autoPrevPage();
+            PageView.this.autoPrevPage();
         }
 
         @Override
@@ -239,17 +239,23 @@ public class PageView extends View {
 
     public void drawPage(int pageOnCur) {
         if (!isPrepare) return;
-        mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
+        if (mPageLoader != null) {
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
+        }
     }
 
     public void drawBackground(int pageOnCur) {
         if (!isPrepare) return;
-        mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
+        if (mPageLoader != null) {
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
+        }
     }
 
     public void drawContent(int pageOnCur) {
         if (!isPrepare) return;
-        mPageLoader.drawPage(null, getContentBitmap(pageOnCur), pageOnCur);
+        if (mPageLoader != null) {
+            mPageLoader.drawPage(null, getContentBitmap(pageOnCur), pageOnCur);
+        }
     }
 
     @Override
@@ -267,8 +273,10 @@ public class PageView extends View {
             mPageAnim.scrollAnim();
             if (mPageAnim.isChangePage() && !mPageAnim.getScroller().computeScrollOffset()) {
                 mPageAnim.changePageEnd();
-                mPageLoader.pagingEnd(mPageAnim.getDirection());
-                mPageAnim.setDirection(PageAnimation.Direction.NONE);
+                if (mPageAnim.getDirection() != PageAnimation.Direction.NONE) {
+                    mPageLoader.pagingEnd(mPageAnim.getDirection());
+                    mPageAnim.setDirection(PageAnimation.Direction.NONE);
+                }
             }
         }
         super.computeScroll();

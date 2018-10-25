@@ -79,7 +79,7 @@ public abstract class PageLoader {
     // 绘制小说内容的画笔
     private TextPaint mTextPaint;
     // 阅读器的配置选项
-    private ReadBookControl readBookControl;
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     /*****************params**************************/
     //errorMsg
@@ -128,7 +128,6 @@ public abstract class PageLoader {
         mCollBook = collBook;
         mCurChapterPos = mCollBook.getDurChapter();
         mCurPagePos = mCollBook.getDurChapterPage();
-        mCurChapter = dealLoadPageList(mCurChapterPos);
 
         // 初始化数据
         initData();
@@ -139,8 +138,6 @@ public abstract class PageLoader {
     }
 
     private void initData() {
-        // 获取配置管理器
-        readBookControl = ReadBookControl.getInstance();
         // 获取配置参数
         mPageMode = readBookControl.getPageMode(readBookControl.getPageMode());
         // 初始化参数
@@ -538,6 +535,10 @@ public abstract class PageLoader {
      * 打开当前章节指定页
      */
     void openChapter(int pagePos) {
+        if (mCurChapter == null) {
+            mCurChapter = new TxtChapter(mCurChapterPos);
+        }
+
         mCurPagePos = pagePos;
         if (!mPageView.isPrepare()) {
             return;
