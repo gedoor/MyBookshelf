@@ -227,7 +227,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
     @Override
     public Bitmap getBgBitmap(int pageOnCur) {
-//        return mNextBitmap;
         if (pageOnCur < 0) {
             return mPreBitmap;
         } else if (pageOnCur > 0) {
