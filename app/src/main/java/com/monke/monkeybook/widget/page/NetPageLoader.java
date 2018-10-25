@@ -86,11 +86,11 @@ public class NetPageLoader extends PageLoader {
         }
         if (chapterIndex == mCurChapterPos - 1) {
             parsePrevChapter();
-            mPageView.drawPrevPage();
+            mPageView.drawPage(-1);
         }
         if (chapterIndex == mCurChapterPos + 1) {
             parseNextChapter();
-            mPageView.drawNextPage();
+            mPageView.drawPage(1);
         }
     }
 
