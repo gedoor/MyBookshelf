@@ -381,7 +381,7 @@ public class ReadAloudService extends Service {
         running = false;
         clearTTS();
         unRegisterMediaButton();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void clearTTS() {
@@ -461,7 +461,7 @@ public class ReadAloudService extends Service {
             }
         };
         IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     private void updateMediaSessionPlaybackState() {
