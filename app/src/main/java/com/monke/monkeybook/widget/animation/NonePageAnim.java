@@ -31,5 +31,6 @@ public class NonePageAnim extends HorizonPageAnim {
     public void startAnim() {
         super.startAnim();
         isRunning = false;
+        changePage = true;
     }
 }
