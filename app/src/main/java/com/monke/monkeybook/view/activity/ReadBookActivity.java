@@ -1177,9 +1177,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void finishContent() {
-        if (mPageLoader != null && mPageLoader.getPageStatus() != PageLoader.STATUS_FINISH) {
-            mPageLoader.openChapter(mPresenter.getBookShelf().getDurChapterPage());
+    public void finishContent(int index) {
+        if (mPageLoader != null) {
+            mPageLoader.finishContent(index);
         }
     }
 

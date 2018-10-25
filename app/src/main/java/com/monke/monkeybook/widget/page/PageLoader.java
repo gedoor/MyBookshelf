@@ -99,7 +99,6 @@ public abstract class PageLoader {
 
     // 是否打开过章节
     private boolean isChapterOpen;
-    private boolean isFirstOpen = true;
     private boolean isClose;
     // 页面的翻页效果模式
     private PageMode mPageMode;
@@ -135,10 +134,8 @@ public abstract class PageLoader {
     private int mBgColor;
 
     // 当前章
-    protected int mCurChapterPos = 0;
-    protected int mCurPagePos = 0;
-    //上一章的记录
-    private int mLastChapterPos = 0;
+    int mCurChapterPos;
+    private int mCurPagePos;
     private int goPagePos = 0;
 
     /*****************************init params*******************************/
@@ -146,6 +143,9 @@ public abstract class PageLoader {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
+        mCurChapterPos = mCollBook.getDurChapter();
+        mCurPagePos = mCollBook.getDurChapterPage();
+        mCurChapter = dealLoadPageList(mCurChapterPos);
 
         // 初始化数据
         initData();
@@ -153,8 +153,6 @@ public abstract class PageLoader {
         initPaint();
         // 初始化PageView
         initPageView();
-        // 初始化书籍
-        prepareBook();
     }
 
     private void initData() {
@@ -510,12 +508,16 @@ public abstract class PageLoader {
         return mCurPagePos;
     }
 
-    /**
-     * 初始化书籍
-     */
-    private void prepareBook() {
-        mCurChapterPos = mCollBook.getDurChapter();
-        mLastChapterPos = mCurChapterPos;
+    public void finishContent(int chapterIndex) {
+        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != STATUS_FINISH) {
+            openChapter(mCurPagePos);
+        }
+        if (chapterIndex == mCurChapterPos - 1) {
+            mPageView.drawPrevPage();
+        }
+        if (chapterIndex == mCurChapterPos + 1) {
+            mPageView.drawNextPage();
+        }
     }
 
     /**
@@ -628,7 +630,6 @@ public abstract class PageLoader {
      * 打开当前章节指定页
      */
     public synchronized void openChapter(int pagePos) {
-        isFirstOpen = false;
 
         if (!mPageView.isPrepare()) {
             return;

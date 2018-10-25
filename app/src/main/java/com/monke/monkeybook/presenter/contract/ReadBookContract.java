@@ -22,7 +22,7 @@ public interface ReadBookContract {
 
         void setAdd(Boolean isAdd);
 
-        void finishContent();
+        void finishContent(int index);
 
         void changeSourceFinish();
 

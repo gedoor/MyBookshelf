@@ -117,7 +117,7 @@ public class NetPageLoader extends PageLoader {
     boolean parseCurChapter() {
         boolean isRight = super.parseCurChapter();
         if (mPageChangeListener != null) {
-            for (int i = mCurChapterPos; i < mCurChapterPos + 5; i++) {
+            for (int i = mCurChapterPos - 1; i < mCurChapterPos + 5; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
                     mPageChangeListener.requestChapters(i);
                 }

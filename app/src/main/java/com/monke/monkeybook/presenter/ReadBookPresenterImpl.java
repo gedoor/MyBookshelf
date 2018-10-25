@@ -142,7 +142,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         @Override
                         public void onNext(BookContentBean bookContentBean) {
                             DownloadingList(REMOVE, bookContentBean.getDurChapterUrl());
-                            mView.finishContent();
+                            mView.finishContent(bookContentBean.getDurChapterIndex());
                         }
 
                         @Override
@@ -315,7 +315,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         mView.toast("换源失败！" + e.getMessage());
-                        mView.finishContent();
+                        mView.finishContent(bookShelf.getDurChapter());
                     }
                 });
     }
@@ -394,7 +394,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         mView.toast(e.getMessage());
-                        mView.finishContent();
+                        mView.finishContent(bookShelf.getDurChapter());
                     }
                 });
     }
