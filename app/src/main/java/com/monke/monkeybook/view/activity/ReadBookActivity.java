@@ -1266,9 +1266,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         batInfoReceiver.registerThis();
         screenOffTimerStart();
         if (mPageLoader != null) {
-            mPageLoader.updateBattery(BatteryUtil.getLevel(this));
+            if (!mPageLoader.updateBattery(BatteryUtil.getLevel(this))) {
+                mPageLoader.drawPage();
+            }
         }
-        pageView.drawCurPage();
         if (showCheckPermission && mPresenter.getOpen_from() == OPEN_FROM_OTHER && EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);

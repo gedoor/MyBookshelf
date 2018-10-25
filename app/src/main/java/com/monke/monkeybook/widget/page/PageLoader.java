@@ -294,7 +294,7 @@ public abstract class PageLoader {
 //            mCurPage = new TxtPage();
 //        }
         mPageView.resetScroll();
-        mPageView.drawCurPage();
+        drawPage();
         return true;
     }
 
@@ -320,7 +320,7 @@ public abstract class PageLoader {
 //            mCurPage = new TxtPage();
 //        }
         mPageView.resetScroll();
-        mPageView.drawCurPage();
+        drawPage();
         return true;
     }
 
@@ -371,7 +371,7 @@ public abstract class PageLoader {
 //        mCurPage = getCurPage(pos);
         mCurPagePos = pos;
         mPageView.resetScroll();
-        mPageView.drawCurPage();
+        drawPage();
         pagingEnd(PageAnimation.Direction.NONE);
         return true;
     }
@@ -406,19 +406,21 @@ public abstract class PageLoader {
      */
     public void updateTime() {
         if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
-            mPageView.drawCurPage();
+            drawPage();
         }
     }
 
     /**
      * 更新电量
      */
-    public void updateBattery(int level) {
+    public boolean updateBattery(int level) {
         mBatteryLevel = level;
 
         if (!mPageView.isRunning() && mSettingManager.getHideStatusBar() && mSettingManager.getShowTimeBattery()) {
-            mPageView.drawCurPage();
+            drawPage();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -462,7 +464,7 @@ public abstract class PageLoader {
 
         // 重新绘制当前页
         mPageView.resetScroll();
-        mPageView.drawCurPage();
+        drawPage();
     }
 
     /**
@@ -535,7 +537,7 @@ public abstract class PageLoader {
     public void setStatus(int status) {
         mCurChapter.setStatus(status);
         errorMsg = "";
-        mPageView.drawCurPage();
+        drawPage();
     }
 
     /**
@@ -544,7 +546,7 @@ public abstract class PageLoader {
     public void chapterError(String msg) {
         mCurChapter.setStatus(STATUS_ERROR);
         errorMsg = msg;
-        mPageView.drawCurPage();
+        drawPage();
     }
 
     /**
@@ -684,18 +686,21 @@ public abstract class PageLoader {
         } //else {
 //            mCurPage = new TxtPage();
 //        }
-        upOtherPage();
-        mPageView.drawCurPage();
+        drawPage();
         pagingEnd(PageAnimation.Direction.NONE);
     }
 
-    public void upOtherPage() {
+    public void drawPage() {
+        if (mCurChapter == null) {
+            mCurChapter = new TxtChapter(mCurChapterPos);
+        }
         if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
             mPageView.drawPrevPage();
         }
         if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
             mPageView.drawNextPage();
         }
+        mPageView.drawCurPage();
     }
 
     /**
@@ -742,7 +747,7 @@ public abstract class PageLoader {
      * 绘制页面
      * pageOnCur: 位于当前页的位置, 小于0上一页, 0 当前页, 大于0下一页
      */
-    public void drawPage(Bitmap bgBitmap, Bitmap bitmap, int pageOnCur) {
+    void drawPage(Bitmap bgBitmap, Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
         TxtPage txtPage;
         if (pageOnCur == 0) { //当前页
@@ -756,6 +761,7 @@ public abstract class PageLoader {
                 txtChapter = mCurChapter;
                 txtPage = mCurChapter.getPage(mCurPagePos - 1);
             } else {
+                if (mPreChapter == null) return;
                 txtChapter = mPreChapter;
                 txtPage = mPreChapter.getPage(mPreChapter.getPageSize() - 1);
             }
@@ -764,6 +770,7 @@ public abstract class PageLoader {
                 txtChapter = mCurChapter;
                 txtPage = mCurChapter.getPage(mCurPagePos + 1);
             } else {
+                if (mNextChapter == null) return;
                 txtChapter = mNextChapter;
                 txtPage = mNextChapter.getPage(0);
             }
@@ -1056,7 +1063,7 @@ public abstract class PageLoader {
             // 章节切换
             chapterChangeCallback();
         }
-        mPageView.drawCurPage();
+        drawPage();
 //        }
     }
 
@@ -1101,7 +1108,8 @@ public abstract class PageLoader {
      * 解析上一章数据
      */
     boolean parsePrevChapter() {
-        if (mPreChapter == null && mCurChapterPos > 0) {
+        if ((mPreChapter == null || mPreChapter.getStatus() != STATUS_FINISH)
+                && mCurChapterPos > 0) {
             mPreChapter = dealLoadPageList(mCurChapterPos - 1);
         }
         return mPreChapter != null && mPreChapter.getStatus() == STATUS_FINISH;
@@ -1197,7 +1205,8 @@ public abstract class PageLoader {
      * 解析下一章数据
      */
     boolean parseNextChapter() {
-        if (mNextChapter == null && mCurChapterPos < mCollBook.getChapterList().size() - 1) {
+        if ((mNextChapter == null || mNextChapter.getStatus() != STATUS_FINISH)
+                && mCurChapterPos < mCollBook.getChapterList().size() - 1) {
             mNextChapter = dealLoadPageList(mCurChapterPos + 1);
         }
         return mNextChapter != null && mNextChapter.getStatus() == STATUS_FINISH;
