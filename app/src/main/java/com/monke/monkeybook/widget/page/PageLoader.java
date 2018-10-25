@@ -546,14 +546,14 @@ public abstract class PageLoader {
         // 如果章节目录没有准备好
         if (!isChapterListPrepare) {
             mCurChapter.setStatus(STATUS_LOADING);
-            mPageView.drawCurPage();
+            mPageView.drawPage(0);
             return;
         }
 
         // 如果获取到的章节目录为空
         if (mCollBook.getChapterList().isEmpty()) {
             mCurChapter.setStatus(STATUS_CATEGORY_EMPTY);
-            mPageView.drawCurPage();
+            mPageView.drawPage(0);
             return;
         }
 
@@ -565,12 +565,12 @@ public abstract class PageLoader {
 
     public void drawPage() {
         if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
-            mPageView.drawPrevPage();
+            mPageView.drawPage(-1);
         }
         if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
-            mPageView.drawNextPage();
+            mPageView.drawPage(1);
         }
-        mPageView.drawCurPage();
+        mPageView.drawPage(0);
     }
 
     /**
@@ -593,7 +593,7 @@ public abstract class PageLoader {
                     parseNextChapter();
                     chapterChangeCallback();
                 }
-                mPageView.drawNextPage();
+                mPageView.drawPage(1);
                 break;
             case PRE:
                 if (mCurPagePos > 0) {
@@ -607,7 +607,7 @@ public abstract class PageLoader {
                     parsePrevChapter();
                     chapterChangeCallback();
                 }
-                mPageView.drawPrevPage();
+                mPageView.drawPage(-1);
                 break;
         }
         mPageView.setContentDescription(getContent(getCurPagePos()));
@@ -660,6 +660,7 @@ public abstract class PageLoader {
      */
     @SuppressLint("DefaultLocale")
     private void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
+        if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (readBookControl.bgIsColor()) {
             canvas.drawColor(readBookControl.getBgColor());
@@ -796,6 +797,7 @@ public abstract class PageLoader {
      * 绘制内容
      */
     private void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
+        if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (mPageMode == PageMode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);

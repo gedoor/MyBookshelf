@@ -90,13 +90,13 @@ public class PageView extends View {
         public void drawView(PageAnimation.Direction direction) {
             switch (direction) {
                 case PRE:
-                    drawPrevPage();
+                    drawPage(-1);
                     break;
                 case NEXT:
-                    drawNextPage();
+                    drawPage(1);
                     break;
                 default:
-                    drawCurPage();
+                    drawPage(0);
                     break;
             }
         }
@@ -178,7 +178,7 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             if (hasPrevPage()) {
                 resetScroll();
-                drawCurPage();
+                drawPage(0);
                 return true;
             }
             return false;
@@ -192,7 +192,7 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             if (hasNextPage()) {
                 resetScroll();
-                drawCurPage();
+                drawPage(0);
                 return true;
             }
             return false;
@@ -237,37 +237,19 @@ public class PageView extends View {
         mPageAnim.startAnim();
     }
 
-
-    /**
-     * 绘制上一页
-     */
-    public void drawPrevPage() {
+    public void drawPage(int pageOnCur) {
         if (!isPrepare) return;
-        mPageLoader.drawPage(getBgBitmap(-1), getContentBitmap(-1), -1);
+        mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
     }
 
-    /**
-     * 绘制当前页。
-     */
-    public void drawCurPage() {
+    public void drawBackground(int pageOnCur) {
         if (!isPrepare) return;
-
-        if (mPageLoader != null) {
-            mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
-//            if (mPageAnim instanceof HorizonPageAnim) {
-//                mPageAnim.setChangePage(true);
-//            }
-            invalidate();
-        }
+        mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
     }
 
-    /**
-     * 绘制下一页
-     */
-    public void drawNextPage() {
+    public void drawContent(int pageOnCur) {
         if (!isPrepare) return;
-
-        mPageLoader.drawPage(getBgBitmap(1), getContentBitmap(1), 1);
+        mPageLoader.drawPage(null, getContentBitmap(pageOnCur), pageOnCur);
     }
 
     @Override
