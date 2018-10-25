@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * 无动画翻页
  */
 
 public class NonePageAnim extends HorizonPageAnim {

@@ -14,7 +14,7 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.  仿真翻页
+ * 仿真翻页
  */
 
 public class SimulationPageAnim extends HorizonPageAnim {
@@ -95,10 +95,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 break;
             default:
                 calcPoints();
-                drawCurrentPageArea(canvas, mNextBitmap, mPath0);
+                drawCurrentPageArea(canvas, mPreBitmap, mPath0);
                 drawNextPageAreaAndShadow(canvas, mCurBitmap);
                 drawCurrentPageShadow(canvas);
-                drawCurrentBackArea(canvas, mNextBitmap);
+                drawCurrentBackArea(canvas, mPreBitmap);
                 break;
         }
     }

@@ -707,17 +707,20 @@ public abstract class PageLoader {
      * 翻页完成
      */
     public void pagingEnd(PageAnimation.Direction direction) {
+        if (!isChapterListPrepare) {
+            return;
+        }
         switch (direction) {
             case NEXT:
                 if (mCurPagePos < mCurChapter.getPageSize() - 1) {
                     mCurPagePos = mCurPagePos + 1;
                 } else {
                     mCurChapterPos = mCurChapterPos + 1;
+                    mCurPagePos = 0;
                     mPreChapter = mCurChapter;
                     mCurChapter = mNextChapter;
                     mNextChapter = null;
                     parseNextChapter();
-                    mCurPagePos = 0;
                 }
                 mPageView.drawNextPage();
                 break;
@@ -726,12 +729,11 @@ public abstract class PageLoader {
                     mCurPagePos = mCurPagePos - 1;
                 } else {
                     mCurChapterPos = mCurChapterPos - 1;
-                    mCurPagePos = 0;
+                    mCurPagePos = mPreChapter.getPageSize() - 1;
                     mNextChapter = mCurChapter;
                     mCurChapter = mPreChapter;
                     mPreChapter = null;
                     parsePrevChapter();
-                    mCurPagePos = mCurChapter.getPageSize() - 1;
                 }
                 mPageView.drawPrevPage();
                 break;
@@ -750,10 +752,10 @@ public abstract class PageLoader {
     void drawPage(Bitmap bgBitmap, Bitmap bitmap, int pageOnCur) {
         TxtChapter txtChapter;
         TxtPage txtPage;
+        if (mCurChapter == null) {
+            mCurChapter = dealLoadPageList(mCurChapterPos);
+        }
         if (pageOnCur == 0) { //当前页
-            if (mCurChapter == null) {
-                mCurChapter = dealLoadPageList(mCurChapterPos);
-            }
             txtChapter = mCurChapter;
             txtPage = mCurChapter.getPage(mCurPagePos);
         } else if (pageOnCur < 0) { //上一页
