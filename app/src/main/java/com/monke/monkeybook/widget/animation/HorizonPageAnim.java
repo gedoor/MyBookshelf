@@ -57,8 +57,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
         }
     }
 
-    public abstract void drawStatic(Canvas canvas);
-
     public abstract void drawMove(Canvas canvas);
 
     @Override

@@ -63,7 +63,7 @@ public class PageView extends View {
     private PageAnimation.OnPageChangeListener mPageAnimListener = new PageAnimation.OnPageChangeListener() {
         @Override
         public void changePage(PageAnimation.Direction direction) {
-//            mPageLoader.pagingEnd(direction);
+            mPageLoader.pagingEnd(direction);
         }
 
         @Override
@@ -77,11 +77,6 @@ public class PageView extends View {
         }
 
         @Override
-        public void pageCancel() {
-            PageView.this.pageCancel();
-        }
-
-        @Override
         public void autoNextPage() {
             autoNextPage();
         }
@@ -89,6 +84,21 @@ public class PageView extends View {
         @Override
         public void autoPrevPage() {
             autoPrevPage();
+        }
+
+        @Override
+        public void drawView(PageAnimation.Direction direction) {
+            switch (direction) {
+                case PRE:
+                    drawPrevPage();
+                    break;
+                case NEXT:
+                    drawNextPage();
+                    break;
+                default:
+                    drawCurPage();
+                    break;
+            }
         }
     };
 
@@ -330,10 +340,6 @@ public class PageView extends View {
         }
     }
 
-    private void pageCancel() {
-        mPageLoader.pageCancel();
-    }
-
     @Override
     public void computeScroll() {
         //进行滑动
@@ -396,7 +402,9 @@ public class PageView extends View {
 
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(0), getContentBitmap(0), 0);
-            mPageAnim.setChangePage(true);
+            if (mPageAnim instanceof HorizonPageAnim) {
+                mPageAnim.setChangePage(true);
+            }
             invalidate();
         }
     }
@@ -407,9 +415,6 @@ public class PageView extends View {
     public void drawNextPage() {
         if (!isPrepare) return;
 
-//        if (mPageAnim instanceof HorizonPageAnim) {
-//            ((HorizonPageAnim) mPageAnim).changePage();
-//        }
         mPageLoader.drawPage(getBgBitmap(1), getContentBitmap(1), 1);
     }
 

@@ -173,11 +173,11 @@ public abstract class PageAnimation {
 
         boolean hasNext();
 
-        void pageCancel();
-
         void autoNextPage();
 
         void autoPrevPage();
+
+        void drawView(Direction direction);
     }
 
 }

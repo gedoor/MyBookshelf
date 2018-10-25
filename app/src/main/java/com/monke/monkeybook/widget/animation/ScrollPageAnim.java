@@ -29,12 +29,6 @@ public class ScrollPageAnim extends PageAnimation {
     private VelocityTracker mVelocity;
     // 整个Bitmap的背景显示
     private Bitmap mBgBitmap;
-    // 上一个view
-    private BitmapView mPrevBitmapView;
-    //当前view
-    private BitmapView mCurBitmapView;
-    //下一个view
-    private BitmapView mNextBitmapView;
     // 被废弃的图片列表
     private Bitmap mNextBitmap;
     private ArrayDeque<BitmapView> mScrapViews;
@@ -49,6 +43,7 @@ public class ScrollPageAnim extends PageAnimation {
     private Iterator<BitmapView> upIt;
     //是否翻阅下一页。true表示翻到下一页，false表示上一页。
     private boolean isNext = false;
+    private boolean firstDown;
 
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
@@ -58,27 +53,6 @@ public class ScrollPageAnim extends PageAnimation {
 
     private void initWidget() {
         mBgBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
-
-        mPrevBitmapView = new BitmapView();
-        mPrevBitmapView.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
-        mPrevBitmapView.srcRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mPrevBitmapView.destRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mPrevBitmapView.top = 0;
-        mPrevBitmapView.bottom = mPrevBitmapView.bitmap.getHeight();
-
-        mCurBitmapView = new BitmapView();
-        mCurBitmapView.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
-        mCurBitmapView.srcRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mCurBitmapView.destRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mCurBitmapView.top = 0;
-        mCurBitmapView.bottom = mPrevBitmapView.bitmap.getHeight();
-
-        mNextBitmapView = new BitmapView();
-        mNextBitmapView.bitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.ARGB_4444);
-        mNextBitmapView.srcRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mNextBitmapView.destRect = new Rect(0, 0, mViewWidth, mViewHeight);
-        mNextBitmapView.top = 0;
-        mNextBitmapView.bottom = mPrevBitmapView.bitmap.getHeight();
 
         mScrapViews = new ArrayDeque<>(3);
         for (int i = 0; i < 3; ++i) {
@@ -91,7 +65,7 @@ public class ScrollPageAnim extends PageAnimation {
 
             mScrapViews.push(view);
         }
-
+        firstDown = true;
         onLayout();
         isRefresh = false;
     }
@@ -144,7 +118,7 @@ public class ScrollPageAnim extends PageAnimation {
                 downIt.remove();
                 // 如果原先是从上加载，现在变成从下加载，则表示取消
                 if (mDirection == Direction.UP) {
-                    mListener.pageCancel();
+//                    mListener.pageCancel();
                     mDirection = Direction.NONE;
                 }
             }
@@ -167,9 +141,14 @@ public class ScrollPageAnim extends PageAnimation {
             if (!isRefresh) {
                 boolean hasNext = mListener.hasNext(); //如果不成功则无法滑动
 
-                // 如果不存在next,则进行还原
-                if (!hasNext) {
-                    mListener.changePage(Direction.NEXT);
+                if (hasNext) {
+                    mListener.drawView(Direction.NEXT);
+                    if (firstDown) {
+                        firstDown = false;
+                    } else {
+                        mListener.changePage(Direction.NEXT);
+                    }
+                } else {// 如果不存在next,则进行还原
                     mNextBitmap = cancelBitmap;
                     for (BitmapView activeView : mActiveViews) {
                         activeView.top = 0;
@@ -228,7 +207,7 @@ public class ScrollPageAnim extends PageAnimation {
                 // 如果原先是下，现在变成从上加载了，则表示取消加载
 
                 if (mDirection == Direction.DOWN) {
-                    mListener.pageCancel();
+//                    mListener.pageCancel();
                     mDirection = Direction.NONE;
                 }
             }
@@ -247,9 +226,12 @@ public class ScrollPageAnim extends PageAnimation {
             Bitmap cancelBitmap = mNextBitmap;
             mNextBitmap = view.bitmap;
             if (!isRefresh) {
+                firstDown = false;
                 boolean hasPrev = mListener.hasPrev(); // 如果不成功则无法滑动
-                // 如果不存在next,则进行还原
-                if (!hasPrev) {
+                if (hasPrev) {
+                    mListener.drawView(Direction.NONE);
+                    mListener.changePage(Direction.PRE);
+                } else { // 如果不存在next,则进行还原
                     mNextBitmap = cancelBitmap;
                     for (BitmapView activeView : mActiveViews) {
                         activeView.top = 0;
@@ -288,6 +270,7 @@ public class ScrollPageAnim extends PageAnimation {
         // 清除所有的Active
         mActiveViews.clear();
         // 重新进行布局
+        firstDown = true;
         onLayout();
         isRefresh = false;
     }
