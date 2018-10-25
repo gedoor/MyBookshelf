@@ -3,6 +3,7 @@ package com.monke.monkeybook.presenter;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -37,22 +38,26 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
             List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManage.getAllBookSource() : BookSourceManage.getSelectedBookSource();
             for (BookSourceBean sourceBean : sourceBeans) {
-                if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                    String kindA[] = sourceBean.getRuleFindUrl().split("&&");
-                    List<FindKindBean> children = new ArrayList<>();
-                    for (String kindB : kindA) {
-                        String kind[] = kindB.split("::");
-                        FindKindBean findKindBean = new FindKindBean();
-                        findKindBean.setGroup(sourceBean.getBookSourceName());
-                        findKindBean.setTag(sourceBean.getBookSourceUrl());
-                        findKindBean.setKindName(kind[0]);
-                        findKindBean.setKindUrl(kind[1]);
-                        children.add(findKindBean);
+                try {
+                    if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
+                        String kindA[] = sourceBean.getRuleFindUrl().split("&&");
+                        List<FindKindBean> children = new ArrayList<>();
+                        for (String kindB : kindA) {
+                            String kind[] = kindB.split("::");
+                            FindKindBean findKindBean = new FindKindBean();
+                            findKindBean.setGroup(sourceBean.getBookSourceName());
+                            findKindBean.setTag(sourceBean.getBookSourceUrl());
+                            findKindBean.setKindName(kind[0]);
+                            findKindBean.setKindUrl(kind[1]);
+                            children.add(findKindBean);
+                        }
+                        FindKindGroupBean groupBean = new FindKindGroupBean();
+                        groupBean.setGroupName(sourceBean.getBookSourceName());
+                        groupBean.setChildrenCount(kindA.length);
+                        group.add(new RecyclerViewData(groupBean, children, false));
                     }
-                    FindKindGroupBean groupBean = new FindKindGroupBean();
-                    groupBean.setGroupName(sourceBean.getBookSourceName());
-                    groupBean.setChildrenCount(kindA.length);
-                    group.add(new RecyclerViewData(groupBean, children, false));
+                } catch (Exception exception) {
+                    e.onError(new Throwable(sourceBean.getBookSourceName() + "\n发现规则有误\n" + exception.getMessage()));
                 }
             }
             e.onNext(group);
@@ -69,7 +74,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
