@@ -97,10 +97,6 @@ public abstract class PageAnimation {
         return changePage;
     }
 
-    public void setChangePage(boolean changePage) {
-        this.changePage = changePage;
-    }
-
     /**
      * 开启翻页动画
      */
