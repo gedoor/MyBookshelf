@@ -252,7 +252,7 @@ public abstract class PageLoader {
 
         // 重新绘制当前页
         mPageView.resetScroll();
-        drawPage();
+        openChapter(mCurPagePos);
     }
 
     /**
@@ -326,8 +326,7 @@ public abstract class PageLoader {
         mPreChapter = null;
         parsePrevChapter();
 
-        mPageView.resetScroll();
-        drawPage();
+        openChapter(mCurPagePos);
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
         return true;
@@ -349,8 +348,7 @@ public abstract class PageLoader {
         mNextChapter = null;
         parseNextChapter();
 
-        mPageView.resetScroll();
-        drawPage();
+        openChapter(mCurPagePos);
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
         return true;
@@ -386,7 +384,6 @@ public abstract class PageLoader {
             mNextChapter = null;
         }
 
-        // 打开指定章节
         openChapter(pagePos);
     }
 
@@ -398,9 +395,7 @@ public abstract class PageLoader {
             return false;
         }
         mCurPagePos = pos;
-        mPageView.resetScroll();
-        drawPage();
-        pagingEnd(PageAnimation.Direction.NONE);
+        openChapter(mCurPagePos);
         return true;
     }
 
@@ -434,7 +429,12 @@ public abstract class PageLoader {
      */
     public void updateTime() {
         if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
-            drawPage();
+            if (mPageMode == PageMode.SCROLL) {
+                mPageView.drawBackground(0);
+            } else {
+                upPage();
+            }
+            mPageView.invalidate();
         }
     }
 
@@ -443,9 +443,13 @@ public abstract class PageLoader {
      */
     public boolean updateBattery(int level) {
         mBatteryLevel = level;
-
         if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
-            drawPage();
+            if (mPageMode == PageMode.SCROLL) {
+                mPageView.drawBackground(0);
+            } else {
+                upPage();
+            }
+            mPageView.invalidate();
             return true;
         }
         return false;
@@ -485,7 +489,13 @@ public abstract class PageLoader {
     public void setStatus(int status) {
         mCurChapter.setStatus(status);
         errorMsg = "";
-        drawPage();
+        if (mPageMode != PageMode.SCROLL) {
+            upPage();
+        } else {
+            mPageView.resetScroll();
+            mPageView.drawPage(0);
+        }
+        mPageView.invalidate();
     }
 
     /**
@@ -494,7 +504,13 @@ public abstract class PageLoader {
     public void chapterError(String msg) {
         mCurChapter.setStatus(STATUS_ERROR);
         errorMsg = msg;
-        drawPage();
+        if (mPageMode != PageMode.SCROLL) {
+            upPage();
+        } else {
+            mPageView.resetScroll();
+            mPageView.drawPage(0);
+        }
+        mPageView.invalidate();
     }
 
     /**
@@ -555,19 +571,30 @@ public abstract class PageLoader {
         }
 
         parseCurChapter();
-        drawPage();
+        if (mPageMode == PageMode.SCROLL) {
+            mPageView.resetScroll();
+            mPageView.drawPage(0);
+        } else {
+            upPage();
+        }
+        mPageView.invalidate();
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
     }
 
-    public void drawPage() {
-        if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
-            mPageView.drawPage(-1);
+    public void upPage() {
+        if (mPageMode != PageMode.SCROLL) {
+            if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
+                mPageView.drawPage(-1);
+            }
+            if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
+                mPageView.drawPage(1);
+            }
+            mPageView.drawPage(0);
+        } else {
+            mPageView.drawBackground(0);
+            mPageView.drawContent(1);
         }
-        if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < mCollBook.getChapterList().size() - 1) {
-            mPageView.drawPage(1);
-        }
-        mPageView.drawPage(0);
     }
 
     /**
@@ -990,7 +1017,9 @@ public abstract class PageLoader {
      * 解析数据
      */
     boolean parseCurChapter() {
-        mCurChapter = dealLoadPageList(mCurChapterPos);
+        if (mCurChapter.getStatus() != STATUS_FINISH) {
+            mCurChapter = dealLoadPageList(mCurChapterPos);
+        }
         parsePrevChapter();
         parseNextChapter();
         return mCurChapter.getStatus() == STATUS_FINISH;
