@@ -111,7 +111,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                             //进行下一页的配置
                             isNext = true;
                             //判断是否下一页存在
-                            boolean hasNext = mListener.hasNext();
+                            boolean hasNext = mListener.hasNext(0);
                             //如果存在设置动画方向
                             setDirection(Direction.NEXT);
 
@@ -138,7 +138,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
 
                     if (isNext) {
                         //判断是否下一页存在
-                        boolean hasNext = mListener.hasNext();
+                        boolean hasNext = mListener.hasNext(0);
                         //设置动画方向
                         setDirection(Direction.NEXT);
                         if (!hasNext) {

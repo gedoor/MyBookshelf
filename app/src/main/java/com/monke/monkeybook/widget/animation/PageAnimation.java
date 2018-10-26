@@ -181,7 +181,7 @@ public abstract class PageAnimation {
 
         boolean hasPrev();
 
-        boolean hasNext();
+        boolean hasNext(int pageOnCur);
 
         void drawBackground(int pos);
 

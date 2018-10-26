@@ -584,7 +584,7 @@ public abstract class PageLoader {
             case NEXT:
                 if (mCurPagePos < mCurChapter.getPageSize() - 1) {
                     mCurPagePos = mCurPagePos + 1;
-                } else {
+                } else if (mCurChapterPos < mCollBook.getChapterListSize() - 1) {
                     mCurChapterPos = mCurChapterPos + 1;
                     mCurPagePos = 0;
                     mPreChapter = mCurChapter;
@@ -598,7 +598,7 @@ public abstract class PageLoader {
             case PRE:
                 if (mCurPagePos > 0) {
                     mCurPagePos = mCurPagePos - 1;
-                } else {
+                } else if (mCurChapterPos > 0){
                     mCurChapterPos = mCurChapterPos - 1;
                     mCurPagePos = mPreChapter.getPageSize() - 1;
                     mNextChapter = mCurChapter;
@@ -918,9 +918,9 @@ public abstract class PageLoader {
     }
 
     /**
-     * 翻阅上一页
+     * 判断是否存在上一页
      */
-    boolean prev() {
+    boolean hasPrev() {
         // 以下情况禁止翻页
         if (canNotTurnPage()) {
             return false;
@@ -948,9 +948,9 @@ public abstract class PageLoader {
     }
 
     /**
-     * 翻到下一页
+     * 判断是否下一页存在
      */
-    boolean next() {
+    boolean hasNext(int pageOnCur) {
         // 以下情况禁止翻页
         if (canNotTurnPage()) {
             return false;
@@ -958,7 +958,7 @@ public abstract class PageLoader {
 
         if (getPageStatus() == STATUS_FINISH) {
             // 先查看是否存在下一页
-            if (mCurPagePos < mCurChapter.getPageSize() - 1) {
+            if (mCurPagePos + pageOnCur < mCurChapter.getPageSize() - 1) {
                 return true;
             }
         }

@@ -69,8 +69,8 @@ public class PageView extends View {
         }
 
         @Override
-        public boolean hasNext() {
-            return PageView.this.hasNextPage();
+        public boolean hasNext(int pageOnCur) {
+            return PageView.this.hasNextPage(pageOnCur);
         }
 
         @Override
@@ -185,7 +185,7 @@ public class PageView extends View {
             //设置点击点
             mPageAnim.setTouchPoint(x, y);
             //设置方向
-            Boolean hasNext = hasNextPage();
+            Boolean hasNext = hasNextPage(0);
 
             mPageAnim.setDirection(direction);
             if (!hasNext) {
@@ -329,7 +329,7 @@ public class PageView extends View {
      * 判断是否存在上一页
      */
     private boolean hasPrevPage() {
-        if (mPageLoader.prev()) {
+        if (mPageLoader.hasPrev()) {
             return true;
         } else {
             activity.showSnackBar(this,"没有上一页");
@@ -340,8 +340,8 @@ public class PageView extends View {
     /**
      * 判断是否下一页存在
      */
-    private boolean hasNextPage() {
-        if (mPageLoader.next()) {
+    private boolean hasNextPage(int pageOnCur) {
+        if (mPageLoader.hasNext(pageOnCur)) {
             return true;
         } else {
             activity.showSnackBar(this, "没有下一页");
