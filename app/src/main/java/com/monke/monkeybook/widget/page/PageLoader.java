@@ -497,10 +497,6 @@ public abstract class PageLoader {
         drawPage();
     }
 
-    public boolean isClose() {
-        return isClose;
-    }
-
     /**
      * 获取正文
      */
@@ -1035,7 +1031,7 @@ public abstract class PageLoader {
         // 获取章节
         ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
         // 判断章节是否存在
-        if (!hasChapterData(chapter)) {
+        if (!hasChapterData(chapter) || !mPageView.isPrepare()) {
             return txtChapter;
         }
         // 获取章节的文本流
@@ -1221,6 +1217,10 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
+    }
+
+    public boolean isClose() {
+        return isClose;
     }
 
     /*****************************************interface*****************************************/
