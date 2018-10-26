@@ -122,7 +122,7 @@ public abstract class PageLoader {
     int mCurPagePos;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, BookShelfBean collBook) {
+    PageLoader(PageView pageView, BookShelfBean collBook) {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
@@ -168,7 +168,7 @@ public abstract class PageLoader {
         mTitlePara = (int) (mTitleSize / 2 * readBookControl.getLineMultiplier() * readBookControl.getParagraphSize());
     }
 
-    public void initPaint() {
+    private void initPaint() {
         Typeface typeface;
         try {
             if (!TextUtils.isEmpty(readBookControl.getFontPath())) {
