@@ -298,7 +298,7 @@ public abstract class PageLoader {
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
         BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()), mCurChapterPos, mCollBook.getChapterList(mCurChapterPos).getDurChapterName());
-        skipToChapter(mCurChapterPos);
+        skipToChapter(mCurChapterPos, 0);
     }
 
     /**
@@ -313,9 +313,9 @@ public abstract class PageLoader {
     /**
      * 跳转到上一章
      */
-    public boolean skipPreChapter() {
-        if (!hasPrevChapter()) {
-            return false;
+    public void skipPreChapter() {
+        if (mCurChapterPos <= 0) {
+            return;
         }
 
         // 载入上一章。
@@ -329,14 +329,13 @@ public abstract class PageLoader {
         openChapter(mCurPagePos);
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
-        return true;
     }
 
     /**
      * 跳转到下一章
      */
     public boolean skipNextChapter() {
-        if (!hasNextChapter()) {
+        if (mCurChapterPos + 1 >= mCollBook.getChapterListSize()) {
             return false;
         }
 
@@ -352,15 +351,6 @@ public abstract class PageLoader {
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
         return true;
-    }
-
-    /**
-     * 跳转到指定章节
-     *
-     * @param pos:从 0 开始。
-     */
-    public void skipToChapter(int pos) {
-        skipToChapter(pos, 0);
     }
 
     /**
@@ -390,27 +380,26 @@ public abstract class PageLoader {
     /**
      * 跳转到指定的页
      */
-    public boolean skipToPage(int pos) {
+    public void skipToPage(int pos) {
         if (!isChapterListPrepare) {
-            return false;
+            return;
         }
         mCurPagePos = pos;
         openChapter(mCurPagePos);
-        return true;
     }
 
     /**
      * 翻到上一页
      */
-    public boolean skipToPrePage() {
-        return mPageView.autoPrevPage();
+    public void skipToPrePage() {
+        mPageView.autoPrevPage();
     }
 
     /**
      * 翻到下一页
      */
-    public boolean skipToNextPage() {
-        return mPageView.autoNextPage();
+    public void skipToNextPage() {
+        mPageView.autoNextPage();
     }
 
     /**
@@ -796,8 +785,7 @@ public abstract class PageLoader {
             //外框的制作
             int outFrameLeft = polarLeft - outFrameWidth;
             int outFrameTop = visibleBottom - outFrameHeight;
-            int outFrameBottom = visibleBottom;
-            Rect outFrame = new Rect(outFrameLeft, outFrameTop, polarLeft, outFrameBottom);
+            Rect outFrame = new Rect(outFrameLeft, outFrameTop, polarLeft, visibleBottom);
 
             mBatteryPaint.setStyle(Paint.Style.STROKE);
             mBatteryPaint.setStrokeWidth(border);
@@ -806,7 +794,7 @@ public abstract class PageLoader {
             //内框的制作
             float innerWidth = (outFrame.width() - innerMargin * 2 - border) * (mBatteryLevel / 100.0f);
             RectF innerFrame = new RectF(outFrameLeft + border + innerMargin, outFrameTop + border + innerMargin,
-                    outFrameLeft + border + innerMargin + innerWidth, outFrameBottom - border - innerMargin);
+                    outFrameLeft + border + innerMargin + innerWidth, visibleBottom - border - innerMargin);
 
             mBatteryPaint.setStyle(Paint.Style.FILL);
             canvas.drawRect(innerFrame, mBatteryPaint);
@@ -948,7 +936,7 @@ public abstract class PageLoader {
      */
     boolean prev() {
         // 以下情况禁止翻页
-        if (!canTurnPage()) {
+        if (canNotTurnPage()) {
             return false;
         }
 
@@ -959,11 +947,7 @@ public abstract class PageLoader {
             }
         }
 
-        if (!hasPrevChapter()) {
-            return false;
-        }
-
-        return true;
+        return mCurChapterPos > 0;
     }
 
     /**
@@ -978,18 +962,11 @@ public abstract class PageLoader {
     }
 
     /**
-     * 判断是否上一章节为空
-     */
-    private boolean hasPrevChapter() {
-        return mCurChapterPos - 1 >= 0;
-    }
-
-    /**
      * 翻到下一页
      */
     boolean next() {
         // 以下情况禁止翻页
-        if (!canTurnPage()) {
+        if (canNotTurnPage()) {
             return false;
         }
 
@@ -1000,16 +977,6 @@ public abstract class PageLoader {
             }
         }
 
-        if (!hasNextChapter()) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 判断是否到达目录最后一章
-     */
-    private boolean hasNextChapter() {
         return mCurChapterPos + 1 < mCollBook.getChapterListSize();
     }
 
@@ -1223,10 +1190,11 @@ public abstract class PageLoader {
     /**
      * 根据当前状态，决定是否能够翻页
      */
-    private boolean canTurnPage() {
-        return isChapterListPrepare
-                && getPageStatus() != STATUS_PARSE_ERROR
-                && getPageStatus() != STATUS_PARING;
+    private boolean canNotTurnPage() {
+        return !isChapterListPrepare
+                || getPageStatus() == STATUS_PARSE_ERROR
+                || getPageStatus() == STATUS_PARING
+                || getPageStatus() == STATUS_HY;
     }
 
     /**
