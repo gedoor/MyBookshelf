@@ -359,18 +359,9 @@ public abstract class PageLoader {
         mCurChapterPos = chapterPos;
         mCurPagePos = pagePos;
 
-        // 将上一章的缓存设置为null
-        if (mPreChapter != null && mPreChapter.getPosition() != chapterPos - 1) {
-            mPreChapter = null;
-        }
-        // 清理当前章节
-        if (mCurChapter != null && mCurChapter.getPosition() != chapterPos) {
-            mCurChapter = null;
-        }
-        // 将下一章缓存设置为null
-        if (mNextChapter != null && mNextChapter.getPosition() != chapterPos + 1) {
-            mNextChapter = null;
-        }
+        mPreChapter = null;
+        mCurChapter = null;
+        mNextChapter = null;
 
         openChapter(pagePos);
     }

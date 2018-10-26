@@ -533,7 +533,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 加载阅读页面
      */
     private void initPageView() {
-        //获取页面加载器
         mPageLoader = pageView.getPageLoader(this, mPresenter.getBookShelf());
         mPageLoader.updateBattery(BatteryUtil.getLevel(this));
         mPageLoader.setOnPageChangeListener(
