@@ -87,19 +87,15 @@ public class PageView extends View {
         }
 
         @Override
-        public void drawView(PageAnimation.Direction direction) {
-            switch (direction) {
-                case PRE:
-                    drawPage(-1);
-                    break;
-                case NEXT:
-                    drawPage(1);
-                    break;
-                default:
-                    drawPage(0);
-                    break;
-            }
+        public void drawBackground(int pos) {
+            PageView.this.drawBackground(pos);
         }
+
+        @Override
+        public void drawContent(int pos) {
+            PageView.this.drawContent(pos);
+        }
+
     };
 
     public PageView(Context context) {

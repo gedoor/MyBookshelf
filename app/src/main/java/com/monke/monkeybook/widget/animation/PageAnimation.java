@@ -173,7 +173,9 @@ public abstract class PageAnimation {
 
         void autoPrevPage();
 
-        void drawView(Direction direction);
+        void drawBackground(int pos);
+
+        void drawContent(int pos);
     }
 
 }
