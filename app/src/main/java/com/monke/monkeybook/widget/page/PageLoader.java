@@ -61,8 +61,6 @@ public abstract class PageLoader {
     private Context mContext;
     // 页面显示类
     PageView mPageView;
-    // 当前显示的页
-//    private TxtPage mCurPage;
     // 上一章的页面列表缓存
     private TxtChapter mPreChapter;
     // 当前章节的页面列表
