@@ -15,6 +15,8 @@ import com.monke.monkeybook.help.ReadBookControl;
  */
 
 public abstract class PageAnimation {
+    //动画速度
+    static final int animationSpeed = 300;
     //正在使用的View
     protected View mView;
     protected ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -131,7 +133,19 @@ public abstract class PageAnimation {
      * 滚动动画
      * 必须放在computeScroll()方法中执行
      */
-    public abstract void scrollAnim();
+    public void scrollAnim() {
+        if (mScroller.computeScrollOffset()) {
+            int x = mScroller.getCurrX();
+            int y = mScroller.getCurrY();
+
+            setTouchPoint(x, y);
+
+            if (mScroller.getFinalX() == x && mScroller.getFinalY() == y) {
+                isRunning = false;
+            }
+            mView.postInvalidate();
+        }
+    }
 
     /**
      * 取消动画
@@ -168,10 +182,6 @@ public abstract class PageAnimation {
         boolean hasPrev();
 
         boolean hasNext();
-
-        void autoNextPage();
-
-        void autoPrevPage();
 
         void drawBackground(int pos);
 

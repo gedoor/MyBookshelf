@@ -622,7 +622,6 @@ public abstract class PageLoader {
                 break;
         }
         mPageView.setContentDescription(getContent(getCurPagePos()));
-        mPageView.upPagePos(mCurChapterPos, mCurPagePos);
         mCollBook.setDurChapter(mCurChapterPos);
         mCollBook.setDurChapterPage(mCurPagePos);
         mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos());

@@ -17,7 +17,6 @@ import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
-import com.monke.monkeybook.widget.animation.HorizonPageAnim;
 import com.monke.monkeybook.widget.animation.NonePageAnim;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 import com.monke.monkeybook.widget.animation.ScrollPageAnim;
@@ -44,8 +43,6 @@ public class PageView extends View {
     private int mStartY = 0;
     private boolean isMove = false;
     private boolean actionFromEdge = false;
-    private int mPageIndex;
-    private int mChapterIndex;
     // 初始化参数
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     // 是否允许点击
@@ -74,16 +71,6 @@ public class PageView extends View {
         @Override
         public boolean hasNext() {
             return PageView.this.hasNextPage();
-        }
-
-        @Override
-        public void autoNextPage() {
-            PageView.this.autoNextPage();
-        }
-
-        @Override
-        public void autoPrevPage() {
-            PageView.this.autoPrevPage();
         }
 
         @Override
@@ -170,31 +157,19 @@ public class PageView extends View {
         return mPageAnim.getBgBitmap(pageOnCur);
     }
 
-    public boolean autoPrevPage() {
+    public void autoPrevPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            if (hasPrevPage()) {
-                resetScroll();
-                drawPage(0);
-                return true;
-            }
-            return false;
+            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PRE);
         } else {
             startPageAnim(PageAnimation.Direction.PRE);
-            return true;
         }
     }
 
-    public boolean autoNextPage() {
+    public void autoNextPage() {
         if (mPageAnim instanceof ScrollPageAnim) {
-            if (hasNextPage()) {
-                resetScroll();
-                drawPage(0);
-                return true;
-            }
-            return false;
+            ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.NEXT);
         } else {
             startPageAnim(PageAnimation.Direction.NEXT);
-            return true;
         }
     }
 
@@ -372,11 +347,6 @@ public class PageView extends View {
             activity.showSnackBar(this, "没有下一页");
             return false;
         }
-    }
-
-    public void upPagePos(int chapterPos, int pagePos) {
-        mChapterIndex = chapterPos;
-        mPageIndex = pagePos;
     }
 
     //如果滑动状态没有停止就取消状态，重新设置Anim的触碰点

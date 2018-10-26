@@ -12,8 +12,6 @@ import android.view.ViewConfiguration;
  */
 
 public abstract class HorizonPageAnim extends PageAnimation {
-    //动画速度
-    protected static final int animationSpeed = 300;
     private static final String TAG = "HorizonPageAnim";
     protected Bitmap mPreBitmap;
     protected Bitmap mCurBitmap;
@@ -196,21 +194,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
             } else {
                 canvas.drawBitmap(mCurBitmap, 0, 0, null);
             }
-        }
-    }
-
-    @Override
-    public void scrollAnim() {
-        if (mScroller.computeScrollOffset()) {
-            int x = mScroller.getCurrX();
-            int y = mScroller.getCurrY();
-
-            setTouchPoint(x, y);
-
-            if (mScroller.getFinalX() == x && mScroller.getFinalY() == y) {
-                isRunning = false;
-            }
-            mView.postInvalidate();
         }
     }
 
