@@ -1047,7 +1047,7 @@ public abstract class PageLoader {
         // 获取章节
         ChapterListBean chapter = mCollBook.getChapterList(chapterPos);
         // 判断章节是否存在
-        if (!hasChapterData(chapter) || !mPageView.isPrepare()) {
+        if (!mPageView.isPrepare() || !hasChapterData(chapter)) {
             return txtChapter;
         }
         // 获取章节的文本流
@@ -1063,8 +1063,6 @@ public abstract class PageLoader {
         if (pages != null) {
             txtChapter.setTxtPageList(pages);
             txtChapter.setStatus(STATUS_FINISH);
-        }
-        if (txtChapter.getStatus() == STATUS_FINISH) {
             if (txtChapter.getTxtPageList().isEmpty()) {
                 txtChapter.setStatus(STATUS_EMPTY);
                 // 添加一个空数据
