@@ -1036,25 +1036,12 @@ public abstract class PageLoader {
         return mNextChapter != null && mNextChapter.getStatus() == STATUS_FINISH;
     }
 
-    TxtChapter dealLoadPageList(int chapterPos) {
-        TxtChapter txtChapter = loadPageList(chapterPos);
-        if (txtChapter.getStatus() == STATUS_FINISH) {
-            if (txtChapter.getTxtPageList().isEmpty()) {
-                txtChapter.setStatus(STATUS_EMPTY);
-                // 添加一个空数据
-                TxtPage page = new TxtPage();
-                page.lines = new ArrayList<>(1);
-                txtChapter.getTxtPageList().add(page);
-            }
-        }
-        return txtChapter;
-    }
-
 
     /**
-     * 加载页面列表
+     * @param chapterPos　章节Pos
+     * @return 章节数据
      */
-    private TxtChapter loadPageList(int chapterPos) {
+    TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = new TxtChapter(chapterPos);
         txtChapter.setStatus(STATUS_LOADING);
         // 获取章节
@@ -1076,6 +1063,15 @@ public abstract class PageLoader {
         if (pages != null) {
             txtChapter.setTxtPageList(pages);
             txtChapter.setStatus(STATUS_FINISH);
+        }
+        if (txtChapter.getStatus() == STATUS_FINISH) {
+            if (txtChapter.getTxtPageList().isEmpty()) {
+                txtChapter.setStatus(STATUS_EMPTY);
+                // 添加一个空数据
+                TxtPage page = new TxtPage();
+                page.lines = new ArrayList<>(1);
+                txtChapter.getTxtPageList().add(page);
+            }
         }
         return txtChapter;
     }
