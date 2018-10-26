@@ -225,7 +225,7 @@ public abstract class PageLoader {
         // 设置标题的字体大小
         mTitlePaint.setTextSize(mTitleSize);
 
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -237,7 +237,7 @@ public abstract class PageLoader {
         mTitlePaint.setColor(readBookControl.getTextColor());
         mTextPaint.setColor(readBookControl.getTextColor());
 
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -265,8 +265,6 @@ public abstract class PageLoader {
         mMarginRight = ScreenUtils.dpToPx(readBookControl.getPaddingRight());
 
         prepareDisplay(mDisplayWidth, mDisplayHeight);
-
-        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
     }
 
     /**
