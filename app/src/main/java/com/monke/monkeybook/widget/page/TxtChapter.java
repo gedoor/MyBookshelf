@@ -9,7 +9,7 @@ import java.util.List;
 class TxtChapter {
     private int position;
     private List<TxtPage> txtPageList;
-    private Enum.PageStatus status;
+    private Enum.PageStatus status = Enum.PageStatus.LOADING;
     private String msg;
 
     TxtChapter(int position) {
