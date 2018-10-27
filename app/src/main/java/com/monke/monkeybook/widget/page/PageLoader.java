@@ -114,9 +114,6 @@ public abstract class PageLoader {
     int mCurChapterPos;
     int mCurPagePos;
 
-    private Disposable prevDisposable;
-    private Disposable nextDisposable;
-
     /*****************************init params*******************************/
     PageLoader(PageView pageView, BookShelfBean collBook) {
         mPageView = pageView;
@@ -562,7 +559,7 @@ public abstract class PageLoader {
         pagingEnd(PageAnimation.Direction.NONE);
     }
 
-    public void upPage() {
+    private void upPage() {
         if (mPageMode != Enum.PageMode.SCROLL) {
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
@@ -968,35 +965,7 @@ public abstract class PageLoader {
         if ((mPreChapter != null && mPreChapter.getStatus() == Enum.PageStatus.FINISH) || prevChapterPos < 0) {
             return;
         }
-        prevDisposable.dispose();
-        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(prevChapterPos)))
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<TxtChapter>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        prevDisposable = d;
-                    }
-
-                    @Override
-                    public void onSuccess(TxtChapter txtChapter) {
-                        if (txtChapter.getPosition() == mCurChapterPos - 1) {
-                            mPreChapter = txtChapter;
-                        } else if (txtChapter.getPosition() == mCurChapterPos) {
-                            mCurChapter = txtChapter;
-                        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
-                            mNextChapter = txtChapter;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
-                            mPreChapter = new TxtChapter(prevChapterPos);
-                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
-                            mPreChapter.setMsg(e.getMessage());
-                        }
-                    }
-                });
+        mPreChapter = dealLoadPageList(prevChapterPos);
     }
 
     /**
@@ -1007,34 +976,7 @@ public abstract class PageLoader {
         if ((mNextChapter != null && mNextChapter.getStatus() == Enum.PageStatus.FINISH) || nextChapterPos >= mCollBook.getChapterList().size()) {
             return;
         }
-        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(nextChapterPos)))
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<TxtChapter>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        nextDisposable = d;
-                    }
-
-                    @Override
-                    public void onSuccess(TxtChapter txtChapter) {
-                        if (txtChapter.getPosition() == mCurChapterPos - 1) {
-                            mPreChapter = txtChapter;
-                        } else if (txtChapter.getPosition() == mCurChapterPos) {
-                            mCurChapter = txtChapter;
-                        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
-                            mNextChapter = txtChapter;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH) {
-                            mPreChapter = new TxtChapter(nextChapterPos);
-                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
-                            mPreChapter.setMsg(e.getMessage());
-                        }
-                    }
-                });
+        mNextChapter = dealLoadPageList(nextChapterPos);
     }
 
     /**
@@ -1239,12 +1181,6 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
-        if (prevDisposable != null) {
-            prevDisposable.dispose();
-        }
-        if (nextDisposable != null) {
-            nextDisposable.dispose();
-        }
     }
 
     public boolean isClose() {
