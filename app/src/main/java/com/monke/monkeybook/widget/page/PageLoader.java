@@ -513,14 +513,14 @@ public abstract class PageLoader {
      * 打开当前章节指定页
      */
     void openChapter(int pagePos) {
-        if (mCurChapter == null) {
-            mCurChapter = new TxtChapter(mCurChapterPos);
-            reSetPage();
-        }
-
         mCurPagePos = pagePos;
         if (!mPageView.isPrepare()) {
             return;
+        }
+
+        if (mCurChapter == null) {
+            mCurChapter = new TxtChapter(mCurChapterPos);
+            reSetPage();
         }
 
         // 如果章节目录没有准备好
