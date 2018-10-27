@@ -118,16 +118,16 @@ public class NetPageLoader extends PageLoader {
 
     // 装载上一章节的内容
     @Override
-    boolean parsePrevChapter() {
+    void parsePrevChapter() {
         if (mPageChangeListener != null && mCurChapterPos >= 1 && shouldRequestChapter(mCurChapterPos - 1)) {
             mPageChangeListener.requestChapters(mCurChapterPos - 1);
         }
-        return super.parsePrevChapter();
+        super.parsePrevChapter();
     }
 
     // 装载当前章内容。
     @Override
-    boolean parseCurChapter() {
+    void parseCurChapter() {
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos - 1; i < mCurChapterPos + 5; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
@@ -135,12 +135,12 @@ public class NetPageLoader extends PageLoader {
                 }
             }
         }
-        return super.parseCurChapter();
+        super.parseCurChapter();
     }
 
     // 装载下一章节的内容
     @Override
-    boolean parseNextChapter() {
+    void parseNextChapter() {
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
                 if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
@@ -148,7 +148,7 @@ public class NetPageLoader extends PageLoader {
                 }
             }
         }
-        return super.parseNextChapter();
+        super.parseNextChapter();
     }
 
     @Override

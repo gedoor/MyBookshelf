@@ -939,12 +939,11 @@ public abstract class PageLoader {
     /**
      * 解析上一章数据
      */
-    boolean parsePrevChapter() {
+    void parsePrevChapter() {
         if ((mPreChapter == null || mPreChapter.getStatus() != STATUS_FINISH)
                 && mCurChapterPos > 0) {
             mPreChapter = dealLoadPageList(mCurChapterPos - 1);
         }
-        return mPreChapter != null && mPreChapter.getStatus() == STATUS_FINISH;
     }
 
     /**
@@ -969,24 +968,22 @@ public abstract class PageLoader {
     /**
      * 解析数据
      */
-    boolean parseCurChapter() {
+    void parseCurChapter() {
         if (mCurChapter.getStatus() != STATUS_FINISH) {
             mCurChapter = dealLoadPageList(mCurChapterPos);
         }
         parsePrevChapter();
         parseNextChapter();
-        return mCurChapter.getStatus() == STATUS_FINISH;
     }
 
     /**
      * 解析下一章数据
      */
-    boolean parseNextChapter() {
+    void parseNextChapter() {
         if ((mNextChapter == null || mNextChapter.getStatus() != STATUS_FINISH)
                 && mCurChapterPos < mCollBook.getChapterList().size() - 1) {
             mNextChapter = dealLoadPageList(mCurChapterPos + 1);
         }
-        return mNextChapter != null && mNextChapter.getStatus() == STATUS_FINISH;
     }
 
 
