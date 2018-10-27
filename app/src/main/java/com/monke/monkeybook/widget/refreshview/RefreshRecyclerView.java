@@ -133,7 +133,7 @@ public class RefreshRecyclerView extends FrameLayout {
     public RefreshRecyclerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recycler_view, this, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_refresh_recycler, this, false);
         ButterKnife.bind(this, view);
 
         @SuppressLint("CustomViewStyleable")

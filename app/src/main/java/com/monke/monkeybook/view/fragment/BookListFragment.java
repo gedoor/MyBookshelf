@@ -10,7 +10,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.monke.monkeybook.BitIntentDataManager;
@@ -33,6 +37,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
@@ -42,6 +47,11 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.local_book_rv_content)
     RecyclerView rvBookshelf;
+    @BindView(R.id.tv_empty)
+    TextView tvEmpty;
+    @BindView(R.id.rl_empty_view)
+    RelativeLayout rlEmptyView;
+    Unbinder unbinder;
 
     private boolean viewIsList;
     private String bookPx;
@@ -226,6 +236,12 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         } else {
             bookShelfGridAdapter.replaceAll(bookShelfBeanList, bookPx);
         }
+        if (bookShelfBeanList.size() > 0) {
+            rlEmptyView.setVisibility(View.GONE);
+            tvEmpty.setText("书架空空,去添加书籍吧!");
+        } else {
+            rlEmptyView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -255,6 +271,20 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public SharedPreferences getPreferences() {
         return preferences;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public interface CallBackValue {
