@@ -2,7 +2,6 @@
 package com.monke.monkeybook.view.popupwindow;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -70,6 +69,8 @@ public class MoreSettingPop extends PopupWindow {
     Switch sbTipMarginChange;
     @BindView(R.id.llNavigationBarColor)
     LinearLayout llNavigationBarColor;
+    @BindView(R.id.ll_click_all_next)
+    LinearLayout llClickAllNext;
 
     private ReadBookActivity activity;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -124,6 +125,7 @@ public class MoreSettingPop extends PopupWindow {
         sbClick.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setCanClickTurn(isChecked);
+                upView();
             }
         });
         sbClickAllNext.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -136,27 +138,27 @@ public class MoreSettingPop extends PopupWindow {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTitle(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.recreate();
+                changeProListener.refreshPage();
             }
         });
         sbShowTimeBattery.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowTimeBattery(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.recreate();
+                changeProListener.refreshPage();
             }
         });
         sbShowLine.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setShowLine(isChecked);
                 readBookControl.setLineChange(System.currentTimeMillis());
-                changeProListener.recreate();
+                changeProListener.refreshPage();
             }
         });
         sbTipMarginChange.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
                 readBookControl.setTipMarginChange(b);
-                changeProListener.recreate();
+                changeProListener.refreshPage();
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
@@ -178,7 +180,7 @@ public class MoreSettingPop extends PopupWindow {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
                         dialogInterface.dismiss();
-                        changeProListener.recreate();
+                        changeProListener.refreshPage();
                     })
                     .create();
             dialog.show();
@@ -243,6 +245,11 @@ public class MoreSettingPop extends PopupWindow {
         } else {
             llNavigationBarColor.setVisibility(View.VISIBLE);
         }
+        if (readBookControl.getCanClickTurn()) {
+            llClickAllNext.setVisibility(View.VISIBLE);
+        } else {
+            llClickAllNext.setVisibility(View.GONE);
+        }
     }
 
     private void upScreenTimeOut(int screenTimeOut) {
@@ -270,6 +277,8 @@ public class MoreSettingPop extends PopupWindow {
         void keepScreenOnChange(int keepScreenOn);
 
         void recreate();
+
+        void refreshPage();
     }
 
 }

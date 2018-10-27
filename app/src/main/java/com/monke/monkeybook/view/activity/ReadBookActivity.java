@@ -522,6 +522,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 moreSettingPop.dismiss();
                 ReadBookActivity.this.recreate();
             }
+
+            @Override
+            public void refreshPage() {
+                if (mPageLoader != null) {
+                    mPageLoader.refreshUi();
+                }
+            }
         });
     }
 

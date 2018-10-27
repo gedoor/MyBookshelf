@@ -311,6 +311,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_click_all_next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background_menu"
