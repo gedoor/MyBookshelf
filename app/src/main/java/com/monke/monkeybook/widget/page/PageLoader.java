@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-7-1.
+ * 页面加载器
  */
 
 public abstract class PageLoader {
@@ -290,9 +290,13 @@ public abstract class PageLoader {
      * 换源结束
      */
     public void changeSourceFinish(BookShelfBean bookShelfBean) {
-        mCollBook = bookShelfBean;
-        mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
-        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+        if (bookShelfBean == null) {
+            openChapter(mCollBook.getDurChapterPage());
+        } else {
+            mCollBook = bookShelfBean;
+            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+            skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+        }
     }
 
     /**
@@ -910,25 +914,13 @@ public abstract class PageLoader {
         if (canNotTurnPage()) {
             return false;
         }
-
         if (getPageStatus() == Enum.PageStatus.FINISH) {
             // 先查看是否存在上一页
             if (mCurPagePos > 0) {
                 return true;
             }
         }
-
         return mCurChapterPos > 0;
-    }
-
-    /**
-     * 解析上一章数据
-     */
-    void parsePrevChapter() {
-        if ((mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH)
-                && mCurChapterPos > 0) {
-            mPreChapter = dealLoadPageList(mCurChapterPos - 1);
-        }
     }
 
     /**
@@ -939,14 +931,12 @@ public abstract class PageLoader {
         if (canNotTurnPage()) {
             return false;
         }
-
         if (getPageStatus() == Enum.PageStatus.FINISH) {
             // 先查看是否存在下一页
             if (mCurPagePos + pageOnCur < mCurChapter.getPageSize() - 1) {
                 return true;
             }
         }
-
         return mCurChapterPos + 1 < mCollBook.getChapterListSize();
     }
 
@@ -962,12 +952,24 @@ public abstract class PageLoader {
     }
 
     /**
+     * 解析上一章数据
+     */
+    void parsePrevChapter() {
+        final int prevChapterPos = mCurChapterPos - 1;
+        if ((mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH)
+                && prevChapterPos >= 0) {
+            mPreChapter = dealLoadPageList(prevChapterPos);
+        }
+    }
+
+    /**
      * 解析下一章数据
      */
     void parseNextChapter() {
+        final int nextChapterPos = mCurChapterPos + 1;
         if ((mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH)
-                && mCurChapterPos < mCollBook.getChapterList().size() - 1) {
-            mNextChapter = dealLoadPageList(mCurChapterPos + 1);
+                && nextChapterPos < mCollBook.getChapterList().size()) {
+            mNextChapter = dealLoadPageList(nextChapterPos);
         }
     }
 
@@ -1189,13 +1191,6 @@ public abstract class PageLoader {
          * @param pos:切换章节的序号
          */
         void onChapterChange(int pos);
-
-        /**
-         * 作用：请求加载章节内容
-         *
-         * @param chapterIndex:需要下载的章节
-         */
-        void requestChapters(int chapterIndex);
 
         /**
          * 作用：章节目录加载完成时候回调

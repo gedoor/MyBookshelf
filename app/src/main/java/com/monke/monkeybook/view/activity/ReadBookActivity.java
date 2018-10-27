@@ -573,12 +573,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     }
 
                     @Override
-                    public void requestChapters(int chapterIndex) {
-                        if (isNetWorkAvailable())
-                            mPresenter.loadContent(chapterIndex);
-                    }
-
-                    @Override
                     public void onCategoryFinish(List<ChapterListBean> chapters) {
                         mPresenter.getBookShelf().getBookInfoBean().setChapterList(chapters);
                         mPresenter.getBookShelf().setChapterListSize(chapters.size());
@@ -1185,18 +1179,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void finishContent(int index) {
-        if (mPageLoader != null) {
-            ((NetPageLoader) mPageLoader).finishContent(index);
-        }
-    }
-
-    @Override
-    public void error(String msg) {
-
-    }
-
-    @Override
     public void openBookFromOther() {
         if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
             mPresenter.openBookFromOther(this);
@@ -1321,9 +1303,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void changeSourceFinish() {
+    public void changeSourceFinish(BookShelfBean book) {
         if (mPageLoader != null) {
-            mPageLoader.changeSourceFinish(mPresenter.getBookShelf());
+            mPageLoader.changeSourceFinish(book);
         }
     }
 

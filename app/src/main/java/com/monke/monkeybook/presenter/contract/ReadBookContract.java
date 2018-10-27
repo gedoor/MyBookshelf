@@ -22,11 +22,7 @@ public interface ReadBookContract {
 
         void setAdd(Boolean isAdd);
 
-        void finishContent(int index);
-
-        void changeSourceFinish();
-
-        void error(String msg);
+        void changeSourceFinish(BookShelfBean book);
 
         /**
          * 开始加载
@@ -66,8 +62,6 @@ public interface ReadBookContract {
         int getOpen_from();
 
         BookShelfBean getBookShelf();
-
-        void loadContent(final int chapterIndex);
 
         void saveProgress();
 

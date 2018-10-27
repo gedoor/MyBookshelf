@@ -29,11 +29,8 @@ import io.reactivex.disposables.Disposable;
 import static com.monke.monkeybook.help.FileHelp.BLANK;
 
 /**
- * Created by newbiechen on 17-7-1.
- * 问题:
- * 1. 异常处理没有做好
+ * 加载本地书籍
  */
-
 public class LocalPageLoader extends PageLoader {
     private static final String TAG = "LocalPageLoader";
     //默认从文件中获取数据的长度
@@ -69,8 +66,6 @@ public class LocalPageLoader extends PageLoader {
      * 未完成的部分:
      * 1. 序章的添加
      * 2. 章节存在的书本的虚拟分章效果
-     *
-     * @throws IOException
      */
     private List<ChapterListBean> loadChapters() throws IOException {
         List<ChapterListBean> mChapterList = new ArrayList<>();
@@ -331,9 +326,8 @@ public class LocalPageLoader extends PageLoader {
 
         } else {
             // 通过RxJava异步处理分章事件
-            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
-                e.onSuccess(loadChapters());
-            }).compose(RxUtils::toSimpleSingle)
+            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
+                    .compose(RxUtils::toSimpleSingle)
                     .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new SingleObserver<List<ChapterListBean>>() {
                         @Override
@@ -375,8 +369,7 @@ public class LocalPageLoader extends PageLoader {
         //从文件中获取数据
         byte[] content = getChapterContent(chapter);
         ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        BufferedReader br = new BufferedReader(new InputStreamReader(bais, mCharset));
-        return br;
+        return new BufferedReader(new InputStreamReader(bais, mCharset));
     }
 
     @Override
