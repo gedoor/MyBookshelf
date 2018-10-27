@@ -22,6 +22,7 @@ import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.IOUtils;
+import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
@@ -29,6 +30,11 @@ import com.monke.monkeybook.widget.animation.PageAnimation;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 页面加载器
@@ -107,6 +113,9 @@ public abstract class PageLoader {
     // 当前章
     int mCurChapterPos;
     int mCurPagePos;
+
+    private Disposable prevDisposable;
+    private Disposable nextDisposable;
 
     /*****************************init params*******************************/
     PageLoader(PageView pageView, BookShelfBean collBook) {
@@ -593,7 +602,7 @@ public abstract class PageLoader {
             case PRE:
                 if (mCurPagePos > 0) {
                     mCurPagePos = mCurPagePos - 1;
-                } else if (mCurChapterPos > 0){
+                } else if (mCurChapterPos > 0) {
                     mCurChapterPos = mCurChapterPos - 1;
                     mCurPagePos = mPreChapter.getPageSize() - 1;
                     mNextChapter = mCurChapter;
@@ -956,10 +965,38 @@ public abstract class PageLoader {
      */
     void parsePrevChapter() {
         final int prevChapterPos = mCurChapterPos - 1;
-        if ((mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH)
-                && prevChapterPos >= 0) {
-            mPreChapter = dealLoadPageList(prevChapterPos);
+        if ((mPreChapter != null && mPreChapter.getStatus() == Enum.PageStatus.FINISH) || prevChapterPos < 0) {
+            return;
         }
+        prevDisposable.dispose();
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(prevChapterPos)))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<TxtChapter>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        prevDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(TxtChapter txtChapter) {
+                        if (txtChapter.getPosition() == mCurChapterPos - 1) {
+                            mPreChapter = txtChapter;
+                        } else if (txtChapter.getPosition() == mCurChapterPos) {
+                            mCurChapter = txtChapter;
+                        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
+                            mNextChapter = txtChapter;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
+                            mPreChapter = new TxtChapter(prevChapterPos);
+                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setMsg(e.getMessage());
+                        }
+                    }
+                });
     }
 
     /**
@@ -967,15 +1004,41 @@ public abstract class PageLoader {
      */
     void parseNextChapter() {
         final int nextChapterPos = mCurChapterPos + 1;
-        if ((mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH)
-                && nextChapterPos < mCollBook.getChapterList().size()) {
-            mNextChapter = dealLoadPageList(nextChapterPos);
+        if ((mNextChapter != null && mNextChapter.getStatus() == Enum.PageStatus.FINISH) || nextChapterPos >= mCollBook.getChapterList().size()) {
+            return;
         }
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(nextChapterPos)))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<TxtChapter>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        nextDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(TxtChapter txtChapter) {
+                        if (txtChapter.getPosition() == mCurChapterPos - 1) {
+                            mPreChapter = txtChapter;
+                        } else if (txtChapter.getPosition() == mCurChapterPos) {
+                            mCurChapter = txtChapter;
+                        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
+                            mNextChapter = txtChapter;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH) {
+                            mPreChapter = new TxtChapter(nextChapterPos);
+                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setMsg(e.getMessage());
+                        }
+                    }
+                });
     }
 
-
     /**
-     * @param chapterPos　章节Pos
+     * @param chapterPos 　章节Pos
      * @return 章节数据
      */
     TxtChapter dealLoadPageList(int chapterPos) {
@@ -1176,6 +1239,12 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
+        if (prevDisposable != null) {
+            prevDisposable.dispose();
+        }
+        if (nextDisposable != null) {
+            nextDisposable.dispose();
+        }
     }
 
     public boolean isClose() {
@@ -1187,21 +1256,18 @@ public abstract class PageLoader {
     public interface OnPageChangeListener {
         /**
          * 作用：章节切换的时候进行回调
-         *
          * @param pos:切换章节的序号
          */
         void onChapterChange(int pos);
 
         /**
          * 作用：章节目录加载完成时候回调
-         *
          * @param chapters：返回章节目录
          */
         void onCategoryFinish(List<ChapterListBean> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。
-         *
          * @param count:页面的数量
          */
         void onPageCountChange(int count);
