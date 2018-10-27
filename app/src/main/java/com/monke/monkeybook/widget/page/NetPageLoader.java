@@ -78,10 +78,10 @@ public class NetPageLoader extends PageLoader {
     }
 
     /**
-     * @param chapterIndex
+     * 章节下载完成
      */
     public void finishContent(int chapterIndex) {
-        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != STATUS_FINISH) {
+        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
             openChapter(mCurPagePos);
         }
         if (chapterIndex == mCurChapterPos - 1) {
@@ -153,9 +153,10 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     TxtChapter dealLoadPageList(int chapterPos) {
-        if (!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && getPageStatus() == STATUS_LOADING) {
-            chapterError("网络连接不可用");
+        TxtChapter txtChapter = super.dealLoadPageList(chapterPos);
+        if (!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
+            txtChapter.setMsg("网络连接不可用");
         }
-        return super.dealLoadPageList(chapterPos);
+        return txtChapter;
     }
 }

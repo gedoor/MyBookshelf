@@ -9,45 +9,49 @@ import java.util.List;
 class TxtChapter {
     private int position;
     private List<TxtPage> txtPageList;
-    private int status;
+    private Enum.PageStatus status;
+    private String msg;
 
     TxtChapter(int position) {
         this.position = position;
-    }
-
-    TxtChapter(int position, List<TxtPage> txtPageList) {
-        this.position = position;
-        this.txtPageList = txtPageList;
     }
 
     public int getPosition() {
         return position;
     }
 
-    public void setTxtPageList(List<TxtPage> txtPageList) {
+    void setTxtPageList(List<TxtPage> txtPageList) {
         this.txtPageList = txtPageList;
     }
 
-    public List<TxtPage> getTxtPageList() {
+    List<TxtPage> getTxtPageList() {
         return txtPageList;
     }
 
-    public int getPageSize() {
+    int getPageSize() {
         return txtPageList != null ? txtPageList.size() : 0;
     }
 
-    public TxtPage getPage(int page) {
+    TxtPage getPage(int page) {
         if (txtPageList != null) {
             return txtPageList.get(Math.max(0, Math.min(page, txtPageList.size() - 1)));
         }
         return null;
     }
 
-    public int getStatus() {
+    Enum.PageStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int mStatus) {
+    void setStatus(Enum.PageStatus mStatus) {
         this.status = mStatus;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

@@ -111,7 +111,7 @@ public class PageView extends View {
     }
 
     //设置翻页的模式
-    void setPageMode(PageMode pageMode, int marginTop, int marginBottom) {
+    void setPageMode(Enum.PageMode pageMode, int marginTop, int marginBottom) {
         //视图未初始化的时候，禁止调用
         if (mViewWidth == 0 || mViewHeight == 0 || mPageLoader == null) return;
         if (!readBookControl.getHideStatusBar()) {
