@@ -22,7 +22,6 @@ import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.IOUtils;
-import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
@@ -30,11 +29,6 @@ import com.monke.monkeybook.widget.animation.PageAnimation;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.disposables.Disposable;
 
 /**
  * 页面加载器
@@ -463,12 +457,7 @@ public abstract class PageLoader {
      */
     public void setStatus(Enum.PageStatus status) {
         mCurChapter.setStatus(status);
-        if (mPageMode != Enum.PageMode.SCROLL) {
-            upPage();
-        } else {
-            mPageView.resetScroll();
-            mPageView.drawPage(0);
-        }
+        reSetPage();
         mPageView.invalidate();
     }
 
@@ -526,6 +515,7 @@ public abstract class PageLoader {
     void openChapter(int pagePos) {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
+            reSetPage();
         }
 
         mCurPagePos = pagePos;
@@ -536,27 +526,31 @@ public abstract class PageLoader {
         // 如果章节目录没有准备好
         if (!isChapterListPrepare) {
             mCurChapter.setStatus(Enum.PageStatus.LOADING);
-            mPageView.drawPage(0);
+            reSetPage();
             return;
         }
 
         // 如果获取到的章节目录为空
         if (mCollBook.getChapterList().isEmpty()) {
             mCurChapter.setStatus(Enum.PageStatus.CATEGORY_EMPTY);
-            mPageView.drawPage(0);
+            reSetPage();
             return;
         }
 
         parseCurChapter();
+        reSetPage();
+        mPageView.invalidate();
+        chapterChangeCallback();
+        pagingEnd(PageAnimation.Direction.NONE);
+    }
+
+    private void reSetPage() {
         if (mPageMode == Enum.PageMode.SCROLL) {
             mPageView.resetScroll();
             mPageView.drawPage(0);
         } else {
             upPage();
         }
-        mPageView.invalidate();
-        chapterChangeCallback();
-        pagingEnd(PageAnimation.Direction.NONE);
     }
 
     private void upPage() {

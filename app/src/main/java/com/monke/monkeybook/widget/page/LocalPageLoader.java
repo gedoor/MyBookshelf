@@ -322,7 +322,7 @@ public class LocalPageLoader extends PageLoader {
             }
 
             // 加载并显示当前章节
-            openChapter(mCollBook.getDurChapterPage());
+            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
 
         } else {
             // 通过RxJava异步处理分章事件
