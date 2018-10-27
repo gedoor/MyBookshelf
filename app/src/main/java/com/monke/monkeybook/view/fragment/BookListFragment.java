@@ -51,8 +51,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     TextView tvEmpty;
     @BindView(R.id.rl_empty_view)
     RelativeLayout rlEmptyView;
-    Unbinder unbinder;
 
+    private Unbinder unbinder;
     private boolean viewIsList;
     private String bookPx;
     private boolean resumed = false;
@@ -75,6 +75,13 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public int createLayoutId() {
         return R.layout.fragment_book_list;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
     }
 
     @Override
@@ -216,7 +223,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         super.onPause();
     }
 
-
     private void stopBookShelfRefreshAnim() {
         List<BookShelfBean> bookShelfBeans = getBookshelfList();
         if (bookShelfBeans != null && bookShelfBeans.size() > 0) {
@@ -238,8 +244,8 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         }
         if (bookShelfBeanList.size() > 0) {
             rlEmptyView.setVisibility(View.GONE);
-            tvEmpty.setText("书架空空,去添加书籍吧!");
         } else {
+            tvEmpty.setText("书架空空，去搜索添加书籍吧！");
             rlEmptyView.setVisibility(View.VISIBLE);
         }
     }
@@ -271,14 +277,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     @Override
     public SharedPreferences getPreferences() {
         return preferences;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
     }
 
     @Override

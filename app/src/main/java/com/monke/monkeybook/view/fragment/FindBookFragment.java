@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseFragment;
@@ -34,9 +36,12 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     RecyclerView expandableList;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.tv_empty)
+    TextView tvEmpty;
+    @BindView(R.id.rl_empty_view)
+    RelativeLayout rlEmptyView;
 
-    Unbinder unbinder;
-
+    private Unbinder unbinder;
     private FindKindAdapter adapter;
     private int lastExpandedPosition = 0;
 
@@ -75,8 +80,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             if (autoExpandGroup()) {
                 adapter.expandGroup(lastExpandedPosition);
             }
+            rlEmptyView.setVisibility(View.GONE);
         } else {
             adapter.clearAll();
+            tvEmpty.setText("没有发现，可以在书源里添加。");
+            rlEmptyView.setVisibility(View.VISIBLE);
         }
     }
 
