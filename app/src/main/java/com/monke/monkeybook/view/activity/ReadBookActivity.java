@@ -433,7 +433,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initReadInterfacePop();
         initReadAdjustPop();
         initMoreSettingPop();
-        flContent.setBackground(readBookControl.getTextBackground());
+        pageView.setBackground(readBookControl.getTextBackground());
     }
 
     /**
