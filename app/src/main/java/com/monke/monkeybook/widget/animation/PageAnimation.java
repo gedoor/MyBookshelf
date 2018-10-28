@@ -122,7 +122,7 @@ public abstract class PageAnimation {
     /**
      * 点击事件的处理
      */
-    public abstract boolean onTouchEvent(MotionEvent event);
+    public abstract void onTouchEvent(MotionEvent event);
 
     /**
      * 绘制图形

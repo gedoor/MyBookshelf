@@ -30,7 +30,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     //是否没下一页或者上一页
     private boolean noNext = false;
 
-    public HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
+    HorizonPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
         //创建图片
         mPreBitmap = Bitmap.createBitmap(mViewWidth, mViewHeight, Bitmap.Config.RGB_565);
@@ -58,7 +58,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
     public abstract void drawMove(Canvas canvas);
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void onTouchEvent(MotionEvent event) {
         changePage = false;
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         //获取点击位置
@@ -105,7 +105,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                             //如果上一页不存在
                             if (!hasPrev) {
                                 noNext = true;
-                                return true;
+                                return;
                             }
                         } else {
                             //进行下一页的配置
@@ -118,7 +118,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                             //如果不存在表示没有下一页了
                             if (!hasNext) {
                                 noNext = true;
-                                return true;
+                                return;
                             }
                         }
                     } else {
@@ -142,13 +142,13 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         //设置动画方向
                         setDirection(Direction.NEXT);
                         if (!hasNext) {
-                            return true;
+                            return;
                         }
                     } else {
                         boolean hasPrev = mListener.hasPrev();
                         setDirection(Direction.PRE);
                         if (!hasPrev) {
-                            return true;
+                            return;
                         }
                     }
                 } else {
@@ -170,7 +170,6 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 }
                 break;
         }
-        return true;
     }
 
     @Override
