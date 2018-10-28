@@ -4,6 +4,7 @@ package com.monke.monkeybook.view.activity;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.monke.basemvplib.impl.IPresenter;
@@ -28,18 +29,13 @@ public class WelcomeActivity extends MBaseActivity {
     @Override
     protected void onCreateActivity() {
         // 避免从桌面启动程序后，会重新实例化入口类的activity
-        if((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
             return;
         }
         setContentView(R.layout.activity_welcome);
 
-        new Thread(() -> {
-            try {
-                DbHelper.getInstance().getmDaoSession();
-            } catch (Exception e) {
-            }
-        }).start();
+        AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession());
 
         ButterKnife.bind(this);
 

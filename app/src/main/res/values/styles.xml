@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="CAppTheme" parent="Base.AppTheme">
         <!-- Customize your theme here. -->
-
     </style>
 
     <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
@@ -58,7 +57,7 @@
     <style name="anim_pop_chapterlist">
         <item name="android:windowEnterAnimation">@anim/anim_pop_chapterlist_in</item>
         <item name="android:windowExitAnimation">@anim/anim_pop_chapterlist_out</item>
-    </style>'
+    </style>
 
     <style name="anim_pop_moresetting">
         <item name="android:windowEnterAnimation">@anim/anim_pop_moresetting_in</item>
@@ -69,6 +68,7 @@
         <item name="android:windowEnterAnimation">@anim/anim_pop_windowlight_in</item>
         <item name="android:windowExitAnimation">@anim/anim_pop_windowlight_out</item>
     </style>
+
     <style name="anim_pop_windowmenumore">
         <item name="android:windowEnterAnimation">@anim/anim_pop_windowmenumore_in</item>
         <item name="android:windowExitAnimation">@anim/anim_pop_windowmenumore_out</item>

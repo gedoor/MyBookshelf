@@ -78,8 +78,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     RadioGroup rgBookGroup;
     @BindView(R.id.tv_chapter_size)
     TextView tvChapterSize;
-    @BindView(R.id.rb_zdy)
-    RadioButton rbZdy;
 
     private Animation animHideLoading;
     private Animation animShowInfo;
@@ -247,11 +245,13 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @SuppressLint("DefaultLocale")
     private void upChapterSizeTv() {
-        if (bookShelfBean.getChapterListSize() > 0) {
-            tvChapterSize.setText(String.format("(%d)", bookShelfBean.getChapterListSize()));
-        } else {
-            tvChapterSize.setText("");
+        String chapterSize = "";
+        if (mPresenter.getOpenFrom() == FROM_BOOKSHELF && bookShelfBean.getChapterListSize() > 0) {
+            int newChapterNum = bookShelfBean.getChapterListSize() - 1 - bookShelfBean.getDurChapter();
+            if (newChapterNum > 0)
+                chapterSize = String.format("(+%d)", newChapterNum);
         }
+        tvChapterSize.setText(chapterSize);
     }
 
     private void initView() {

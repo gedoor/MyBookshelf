@@ -221,7 +221,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mSearchAutoComplete.setPadding(15, 0, 0, 0);
         searchView.onActionViewExpanded();
-	LinearLayout editFrame = searchView.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
+        LinearLayout editFrame = searchView.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
         ImageView closeButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
         ImageView goButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame.getLayoutParams();
@@ -341,12 +341,16 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         code = code.toLowerCase().replaceAll("^set:", "").trim();
         String[] param = code.split("\\s+");
         String msg = null;
+        boolean enable = param.length == 1 || !param[1].equals("false");
         switch (param[0]) {
             case "show_nav_shelves":
-                boolean enable = param.length == 1 || !param[1].equals("false");
                 SharedPreferencesUtil.saveData("showNavShelves", enable);
                 msg = "已" + (enable ? "启" : "禁") + "用侧边栏书架！";
                 RxBus.get().post(RxBusTag.UPDATE_PX, true);
+                break;
+            case "use_regex_in_new_rule":
+                SharedPreferencesUtil.saveData("useRegexInNewRule", enable);
+                msg = "已" + (enable ? "启" : "禁") + "用新建替换规则时默认使用正则表达式！";
                 break;
         }
         if (msg != null)

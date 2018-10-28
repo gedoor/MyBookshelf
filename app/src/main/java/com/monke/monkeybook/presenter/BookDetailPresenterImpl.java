@@ -239,7 +239,7 @@ public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContrac
                         bookShelf = value;
                         mView.updateView();
                         String tag = bookShelf.getTag();
-                        if (tag != My716.TAG) {
+                        if (!tag.equals(My716.TAG)) {
                             try {
                                 long currentTime = System.currentTimeMillis();
                                 String bookName = bookShelf.getBookInfoBean().getName();
