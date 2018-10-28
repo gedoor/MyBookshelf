@@ -52,15 +52,18 @@ public class SharedPreferencesUtil {
         editor.apply();
     }
 
+    public static boolean getBoolean(String key, boolean defValue) {
+        return  sharedPreferences.getBoolean(key, defValue);
+    }
+
     /**
      * 从文件中读取数据
      *
-     * @param context
      * @param key
      * @param defValue
      * @return
      */
-    public static Object getData(Context context, String key, Object defValue) {
+    public static Object getData(String key, Object defValue) {
 
         String type = defValue.getClass().getSimpleName();
         //defValue为为默认值，如果当前获取不到数据就返回它

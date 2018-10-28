@@ -38,7 +38,7 @@ public class ChapterContentHelp {
                 for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
                     if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                         try {
-                            line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                            line = line.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement());
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
@@ -55,7 +55,7 @@ public class ChapterContentHelp {
             content = contentBuilder.toString();
             for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
                 if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
-                    if (!TextUtils.isEmpty(replaceRule.getRegex()) && replaceRule.getRegex().contains("\\n")) {
+                    if (replaceRule.getIsRegex() && !TextUtils.isEmpty(replaceRule.getRegex()) && replaceRule.getRegex().contains("\\n")) {
                         try {
                             content = content.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
                         } catch (Exception e1) {

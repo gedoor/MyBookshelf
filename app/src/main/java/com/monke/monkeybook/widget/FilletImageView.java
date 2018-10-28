@@ -21,9 +21,6 @@ public class FilletImageView extends android.support.v7.widget.AppCompatImageVie
 
     public FilletImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        if (Build.VERSION.SDK_INT < 18) {
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
     }
 
     @Override
