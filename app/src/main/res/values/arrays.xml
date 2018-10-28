@@ -62,20 +62,6 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="check_update_interval">
-        <item>1天</item>
-        <item>7天</item>
-        <item>15天</item>
-        <item>从不</item>
-    </string-array>
-
-    <string-array name="check_update_interval_value">
-        <item>1</item>
-        <item>7</item>
-        <item>15</item>
-        <item>-1</item>
-    </string-array>
-
     <string-array name="read_type_title">
         <item>@string/horizontal_page_turning</item>
         <item>@string/vertical_scroll</item>

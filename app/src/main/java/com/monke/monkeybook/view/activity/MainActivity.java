@@ -20,7 +20,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,16 +34,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
-import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.BaseTabActivity;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
@@ -480,9 +476,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (!isRecreate) {
             versionUpRun();
             requestPermission();
-            if (!BuildConfig.DEBUG && TextUtils.isEmpty(ACache.get(this).getAsString("checkUpdate"))) {
-                UpdateManager.getInstance(this).checkUpdate(false);
-            }
         }
     }
 
