@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -43,12 +42,6 @@ public class UpdateManager {
     }
 
     public void checkUpdate(boolean showMsg) {
-        int saveDate = Integer.parseInt(MApplication.getInstance().getConfigPreferences().getString(activity.getString(R.string.pk_check_update), "1"));
-        if (saveDate < 0) {
-            ACache.get(activity).put("checkUpdate", "checkUpdate");
-        } else {
-            ACache.get(activity).put("checkUpdate", "checkUpdate", saveDate * ACache.TIME_DAY);
-        }
         BaseModelImpl.getRetrofitString("https://api.github.com")
                 .create(IHttpGetApi.class)
                 .getWebContent(MApplication.getInstance().getString(R.string.latest_release_api), AnalyzeHeaders.getMap(null))

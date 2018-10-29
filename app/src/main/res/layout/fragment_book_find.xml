@@ -3,7 +3,6 @@
     android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="6dp"
     android:background="@color/background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
@@ -14,6 +13,7 @@
         android:layout_height="match_parent">
 
         <FrameLayout
+            android:padding="6dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

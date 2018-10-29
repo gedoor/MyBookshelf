@@ -268,7 +268,7 @@ public class ScrollPageAnim extends PageAnimation {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void onTouchEvent(MotionEvent event) {
         final int slop = ViewConfiguration.get(mView.getContext()).getScaledTouchSlop();
         int x = (int) event.getX();
         int y = (int) event.getY();
@@ -328,7 +328,6 @@ public class ScrollPageAnim extends PageAnimation {
                 }
                 break;
         }
-        return true;
     }
 
     @Override

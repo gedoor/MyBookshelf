@@ -64,7 +64,7 @@ public class SlidePageAnim extends HorizonPageAnim {
     @Override
     public void startAnim() {
         super.startAnim();
-        int dx = 0;
+        int dx;
         switch (mDirection) {
             case NEXT:
                 if (isCancel) {

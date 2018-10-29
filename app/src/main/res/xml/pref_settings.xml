@@ -62,11 +62,4 @@
         android:key="@string/pk_download_path"
         android:title="@string/download_path" />
 
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@array/check_update_interval"
-        android:entryValues="@array/check_update_interval_value"
-        android:key="@string/pk_check_update"
-        android:title="@string/check_update_interval" />
-
 </PreferenceScreen>

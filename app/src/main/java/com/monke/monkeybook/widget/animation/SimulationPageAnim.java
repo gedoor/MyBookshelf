@@ -16,7 +16,6 @@ import android.view.View;
 /**
  * 仿真翻页
  */
-
 public class SimulationPageAnim extends HorizonPageAnim {
     private static final String TAG = "SimulationPageAnim";
 
@@ -230,15 +229,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
      * 是否能够拖动过去
      */
     public boolean canDragOver() {
-        if (mTouchToCornerDis > mScreenWidth / 10)
-            return true;
-        return false;
+        return mTouchToCornerDis > mScreenWidth / 10;
     }
 
     public boolean right() {
-        if (mCornerX > -4)
-            return false;
-        return true;
+        return mCornerX <= -4;
     }
 
     /**
@@ -277,9 +272,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
             } else {
                 canvas.clipPath(mPath1, Region.Op.INTERSECT);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) { }
 
         mPaint.setColorFilter(mColorMatrixFilter);
 
@@ -308,10 +301,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
     /**
      * 绘制翻起页的阴影
-     *
-     * @param canvas
      */
-    public void drawCurrentPageShadow(Canvas canvas) {
+    private void drawCurrentPageShadow(Canvas canvas) {
         double degree;
         if (mIsRTandLB) {
             degree = Math.PI
@@ -350,8 +341,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
 
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         }
 
         int leftx;
@@ -391,9 +382,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
 
             canvas.clipPath(mPath1);
-        } catch (Exception e) {
-
-        }
+        } catch (Exception ignored) { }
 
         if (mIsRTandLB) {
             leftx = (int) (mBezierControl2.y);
@@ -460,8 +449,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 canvas.clipPath(mPath1, Region.Op.INTERSECT);
             }
             //canvas.clipPath(mPath1, Region.Op.INTERSECT);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) { }
 
 
         canvas.drawBitmap(bitmap, 0, 0, null);
@@ -501,11 +489,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
     /**
      * 计算拖拽点对应的拖拽脚
-     *
-     * @param x
-     * @param y
      */
-    public void calcCornerXY(float x, float y) {
+    private void calcCornerXY(float x, float y) {
         if (x <= mScreenWidth / 2) {
             mCornerX = 0;
         } else {
@@ -517,12 +502,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
             mCornerY = mScreenHeight;
         }
 
-        if ((mCornerX == 0 && mCornerY == mScreenHeight)
-                || (mCornerX == mScreenWidth && mCornerY == 0)) {
-            mIsRTandLB = true;
-        } else {
-            mIsRTandLB = false;
-        }
+        mIsRTandLB = (mCornerX == 0 && mCornerY == mScreenHeight)
+                || (mCornerX == mScreenWidth && mCornerY == 0);
 
     }
 
@@ -604,14 +585,8 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
     /**
      * 求解直线P1P2和直线P3P4的交点坐标
-     *
-     * @param P1
-     * @param P2
-     * @param P3
-     * @param P4
-     * @return
      */
-    public PointF getCross(PointF P1, PointF P2, PointF P3, PointF P4) {
+    private PointF getCross(PointF P1, PointF P2, PointF P3, PointF P4) {
         PointF CrossP = new PointF();
         // 二元函数通式： y=ax+b
         float a1 = (P2.y - P1.y) / (P2.x - P1.x);

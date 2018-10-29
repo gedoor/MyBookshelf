@@ -1,14 +1,12 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -24,7 +22,6 @@ import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.BookmarkBean;
@@ -36,7 +33,6 @@ import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManage;
 import com.monke.monkeybook.model.ImportBookModelImpl;
@@ -47,17 +43,12 @@ import com.monke.monkeybook.service.DownloadService;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
@@ -295,7 +286,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         bookShelf = value;
                         mView.changeSourceFinish(bookShelf);
                         String tag = bookShelf.getTag();
-                        if (tag != My716.TAG) {
+                        if (!Objects.equals(tag, My716.TAG)) {
                             try {
                                 long currentTime = System.currentTimeMillis();
                                 String bookName = bookShelf.getBookInfoBean().getName();
