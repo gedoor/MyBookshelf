@@ -299,7 +299,6 @@ public class ReadAloudService extends Service {
             textToSpeech.stop();
         }
         RxBus.get().post(RxBusTag.ALOUD_STATE, PAUSE);
-        RxBus.get().post(RxBusTag.ALOUD_STATE, PAUSE);
     }
 
     private void startAudioFade(float from, float to) {
@@ -426,14 +425,22 @@ public class ReadAloudService extends Service {
         super.onDestroy();
         running = false;
         clearTTS();
-        if (fadeTts) {
-            RxBus.get().post(RxBusTag.RESET_VOLUME, TTS_STREAM);
-        }
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
     }
 
-    private void clearTTS() {
+    public void clearTTS() {
+        if (fadeTts && textToSpeech != null) {
+            MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
+            startAudioFade(MApplication.VOLUME, 1);
+            new Handler().postDelayed(() -> clearTTSN(), 400);
+            RxBus.get().post(RxBusTag.RESET_VOLUME, TTS_STREAM);
+        } else {
+            playTTSN();
+        }
+    }
+
+    private void clearTTSN() {
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
