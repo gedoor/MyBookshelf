@@ -367,7 +367,6 @@ public class BitmapUtil {
         int h = srcBitmap.getHeight();
 
         int[] pix = new int[w * h];
-        Bitmap destBitmap = srcBitmap.copy(Config.RGB_565, true);
         srcBitmap.getPixels(pix, 0, w, 0, 0, w, h);
 
         int wm = w - 1;
@@ -553,9 +552,7 @@ public class BitmapUtil {
                 yi += w;
             }
         }
-
-        destBitmap.setPixels(pix, 0, w, 0, 0, w, h);
-        return destBitmap;
+        return Bitmap.createBitmap(pix, w, h, Config.RGB_565);
     }
 
 }

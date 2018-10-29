@@ -429,38 +429,39 @@ public class SimulationPageAnim extends HorizonPageAnim {
     public void changePageEnd() {
         super.changePageEnd();
 
+        if (!blurBackImage)
+            return;
+
         switch (mDirection) {
             case NEXT:
-                if (blurBackImage) {
-                    if (blurCurBitmap != null)
-                        blurPreBitmap = blurCurBitmap;
-                    else
-                        AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
-                    blurCurBitmap = stackBlur(mCurBitmap);
+                if (blurCurBitmap != null) {
+                    blurPreBitmap = blurCurBitmap;
+                } else {
+                    AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
                 }
+                blurCurBitmap = stackBlur(mCurBitmap);
                 break;
             case PRE:
-                if (blurBackImage) {
-                    if (blurPreBitmap != null)
-                        blurCurBitmap = blurPreBitmap;
-                    else
-                        blurCurBitmap = stackBlur(mCurBitmap);
+                if (blurPreBitmap != null) {
+                    blurCurBitmap = blurPreBitmap;
+                } else {
+                    blurCurBitmap = stackBlur(mCurBitmap);
                 }
-                break;
-            default:
-                blurCurBitmap = stackBlur(mCurBitmap);
-                AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
                 break;
         }
     }
 
     @Override
     public void onPageDrawn(int pageOnCur) {
-        if (pageOnCur < 0 && blurBackImage) {
-            blurPreBitmap = stackBlur(mPreBitmap);
-        } else if (pageOnCur == 0 && blurBackImage) {
-            blurCurBitmap = stackBlur(mCurBitmap);
-        }
+        if (!blurBackImage)
+            return;
+        AsyncTask.execute(() -> {
+            if (pageOnCur < 0) {
+                blurPreBitmap = stackBlur(mPreBitmap);
+            } else if (pageOnCur == 0) {
+                blurCurBitmap = stackBlur(mCurBitmap);
+            }
+        });
     }
 
     private void drawNextPageAreaAndShadow(Canvas canvas, Bitmap bitmap) {
