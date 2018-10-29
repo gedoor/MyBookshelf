@@ -90,14 +90,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
         mTouchX = 0.01f; // 不让x,y为0,否则在点计算时会有问题
         mTouchY = 0.01f;
         blurBackImage = SharedPreferencesUtil.getBoolean("blurSimBack", false);
-        if (blurBackImage) {
-            if (blurCurBitmap == null) {
-                blurCurBitmap = mCurBitmap.copy(mCurBitmap.getConfig(), true);
-            }
-            if (blurPreBitmap == null) {
-                blurPreBitmap = mPreBitmap.copy(mPreBitmap.getConfig(), true);
-            }
-        }
     }
 
     @Override
@@ -436,20 +428,38 @@ public class SimulationPageAnim extends HorizonPageAnim {
     @Override
     public void changePageEnd() {
         super.changePageEnd();
-        if (blurBackImage) {
-            if (mDirection.equals(Direction.PRE)) {
-                stackBlur(mPreBitmap, blurPreBitmap);
-                AsyncTask.execute(() -> stackBlur(mCurBitmap, blurCurBitmap));
-            } else {
-                stackBlur(mCurBitmap, blurCurBitmap);
-                AsyncTask.execute(() -> stackBlur(mPreBitmap, blurPreBitmap));
-            }
-            /*
-            stackBlur(mCurBitmap, blurCurBitmap);
-            stackBlur(mPreBitmap, blurPreBitmap);
-            AsyncTask.execute(() -> stackBlur(mCurBitmap, blurCurBitmap));
-            AsyncTask.execute(() -> stackBlur(mPreBitmap, blurPreBitmap));
-            */
+
+        switch (mDirection) {
+            case NEXT:
+                if (blurBackImage) {
+                    if (blurCurBitmap != null)
+                        blurPreBitmap = blurCurBitmap;
+                    else
+                        AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
+                    blurCurBitmap = stackBlur(mCurBitmap);
+                }
+                break;
+            case PRE:
+                if (blurBackImage) {
+                    if (blurPreBitmap != null)
+                        blurCurBitmap = blurPreBitmap;
+                    else
+                        blurCurBitmap = stackBlur(mCurBitmap);
+                }
+                break;
+            default:
+                blurCurBitmap = stackBlur(mCurBitmap);
+                AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
+                break;
+        }
+    }
+
+    @Override
+    public void onPageDrawn(int pageOnCur) {
+        if (pageOnCur < 0 && blurBackImage) {
+            blurPreBitmap = stackBlur(mPreBitmap);
+        } else if (pageOnCur == 0 && blurBackImage) {
+            blurCurBitmap = stackBlur(mCurBitmap);
         }
     }
 

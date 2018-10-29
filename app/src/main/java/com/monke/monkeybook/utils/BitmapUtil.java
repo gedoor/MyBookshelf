@@ -348,7 +348,7 @@ public class BitmapUtil {
         return getBitmap(bitmap, screenWidth, screenHight);
     }
 
-    public static void stackBlur(Bitmap srcBitmap, Bitmap destBitmap) {
+    public static Bitmap stackBlur(Bitmap srcBitmap) {
 
         // Stack Blur v1.0 from
         // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
@@ -367,6 +367,7 @@ public class BitmapUtil {
         int h = srcBitmap.getHeight();
 
         int[] pix = new int[w * h];
+        Bitmap destBitmap = srcBitmap.copy(Config.RGB_565, true);
         srcBitmap.getPixels(pix, 0, w, 0, 0, w, h);
 
         int wm = w - 1;
@@ -554,6 +555,7 @@ public class BitmapUtil {
         }
 
         destBitmap.setPixels(pix, 0, w, 0, 0, w, h);
+        return destBitmap;
     }
 
 }
