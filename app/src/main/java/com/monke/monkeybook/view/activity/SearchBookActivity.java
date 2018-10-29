@@ -348,9 +348,17 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 msg = "已" + (enable ? "启" : "禁") + "用侧边栏书架！";
                 RxBus.get().post(RxBusTag.UPDATE_PX, true);
                 break;
+            case "fade_tts":
+                SharedPreferencesUtil.saveData("fadeTTS", enable);
+                msg = "已" + (enable ? "启" : "禁") + "用朗读时淡入淡出！";
+                break;
             case "use_regex_in_new_rule":
                 SharedPreferencesUtil.saveData("useRegexInNewRule", enable);
                 msg = "已" + (enable ? "启" : "禁") + "用新建替换规则时默认使用正则表达式！";
+                break;
+            case "blur_sim_back":
+                SharedPreferencesUtil.saveData("blurSimBack", enable);
+                msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背景虚化！";
                 break;
         }
         if (msg != null)

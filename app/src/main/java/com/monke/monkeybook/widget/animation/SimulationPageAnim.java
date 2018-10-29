@@ -10,8 +10,13 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Region;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.view.View;
+
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
+
+import static com.monke.monkeybook.utils.BitmapUtil.stackBlur;
 
 /**
  * 仿真翻页
@@ -57,6 +62,10 @@ public class SimulationPageAnim extends HorizonPageAnim {
     private GradientDrawable mFrontShadowDrawableVRL;
 
     private Paint mPaint;
+    private Bitmap blurCurBitmap;
+    private Bitmap blurPreBitmap;
+    private boolean blurBackImage;
+
 
     public SimulationPageAnim(int w, int h, View view, OnPageChangeListener listener) {
         super(w, h, view, listener);
@@ -80,6 +89,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
 
         mTouchX = 0.01f; // 不让x,y为0,否则在点计算时会有问题
         mTouchY = 0.01f;
+        blurBackImage = SharedPreferencesUtil.getBoolean("blurSimBack", false);
     }
 
     @Override
@@ -90,14 +100,14 @@ public class SimulationPageAnim extends HorizonPageAnim {
                 drawCurrentPageArea(canvas, mCurBitmap, mPath0);//绘制翻页时的正面页
                 drawNextPageAreaAndShadow(canvas, mNextBitmap);
                 drawCurrentPageShadow(canvas);
-                drawCurrentBackArea(canvas, mCurBitmap);
+                drawCurrentBackArea(canvas, blurBackImage ? blurCurBitmap : mCurBitmap);
                 break;
             default:
                 calcPoints();
                 drawCurrentPageArea(canvas, mPreBitmap, mPath0);
                 drawNextPageAreaAndShadow(canvas, mCurBitmap);
                 drawCurrentPageShadow(canvas);
-                drawCurrentBackArea(canvas, mPreBitmap);
+                drawCurrentBackArea(canvas, blurBackImage ? blurPreBitmap : mPreBitmap);
                 break;
         }
     }
@@ -341,9 +351,7 @@ public class SimulationPageAnim extends HorizonPageAnim {
             }
 
             canvas.clipPath(mPath1, Region.Op.INTERSECT);
-        } catch (Exception ignored) {
-
-        }
+        } catch (Exception ignored) { }
 
         int leftx;
         int rightx;
@@ -417,6 +425,46 @@ public class SimulationPageAnim extends HorizonPageAnim {
         canvas.restore();
     }
 
+    @Override
+    public void changePageEnd() {
+        super.changePageEnd();
+
+        if (!blurBackImage)
+            return;
+
+        switch (mDirection) {
+            case NEXT:
+                if (blurCurBitmap != null) {
+                    blurPreBitmap = blurCurBitmap;
+                    blurCurBitmap = stackBlur(mCurBitmap);
+                } else {
+                    AsyncTask.execute(() -> blurCurBitmap = stackBlur(mCurBitmap));
+                    AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
+                }
+                break;
+            case PRE:
+                if (blurPreBitmap != null) {
+                    blurCurBitmap = blurPreBitmap;
+                } else {
+                    blurCurBitmap = stackBlur(mCurBitmap);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onPageDrawn(int pageOnCur) {
+        if (!blurBackImage)
+            return;
+        AsyncTask.execute(() -> {
+            if (pageOnCur < 0) {
+                blurPreBitmap = stackBlur(mPreBitmap);
+            } else if (pageOnCur == 0) {
+                blurCurBitmap = stackBlur(mCurBitmap);
+            }
+        });
+    }
+
     private void drawNextPageAreaAndShadow(Canvas canvas, Bitmap bitmap) {
         mPath1.reset();
         mPath1.moveTo(mBezierStart1.x, mBezierStart1.y);
@@ -484,7 +532,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**

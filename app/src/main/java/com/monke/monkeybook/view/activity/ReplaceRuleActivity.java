@@ -25,7 +25,7 @@ import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.model.ReplaceRuleManager;
 import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 import com.monke.monkeybook.utils.FileUtil;
@@ -101,7 +101,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         recyclerViewBookSource.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReplaceRuleAdapter(this);
         recyclerViewBookSource.setAdapter(adapter);
-        adapter.resetDataS(ReplaceRuleManage.getAll());
+        adapter.resetDataS(ReplaceRuleManager.getAll());
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchHelpCallback.setDragEnable(true);
@@ -113,8 +113,8 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     public void editReplaceRule(ReplaceRuleBean replaceRuleBean) {
         moProgressHUD.showPutReplaceRule(replaceRuleBean, ruleBean -> {
             Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-                ReplaceRuleManage.saveData(ruleBean);
-                e.onNext(ReplaceRuleManage.getAll());
+                ReplaceRuleManager.saveData(ruleBean);
+                e.onNext(ReplaceRuleManager.getAll());
                 e.onComplete();
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -148,7 +148,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         }
         adapter.notifyDataSetChanged();
         selectAll = !selectAll;
-        ReplaceRuleManage.addDataS(adapter.getDataList());
+        ReplaceRuleManager.addDataS(adapter.getDataList());
     }
 
     public void delData(ReplaceRuleBean replaceRuleBean) {
@@ -270,7 +270,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     public void refresh() {
-        adapter.resetDataS(ReplaceRuleManage.getAll());
+        adapter.resetDataS(ReplaceRuleManager.getAll());
     }
 
     @Override

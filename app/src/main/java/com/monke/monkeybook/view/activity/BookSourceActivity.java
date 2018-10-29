@@ -28,7 +28,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.utils.FileUtil;
@@ -139,7 +139,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        adapter.resetDataS(BookSourceManage.getAllBookSource());
+        adapter.resetDataS(BookSourceManager.getAllBookSource());
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchHelpCallback.setDragEnable(true);
@@ -191,7 +191,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     .list();
             adapter.resetDataS(sourceBeanList);
         } else {
-            adapter.resetDataS(BookSourceManage.getAllBookSource());
+            adapter.resetDataS(BookSourceManager.getAllBookSource());
         }
     }
 
@@ -278,11 +278,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     public void upGroupMenu() {
         if (groupMenu == null) return;
         groupMenu.removeGroup(R.id.source_group);
-        if (BookSourceManage.groupList.size() == 0) {
+        if (BookSourceManager.groupList.size() == 0) {
             groupItem.setVisible(false);
         } else {
             groupItem.setVisible(true);
-            for (String groupName : new ArrayList<>(BookSourceManage.groupList)) {
+            for (String groupName : new ArrayList<>(BookSourceManager.groupList)) {
                 groupMenu.add(R.id.source_group, Menu.NONE, Menu.NONE, groupName);
             }
         }

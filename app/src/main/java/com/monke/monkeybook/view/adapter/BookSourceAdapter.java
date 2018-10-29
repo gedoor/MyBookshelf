@@ -16,7 +16,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
 import com.monke.monkeybook.view.activity.SourceEditActivity;
 
@@ -128,7 +128,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             notifyDataSetChanged();
         });
         holder.topView.setOnClickListener(view -> {
-            allDataList(BookSourceManage.getAllBookSource());
+            allDataList(BookSourceManager.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
             int maxWeight = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                     .orderRaw("-WEIGHT ASC").limit(1).unique().getWeight();

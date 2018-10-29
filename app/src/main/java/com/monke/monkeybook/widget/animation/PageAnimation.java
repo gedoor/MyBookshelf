@@ -129,6 +129,8 @@ public abstract class PageAnimation {
      */
     public abstract void draw(Canvas canvas);
 
+    public void onPageDrawn(int pageOnCur) { }
+
     /**
      * 滚动动画
      * 必须放在computeScroll()方法中执行

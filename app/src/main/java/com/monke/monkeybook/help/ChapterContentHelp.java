@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
-import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.model.ReplaceRuleManager;
 
 public class ChapterContentHelp {
 
@@ -32,10 +32,10 @@ public class ChapterContentHelp {
     public static String replaceContent(BookShelfBean mBook, String content) {
         String allLine[] = content.split("\n\u3000\u3000");
         //替换
-        if (ReplaceRuleManage.getEnabled() != null && ReplaceRuleManage.getEnabled().size() > 0) {
+        if (ReplaceRuleManager.getEnabled() != null && ReplaceRuleManager.getEnabled().size() > 0) {
             StringBuilder contentBuilder = new StringBuilder();
             for (String line : allLine) {
-                for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+                for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
                     if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                         try {
                             line = line.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement());
@@ -53,7 +53,7 @@ public class ChapterContentHelp {
                 }
             }
             content = contentBuilder.toString();
-            for (ReplaceRuleBean replaceRule : ReplaceRuleManage.getEnabled()) {
+            for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
                 if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                     if (replaceRule.getIsRegex() && !TextUtils.isEmpty(replaceRule.getRegex()) && replaceRule.getRegex().contains("\\n")) {
                         try {

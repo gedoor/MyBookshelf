@@ -3,9 +3,7 @@ package com.monke.monkeybook.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 
 
 public class FilletImageView extends android.support.v7.widget.AppCompatImageView {

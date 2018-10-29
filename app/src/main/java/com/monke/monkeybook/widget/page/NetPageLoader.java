@@ -135,9 +135,7 @@ public class NetPageLoader extends PageLoader {
                         }
 
                         @Override
-                        public void onComplete() {
-
-                        }
+                        public void onComplete() {}
                     });
         }
     }
@@ -241,6 +239,7 @@ public class NetPageLoader extends PageLoader {
     TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = super.dealLoadPageList(chapterPos);
         if (!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
+            txtChapter.setStatus(Enum.PageStatus.ERROR);
             txtChapter.setMsg("网络连接不可用");
         }
         return txtChapter;

@@ -47,6 +47,8 @@ public interface MainContract {
         void addBookUrl(String bookUrl);
 
         void clearBookshelf();
+
+        void resetVolume();
     }
 
 }

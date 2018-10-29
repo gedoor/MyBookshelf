@@ -11,7 +11,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.help.DocumentHelper;
-import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.model.ReplaceRuleManager;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 
 import java.io.File;
@@ -46,8 +46,8 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                 i++;
                 replaceRuleBean.setSerialNumber(i + 1);
             }
-            ReplaceRuleManage.addDataS(replaceRuleBeans);
-            e.onNext(ReplaceRuleManage.getAll());
+            ReplaceRuleManager.addDataS(replaceRuleBeans);
+            e.onNext(ReplaceRuleManager.getAll());
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -57,8 +57,8 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
     @Override
     public void delData(ReplaceRuleBean replaceRuleBean) {
         Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManage.delData(replaceRuleBean);
-            e.onNext(ReplaceRuleManage.getAll());
+            ReplaceRuleManager.delData(replaceRuleBean);
+            e.onNext(ReplaceRuleManager.getAll());
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -67,9 +67,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                     public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
                         mView.refresh();
                         mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
-                                .setAction("恢复", view -> {
-                                    restoreData(replaceRuleBean);
-                                })
+                                .setAction("恢复", view -> restoreData(replaceRuleBean))
                                 .show();
                     }
 
@@ -83,7 +81,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
     @Override
     public void delData(List<ReplaceRuleBean> replaceRuleBeans) {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            ReplaceRuleManage.delDataS(replaceRuleBeans);
+            ReplaceRuleManager.delDataS(replaceRuleBeans);
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,8 +101,8 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
 
     private void restoreData(ReplaceRuleBean replaceRuleBean) {
         Observable.create((ObservableOnSubscribe<List<ReplaceRuleBean>>) e -> {
-            ReplaceRuleManage.saveData(replaceRuleBean);
-            e.onNext(ReplaceRuleManage.getAll());
+            ReplaceRuleManager.saveData(replaceRuleBean);
+            e.onNext(ReplaceRuleManager.getAll());
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -130,7 +128,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
             try {
                 List<ReplaceRuleBean> dataS = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
                 }.getType());
-                ReplaceRuleManage.addDataS(dataS);
+                ReplaceRuleManager.addDataS(dataS);
                 mView.refresh();
                 mView.toast("导入成功");
             } catch (Exception e) {
@@ -151,7 +149,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
             mView.toast("URL格式不对");
             return;
         }
-        ReplaceRuleManage.importReplaceRuleFromWww(url)
+        ReplaceRuleManager.importReplaceRuleFromWww(url)
                 .subscribe(new SimpleObserver<Boolean>() {
                     @Override
                     public void onNext(Boolean aBoolean) {

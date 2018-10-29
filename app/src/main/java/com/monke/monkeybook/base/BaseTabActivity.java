@@ -45,7 +45,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     /*****************rewrite method***************************/
 
 
-    private void setUpTabLayout(){
+    private void setUpTabLayout() {
         mFragmentList = createTabFragments();
         mTitleList = createTabTitles();
 
@@ -60,8 +60,8 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     /**
      * 检查输入的参数是否正确。即Fragment和title是成对的。
      */
-    private void checkParamsIsRight(){
-        if (mFragmentList == null || mTitleList == null){
+    private void checkParamsIsRight() {
+        if (mFragmentList == null || mTitleList == null) {
             throw new IllegalArgumentException("fragmentList or titleList doesn't have null");
         }
 

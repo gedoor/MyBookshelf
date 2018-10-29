@@ -8,8 +8,8 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.BookSourceManage;
-import com.monke.monkeybook.model.ReplaceRuleManage;
+import com.monke.monkeybook.model.BookSourceManager;
+import com.monke.monkeybook.model.ReplaceRuleManager;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.XmlUtils;
@@ -83,7 +83,7 @@ public class DataRestore {
         if (json != null) {
             List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
             }.getType());
-            BookSourceManage.addBookSource(bookSourceBeans);
+            BookSourceManager.addBookSource(bookSourceBeans);
         }
     }
 
@@ -103,7 +103,7 @@ public class DataRestore {
         if (json != null) {
             List<ReplaceRuleBean> replaceRuleBeans = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
             }.getType());
-            ReplaceRuleManage.addDataS(replaceRuleBeans);
+            ReplaceRuleManager.addDataS(replaceRuleBeans);
         }
     }
 }

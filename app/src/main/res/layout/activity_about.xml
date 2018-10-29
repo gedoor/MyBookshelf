@@ -129,6 +129,27 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/vw_faq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/background_card"
+                android:layout_margin="6dp">
+
+                <TextView
+                    android:id="@+id/tv_faq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_ib_pre"
+                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/ic_launch_black_24dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/faq" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/vw_qq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -251,27 +272,6 @@
                     android:drawableStart="@drawable/ic_launch_black_24dp"
                     android:gravity="center_vertical"
                     android:text="@string/home_page" />
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/vw_faq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
-
-                <TextView
-                    android:id="@+id/tv_faq"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_launch_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/faq" />
 
             </android.support.v7.widget.CardView>
 
