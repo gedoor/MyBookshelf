@@ -436,10 +436,11 @@ public class SimulationPageAnim extends HorizonPageAnim {
             case NEXT:
                 if (blurCurBitmap != null) {
                     blurPreBitmap = blurCurBitmap;
+                    blurCurBitmap = stackBlur(mCurBitmap);
                 } else {
+                    AsyncTask.execute(() -> blurCurBitmap = stackBlur(mCurBitmap));
                     AsyncTask.execute(() -> blurPreBitmap = stackBlur(mPreBitmap));
                 }
-                blurCurBitmap = stackBlur(mCurBitmap);
                 break;
             case PRE:
                 if (blurPreBitmap != null) {
