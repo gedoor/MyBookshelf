@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
  * 替换规则管理
  */
 
-public class ReplaceRuleManage extends BaseModelImpl {
+public class ReplaceRuleManager extends BaseModelImpl {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
     private static List<ReplaceRuleBean> replaceRuleBeansAll;
 

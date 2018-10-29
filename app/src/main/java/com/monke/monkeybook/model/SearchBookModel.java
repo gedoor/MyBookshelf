@@ -59,7 +59,7 @@ public class SearchBookModel {
             my716.setHasMore(true);
             searchEngineS.add(my716);
         }
-        for (BookSourceBean bookSourceBean : BookSourceManage.getSelectedBookSource()) {
+        for (BookSourceBean bookSourceBean : BookSourceManager.getSelectedBookSource()) {
             SearchEngine se = new SearchEngine();
             se.setTag(bookSourceBean.getBookSourceUrl());
             se.setHasMore(true);

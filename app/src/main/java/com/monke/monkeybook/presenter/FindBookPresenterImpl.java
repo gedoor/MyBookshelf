@@ -17,7 +17,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 
@@ -36,7 +36,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
         Observable.create((ObservableOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
-            List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManage.getAllBookSource() : BookSourceManage.getSelectedBookSource();
+            List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource();
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {

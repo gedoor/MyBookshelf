@@ -31,7 +31,7 @@ import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.contract.SourceEditContract;
 import com.monke.monkeybook.utils.BitmapUtil;
 
@@ -56,8 +56,8 @@ public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContrac
             if (bookSourceOld != null && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
                 DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
             }
-            BookSourceManage.addBookSource(bookSource);
-            BookSourceManage.refreshBookSource();
+            BookSourceManager.addBookSource(bookSource);
+            BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

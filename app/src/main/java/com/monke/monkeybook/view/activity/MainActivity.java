@@ -41,7 +41,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.BookSourceManage;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.MainPresenterImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.fragment.BookListFragment;
@@ -457,7 +457,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
             //书源为空时加载默认书源
-            BookSourceManage.initDefaultBookSource(this);
+            BookSourceManager.initDefaultBookSource(this);
             //更新日志
             moProgressHUD.showAssetMarkdown("updateLog.md");
         }

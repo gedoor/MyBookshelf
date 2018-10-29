@@ -54,9 +54,7 @@ public class FontSelector {
 
     public FontSelector setListener(OnThisListener thisListener) {
         this.thisListener = thisListener;
-        builder.setPositiveButton(R.string.default_font, ((dialogInterface, i) -> {
-            thisListener.setDefault();
-        }));
+        builder.setPositiveButton(R.string.default_font, ((dialogInterface, i) -> thisListener.setDefault()));
         return this;
     }
 
