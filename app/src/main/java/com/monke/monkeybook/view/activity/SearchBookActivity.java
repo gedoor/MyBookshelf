@@ -358,7 +358,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 break;
             case "blur_sim_back":
                 SharedPreferencesUtil.saveData("blurSimBack", enable);
-                msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背页模糊！";
+                msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背景虚化！";
                 break;
         }
         if (msg != null)
