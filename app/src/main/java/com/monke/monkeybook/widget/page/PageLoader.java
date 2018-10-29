@@ -415,7 +415,7 @@ public abstract class PageLoader {
         if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             if (mPageMode == Enum.PageMode.SCROLL) {
                 mPageView.drawBackground(0);
-            } else {
+            } else if (mCurChapter != null) {
                 upPage();
             }
             mPageView.invalidate();

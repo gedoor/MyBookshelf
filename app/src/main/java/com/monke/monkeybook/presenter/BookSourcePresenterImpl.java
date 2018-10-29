@@ -77,9 +77,7 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
                     @Override
                     public void onNext(Boolean aBoolean) {
                         mView.getSnackBar(delBookSource.getBookSourceName() + "已删除", Snackbar.LENGTH_LONG)
-                                .setAction("恢复", view -> {
-                                    restoreBookSource(delBookSource);
-                                })
+                                .setAction("恢复", view -> restoreBookSource(delBookSource))
                                 .show();
                     }
 

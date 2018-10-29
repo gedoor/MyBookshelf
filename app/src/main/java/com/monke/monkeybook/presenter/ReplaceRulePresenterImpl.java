@@ -67,9 +67,7 @@ public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContr
                     public void onNext(List<ReplaceRuleBean> replaceRuleBeans) {
                         mView.refresh();
                         mView.getSnackBar(replaceRuleBean.getReplaceSummary() + "已删除", Snackbar.LENGTH_LONG)
-                                .setAction("恢复", view -> {
-                                    restoreData(replaceRuleBean);
-                                })
+                                .setAction("恢复", view -> restoreData(replaceRuleBean))
                                 .show();
                     }
 

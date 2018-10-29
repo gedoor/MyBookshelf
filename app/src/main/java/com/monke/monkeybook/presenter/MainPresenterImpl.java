@@ -1,6 +1,8 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -10,6 +12,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -22,6 +25,7 @@ import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
 
 import java.net.URL;
 
@@ -56,7 +60,8 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                         mView.dismissHUD();
                         if (value) {
                             //更新书架并刷新
-                            mView.recreate();
+                            mView.toast(R.string.restore_success);
+                            RxBus.get().post(RxBusTag.UPDATE_PX, true);
                         } else {
                             mView.toast(R.string.restore_fail);
                         }
@@ -189,5 +194,18 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
     public void updatePx(Boolean px) {
         mView.recreate();
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RESET_VOLUME)})
+    public void resetVolume(int stream) {
+        if (!MApplication.getInstance().getConfigPreferences().getBoolean("fadeTTS", false))
+            return;
+        AudioManager audioManager = ((AudioManager) mView.getContext().getSystemService(Context.AUDIO_SERVICE));
+        if (!audioManager.isMusicActive())
+            audioManager.setStreamVolume(stream, MApplication.VOLUME, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+    }
+
+    public void resetVolume() {
+        resetVolume(AudioManager.STREAM_MUSIC);
     }
 }
