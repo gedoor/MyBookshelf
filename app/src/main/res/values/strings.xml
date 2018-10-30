@@ -59,7 +59,7 @@
     <string name="backup_success">备份成功</string>
     <string name="backup_fail">备份失败</string>
     <string name="on_restore">正在恢复</string>
-    <string name="restore_success">恢复成功,正在检查更新</string>
+    <string name="restore_success">恢复成功</string>
     <string name="restore_fail">恢复失败</string>
     <string name="screen_direction">屏幕方向</string>
     <string name="screen_sensor">跟随传感器</string>
