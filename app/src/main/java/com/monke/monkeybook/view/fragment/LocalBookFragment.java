@@ -2,10 +2,8 @@ package com.monke.monkeybook.view.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.media.MediaStoreHelper;
@@ -15,6 +13,7 @@ import com.monke.monkeybook.widget.refreshview.RefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by newbiechen on 17-5-27.
@@ -27,15 +26,25 @@ public class LocalBookFragment extends BaseFileFragment {
     @BindView(R.id.local_book_rv_content)
     RecyclerView mRvContent;
 
+    private Unbinder unbinder;
+
     @Override
-    protected View createView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_local_book, container, false);
+    public int createLayoutId() {
+        return R.layout.fragment_local_book;
+    }
+
+    /**
+     * P层绑定   若无则返回null;
+     */
+    @Override
+    protected IPresenter initInjector() {
+        return null;
     }
 
     @Override
     protected void bindView() {
         super.bindView();
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         setUpAdapter();
     }
 
@@ -86,4 +95,9 @@ public class LocalBookFragment extends BaseFileFragment {
                 });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
 }

@@ -1,16 +1,13 @@
 package com.monke.monkeybook.view.fragment;
 
 import android.graphics.PorterDuff;
-import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FileHelp;
@@ -44,20 +41,28 @@ public class FileCategoryFragment extends BaseFileFragment {
     RecyclerView mRvContent;
     @BindView(R.id.tv_sd)
     TextView tvSd;
-    Unbinder unbinder;
 
+    private Unbinder unbinder;
     private FileStack mFileStack;
     private String rootFilePath;
 
     @Override
-    protected View createView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_file_category, container, false);
+    public int createLayoutId() {
+        return R.layout.fragment_file_category;
+    }
+
+    /**
+     * P层绑定   若无则返回null;
+     */
+    @Override
+    protected IPresenter initInjector() {
+        return null;
     }
 
     @Override
     protected void bindView() {
         super.bindView();
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         mFileStack = new FileStack();
         setUpAdapter();
     }
@@ -177,13 +182,6 @@ public class FileCategoryFragment extends BaseFileFragment {
             }
         }
         return count;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.monke.monkeybook.view.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,9 +48,14 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
+    protected FindBookContract.Presenter initInjector() {
+        return new FindBookPresenterImpl();
+    }
+
+    @Override
     protected void bindView() {
         super.bindView();
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         initExpandableList();
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         refreshLayout.setOnRefreshListener(() -> {
@@ -62,14 +64,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         });
     }
 
+    /**
+     * 首次逻辑操作
+     */
     @Override
-    protected void initData() {
+    protected void firstRequest() {
+        super.firstRequest();
         mPresenter.initData();
-    }
-
-    @Override
-    protected FindBookContract.Presenter initInjector() {
-        return new FindBookPresenterImpl();
     }
 
     @Override
@@ -102,13 +103,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         adapter.setOnItemClickListener(this);
         expandableList.setAdapter(adapter);
         adapter.setCanExpandAll(false);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
     }
 
     @Override
