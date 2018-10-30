@@ -487,7 +487,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void bgChange() {
                 readBookControl.initTextDrawableIndex();
-                flContent.setBackground(readBookControl.getTextBackground());
+                pageView.setBackground(readBookControl.getTextBackground());
                 initImmersionBar();
                 if (mPageLoader != null) {
                     mPageLoader.setPageStyle();
