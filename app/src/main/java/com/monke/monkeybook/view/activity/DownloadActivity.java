@@ -146,10 +146,10 @@ public class DownloadActivity extends MBaseActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem pauseMenu = menu.getItem(0);
         if (downloadPause) {
-            pauseMenu.setIcon(R.drawable.ic_play1);
+            pauseMenu.setIcon(R.drawable.ic_play_24dp);
             pauseMenu.setTitle(R.string.start);
         } else {
-            pauseMenu.setIcon(R.drawable.ic_pause1);
+            pauseMenu.setIcon(R.drawable.ic_pause_24dp);
             pauseMenu.setTitle(R.string.pause);
         }
         // pauseMenu.getIcon().mutate();

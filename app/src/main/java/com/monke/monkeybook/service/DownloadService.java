@@ -413,9 +413,9 @@ public class DownloadService extends Service {
                 .setContentText(downloadChapterBean.getDurChapterName() == null ? "  " : downloadChapterBean.getDurChapterName())
                 .setContentIntent(mainPendingIntent);
         if (isStartDownload) {
-            builder.addAction(R.drawable.ic_pause1, getString(R.string.pause), getThisServicePendingIntent(pauseAction));
+            builder.addAction(R.drawable.ic_pause_24dp, getString(R.string.pause), getThisServicePendingIntent(pauseAction));
         } else {
-            builder.addAction(R.drawable.ic_play1, getString(R.string.resume), getThisServicePendingIntent(startAction));
+            builder.addAction(R.drawable.ic_play_24dp, getString(R.string.resume), getThisServicePendingIntent(startAction));
         }
         builder.addAction(R.drawable.ic_stop_black_24dp, getString(R.string.cancel), getThisServicePendingIntent(doneAction));
         //发送通知

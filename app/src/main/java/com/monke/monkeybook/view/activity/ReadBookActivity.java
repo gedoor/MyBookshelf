@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -54,7 +53,6 @@ import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.page.Enum;
-import com.monke.monkeybook.widget.page.NetPageLoader;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
 import com.monke.mprogressbar.MHorProgressBar;
@@ -997,11 +995,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
                 break;
             case PLAY:
-                fabReadAloud.setImageResource(R.drawable.ic_pause2);
+                fabReadAloud.setImageResource(R.drawable.ic_pause_outline_24dp);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             case PAUSE:
-                fabReadAloud.setImageResource(R.drawable.ic_play2);
+                fabReadAloud.setImageResource(R.drawable.ic_play_outline_24dp);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             default:
