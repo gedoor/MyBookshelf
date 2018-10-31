@@ -116,8 +116,10 @@ public abstract class PageLoader {
 
     private Disposable prevDisposable;
     private Disposable nextDisposable;
+    //翻页时间
+    private long skipPageTime = 0;
 
-    /*****************************init params*******************************/
+   /*****************************init params*******************************/
     PageLoader(PageView pageView, BookShelfBean collBook) {
         mPageView = pageView;
         mContext = pageView.getContext();
@@ -381,14 +383,20 @@ public abstract class PageLoader {
      * 翻到上一页
      */
     public void skipToPrePage() {
-        mPageView.autoPrevPage();
+        if ((System.currentTimeMillis() - skipPageTime) > 300) {
+            mPageView.autoPrevPage();
+            skipPageTime = System.currentTimeMillis();
+        }
     }
 
     /**
      * 翻到下一页
      */
     public void skipToNextPage() {
-        mPageView.autoNextPage();
+        if ((System.currentTimeMillis() - skipPageTime) > 300) {
+            mPageView.autoNextPage();
+            skipPageTime = System.currentTimeMillis();
+        }
     }
 
     /**
