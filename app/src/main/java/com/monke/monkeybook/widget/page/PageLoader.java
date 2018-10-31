@@ -968,7 +968,6 @@ public abstract class PageLoader {
         if ((mPreChapter != null && mPreChapter.getStatus() == Enum.PageStatus.FINISH) || prevChapterPos < 0) {
             return;
         }
-//        mPreChapter = dealLoadPageList(prevChapterPos);
         if (prevDisposable != null) {
             prevDisposable.dispose();
         }
@@ -1004,7 +1003,6 @@ public abstract class PageLoader {
         if ((mNextChapter != null && mNextChapter.getStatus() == Enum.PageStatus.FINISH) || nextChapterPos >= mCollBook.getChapterList().size()) {
             return;
         }
-//        mNextChapter = dealLoadPageList(nextChapterPos);
         if (nextDisposable != null) {
             nextDisposable.dispose();
         }
