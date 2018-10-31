@@ -245,12 +245,8 @@ public abstract class PageLoader {
      */
     public void setPageMode(Enum.PageMode pageMode) {
         mPageMode = pageMode;
-
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
-
-        // 重新绘制当前页
-        mPageView.resetScroll();
-        openChapter(mCurPagePos);
+        skipToChapter(mCurChapterPos, mCurPagePos);
     }
 
     /**
@@ -960,7 +956,6 @@ public abstract class PageLoader {
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
-//            mCurChapter = dealLoadPageList(mCurChapterPos);
             Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(mCurChapterPos)))
                     .compose(RxUtils::toSimpleSingle)
                     .subscribe(new SingleObserver<TxtChapter>() {
