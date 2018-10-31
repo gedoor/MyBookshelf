@@ -233,6 +233,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         } else {
             bookShelfGridAdapter.replaceAll(bookShelfBeanList, bookPx);
         }
+        if (rlEmptyView == null) return;
         if (bookShelfBeanList.size() > 0) {
             rlEmptyView.setVisibility(View.GONE);
         } else {
