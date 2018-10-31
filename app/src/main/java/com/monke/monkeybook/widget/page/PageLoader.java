@@ -114,6 +114,7 @@ public abstract class PageLoader {
     int mCurChapterPos;
     int mCurPagePos;
 
+    private Disposable curDisposable;
     private Disposable prevDisposable;
     private Disposable nextDisposable;
     //翻页时间
@@ -960,12 +961,15 @@ public abstract class PageLoader {
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
+            if (curDisposable != null) {
+                curDisposable.dispose();
+            }
             Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(mCurChapterPos)))
                     .compose(RxUtils::toSimpleSingle)
                     .subscribe(new SingleObserver<TxtChapter>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-
+                            curDisposable = d;
                         }
 
                         @Override
@@ -1278,6 +1282,16 @@ public abstract class PageLoader {
      * 关闭书本
      */
     public void closeBook() {
+        if (curDisposable != null) {
+            curDisposable.dispose();
+        }
+        if (prevDisposable != null) {
+            prevDisposable.dispose();
+        }
+        if (nextDisposable != null) {
+            nextDisposable.dispose();
+        }
+
         isChapterListPrepare = false;
         isClose = true;
 
@@ -1286,12 +1300,6 @@ public abstract class PageLoader {
         mNextChapter = null;
         mPageView = null;
 
-        if (prevDisposable != null) {
-            prevDisposable.dispose();
-        }
-        if (nextDisposable != null) {
-            nextDisposable.dispose();
-        }
     }
 
     public boolean isClose() {
