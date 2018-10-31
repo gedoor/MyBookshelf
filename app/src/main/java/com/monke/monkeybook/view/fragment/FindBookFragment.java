@@ -75,6 +75,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     public synchronized void updateUI(List<RecyclerViewData> group) {
+        if (rlEmptyView == null) return;
         if (group.size() > 0) {
             adapter.setAllDatas(group);
             lastExpandedPosition = Math.min(lastExpandedPosition, group.size() - 1);
