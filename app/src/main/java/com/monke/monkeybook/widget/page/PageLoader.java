@@ -22,6 +22,7 @@ import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.IOUtils;
+import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
@@ -29,6 +30,11 @@ import com.monke.monkeybook.widget.animation.PageAnimation;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 页面加载器
@@ -107,6 +113,9 @@ public abstract class PageLoader {
     // 当前章
     int mCurChapterPos;
     int mCurPagePos;
+
+    private Disposable prevDisposable;
+    private Disposable nextDisposable;
 
     /*****************************init params*******************************/
     PageLoader(PageView pageView, BookShelfBean collBook) {
@@ -959,7 +968,32 @@ public abstract class PageLoader {
         if ((mPreChapter != null && mPreChapter.getStatus() == Enum.PageStatus.FINISH) || prevChapterPos < 0) {
             return;
         }
-        mPreChapter = dealLoadPageList(prevChapterPos);
+//        mPreChapter = dealLoadPageList(prevChapterPos);
+        if (prevDisposable != null) {
+            prevDisposable.dispose();
+        }
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(prevChapterPos)))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<TxtChapter>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        prevDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(TxtChapter txtChapter) {
+                        upTextChapter(txtChapter);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
+                            mPreChapter = new TxtChapter(prevChapterPos);
+                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setMsg(e.getMessage());
+                        }
+                    }
+                });
     }
 
     /**
@@ -970,7 +1004,45 @@ public abstract class PageLoader {
         if ((mNextChapter != null && mNextChapter.getStatus() == Enum.PageStatus.FINISH) || nextChapterPos >= mCollBook.getChapterList().size()) {
             return;
         }
-        mNextChapter = dealLoadPageList(nextChapterPos);
+//        mNextChapter = dealLoadPageList(nextChapterPos);
+        if (nextDisposable != null) {
+            nextDisposable.dispose();
+        }
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(nextChapterPos)))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<TxtChapter>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        nextDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(TxtChapter txtChapter) {
+                        upTextChapter(txtChapter);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH) {
+                            mPreChapter = new TxtChapter(nextChapterPos);
+                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setMsg(e.getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void upTextChapter(TxtChapter txtChapter) {
+        if (txtChapter.getPosition() == mCurChapterPos - 1) {
+            mPreChapter = txtChapter;
+            mPageView.drawPage(-1);
+        } else if (txtChapter.getPosition() == mCurChapterPos) {
+            mCurChapter = txtChapter;
+            mPageView.drawPage(0);
+        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
+            mNextChapter = txtChapter;
+            mPageView.drawPage(1);
+        }
     }
 
     /**
@@ -1175,6 +1247,13 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
+
+        if (prevDisposable != null) {
+            prevDisposable.dispose();
+        }
+        if (nextDisposable != null) {
+            nextDisposable.dispose();
+        }
     }
 
     public boolean isClose() {
