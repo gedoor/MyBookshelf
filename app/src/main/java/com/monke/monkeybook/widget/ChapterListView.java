@@ -217,9 +217,9 @@ public class ChapterListView extends FrameLayout {
             public void itemClick(int index, int page, int tabPosition) {
                 if (itemClickListener != null) {
                     if (!(tabPosition == 0 && index == bookShelfBean.getDurChapter())) {
-                        itemClickListener.itemClick(index, page, tabPosition);
-                        searchViewCollapsed();
                         dismissChapterList();
+                        searchViewCollapsed();
+                        itemClickListener.itemClick(index, page, tabPosition);
                     }
                 }
             }
