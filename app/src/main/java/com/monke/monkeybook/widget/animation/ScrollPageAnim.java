@@ -29,7 +29,6 @@ public class ScrollPageAnim extends PageAnimation {
     // 整个Bitmap的背景显示
     private Bitmap mBgBitmap;
     // 被废弃的图片列表
-    private Bitmap mNextBitmap;
     private ArrayDeque<BitmapView> mScrapViews;
     // 正在被利用的图片列表
     private ArrayList<BitmapView> mActiveViews = new ArrayList<>(2);
@@ -38,6 +37,7 @@ public class ScrollPageAnim extends PageAnimation {
     //是否移动了
     private boolean isMove = false;
     private boolean firstDown;
+    private Bitmap mNextBitmap;
 
     public ScrollPageAnim(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         super(w, h, marginWidth, marginTop, marginBottom, view, listener);
@@ -137,11 +137,9 @@ public class ScrollPageAnim extends PageAnimation {
                     if (firstDown) {
                         firstDown = false;
                         mListener.drawBackground(0);
-                        mListener.drawContent(1);
                     } else {
                         mListener.changePage(Direction.NEXT);
                         mListener.drawBackground(0);
-                        mListener.drawContent(1);
                     }
                 } else {// 如果不存在next,则进行还原
                     mListener.changePage(Direction.NEXT);
@@ -173,6 +171,7 @@ public class ScrollPageAnim extends PageAnimation {
             view.destRect.bottom = view.bottom;
 
             realEdge += view.bitmap.getHeight();
+            mListener.drawContent(1);
         }
     }
 
@@ -221,7 +220,6 @@ public class ScrollPageAnim extends PageAnimation {
                 if (hasPrev) {
                     mListener.changePage(Direction.PRE);
                     mListener.drawBackground(0);
-                    mListener.drawContent(0);
                 } else { // 如果不存在next,则进行还原
                     firstDown = true;
                     mNextBitmap = cancelBitmap;
@@ -249,6 +247,7 @@ public class ScrollPageAnim extends PageAnimation {
             view.destRect.top = view.top;
             view.destRect.bottom = view.bottom;
             realEdge -= view.bitmap.getHeight();
+            mListener.drawContent(0);
         }
     }
 
@@ -396,12 +395,15 @@ public class ScrollPageAnim extends PageAnimation {
 
     @Override
     public Bitmap getContentBitmap(int pageOnCur) {
-//        if (pageOnCur < 0) {
-//            return mPrevBitmapView.bitmap;
-//        } else if (pageOnCur > 0) {
-//            return mNextBitmapView.bitmap;
-//        }
-//        return mCurBitmapView.bitmap;
+        if (pageOnCur == 0) {
+            if (mActiveViews.size() >= 1) {
+                return mActiveViews.get(0).bitmap;
+            }
+        } else if (pageOnCur == 1) {
+            if (mActiveViews.size() >= 2) {
+                return mActiveViews.get(1).bitmap;
+            }
+        }
         return mNextBitmap;
     }
 
