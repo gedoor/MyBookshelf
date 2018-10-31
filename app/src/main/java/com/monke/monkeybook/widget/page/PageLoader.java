@@ -992,7 +992,8 @@ public abstract class PageLoader {
      */
     void parsePrevChapter() {
         final int prevChapterPos = mCurChapterPos - 1;
-        if ((mPreChapter != null && mPreChapter.getStatus() == Enum.PageStatus.FINISH) || prevChapterPos < 0) {
+        if (mPreChapter == null) mPreChapter = new TxtChapter(prevChapterPos);
+        if (mPreChapter.getStatus() == Enum.PageStatus.FINISH || prevChapterPos < 0) {
             return;
         }
         if (prevDisposable != null) {
@@ -1027,7 +1028,8 @@ public abstract class PageLoader {
      */
     void parseNextChapter() {
         final int nextChapterPos = mCurChapterPos + 1;
-        if ((mNextChapter != null && mNextChapter.getStatus() == Enum.PageStatus.FINISH) || nextChapterPos >= mCollBook.getChapterList().size()) {
+        if (mNextChapter == null) mNextChapter = new TxtChapter(nextChapterPos);
+        if (mNextChapter.getStatus() == Enum.PageStatus.FINISH || nextChapterPos >= mCollBook.getChapterList().size()) {
             return;
         }
         if (nextDisposable != null) {
