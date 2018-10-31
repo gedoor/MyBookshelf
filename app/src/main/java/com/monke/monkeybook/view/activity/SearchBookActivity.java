@@ -356,10 +356,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 SharedPreferencesUtil.saveData("useRegexInNewRule", enable);
                 msg = "已" + (enable ? "启" : "禁") + "用新建替换规则时默认使用正则表达式！";
                 break;
-            case "blur_sim_back":
-                SharedPreferencesUtil.saveData("blurSimBack", enable);
-                msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背景虚化！";
-                break;
         }
         if (msg != null)
             toast(msg);
