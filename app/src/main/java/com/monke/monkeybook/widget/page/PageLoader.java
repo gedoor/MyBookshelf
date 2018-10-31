@@ -547,8 +547,6 @@ public abstract class PageLoader {
         }
 
         parseCurChapter();
-        reSetPage();
-        mPageView.invalidate();
         chapterChangeCallback();
         pagingEnd(PageAnimation.Direction.NONE);
     }
@@ -954,7 +952,29 @@ public abstract class PageLoader {
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
-            mCurChapter = dealLoadPageList(mCurChapterPos);
+//            mCurChapter = dealLoadPageList(mCurChapterPos);
+            Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(mCurChapterPos)))
+                    .compose(RxUtils::toSimpleSingle)
+                    .subscribe(new SingleObserver<TxtChapter>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(TxtChapter txtChapter) {
+                            upTextChapter(txtChapter);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
+                                mPreChapter = new TxtChapter(mCurChapterPos);
+                                mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                                mPreChapter.setMsg(e.getMessage());
+                            }
+                        }
+                    });
         }
         parsePrevChapter();
         parseNextChapter();
@@ -1033,14 +1053,23 @@ public abstract class PageLoader {
     private void upTextChapter(TxtChapter txtChapter) {
         if (txtChapter.getPosition() == mCurChapterPos - 1) {
             mPreChapter = txtChapter;
-            mPageView.drawPage(-1);
+            if (mPageMode == Enum.PageMode.SCROLL) {
+                mPageView.drawContent(-1);
+            } else {
+                mPageView.drawPage(-1);
+            }
         } else if (txtChapter.getPosition() == mCurChapterPos) {
             mCurChapter = txtChapter;
-            mPageView.drawPage(0);
-        } else if (txtChapter.getPosition() == mCurChapterPos - 1) {
+            reSetPage();
+        } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
             mNextChapter = txtChapter;
-            mPageView.drawPage(1);
+            if (mPageMode == Enum.PageMode.SCROLL) {
+                mPageView.drawContent(1);
+            } else {
+                mPageView.drawPage(1);
+            }
         }
+        mPageView.invalidate();
     }
 
     /**

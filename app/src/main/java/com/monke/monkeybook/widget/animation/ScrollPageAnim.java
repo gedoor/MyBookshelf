@@ -171,7 +171,11 @@ public class ScrollPageAnim extends PageAnimation {
             view.destRect.bottom = view.bottom;
 
             realEdge += view.bitmap.getHeight();
-            mListener.drawContent(1);
+            if (mActiveViews.size() == 1) {
+                mListener.drawContent(0);
+            } else {
+                mListener.drawContent(1);
+            }
         }
     }
 
@@ -404,7 +408,7 @@ public class ScrollPageAnim extends PageAnimation {
                 return mActiveViews.get(1).bitmap;
             }
         }
-        return mNextBitmap;
+        return null;
     }
 
     private static class BitmapView {
