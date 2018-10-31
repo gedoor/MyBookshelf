@@ -251,7 +251,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                mPresenter.querySearchHistory(newText);
+                if (!newText.toLowerCase().startsWith("set:")) {
+                    mPresenter.querySearchHistory(newText);
+                } else {
+
+                }
                 return false;
             }
         });

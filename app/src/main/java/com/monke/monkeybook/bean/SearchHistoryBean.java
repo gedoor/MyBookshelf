@@ -16,24 +16,31 @@ public class SearchHistoryBean {
     public long getDate() {
         return this.date;
     }
+
     public void setDate(long date) {
         this.date = date;
     }
+
     public String getContent() {
         return this.content;
     }
+
     public void setContent(String content) {
         this.content = content;
     }
+
     public int getType() {
         return this.type;
     }
+
     public void setType(int type) {
         this.type = type;
     }
+
     public Long getId() {
         return this.id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -43,6 +50,7 @@ public class SearchHistoryBean {
         this.content = content;
         this.date = date;
     }
+
     @Generated(hash = 488115752)
     public SearchHistoryBean(Long id, int type, String content, long date) {
         this.id = id;
@@ -50,8 +58,10 @@ public class SearchHistoryBean {
         this.content = content;
         this.date = date;
     }
+
     @Generated(hash = 1570282321)
     public SearchHistoryBean() {
+
     }
 
 }
