@@ -975,6 +975,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         llMenuBottom.startAnimation(menuBottomIn);
+        hideSnackBar();
     }
 
     /**
