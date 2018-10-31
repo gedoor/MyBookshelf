@@ -43,51 +43,31 @@ public class NetPageLoader extends PageLoader {
     private Scheduler scheduler;
     private Handler handler = new Handler();
 
-    NetPageLoader(PageView pageView, BookShelfBean collBook) {
-        super(pageView, collBook);
+    NetPageLoader(PageView pageView) {
+        super(pageView);
         executorService = Executors.newFixedThreadPool(10);
         scheduler = Schedulers.from(executorService);
     }
 
     @Override
     public void refreshChapterList() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (mCollBook.getChapterList().size() == 0) {
-                mCollBook.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(mCollBook.getNoteUrl()));
-                mCollBook.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(mCollBook.getBookInfoBean().getName()));
+        if (getBook().getChapterList().size() > 0) {
+            isChapterListPrepare = true;
+
+            // 目录加载完成，执行回调操作。
+            if (mPageChangeListener != null) {
+                mPageChangeListener.onCategoryFinish(getBook().getChapterList());
             }
-            e.onNext(mCollBook.getChapterList().size() > 0);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        if (aBoolean) {
-                            isChapterListPrepare = true;
 
-                            // 目录加载完成，执行回调操作。
-                            if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
-                            }
-
-                            // 打开章节
-                            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-                        } else {
-                            loadChapterList();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
-                });
+            // 打开章节
+            skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
+        } else {
+            loadChapterList();
+        }
     }
 
     private void loadChapterList() {
-        WebBookModelImpl.getInstance().getChapterList(mCollBook)
+        WebBookModelImpl.getInstance().getChapterList(getBook())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
@@ -97,18 +77,18 @@ public class NetPageLoader extends PageLoader {
                         isChapterListPrepare = true;
 
                         // 存储章节到数据库
-                        mCollBook.setFinalRefreshData(System.currentTimeMillis());
+                        getBook().setFinalRefreshData(System.currentTimeMillis());
 
-                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(mCollBook.getChapterList());
-                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
+                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(getBook().getChapterList());
+                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(getBook());
 
                         // 提示目录加载完成
                         if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+                            mPageChangeListener.onCategoryFinish(getBook().getChapterList());
                         }
 
                         // 加载并显示当前章节
-                        skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+                        skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
                     }
 
                     @Override
@@ -120,24 +100,24 @@ public class NetPageLoader extends PageLoader {
 
     @SuppressLint("DefaultLocale")
     public synchronized void loadContent(final int chapterIndex) {
-        if (null != mCollBook && mCollBook.getChapterListSize() > 0) {
+        if (null != getBook() && getBook().getChapterListSize() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
-                        chapterIndex, mCollBook.getChapterList(chapterIndex).getDurChapterName())
-                        && !DownloadingList(listHandle.CHECK, mCollBook.getChapterList(chapterIndex).getDurChapterUrl())) {
-                    DownloadingList(listHandle.ADD, mCollBook.getChapterList(chapterIndex).getDurChapterUrl());
+                if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
+                        chapterIndex, getBook().getChapterList(chapterIndex).getDurChapterName())
+                        && !DownloadingList(listHandle.CHECK, getBook().getChapterList(chapterIndex).getDurChapterUrl())) {
+                    DownloadingList(listHandle.ADD, getBook().getChapterList(chapterIndex).getDurChapterUrl());
                     e.onNext(chapterIndex);
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(scheduler, mCollBook.getBookInfoBean().getName(), mCollBook.getChapterList(index).getDurChapterUrl(), index, mCollBook.getTag()))
+                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(scheduler, getBook().getBookInfoBean().getName(), getBook().getChapterList(index).getDurChapterUrl(), index, getBook().getTag()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mPageView.getActivity()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             handler.postDelayed(() -> {
-                                DownloadingList(listHandle.REMOVE, mCollBook.getChapterList(chapterIndex).getDurChapterUrl());
+                                DownloadingList(listHandle.REMOVE, getBook().getChapterList(chapterIndex).getDurChapterUrl());
                                 d.dispose();
                             }, 30 * 1000);
                         }
@@ -151,14 +131,15 @@ public class NetPageLoader extends PageLoader {
 
                         @Override
                         public void onError(Throwable e) {
-                            DownloadingList(listHandle.REMOVE, mCollBook.getChapterList(chapterIndex).getDurChapterUrl());
+                            DownloadingList(listHandle.REMOVE, getBook().getChapterList(chapterIndex).getDurChapterUrl());
                             if (chapterIndex == mCurChapterPos) {
                                 chapterError(e.getMessage());
                             }
                         }
 
                         @Override
-                        public void onComplete() {}
+                        public void onComplete() {
+                        }
                     });
         }
     }
@@ -198,7 +179,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
         @SuppressLint("DefaultLocale")
-        File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
+        File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());
         if (!file.exists()) return null;
 
@@ -209,12 +190,12 @@ public class NetPageLoader extends PageLoader {
     @SuppressLint("DefaultLocale")
     @Override
     protected boolean hasChapterData(ChapterListBean chapter) {
-        return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(mCollBook.getBookInfoBean()),
+        return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterIndex));
+        return isNetWorkAvailable() && !hasChapterData(getBook().getChapterList(chapterIndex));
     }
 
     // 装载上一章节的内容
@@ -231,7 +212,7 @@ public class NetPageLoader extends PageLoader {
     void parseCurChapter() {
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos - 1; i < mCurChapterPos + 5; i++) {
-                if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
+                if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
                     loadContent(i);
                 }
             }
@@ -244,7 +225,7 @@ public class NetPageLoader extends PageLoader {
     void parseNextChapter() {
         if (mPageChangeListener != null) {
             for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
-                if (i < mCollBook.getChapterListSize() && shouldRequestChapter(i)) {
+                if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
                     loadContent(i);
                 }
             }
@@ -261,7 +242,7 @@ public class NetPageLoader extends PageLoader {
     @Override
     TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = super.dealLoadPageList(chapterPos);
-        if (!isNetWorkAvailable() && !hasChapterData(mCollBook.getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
+        if (!isNetWorkAvailable() && !hasChapterData(getBook().getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
             txtChapter.setStatus(Enum.PageStatus.ERROR);
             txtChapter.setMsg("网络连接不可用");
         }

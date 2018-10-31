@@ -1,10 +1,8 @@
 package com.monke.monkeybook.widget.page;
 
 import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
@@ -64,8 +62,8 @@ public class LocalPageLoader extends PageLoader {
 
     private Disposable mChapterDisp = null;
 
-    LocalPageLoader(PageView pageView, BookShelfBean collBook) {
-        super(pageView, collBook);
+    LocalPageLoader(PageView pageView) {
+        super(pageView);
     }
 
     /**
@@ -239,7 +237,7 @@ public class LocalPageLoader extends PageLoader {
         for (int i = 0; i < mChapterList.size(); i++) {
             ChapterListBean bean = mChapterList.get(i);
             bean.setDurChapterIndex(i);
-            bean.setNoteUrl(mCollBook.getNoteUrl());
+            bean.setNoteUrl(getBook().getNoteUrl());
             bean.setDurChapterUrl(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + i + bean.getDurChapterName()));
         }
         IOUtils.close(bookStream);
@@ -311,21 +309,17 @@ public class LocalPageLoader extends PageLoader {
     @Override
     public void refreshChapterList() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            if (mCollBook.getChapterList().size() == 0) {
-                mCollBook.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(mCollBook.getNoteUrl()));
-                mCollBook.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(mCollBook.getBookInfoBean().getName()));
-            }
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-            mBookFile = new File(mCollBook.getNoteUrl());
+            mBookFile = new File(getBook().getNoteUrl());
             //获取文件编码
             mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
 
             Long lastModified = mBookFile.lastModified();
-            if (mCollBook.getFinalRefreshData() < lastModified) {
-                mCollBook.setFinalRefreshData(lastModified);
-                mCollBook.setHasUpdate(true);
+            if (getBook().getFinalRefreshData() < lastModified) {
+                getBook().setFinalRefreshData(lastModified);
+                getBook().setHasUpdate(true);
             }
-            e.onNext(!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0);
+            e.onNext(!getBook().getHasUpdate() && getBook().getChapterList().size() > 0);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -338,11 +332,11 @@ public class LocalPageLoader extends PageLoader {
 
                             // 目录加载完成，执行回调操作。
                             if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+                                mPageChangeListener.onCategoryFinish(getBook().getChapterList());
                             }
 
                             // 打开章节
-                            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+                            skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
                         } else {
                             loadChapterList();
                         }
@@ -372,11 +366,11 @@ public class LocalPageLoader extends PageLoader {
                         isChapterListPrepare = true;
 
                         // 存储章节到数据库
-                        mCollBook.setHasUpdate(false);
-                        mCollBook.getBookInfoBean().setChapterList(value);
+                        getBook().setHasUpdate(false);
+                        getBook().getBookInfoBean().setChapterList(value);
 
                         DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
-                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
+                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(getBook());
 
                         // 提示目录加载完成
                         if (mPageChangeListener != null) {
@@ -384,7 +378,7 @@ public class LocalPageLoader extends PageLoader {
                         }
 
                         // 加载并显示当前章节
-                        openChapter(mCollBook.getDurChapterPage());
+                        openChapter(getBook().getDurChapterPage());
                     }
 
                     @Override
