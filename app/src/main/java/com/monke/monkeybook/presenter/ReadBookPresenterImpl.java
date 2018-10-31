@@ -89,7 +89,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     bookShelf = beans.get(0);
                 }
             }
-            if (bookShelf != null && bookShelf.getChapterList().size() == 0) {
+            if (bookShelf != null) {
                 bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
             }
