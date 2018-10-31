@@ -126,8 +126,10 @@ public class NetPageLoader extends PageLoader {
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
                             handler.postDelayed(() -> {
-                                DownloadingList(listHandle.REMOVE, getBook().getChapterList(chapterIndex).getDurChapterUrl());
-                                d.dispose();
+                                if (!d.isDisposed() && getBook() != null) {
+                                    DownloadingList(listHandle.REMOVE, getBook().getChapterList(chapterIndex).getDurChapterUrl());
+                                    d.dispose();
+                                }
                             }, 30 * 1000);
                         }
 

@@ -1264,7 +1264,10 @@ public abstract class PageLoader {
     }
 
     BookShelfBean getBook() {
-        return mPageView.getActivity().getBook();
+        if (mPageView != null) {
+            return mPageView.getActivity().getBook();
+        }
+        return null;
     }
 
     /**
