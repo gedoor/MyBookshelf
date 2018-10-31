@@ -69,8 +69,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             loadBook(intent);
         } else {
             mView.openBookFromOther();
+            mView.showMenu();
         }
-        mView.showMenu();
     }
 
     private void loadBook(Intent intent) {
@@ -106,6 +106,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         } else {
                             mView.setHpbReadProgressMax(0);
                             mView.startLoadingBook();
+                            mView.showMenu();
                             checkInShelf();
                         }
                     }
