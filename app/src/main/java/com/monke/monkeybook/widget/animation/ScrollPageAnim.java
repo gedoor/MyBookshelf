@@ -370,11 +370,11 @@ public class ScrollPageAnim extends PageAnimation {
         switch (direction) {
             case NEXT:
                 super.startAnim();
-                mScroller.startScroll(0, 0, 0, -mViewHeight + 200, animationSpeed);
+                mScroller.startScroll(0, 0, 0, -mViewHeight + 300, animationSpeed);
                 break;
             case PRE:
                 super.startAnim();
-                mScroller.startScroll(0, 0, 0, mViewHeight - 200, animationSpeed);
+                mScroller.startScroll(0, 0, 0, mViewHeight - 300, animationSpeed);
                 break;
         }
     }
