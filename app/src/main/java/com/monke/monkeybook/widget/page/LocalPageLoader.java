@@ -1,8 +1,10 @@
 package com.monke.monkeybook.widget.page;
 
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
@@ -21,10 +23,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.help.FileHelp.BLANK;
 
@@ -304,64 +310,88 @@ public class LocalPageLoader extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-        mBookFile = new File(mCollBook.getNoteUrl());
-        //获取文件编码
-        mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
-
-        Long lastModified = mBookFile.lastModified();
-
-        // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0) {
-
-            isChapterListPrepare = true;
-
-            //提示目录加载完成
-            if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            if (mCollBook.getChapterList().size() == 0) {
+                mCollBook.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(mCollBook.getNoteUrl()));
+                mCollBook.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(mCollBook.getBookInfoBean().getName()));
             }
+            // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
+            mBookFile = new File(mCollBook.getNoteUrl());
+            //获取文件编码
+            mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
 
-            // 加载并显示当前章节
-            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-
-        } else {
-            // 通过RxJava异步处理分章事件
-            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
-                    .compose(RxUtils::toSimpleSingle)
-                    .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SingleObserver<List<ChapterListBean>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mChapterDisp = d;
-                        }
-
-                        @Override
-                        public void onSuccess(List<ChapterListBean> value) {
-                            mChapterDisp = null;
+            Long lastModified = mBookFile.lastModified();
+            if (mCollBook.getFinalRefreshData() < lastModified) {
+                mCollBook.setFinalRefreshData(lastModified);
+                mCollBook.setHasUpdate(true);
+            }
+            e.onNext(!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0);
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
                             isChapterListPrepare = true;
 
-                            // 存储章节到数据库
-                            mCollBook.getBookInfoBean().setChapterList(value);
-                            mCollBook.setFinalRefreshData(lastModified);
-
-                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
-                            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
-
-                            // 提示目录加载完成
+                            // 目录加载完成，执行回调操作。
                             if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(value);
+                                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
                             }
 
-                            // 加载并显示当前章节
-                            openChapter(mCollBook.getDurChapterPage());
+                            // 打开章节
+                            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
+                        } else {
+                            loadChapterList();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
+    }
+
+    private void loadChapterList() {
+        // 通过RxJava异步处理分章事件
+        Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
+                .compose(RxUtils::toSimpleSingle)
+                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new SingleObserver<List<ChapterListBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mChapterDisp = d;
+                    }
+
+                    @Override
+                    public void onSuccess(List<ChapterListBean> value) {
+                        mChapterDisp = null;
+                        isChapterListPrepare = true;
+
+                        // 存储章节到数据库
+                        mCollBook.setHasUpdate(false);
+                        mCollBook.getBookInfoBean().setChapterList(value);
+
+                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
+                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
+
+                        // 提示目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(value);
                         }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            chapterError(e.getMessage());
-                        }
-                    });
-        }
+                        // 加载并显示当前章节
+                        openChapter(mCollBook.getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
     }
 
     @Override

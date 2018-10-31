@@ -66,6 +66,15 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         open_from = intent.getData() != null ? OPEN_FROM_OTHER : OPEN_FROM_APP;
         open_from = intent.getIntExtra("openFrom", open_from);
         if (open_from == OPEN_FROM_APP) {
+            loadBook(intent);
+        } else {
+            mView.openBookFromOther();
+        }
+        mView.showMenu();
+    }
+
+    private void loadBook(Intent intent) {
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             if (bookShelf == null) {
                 String key = intent.getStringExtra("data_key");
                 bookShelf = (BookShelfBean) BitIntentDataManager.getInstance().getData(key);
@@ -80,15 +89,28 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     bookShelf = beans.get(0);
                 }
             }
-            if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
-                mView.finish();
-                return;
-            }
-            checkInShelf();
-        } else {
-            mView.openBookFromOther();
-        }
-        mView.showMenu();
+            e.onNext(bookShelf);
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
+                            mView.finish();
+                        } else {
+                            mView.setHpbReadProgressMax(0);
+                            mView.startLoadingBook();
+                            checkInShelf();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.finish();
+                    }
+                });
     }
 
     /**
@@ -326,8 +348,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
 
     private void checkInShelf() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
-            bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
             e.onNext(!(temp == null || temp.size() == 0));
             e.onComplete();
@@ -338,8 +358,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                     @Override
                     public void onNext(Boolean value) {
                         mView.setAdd(value);
-                        mView.setHpbReadProgressMax(0);
-                        mView.startLoadingBook();
                     }
 
                     @Override
