@@ -534,6 +534,12 @@ public abstract class PageLoader {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
             reSetPage();
+            mPageView.invalidate();
+        } else if (mCurChapter.getStatus() == Enum.PageStatus.FINISH) {
+            reSetPage();
+            mPageView.invalidate();
+            pagingEnd(PageAnimation.Direction.NONE);
+            return;
         }
 
         // 如果章节目录没有准备好
@@ -551,8 +557,6 @@ public abstract class PageLoader {
         }
 
         parseCurChapter();
-        chapterChangeCallback();
-        pagingEnd(PageAnimation.Direction.NONE);
     }
 
     private void reSetPage() {
@@ -1064,6 +1068,8 @@ public abstract class PageLoader {
         } else if (txtChapter.getPosition() == mCurChapterPos) {
             mCurChapter = txtChapter;
             reSetPage();
+            chapterChangeCallback();
+            pagingEnd(PageAnimation.Direction.NONE);
         } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
             mNextChapter = txtChapter;
             if (mPageMode == Enum.PageMode.SCROLL) {
