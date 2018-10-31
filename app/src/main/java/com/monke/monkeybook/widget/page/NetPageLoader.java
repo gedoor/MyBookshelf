@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 
 import com.monke.basemvplib.BaseActivity;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -70,8 +69,12 @@ public class NetPageLoader extends PageLoader {
         WebBookModelImpl.getInstance().getChapterList(getBook())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .subscribe(new Observer<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         isChapterListPrepare = true;
@@ -95,6 +98,11 @@ public class NetPageLoader extends PageLoader {
                     public void onError(Throwable e) {
                         chapterError(e.getMessage());
                     }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
 
@@ -116,6 +124,7 @@ public class NetPageLoader extends PageLoader {
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
                             handler.postDelayed(() -> {
                                 DownloadingList(listHandle.REMOVE, getBook().getChapterList(chapterIndex).getDurChapterUrl());
                                 d.dispose();

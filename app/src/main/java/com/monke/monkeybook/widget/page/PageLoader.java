@@ -34,6 +34,7 @@ import java.util.List;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -111,9 +112,7 @@ public abstract class PageLoader {
     int mCurChapterPos;
     int mCurPagePos;
 
-    private Disposable curDisposable;
-    private Disposable prevDisposable;
-    private Disposable nextDisposable;
+    CompositeDisposable compositeDisposable;
     //翻页时间
     private long skipPageTime = 0;
 
@@ -123,7 +122,7 @@ public abstract class PageLoader {
         mContext = pageView.getContext();
         mCurChapterPos = getBook().getDurChapter();
         mCurPagePos = getBook().getDurChapterPage();
-
+        compositeDisposable = new CompositeDisposable();
         // 初始化数据
         initData();
         // 初始化画笔
@@ -956,15 +955,12 @@ public abstract class PageLoader {
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
-            if (curDisposable != null) {
-                curDisposable.dispose();
-            }
             Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(mCurChapterPos)))
                     .compose(RxUtils::toSimpleSingle)
                     .subscribe(new SingleObserver<TxtChapter>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-                            curDisposable = d;
+                            compositeDisposable.add(d);
                         }
 
                         @Override
@@ -995,15 +991,12 @@ public abstract class PageLoader {
         if (mPreChapter.getStatus() == Enum.PageStatus.FINISH || prevChapterPos < 0) {
             return;
         }
-        if (prevDisposable != null) {
-            prevDisposable.dispose();
-        }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(prevChapterPos)))
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<TxtChapter>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        prevDisposable = d;
+                        compositeDisposable.add(d);
                     }
 
                     @Override
@@ -1031,15 +1024,12 @@ public abstract class PageLoader {
         if (mNextChapter.getStatus() == Enum.PageStatus.FINISH || nextChapterPos >= getBook().getChapterList().size()) {
             return;
         }
-        if (nextDisposable != null) {
-            nextDisposable.dispose();
-        }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(nextChapterPos)))
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<TxtChapter>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        nextDisposable = d;
+                        compositeDisposable.add(d);
                     }
 
                     @Override
@@ -1281,15 +1271,8 @@ public abstract class PageLoader {
      * 关闭书本
      */
     public void closeBook() {
-        if (curDisposable != null) {
-            curDisposable.dispose();
-        }
-        if (prevDisposable != null) {
-            prevDisposable.dispose();
-        }
-        if (nextDisposable != null) {
-            nextDisposable.dispose();
-        }
+        compositeDisposable.dispose();
+        compositeDisposable = null;
 
         isChapterListPrepare = false;
         isClose = true;
@@ -1298,7 +1281,6 @@ public abstract class PageLoader {
         mCurChapter = null;
         mNextChapter = null;
         mPageView = null;
-
     }
 
     public boolean isClose() {

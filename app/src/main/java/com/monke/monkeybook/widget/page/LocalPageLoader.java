@@ -60,8 +60,6 @@ public class LocalPageLoader extends PageLoader {
     //编码类型
     private Charset mCharset;
 
-    private Disposable mChapterDisp = null;
-
     LocalPageLoader(PageView pageView) {
         super(pageView);
     }
@@ -298,15 +296,6 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    public void closeBook() {
-        super.closeBook();
-        if (mChapterDisp != null) {
-            mChapterDisp.dispose();
-            mChapterDisp = null;
-        }
-    }
-
-    @Override
     public void refreshChapterList() {
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
@@ -353,16 +342,14 @@ public class LocalPageLoader extends PageLoader {
         // 通过RxJava异步处理分章事件
         Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
                 .compose(RxUtils::toSimpleSingle)
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SingleObserver<List<ChapterListBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        mChapterDisp = d;
+                        compositeDisposable.add(d);
                     }
 
                     @Override
                     public void onSuccess(List<ChapterListBean> value) {
-                        mChapterDisp = null;
                         isChapterListPrepare = true;
 
                         // 存储章节到数据库
