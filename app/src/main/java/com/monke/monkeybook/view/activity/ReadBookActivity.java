@@ -606,7 +606,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getContent(pageIndex),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
                                 );
                             }
                             return;
@@ -1223,7 +1223,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getContent(mPageLoader.getCurPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
+                            ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
                     );
                 }
         }

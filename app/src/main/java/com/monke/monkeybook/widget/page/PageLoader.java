@@ -685,7 +685,7 @@ public abstract class PageLoader {
 
         if (!getBook().getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? getBook().getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
-            title = ChapterContentHelp.replaceContent(getBook(), title);
+            title = ChapterContentHelp.getInstance().replaceContent(getBook(), title);
             String page = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
                     : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
             String progress = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
@@ -1112,17 +1112,18 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(ChapterListBean chapter, String content) throws Exception {
         //生成的页面
+        ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
         List<TxtPage> pages = new ArrayList<>();
-        content = ChapterContentHelp.replaceContent(getBook(), content);
-        content = ChapterContentHelp.toTraditional(readBookControl, content);
+        content = chapterContentHelp.replaceContent(getBook(), content);
+        content = chapterContentHelp.toTraditional(readBookControl, content);
         String allLine[] = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
         String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-        paragraph = ChapterContentHelp.replaceContent(getBook(), paragraph);
-        paragraph = ChapterContentHelp.toTraditional(readBookControl, paragraph);
+        paragraph = chapterContentHelp.replaceContent(getBook(), paragraph);
+        paragraph = chapterContentHelp.toTraditional(readBookControl, paragraph);
         if (!readBookControl.getShowTitle()) {
             showTitle = false;
             paragraph = null;
