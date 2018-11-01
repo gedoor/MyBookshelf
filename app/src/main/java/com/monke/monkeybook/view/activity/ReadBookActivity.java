@@ -1119,7 +1119,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPageLoader.skipToPrePage();
                     }
                     return true;
-                } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
+                } else if (keyCode == 32) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
                     }
