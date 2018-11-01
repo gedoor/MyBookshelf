@@ -1114,6 +1114,7 @@ public abstract class PageLoader {
         //生成的页面
         ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
         List<TxtPage> pages = new ArrayList<>();
+        content = content.replaceAll("\\s", " ");
         content = chapterContentHelp.replaceContent(getBook(), content);
         content = chapterContentHelp.toTraditional(readBookControl, content);
         String allLine[] = content.split("\n");
