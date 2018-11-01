@@ -1132,7 +1132,8 @@ public abstract class PageLoader {
         while (showTitle || i < allLine.length) {
             // 重置段落
             if (!showTitle) {
-                paragraph = allLine[i] + "\n";
+                paragraph = allLine[i].trim();
+                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
                 i++;
             }
             if (paragraph.equals("")) continue;
