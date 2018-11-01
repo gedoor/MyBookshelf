@@ -213,7 +213,9 @@ public class PageView extends View {
         if (!isPrepare) return;
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
-            mPageAnim.onPageDrawn(pageOnCur);
+            if (mPageAnim instanceof SimulationPageAnim) {
+                ((SimulationPageAnim) mPageAnim).onPageDrawn(pageOnCur);
+            }
         }
     }
 

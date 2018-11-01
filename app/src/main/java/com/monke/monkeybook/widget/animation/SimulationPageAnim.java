@@ -452,7 +452,6 @@ public class SimulationPageAnim extends HorizonPageAnim {
         }
     }
 
-    @Override
     public void onPageDrawn(int pageOnCur) {
         if (!blurBackImage)
             return;
