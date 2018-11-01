@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +13,7 @@ import android.view.ViewConfiguration;
 
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
@@ -25,6 +25,9 @@ import com.monke.monkeybook.widget.animation.SimulationPageAnim;
 import com.monke.monkeybook.widget.animation.SlidePageAnim;
 
 import java.util.Objects;
+
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
 
 
 /**
@@ -76,12 +79,16 @@ public class PageView extends View {
 
         @Override
         public void drawBackground(int pos) {
-            AsyncTask.execute(() -> PageView.this.drawBackground(pos));
+            Single.create((SingleOnSubscribe<? extends Object>) e -> PageView.this.drawBackground(pos))
+                    .compose(RxUtils::toSimpleSingle)
+                    .subscribe();
         }
 
         @Override
         public void drawContent(int pos) {
-            AsyncTask.execute(() -> PageView.this.drawContent(pos));
+            Single.create((SingleOnSubscribe<? extends Object>) e -> PageView.this.drawContent(pos))
+                    .compose(RxUtils::toSimpleSingle)
+                    .subscribe();
         }
 
     };
