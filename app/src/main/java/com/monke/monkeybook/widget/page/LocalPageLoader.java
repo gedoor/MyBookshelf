@@ -9,11 +9,8 @@ import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -249,7 +246,7 @@ public class LocalPageLoader extends PageLoader {
     /**
      * 从文件中提取一章的内容
      */
-    private byte[] getChapterContent(ChapterListBean chapter) {
+    private byte[] getChapterContentByte(ChapterListBean chapter) {
         RandomAccessFile bookStream = null;
         try {
             bookStream = new RandomAccessFile(mBookFile, "r");
@@ -376,11 +373,10 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
+    protected String getChapterContent(ChapterListBean chapter) throws Exception {
         //从文件中获取数据
-        byte[] content = getChapterContent(chapter);
-        ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        return new BufferedReader(new InputStreamReader(bais, mCharset));
+        byte[] content = getChapterContentByte(chapter);
+        return new String(content, mCharset);
     }
 
     @Override

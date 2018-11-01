@@ -9,13 +9,11 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -188,14 +186,14 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
-    protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
+    protected String getChapterContent(ChapterListBean chapter) throws Exception {
         @SuppressLint("DefaultLocale")
         File file = BookshelfHelp.getBookFile(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());
         if (!file.exists()) return null;
 
-        Reader reader = new FileReader(file);
-        return new BufferedReader(reader);
+        byte[] contentByte = DocumentHelper.getBytes(file);
+        return new String(contentByte, "UTF-8");
     }
 
     @SuppressLint("DefaultLocale")

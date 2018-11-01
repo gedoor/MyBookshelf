@@ -21,13 +21,11 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 
-import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -510,7 +508,7 @@ public abstract class PageLoader {
     /**
      * 获取章节的文本流
      */
-    protected abstract BufferedReader getChapterReader(ChapterListBean chapter) throws Exception;
+    protected abstract String getChapterContent(ChapterListBean chapter) throws Exception;
 
     /**
      * 章节数据是否存在
@@ -1086,13 +1084,10 @@ public abstract class PageLoader {
             return txtChapter;
         }
         // 获取章节的文本流
-        BufferedReader reader = null;
         List<TxtPage> pages = null;
         try {
-            reader = getChapterReader(chapter);
-            pages = loadPageList(chapter, reader);
+            pages = loadPageList(chapter, getChapterContent(chapter));
         } catch (Exception e) {
-            IOUtils.close(reader);
             e.printStackTrace();
         }
         if (pages != null) {
@@ -1113,33 +1108,34 @@ public abstract class PageLoader {
      * 将章节数据，解析成页面列表
      *
      * @param chapter：章节信息
-     * @param br：章节的文本流
+     * @param content：章节的文本
      */
-    private List<TxtPage> loadPageList(ChapterListBean chapter, BufferedReader br) throws Exception {
+    private List<TxtPage> loadPageList(ChapterListBean chapter, String content) throws Exception {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
+        content = ChapterContentHelp.replaceContent(getBook(), content);
+        content = ChapterContentHelp.toTraditional(readBookControl, content);
+        String allLine[] = content.split("\n");
         //使用流的方式加载
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
         String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-        br.readLine(); //去除标题行
+        paragraph = ChapterContentHelp.replaceContent(getBook(), paragraph);
+        paragraph = ChapterContentHelp.toTraditional(readBookControl, paragraph);
         if (!readBookControl.getShowTitle()) {
             showTitle = false;
             paragraph = null;
         }
-        while (showTitle || (paragraph = br.readLine()) != null) {
-            if (paragraph.equals("")) continue;
-            paragraph = ChapterContentHelp.replaceContent(getBook(), paragraph);
-            paragraph = ChapterContentHelp.toTraditional(readBookControl, paragraph);
-            paragraph = paragraph.replaceAll("\\s", " ").trim();
-            // 如果只有换行符，那么就不执行
-            if (paragraph.equals("")) continue;
+        int i = 1;
+        while (showTitle || i < allLine.length) {
             // 重置段落
             if (!showTitle) {
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
+                paragraph = allLine[i] + "\n";
+                i++;
             }
+            if (paragraph.equals("")) continue;
             int wordCount;
             String subStr;
             while (paragraph.length() > 0) {

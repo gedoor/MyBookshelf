@@ -30,28 +30,30 @@ public class ChapterContentHelp {
      * 替换净化
      */
     public static String replaceContent(BookShelfBean mBook, String content) {
-        String allLine[] = content.split("\n\u3000\u3000");
+        String allLine[] = content.split("\n");
         //替换
         if (ReplaceRuleManager.getEnabled() != null && ReplaceRuleManager.getEnabled().size() > 0) {
             StringBuilder contentBuilder = new StringBuilder();
             for (String line : allLine) {
-                for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
-                    if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
-                        try {
-                            line = line.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement());
-                            if (line.length() == 0) {
-                                break;
+                if (!line.trim().equals("")) {
+                    for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
+                        if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
+                            try {
+                                line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement());
+                                if (line.length() == 0) {
+                                    break;
+                                }
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
                             }
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
                         }
                     }
-                }
-                if (line.length() > 0) {
-                    if (contentBuilder.length() == 0) {
-                        contentBuilder.append(line);
-                    } else {
-                        contentBuilder.append("\n").append("\u3000\u3000").append(line);
+                    if (line.length() > 0) {
+                        if (contentBuilder.length() == 0) {
+                            contentBuilder.append(line);
+                        } else {
+                            contentBuilder.append("\n").append("\u3000\u3000").append(line);
+                        }
                     }
                 }
             }
