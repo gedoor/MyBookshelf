@@ -248,16 +248,6 @@ public class NetPageLoader extends PageLoader {
         executorService.shutdown();
     }
 
-    @Override
-    synchronized TxtChapter dealLoadPageList(int chapterPos) {
-        TxtChapter txtChapter = super.dealLoadPageList(chapterPos);
-        if (!isNetWorkAvailable() && !hasChapterData(getBook().getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
-            txtChapter.setStatus(Enum.PageStatus.ERROR);
-            txtChapter.setMsg("网络连接不可用");
-        }
-        return txtChapter;
-    }
-
     public enum listHandle {
         ADD, REMOVE, CHECK
     }

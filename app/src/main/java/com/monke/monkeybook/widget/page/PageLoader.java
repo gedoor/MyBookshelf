@@ -26,8 +26,6 @@ import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,11 +66,11 @@ public abstract class PageLoader {
     // 绘制提示的画笔(章节名称和时间)
     private TextPaint mTipPaint;
     // 绘制标题的画笔
-    private TextPaint mTitlePaint;
+    TextPaint mTitlePaint;
     // 绘制小说内容的画笔
-    private TextPaint mTextPaint;
+    TextPaint mTextPaint;
     // 阅读器的配置选项
-    private ReadBookControl readBookControl = ReadBookControl.getInstance();
+    ReadBookControl readBookControl = ReadBookControl.getInstance();
 
     /*****************params**************************/
     // 判断章节列表是否加载完成
@@ -81,8 +79,8 @@ public abstract class PageLoader {
     // 页面的翻页效果模式
     private Enum.PageMode mPageMode;
     //书籍绘制区域的宽高
-    private int mVisibleWidth;
-    private int mVisibleHeight;
+    int mVisibleWidth;
+    int mVisibleHeight;
     //应用的宽高
     private int mDisplayWidth;
     private int mDisplayHeight;
@@ -91,7 +89,7 @@ public abstract class PageLoader {
     private int mMarginBottom;
     private int mMarginLeft;
     private int mMarginRight;
-    private int contentMarginHeight;
+    int contentMarginHeight;
     private int defaultMarginWidth;
 
     //标题的大小
@@ -99,12 +97,12 @@ public abstract class PageLoader {
     //字体的大小
     private int mTextSize;
     //行间距
-    private int mTextInterval;
+    int mTextInterval;
     //标题的行间距
-    private int mTitleInterval;
+    int mTitleInterval;
     //段落距离(基于行间距的额外距离)
-    private int mTextPara;
-    private int mTitlePara;
+    int mTextPara;
+    int mTitlePara;
     //电池的百分比
     private int mBatteryLevel;
 
@@ -440,13 +438,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 获取书籍信息
-     */
-    public BookShelfBean getCollBook() {
-        return getBook();
-    }
-
-    /**
      * 获取当前章节位置
      */
     public int getCurChapterPos() {
@@ -633,7 +624,7 @@ public abstract class PageLoader {
         TxtChapter txtChapter;
         TxtPage txtPage;
         if (mCurChapter == null) {
-            mCurChapter = dealLoadPageList(mCurChapterPos);
+            mCurChapter = new TxtChapter(mCurChapterPos);
         }
         if (pageOnCur == 0) { //当前页
             txtChapter = mCurChapter;
@@ -959,7 +950,11 @@ public abstract class PageLoader {
      */
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
-            Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(mCurChapterPos)))
+            Single.create((SingleOnSubscribe<TxtChapter>) e -> {
+                PageList pageList = new PageList(this);
+                TxtChapter txtChapter = pageList.dealLoadPageList(getBook().getChapterList(mCurChapterPos), mPageView.isPrepare());
+                e.onSuccess(txtChapter);
+            })
                     .compose(RxUtils::toSimpleSingle)
                     .subscribe(new SingleObserver<TxtChapter>() {
                         @Override
@@ -995,7 +990,11 @@ public abstract class PageLoader {
         if (mPreChapter.getStatus() == Enum.PageStatus.FINISH || prevChapterPos < 0) {
             return;
         }
-        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(prevChapterPos)))
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> {
+            PageList pageList = new PageList(this);
+            TxtChapter txtChapter = pageList.dealLoadPageList(getBook().getChapterList(prevChapterPos), mPageView.isPrepare());
+            e.onSuccess(txtChapter);
+        })
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<TxtChapter>() {
                     @Override
@@ -1028,7 +1027,11 @@ public abstract class PageLoader {
         if (mNextChapter.getStatus() == Enum.PageStatus.FINISH || nextChapterPos >= getBook().getChapterList().size()) {
             return;
         }
-        Single.create((SingleOnSubscribe<TxtChapter>) e -> e.onSuccess(dealLoadPageList(nextChapterPos)))
+        Single.create((SingleOnSubscribe<TxtChapter>) e -> {
+            PageList pageList = new PageList(this);
+            TxtChapter txtChapter = pageList.dealLoadPageList(getBook().getChapterList(nextChapterPos), mPageView.isPrepare());
+            e.onSuccess(txtChapter);
+        })
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<TxtChapter>() {
                     @Override
@@ -1076,152 +1079,7 @@ public abstract class PageLoader {
         mPageView.invalidate();
     }
 
-    /**
-     * @param chapterPos 　章节Pos
-     * @return 章节数据
-     */
-    synchronized TxtChapter dealLoadPageList(int chapterPos) {
-        TxtChapter txtChapter = new TxtChapter(chapterPos);
-        if (getBook() == null) {
-            return txtChapter;
-        }
-        ChapterListBean chapter = getBook().getChapterList(chapterPos);
-        // 判断章节是否存在
-        if (!mPageView.isPrepare() || !hasChapterData(chapter)) {
-            return txtChapter;
-        }
-        List<TxtPage> pages = null;
-        try {
-            pages = loadPageList(chapter, getChapterContent(chapter));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (pages != null) {
-            txtChapter.setTxtPageList(pages);
-            txtChapter.setStatus(Enum.PageStatus.FINISH);
-            if (txtChapter.getTxtPageList().isEmpty()) {
-                txtChapter.setStatus(Enum.PageStatus.EMPTY);
-                // 添加一个空数据
-                TxtPage page = new TxtPage();
-                page.lines = new ArrayList<>(1);
-                txtChapter.getTxtPageList().add(page);
-            }
-        }
-        return txtChapter;
-    }
-
-    /**
-     * 将章节数据，解析成页面列表
-     *
-     * @param chapter：章节信息
-     * @param content：章节的文本
-     */
-    private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
-        //生成的页面
-        ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
-        List<TxtPage> pages = new ArrayList<>();
-        content = chapterContentHelp.replaceContent(getBook(), content);
-        content = chapterContentHelp.toTraditional(readBookControl, content);
-        String allLine[] = content.split("\n");
-        List<String> lines = new ArrayList<>();
-        int rHeight = mVisibleHeight - contentMarginHeight * 2;
-        int titleLinesCount = 0;
-        boolean showTitle = true; // 是否展示标题
-        String paragraph = chapterContentHelp.replaceContent(getBook(), chapter.getDurChapterName());
-        paragraph = chapterContentHelp.toTraditional(readBookControl, paragraph);
-        paragraph = paragraph.trim() + "\n";
-        if (!readBookControl.getShowTitle()) {
-            showTitle = false;
-            paragraph = null;
-        }
-        int i = 1;
-        while (showTitle || i < allLine.length) {
-            // 重置段落
-            if (!showTitle) {
-                paragraph = allLine[i].replaceAll("\\s", " ").trim();
-                i++;
-                if (paragraph.equals("")) continue;
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
-            }
-            int wordCount;
-            String subStr;
-            while (paragraph.length() > 0) {
-                //当前空间，是否容得下一行文字
-                if (showTitle) {
-                    rHeight -= mTitlePaint.getTextSize();
-                } else {
-                    rHeight -= mTextPaint.getTextSize();
-                }
-                // 一页已经填充满了，创建 TextPage
-                if (rHeight <= 0) {
-                    // 创建Page
-                    TxtPage page = new TxtPage();
-                    page.position = pages.size();
-                    page.title = chapter.getDurChapterName();
-                    page.lines = new ArrayList<>(lines);
-                    page.titleLines = titleLinesCount;
-                    pages.add(page);
-                    // 重置Lines
-                    lines.clear();
-                    rHeight = mVisibleHeight - contentMarginHeight * 2;
-                    titleLinesCount = 0;
-
-                    continue;
-                }
-
-                //测量一行占用的字节数
-                if (showTitle) {
-                    Layout tempLayout = new StaticLayout(paragraph, mTitlePaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                    wordCount = tempLayout.getLineEnd(0);
-                } else {
-                    Layout tempLayout = new StaticLayout(paragraph, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
-                    wordCount = tempLayout.getLineEnd(0);
-
-                }
-
-                subStr = paragraph.substring(0, wordCount);
-                if (!subStr.equals("\n")) {
-                    //将一行字节，存储到lines中
-                    lines.add(subStr);
-
-                    //设置段落间距
-                    if (showTitle) {
-                        titleLinesCount += 1;
-                        rHeight -= mTitleInterval;
-                    } else {
-                        rHeight -= mTextInterval;
-                    }
-                }
-                //裁剪
-                paragraph = paragraph.substring(wordCount);
-            }
-
-            //增加段落的间距
-            if (!showTitle && lines.size() != 0) {
-                rHeight = rHeight - mTextPara + mTextInterval;
-            }
-
-            if (showTitle) {
-                rHeight = rHeight - mTitlePara + mTitleInterval;
-                showTitle = false;
-            }
-        }
-
-        if (lines.size() != 0) {
-            //创建Page
-            TxtPage page = new TxtPage();
-            page.position = pages.size();
-            page.title = chapter.getDurChapterName();
-            page.lines = new ArrayList<>(lines);
-            page.titleLines = titleLinesCount;
-            pages.add(page);
-            //重置Lines
-            lines.clear();
-        }
-        return pages;
-    }
-
-    private synchronized void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
+    private void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
         float x = mMarginLeft;
 
         if (isFirstLineOfParagraph(line)) {
@@ -1244,7 +1102,7 @@ public abstract class PageLoader {
     }
 
     //判断是不是d'hou
-    private synchronized boolean isFirstLineOfParagraph(String line) {
+    private boolean isFirstLineOfParagraph(String line) {
         return line.length() > 3 && line.charAt(0) == (char) 12288 && line.charAt(1) == (char) 12288;
     }
 
@@ -1287,7 +1145,6 @@ public abstract class PageLoader {
         mPreChapter = null;
         mCurChapter = null;
         mNextChapter = null;
-        mPageView = null;
     }
 
     public boolean isClose() {
