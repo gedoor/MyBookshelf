@@ -667,7 +667,7 @@ public abstract class PageLoader {
      * 绘制背景
      */
     @SuppressLint("DefaultLocale")
-    private void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
+    private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (readBookControl.bgIsColor()) {
@@ -803,7 +803,7 @@ public abstract class PageLoader {
     /**
      * 绘制内容
      */
-    private void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
+    private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
         if (mPageMode == Enum.PageMode.SCROLL) {
