@@ -39,6 +39,9 @@ public class ChapterContentHelp {
                     if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                         try {
                             line = line.replaceAll(replaceRule.getFixedRegex(), replaceRule.getReplacement());
+                            if (line.length() == 0) {
+                                break;
+                            }
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }

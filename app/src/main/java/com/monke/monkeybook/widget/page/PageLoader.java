@@ -1130,6 +1130,7 @@ public abstract class PageLoader {
             paragraph = null;
         }
         while (showTitle || (paragraph = br.readLine()) != null) {
+            if (paragraph.equals("")) continue;
             paragraph = ChapterContentHelp.replaceContent(getBook(), paragraph);
             paragraph = ChapterContentHelp.toTraditional(readBookControl, paragraph);
             paragraph = paragraph.replaceAll("\\s", " ").trim();
