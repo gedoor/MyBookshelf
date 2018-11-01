@@ -1135,10 +1135,10 @@ public abstract class PageLoader {
             // 重置段落
             if (!showTitle) {
                 paragraph = allLine[i].replaceAll("\\s", " ").trim();
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
                 i++;
+                if (paragraph.equals("")) continue;
+                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
             }
-            if (paragraph.equals("")) continue;
             int wordCount;
             String subStr;
             while (paragraph.length() > 0) {
