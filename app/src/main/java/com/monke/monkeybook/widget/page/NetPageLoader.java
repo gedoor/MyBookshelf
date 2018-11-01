@@ -249,7 +249,7 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
-    TxtChapter dealLoadPageList(int chapterPos) {
+    synchronized TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = super.dealLoadPageList(chapterPos);
         if (!isNetWorkAvailable() && !hasChapterData(getBook().getChapterList(chapterPos)) && txtChapter.getStatus() == Enum.PageStatus.LOADING) {
             txtChapter.setStatus(Enum.PageStatus.ERROR);

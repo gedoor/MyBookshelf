@@ -1074,7 +1074,7 @@ public abstract class PageLoader {
      * @param chapterPos 　章节Pos
      * @return 章节数据
      */
-    TxtChapter dealLoadPageList(int chapterPos) {
+    synchronized TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = new TxtChapter(chapterPos);
         txtChapter.setStatus(Enum.PageStatus.LOADING);
         // 获取章节
