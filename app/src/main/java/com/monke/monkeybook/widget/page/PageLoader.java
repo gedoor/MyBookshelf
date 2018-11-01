@@ -1123,9 +1123,9 @@ public abstract class PageLoader {
         int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
-        String paragraph = chapter.getDurChapterName() + "\n"; //默认展示标题
-        paragraph = chapterContentHelp.replaceContent(getBook(), paragraph);
+        String paragraph = chapterContentHelp.replaceContent(getBook(), chapter.getDurChapterName());
         paragraph = chapterContentHelp.toTraditional(readBookControl, paragraph);
+        paragraph = paragraph.trim() + "\n";
         if (!readBookControl.getShowTitle()) {
             showTitle = false;
             paragraph = null;
