@@ -26,6 +26,8 @@ import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1076,14 +1078,14 @@ public abstract class PageLoader {
      */
     synchronized TxtChapter dealLoadPageList(int chapterPos) {
         TxtChapter txtChapter = new TxtChapter(chapterPos);
-        txtChapter.setStatus(Enum.PageStatus.LOADING);
-        // 获取章节
+        if (getBook() == null) {
+            return txtChapter;
+        }
         ChapterListBean chapter = getBook().getChapterList(chapterPos);
         // 判断章节是否存在
         if (!mPageView.isPrepare() || !hasChapterData(chapter)) {
             return txtChapter;
         }
-        // 获取章节的文本流
         List<TxtPage> pages = null;
         try {
             pages = loadPageList(chapter, getChapterContent(chapter));
@@ -1110,7 +1112,7 @@ public abstract class PageLoader {
      * @param chapter：章节信息
      * @param content：章节的文本
      */
-    private List<TxtPage> loadPageList(ChapterListBean chapter, String content) throws Exception {
+    private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
         //生成的页面
         ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
         List<TxtPage> pages = new ArrayList<>();
