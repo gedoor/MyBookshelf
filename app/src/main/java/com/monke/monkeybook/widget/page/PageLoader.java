@@ -1221,7 +1221,7 @@ public abstract class PageLoader {
         return pages;
     }
 
-    private void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
+    private synchronized void drawScaledText(Canvas canvas, String line, float lineWidth, TextPaint paint, float top) {
         float x = mMarginLeft;
 
         if (isFirstLineOfParagraph(line)) {
@@ -1244,7 +1244,7 @@ public abstract class PageLoader {
     }
 
     //判断是不是d'hou
-    private boolean isFirstLineOfParagraph(String line) {
+    private synchronized boolean isFirstLineOfParagraph(String line) {
         return line.length() > 3 && line.charAt(0) == (char) 12288 && line.charAt(1) == (char) 12288;
     }
 
