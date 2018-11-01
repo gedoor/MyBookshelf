@@ -39,7 +39,7 @@ public class ChapterContentHelp {
         if (ReplaceRuleManager.getEnabled() != null && ReplaceRuleManager.getEnabled().size() > 0) {
             StringBuilder contentBuilder = new StringBuilder();
             for (String line : allLine) {
-                if (!line.trim().equals("")) {
+                if (!line.replaceAll("\\s", " ").trim().equals("")) {
                     for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
                         if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(mBook, replaceRule.getUseTo())) {
                             try {
@@ -56,7 +56,7 @@ public class ChapterContentHelp {
                         if (contentBuilder.length() == 0) {
                             contentBuilder.append(line);
                         } else {
-                            contentBuilder.append("\n").append("\u3000\u3000").append(line);
+                            contentBuilder.append("\n").append(line);
                         }
                     }
                 }
