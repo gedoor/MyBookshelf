@@ -136,14 +136,11 @@ public class ScrollPageAnim extends PageAnimation {
                 if (hasNext) {
                     if (firstDown) {
                         firstDown = false;
-                        mListener.drawBackground(0);
                     } else {
                         mListener.changePage(Direction.NEXT);
-                        mListener.drawBackground(0);
                     }
                 } else {// 如果不存在next,则进行还原
                     mListener.changePage(Direction.NEXT);
-                    mListener.drawBackground(0);
                     mNextBitmap = cancelBitmap;
                     for (BitmapView activeView : mActiveViews) {
                         activeView.top = 0;
@@ -156,7 +153,7 @@ public class ScrollPageAnim extends PageAnimation {
                     return;
                 }
             }
-
+            mListener.drawBackground(0);
             // 如果加载成功，那么就将View从ScrapViews中移除
             mScrapViews.removeFirst();
             // 添加到存活的Bitmap中

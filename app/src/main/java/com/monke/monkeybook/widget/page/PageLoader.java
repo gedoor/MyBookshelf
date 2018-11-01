@@ -598,7 +598,9 @@ public abstract class PageLoader {
                     parseNextChapter();
                     chapterChangeCallback();
                 }
-                mPageView.drawPage(1);
+                if (mPageMode != Enum.PageMode.SCROLL) {
+                    mPageView.drawPage(1);
+                }
                 break;
             case PRE:
                 if (mCurPagePos > 0) {
@@ -612,7 +614,9 @@ public abstract class PageLoader {
                     parsePrevChapter();
                     chapterChangeCallback();
                 }
-                mPageView.drawPage(-1);
+                if (mPageMode != Enum.PageMode.SCROLL) {
+                    mPageView.drawPage(-1);
+                }
                 break;
         }
         mPageView.setContentDescription(getContent(getCurPagePos()));
