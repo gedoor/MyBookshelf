@@ -122,6 +122,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             refreshLayout.setRefreshing(false);
         });
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
+        itemTouchHelpCallback.setSwipeRefreshLayout(refreshLayout);
         if (bookPx.equals("2")) {
             itemTouchHelpCallback.setDragEnable(true);
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelpCallback);
