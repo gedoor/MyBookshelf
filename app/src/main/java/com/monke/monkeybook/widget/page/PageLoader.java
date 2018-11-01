@@ -1116,7 +1116,6 @@ public abstract class PageLoader {
         content = ChapterContentHelp.replaceContent(getBook(), content);
         content = ChapterContentHelp.toTraditional(readBookControl, content);
         String allLine[] = content.split("\n");
-        //使用流的方式加载
         List<String> lines = new ArrayList<>();
         int rHeight = mVisibleHeight - contentMarginHeight * 2;
         int titleLinesCount = 0;
