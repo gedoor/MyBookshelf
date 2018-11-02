@@ -7,7 +7,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.WebBookModelImpl;
@@ -33,14 +32,14 @@ import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
  * 网络页面加载器
  */
 
-public class NetPageLoader extends PageLoader {
+public class PageLoaderNet extends PageLoader {
     private static final String TAG = "NetPageLoader";
     private List<String> downloadingChapterList = new ArrayList<>();
     private ExecutorService executorService;
     private Scheduler scheduler;
     private Handler handler = new Handler();
 
-    NetPageLoader(PageView pageView) {
+    PageLoaderNet(PageView pageView) {
         super(pageView);
         executorService = Executors.newFixedThreadPool(10);
         scheduler = Schedulers.from(executorService);
@@ -59,49 +58,39 @@ public class NetPageLoader extends PageLoader {
             // 打开章节
             skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
         } else {
-            loadChapterList();
-        }
-    }
-
-    private void loadChapterList() {
-        WebBookModelImpl.getInstance().getChapterList(getBook())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BookShelfBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onNext(BookShelfBean bookShelfBean) {
-                        isChapterListPrepare = true;
-
-                        // 存储章节到数据库
-                        getBook().setFinalRefreshData(System.currentTimeMillis());
-
-                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(getBook().getChapterList());
-                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(getBook());
-
-                        // 提示目录加载完成
-                        if (mPageChangeListener != null) {
-                            mPageChangeListener.onCategoryFinish(getBook().getChapterList());
+            WebBookModelImpl.getInstance().getChapterList(getBook())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BookShelfBean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
                         }
 
-                        // 加载并显示当前章节
-                        skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
-                    }
+                        @Override
+                        public void onNext(BookShelfBean bookShelfBean) {
+                            isChapterListPrepare = true;
 
-                    @Override
-                    public void onError(Throwable e) {
-                        chapterError(e.getMessage());
-                    }
+                            // 目录加载完成
+                            if (mPageChangeListener != null) {
+                                mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
+                            }
 
-                    @Override
-                    public void onComplete() {
+                            // 加载并显示当前章节
+                            skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onError(Throwable e) {
+                            chapterError(e.getMessage());
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -244,7 +233,45 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     public void updateChapter() {
+        mPageView.getActivity().toast("目录更新中");
+        WebBookModelImpl.getInstance().getChapterList(getBook())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        isChapterListPrepare = true;
+
+                        if (bookShelfBean.getChapterList().size() > getBook().getChapterList().size()) {
+                            mPageView.getActivity().toast("更新完成,有新章节");
+                        } else {
+                            mPageView.getActivity().toast("更新完成,无新章节");
+                        }
+
+                        // 目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
+                        }
+
+                        // 加载并显示当前章节
+                        skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override

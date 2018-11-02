@@ -24,7 +24,7 @@ class PageList {
         TxtChapter txtChapter = new TxtChapter(chapter.getDurChapterIndex());
         // 判断章节是否存在
         if (!isPrepare || !pageLoader.hasChapterData(chapter)) {
-            if (pageLoader instanceof NetPageLoader && !NetworkUtil.isNetWorkAvailable()) {
+            if (pageLoader instanceof PageLoaderNet && !NetworkUtil.isNetWorkAvailable()) {
                 txtChapter.setStatus(Enum.PageStatus.ERROR);
                 txtChapter.setMsg("网络连接不可用");
             }
