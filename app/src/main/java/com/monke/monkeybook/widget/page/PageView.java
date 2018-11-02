@@ -212,7 +212,9 @@ public class PageView extends View {
         if (!isPrepare) return;
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
-            mPageAnim.onPageDrawn(pageOnCur);
+            if (mPageAnim instanceof SimulationPageAnim) {
+                ((SimulationPageAnim) mPageAnim).onPageDrawn(pageOnCur);
+            }
         }
     }
 
@@ -333,7 +335,7 @@ public class PageView extends View {
         if (mPageLoader.hasPrev()) {
             return true;
         } else {
-            activity.showSnackBar(this,"没有上一页");
+            activity.showSnackBar(this, "没有上一页");
             return false;
         }
     }
@@ -391,7 +393,7 @@ public class PageView extends View {
     /**
      * 获取 PageLoader
      */
-    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean collBook) {
+    public PageLoader getPageLoader(ReadBookActivity activity) {
         this.activity = activity;
         this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
@@ -399,10 +401,10 @@ public class PageView extends View {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-        if (Objects.equals(collBook.getTag(), BookShelfBean.LOCAL_TAG)) {
-            mPageLoader = new LocalPageLoader(this, collBook);
+        if (Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
+            mPageLoader = new LocalPageLoader(this);
         } else {
-            mPageLoader = new NetPageLoader(this, collBook);
+            mPageLoader = new NetPageLoader(this);
         }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {

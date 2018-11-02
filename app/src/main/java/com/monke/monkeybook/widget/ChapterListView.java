@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -217,9 +218,9 @@ public class ChapterListView extends FrameLayout {
             public void itemClick(int index, int page, int tabPosition) {
                 if (itemClickListener != null) {
                     if (!(tabPosition == 0 && index == bookShelfBean.getDurChapter())) {
-                        itemClickListener.itemClick(index, page, tabPosition);
                         searchViewCollapsed();
                         dismissChapterList();
+                        new Handler().postDelayed(() -> itemClickListener.itemClick(index, page, tabPosition), 200);
                     }
                 }
             }

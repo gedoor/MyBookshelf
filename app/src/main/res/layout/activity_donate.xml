@@ -25,7 +25,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,31 +49,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="你的支持是我更新的动力" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/vw_zfb_hb_kl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
-                        android:text="支付宝红包口令" />
 
                 </LinearLayout>
 
@@ -172,7 +148,6 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:background="@drawable/bg_ib_pre"
-                        app:cardBackgroundColor="@color/background_card"
                         android:text="支付宝收款二维码" />
 
                 </LinearLayout>

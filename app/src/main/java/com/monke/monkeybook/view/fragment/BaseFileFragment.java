@@ -1,6 +1,6 @@
 package com.monke.monkeybook.view.fragment;
 
-import com.monke.basemvplib.BaseFragment;
+import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.view.adapter.FileSystemAdapter;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.List;
  * FileSystemActivity的基础Fragment类
  */
 
-public abstract class BaseFileFragment extends BaseFragment {
+public abstract class BaseFileFragment extends MBaseFragment {
 
     protected FileSystemAdapter mAdapter;
     protected OnFileCheckedListener mListener;

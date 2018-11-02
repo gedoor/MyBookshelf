@@ -1,6 +1,6 @@
 package com.monke.monkeybook.widget.page;
 
-import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelp;
@@ -9,11 +9,8 @@ import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -21,10 +18,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.help.FileHelp.BLANK;
 
@@ -56,10 +57,8 @@ public class LocalPageLoader extends PageLoader {
     //编码类型
     private Charset mCharset;
 
-    private Disposable mChapterDisp = null;
-
-    LocalPageLoader(PageView pageView, BookShelfBean collBook) {
-        super(pageView, collBook);
+    LocalPageLoader(PageView pageView) {
+        super(pageView);
     }
 
     /**
@@ -233,7 +232,7 @@ public class LocalPageLoader extends PageLoader {
         for (int i = 0; i < mChapterList.size(); i++) {
             ChapterListBean bean = mChapterList.get(i);
             bean.setDurChapterIndex(i);
-            bean.setNoteUrl(mCollBook.getNoteUrl());
+            bean.setNoteUrl(getBook().getNoteUrl());
             bean.setDurChapterUrl(MD5Utils.strToMd5By16(mBookFile.getAbsolutePath() + i + bean.getDurChapterName()));
         }
         IOUtils.close(bookStream);
@@ -247,7 +246,7 @@ public class LocalPageLoader extends PageLoader {
     /**
      * 从文件中提取一章的内容
      */
-    private byte[] getChapterContent(ChapterListBean chapter) {
+    private byte[] getChapterContentByte(ChapterListBean chapter) {
         RandomAccessFile bookStream = null;
         try {
             bookStream = new RandomAccessFile(mBookFile, "r");
@@ -294,82 +293,90 @@ public class LocalPageLoader extends PageLoader {
     }
 
     @Override
-    public void closeBook() {
-        super.closeBook();
-        if (mChapterDisp != null) {
-            mChapterDisp.dispose();
-            mChapterDisp = null;
-        }
-    }
-
-    @Override
     public void refreshChapterList() {
-        // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
-        mBookFile = new File(mCollBook.getNoteUrl());
-        //获取文件编码
-        mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
+        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
+            mBookFile = new File(getBook().getNoteUrl());
+            //获取文件编码
+            mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
 
-        Long lastModified = mBookFile.lastModified();
-
-        // 判断文件是否已经加载过，并具有缓存
-        if (!mCollBook.getHasUpdate() && mCollBook.getChapterList().size() > 0) {
-
-            isChapterListPrepare = true;
-
-            //提示目录加载完成
-            if (mPageChangeListener != null) {
-                mPageChangeListener.onCategoryFinish(mCollBook.getChapterList());
+            Long lastModified = mBookFile.lastModified();
+            if (getBook().getFinalRefreshData() < lastModified) {
+                getBook().setFinalRefreshData(lastModified);
+                getBook().setHasUpdate(true);
             }
-
-            // 加载并显示当前章节
-            skipToChapter(mCollBook.getDurChapter(), mCollBook.getDurChapterPage());
-
-        } else {
-            // 通过RxJava异步处理分章事件
-            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
-                    .compose(RxUtils::toSimpleSingle)
-                    .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SingleObserver<List<ChapterListBean>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            mChapterDisp = d;
-                        }
-
-                        @Override
-                        public void onSuccess(List<ChapterListBean> value) {
-                            mChapterDisp = null;
+            e.onNext(!getBook().getHasUpdate() && getBook().getChapterList().size() > 0);
+            e.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new SimpleObserver<Boolean>() {
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
                             isChapterListPrepare = true;
 
-                            // 存储章节到数据库
-                            mCollBook.getBookInfoBean().setChapterList(value);
-                            mCollBook.setFinalRefreshData(lastModified);
-
-                            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
-                            DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(mCollBook);
-
-                            // 提示目录加载完成
+                            // 目录加载完成，执行回调操作。
                             if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(value);
+                                mPageChangeListener.onCategoryFinish(getBook().getChapterList());
                             }
 
-                            // 加载并显示当前章节
-                            openChapter(mCollBook.getDurChapterPage());
+                            // 打开章节
+                            skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
+                        } else {
+                            loadChapterList();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
+    }
+
+    private void loadChapterList() {
+        // 通过RxJava异步处理分章事件
+        Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<ChapterListBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(List<ChapterListBean> value) {
+                        isChapterListPrepare = true;
+
+                        // 存储章节到数据库
+                        getBook().setHasUpdate(false);
+                        getBook().getBookInfoBean().setChapterList(value);
+
+                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(value);
+                        DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplaceInTx(getBook());
+
+                        // 提示目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(value);
                         }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            chapterError(e.getMessage());
-                        }
-                    });
-        }
+                        // 加载并显示当前章节
+                        openChapter(getBook().getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+                });
     }
 
     @Override
-    protected BufferedReader getChapterReader(ChapterListBean chapter) throws Exception {
+    protected String getChapterContent(ChapterListBean chapter) throws Exception {
         //从文件中获取数据
-        byte[] content = getChapterContent(chapter);
-        ByteArrayInputStream bais = new ByteArrayInputStream(content);
-        return new BufferedReader(new InputStreamReader(bais, mCharset));
+        byte[] content = getChapterContentByte(chapter);
+        return new String(content, mCharset);
     }
 
     @Override

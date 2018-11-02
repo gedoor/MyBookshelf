@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -54,7 +53,6 @@ import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.page.Enum;
-import com.monke.monkeybook.widget.page.NetPageLoader;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
 import com.monke.mprogressbar.MHorProgressBar;
@@ -489,7 +487,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void bgChange() {
                 readBookControl.initTextDrawableIndex();
-                flContent.setBackground(readBookControl.getTextBackground());
+                pageView.setBackground(readBookControl.getTextBackground());
                 initImmersionBar();
                 if (mPageLoader != null) {
                     mPageLoader.setPageStyle();
@@ -541,7 +539,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 加载阅读页面
      */
     private void initPageView() {
-        mPageLoader = pageView.getPageLoader(this, mPresenter.getBookShelf());
+        mPageLoader = pageView.getPageLoader(this);
         mPageLoader.updateBattery(BatteryUtil.getLevel(this));
         mPageLoader.setOnPageChangeListener(
                 new PageLoader.OnPageChangeListener() {
@@ -608,7 +606,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getContent(pageIndex),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
                                 );
                             }
                             return;
@@ -977,6 +975,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         flMenu.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         llMenuBottom.startAnimation(menuBottomIn);
+        hideSnackBar();
+    }
+
+    public BookShelfBean getBook() {
+        return mPresenter.getBookShelf();
     }
 
     /**
@@ -997,11 +1000,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 }
                 break;
             case PLAY:
-                fabReadAloud.setImageResource(R.drawable.ic_pause2);
+                fabReadAloud.setImageResource(R.drawable.ic_pause_outline_24dp);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             case PAUSE:
-                fabReadAloud.setImageResource(R.drawable.ic_play2);
+                fabReadAloud.setImageResource(R.drawable.ic_play_outline_24dp);
                 llReadAloudTimer.setVisibility(View.VISIBLE);
                 break;
             default:
@@ -1116,7 +1119,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPageLoader.skipToPrePage();
                     }
                     return true;
-                } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
+                } else if (keyCode == 32) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
                     }
@@ -1220,7 +1223,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getContent(mPageLoader.getCurPagePos()),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            ChapterContentHelp.replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
+                            ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
                     );
                 }
         }

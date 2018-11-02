@@ -1,5 +1,7 @@
 package com.monke.monkeybook.help;
 
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,13 @@ import android.support.v7.widget.helper.ItemTouchHelper;
  */
 
 public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
+
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+
     /**
      * Item操作的回调
      */
@@ -127,6 +136,15 @@ public class MyItemTouchHelpCallback extends ItemTouchHelper.Callback {
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         if (onItemTouchCallbackListener != null) {
             onItemTouchCallbackListener.onSwiped(viewHolder.getAdapterPosition());
+        }
+    }
+
+    @Override
+    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
+        if (swipeRefreshLayout != null) {
+            final boolean swiping = actionState == ItemTouchHelper.ACTION_STATE_DRAG;
+            swipeRefreshLayout.setEnabled(!swiping);
         }
     }
 

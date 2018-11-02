@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface FindBookContract {
     interface Presenter extends IPresenter {
+
         void initData();
+
     }
 
     interface View extends IView {

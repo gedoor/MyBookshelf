@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_pause_resume"
-        android:icon="@drawable/ic_pause1"
+        android:icon="@drawable/ic_pause_24dp"
         android:title="@string/pause"
         app:showAsAction="ifRoom" />
 
