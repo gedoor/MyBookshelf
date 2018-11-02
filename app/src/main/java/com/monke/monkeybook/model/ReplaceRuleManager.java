@@ -25,6 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ReplaceRuleManager extends BaseModelImpl {
     private static List<ReplaceRuleBean> replaceRuleBeansEnabled;
     private static List<ReplaceRuleBean> replaceRuleBeansAll;
+    private static long lastUpTime = System.currentTimeMillis();
 
     public static List<ReplaceRuleBean> getEnabled() {
         if (replaceRuleBeansEnabled == null) {
@@ -35,6 +36,10 @@ public class ReplaceRuleManager extends BaseModelImpl {
                     .list();
         }
         return replaceRuleBeansEnabled;
+    }
+
+    public static long getLastUpTime() {
+        return lastUpTime;
     }
 
     public static List<ReplaceRuleBean> getAll() {
@@ -85,6 +90,7 @@ public class ReplaceRuleManager extends BaseModelImpl {
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
         ReadBookControl.getInstance().setLineChange(System.currentTimeMillis());
+        lastUpTime = System.currentTimeMillis();
     }
 
     public static Observable<Boolean> importReplaceRuleFromWww(URL url) {

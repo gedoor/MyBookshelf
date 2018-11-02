@@ -1,7 +1,6 @@
 package com.monke.monkeybook.help;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -15,6 +14,7 @@ public class ChapterContentHelp {
     private List<ReplaceRuleBean> validReplaceRules;
     private static ChapterContentHelp instance;
     private BookShelfBean book;
+    private long lastUpdateTime = 0;
 
     public static ChapterContentHelp getInstance() {
         if (instance == null)
@@ -23,8 +23,9 @@ public class ChapterContentHelp {
     }
 
     public void updateBookShelf(BookShelfBean bookShelf) {
-        if (book == null || !book.equals(bookShelf)) {
-            this.book = bookShelf;
+        if (book == null || !book.equals(bookShelf) || lastUpdateTime != ReplaceRuleManager.getLastUpTime()) {
+            book = bookShelf;
+            lastUpdateTime = ReplaceRuleManager.getLastUpTime();
             updateReplaceRules();
         }
     }
