@@ -72,7 +72,7 @@ public class WebBookModelImpl implements IWebBookModel {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
             return bookModel.getBookContent(scheduler, durChapterUrl, durChapterIndex)
-                    .flatMap((bookContentBean -> upChapterList(bookName, tag, bookContentBean)));
+                    .flatMap((bookContentBean -> saveContent(bookName, tag, bookContentBean)));
         } else
             return Observable.create(e -> {
                 e.onError(new Throwable("没有找到书源"));
@@ -152,7 +152,7 @@ public class WebBookModelImpl implements IWebBookModel {
     }
 
     @SuppressLint("DefaultLocale")
-    private Observable<BookContentBean> upChapterList(String bookName, String tag, BookContentBean bookContentBean) {
+    private Observable<BookContentBean> saveContent(String bookName, String tag, BookContentBean bookContentBean) {
         return Observable.create(e -> {
             if (bookContentBean.getRight()) {
                 ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
@@ -166,10 +166,13 @@ public class WebBookModelImpl implements IWebBookModel {
                         e.onNext(bookContentBean);
                         e.onComplete();
                         return;
+                    } else {
+                        e.onError(new Throwable("保存章节出错"));
+                        e.onComplete();
                     }
                 }
             }
-            e.onError(new Throwable("保存章节出错"));
+            e.onError(new Throwable("下载章节出错"));
             e.onComplete();
         });
     }
