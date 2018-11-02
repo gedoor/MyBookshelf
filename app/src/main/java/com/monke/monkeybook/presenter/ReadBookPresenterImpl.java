@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -352,24 +353,10 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     }
 
     private void checkInShelf() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        AsyncTask.execute(() ->{
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-            e.onNext(!(temp == null || temp.size() == 0));
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean value) {
-                        mView.setAdd(value);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
+            mView.setAdd(temp != null && temp.size() > 0);
+        });
     }
 
     @Override
