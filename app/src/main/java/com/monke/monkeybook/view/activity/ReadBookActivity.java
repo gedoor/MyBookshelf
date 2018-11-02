@@ -58,8 +58,6 @@ import com.monke.monkeybook.widget.page.PageView;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -163,9 +161,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private MoProgressHUD moProgressHUD;
     private ThisBatInfoReceiver batInfoReceiver;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-
-    @SuppressLint("SimpleDateFormat")
-    private DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
     private Boolean showCheckPermission = false;
     private boolean autoPage = false;
