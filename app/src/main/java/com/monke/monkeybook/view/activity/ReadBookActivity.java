@@ -860,6 +860,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (mPageLoader != null) {
                     mPageLoader.updateChapter();
                 }
+                break;
             case android.R.id.home:
                 finish();
                 break;
