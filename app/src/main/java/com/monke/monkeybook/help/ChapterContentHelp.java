@@ -22,7 +22,7 @@ public class ChapterContentHelp {
         return instance;
     }
 
-    public void updateBookShelf(BookShelfBean bookShelf, long upTime) {
+    private void updateBookShelf(BookShelfBean bookShelf, long upTime) {
         if (book == null || !book.equals(bookShelf) || lastUpdateTime != upTime) {
             book = bookShelf;
             lastUpdateTime = upTime;
@@ -30,7 +30,7 @@ public class ChapterContentHelp {
         }
     }
 
-    public void updateReplaceRules() {
+    private void updateReplaceRules() {
         if (validReplaceRules == null)
             validReplaceRules = new ArrayList<>();
         else
@@ -73,7 +73,7 @@ public class ChapterContentHelp {
         StringBuilder contentBuilder = new StringBuilder();
         //替换
         for (String line : allLine) {
-            line = line.replaceAll("^[\\s\u3000]+", "").trim();
+            line = line.replaceAll("^[\\s\u3000]+", " ").trim();
             if (line.length() == 0) continue;
             for (ReplaceRuleBean replaceRule : validReplaceRules) {
                 try {
