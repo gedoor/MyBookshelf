@@ -1,26 +1,17 @@
 <resources>
 
-    <style name="WhiteTheme" parent="Base.AppTheme">
+    <!-- Base application theme. -->
+    <style name="CAppTheme" parent="Base.AppTheme">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="TealGreenTheme" parent="Base.AppTheme">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/teal_green</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <!-- Base application theme. -->
-    <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
         <item name="android:itemTextAppearance">@style/MenuItemTextStyle</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="NavigationViewStyle">
@@ -43,6 +34,13 @@
 
     <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/background_menu</item>
+    </style>
+
+    <style name="CAppTransparentTheme" parent="CAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
