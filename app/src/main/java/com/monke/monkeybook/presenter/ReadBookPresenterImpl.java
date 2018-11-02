@@ -49,7 +49,11 @@ import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
@@ -362,27 +366,31 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     @Override
     public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
-            Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            Single.create((SingleOnSubscribe<Boolean>) e -> {
                 DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().insertOrReplaceInTx(bookShelf.getChapterList());
                 DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(bookShelf.getBookInfoBean());
                 //网络数据获取成功  存入BookShelf表数据库
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelf);
                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
                 mView.setAdd(true);
-                e.onNext(true);
-                e.onComplete();
+                e.onSuccess(true);
             }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new SimpleObserver<Object>() {
+                    .subscribe(new SingleObserver<Boolean>() {
                         @Override
-                        public void onNext(Object value) {
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Boolean aBoolean) {
                             if (addListener != null)
                                 addListener.addSuccess();
                         }
 
                         @Override
                         public void onError(Throwable e) {
-
+                            mView.toast(e.getMessage());
                         }
                     });
         }
