@@ -6,7 +6,6 @@ import android.text.StaticLayout;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +14,7 @@ import java.util.List;
 
 class PageList {
     private PageLoader pageLoader;
+    private ChapterContentHelp contentHelper = ChapterContentHelp.getInstance();
 
     PageList(PageLoader pageLoader) {
         this.pageLoader = pageLoader;
@@ -58,31 +58,26 @@ class PageList {
      */
     private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
         //生成的页面
-        ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
         List<TxtPage> pages = new ArrayList<>();
         if (pageLoader.getBook() == null) return pages;
-        content = chapterContentHelp.replaceContent(pageLoader.getBook(), content);
-        content = chapterContentHelp.toTraditional(pageLoader.readBookControl, content);
+        content = contentHelper.replaceContent(pageLoader.getBook(), content);
         String allLine[] = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
         int titleLinesCount = 0;
-        boolean showTitle = true; // 是否展示标题
-        String paragraph = chapterContentHelp.replaceContent(pageLoader.getBook(), chapter.getDurChapterName());
-        paragraph = chapterContentHelp.toTraditional(pageLoader.readBookControl, paragraph);
-        paragraph = paragraph.trim() + "\n";
-        if (!pageLoader.readBookControl.getShowTitle()) {
-            showTitle = false;
-            paragraph = null;
+        boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
+        String paragraph = null;
+        if (showTitle) {
+            paragraph = contentHelper.replaceContent(pageLoader.getBook(), chapter.getDurChapterName());
+            paragraph = paragraph.trim() + "\n";
         }
         int i = 1;
         while (showTitle || i < allLine.length) {
             // 重置段落
             if (!showTitle) {
-                paragraph = allLine[i].replaceAll("\\s", " ").trim();
+                paragraph = "\u3000\u3000" + allLine[i].replaceAll("\\s", " ").trim() + "\n";
                 i++;
-                if (paragraph.equals("")) continue;
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
+                if (paragraph.equals("\u3000\u3000\n")) continue;
             }
             int wordCount;
             String subStr;

@@ -25,7 +25,6 @@ import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModelImpl;
 import com.monke.monkeybook.presenter.contract.MainContract;
-import com.monke.monkeybook.utils.SharedPreferencesUtil;
 
 import java.net.URL;
 

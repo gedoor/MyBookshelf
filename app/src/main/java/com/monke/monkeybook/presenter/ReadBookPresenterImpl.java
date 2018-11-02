@@ -357,7 +357,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     }
 
     private void checkInShelf() {
-        AsyncTask.execute(() ->{
+        AsyncTask.execute(() -> {
             List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
             mView.setAdd(temp != null && temp.size() > 0);
         });
