@@ -1117,6 +1117,8 @@ public abstract class PageLoader {
         }
     }
 
+    public abstract void updateChapter();
+
     /**
      * 根据当前状态，决定是否能够翻页
      */

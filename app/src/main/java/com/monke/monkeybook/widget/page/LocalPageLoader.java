@@ -380,4 +380,9 @@ public class LocalPageLoader extends PageLoader {
     protected boolean hasChapterData(ChapterListBean chapter) {
         return true;
     }
+
+    @Override
+    public void updateChapter() {
+
+    }
 }

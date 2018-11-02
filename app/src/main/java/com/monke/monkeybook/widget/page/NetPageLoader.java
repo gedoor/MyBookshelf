@@ -243,6 +243,11 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
+    public void updateChapter() {
+
+    }
+
+    @Override
     public void closeBook() {
         super.closeBook();
         executorService.shutdown();
