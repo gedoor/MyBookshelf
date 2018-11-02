@@ -45,6 +45,7 @@ public class MApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -53,7 +54,6 @@ public class MApplication extends Application {
             versionName = "0.0.0";
             e.printStackTrace();
         }
-        instance = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannelIdDownload();
             createChannelIdReadAloud();

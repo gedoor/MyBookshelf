@@ -47,7 +47,7 @@
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            app:tabBackground="@color/colorPrimary"
+            app:tabBackground="?attr/colorPrimary"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/darker_gray"
             app:tabMode="fixed" />
