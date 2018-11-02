@@ -4,9 +4,9 @@ package com.monke.monkeybook.view.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -162,19 +160,22 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                 itemClickListener.onClick(v, index);
         });
         if (!Objects.equals(bookshelfPx, "2")) {
-            holder.flContent.setOnLongClickListener(v -> {
+            holder.flContent.setOnLongClickListener(view -> {
                 if (itemClickListener != null) {
-                    itemClickListener.onLongClick(v, index);
+                    itemClickListener.onLongClick(view, index);
                 }
                 return true;
             });
-        } else if (books.get(index).getSerialNumber() != index) {
-            books.get(index).setSerialNumber(index);
-            new Thread() {
-                public void run() {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index));
+        } else {
+            holder.ivCover.setOnClickListener(view -> {
+                if (itemClickListener != null) {
+                    itemClickListener.onLongClick(view, index);
                 }
-            }.start();
+            });
+        }
+        if (Objects.equals(bookshelfPx, "2") && books.get(index).getSerialNumber() != index) {
+            books.get(index).setSerialNumber(index);
+            AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index)));
         }
         if (books.get(index).isLoading()) {
             holder.rotateLoading.setVisibility(View.VISIBLE);
