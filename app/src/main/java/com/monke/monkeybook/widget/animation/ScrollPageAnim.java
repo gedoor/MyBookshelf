@@ -13,13 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by newbiechen on 17-7-23.
  * 原理:仿照ListView源码实现的上下滑动效果
- * Alter by: zeroAngus
- * <p>
- * 问题:
- * 2. 滑动卡顿的问题。原因:由于绘制的数据过多造成的卡顿问题。 (主要是文字绘制需要的时长比较多) 解决办法：做文字缓冲
- * 3. 弱网环境下，显示的问题
+ * 问题:* 滑动卡顿的问题。原因:由于绘制的数据过多造成的卡顿问题。 (主要是文字绘制需要的时长比较多) 解决办法：做文字缓冲
  */
 public class ScrollPageAnim extends PageAnimation {
     private static final String TAG = "ScrollAnimation";
