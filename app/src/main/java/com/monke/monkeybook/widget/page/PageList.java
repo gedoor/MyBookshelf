@@ -6,7 +6,6 @@ import android.text.StaticLayout;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +14,7 @@ import java.util.List;
 
 class PageList {
     private PageLoader pageLoader;
+    private ChapterContentHelp contentHelper = ChapterContentHelp.getInstance();
 
     PageList(PageLoader pageLoader) {
         this.pageLoader = pageLoader;
@@ -57,14 +57,10 @@ class PageList {
      * @param content：章节的文本
      */
     private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
-        boolean convertCTS = pageLoader.readBookControl.getTextConvert() != 0;
         //生成的页面
-        ChapterContentHelp chapterContentHelp = ChapterContentHelp.getInstance();
         List<TxtPage> pages = new ArrayList<>();
         if (pageLoader.getBook() == null) return pages;
-        content = chapterContentHelp.replaceContent(pageLoader.getBook(), content);
-        if (convertCTS)
-            content = chapterContentHelp.toTraditional(pageLoader.readBookControl, content);
+        content = contentHelper.replaceContent(pageLoader.getBook(), content);
         String allLine[] = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
@@ -72,9 +68,7 @@ class PageList {
         boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
         String paragraph = null;
         if (showTitle) {
-            paragraph = chapterContentHelp.replaceContent(pageLoader.getBook(), chapter.getDurChapterName());
-            if (convertCTS)
-                paragraph = chapterContentHelp.toTraditional(pageLoader.readBookControl, paragraph);
+            paragraph = contentHelper.replaceContent(pageLoader.getBook(), chapter.getDurChapterName());
             paragraph = paragraph.trim() + "\n";
         }
         int i = 1;

@@ -22,10 +22,10 @@ public class ChapterContentHelp {
         return instance;
     }
 
-    public void updateBookShelf(BookShelfBean bookShelf) {
-        if (book == null || !book.equals(bookShelf) || lastUpdateTime != ReplaceRuleManager.getLastUpTime()) {
+    public void updateBookShelf(BookShelfBean bookShelf, long upTime) {
+        if (book == null || !book.equals(bookShelf) || lastUpdateTime != upTime) {
             book = bookShelf;
-            lastUpdateTime = ReplaceRuleManager.getLastUpTime();
+            lastUpdateTime = upTime;
             updateReplaceRules();
         }
     }
@@ -47,8 +47,8 @@ public class ChapterContentHelp {
     /**
      * 转繁体
      */
-    public static String toTraditional(ReadBookControl readBookControl, String content) {
-        switch (readBookControl.getTextConvert()) {
+    private String toTraditional(int convert, String content) {
+        switch (convert) {
             case 0:
                 break;
             case 1:
@@ -65,38 +65,40 @@ public class ChapterContentHelp {
      * 替换净化
      */
     public String replaceContent(BookShelfBean mBook, String content) {
-        updateBookShelf(mBook);
+        updateBookShelf(mBook, ReplaceRuleManager.getLastUpTime());
+        int convertCTS = ReadBookControl.getInstance().getTextConvert();
         if (validReplaceRules.size() == 0)
-            return content;
+            return toTraditional(convertCTS, content);
         String allLine[] = content.split("\n");
         StringBuilder contentBuilder = new StringBuilder();
         //替换
         for (String line : allLine) {
             line = line.replaceAll("^[\\s\u3000]+", "").trim();
             if (line.length() == 0) continue;
-                for (ReplaceRuleBean replaceRule : validReplaceRules) {
-                    try {
-                        line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement()).trim();
-                        if (line.length() == 0) break;
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                if (line.length() == 0) continue;
-                contentBuilder.append(line).append("\n");
-            }
-            content = contentBuilder.toString();
             for (ReplaceRuleBean replaceRule : validReplaceRules) {
-                String rule = replaceRule.getRegex();
-                if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n")) {
-                    try {
-                        content = content.replaceAll(rule, replaceRule.getReplacement());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
+                try {
+                    line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement()).trim();
+                    if (line.length() == 0) break;
+                } catch (Exception e1) {
+                    e1.printStackTrace();
                 }
             }
-        return content;
+            if (line.length() == 0) continue;
+            contentBuilder.append(line).append("\n");
+        }
+
+        content = contentBuilder.toString();
+        for (ReplaceRuleBean replaceRule : validReplaceRules) {
+            String rule = replaceRule.getRegex();
+            if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n")) {
+                try {
+                    content = content.replaceAll(rule, replaceRule.getReplacement());
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return toTraditional(convertCTS, content);
     }
 
     private boolean isUseTo(BookShelfBean mBook, String useTo) {
