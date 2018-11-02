@@ -24,7 +24,7 @@
         android:persistent="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/CAppTheme"
+        android:theme="@style/WhiteTheme"
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:replace="android:theme">
 
@@ -85,73 +85,59 @@
             android:name=".view.activity.SearchBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme"
             android:windowSoftInputMode="stateHidden|adjustUnspecified" />
         <activity
             android:name=".view.activity.ChoiceBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.BookDetailActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.ImportBookActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.BookSourceActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.ReplaceRuleActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.SettingActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.AboutActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.DonateActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.SourceEditActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.ReadStyleActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.DownloadActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.BookInfoActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
         <activity
             android:name=".view.activity.UpdateActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask"
-            android:theme="@style/CAppTransparentTheme" />
+            android:launchMode="singleTask" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
