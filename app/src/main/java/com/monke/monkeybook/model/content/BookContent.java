@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.model.ErrorAnalyContentManager;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
@@ -45,7 +44,6 @@ public class BookContent {
 
             WebContentBean webContentBean = analyzeBookContent(s, durChapterUrl);
             bookContentBean.setDurChapterContent(webContentBean.content);
-            bookContentBean.setRight(webContentBean.isRight);
 
             while (!TextUtils.isEmpty(webContentBean.nextUrl)) {
                 Call<String> call = DefaultModelImpl.getRetrofitString(bookSourceBean.getBookSourceUrl())
@@ -71,26 +69,17 @@ public class BookContent {
 
     private WebContentBean analyzeBookContent(final String s, final String chapterUrl) {
         WebContentBean webContentBean = new WebContentBean();
-        try {
-            Document doc = Jsoup.parse(s);
-            AnalyzeElement analyzeElement = new AnalyzeElement(doc, chapterUrl);
-            webContentBean.content = analyzeElement.getResult(ruleBookContent);
-            webContentBean.isRight = true;
-            if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
-                webContentBean.nextUrl = analyzeElement.getResult(bookSourceBean.getRuleContentUrlNext());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            ErrorAnalyContentManager.getInstance().writeNewErrorUrl(chapterUrl);
-            webContentBean.content = chapterUrl.substring(0, chapterUrl.indexOf('/', 8)) + ex.getMessage();
-            webContentBean.isRight = false;
+        Document doc = Jsoup.parse(s);
+        AnalyzeElement analyzeElement = new AnalyzeElement(doc, chapterUrl);
+        webContentBean.content = analyzeElement.getResult(ruleBookContent);
+        if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
+            webContentBean.nextUrl = analyzeElement.getResult(bookSourceBean.getRuleContentUrlNext());
         }
         return webContentBean;
     }
 
     private class WebContentBean {
         private String content;
-        private boolean isRight;
         private String nextUrl;
 
         private WebContentBean() {

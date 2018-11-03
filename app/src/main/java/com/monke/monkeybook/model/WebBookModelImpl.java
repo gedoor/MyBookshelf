@@ -4,6 +4,7 @@ package com.monke.monkeybook.model;
 import android.annotation.SuppressLint;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -68,11 +69,11 @@ public class WebBookModelImpl implements IWebBookModel {
      * 章节缓存
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String bookName, final String durChapterUrl, final int durChapterIndex, String tag) {
-        IStationBookModel bookModel = getBookSourceModel(tag);
+    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, BaseChapterBean chapterBean, String bookName) {
+        IStationBookModel bookModel = getBookSourceModel(chapterBean.getTag());
         if (bookModel != null) {
-            return bookModel.getBookContent(scheduler, durChapterUrl, durChapterIndex)
-                    .flatMap((bookContentBean -> saveContent(bookName, tag, bookContentBean)));
+            return bookModel.getBookContent(scheduler, chapterBean.getDurChapterUrl(), chapterBean.getDurChapterIndex())
+                    .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
         } else
             return Observable.create(e -> {
                 e.onError(new Throwable("没有找到书源"));
@@ -152,28 +153,18 @@ public class WebBookModelImpl implements IWebBookModel {
     }
 
     @SuppressLint("DefaultLocale")
-    private Observable<BookContentBean> saveContent(String bookName, String tag, BookContentBean bookContentBean) {
+    private Observable<BookContentBean> saveContent(String bookName, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
-            if (bookContentBean.getRight()) {
-                ChapterListBean chapterListBean = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                        .where(ChapterListBeanDao.Properties.DurChapterUrl.eq(bookContentBean.getDurChapterUrl())).unique();
-                if (chapterListBean != null) {
-                    bookContentBean.setNoteUrl(chapterListBean.getNoteUrl());
-                    if (BookshelfHelp.saveChapterInfo(bookName + "-" + tag, chapterListBean.getDurChapterIndex(),
-                            chapterListBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
-                        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().update(chapterListBean);
-                        RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterListBean);
-                        e.onNext(bookContentBean);
-                        e.onComplete();
-                        return;
-                    } else {
-                        e.onError(new Throwable("保存章节出错"));
-                        e.onComplete();
-                    }
+                bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
+                if (BookshelfHelp.saveChapterInfo(bookName + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
+                        chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
+                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterBean);
+                    e.onNext(bookContentBean);
+                    e.onComplete();
+                } else {
+                    e.onError(new Throwable("保存章节出错"));
+                    e.onComplete();
                 }
-            }
-            e.onError(new Throwable("下载章节出错"));
-            e.onComplete();
         });
     }
 }

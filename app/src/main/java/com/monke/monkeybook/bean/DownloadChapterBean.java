@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 @Entity
-public class DownloadChapterBean implements Parcelable {
+public class DownloadChapterBean implements Parcelable, BaseChapterBean {
     private String noteUrl;
 
     private int durChapterIndex;  //当前章节数
@@ -80,6 +80,7 @@ public class DownloadChapterBean implements Parcelable {
         dest.writeString(coverUrl);
     }
 
+    @Override
     public String getNoteUrl() {
         return noteUrl;
     }
@@ -88,6 +89,7 @@ public class DownloadChapterBean implements Parcelable {
         this.noteUrl = noteUrl;
     }
 
+    @Override
     public int getDurChapterIndex() {
         return durChapterIndex;
     }
@@ -96,6 +98,7 @@ public class DownloadChapterBean implements Parcelable {
         this.durChapterIndex = durChapterIndex;
     }
 
+    @Override
     public String getDurChapterUrl() {
         return durChapterUrl;
     }
@@ -104,6 +107,7 @@ public class DownloadChapterBean implements Parcelable {
         this.durChapterUrl = durChapterUrl;
     }
 
+    @Override
     public String getDurChapterName() {
         return durChapterName;
     }
@@ -112,6 +116,7 @@ public class DownloadChapterBean implements Parcelable {
         this.durChapterName = durChapterName;
     }
 
+    @Override
     public String getTag() {
         return tag;
     }

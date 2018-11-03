@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -24,7 +25,7 @@ public interface IWebBookModel {
     /**
      * 章节缓存
      */
-    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String bookName, final String durChapterUrl, final int durChapterIndex, String tag);
+    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean baseChapterBean, String bookName);
 
     /**
      * 其他站点资源整合搜索
