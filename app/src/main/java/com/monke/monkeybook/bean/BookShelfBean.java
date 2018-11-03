@@ -310,4 +310,12 @@ public class BookShelfBean implements Parcelable, Cloneable {
     public void setAllowUpdate(Boolean allowUpdate) {
         this.allowUpdate = allowUpdate;
     }
+
+    public boolean realChapterListEmpty() {
+        return getChapterList().isEmpty();
+    }
+
+    public void setChapterList(List<ChapterListBean> chapterList) {
+        this.bookInfoBean.setChapterList(chapterList);
+    }
 }

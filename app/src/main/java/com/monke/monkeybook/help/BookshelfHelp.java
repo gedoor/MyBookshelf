@@ -290,6 +290,17 @@ public class BookshelfHelp {
         }
     }
 
+    public static boolean isInBookShelf(String bookUrl) {
+        if (bookUrl == null) {
+            return false;
+        }
+
+        long count = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl))
+                .count();
+        return count > 0;
+    }
+
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
         removeFromBookShelf(bookShelfBean, false);
     }

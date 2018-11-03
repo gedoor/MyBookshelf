@@ -132,9 +132,6 @@ dependencies {
     //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    //SwitchButton
-    implementation 'com.kyleduo.switchbutton:library:2.0.0'
-
     //bind view
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
@@ -162,7 +159,11 @@ dependencies {
     //字符串比较
     implementation 'net.ricecode:string-similarity:1.0.0'
 
+    //MarkDown
     implementation 'ru.noties:markwon:2.0.0'
+
+    //epub
+    implementation 'nl.siegmann.epublib:epublib-core:3.1'
 }
 
 greendao {

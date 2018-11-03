@@ -2,11 +2,11 @@ package com.monke.monkeybook.widget.page;
 
 import android.text.TextUtils;
 
+import com.monke.basemvplib.CharsetDetector;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
@@ -57,7 +57,7 @@ public class PageLoaderText extends PageLoader {
     //获取书本的文件
     private File mBookFile;
     //编码类型
-    private Charset mCharset;
+    private String mCharset;
 
     PageLoaderText(PageView pageView) {
         super(pageView);
@@ -289,7 +289,7 @@ public class PageLoaderText extends PageLoader {
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
             mBookFile = new File(getBook().getNoteUrl());
             //获取文件编码
-            mCharset = FileHelp.getCharset(mBookFile.getAbsolutePath());
+            mCharset = CharsetDetector.detectCharset(mBookFile);
 
             Long lastModified = mBookFile.lastModified();
             if (getBook().getFinalRefreshData() < lastModified) {
@@ -358,7 +358,7 @@ public class PageLoaderText extends PageLoader {
     protected String getChapterContent(ChapterListBean chapter) {
         //从文件中获取数据
         byte[] content = getChapterContentByte(chapter);
-        return new String(content, mCharset);
+        return new String(content, Charset.forName(mCharset));
     }
 
     /**

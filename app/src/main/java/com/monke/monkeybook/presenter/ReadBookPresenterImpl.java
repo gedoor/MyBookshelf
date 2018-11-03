@@ -29,7 +29,6 @@ import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
@@ -93,6 +92,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             if (bookShelf != null) {
                 bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
+                mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
             }
             e.onNext(bookShelf);
             e.onComplete();
@@ -108,7 +108,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                             mView.setHpbReadProgressMax(0);
                             mView.startLoadingBook();
                             mView.showMenu();
-                            checkInShelf();
                         }
                     }
 
@@ -200,7 +199,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
-                                        checkInShelf();
+                                        mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
                                     }
 
                                     @Override
@@ -350,13 +349,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
     @Override
     public BookShelfBean getBookShelf() {
         return bookShelf;
-    }
-
-    private void checkInShelf() {
-        AsyncTask.execute(() -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-            mView.setAdd(temp != null && temp.size() > 0);
-        });
     }
 
     @Override

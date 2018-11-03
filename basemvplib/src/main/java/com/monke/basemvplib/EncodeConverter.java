@@ -7,7 +7,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.mozilla.universalchardet.UniversalDetector;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -91,10 +90,7 @@ public class EncodeConverter extends Converter.Factory {
                     }
                 }
                 //根据内容判断
-                UniversalDetector detector = new UniversalDetector(null);
-                detector.handleData(responseBytes, 0, responseBytes.length - 1);
-                detector.dataEnd();
-                charsetStr = detector.getDetectedCharset();
+                charsetStr = CharsetDetector.detectCharset(value.byteStream());
                 return new String(responseBytes, Charset.forName(charsetStr));
             }
         };
