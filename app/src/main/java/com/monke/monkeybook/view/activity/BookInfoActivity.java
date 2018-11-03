@@ -26,6 +26,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.FileUtil;
+import com.monke.monkeybook.utils.SoftInputUtil;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -183,7 +184,7 @@ public class BookInfoActivity extends MBaseActivity {
     private void setupActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.book_info);
         }
     }
@@ -218,6 +219,8 @@ public class BookInfoActivity extends MBaseActivity {
         initCover();
         BookshelfHelp.saveBookToShelf(book);
         RxBus.get().post(RxBusTag.HAD_ADD_BOOK, book);
+        SoftInputUtil.hideIMM(this, getCurrentFocus());
+        finish();
     }
 
 
