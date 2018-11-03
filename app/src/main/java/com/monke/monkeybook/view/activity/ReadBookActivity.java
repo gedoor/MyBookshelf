@@ -963,13 +963,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private void setTextChapterRegex() {
         if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-            String regexPath = getBook().getNoteUrl().substring(0, getBook().getNoteUrl().lastIndexOf(".")) + ".regex";
+            String regex = getBook().getBookInfoBean().getChapterUrl();
             moProgressHUD.showInputBox("TXT目录正则",
-                    "",
-                    inputText -> {
-
-            });
+                    regex,
+                    this::saveTextChapterRegex);
         }
+    }
+
+    private void saveTextChapterRegex(String regex) {
+        getBook().getBookInfoBean().setChapterUrl(regex);
+        mPresenter.saveProgress();
     }
 
     /**
