@@ -2,6 +2,8 @@ package com.monke.monkeybook.widget.page;
 
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.dao.ChapterListBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
@@ -374,7 +376,12 @@ public class PageLoaderText extends PageLoader {
     @Override
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
-        Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
+        Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
+            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                    .where(ChapterListBeanDao.Properties.NoteUrl.eq(getBook().getNoteUrl()))
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            e.onSuccess(loadChapters());
+        })
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<List<ChapterListBean>>() {
                     @Override
