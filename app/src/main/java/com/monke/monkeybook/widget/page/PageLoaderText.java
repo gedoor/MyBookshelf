@@ -254,7 +254,12 @@ public class PageLoaderText extends PageLoader {
     private boolean checkChapterType(RandomAccessFile bookStream) throws IOException {
         chapterPatterns.clear();
         if (!TextUtils.isEmpty(getBook().getBookInfoBean().getChapterUrl())) {
-            chapterPatterns.add(getBook().getBookInfoBean().getChapterUrl());
+            for (String x : getBook().getBookInfoBean().getChapterUrl().split("\n")) {
+                x = x.trim();
+                if (!TextUtils.isEmpty(x)) {
+                    chapterPatterns.add(x);
+                }
+            }
         }
         chapterPatterns.addAll(Arrays.asList(CHAPTER_PATTERNS));
         //首先获取128k的数据
