@@ -205,6 +205,7 @@ public class BookInfoActivity extends MBaseActivity {
                 saveInfo();
                 break;
             case android.R.id.home:
+                SoftInputUtil.hideIMM(this, getCurrentFocus());
                 finish();
                 break;
         }
