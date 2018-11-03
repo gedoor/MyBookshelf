@@ -57,7 +57,7 @@ public class PageLoaderText extends PageLoader {
     //获取书本的文件
     private File mBookFile;
     //编码类型
-    private String mCharset;
+    private Charset mCharset;
 
     PageLoaderText(PageView pageView) {
         super(pageView);
@@ -289,7 +289,7 @@ public class PageLoaderText extends PageLoader {
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
             mBookFile = new File(getBook().getNoteUrl());
             //获取文件编码
-            mCharset = CharsetDetector.detectCharset(mBookFile);
+            mCharset = Charset.forName(CharsetDetector.detectCharset(mBookFile));
 
             Long lastModified = mBookFile.lastModified();
             if (getBook().getFinalRefreshData() < lastModified) {
@@ -358,7 +358,7 @@ public class PageLoaderText extends PageLoader {
     protected String getChapterContent(ChapterListBean chapter) {
         //从文件中获取数据
         byte[] content = getChapterContentByte(chapter);
-        return new String(content, Charset.forName(mCharset));
+        return new String(content, mCharset);
     }
 
     /**
