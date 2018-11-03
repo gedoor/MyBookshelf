@@ -189,11 +189,15 @@ public static java.lang.String TABLENAME;
 -keep class freemarker.**{*;}
 -keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
--keep class org.jsoup.**{ *; }
+-keep class org.jsoup.**{ *;}
 -keep class com.monke.mprogressbar.**{ *;}
 
+###EPUB
+-dontwarn nl.siegmann.epublib.**
+-dontwarn org.xmlpull.v1.**
 -keep class nl.siegmann.epublib.**{*;}
 -keep class javax.xml.**{*;}
+-keep class org.xmlpull.**{*;}
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
