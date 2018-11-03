@@ -76,10 +76,7 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@drawable/bg_shadow_top" />
+            <View style="@style/Style.Shadow.Top" />
         </LinearLayout>
 
         <LinearLayout
@@ -205,10 +202,8 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@drawable/bg_shadow_bottom" />
+            <View style="@style/Style.Shadow.Bottom" />
+
             <!--底部设置栏-->
             <LinearLayout
                 android:id="@+id/llNavigationBar"
