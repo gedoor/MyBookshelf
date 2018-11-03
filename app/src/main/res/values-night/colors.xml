@@ -21,6 +21,9 @@
     <color name="tv_text_default">#b7b7b7</color>
     <color name="menu_color_default">#b7b7b7</color>
 
+    <color name="tv_chapter_color_selected">#b7b7b7</color>
+    <color name="tv_chapter_color_normal">#969696</color>
+
     <color name="tv_text_button_nor">#434343</color>
     <color name="tv_text_button_pre">#657a8b</color>
     <color name="tv_text_button_disable">#536573</color>

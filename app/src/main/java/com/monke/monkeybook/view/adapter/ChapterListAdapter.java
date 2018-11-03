@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -168,7 +168,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     class ThisViewHolder extends RecyclerView.ViewHolder {
-        private FrameLayout flContent;
+        private LinearLayout flContent;
         private TextView tvName;
 
         ThisViewHolder(View itemView) {
