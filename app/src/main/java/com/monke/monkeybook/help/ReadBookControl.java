@@ -79,9 +79,14 @@ public class ReadBookControl {
         return readBookControl;
     }
 
+
     private ReadBookControl() {
-        initTextDrawable();
         readPreference = MApplication.getInstance().getConfigPreferences();
+        initTextDrawable();
+        updateReaderSettings();
+    }
+
+    public void updateReaderSettings() {
         this.hideStatusBar = readPreference.getBoolean("hide_status_bar", false);
         this.hideNavigationBar = readPreference.getBoolean("hide_navigation_bar", false);
         this.textSize = readPreference.getInt("textSize", 20);
