@@ -155,16 +155,17 @@ public class WebBookModelImpl implements IWebBookModel {
     @SuppressLint("DefaultLocale")
     private Observable<BookContentBean> saveContent(String bookName, BaseChapterBean chapterBean, BookContentBean bookContentBean) {
         return Observable.create(e -> {
-                bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
-                if (BookshelfHelp.saveChapterInfo(bookName + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
-                        chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
-                    RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterBean);
-                    e.onNext(bookContentBean);
-                    e.onComplete();
-                } else {
-                    e.onError(new Throwable("保存章节出错"));
-                    e.onComplete();
-                }
+            bookContentBean.setNoteUrl(chapterBean.getNoteUrl());
+            if (bookContentBean.getDurChapterContent() == null) {
+                e.onError(new Throwable("下载章节出错"));
+            } else if (BookshelfHelp.saveChapterInfo(bookName + "-" + chapterBean.getTag(), chapterBean.getDurChapterIndex(),
+                    chapterBean.getDurChapterName(), bookContentBean.getDurChapterContent())) {
+                RxBus.get().post(RxBusTag.CHAPTER_CHANGE, chapterBean);
+                e.onNext(bookContentBean);
+            } else {
+                e.onError(new Throwable("保存章节出错"));
+            }
+            e.onComplete();
         });
     }
 }

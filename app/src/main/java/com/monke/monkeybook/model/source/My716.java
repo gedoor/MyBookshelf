@@ -198,8 +198,8 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
 
                 bookContentBean.setDurChapterUrl(durChapterUrl);
                 bookContentBean.setDurChapterIndex(durChapterIndex);
-                e.onNext(bookContentBean);
                 bookContentBean.setDurChapterContent(chapter.get("body").getAsString());
+                e.onNext(bookContentBean);
             } else {
                 e.onError(new Throwable("获取失败"));
             }
