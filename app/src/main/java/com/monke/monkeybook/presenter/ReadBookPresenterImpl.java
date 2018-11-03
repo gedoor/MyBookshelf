@@ -366,7 +366,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 BookshelfHelp.saveBookToShelf(bookShelf);
                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
                 mView.setAdd(true);
-                addListener.addSuccess();
+                if (addListener != null) {
+                    addListener.addSuccess();
+                }
             });
         }
     }
