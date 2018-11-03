@@ -196,14 +196,13 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
             if (root.get("ok").getAsBoolean()) {
                 JsonObject chapter = root.get("chapter").getAsJsonObject();
 
-                bookContentBean.setRight(true);
                 bookContentBean.setDurChapterUrl(durChapterUrl);
                 bookContentBean.setDurChapterIndex(durChapterIndex);
                 bookContentBean.setDurChapterContent(chapter.get("body").getAsString());
+                e.onNext(bookContentBean);
             } else {
-                bookContentBean.setRight(false);
+                e.onError(new Throwable("获取失败"));
             }
-            e.onNext(bookContentBean);
             e.onComplete();
         });
     }

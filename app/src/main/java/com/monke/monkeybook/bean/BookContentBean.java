@@ -4,9 +4,6 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 书本缓存内容
  */
@@ -21,18 +18,15 @@ public class BookContentBean implements Parcelable{
 
     private String tag;   //来源  某个网站/本地
 
-    private Boolean isRight = true;
-
     public BookContentBean(){
 
     }
 
-    protected BookContentBean(Parcel in) {
+    private BookContentBean(Parcel in) {
         durChapterUrl = in.readString();
         durChapterIndex = in.readInt();
         durChapterContent = in.readString();
         tag = in.readString();
-        isRight = in.readByte()!=0;
         noteUrl = in.readString();
     }
 
@@ -42,7 +36,6 @@ public class BookContentBean implements Parcelable{
         dest.writeInt(durChapterIndex);
         dest.writeString(durChapterContent);
         dest.writeString(tag);
-        dest.writeByte((byte) (isRight ? 1 : 0));
         dest.writeString(noteUrl);
     }
 
@@ -85,8 +78,6 @@ public class BookContentBean implements Parcelable{
 
     public void setDurChapterContent(String durChapterContent) {
         this.durChapterContent = durChapterContent;
-        if(durChapterContent ==null || durChapterContent.length()==0)
-            this.isRight = false;
     }
 
     public String getTag() {
@@ -95,14 +86,6 @@ public class BookContentBean implements Parcelable{
 
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public Boolean getRight() {
-        return isRight;
-    }
-
-    public void setRight(Boolean right) {
-        isRight = right;
     }
 
     public String getNoteUrl() {

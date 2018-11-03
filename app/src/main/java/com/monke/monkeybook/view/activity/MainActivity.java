@@ -173,29 +173,27 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         //TabLayout使用自定义Item
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
-            if (tab != null) {
-                tab.setCustomView(tab_icon(mTitles[i], null));
-                if (tab.getCustomView() != null) {
-                    View tabView = (View) tab.getCustomView().getParent();
-                    tabView.setTag(i);
-                    //设置第一个Item的点击事件(当下标为0时触发)
-                    if (i == 0) {
-                        tabView.setOnClickListener(view -> {
-                            if (tabView.isSelected()) {
-                                //切换书架
-                                PopupMenu popupMenu = new PopupMenu(this, view);
-                                for (int j = 0; j < BOOK_GROUPS.length; j++) {
-                                    popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
-                                }
-                                popupMenu.setOnMenuItemClickListener(menuItem -> {
-                                    upGroup(menuItem.getOrder());
-                                    return true;
-                                });
-                                popupMenu.show();
-                            }
+            if (tab == null) return;
+            tab.setCustomView(tab_icon(mTitles[i], null));
+            if (tab.getCustomView() == null) return;
+            View tabView = (View) tab.getCustomView().getParent();
+            tabView.setTag(i);
+            //设置第一个Item的点击事件(当下标为0时触发)
+            if (i == 0) {
+                tabView.setOnClickListener(view -> {
+                    if (tabView.isSelected()) {
+                        //切换书架
+                        PopupMenu popupMenu = new PopupMenu(this, view);
+                        for (int j = 0; j < BOOK_GROUPS.length; j++) {
+                            popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
+                        }
+                        popupMenu.setOnMenuItemClickListener(menuItem -> {
+                            upGroup(menuItem.getOrder());
+                            return true;
                         });
+                        popupMenu.show();
                     }
-                }
+                });
             }
         }
     }

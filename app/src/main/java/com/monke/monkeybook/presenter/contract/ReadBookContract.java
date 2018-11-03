@@ -67,7 +67,7 @@ public interface ReadBookContract {
 
         String getChapterTitle(int chapterIndex);
 
-        void addToShelf(final ReadBookPresenterImpl.OnAddListener addListner);
+        void addToShelf(final ReadBookPresenterImpl.OnAddListener Listener);
 
         void removeFromShelf();
 

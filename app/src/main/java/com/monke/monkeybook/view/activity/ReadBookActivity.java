@@ -856,6 +856,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_book_info:
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
+            case R.id.update_chapter_list:
+                if (mPageLoader != null) {
+                    mPageLoader.updateChapter();
+                }
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -1114,7 +1119,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPageLoader.skipToPrePage();
                     }
                     return true;
-                } else if (keyCode == 32) {
+                } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
                     }

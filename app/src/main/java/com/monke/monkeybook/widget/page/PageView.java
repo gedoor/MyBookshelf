@@ -402,9 +402,9 @@ public class PageView extends View {
         }
         // 根据书籍类型，获取具体的加载器
         if (Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
-            mPageLoader = new LocalPageLoader(this);
+            mPageLoader = new PageLoaderText(this);
         } else {
-            mPageLoader = new NetPageLoader(this);
+            mPageLoader = new PageLoaderNet(this);
         }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {

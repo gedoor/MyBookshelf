@@ -203,13 +203,13 @@ public class FileHelp {
     }
 
     //获取文件的编码格式
-    public static Charset getCharset(String fileName) {
+    public static Charset getCharset(String filePatch) {
         UniversalDetector detector = new UniversalDetector(null);
         BufferedInputStream bis = null;
         Charset charset = Charset.defaultCharset();
         byte[] firstBytes = new byte[1024];
         try {
-            bis = new BufferedInputStream(new FileInputStream(fileName));
+            bis = new BufferedInputStream(new FileInputStream(filePatch));
             bis.mark(0);
             int read = bis.read(firstBytes, 0, 1024);
             if (read == -1) {

@@ -520,7 +520,6 @@ public abstract class PageLoader {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
             reSetPage();
-            mPageView.invalidate();
         } else if (mCurChapter.getStatus() == Enum.PageStatus.FINISH) {
             reSetPage();
             mPageView.invalidate();
@@ -532,6 +531,7 @@ public abstract class PageLoader {
         if (!isChapterListPrepare) {
             mCurChapter.setStatus(Enum.PageStatus.LOADING);
             reSetPage();
+            mPageView.invalidate();
             return;
         }
 
@@ -539,6 +539,7 @@ public abstract class PageLoader {
         if (getBook().getChapterList().isEmpty()) {
             mCurChapter.setStatus(Enum.PageStatus.CATEGORY_EMPTY);
             reSetPage();
+            mPageView.invalidate();
             return;
         }
 
@@ -556,13 +557,13 @@ public abstract class PageLoader {
 
     private void upPage() {
         if (mPageMode != Enum.PageMode.SCROLL) {
+            mPageView.drawPage(0);
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
             }
             if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < getBook().getChapterList().size() - 1) {
                 mPageView.drawPage(1);
             }
-            mPageView.drawPage(0);
         } else {
             mPageView.drawBackground(0);
             mPageView.drawContent(1);
@@ -1116,6 +1117,8 @@ public abstract class PageLoader {
             mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
         }
     }
+
+    public abstract void updateChapter();
 
     /**
      * 根据当前状态，决定是否能够翻页

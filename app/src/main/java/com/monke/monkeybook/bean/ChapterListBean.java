@@ -20,7 +20,7 @@ import static com.monke.monkeybook.help.BookshelfHelp.chapterNamePattern;
  * 章节列表
  */
 @Entity
-public class ChapterListBean implements Parcelable,Cloneable{
+public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
 
     private String noteUrl; //对应BookInfoBean noteUrl;
 
@@ -46,7 +46,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
 
     @Generated(hash = 1504053071)
     public ChapterListBean(String noteUrl, int durChapterIndex, String durChapterUrl, String durChapterName, String tag,
-            Long start, Long end) {
+                           Long start, Long end) {
         this.noteUrl = noteUrl;
         this.durChapterIndex = durChapterIndex;
         this.durChapterUrl = durChapterUrl;
@@ -75,7 +75,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
     public int describeContents() {
         return 0;
     }
-    
+
     @Transient
     public static final Creator<ChapterListBean> CREATOR = new Creator<ChapterListBean>() {
         @Override
@@ -109,6 +109,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         }
     }
 
+    @Override
     public String getTag() {
         return this.tag;
     }
@@ -117,6 +118,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         this.tag = tag;
     }
 
+    @Override
     public String getDurChapterName() {
         return this.durChapterName;
     }
@@ -125,7 +127,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         if (durChapterName != null) {
             durChapterName = durChapterName.trim();
             Matcher matcher = chapterNamePattern.matcher(durChapterName);
-            if(matcher.find()) {
+            if (matcher.find()) {
                 int num = StringUtils.stringToInt(matcher.group(2));
                 this.durChapterName = num > 0 ? matcher.replaceFirst("第" + num + "章 ") : matcher.replaceFirst("$1 ");
                 return;
@@ -136,10 +138,10 @@ public class ChapterListBean implements Parcelable,Cloneable{
 
     public String getPureChapterName() {
         return durChapterName == null ? ""
-            : StringUtils.fullToHalf(durChapterName).replaceAll("\\s", "")
+                : StringUtils.fullToHalf(durChapterName).replaceAll("\\s", "")
                 .replaceAll("^第.*?章|[(\\[][^()\\[\\]]{2,}[)\\]]$", "")
                 .replaceAll("[^\\w\\u4E00-\\u9FEF〇\\u3400-\\u4DBF\\u20000-\\u2A6DF\\u2A700-\\u2EBEF]", "");
-                // 所有非字母数字中日韩文字 CJK区+扩展A-F区
+        // 所有非字母数字中日韩文字 CJK区+扩展A-F区
     }
 
     public int getChapterNum() {
@@ -152,6 +154,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         return -1;
     }
 
+    @Override
     public String getDurChapterUrl() {
         return this.durChapterUrl;
     }
@@ -160,6 +163,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         this.durChapterUrl = durChapterUrl;
     }
 
+    @Override
     public int getDurChapterIndex() {
         return this.durChapterIndex;
     }
@@ -168,6 +172,7 @@ public class ChapterListBean implements Parcelable,Cloneable{
         this.durChapterIndex = durChapterIndex;
     }
 
+    @Override
     public String getNoteUrl() {
         return this.noteUrl;
     }

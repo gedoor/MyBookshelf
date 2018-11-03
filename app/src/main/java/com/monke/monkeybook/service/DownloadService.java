@@ -237,7 +237,7 @@ public class DownloadService extends Service {
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
-                    return WebBookModelImpl.getInstance().getBookContent(scheduler, data.getBookName(), data.getDurChapterUrl(), data.getDurChapterIndex(), data.getTag());
+                    return WebBookModelImpl.getInstance().getBookContent(scheduler, data, data.getBookName());
                 } else {
                     return Observable.create(e -> {
                         e.onNext(new BookContentBean());
