@@ -34,7 +34,7 @@ import static com.monke.monkeybook.help.FileHelp.BLANK;
  * 加载本地书籍
  */
 public class PageLoaderText extends PageLoader {
-    private static final String TAG = "LocalPageLoader";
+    private static final String TAG = "PageLoaderText";
     //默认从文件中获取数据的长度
     private final static int BUFFER_SIZE = 512 * 1024;
     //没有标题的时候，每个章节的最大长度

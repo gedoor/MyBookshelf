@@ -133,6 +133,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                isRunning = false;
                 if (!isMove) {
                     isNext = x > mScreenWidth / 2 || readBookControl.getClickAllNext();
 
@@ -140,16 +141,16 @@ public abstract class HorizonPageAnim extends PageAnimation {
                         //判断是否下一页存在
                         boolean hasNext = mListener.hasNext(0);
                         //设置动画方向
-                        setDirection(Direction.NEXT);
                         if (!hasNext) {
                             return;
                         }
+                        setDirection(Direction.NEXT);
                     } else {
                         boolean hasPrev = mListener.hasPrev();
-                        setDirection(Direction.PRE);
                         if (!hasPrev) {
                             return;
                         }
+                        setDirection(Direction.PRE);
                     }
                 } else {
                     isCancel = Math.abs(mLastX - mStartX) < slop * 3 || isCancel;
@@ -163,21 +164,18 @@ public abstract class HorizonPageAnim extends PageAnimation {
                 break;
             case MotionEvent.ACTION_CANCEL:
                 isCancel = true;
-                // 开启翻页效果
-                if (!noNext) {
-                    startAnim();
-                    mView.invalidate();
-                }
+                isRunning = false;
+                setDirection(Direction.NONE);
                 break;
         }
     }
 
     @Override
     public void draw(Canvas canvas) {
-        if (isRunning) {
+        if (isRunning && !noNext) {
             drawMove(canvas);
         } else {
-            if (!isCancel) {
+            if (!isCancel && !noNext) {
                 switch (mDirection) {
                     case NEXT:
                         canvas.drawBitmap(mNextBitmap, 0, 0, null);
@@ -193,6 +191,7 @@ public abstract class HorizonPageAnim extends PageAnimation {
             } else {
                 canvas.drawBitmap(mCurBitmap, 0, 0, null);
             }
+            isCancel = true;
         }
     }
 

@@ -21,6 +21,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.model.ReplaceRuleManager;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
@@ -364,8 +365,8 @@ public abstract class PageLoader {
         if (!isChapterListPrepare) {
             return;
         }
-        mCurPagePos = pos;
-        openChapter(mCurPagePos);
+        // mCurPagePos = pos;
+        openChapter(pos);
     }
 
     /**
@@ -417,6 +418,9 @@ public abstract class PageLoader {
      * 更新电量
      */
     public boolean updateBattery(int level) {
+        if (mBatteryLevel == level) {
+            return true;
+        }
         mBatteryLevel = level;
         if (!mPageView.isRunning() && readBookControl.getHideStatusBar() && readBookControl.getShowTimeBattery()) {
             if (mPageMode == Enum.PageMode.SCROLL) {
@@ -427,7 +431,7 @@ public abstract class PageLoader {
             mPageView.invalidate();
             return true;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -950,6 +954,7 @@ public abstract class PageLoader {
      * 解析数据
      */
     void parseCurChapter() {
+        ChapterContentHelp.getInstance().updateBookShelf(getBook(), ReplaceRuleManager.getLastUpTime());
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 PageList pageList = new PageList(this);
@@ -987,6 +992,10 @@ public abstract class PageLoader {
      */
     void parsePrevChapter() {
         final int prevChapterPos = mCurChapterPos - 1;
+        if (prevChapterPos < 0) {
+            mPreChapter = null;
+            return;
+        }
         if (mPreChapter == null) mPreChapter = new TxtChapter(prevChapterPos);
         if (mPreChapter.getStatus() == Enum.PageStatus.FINISH || prevChapterPos < 0) {
             return;
@@ -1024,8 +1033,12 @@ public abstract class PageLoader {
      */
     void parseNextChapter() {
         final int nextChapterPos = mCurChapterPos + 1;
+        if (nextChapterPos >= getBook().getChapterList().size()) {
+            mNextChapter = null;
+            return;
+        }
         if (mNextChapter == null) mNextChapter = new TxtChapter(nextChapterPos);
-        if (mNextChapter.getStatus() == Enum.PageStatus.FINISH || nextChapterPos >= getBook().getChapterList().size()) {
+        if (mNextChapter.getStatus() == Enum.PageStatus.FINISH) {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {

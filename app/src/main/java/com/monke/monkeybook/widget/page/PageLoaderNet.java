@@ -33,7 +33,7 @@ import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
  */
 
 public class PageLoaderNet extends PageLoader {
-    private static final String TAG = "NetPageLoader";
+    private static final String TAG = "PageLoaderNet";
     private List<String> downloadingChapterList = new ArrayList<>();
     private ExecutorService executorService;
     private Scheduler scheduler;
