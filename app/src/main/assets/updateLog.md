@@ -4,6 +4,7 @@
 **2018/11/3**
 * 解决一些BUG
 * 加入自定义TXT目录正则
+* 拷贝https://github.com/Invinciblelee的代码增加EPUB文件支持
 
 **2018/11/2**
 * 解决一些BUG
