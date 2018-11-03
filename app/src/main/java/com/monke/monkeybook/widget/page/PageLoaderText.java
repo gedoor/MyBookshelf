@@ -242,27 +242,6 @@ public class PageLoaderText extends PageLoader {
     }
 
     /**
-     * 从文件中提取一章的内容
-     */
-    private byte[] getChapterContentByte(ChapterListBean chapter) {
-        RandomAccessFile bookStream = null;
-        try {
-            bookStream = new RandomAccessFile(mBookFile, "r");
-            bookStream.seek(chapter.getStart());
-            int extent = (int) (chapter.getEnd() - chapter.getStart());
-            byte[] content = new byte[extent];
-            bookStream.read(content, 0, extent);
-            return content;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.close(bookStream);
-        }
-
-        return new byte[0];
-    }
-
-    /**
      * 1. 检查文件中是否存在章节名
      * 2. 判断文件中使用的章节名类型的正则表达式
      *
@@ -362,10 +341,30 @@ public class PageLoaderText extends PageLoader {
     }
 
     @Override
-    protected String getChapterContent(ChapterListBean chapter) throws Exception {
+    protected String getChapterContent(ChapterListBean chapter) {
         //从文件中获取数据
         byte[] content = getChapterContentByte(chapter);
         return new String(content, mCharset);
+    }
+
+    /**
+     * 从文件中提取一章的内容
+     */
+    private byte[] getChapterContentByte(ChapterListBean chapter) {
+        RandomAccessFile bookStream = null;
+        try {
+            bookStream = new RandomAccessFile(mBookFile, "r");
+            bookStream.seek(chapter.getStart());
+            int extent = (int) (chapter.getEnd() - chapter.getStart());
+            byte[] content = new byte[extent];
+            bookStream.read(content, 0, extent);
+            return content;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.close(bookStream);
+        }
+        return new byte[0];
     }
 
     @Override
