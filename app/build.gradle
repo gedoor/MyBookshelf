@@ -163,7 +163,7 @@ dependencies {
     implementation 'ru.noties:markwon:2.0.0'
 
     //epub
-    implementation ('nl.siegmann.epublib:epublib-core:3.1'){
+    implementation('nl.siegmann.epublib:epublib-core:3.1') {
         exclude group: 'xmlpull'
     }
 }

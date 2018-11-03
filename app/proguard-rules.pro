@@ -190,7 +190,10 @@ public static java.lang.String TABLENAME;
 -keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
 -keep class org.jsoup.**{ *; }
--keep class com.monke.mprogressbar.**{ *; }
+-keep class com.monke.mprogressbar.**{ *;}
+
+-keep class nl.siegmann.epublib.**{*;}
+-keep class javax.xml.**{*;}
 
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
