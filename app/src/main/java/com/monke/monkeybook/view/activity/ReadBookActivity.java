@@ -90,8 +90,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     MHorProgressBar hpbReadProgress;
     @BindView(R.id.ll_catalog)
     LinearLayout llCatalog;
-    @BindView(R.id.ll_light)
-    LinearLayout llLight;
+    @BindView(R.id.ll_adjust)
+    LinearLayout llAdjust;
     @BindView(R.id.ll_font)
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
@@ -773,26 +773,26 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         llCatalog.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
             if (chapterListView.hasData()) {
-                new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+                mHandler.postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
             }
         });
 
-        //亮度
-        llLight.setOnClickListener(view -> {
+        //调节
+        llAdjust.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //界面
         llFont.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         //设置
         llSetting.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
         });
 
         tvReadAloudTimer.setOnClickListener(null);

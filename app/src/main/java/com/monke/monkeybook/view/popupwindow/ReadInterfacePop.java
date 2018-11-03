@@ -8,13 +8,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
 import com.monke.monkeybook.widget.font.FontSelector;
@@ -78,7 +78,6 @@ public class ReadInterfacePop extends PopupWindow {
         this.changeProListener = changeProListener;
 
         View view = LayoutInflater.from(readBookActivity).inflate(R.layout.pop_read_interface, null);
-        ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
@@ -89,6 +88,12 @@ public class ReadInterfacePop extends PopupWindow {
         setTouchable(true);
         setClippingEnabled(false);
         setAnimationStyle(R.style.anim_pop_windowlight);
+    }
+
+    @Override
+    public void showAtLocation(View parent, int gravity, int x, int y) {
+        super.showAtLocation(parent, gravity, x, y);
+        setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     private void initData() {

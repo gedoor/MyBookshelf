@@ -317,7 +317,7 @@
                         android:layout_weight="2" />
                     <!--调节按钮-->
                     <LinearLayout
-                        android:id="@+id/ll_light"
+                        android:id="@+id/ll_adjust"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:background="@drawable/bg_ib_pre_round"

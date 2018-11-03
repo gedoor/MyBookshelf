@@ -89,4 +89,5 @@
         <item name="android:layout_height">@dimen/shadow_height</item>
         <item name="android:background">@drawable/bg_shadow_bottom</item>
     </style>
+
 </resources>

@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
@@ -83,7 +82,6 @@ public class MoreSettingPop extends PopupWindow {
         this.changeProListener = changeProListener;
 
         View view = LayoutInflater.from(activity).inflate(R.layout.pop_more_setting, null);
-        ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();

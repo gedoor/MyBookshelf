@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
@@ -57,7 +56,6 @@ public class ReadAdjustPop extends PopupWindow {
         this.adjustListener = adjustListener;
 
         View view = LayoutInflater.from(activity).inflate(R.layout.pop_read_adjust, null);
-        ImmersionBar.navigationBarPadding(activity, view);
         this.setContentView(view);
         ButterKnife.bind(this, view);
         initData();
@@ -69,6 +67,14 @@ public class ReadAdjustPop extends PopupWindow {
         setTouchable(true);
         setClippingEnabled(false);
         setAnimationStyle(R.style.anim_pop_windowlight);
+    }
+
+    @Override
+    public void showAtLocation(View parent, int gravity, int x, int y) {
+        super.showAtLocation(parent, gravity, x, y);
+        initData();
+        hpbLight.setDurProgress(light);
+        scbFollowSys.setChecked(isFollowSys);
     }
 
     private void initData() {
@@ -243,14 +249,6 @@ public class ReadAdjustPop extends PopupWindow {
     public void dismiss() {
         saveLight();
         super.dismiss();
-    }
-
-    @Override
-    public void showAtLocation(View parent, int gravity, int x, int y) {
-        super.showAtLocation(parent, gravity, x, y);
-        initData();
-        hpbLight.setDurProgress(light);
-        scbFollowSys.setChecked(isFollowSys);
     }
 
     public void initLight() {
