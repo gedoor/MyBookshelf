@@ -861,6 +861,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     mPageLoader.updateChapter();
                 }
                 break;
+            case R.id.action_set_regex:
+                setTextChapterRegex();
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -955,6 +958,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         moProgressHUD.dismiss();
                         mPresenter.addDownload(start, end);
                     });
+        }
+    }
+
+    private void setTextChapterRegex() {
+        if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+            String regexPath = getBook().getNoteUrl().substring(0, getBook().getNoteUrl().lastIndexOf(".")) + ".regex";
+            moProgressHUD.showInputBox("TXT目录正则",
+                    "",
+                    inputText -> {
+
+            });
         }
     }
 
@@ -1143,27 +1157,33 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void showMenu() {
-        if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+        if (menu == null) return;
+        boolean onLine = mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG);
+        if (onLine) {
             atvUrl.setVisibility(View.VISIBLE);
-            if (menu != null) {
-                for (int i = 0; i < menu.size(); i++) {
-                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
-                        menu.getItem(i).setVisible(true);
-                        menu.getItem(i).setEnabled(true);
-                    }
+        } else {
+            atvUrl.setVisibility(View.GONE);
+        }
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
+                if (onLine) {
+                    menu.getItem(i).setVisible(true);
+                    menu.getItem(i).setEnabled(true);
+                } else {
+                    menu.getItem(i).setVisible(false);
+                    menu.getItem(i).setEnabled(false);
                 }
             }
-        } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
-            atvUrl.setVisibility(View.GONE);
-            if (menu != null) {
-                for (int i = 0; i < menu.size(); i++) {
-                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
-                        menu.getItem(i).setVisible(false);
-                        menu.getItem(i).setEnabled(false);
-                    }
+            if (menu.getItem(i).getGroupId() == R.id.menu_text) {
+                if (getBook() != null && getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+                    menu.getItem(i).setVisible(true);
+                    menu.getItem(i).setEnabled(true);
+                } else {
+                    menu.getItem(i).setVisible(false);
                 }
             }
         }
+
     }
 
     @Override

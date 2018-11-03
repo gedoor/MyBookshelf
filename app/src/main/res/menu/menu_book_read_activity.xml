@@ -56,4 +56,12 @@
             app:showAsAction="never" />
     </group>
 
+    <group android:id="@+id/menu_text">
+        <item
+            android:id="@+id/action_set_regex"
+            android:icon="@drawable/ic_toc"
+            android:title="@string/txt_chapter_regex"
+            app:showAsAction="never" />
+    </group>
+
 </menu>
