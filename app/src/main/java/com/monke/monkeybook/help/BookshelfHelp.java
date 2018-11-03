@@ -3,7 +3,6 @@ package com.monke.monkeybook.help;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -140,7 +139,6 @@ public class BookshelfHelp {
             setChapterIsCached(folderName, index, true);
             return true;
         } catch (IOException e) {
-            MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
             e.printStackTrace();
             return false;
         }
