@@ -91,6 +91,7 @@ public class ReadInterfacePop extends FrameLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_interface, null);
         addView(view);
         ButterKnife.bind(this, view);
+        view.setOnClickListener(null);
         bindEvent();
     }
 

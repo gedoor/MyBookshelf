@@ -96,6 +96,7 @@ public class MoreSettingPop extends FrameLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, null);
         addView(view);
         ButterKnife.bind(this, view);
+        view.setOnClickListener(null);
         initData();
         bindEvent();
     }

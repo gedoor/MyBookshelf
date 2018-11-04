@@ -70,6 +70,7 @@ public class ReadAdjustPop extends FrameLayout {
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, null);
         addView(view);
         ButterKnife.bind(this, view);
+        view.setOnClickListener(null);
         bindEvent();
     }
 
