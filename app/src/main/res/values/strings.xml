@@ -266,5 +266,6 @@
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>
     <string name="update_chapter">更新目录</string>
     <string name="txt_chapter_regex">目录正则</string>
+    <string name="set_charset">设置编码</string>
 
 </resources>
