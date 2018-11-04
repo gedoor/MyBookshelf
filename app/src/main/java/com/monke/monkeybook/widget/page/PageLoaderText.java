@@ -108,12 +108,8 @@ public class PageLoaderText extends PageLoader {
                         seekPos += chapterContent.length();
 
                         if (curOffset == 0) { //如果当前对整个文件的偏移位置为0的话，那么就是序章
-                            //获取序章
-                            byte[] content = new byte[chapterContent.getBytes(mCharset).length];
-                            bookStream.read(content, 0, chapterContent.getBytes(mCharset).length);
-
                             //加入简介
-                            getBook().getBookInfoBean().setIntroduce(new String(content, mCharset));
+                            getBook().getBookInfoBean().setIntroduce(chapterContent);
 
                             //创建当前章节
                             ChapterListBean curChapter = new ChapterListBean();
