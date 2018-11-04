@@ -33,7 +33,7 @@ public interface ReadBookContract {
 
         void initChapterList();
 
-        void showMenu();
+        void upMenu();
 
         void openBookFromOther();
 

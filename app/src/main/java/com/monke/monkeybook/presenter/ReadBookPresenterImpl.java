@@ -69,7 +69,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             loadBook(intent);
         } else {
             mView.openBookFromOther();
-            mView.showMenu();
+            mView.upMenu();
         }
     }
 
@@ -107,7 +107,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         } else {
                             mView.setHpbReadProgressMax(0);
                             mView.startLoadingBook();
-                            mView.showMenu();
+                            mView.upMenu();
                         }
                     }
 

@@ -828,7 +828,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
-        showMenu();
+        upMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -1224,7 +1224,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void showMenu() {
+    public void upMenu() {
         if (menu == null) return;
         boolean onLine = mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG);
         if (onLine) {
@@ -1241,13 +1241,21 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     menu.getItem(i).setVisible(false);
                     menu.getItem(i).setEnabled(false);
                 }
-            }
-            if (menu.getItem(i).getGroupId() == R.id.menu_text) {
+            } else if (menu.getItem(i).getGroupId() == R.id.menuLocal) {
+                if (!onLine) {
+                    menu.getItem(i).setVisible(true);
+                    menu.getItem(i).setEnabled(true);
+                } else {
+                    menu.getItem(i).setVisible(false);
+                    menu.getItem(i).setEnabled(false);
+                }
+            } else if (menu.getItem(i).getGroupId() == R.id.menu_text) {
                 if (getBook() != null && getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
                     menu.getItem(i).setVisible(true);
                     menu.getItem(i).setEnabled(true);
                 } else {
                     menu.getItem(i).setVisible(false);
+                    menu.getItem(i).setEnabled(false);
                 }
             }
         }
