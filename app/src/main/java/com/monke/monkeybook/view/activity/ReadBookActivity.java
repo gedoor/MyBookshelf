@@ -520,7 +520,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void recreate() {
-                moreSettingPop.setVisibility(View.GONE);
                 ReadBookActivity.this.recreate();
             }
 
