@@ -980,11 +980,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 charset,
                 (inputText -> {
                     if (!Objects.equals(charset, inputText)) {
-                        getBook().getBookInfoBean().setChapterUrl(inputText);
+                        getBook().getBookInfoBean().setCharset(inputText);
                         mPresenter.saveProgress();
-                        if (mPageLoader != null) {
-                            mPageLoader.updateChapter();
-                        }
                     }
                 }));
     }
