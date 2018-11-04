@@ -788,19 +788,19 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         //调节
         llAdjust.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            mHandler.postDelayed(this::readAdjustIn, menuTopOut.getDuration());
+            mHandler.postDelayed(this::readAdjustIn, menuBottomOut.getDuration() + 100);
         });
 
         //界面
         llFont.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            mHandler.postDelayed(this::readInterfaceIn, menuTopOut.getDuration());
+            mHandler.postDelayed(this::readInterfaceIn, menuBottomOut.getDuration() + 100);
         });
 
         //设置
         llSetting.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            mHandler.postDelayed(this::moreSettingIn, menuTopOut.getDuration());
+            mHandler.postDelayed(this::moreSettingIn, menuBottomOut.getDuration() + 100);
         });
 
         tvReadAloudTimer.setOnClickListener(null);
