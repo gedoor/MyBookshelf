@@ -154,9 +154,7 @@ public class PageLoaderText extends PageLoader {
                             curChapter.setDurChapterName(matcher.group());
                             curChapter.setStart(lastChapter.getEnd());
                             mChapterList.add(curChapter);
-                        }
-                        //如果章节不存在则创建章节
-                        else {
+                        } else { //如果章节不存在则创建章节
                             ChapterListBean curChapter = new ChapterListBean();
                             curChapter.setDurChapterName(matcher.group());
                             curChapter.setStart(0L);
