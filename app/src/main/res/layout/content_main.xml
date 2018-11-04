@@ -31,6 +31,8 @@
                 android:id="@+id/card_search"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:cardBackgroundColor="@color/background_card"
                 app:cardElevation="0dp">
 
@@ -39,7 +41,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="11dp"
                     android:gravity="center_vertical"
-                    android:text="@string/search_book_key" />
+                    android:text="@string/search_book_key"
+                    tools:ignore="RtlHardcoded" />
             </android.support.v7.widget.CardView>
         </android.support.v7.widget.Toolbar>
 
