@@ -3,14 +3,12 @@ package com.monke.monkeybook.widget.page;
 import android.text.TextUtils;
 
 import com.monke.basemvplib.CharsetDetector;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,14 +20,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.help.FileHelp.BLANK;
 
@@ -275,7 +269,7 @@ public class PageLoaderText extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
             // 对于文件是否存在，或者为空的判断，不作处理。 ==> 在文件打开前处理过了。
             mBookFile = new File(getBook().getNoteUrl());
             //获取文件编码
@@ -289,55 +283,29 @@ public class PageLoaderText extends PageLoader {
                 getBook().setFinalRefreshData(lastModified);
                 getBook().setHasUpdate(true);
             }
-            e.onNext(!getBook().getHasUpdate() && getBook().getChapterList().size() > 0);
-            e.onComplete();
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SimpleObserver<Boolean>() {
+            if (getBook().getHasUpdate() || getBook().getChapterList().size() == 0) {
+                getBook().setChapterList(loadChapters());
+                getBook().setHasUpdate(false);
+            }
+            e.onSuccess(getBook().getChapterList());
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<ChapterListBean>>() {
                     @Override
-                    public void onNext(Boolean aBoolean) {
-                        if (aBoolean) {
-                            isChapterListPrepare = true;
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
-                            // 目录加载完成，执行回调操作。
-                            if (mPageChangeListener != null) {
-                                mPageChangeListener.onCategoryFinish(getBook().getChapterList());
-                            }
+                    @Override
+                    public void onSuccess(List<ChapterListBean> chapterListBeans) {
+                        isChapterListPrepare = true;
 
-                            // 打开章节
-                            skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
-                        } else {
-                            Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> e.onSuccess(loadChapters()))
-                                    .compose(RxUtils::toSimpleSingle)
-                                    .subscribe(new SingleObserver<List<ChapterListBean>>() {
-                                        @Override
-                                        public void onSubscribe(Disposable d) {
-                                            compositeDisposable.add(d);
-                                        }
-
-                                        @Override
-                                        public void onSuccess(List<ChapterListBean> value) {
-                                            isChapterListPrepare = true;
-
-                                            // 存储章节到数据库
-                                            getBook().setHasUpdate(false);
-
-                                            // 提示目录加载完成
-                                            if (mPageChangeListener != null) {
-                                                mPageChangeListener.onCategoryFinish(value);
-                                            }
-
-                                            // 加载并显示当前章节
-                                            openChapter(getBook().getDurChapterPage());
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            chapterError(e.getMessage());
-                                        }
-                                    });
+                        // 目录加载完成，执行回调操作。
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(chapterListBeans);
                         }
+
+                        // 打开章节
+                        skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
                     }
 
                     @Override
