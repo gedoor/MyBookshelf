@@ -976,7 +976,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setCharset() {
         final String charset = getBook().getBookInfoBean().getCharset();
-        moProgressHUD.showInputBox("TXT目录正则",
+        moProgressHUD.showInputBox("输入编码",
                 charset,
                 (inputText -> {
                     if (!Objects.equals(charset, inputText)) {
