@@ -66,7 +66,7 @@ public class PageLoaderEpub extends PageLoader {
         }
     }
 
-    private Charset getCharset(Book book) {
+    private String getCharset(Book book) {
         try {
             Resource resource = book.getCoverPage();
             Document doc = Jsoup.parse(new String(resource.getData(), "utf-8"));
@@ -75,15 +75,13 @@ public class PageLoaderEpub extends PageLoader {
                 String charsetName = metaTag.attr("charset");
                 if (!charsetName.isEmpty()) {
                     if (!TextUtils.isEmpty(charsetName)) {
-                        return Charset.forName(charsetName);
+                        return charsetName;
                     }
                 }
             }
-
-            String charsetName = CharsetDetector.detectCharset(resource.getInputStream());
-            return Charset.forName(charsetName);
+            return CharsetDetector.detectCharset(resource.getInputStream());
         } catch (Exception e) {
-            return Charset.forName("utf-8");
+            return "utf-8";
         }
     }
 
@@ -194,7 +192,10 @@ public class PageLoaderEpub extends PageLoader {
                 e.onError(new Exception("文件解析失败"));
                 return;
             }
-            mCharset = getCharset(mRawBook);
+            if (TextUtils.isEmpty(getBook().getBookInfoBean().getCharset())) {
+                getBook().getBookInfoBean().setCharset(getCharset(mRawBook));
+            }
+            mCharset = Charset.forName(getBook().getBookInfoBean().getCharset());
 
             e.onNext(getBook());
             e.onComplete();
