@@ -969,18 +969,24 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    /**
+     * 设置TXT目录正则
+     */
     private void setTextChapterRegex() {
         if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-            String regex = getBook().getBookInfoBean().getChapterUrl();
+            final String regex = getBook().getBookInfoBean().getChapterUrl();
             moProgressHUD.showInputBox("TXT目录正则",
                     regex,
-                    this::saveTextChapterRegex);
+                    (inputText -> {
+                        if (!Objects.equals(regex, inputText)) {
+                            getBook().getBookInfoBean().setChapterUrl(regex);
+                            mPresenter.saveProgress();
+                            if (mPageLoader != null) {
+                                mPageLoader.updateChapter();
+                            }
+                        }
+                    }));
         }
-    }
-
-    private void saveTextChapterRegex(String regex) {
-        getBook().getBookInfoBean().setChapterUrl(regex);
-        mPresenter.saveProgress();
     }
 
     private void readAdjustIn() {
