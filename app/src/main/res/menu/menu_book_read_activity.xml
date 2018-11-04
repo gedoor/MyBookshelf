@@ -33,9 +33,9 @@
     <group android:id="@+id/menuLocal">
 
         <item
-            android:id="@+id/update_chapter_list"
-            android:icon="@drawable/ic_update_black_24dp"
-            android:title="@string/update_chapter"
+            android:id="@+id/action_set_charset"
+            android:icon="@drawable/ic_translate_black_24dp"
+            android:title="@string/set_charset"
             app:showAsAction="never" />
 
     </group>
@@ -54,9 +54,9 @@
             app:showAsAction="ifRoom" />
 
         <item
-            android:id="@+id/action_set_charset"
-            android:icon="@drawable/ic_translate_black_24dp"
-            android:title="@string/set_charset"
+            android:id="@+id/update_chapter_list"
+            android:icon="@drawable/ic_update_black_24dp"
+            android:title="@string/update_chapter"
             app:showAsAction="never" />
 
         <item
