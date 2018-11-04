@@ -51,10 +51,7 @@ public class GroupItem<T, S> extends BaseItem {
     }
 
     public boolean hasChilds() {
-        if (getChildDatas() == null || getChildDatas().isEmpty()) {
-            return false;
-        }
-        return true;
+        return getChildDatas() != null && !getChildDatas().isEmpty();
     }
 
     public List<S> getChildDatas() {

@@ -36,7 +36,7 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
         Observable.create((ObservableOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
-            List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource();
+            List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
@@ -57,7 +57,8 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                         group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {
-                    e.onError(new Throwable(sourceBean.getBookSourceName() + "\n发现规则有误\n" + exception.getMessage()));
+                    sourceBean.setBookSourceGroup("发现规则语法错误");
+                    BookSourceManager.addBookSource(sourceBean);
                 }
             }
             e.onNext(group);
