@@ -1233,30 +1233,34 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             atvUrl.setVisibility(View.GONE);
         }
         for (int i = 0; i < menu.size(); i++) {
-            if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
-                if (onLine) {
-                    menu.getItem(i).setVisible(true);
-                    menu.getItem(i).setEnabled(true);
-                } else {
-                    menu.getItem(i).setVisible(false);
-                    menu.getItem(i).setEnabled(false);
-                }
-            } else if (menu.getItem(i).getGroupId() == R.id.menuLocal) {
-                if (!onLine) {
-                    menu.getItem(i).setVisible(true);
-                    menu.getItem(i).setEnabled(true);
-                } else {
-                    menu.getItem(i).setVisible(false);
-                    menu.getItem(i).setEnabled(false);
-                }
-            } else if (menu.getItem(i).getGroupId() == R.id.menu_text) {
-                if (getBook() != null && getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-                    menu.getItem(i).setVisible(true);
-                    menu.getItem(i).setEnabled(true);
-                } else {
-                    menu.getItem(i).setVisible(false);
-                    menu.getItem(i).setEnabled(false);
-                }
+            switch (menu.getItem(i).getGroupId()) {
+                case R.id.menuOnLine:
+                    if (onLine) {
+                        menu.getItem(i).setVisible(true);
+                        menu.getItem(i).setEnabled(true);
+                    } else {
+                        menu.getItem(i).setVisible(false);
+                        menu.getItem(i).setEnabled(false);
+                    }
+                    break;
+                case R.id.menuLocal:
+                    if (!onLine) {
+                        menu.getItem(i).setVisible(true);
+                        menu.getItem(i).setEnabled(true);
+                    } else {
+                        menu.getItem(i).setVisible(false);
+                        menu.getItem(i).setEnabled(false);
+                    }
+                    break;
+                case R.id.menu_text:
+                    if (getBook() != null && getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+                        menu.getItem(i).setVisible(true);
+                        menu.getItem(i).setEnabled(true);
+                    } else {
+                        menu.getItem(i).setVisible(false);
+                        menu.getItem(i).setEnabled(false);
+                    }
+                    break;
             }
         }
 
