@@ -169,7 +169,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     //初始化TabLayout和ViewPager
     private void initTabLayout() {
-
         //TabLayout使用自定义Item
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
@@ -182,20 +181,26 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             if (i == 0) {
                 tabView.setOnClickListener(view -> {
                     if (tabView.isSelected()) {
-                        //切换书架
-                        PopupMenu popupMenu = new PopupMenu(this, view);
-                        for (int j = 0; j < BOOK_GROUPS.length; j++) {
-                            popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
-                        }
-                        popupMenu.setOnMenuItemClickListener(menuItem -> {
-                            upGroup(menuItem.getOrder());
-                            return true;
-                        });
-                        popupMenu.show();
+                        showBookGroupMenu(view);
                     }
                 });
             }
         }
+    }
+
+    /**
+     * 显示分组菜单
+     */
+    private void showBookGroupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        for (int j = 0; j < BOOK_GROUPS.length; j++) {
+            popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
+        }
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            upGroup(menuItem.getOrder());
+            return true;
+        });
+        popupMenu.show();
     }
 
     private void updateTabItemText(int group) {
