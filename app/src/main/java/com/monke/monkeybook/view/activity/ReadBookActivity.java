@@ -863,6 +863,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_book_info:
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
+            case R.id.action_set_charset:
+                setCharset();
+                break;
             case R.id.update_chapter_list:
                 if (mPageLoader != null) {
                     mPageLoader.updateChapter();
@@ -969,6 +972,24 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
+     * 设置编码
+     */
+    private void setCharset() {
+        final String charset = getBook().getBookInfoBean().getCharset();
+        moProgressHUD.showInputBox("TXT目录正则",
+                charset,
+                (inputText -> {
+                    if (!Objects.equals(charset, inputText)) {
+                        getBook().getBookInfoBean().setChapterUrl(inputText);
+                        mPresenter.saveProgress();
+                        if (mPageLoader != null) {
+                            mPageLoader.updateChapter();
+                        }
+                    }
+                }));
+    }
+
+    /**
      * 设置TXT目录正则
      */
     private void setTextChapterRegex() {
@@ -978,7 +999,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     regex,
                     (inputText -> {
                         if (!Objects.equals(regex, inputText)) {
-                            getBook().getBookInfoBean().setChapterUrl(regex);
+                            getBook().getBookInfoBean().setChapterUrl(inputText);
                             mPresenter.saveProgress();
                             if (mPageLoader != null) {
                                 mPageLoader.updateChapter();
