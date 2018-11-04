@@ -108,21 +108,17 @@ public class PageLoaderText extends PageLoader {
                         seekPos += chapterContent.length();
 
                         if (curOffset == 0) { //如果当前对整个文件的偏移位置为0的话，那么就是序章
-                            //创建序章
-                            ChapterListBean preChapter = new ChapterListBean();
-                            preChapter.setDurChapterName("序章");
-                            preChapter.setStart(0L);
-                            preChapter.setEnd((long) chapterContent.getBytes(mCharset).length); //获取String的byte值,作为最终值
+                            //获取序章
+                            byte[] content = new byte[chapterContent.getBytes(mCharset).length];
+                            bookStream.read(content, 0, chapterContent.getBytes(mCharset).length);
 
-                            //如果序章大小大于30才添加进去
-                            if (preChapter.getEnd() - preChapter.getStart() > 30) {
-                                mChapterList.add(preChapter);
-                            }
+                            //加入简介
+                            getBook().getBookInfoBean().setIntroduce(new String(content, mCharset));
 
                             //创建当前章节
                             ChapterListBean curChapter = new ChapterListBean();
                             curChapter.setDurChapterName(matcher.group());
-                            curChapter.setStart(preChapter.getEnd());
+                            curChapter.setStart((long) chapterContent.getBytes(mCharset).length);
                             mChapterList.add(curChapter);
                         } else {  //否则就block分割之后，上一个章节的剩余内容
                             //获取上一章节
