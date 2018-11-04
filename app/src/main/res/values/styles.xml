@@ -39,7 +39,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@color/background_menu</item>
     </style>
 
