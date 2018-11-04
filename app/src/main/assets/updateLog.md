@@ -5,6 +5,7 @@
 * 解决一些BUG
 * 加入自定义TXT目录正则
 * 拷贝https://github.com/Invinciblelee的代码增加EPUB文件支持
+* 优化阅读设置,解决隐藏虚拟操作栏下面显示空白的问题
 
 **2018/11/2**
 * 解决一些BUG
