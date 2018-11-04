@@ -33,6 +33,7 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         public final static Property Author = new Property(6, String.class, "author", false, "AUTHOR");
         public final static Property Introduce = new Property(7, String.class, "introduce", false, "INTRODUCE");
         public final static Property Origin = new Property(8, String.class, "origin", false, "ORIGIN");
+        public final static Property Charset = new Property(9, String.class, "charset", false, "CHARSET");
     }
 
 
@@ -56,7 +57,8 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
                 "\"COVER_URL\" TEXT," + // 5: coverUrl
                 "\"AUTHOR\" TEXT," + // 6: author
                 "\"INTRODUCE\" TEXT," + // 7: introduce
-                "\"ORIGIN\" TEXT);"); // 8: origin
+                "\"ORIGIN\" TEXT," + // 8: origin
+                "\"CHARSET\" TEXT);"); // 9: charset
     }
 
     /** Drops the underlying database table. */
@@ -109,6 +111,11 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         if (origin != null) {
             stmt.bindString(9, origin);
         }
+ 
+        String charset = entity.getCharset();
+        if (charset != null) {
+            stmt.bindString(10, charset);
+        }
     }
 
     @Override
@@ -155,6 +162,11 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         if (origin != null) {
             stmt.bindString(9, origin);
         }
+ 
+        String charset = entity.getCharset();
+        if (charset != null) {
+            stmt.bindString(10, charset);
+        }
     }
 
     @Override
@@ -173,7 +185,8 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // coverUrl
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // author
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // introduce
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // origin
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // origin
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // charset
         );
         return entity;
     }
@@ -189,6 +202,7 @@ public class BookInfoBeanDao extends AbstractDao<BookInfoBean, String> {
         entity.setAuthor(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setIntroduce(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setOrigin(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setCharset(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
      }
     
     @Override
