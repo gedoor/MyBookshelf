@@ -34,6 +34,7 @@
             android:id="@+id/ll_menu_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:orientation="vertical">
 
             <LinearLayout
@@ -84,6 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:visibility="invisible"
             android:orientation="vertical">
 
             <LinearLayout
@@ -427,6 +429,28 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <com.monke.monkeybook.view.popupwindow.ReadAdjustPop
+            android:id="@+id/readAdjustPop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="invisible" />
+
+        <com.monke.monkeybook.view.popupwindow.ReadInterfacePop
+            android:id="@+id/readInterfacePop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="invisible" />
+
+        <com.monke.monkeybook.view.popupwindow.MoreSettingPop
+            android:id="@+id/moreSettingPop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="invisible" />
+
     </FrameLayout>
 
     <com.monke.mprogressbar.MHorProgressBar

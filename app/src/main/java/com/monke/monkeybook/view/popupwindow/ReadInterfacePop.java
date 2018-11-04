@@ -1,15 +1,15 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.MApplication;
@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class ReadInterfacePop extends PopupWindow {
+public class ReadInterfacePop extends FrameLayout {
 
     @BindView(R.id.fl_text_Bold)
     TextView flTextBold;
@@ -72,28 +72,32 @@ public class ReadInterfacePop extends PopupWindow {
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnChangeProListener changeProListener;
 
-    public ReadInterfacePop(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
-        super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.activity = readBookActivity;
-        this.changeProListener = changeProListener;
-
-        View view = LayoutInflater.from(readBookActivity).inflate(R.layout.pop_read_interface, null);
-        this.setContentView(view);
-        ButterKnife.bind(this, view);
-        initData();
-        bindEvent();
-
-        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
-        setFocusable(true);
-        setTouchable(true);
-        setClippingEnabled(false);
-        setAnimationStyle(R.style.anim_pop_windowlight);
+    public ReadInterfacePop(Context context) {
+        super(context);
+        init(context);
     }
 
-    @Override
-    public void showAtLocation(View parent, int gravity, int x, int y) {
-        super.showAtLocation(parent, gravity, x, y);
-        setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    public ReadInterfacePop(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public ReadInterfacePop(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_interface, null);
+        addView(view);
+        ButterKnife.bind(this, view);
+        bindEvent();
+    }
+
+    public void setListener(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
+        this.activity = readBookActivity;
+        this.changeProListener = changeProListener;
+        initData();
     }
 
     private void initData() {

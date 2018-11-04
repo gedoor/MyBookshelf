@@ -1,21 +1,22 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.Settings;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.checkbox.SmoothCheckBox;
 import com.monke.mprogressbar.MHorProgressBar;
 import com.monke.mprogressbar.OnProgressListener;
@@ -23,7 +24,7 @@ import com.monke.mprogressbar.OnProgressListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReadAdjustPop extends PopupWindow {
+public class ReadAdjustPop extends FrameLayout {
     @BindView(R.id.hpb_light)
     MHorProgressBar hpbLight;
     @BindView(R.id.scb_follow_sys)
@@ -43,44 +44,60 @@ public class ReadAdjustPop extends PopupWindow {
     @BindView(R.id.tv_auto_page)
     TextView tvAutoPage;
 
-    private ReadBookActivity activity;
+    private Activity context;
     private Boolean isFollowSys;
     private int light;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnAdjustListener adjustListener;
     private SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
 
-    public ReadAdjustPop(ReadBookActivity readBookActivity, OnAdjustListener adjustListener) {
-        super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.activity = readBookActivity;
-        this.adjustListener = adjustListener;
-
-        View view = LayoutInflater.from(activity).inflate(R.layout.pop_read_adjust, null);
-        this.setContentView(view);
-        ButterKnife.bind(this, view);
-        initData();
-        bindEvent();
-        initLight();
-
-        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
-        setFocusable(true);
-        setTouchable(true);
-        setClippingEnabled(false);
-        setAnimationStyle(R.style.anim_pop_windowlight);
+    public ReadAdjustPop(Context context) {
+        super(context);
+        init(context);
     }
 
-    @Override
-    public void showAtLocation(View parent, int gravity, int x, int y) {
-        super.showAtLocation(parent, gravity, x, y);
+    public ReadAdjustPop(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public ReadAdjustPop(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, null);
+        addView(view);
+        ButterKnife.bind(this, view);
+        bindEvent();
+    }
+
+    public void setListener(Activity activity, OnAdjustListener adjustListener) {
+        this.context = activity;
+        this.adjustListener = adjustListener;
+    }
+
+    public void show() {
         initData();
         hpbLight.setDurProgress(light);
         scbFollowSys.setChecked(isFollowSys);
+        initLight();
+    }
+
+    public void dismiss() {
+        saveLight();
     }
 
     private void initData() {
         isFollowSys = getIsFollowSys();
         light = getLight();
-
+        scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
+        if (readBookControl.isSpeechRateFollowSys()) {
+            hpbTtsSpeechRate.setCanTouch(false);
+        }
+        hpbClick.setDurProgress(readBookControl.getClickSensitivity());
+        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate() - 5);
     }
 
     private void bindEvent() {
@@ -131,8 +148,6 @@ public class ReadAdjustPop extends PopupWindow {
 
         //自动翻页间隔
         hpbClick.setMaxProgress(180);
-
-        hpbClick.setDurProgress(readBookControl.getClickSensitivity());
         hpbClick.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -157,10 +172,6 @@ public class ReadAdjustPop extends PopupWindow {
         });
 
         //朗读语速调节
-        scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
-        if (readBookControl.isSpeechRateFollowSys()) {
-            hpbTtsSpeechRate.setCanTouch(false);
-        }
         llTtsSpeechRate.setOnClickListener(v -> {
             if (scbTtsFollowSys.isChecked()) {
                 scbTtsFollowSys.setChecked(false, true);
@@ -180,7 +191,6 @@ public class ReadAdjustPop extends PopupWindow {
                 }
             }
         });
-        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate() - 5);
         hpbTtsSpeechRate.setProgressListener(new OnProgressListener() {
             @Override
             public void moveStartProgress(float dur) {
@@ -208,14 +218,14 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     public void setScreenBrightness() {
-        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
+        WindowManager.LayoutParams params = (context).getWindow().getAttributes();
         params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-        (activity).getWindow().setAttributes(params);
+        (context).getWindow().setAttributes(params);
     }
 
     public int getScreenBrightness() {
         int value = 0;
-        ContentResolver cr = activity.getContentResolver();
+        ContentResolver cr = context.getContentResolver();
         try {
             value = Settings.System.getInt(cr, Settings.System.SCREEN_BRIGHTNESS);
         } catch (Settings.SettingNotFoundException e) {
@@ -225,9 +235,9 @@ public class ReadAdjustPop extends PopupWindow {
     }
 
     public void setScreenBrightness(int value) {
-        WindowManager.LayoutParams params = (activity).getWindow().getAttributes();
+        WindowManager.LayoutParams params = (context).getWindow().getAttributes();
         params.screenBrightness = value * 1.0f / 255f;
-        (activity).getWindow().setAttributes(params);
+        (context).getWindow().setAttributes(params);
     }
 
     private void saveLight() {
@@ -243,12 +253,6 @@ public class ReadAdjustPop extends PopupWindow {
 
     private Boolean getIsFollowSys() {
         return preference.getBoolean("isfollowsys", true);
-    }
-
-    @Override
-    public void dismiss() {
-        saveLight();
-        super.dismiss();
     }
 
     public void initLight() {
