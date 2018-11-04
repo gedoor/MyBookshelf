@@ -979,6 +979,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         moProgressHUD.showInputBox("输入编码",
                 charset,
                 (inputText -> {
+                    inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
                         getBook().getBookInfoBean().setCharset(inputText);
                         mPresenter.saveProgress();
