@@ -92,16 +92,18 @@ public class CharsetDetector {
             e.printStackTrace();
         }
 
+        if (found) {
+            return foundCharset;
+        }
+
         if (isAscii) {
             found = true;
             return "ascii";
         }
 
-        if (!found) {
-            String prob[] = detector.getProbableCharsets();
-            if (prob.length > 0 && !Objects.equals(prob[0], "nomatch")) {
-                return prob[0];
-            }
+        String prob[] = detector.getProbableCharsets();
+        if (prob.length > 0 && !Objects.equals(prob[0], "nomatch")) {
+            return prob[0];
         }
         return DEFAULT_CHARSET;
     }
