@@ -144,9 +144,7 @@ public class WebBookModelImpl implements IWebBookModel {
             bookShelfBean.getBookInfoBean().setChapterList(chapterList);
             bookShelfBean.upDurChapterName();
             bookShelfBean.upLastChapterName();
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                    .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
             e.onNext(bookShelfBean);
             e.onComplete();
         });

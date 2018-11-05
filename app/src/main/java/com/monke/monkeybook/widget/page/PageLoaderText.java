@@ -6,6 +6,7 @@ import com.monke.basemvplib.CharsetDetector;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
 import com.monke.monkeybook.utils.RxUtils;
@@ -351,9 +352,7 @@ public class PageLoaderText extends PageLoader {
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
         Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                    .where(ChapterListBeanDao.Properties.NoteUrl.eq(getBook().getNoteUrl()))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            BookshelfHelp.delChapterList(getBook().getNoteUrl());
             e.onSuccess(loadChapters());
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -367,7 +366,6 @@ public class PageLoaderText extends PageLoader {
                     public void onSuccess(List<ChapterListBean> value) {
                         isChapterListPrepare = true;
                         mPageView.getActivity().toast("更新完成");
-                        // 存储章节到数据库
                         getBook().setHasUpdate(false);
 
                         // 提示目录加载完成

@@ -264,7 +264,7 @@ public class BookshelfHelp {
     public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
-        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
+        delChapterList(bookShelfBean.getNoteUrl());
         if (!keepCaches) {
             String bookName = bookShelfBean.getBookInfoBean().getName();
             // 如果书架上有其他同名书籍，只删除本书源的缓存
@@ -343,6 +343,12 @@ public class BookshelfHelp {
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
                 .build()
                 .list();
+    }
+
+    public static void delChapterList(String noteUrl) {
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
+                .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
     public static void saveBookmark(BookmarkBean bookmarkBean) {

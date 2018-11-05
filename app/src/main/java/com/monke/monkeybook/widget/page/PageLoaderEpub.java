@@ -8,6 +8,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FormatWebText;
+import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.jsoup.Jsoup;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -208,13 +210,13 @@ public class PageLoaderEpub extends PageLoader {
                     public void onNext(BookShelfBean bookShelfBean) {
                         isChapterListPrepare = true;
 
-                        // 加载并显示当前章节
-                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
-
                         //提示目录加载完成
                         if (mPageChangeListener != null) {
                             mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
                         }
+
+                        // 加载并显示当前章节
+                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
                     }
 
                     @Override
@@ -231,6 +233,43 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void updateChapter() {
+        mPageView.getActivity().toast("目录更新中");
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
+            getBook().setChapterList(null);
+            BookshelfHelp.delChapterList(getBook().getNoteUrl());
+            e.onNext(getBook());
+            e.onComplete();
+        }).flatMap(this::checkChapterList)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Observer<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
+                    @Override
+                    public void onNext(BookShelfBean bookShelfBean) {
+                        mPageView.getActivity().toast("更新完成");
+                        isChapterListPrepare = true;
+
+                        //提示目录加载完成
+                        if (mPageChangeListener != null) {
+                            mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
+                        }
+
+                        // 加载并显示当前章节
+                        skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        chapterError(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
