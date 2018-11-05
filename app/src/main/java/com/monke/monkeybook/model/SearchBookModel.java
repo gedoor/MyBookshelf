@@ -122,7 +122,7 @@ public class SearchBookModel {
         if (searchEngineIndex < searchEngineS.size()) {
             final SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
             if (searchEngine.getHasMore()) {
-                WebBookModelImpl.getInstance()
+                WebBookModel.getInstance()
                         .searchOtherBook(content, page, searchEngine.getTag())
                         .observeOn(Schedulers.io())
                         .subscribeOn(Schedulers.newThread())

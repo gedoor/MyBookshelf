@@ -19,7 +19,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.view.activity.BookSourceActivity;
@@ -191,7 +191,7 @@ public class CheckSourceService extends Service {
                     bookShelfBean.setFinalDate(System.currentTimeMillis());
                     bookShelfBean.setDurChapter(0);
                     bookShelfBean.setDurChapterPage(0);
-                    WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
+                    WebBookModel.getInstance().getBookInfo(bookShelfBean)
                             .subscribeOn(scheduler)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver());

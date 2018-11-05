@@ -19,7 +19,7 @@ import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.SearchBookModel;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
 
 import java.util.ArrayList;
@@ -253,8 +253,8 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
     @Override
     public void addBookToShelf(final SearchBookBean searchBookBean) {
         final BookShelfBean bookShelfResult = BookshelfHelp.getBookFromSearchBook(searchBookBean);
-        WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+        WebBookModel.getInstance().getBookInfo(bookShelfResult)
+                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {

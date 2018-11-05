@@ -35,8 +35,8 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.model.ImportBookModelImpl;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.ImportBookModel;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.DownloadService;
@@ -190,7 +190,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 .subscribe(new SimpleObserver<String>() {
                     @Override
                     public void onNext(String value) {
-                        ImportBookModelImpl.getInstance().importBook(new File(value))
+                        ImportBookModel.getInstance().importBook(new File(value))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe(new SimpleObserver<LocBookShelfBean>() {
@@ -244,8 +244,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
         bookShelfBean.setDurChapter(bookShelf.getDurChapter());
         bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
-        WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+        WebBookModel.getInstance().getBookInfo(bookShelfBean)
+                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {

@@ -18,7 +18,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -125,7 +125,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
-                WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
+                WebBookModel.getInstance().getChapterList(bookShelfBean)
                         .flatMap(this::saveBookToShelfO)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

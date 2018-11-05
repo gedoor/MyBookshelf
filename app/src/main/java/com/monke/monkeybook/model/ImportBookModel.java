@@ -9,7 +9,6 @@ import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.impl.IImportBookModel;
 
 import java.io.File;
 
@@ -17,13 +16,12 @@ import io.reactivex.Observable;
 
 import static com.monke.monkeybook.utils.StringUtils.getString;
 
-public class ImportBookModelImpl extends BaseModelImpl implements IImportBookModel {
+public class ImportBookModel extends BaseModelImpl {
 
-    public static ImportBookModelImpl getInstance() {
-        return new ImportBookModelImpl();
+    public static ImportBookModel getInstance() {
+        return new ImportBookModel();
     }
 
-    @Override
     public Observable<LocBookShelfBean> importBook(final File file) {
         return Observable.create(e -> {
             //判断文件是否存在

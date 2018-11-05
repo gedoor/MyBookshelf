@@ -16,7 +16,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.ChoiceBookContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -82,7 +82,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<ChoiceBookContrac
     }
 
     private void searchBook(final long searchTime) {
-        WebBookModelImpl.getInstance().findBook(url, page, tag)
+        WebBookModel.getInstance().findBook(url, page, tag)
                 .subscribeOn(Schedulers.newThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,8 +125,8 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<ChoiceBookContrac
         bookShelfResult.setDurChapter(0);
         bookShelfResult.setDurChapterPage(0);
         bookShelfResult.setTag(searchBookBean.getTag());
-        WebBookModelImpl.getInstance().getBookInfo(bookShelfResult)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+        WebBookModel.getInstance().getBookInfo(bookShelfResult)
+                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
