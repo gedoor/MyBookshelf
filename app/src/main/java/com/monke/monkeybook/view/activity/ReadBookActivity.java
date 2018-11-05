@@ -983,6 +983,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     if (!Objects.equals(charset, inputText)) {
                         getBook().getBookInfoBean().setCharset(inputText);
                         mPresenter.saveProgress();
+                        if (mPageLoader != null) {
+                            mPageLoader.updateChapter();
+                        }
                     }
                 }));
     }
