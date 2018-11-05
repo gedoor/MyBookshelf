@@ -32,6 +32,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.MediaType;
+import nl.siegmann.epublib.domain.Metadata;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.SpineReference;
 import nl.siegmann.epublib.epub.EpubReader;
@@ -88,6 +89,12 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private List<ChapterListBean> loadChapters() {
+        Metadata metadata = mRawBook.getMetadata();
+        getBook().getBookInfoBean().setName(metadata.getFirstTitle());
+        getBook().getBookInfoBean().setAuthor(FormatWebText.getAuthor(metadata.getAuthors().toString()));
+        if (metadata.getDescriptions().size() > 0) {
+            getBook().getBookInfoBean().setIntroduce(metadata.getDescriptions().get(0));
+        }
         List<ChapterListBean> chapterList = new ArrayList<>();
         List<SpineReference> spineReferences = mRawBook.getSpine().getSpineReferences();
 

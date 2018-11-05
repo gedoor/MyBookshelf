@@ -43,7 +43,7 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 bookShelfBean.setAllowUpdate(false);
 
                 BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-                String fileName = file.getName().replace(".txt", "").replace(".TXT", "");
+                String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
                     bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));

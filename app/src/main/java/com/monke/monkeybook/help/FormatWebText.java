@@ -27,12 +27,13 @@ public class FormatWebText {
         return str
                 .replace("&nbsp;", " ")
                 .replaceAll("\\s", " ")
-                .replace("：", "")
+                .replaceAll("[：（）]", "")
                 .replace(":", "")
                 .replace("(", "")
                 .replace(")", "")
-                .replace("（", "")
-                .replace("）", "")
+                .replace("[", "")
+                .replace("]","")
+                .replace(",","")
                 .replaceAll("作.*?者", "")
                 .trim();
     }
