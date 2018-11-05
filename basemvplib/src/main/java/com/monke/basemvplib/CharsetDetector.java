@@ -97,7 +97,6 @@ public class CharsetDetector {
         }
 
         if (isAscii) {
-            found = true;
             return "ascii";
         }
 
