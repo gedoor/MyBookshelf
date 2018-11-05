@@ -134,10 +134,11 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private void parseMenu(List<TOCReference> refs, int level) {
+        if (refs == null) return;
         for (TOCReference ref : refs) {
-
             if (ref.getResource() != null) {
                 ChapterListBean chapterListBean = new ChapterListBean();
+                chapterListBean.setNoteUrl(getBook().getNoteUrl());
                 chapterListBean.setDurChapterName(ref.getTitle());
                 chapterListBean.setDurChapterUrl(ref.getCompleteHref());
                 chapterList.add(chapterListBean);
