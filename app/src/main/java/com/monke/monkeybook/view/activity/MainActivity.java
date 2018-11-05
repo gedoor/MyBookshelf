@@ -206,7 +206,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void updateTabItemText(int group) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(0);
         //首先移除原先View
-        final ViewParent customParent = tab.getCustomView().getParent();
+        if (tab == null) return;
+        final ViewParent customParent = Objects.requireNonNull(tab.getCustomView()).getParent();
         if (customParent != null) {
             ((ViewGroup) customParent).removeView(tab.getCustomView());
         }
@@ -216,8 +217,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         tabView.setTag(0);
     }
 
-    private View tab_icon(String name,Integer iconID){
-        View tabView =  LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right,null);
+    private View tab_icon(String name, Integer iconID) {
+        @SuppressLint("InflateParams")
+        View tabView = LayoutInflater.from(this).inflate(R.layout.tab_view_icon_right, null);
         TextView tv = tabView.findViewById(R.id.tabtext);
         tv.setText(name);
         ImageView im = tabView.findViewById(R.id.tabicon);
@@ -301,7 +303,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                         .setTitle(R.string.clear_bookshelf)
                         .setMessage(R.string.clear_bookshelf_s)
                         .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.clearBookshelf())
-                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
+                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                        })
                         .show();
                 break;
             case R.id.action_change_icon:
@@ -415,7 +418,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     .setTitle(R.string.backup_confirmation)
                     .setMessage(R.string.backup_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
@@ -435,7 +439,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     .setTitle(R.string.restore_confirmation)
                     .setMessage(R.string.restore_message)
                     .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    })
                     .show();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
