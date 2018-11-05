@@ -100,9 +100,7 @@ public class UpdateService extends Service {
 
     private void stopDownload() {
         interceptFlag = true;
-        if (count == 0) {
-            stopSelf();
-        }
+        stopSelf();
     }
 
     @Nullable
