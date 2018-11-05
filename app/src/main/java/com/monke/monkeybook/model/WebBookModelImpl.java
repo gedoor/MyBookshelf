@@ -9,8 +9,6 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.content.DefaultModelImpl;
@@ -57,7 +55,7 @@ public class WebBookModelImpl implements IWebBookModel {
         IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             return bookModel.getChapterList(bookShelfBean)
-                    .flatMap((chapterList) -> getChapterList(bookShelfBean, chapterList));
+                    .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
         } else {
             return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName() + "没有书源"));
         }
@@ -126,7 +124,7 @@ public class WebBookModelImpl implements IWebBookModel {
         }
     }
 
-    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
+    private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
                 ChapterListBean chapter = chapterList.get(i);
