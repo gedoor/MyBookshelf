@@ -237,6 +237,10 @@ public class PageLoaderEpub extends PageLoader {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
             getBook().setChapterList(null);
             BookshelfHelp.delChapterList(getBook().getNoteUrl());
+            if (TextUtils.isEmpty(getBook().getBookInfoBean().getCharset())) {
+                getBook().getBookInfoBean().setCharset(getCharset(mRawBook));
+            }
+            mCharset = Charset.forName(getBook().getBookInfoBean().getCharset());
             e.onNext(getBook());
             e.onComplete();
         }).flatMap(this::checkChapterList)

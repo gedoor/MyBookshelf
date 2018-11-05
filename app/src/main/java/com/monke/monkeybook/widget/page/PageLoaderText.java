@@ -353,6 +353,11 @@ public class PageLoaderText extends PageLoader {
         mPageView.getActivity().toast("目录更新中");
         Single.create((SingleOnSubscribe<List<ChapterListBean>>) e -> {
             BookshelfHelp.delChapterList(getBook().getNoteUrl());
+            //获取文件编码
+            if (TextUtils.isEmpty(getBook().getBookInfoBean().getCharset())) {
+                getBook().getBookInfoBean().setCharset(CharsetDetector.detectCharset(mBookFile));
+            }
+            mCharset = Charset.forName(getBook().getBookInfoBean().getCharset());
             e.onSuccess(loadChapters());
         })
                 .compose(RxUtils::toSimpleSingle)
