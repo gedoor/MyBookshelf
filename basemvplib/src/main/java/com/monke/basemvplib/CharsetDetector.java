@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class CharsetDetector {
 
@@ -98,10 +99,11 @@ public class CharsetDetector {
 
         if (!found) {
             String prob[] = detector.getProbableCharsets();
-            foundCharset = prob[0];
+            if (prob.length > 0 && !Objects.equals(prob[0], "nomatch")) {
+                return prob[0];
+            }
         }
-        found = false;
-        return foundCharset;
+        return DEFAULT_CHARSET;
     }
 
 }
