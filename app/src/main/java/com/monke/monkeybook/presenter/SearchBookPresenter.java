@@ -31,7 +31,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
+public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
     private static final int BOOK = 2;
 
     private Boolean hasSearch = false;   //判断是否搜索过
@@ -43,7 +43,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
 
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenterImpl(Context context, boolean useMy716) {
+    public SearchBookPresenter(Context context, boolean useMy716) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
@@ -115,7 +115,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
 
     @Override
     public void insertSearchHistory() {
-        final int type = SearchBookPresenterImpl.BOOK;
+        final int type = SearchBookPresenter.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
         Observable.create((ObservableOnSubscribe<SearchHistoryBean>) e -> {
             List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
@@ -154,7 +154,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
         Observable.create((ObservableOnSubscribe<Integer>) e -> {
             int a = DbHelper.getInstance().getDb().delete(SearchHistoryBeanDao.TABLENAME,
                     SearchHistoryBeanDao.Properties.Type.columnName + "=? and " + SearchHistoryBeanDao.Properties.Content.columnName + " like ?",
-                    new String[]{String.valueOf(SearchBookPresenterImpl.BOOK), "%" + content + "%"});
+                    new String[]{String.valueOf(SearchBookPresenter.BOOK), "%" + content + "%"});
             e.onNext(a);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -201,7 +201,7 @@ public class SearchBookPresenterImpl extends BasePresenterImpl<SearchBookContrac
         Observable.create((ObservableOnSubscribe<List<SearchHistoryBean>>) e -> {
             List<SearchHistoryBean> data = DbHelper.getInstance().getmDaoSession().getSearchHistoryBeanDao()
                     .queryBuilder()
-                    .where(SearchHistoryBeanDao.Properties.Type.eq(SearchBookPresenterImpl.BOOK), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
+                    .where(SearchHistoryBeanDao.Properties.Type.eq(SearchBookPresenter.BOOK), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
                     .orderDesc(SearchHistoryBeanDao.Properties.Date)
                     .limit(20)
                     .build().list();

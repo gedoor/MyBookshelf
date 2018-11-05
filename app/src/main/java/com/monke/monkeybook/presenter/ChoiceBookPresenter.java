@@ -28,7 +28,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChoiceBookPresenterImpl extends BasePresenterImpl<ChoiceBookContract.View> implements ChoiceBookContract.Presenter {
+public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.View> implements ChoiceBookContract.Presenter {
     private String tag;
     private String url;
     private String title;
@@ -37,7 +37,7 @@ public class ChoiceBookPresenterImpl extends BasePresenterImpl<ChoiceBookContrac
     private long startThisSearchTime;
     private List<BookShelfBean> bookShelfs = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
 
-    public ChoiceBookPresenterImpl(final Intent intent) {
+    public ChoiceBookPresenter(final Intent intent) {
         url = intent.getStringExtra("url");
         title = intent.getStringExtra("title");
         tag = intent.getStringExtra("tag");

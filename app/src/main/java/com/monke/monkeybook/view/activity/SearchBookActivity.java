@@ -29,8 +29,8 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.SearchBookPresenterImpl;
+import com.monke.monkeybook.presenter.BookDetailPresenter;
+import com.monke.monkeybook.presenter.SearchBookPresenter;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
 import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.SoftInputUtil;
@@ -88,7 +88,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected SearchBookContract.Presenter initInjector() {
         useMy716 = !Objects.equals(ACache.get(this).getAsString("useMy716"), "False");
-        return new SearchBookPresenterImpl(this, useMy716);
+        return new SearchBookPresenter(this, useMy716);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             @Override
             public void clickItem(View animView, int position, SearchBookBean searchBookBean) {
                 Intent intent = new Intent(SearchBookActivity.this, BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_SEARCH);
+                intent.putExtra("openFrom", BookDetailPresenter.FROM_SEARCH);
                 intent.putExtra("data", searchBookBean);
                 startActivityByAnim(intent, android.R.anim.fade_in, android.R.anim.fade_out);
             }

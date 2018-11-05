@@ -48,7 +48,7 @@ import io.reactivex.schedulers.Schedulers;
  * 编辑书源
  */
 
-public class SourceEditPresenterImpl extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
+public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
 
     @Override
     public void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {

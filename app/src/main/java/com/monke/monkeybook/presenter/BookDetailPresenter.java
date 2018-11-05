@@ -29,7 +29,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
 
-public class BookDetailPresenterImpl extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
+public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
     public final static int FROM_SEARCH = 2;
 

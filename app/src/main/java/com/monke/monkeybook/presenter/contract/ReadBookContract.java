@@ -8,7 +8,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 
 public interface ReadBookContract {
     interface View extends IView {
@@ -67,7 +67,7 @@ public interface ReadBookContract {
 
         String getChapterTitle(int chapterIndex);
 
-        void addToShelf(final ReadBookPresenterImpl.OnAddListener Listener);
+        void addToShelf(final ReadBookPresenter.OnAddListener Listener);
 
         void removeFromShelf();
 

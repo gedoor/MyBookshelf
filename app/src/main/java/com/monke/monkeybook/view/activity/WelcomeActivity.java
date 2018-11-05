@@ -11,7 +11,7 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,7 +80,7 @@ public class WelcomeActivity extends MBaseActivity {
 
     private void startReadActivity() {
         Intent intent = new Intent(this, ReadBookActivity.class);
-        intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+        intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
         startActivity(intent);
     }
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.bean.FindKindBean;
-import com.monke.monkeybook.presenter.FindBookPresenterImpl;
+import com.monke.monkeybook.presenter.FindBookPresenter;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
 import com.monke.monkeybook.view.activity.ChoiceBookActivity;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
@@ -49,7 +49,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     protected FindBookContract.Presenter initInjector() {
-        return new FindBookPresenterImpl();
+        return new FindBookPresenter();
     }
 
     @Override

@@ -53,7 +53,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
 
-public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
+public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 

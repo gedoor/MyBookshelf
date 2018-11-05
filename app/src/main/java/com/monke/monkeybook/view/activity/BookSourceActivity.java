@@ -29,7 +29,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
+import com.monke.monkeybook.presenter.BookSourcePresenter;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
@@ -76,7 +76,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected BookSourceContract.Presenter initInjector() {
-        return new BookSourcePresenterImpl();
+        return new BookSourcePresenter();
     }
 
     @Override

@@ -21,9 +21,9 @@ import com.monke.monkeybook.base.MBaseFragment;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
-import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.BookListPresenterImpl;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.BookDetailPresenter;
+import com.monke.monkeybook.presenter.BookListPresenter;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.view.activity.BookDetailActivity;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
@@ -77,7 +77,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
 
     @Override
     protected BookListContract.Presenter initInjector() {
-        return new BookListPresenterImpl();
+        return new BookListPresenter();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
                 bookShelfBean.setHasUpdate(false);
                 DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(getActivity(), ReadBookActivity.class);
-                intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+                intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 try {
@@ -189,7 +189,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             @Override
             public void onLongClick(View view, int index) {
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                intent.putExtra("openFrom", BookDetailPresenterImpl.FROM_BOOKSHELF);
+                intent.putExtra("openFrom", BookDetailPresenter.FROM_BOOKSHELF);
                 String key = String.valueOf(System.currentTimeMillis());
                 intent.putExtra("data_key", key);
                 BitIntentDataManager.getInstance().putData(key, getBookshelfList().get(index));

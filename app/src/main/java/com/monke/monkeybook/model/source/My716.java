@@ -11,7 +11,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
-import com.monke.monkeybook.model.content.DefaultModelImpl;
+import com.monke.monkeybook.model.content.DefaultModel;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 
@@ -79,7 +79,7 @@ public class My716 extends BaseModelImpl implements IStationBookModel {
                     searchBookBean.setCoverUrl("http://statics.zhuishushenqi.com" + book.get("cover").getAsString());
                     searchBookBean.setIntroduce(book.get("shortIntro").getAsString());
 
-                    Call<String> call = DefaultModelImpl.getRetrofitString("http://api.zhuishushenqi.com")
+                    Call<String> call = DefaultModel.getRetrofitString("http://api.zhuishushenqi.com")
                             .create(IHttpGetApi.class).getWebContentCall(searchBookBean.getNoteUrl(), AnalyzeHeaders.getMap(null));
                     String s = "";
                     try {

@@ -33,7 +33,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
+public class BookListPresenter extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;

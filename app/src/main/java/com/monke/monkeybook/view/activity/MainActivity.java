@@ -26,8 +26,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
@@ -42,7 +40,7 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.presenter.MainPresenterImpl;
+import com.monke.monkeybook.presenter.MainPresenter;
 import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.fragment.BookListFragment;
 import com.monke.monkeybook.view.fragment.FindBookFragment;
@@ -87,7 +85,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected MainContract.Presenter initInjector() {
-        return new MainPresenterImpl();
+        return new MainPresenter();
     }
 
     @Override

@@ -36,7 +36,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
+public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
     private BookSourceBean delBookSource;
     private Snackbar progressSnackBar;
 

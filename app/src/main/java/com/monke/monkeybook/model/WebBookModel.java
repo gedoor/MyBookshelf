@@ -11,7 +11,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.content.DefaultModelImpl;
+import com.monke.monkeybook.model.content.DefaultModel;
 import com.monke.monkeybook.model.impl.IStationBookModel;
 import com.monke.monkeybook.model.source.My716;
 
@@ -114,7 +114,7 @@ public class WebBookModel {
             case My716.TAG:
                 return My716.getInstance();
             default:
-                return DefaultModelImpl.getInstance(tag);
+                return DefaultModel.getInstance(tag);
         }
     }
 

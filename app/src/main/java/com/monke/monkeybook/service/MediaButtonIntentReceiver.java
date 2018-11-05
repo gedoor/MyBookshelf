@@ -11,7 +11,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 /**
@@ -60,7 +60,7 @@ public class MediaButtonIntentReceiver extends BroadcastReceiver {
     private static void readAloud(final Context context, String command) {
         if (!AppActivityManager.getInstance().isExist(ReadBookActivity.class)) {
             Intent intent = new Intent(context, ReadBookActivity.class);
-            intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+            intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
             intent.putExtra("readAloud", true);
             try {
                 context.startActivity(intent);

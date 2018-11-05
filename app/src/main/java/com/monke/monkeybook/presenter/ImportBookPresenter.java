@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ImportBookPresenterImpl extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
+public class ImportBookPresenter extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
 
     @Override
     public void importBooks(List<File> books) {

@@ -26,7 +26,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ReplaceRuleManager;
-import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
+import com.monke.monkeybook.presenter.ReplaceRulePresenter;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
@@ -70,7 +70,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     protected ReplaceRuleContract.Presenter initInjector() {
-        return new ReplaceRulePresenterImpl();
+        return new ReplaceRulePresenter();
     }
 
     @Override

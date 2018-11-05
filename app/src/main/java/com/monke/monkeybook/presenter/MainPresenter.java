@@ -34,7 +34,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
 
     @Override
     public void backupData() {

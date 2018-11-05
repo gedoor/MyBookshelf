@@ -46,7 +46,7 @@ public class BookContent {
             bookContentBean.setDurChapterContent(webContentBean.content);
 
             while (!TextUtils.isEmpty(webContentBean.nextUrl)) {
-                Call<String> call = DefaultModelImpl.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
                         .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
                 String response = "";
                 try {

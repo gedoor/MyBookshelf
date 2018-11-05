@@ -30,7 +30,7 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class ReplaceRulePresenterImpl extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
+public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
     private BookSourceBean delBookSource;
 
     @Override
