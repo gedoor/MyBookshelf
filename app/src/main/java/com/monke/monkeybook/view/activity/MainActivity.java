@@ -173,17 +173,19 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         for (int i = 0; i < mTlIndicator.getTabCount(); i++) {
             TabLayout.Tab tab = mTlIndicator.getTabAt(i);
             if (tab == null) return;
-            tab.setCustomView(tab_icon(mTitles[i], null));
-            if (tab.getCustomView() == null) return;
-            View tabView = (View) tab.getCustomView().getParent();
-            tabView.setTag(i);
-            //设置第一个Item的点击事件(当下标为0时触发)
-            if (i == 0) {
+            if (i == 0) { //设置第一个Item的点击事件(当下标为0时触发)
+                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
+                View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
+                tabView.setTag(i);
                 tabView.setOnClickListener(view -> {
                     if (tabView.isSelected()) {
                         showBookGroupMenu(view);
                     }
                 });
+            } else {
+                tab.setCustomView(tab_icon(mTitles[i], null));
+                View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
+                tabView.setTag(i);
             }
         }
     }
@@ -200,21 +202,33 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             upGroup(menuItem.getOrder());
             return true;
         });
+        popupMenu.setOnDismissListener(popupMenu1 -> {
+            updateTabItemIcon(false);
+        });
         popupMenu.show();
+        updateTabItemIcon(true);
+    }
+
+    private void updateTabItemIcon(boolean showMenu) {
+        TabLayout.Tab tab = mTlIndicator.getTabAt(0);
+        if (tab == null) return;
+        View customView = tab.getCustomView();
+        if (customView == null) return;
+        ImageView im = customView.findViewById(R.id.tabicon);
+        if (showMenu) {
+            im.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+        } else {
+            im.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        }
     }
 
     private void updateTabItemText(int group) {
         TabLayout.Tab tab = mTlIndicator.getTabAt(0);
-        //首先移除原先View
         if (tab == null) return;
-        final ViewParent customParent = Objects.requireNonNull(tab.getCustomView()).getParent();
-        if (customParent != null) {
-            ((ViewGroup) customParent).removeView(tab.getCustomView());
-        }
-
-        tab.setCustomView(tab_icon(BOOK_GROUPS[group], R.drawable.ic_arrow_drop_down_black_24dp));
-        View tabView = (View) tab.getCustomView().getParent();
-        tabView.setTag(0);
+        View customView = tab.getCustomView();
+        if (customView == null) return;
+        TextView tv = customView.findViewById(R.id.tabtext);
+        tv.setText(BOOK_GROUPS[group]);
     }
 
     private View tab_icon(String name, Integer iconID) {
