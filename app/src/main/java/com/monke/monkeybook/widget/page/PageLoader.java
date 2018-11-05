@@ -1097,7 +1097,7 @@ public abstract class PageLoader {
         float x = mMarginLeft;
 
         if (isFirstLineOfParagraph(line)) {
-            String blanks = "\u3000\u3000";
+            String blanks = StringUtils.halfToFull("  ");
             canvas.drawText(blanks, x, top, paint);
             float bw = StaticLayout.getDesiredWidth(blanks, paint);
             x += bw;
