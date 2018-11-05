@@ -247,7 +247,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
             case R.id.action_import_book_source_onLine:
                 String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-                moProgressHUD.showInputBox("输入书源网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                moProgressHUD.showInputBox("输入书源网址",
+                        TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                        new String[]{getString(R.string.default_source_url)},
                         inputText -> {
                             ACache.get(this).put("sourceUrl", inputText);
                             mPresenter.importBookSource(inputText);

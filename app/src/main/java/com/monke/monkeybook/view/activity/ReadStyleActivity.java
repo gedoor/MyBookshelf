@@ -154,7 +154,10 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectTextColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入文字颜色", ColorUtil.intToString(textColor), inputText -> {
+            moProgressHUD.showInputBox("输入文字颜色",
+                    ColorUtil.intToString(textColor),
+                    null,
+                    inputText -> {
                 try {
                     textColor = Color.parseColor(inputText);
                     upText();
@@ -187,7 +190,10 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectBgColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入背景颜色", ColorUtil.intToString(bgColor), inputText -> {
+            moProgressHUD.showInputBox("输入背景颜色",
+                    ColorUtil.intToString(bgColor),
+                    null,
+                    inputText -> {
                 try {
                     bgColor = Color.parseColor(inputText);
                     bgDrawable = new ColorDrawable(bgColor);

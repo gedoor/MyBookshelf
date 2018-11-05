@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -16,7 +17,7 @@ import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 public class InputView {
     private TextView tvTitle;
-    private EditText etInput;
+    private AutoCompleteTextView etInput;
     private TextView tvOk;
 
     private MoProgressHUD moProgressHUD;
@@ -38,7 +39,7 @@ public class InputView {
         return new InputView(moProgressView);
     }
 
-    void showInputView(final OnInputOk onInputOk, MoProgressHUD moProgressHUD, String title, String defaultValue) {
+    void showInputView(final OnInputOk onInputOk, MoProgressHUD moProgressHUD, String title, String defaultValue, String[] adapterValues) {
         this.moProgressHUD = moProgressHUD;
         this.onInputOk = onInputOk;
         tvTitle.setText(title);
@@ -46,6 +47,10 @@ public class InputView {
             etInput.setTextSize(2, 16); // 2 --> sp
             etInput.setText(defaultValue);
             etInput.setSelectAllOnFocus(true);
+        }
+        if (adapterValues != null) {
+            ArrayAdapter mAdapter = new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, adapterValues);
+            etInput.setAdapter(mAdapter);
         }
     }
 

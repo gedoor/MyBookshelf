@@ -277,7 +277,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
                 break;
             case R.id.action_add_url:
-                moProgressHUD.showInputBox("添加书籍网址", null, inputText -> mPresenter.addBookUrl(inputText));
+                moProgressHUD.showInputBox("添加书籍网址",
+                        null,
+                        null,
+                        inputText -> mPresenter.addBookUrl(inputText));
                 break;
             case R.id.action_download_all:
                 if (!isNetWorkAvailable())

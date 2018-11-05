@@ -316,13 +316,13 @@ public class MoProgressHUD {
     /**
      * 弹出输入框
      */
-    public void showInputBox(String title, String defaultValue, InputView.OnInputOk onInputOk) {
+    public void showInputBox(String title, String defaultValue, String[] adapterValues, InputView.OnInputOk onInputOk) {
         initCenter();
         initAnimation();
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
         InputView.getInstance(mSharedView)
-                .showInputView(onInputOk, this, title, defaultValue);
+                .showInputView(onInputOk, this, title, defaultValue, adapterValues);
         if (!isShowing()) {
             onAttached();
         }

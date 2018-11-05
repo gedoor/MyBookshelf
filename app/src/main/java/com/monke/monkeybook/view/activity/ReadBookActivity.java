@@ -978,6 +978,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         final String charset = getBook().getBookInfoBean().getCharset();
         moProgressHUD.showInputBox("输入编码",
                 charset,
+                new String[]{"UTF-8", "GB2312"},
                 (inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
@@ -998,6 +999,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             final String regex = getBook().getBookInfoBean().getChapterUrl();
             moProgressHUD.showInputBox("TXT目录正则",
                     regex,
+                    null,
                     (inputText -> {
                         if (!Objects.equals(regex, inputText)) {
                             getBook().getBookInfoBean().setChapterUrl(inputText);
