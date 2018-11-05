@@ -4,8 +4,6 @@ import android.text.TextUtils;
 
 import com.monke.basemvplib.CharsetDetector;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.IOUtils;
 import com.monke.monkeybook.utils.MD5Utils;
@@ -117,11 +115,6 @@ public class PageLoaderText extends PageLoader {
                             //将当前段落添加上一章去
                             lastChapter.setEnd(lastChapter.getEnd() + chapterContent.getBytes(mCharset).length);
 
-                            //如果章节内容太小，则移除
-                            if (lastChapter.getEnd() - lastChapter.getStart() < 30) {
-                                mChapterList.remove(lastChapter);
-                            }
-
                             //创建当前章节
                             ChapterListBean curChapter = new ChapterListBean();
                             curChapter.setDurChapterName(matcher.group());
@@ -139,11 +132,6 @@ public class PageLoaderText extends PageLoader {
                             ChapterListBean lastChapter = mChapterList.get(mChapterList.size() - 1);
                             lastChapter.setEnd(lastChapter.getStart() + chapterContent.getBytes(mCharset).length);
 
-                            //如果章节内容太小，则移除
-                            if (lastChapter.getEnd() - lastChapter.getStart() < 30) {
-                                mChapterList.remove(lastChapter);
-                            }
-
                             //创建当前章节
                             ChapterListBean curChapter = new ChapterListBean();
                             curChapter.setDurChapterName(matcher.group());
@@ -157,9 +145,7 @@ public class PageLoaderText extends PageLoader {
                         }
                     }
                 }
-            }
-            //进行本地虚拟分章
-            else {
+            } else { //进行本地虚拟分章
                 //章节在buffer的偏移量
                 int chapterOffset = 0;
                 //当前剩余可分配的长度
