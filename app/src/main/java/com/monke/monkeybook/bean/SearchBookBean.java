@@ -221,8 +221,6 @@ public class SearchBookBean implements Parcelable{
 
     public void setIsAdd(Boolean isAdd) {
         this.isAdd = isAdd;
-        if(isAdd)
-            this.addTime = System.currentTimeMillis();
     }
 
     public void originNumAdd() {
