@@ -18,6 +18,7 @@ import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
+import com.monke.monkeybook.widget.animation.HorizonPageAnim;
 import com.monke.monkeybook.widget.animation.NonePageAnim;
 import com.monke.monkeybook.widget.animation.PageAnimation;
 import com.monke.monkeybook.widget.animation.ScrollPageAnim;
@@ -190,6 +191,7 @@ public class PageView extends View {
 
             mPageAnim.setDirection(direction);
             if (!hasNext) {
+                ((HorizonPageAnim) mPageAnim).setNoNext(true);
                 return;
             }
         } else {
@@ -203,9 +205,12 @@ public class PageView extends View {
             //设置方向方向
             Boolean hashPrev = hasPrevPage();
             if (!hashPrev) {
+                ((HorizonPageAnim) mPageAnim).setNoNext(true);
                 return;
             }
         }
+        ((HorizonPageAnim) mPageAnim).setNoNext(false);
+        ((HorizonPageAnim) mPageAnim).setCancel(false);
         mPageAnim.startAnim();
     }
 
