@@ -35,26 +35,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-        <RelativeLayout
+        <com.monke.monkeybook.widget.refreshview.scroller.FastScrollRecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background">
+            app:bubbleColor="@color/tv_text_button_deep_pre"
+            app:handleColor="@color/darker_gray"
+            app:trackColor="@color/bg_divider_line" />
 
-            <com.monke.monkeybook.widget.refreshview.scroller.FastScrollRecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:handleColor="@color/darker_gray"
-                app:bubbleColor="@color/tv_text_button_deep_pre"
-                app:trackColor="@color/bg_divider_line" />
-
-        </RelativeLayout>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
 
 </LinearLayout>
