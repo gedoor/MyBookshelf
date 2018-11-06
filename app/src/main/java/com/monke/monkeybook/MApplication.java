@@ -71,7 +71,7 @@ public class MApplication extends Application {
         MApplication.downloadPath = downloadPath;
         Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
+        editor.putString(getString(R.string.pk_download_path), downloadPath);
         editor.apply();
     }
 
