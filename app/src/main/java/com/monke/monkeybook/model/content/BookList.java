@@ -46,6 +46,7 @@ public class BookList {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(tag);
                         item.setOrigin(name);
+                        item.setAddTime(System.currentTimeMillis());
                         AnalyzeElement analyzeElement = new AnalyzeElement(booksE.get(i), baseURI);
                         item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
