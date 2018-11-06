@@ -42,9 +42,10 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                        String kindA[] = sourceBean.getRuleFindUrl().split("&&");
+                        String kindA[] = sourceBean.getRuleFindUrl().split("&&|\n");
                         List<FindKindBean> children = new ArrayList<>();
                         for (String kindB : kindA) {
+                            if (kindB.trim().isEmpty()) continue;
                             String kind[] = kindB.split("::");
                             FindKindBean findKindBean = new FindKindBean();
                             findKindBean.setGroup(sourceBean.getBookSourceName());
