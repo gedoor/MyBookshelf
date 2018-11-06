@@ -45,9 +45,15 @@ public class ImportBookModel extends BaseModelImpl {
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
                     bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
-                    bookInfoBean.setName(fileName.substring(0, authorIndex));
+                    fileName = fileName.substring(0, authorIndex-1);
                 } else {
                     bookInfoBean.setAuthor("");
+                }
+                int smhStart = fileName.indexOf("《");
+                int smhEnd = fileName.indexOf("》");
+                if (smhStart != -1 && smhEnd != -1) {
+                    bookInfoBean.setName(fileName.substring(smhStart + 1, smhEnd));
+                } else {
                     bookInfoBean.setName(fileName);
                 }
                 bookInfoBean.setFinalRefreshData(file.lastModified());
