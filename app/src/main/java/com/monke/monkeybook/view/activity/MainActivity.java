@@ -82,6 +82,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private MoProgressHUD moProgressHUD;
     private long exitTime = 0;
     private boolean resumed = false;
+    private Handler handler = new Handler();
 
     @Override
     protected MainContract.Presenter initInjector() {
@@ -394,28 +395,28 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
                 case R.id.action_book_source_manage:
-                    new Handler().postDelayed(() -> BookSourceActivity.startThis(this), 200);
+                    handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
                 case R.id.action_replace_rule:
-                    new Handler().postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
+                    handler.postDelayed(() -> ReplaceRuleActivity.startThis(this), 200);
                     break;
                 case R.id.action_download:
-                    new Handler().postDelayed(() -> DownloadActivity.startThis(this), 200);
+                    handler.postDelayed(() -> DownloadActivity.startThis(this), 200);
                     break;
                 case R.id.action_setting:
-                    new Handler().postDelayed(() -> SettingActivity.startThis(this), 200);
+                    handler.postDelayed(() -> SettingActivity.startThis(this), 200);
                     break;
                 case R.id.action_about:
-                    new Handler().postDelayed(() -> AboutActivity.startThis(this), 200);
+                    handler.postDelayed(() -> AboutActivity.startThis(this), 200);
                     break;
                 case R.id.action_donate:
-                    new Handler().postDelayed(() -> DonateActivity.startThis(this), 200);
+                    handler.postDelayed(() -> DonateActivity.startThis(this), 200);
                     break;
                 case R.id.action_backup:
-                    backup();
+                    handler.postDelayed(this::backup, 200);
                     break;
                 case R.id.action_restore:
-                    restore();
+                    handler.postDelayed(this::restore, 200);
                     break;
                 case R.id.action_night_theme:
                     swNightTheme.setChecked(!isNightTheme());
