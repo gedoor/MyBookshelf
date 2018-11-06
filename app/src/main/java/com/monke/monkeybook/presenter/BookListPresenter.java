@@ -211,11 +211,6 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         queryBookShelf(needRefresh, group);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
-    public void updatePx(Boolean px) {
-        mView.recreate();
-    }
-
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.DOWNLOAD_ALL)})
     public void downloadAll(Integer downloadNum) {
         downloadAll(downloadNum, false);

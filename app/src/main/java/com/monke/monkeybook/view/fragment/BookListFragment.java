@@ -263,11 +263,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
     }
 
     @Override
-    public void recreate() {
-
-    }
-
-    @Override
     public SharedPreferences getPreferences() {
         return preferences;
     }
