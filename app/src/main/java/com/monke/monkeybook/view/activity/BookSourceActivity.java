@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,6 +62,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     RecyclerView recyclerView;
     @BindView(R.id.searchView)
     SearchView searchView;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
 
     private boolean selectAll = true;
     private MenuItem groupItem;
@@ -86,7 +89,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_recycler_serach_vew);
+        setContentView(R.layout.activity_book_source);
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     @Override
@@ -107,12 +114,20 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
-        setupActionBar();
+        super.bindView();
         initSearchView();
         initRecyclerView();
-        moProgressHUD = new MoProgressHUD(this);
+        refreshLayout.setOnRefreshListener(() -> {
+            BookSourceManager.refreshBookSource();
+            refreshBookSource();
+            refreshLayout.setRefreshing(false);
+        });
+    }
+
+    @Override
+    protected void firstRequest() {
+        super.firstRequest();
+        refreshBookSource();
     }
 
     private void initSearchView() {
@@ -139,7 +154,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        adapter.resetDataS(BookSourceManager.getAllBookSource());
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchHelpCallback.setDragEnable(true);

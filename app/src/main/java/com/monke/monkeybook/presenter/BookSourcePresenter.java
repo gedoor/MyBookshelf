@@ -1,5 +1,6 @@
 package com.monke.monkeybook.presenter;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
@@ -42,27 +43,21 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        AsyncTask.execute(() -> {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
             BookSourceManager.refreshBookSource();
-            e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        });
     }
 
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        AsyncTask.execute(() -> {
             for (int i = 1; i <= bookSourceBeans.size(); i++) {
                 bookSourceBeans.get(i - 1).setSerialNumber(i);
             }
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
             BookSourceManager.refreshBookSource();
-            e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        });
     }
 
     @Override
