@@ -73,7 +73,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
      */
     @Override
     public Observable<List<SearchBookBean>> findBook(String url, int page) {
-        if (!initBookSourceBean() || isEmpty(bookSourceBean.getRuleSearchUrl())) {
+        if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new ArrayList<>());
                 emitter.onComplete();
@@ -81,6 +81,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
+            if (!url.startsWith("http")) url = bookSourceBean.getBookSourceUrl() + url;
             AnalyzeSearchUrl analyzeSearchUrl = new AnalyzeSearchUrl(url, "", page);
             if (analyzeSearchUrl.getSearchUrl() == null) {
                 return Observable.create(emitter -> {
