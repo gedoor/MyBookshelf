@@ -75,8 +75,6 @@ public class ReadAloudService extends Service {
     private int nowSpeak;
     private int timeMinute = 0;
     private boolean timerEnable = false;
-    private Timer mTimer;
-    private TimerTask timerTask;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSessionCompat;
     private AudioFocusChangeListener audioFocusChangeListener;
@@ -88,7 +86,8 @@ public class ReadAloudService extends Service {
     private String text;
     private float volume;
     private boolean fadeTts;
-
+    private Handler handler = new Handler();
+    private Runnable dsRunnable;
 
     public ReadAloudService() {
     }
@@ -151,18 +150,7 @@ public class ReadAloudService extends Service {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
         fadeTts = preference.getBoolean("fadeTTS", false);
-
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                if (!pause) {
-                    Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-                    setTimerIntent.setAction(ActionSetTimer);
-                    setTimerIntent.putExtra("minute", -1);
-                    startService(setTimerIntent);
-                }
-            }
-        };
+        dsRunnable = this::doDs;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             initFocusRequest();
         }
@@ -230,7 +218,7 @@ public class ReadAloudService extends Service {
         if (fadeTts) {
             MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
             startAudioFade(1, MApplication.VOLUME);
-            new Handler().postDelayed(() -> playTTSN(), 400);
+            handler.postDelayed(() -> playTTSN(), 400);
         } else {
             playTTSN();
         }
@@ -278,7 +266,7 @@ public class ReadAloudService extends Service {
      * 关闭服务
      */
     private void doneService() {
-        cancelTimer();
+        handler.removeCallbacks(dsRunnable);
         RxBus.get().post(RxBusTag.ALOUD_STATE, STOP);
         stopSelf();
     }
@@ -294,7 +282,7 @@ public class ReadAloudService extends Service {
         if (fadeTts) {
             MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
             startAudioFade(MApplication.VOLUME, 1);
-            new Handler().postDelayed(() -> textToSpeech.stop(), 500);
+            handler.postDelayed(() -> textToSpeech.stop(), 500);
         } else {
             textToSpeech.stop();
         }
@@ -337,31 +325,27 @@ public class ReadAloudService extends Service {
         int maxTimeMinute = 60;
         if (timeMinute > maxTimeMinute) {
             timerEnable = false;
-            cancelTimer();
+            handler.removeCallbacks(dsRunnable);
             timeMinute = 0;
             updateNotification();
         } else if (timeMinute <= 0) {
             if (timerEnable) {
-                cancelTimer();
+                handler.removeCallbacks(dsRunnable);
                 doneService();
             }
         } else {
             timerEnable = true;
             updateNotification();
-            setTimer();
+            handler.postDelayed(dsRunnable, 60000);
         }
     }
 
-    private void setTimer() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-            mTimer.schedule(timerTask, 60000, 60000);
-        }
-    }
-
-    private void cancelTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
+    private void doDs() {
+        if (!pause) {
+            Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
+            setTimerIntent.setAction(ActionSetTimer);
+            setTimerIntent.putExtra("minute", -1);
+            startService(setTimerIntent);
         }
     }
 
