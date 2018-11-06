@@ -42,7 +42,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                        String kindA[] = sourceBean.getRuleFindUrl().split("&&|\n");
+                        String kindA[] = sourceBean.getRuleFindUrl().split("(&&|\n)+");
                         List<FindKindBean> children = new ArrayList<>();
                         for (String kindB : kindA) {
                             if (kindB.trim().isEmpty()) continue;
