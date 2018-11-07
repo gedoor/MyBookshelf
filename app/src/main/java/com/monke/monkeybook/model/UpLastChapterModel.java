@@ -9,6 +9,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.RxUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -34,11 +35,14 @@ public class UpLastChapterModel {
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
             for (BookShelfBean bookShelfBean : bookShelfBeans) {
-                e.onNext(bookShelfBean);
+                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
+                    e.onNext(bookShelfBean);
+                }
             }
             e.onComplete();
         }).flatMap(this::findSearchBookBean)
                 .flatMap(this::toBookshelf)
+                .flatMap(bookShelfBean -> WebBookModel.getInstance().getBookInfo(bookShelfBean))
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
                 .flatMap(this::saveSearchBookBean)
                 .compose(RxUtils::toSimpleSingle)
@@ -55,7 +59,8 @@ public class UpLastChapterModel {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
+                        disposable = null;
                     }
 
                     @Override
