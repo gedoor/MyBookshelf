@@ -64,8 +64,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
-    MenuItem itemMy716;
-    MenuItem itemDonate;
+    private Menu menu;
     private SearchHistoryAdapter searchHistoryAdapter;
     private ExplosionField explosionField;
     private SearchBookAdapter searchBookAdapter;
@@ -166,8 +165,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        itemMy716 = menu.findItem(R.id.action_my716);
-        itemDonate = menu.findItem(R.id.action_donate);
+        this.menu = menu;
         upMenu();
         return super.onPrepareOptionsMenu(menu);
     }
@@ -182,12 +180,15 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 break;
             case R.id.action_my716:
                 useMy716 = !useMy716;
-                itemMy716.setChecked(useMy716);
+                upMenu();
                 mPresenter.setUseMy716(useMy716);
                 ACache.get(this).put("useMy716", useMy716 ? "True" : "False");
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);
+                break;
+            case R.id.action_get_hb:
+                DonateActivity.getZfbHb(this);
                 break;
             case android.R.id.home:
                 SoftInputUtil.hideIMM(this, getCurrentFocus());
@@ -202,14 +203,17 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
      */
     @Override
     public void upMenu() {
-        if (itemMy716 != null) {
-            itemMy716.setChecked(useMy716);
-            if (Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True")) {
-                itemMy716.setVisible(true);
-                itemDonate.setVisible(false);
-            } else {
-                itemMy716.setVisible(false);
-                itemDonate.setVisible(true);
+        if (menu == null) return;
+        boolean getHb = Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True");
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_my716) {
+                item.setChecked(useMy716);
+            }
+            if (item.getGroupId() == R.id.menu_jz) {
+                item.setVisible(!getHb);
+            } else if (item.getGroupId() == R.id.menu_yc_source) {
+                item.setVisible(getHb);
             }
         }
     }
