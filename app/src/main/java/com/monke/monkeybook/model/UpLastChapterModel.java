@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model;
 
+import android.text.TextUtils;
+
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
@@ -42,8 +44,7 @@ public class UpLastChapterModel {
             e.onComplete();
         }).flatMap(this::findSearchBookBean)
                 .flatMap(this::toBookshelf)
-                .flatMap(bookShelfBean -> WebBookModel.getInstance().getBookInfo(bookShelfBean))
-                .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
+                .flatMap(this::getChapterList)
                 .flatMap(this::saveSearchBookBean)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<SearchBookBean>() {
@@ -100,6 +101,15 @@ public class UpLastChapterModel {
             e.onNext(bookShelfBean);
             e.onComplete();
         });
+    }
+
+    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
+        if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
+            return WebBookModel.getInstance().getBookInfo(bookShelfBean)
+                    .flatMap(bookShelf -> WebBookModel.getInstance().getChapterList(bookShelf));
+        } else {
+            return WebBookModel.getInstance().getChapterList(bookShelfBean);
+        }
     }
 
     private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
