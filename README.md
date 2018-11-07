@@ -6,8 +6,8 @@
 
 **提交代码人员**
 - 大古队员 https://github.com/DaguDuiyuan
-- ttydy https://github.com/ttydy
 - atbest https://github.com/atbest
+- ttydy https://github.com/ttydy
 
 # 软件截图
 ![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybookshelf.jpg)
