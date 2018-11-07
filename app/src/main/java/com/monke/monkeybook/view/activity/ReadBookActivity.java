@@ -978,7 +978,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         final String charset = getBook().getBookInfoBean().getCharset();
         moProgressHUD.showInputBox("输入编码",
                 charset,
-                new String[]{"UTF-8", "GB2312"},
+                new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "ASCII"},
                 (inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
