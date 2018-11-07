@@ -2,6 +2,19 @@ package com.monke.monkeybook.model;
 
 import android.app.Activity;
 
+import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.dao.SearchBookBeanDao;
+import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.utils.RxUtils;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+
 /**
  * 更新换源列表里最新章节
  */
@@ -16,11 +29,60 @@ public class UpLastChapterModel {
         return model;
     }
 
-    private void startUpdate(Activity activity) {
+    public void startUpdate(Activity activity) {
         this.activity = activity;
 
-
+        Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
+            List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
+            for (BookShelfBean bookShelfBean : bookShelfBeans) {
+                e.onNext(bookShelfBean);
+            }
+            e.onComplete();
+        }).flatMap(this::findSearchBookBean)
+                .flatMap(this::toBookshelf)
+                .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
+                .flatMap(this::saveSearchBookBean)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe();
     }
 
+    private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {
+        return Observable.create(e -> {
+            List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
+                    .where(SearchBookBeanDao.Properties.Name.eq(bookShelf.getBookInfoBean().getName())).list();
+            for (SearchBookBean searchBookBean : searchBookBeans) {
+                long count = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(searchBookBean.getTag())).count();
+                if (count == 0) {
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
+                } else if (System.currentTimeMillis() - searchBookBean.getAddTime() > 1000 * 60 * 60) {
+                    e.onNext(searchBookBean);
+                }
+            }
+            e.onComplete();
+        });
+    }
 
+    private Observable<BookShelfBean> toBookshelf(SearchBookBean searchBookBean) {
+        return Observable.create(e -> {
+            BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
+            e.onNext(bookShelfBean);
+            e.onComplete();
+        });
+    }
+
+    private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
+        return Observable.create(e -> {
+            SearchBookBean searchBookBean = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
+                    .where(SearchBookBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
+                    .unique();
+            if (searchBookBean != null) {
+                searchBookBean.setLastChapter(bookShelfBean.getLastChapterName());
+                searchBookBean.setAddTime(System.currentTimeMillis());
+                DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
+                e.onNext(searchBookBean);
+            }
+            e.onComplete();
+        });
+    }
 }
