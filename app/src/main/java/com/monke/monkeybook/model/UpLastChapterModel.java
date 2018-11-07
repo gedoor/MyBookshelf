@@ -1,7 +1,5 @@
 package com.monke.monkeybook.model;
 
-import android.app.Activity;
-
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
@@ -14,13 +12,15 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 更新换源列表里最新章节
  */
 public class UpLastChapterModel {
     private static UpLastChapterModel model;
-    private Activity activity;
+    private Disposable disposable;
 
     public static UpLastChapterModel getInstance() {
         if (model == null) {
@@ -29,9 +29,8 @@ public class UpLastChapterModel {
         return model;
     }
 
-    public void startUpdate(Activity activity) {
-        this.activity = activity;
-
+    public void startUpdate() {
+        if (disposable != null) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
             for (BookShelfBean bookShelfBean : bookShelfBeans) {
@@ -43,7 +42,34 @@ public class UpLastChapterModel {
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
                 .flatMap(this::saveSearchBookBean)
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe();
+                .subscribe(new Observer<SearchBookBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(SearchBookBean searchBookBean) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposable = null;
+                    }
+                });
+    }
+
+    public void stopUp() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+        disposable = null;
     }
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {

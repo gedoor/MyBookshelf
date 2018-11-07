@@ -40,6 +40,7 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
+import com.monke.monkeybook.model.UpLastChapterModel;
 import com.monke.monkeybook.presenter.MainPresenter;
 import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.fragment.BookListFragment;
@@ -500,6 +501,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             versionUpRun();
             requestPermission();
         }
+        handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
     }
 
     @Override
@@ -566,6 +568,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     public void onDestroy() {
         if (preferences.getBoolean("fadeTTS", false))
             mPresenter.resetVolume();
+        UpLastChapterModel.getInstance().stopUp();
         super.onDestroy();
     }
 
