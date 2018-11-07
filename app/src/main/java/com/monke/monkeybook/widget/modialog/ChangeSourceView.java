@@ -140,6 +140,12 @@ public class ChangeSourceView {
         getSearchBookInDb(bookShelf);
     }
 
+    void stopChangeSource() {
+        if (searchBookModel != null) {
+            searchBookModel.stopSearch();
+        }
+    }
+
     private void getSearchBookInDb(BookShelfBean bookShelf) {
         Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
@@ -235,7 +241,7 @@ public class ChangeSourceView {
         ibtStop.setVisibility(View.INVISIBLE);
 
         rvSource.setBaseRefreshListener(this::reSearchBook);
-        ibtStop.setOnClickListener(v -> searchBookModel.stopSearch());
+        ibtStop.setOnClickListener(v -> stopChangeSource());
 
     }
 

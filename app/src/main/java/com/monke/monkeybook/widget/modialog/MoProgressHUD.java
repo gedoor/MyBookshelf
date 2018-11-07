@@ -29,7 +29,7 @@ public class MoProgressHUD {
     private ViewGroup rootView;// mSharedView 的 根View
     private MoProgressView mSharedView;
 
-
+    private OnDismissListener dismissListener;
     private Animation inAnim;
     private Animation outAnim;
 
@@ -167,6 +167,9 @@ public class MoProgressHUD {
     }
 
     private void dismissImmediately() {
+        if (dismissListener != null) {
+            dismissListener.onDismiss();
+        }
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
             new Handler().post(() -> {
                 rootView.removeView(mSharedView);
@@ -305,8 +308,9 @@ public class MoProgressHUD {
         initAnimation();
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
-        ChangeSourceView.getInstance(activity, mSharedView)
-                .showChangeSource(bookShelf, clickSource, this);
+        ChangeSourceView changeSourceView = ChangeSourceView.getInstance(activity, mSharedView);
+        changeSourceView.showChangeSource(bookShelf, clickSource, this);
+        dismissListener = changeSourceView::stopChangeSource;
         if (!isShowing()) {
             onAttached();
         }
@@ -361,4 +365,7 @@ public class MoProgressHUD {
         mSharedView.getChildAt(0).startAnimation(inAnim);
     }
 
+    private interface OnDismissListener {
+        void onDismiss();
+    }
 }
