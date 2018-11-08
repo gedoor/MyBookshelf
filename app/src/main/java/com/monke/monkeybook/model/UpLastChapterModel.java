@@ -17,6 +17,7 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -24,7 +25,7 @@ import io.reactivex.disposables.Disposable;
  */
 public class UpLastChapterModel {
     private static UpLastChapterModel model;
-    private Disposable disposable;
+    private CompositeDisposable compositeDisposable;
 
     public static UpLastChapterModel getInstance() {
         if (model == null) {
@@ -34,7 +35,8 @@ public class UpLastChapterModel {
     }
 
     public void startUpdate() {
-        if (disposable != null) return;
+        if (compositeDisposable != null) return;
+        compositeDisposable = new CompositeDisposable();
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
             for (BookShelfBean bookShelfBean : bookShelfBeans) {
@@ -51,7 +53,7 @@ public class UpLastChapterModel {
                 .subscribe(new Observer<SearchBookBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        disposable = d;
+                        compositeDisposable.add(d);
                     }
 
                     @Override
@@ -62,21 +64,21 @@ public class UpLastChapterModel {
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        disposable = null;
+                        stopUp();
                     }
 
                     @Override
                     public void onComplete() {
-                        disposable = null;
+                        stopUp();
                     }
                 });
     }
 
     public void stopUp() {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
         }
-        disposable = null;
+        compositeDisposable = null;
     }
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {
