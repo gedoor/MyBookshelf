@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.widget.FilletImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
@@ -44,8 +44,9 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
                     .apply(new RequestOptions()
+                            .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .fitCenter().dontAnimate()
+                            .centerCrop()
                             .placeholder(R.drawable.img_cover_default))
                     .into(myViewHolder.ivCover);
         }
@@ -151,7 +152,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
-        ImageView ivCover;
+        FilletImageView ivCover;
         TextView tvName;
         TextView tvState;
         TextView tvWords;

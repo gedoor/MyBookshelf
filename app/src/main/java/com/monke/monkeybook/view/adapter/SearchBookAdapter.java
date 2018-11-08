@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.widget.FilletImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
@@ -52,8 +52,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
                     .apply(new RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
-                            .dontAnimate().placeholder(R.drawable.img_cover_default))
+                            .dontAnimate()
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop()
+                            .placeholder(R.drawable.img_cover_default))
                     .into(myViewHolder.ivCover);
         }
         myViewHolder.tvName.setText(String.format("%s (%s)", searchBooks.get(position).getName(), searchBooks.get(position).getAuthor()));
@@ -217,7 +219,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
-        ImageView ivCover;
+        FilletImageView ivCover;
         TextView tvName;
         TextView tvState;
         TextView tvWords;

@@ -34,6 +34,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenter;
 import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
+import com.monke.monkeybook.widget.FilletImageView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
@@ -47,9 +48,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
     @BindView(R.id.iv_blur_cover)
-    ImageView ivBlurCover;
+    FilletImageView ivBlurCover;
     @BindView(R.id.iv_cover)
-    ImageView ivCover;
+    FilletImageView ivCover;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_author)
