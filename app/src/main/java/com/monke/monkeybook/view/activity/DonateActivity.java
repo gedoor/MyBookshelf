@@ -84,13 +84,11 @@ public class DonateActivity extends MBaseActivity {
     @Override
     protected void bindEvent() {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
-        vwZfbHb.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbhbrwm.png"));
-        vwZfbRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
-        vwWxRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
-        vwQqRwm.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
-        vwZfbHbSsm.setOnClickListener(view -> {
-            getZfbHb(this);
-        });
+        vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbhbrwm.png"));
+        vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
+        vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));
+        vwQqRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/qqskrwm.jpg"));
+        vwZfbHbSsm.setOnClickListener(view -> getZfbHb(this));
     }
 
     public static void getZfbHb(Context context) {
@@ -114,9 +112,9 @@ public class DonateActivity extends MBaseActivity {
         }
     }
 
-    private void openIntent(String intentName, String address) {
+    private void openActionViewIntent(String address) {
         try {
-            Intent intent = new Intent(intentName);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse(address));
             startActivity(intent);
         } catch (Exception e) {
