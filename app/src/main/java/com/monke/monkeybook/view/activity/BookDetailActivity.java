@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -48,7 +49,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
     @BindView(R.id.iv_blur_cover)
-    FilletImageView ivBlurCover;
+    AppCompatImageView ivBlurCover;
     @BindView(R.id.iv_cover)
     FilletImageView ivCover;
     @BindView(R.id.tv_name)
