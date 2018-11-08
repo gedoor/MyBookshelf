@@ -12,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
@@ -304,12 +303,12 @@ public class MoProgressHUD {
     /**
      * 换源
      */
-    public void showChangeSource(MBaseActivity activity, BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
+    public void showChangeSource(BookShelfBean bookShelf, ChangeSourceView.OnClickSource clickSource) {
         initCenter();
         initAnimation();
         canBack = true;
         rootView.setOnClickListener(v -> dismiss());
-        ChangeSourceView changeSourceView = ChangeSourceView.getInstance(activity, mSharedView);
+        ChangeSourceView changeSourceView = ChangeSourceView.getInstance(mSharedView);
         changeSourceView.showChangeSource(bookShelf, clickSource, this);
         dismissListener = changeSourceView::stopChangeSource;
         if (!isShowing()) {

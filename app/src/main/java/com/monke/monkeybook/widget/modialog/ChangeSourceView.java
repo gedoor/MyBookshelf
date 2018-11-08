@@ -1,6 +1,8 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -44,6 +45,7 @@ public class ChangeSourceView {
     private MoProgressView moProgressView;
     private OnClickSource onClickSource;
     private Context context;
+    private Handler handler = new Handler(Looper.getMainLooper());
     private ChangeSourceAdapter adapter;
     private SearchBookModel searchBookModel;
     private List<BookShelfBean> bookShelfS = new ArrayList<>();
@@ -51,10 +53,8 @@ public class ChangeSourceView {
     private String bookName;
     private String bookAuthor;
     private int shelfLastChapter;
-    private MBaseActivity activity;
 
-    private ChangeSourceView(MBaseActivity activity, MoProgressView moProgressView) {
-        this.activity = activity;
+    private ChangeSourceView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
         this.context = moProgressView.getContext();
         bindView();
@@ -120,11 +120,11 @@ public class ChangeSourceView {
                 return 0;
             }
         };
-        searchBookModel = new SearchBookModel(activity, searchListener, true);
+        searchBookModel = new SearchBookModel(context, searchListener, true);
     }
 
-    public static ChangeSourceView getInstance(MBaseActivity activity, MoProgressView moProgressView) {
-        return new ChangeSourceView(activity, moProgressView);
+    public static ChangeSourceView getInstance(MoProgressView moProgressView) {
+        return new ChangeSourceView(moProgressView);
     }
 
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
@@ -222,7 +222,7 @@ public class ChangeSourceView {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
-                    activity.runOnUiThread(() -> adapter.addSourceAdapter(searchBookBean));
+                    handler.post(() -> adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
             }

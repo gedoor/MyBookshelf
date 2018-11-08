@@ -9,7 +9,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -100,7 +99,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel((MBaseActivity) context, onSearchListener, useMy716);
+        searchBookModel = new SearchBookModel(context, onSearchListener, useMy716);
     }
 
     @Override

@@ -941,7 +941,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            moProgressHUD.showChangeSource(this, mPresenter.getBookShelf(), searchBookBean -> {
+            moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
                 if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
                     mPageLoader.setStatus(Enum.PageStatus.CHANGE_SOURCE);
                     mPresenter.changeBookSource(searchBookBean);

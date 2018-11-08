@@ -451,8 +451,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        mPresenter.stopSearch();
         explosionField.clear();
+        super.onDestroy();
     }
 
     @Override

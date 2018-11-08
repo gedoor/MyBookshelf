@@ -153,7 +153,7 @@ public class BookInfoActivity extends MBaseActivity {
             }
         });
         tvChangeCover.setOnClickListener(view ->
-                moProgressHUD.showChangeSource(this, book, searchBookBean -> {
+                moProgressHUD.showChangeSource(book, searchBookBean -> {
                     tieCoverUrl.setText(searchBookBean.getCoverUrl());
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
                     initCover();
