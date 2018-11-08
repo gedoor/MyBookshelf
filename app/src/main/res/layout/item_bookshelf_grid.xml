@@ -19,7 +19,7 @@
         android:layout_gravity="center"
         android:visibility="invisible">
 
-        <ImageView
+        <com.monke.monkeybook.widget.FilletImageView
             android:id="@+id/iv_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,17 +55,6 @@
 
         </FrameLayout>
 
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/mpb_durProgress"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible"
-            app:bgdrawable="@color/white"
-            app:cantouch="false"
-            app:fontdrawable="@color/d_blue"
-            tools:ignore="RtlHardcoded" />
-
         <ImageButton
             android:id="@+id/ib_content"
             android:layout_width="match_parent"
@@ -86,6 +75,16 @@
         android:text="ss"
         android:textSize="12sp"
         app:minTextSize="10sp" />
+
+    <com.monke.mprogressbar.MHorProgressBar
+        android:id="@+id/mpb_durProgress"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="invisible"
+        app:bgdrawable="@color/white"
+        app:cantouch="false"
+        app:fontdrawable="@color/d_blue"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="0dp"
