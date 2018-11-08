@@ -11,89 +11,89 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-            <ImageView
-                android:id="@+id/iv_cover"
-                android:layout_width="56dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_cover_default"
-                android:contentDescription="@string/img_cover"
-                android:transitionName="img_cover"
-                tools:ignore="UnusedAttribute" />
+    <com.monke.monkeybook.widget.FilletImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="56dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/img_cover"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_cover_default"
+        android:transitionName="img_cover"
+        tools:ignore="UnusedAttribute" />
 
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="26dp"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/fl_has_new"
-            android:layout_toEndOf="@+id/iv_cover"
-            android:paddingStart="12dp"
-            android:paddingEnd="2dp"
-            android:includeFontPadding="false"
-            android:singleLine="true"
-            android:text="@string/tv_book_name"
-            android:textColor="@color/tv_text_default"
-            android:textSize="16sp"
-            app:minTextSize="13sp" />
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/fl_has_new"
+        android:layout_toEndOf="@+id/iv_cover"
+        android:includeFontPadding="false"
+        android:paddingStart="12dp"
+        android:paddingEnd="2dp"
+        android:singleLine="true"
+        android:text="@string/tv_book_name"
+        android:textColor="@color/tv_text_default"
+        android:textSize="16sp"
+        app:minTextSize="13sp" />
 
-        <FrameLayout
-            android:id="@+id/fl_has_new"
+    <FrameLayout
+        android:id="@+id/fl_has_new"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/iv_has_new"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true">
+            android:padding="6dp"
+            android:src="@drawable/ic_circle_red_24dp"
+            android:visibility="invisible"
+            app:tint="@color/colorAccent" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/iv_has_new"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp"
-                app:tint="@color/colorAccent"
-                android:visibility="invisible" />
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/rl_loading"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:loading_color="@color/tv_text_default"
+            app:loading_width="2dp" />
 
-            <com.victor.loading.rotate.RotateLoading
-                android:id="@+id/rl_loading"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                app:loading_color="@color/tv_text_default"
-                app:loading_width="2dp" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_read"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tv_name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/iv_cover"
+        android:paddingStart="12dp"
+        android:paddingEnd="2dp"
+        android:singleLine="true"
+        android:text="@string/read_dur_progress"
+        android:textColor="@color/tv_text_default"
+        android:textSize="12sp"
+        app:minTextSize="10sp" />
 
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/tv_read"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_below="@+id/tv_name"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/iv_cover"
-            android:paddingStart="12dp"
-            android:layout_marginTop="5dp"
-            android:paddingEnd="2dp"
-            android:singleLine="true"
-            android:text="@string/read_dur_progress"
-            android:textColor="@color/tv_text_default"
-            android:textSize="12sp"
-            app:minTextSize="10sp" />
-
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/tv_last"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_below="@+id/tv_read"
-            android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/iv_cover"
-            android:paddingStart="12dp"
-            android:paddingEnd="2dp"
-            android:singleLine="true"
-            android:text="@string/book_search_last"
-            android:textColor="@color/tv_text_default"
-            android:textSize="12sp"
-            app:minTextSize="10sp" />
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_last"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tv_read"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/iv_cover"
+        android:paddingStart="12dp"
+        android:paddingEnd="2dp"
+        android:singleLine="true"
+        android:text="@string/book_search_last"
+        android:textColor="@color/tv_text_default"
+        android:textSize="12sp"
+        app:minTextSize="10sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -109,9 +109,9 @@
             android:id="@+id/mpb_durProgress"
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
+            android:layout_alignParentBottom="true"
             android:visibility="invisible"
             app:bgdrawable="@color/btn_bg_press"
-            android:layout_alignParentBottom="true"
             app:cantouch="false"
             app:fontdrawable="@color/d_blue"
             tools:ignore="RtlHardcoded" />
