@@ -31,6 +31,7 @@ import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.help.BlurTransformation;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenter;
 import com.monke.monkeybook.presenter.ReadBookPresenter;
@@ -40,7 +41,6 @@ import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.presenter.BookDetailPresenter.FROM_BOOKSHELF;
@@ -195,7 +195,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     Glide.with(this).load(coverUrl)
                             .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                     .placeholder(R.drawable.img_cover_gs))
-                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 15)))
                             .into(ivBlurCover);
                 } else if (customCoverPath.startsWith("http")) {
                     Glide.with(this).load(customCoverPath)
@@ -205,7 +205,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     Glide.with(this).load(customCoverPath)
                             .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                     .placeholder(R.drawable.img_cover_gs))
-                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                             .into(ivBlurCover);
                 } else {
                     ivCover.setImageBitmap(BitmapFactory.decodeFile(customCoverPath));
@@ -289,9 +289,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                                 .placeholder(R.drawable.img_cover_default)).into(ivCover);
             }
             Glide.with(this).load(coverUrl)
-                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
+                    .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .centerCrop()
                             .placeholder(R.drawable.img_cover_gs))
-                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                    .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         }
     }

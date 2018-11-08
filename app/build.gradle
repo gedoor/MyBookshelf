@@ -111,9 +111,6 @@ dependencies {
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-    implementation 'jp.wasabeef:glide-transformations:3.3.0'
-    // If you want to use the GPU Filters
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
 
     //AutoFitTextView
     implementation 'me.grantland:autofittextview:0.2.1'
