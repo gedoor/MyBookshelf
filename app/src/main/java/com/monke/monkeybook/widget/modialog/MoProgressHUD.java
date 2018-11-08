@@ -169,6 +169,7 @@ public class MoProgressHUD {
     private void dismissImmediately() {
         if (dismissListener != null) {
             dismissListener.onDismiss();
+            dismissListener = null;
         }
         if (mSharedView != null && rootView != null && mSharedView.getParent() != null) {
             new Handler().post(() -> {
