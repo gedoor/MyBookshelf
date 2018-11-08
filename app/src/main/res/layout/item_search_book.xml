@@ -27,7 +27,7 @@
                 android:layout_width="60dp"
                 android:layout_height="90dp"
                 android:contentDescription="@string/book"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 android:src="@drawable/img_cover_default" />
 
             <LinearLayout
