@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:contentDescription="@string/set_timer"
-                    android:src="@drawable/ic_timer_black_24dp_new"
+                    android:src="@drawable/ic_timer_black_24dp"
                     android:tint="@color/tv_text_default"
                     app:backgroundTint="@color/background_menu"
                     app:elevation="2dp"
@@ -335,7 +335,7 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"
                             android:contentDescription="@string/adjust"
-                            android:src="@drawable/ic_tune_black_24dp_new"
+                            android:src="@drawable/ic_tune_black_24dp"
                             app:tint="@color/tv_text_default"
                             tools:ignore="NestedWeights" />
 
