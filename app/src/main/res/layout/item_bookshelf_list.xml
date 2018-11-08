@@ -28,6 +28,7 @@
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/fl_has_new"
         android:layout_toEndOf="@+id/iv_cover"
+        android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:paddingStart="12dp"
         android:paddingEnd="2dp"
