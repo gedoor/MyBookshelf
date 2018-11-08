@@ -195,7 +195,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     Glide.with(this).load(coverUrl)
                             .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE).centerCrop()
                                     .placeholder(R.drawable.img_cover_gs))
-                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 15)))
+                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                             .into(ivBlurCover);
                 } else if (customCoverPath.startsWith("http")) {
                     Glide.with(this).load(customCoverPath)
