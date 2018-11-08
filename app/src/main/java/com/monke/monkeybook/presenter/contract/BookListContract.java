@@ -35,7 +35,6 @@ public interface BookListContract {
          */
         void updateGroup(Integer group);
 
-        void toast(String msg);
     }
 
     interface Presenter extends IPresenter {

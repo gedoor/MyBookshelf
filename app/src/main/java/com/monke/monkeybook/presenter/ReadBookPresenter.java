@@ -460,11 +460,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         mView.upAloudState(state);
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_MSG)})
-    public void showMsg(String msg) {
-        mView.toast(msg);
-    }
-
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_INDEX)})
     public void speakIndex(Integer index) {
         mView.speakIndex(index);

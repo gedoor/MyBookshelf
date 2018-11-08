@@ -510,16 +510,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     @Override
-    public void refreshError(String error) {
-        toast(error);
-    }
-
-    @Override
-    public void showLoading(String msg) {
-        moProgressHUD.showLoading(msg);
-    }
-
-    @Override
     public void onRestore(String msg) {
         moProgressHUD.showLoading(msg);
     }

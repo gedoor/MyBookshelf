@@ -41,8 +41,6 @@ public interface ReadBookContract {
 
         void onMediaButton();
 
-        void toast(String msg);
-
         /**
          * 更新朗读状态
          */

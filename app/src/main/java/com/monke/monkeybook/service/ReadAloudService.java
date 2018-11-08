@@ -16,6 +16,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
@@ -87,6 +89,7 @@ public class ReadAloudService extends Service {
     private float volume;
     private boolean fadeTts;
     private Handler handler = new Handler();
+    private Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable dsRunnable;
 
     public ReadAloudService() {
@@ -518,14 +521,14 @@ public class ReadAloudService extends Service {
             if (i == TextToSpeech.SUCCESS) {
                 int result = textToSpeech.setLanguage(Locale.CHINA);
                 if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                    RxBus.get().post(RxBusTag.ALOUD_MSG, getString(R.string.tts_fix));
+                    mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_fix), Toast.LENGTH_SHORT).show());
                 } else {
                     textToSpeech.setOnUtteranceProgressListener(new ttsUtteranceListener());
                     ttsInitSuccess = true;
                     playTTS();
                 }
             } else {
-                RxBus.get().post(RxBusTag.ALOUD_MSG, "TTS初始化失败");
+                mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
                 doneService();
             }
         }
