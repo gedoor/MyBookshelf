@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
@@ -84,7 +83,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         } else {
             //自己处理
             try {//延迟3秒杀进程
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 Log.e(TAG, "error : ", e);
             }
