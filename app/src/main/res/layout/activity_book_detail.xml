@@ -22,7 +22,7 @@
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp">
 
-        <com.monke.monkeybook.widget.FilletImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_blur_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
