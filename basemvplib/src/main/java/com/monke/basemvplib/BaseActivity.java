@@ -3,21 +3,26 @@ package com.monke.basemvplib;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import com.monke.basemvplib.AppActivityManager;
+import android.widget.Toast;
+
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActivity implements IView {
     public final static String start_share_ele= "start_with_share_ele";
+    public static final int SUCCESS = 1;
+    public static final int ERROR = -1;
     protected Bundle savedInstanceState;
     protected T mPresenter;
     protected boolean isRecreate;
     private Boolean startShareAnim = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +119,34 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
     public void recreate() {
         getIntent().putExtra("isRecreate", true);
         super.recreate();
+    }
+
+    /////////Toast//////////////////
+
+    public void toast(String msg) {
+        toast(msg, Toast.LENGTH_SHORT, 0);
+    }
+
+    public void toast(String msg, int state) {
+        toast(msg, Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(int strId) {
+        toast(strId, 0);
+    }
+
+    public void toast(int strId, int state) {
+        toast(getString(strId), Toast.LENGTH_LONG, state);
+    }
+
+    public void toast(String msg, int length, int state) {
+        Toast toast = Toast.makeText(this, msg, length);
+        if (state == SUCCESS) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.success), PorterDuff.Mode.SRC_IN);
+        } else if (state == ERROR) {
+            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.error), PorterDuff.Mode.SRC_IN);
+        }
+        toast.show();
     }
 
     ////////////////////////////////启动Activity转场动画/////////////////////////////////////////////
