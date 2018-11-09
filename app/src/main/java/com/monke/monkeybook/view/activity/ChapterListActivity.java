@@ -148,6 +148,8 @@ public class ChapterListActivity extends MBaseActivity {
             }
         });
 
+        tvChapterInfo.setOnClickListener(view -> layoutManager.scrollToPositionWithOffset(bookShelf.getDurChapter(), 0));
+
         ivChapterSort.setOnClickListener(v -> {
             if (chapterListAdapter != null) {
                 isChapterReverse = !isChapterReverse;
