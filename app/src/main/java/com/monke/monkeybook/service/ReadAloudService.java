@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -383,6 +384,7 @@ public class ReadAloudService extends Service {
         RxBus.get().post(RxBusTag.ALOUD_TIMER, nTitle);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MApplication.channelIdReadAloud)
                 .setSmallIcon(R.drawable.ic_volume_up_black_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setOngoing(true)
                 .setContentTitle(nTitle)
                 .setContentText(text)
