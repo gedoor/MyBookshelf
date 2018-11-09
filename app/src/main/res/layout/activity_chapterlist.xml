@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.monke.monkeybook.widget.ScrimInsetsRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clickable="true"
+    android:fitsSystemWindows="true"
     android:focusable="true"
-    android:orientation="vertical"
-    app:appInsetForeground="@color/colorPrimary">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay"
-        app:contentInsetStartWithNavigation="0dp"
-        app:navigationContentDescription="@string/back"
-        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
+        android:transitionName="sharedView"
+        tools:ignore="UnusedAttribute">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/toolbar_tab"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:fillViewport="false"
-            app:layout_scrollFlags="scroll"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabIndicatorHeight="2.0dp"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorAccent"
-            app:tabTextColor="@color/menu_color_default">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <android.support.design.widget.TabItem
+            <android.support.design.widget.TabLayout
+                android:id="@+id/toolbar_tab"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="@string/table_of_contents" />
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:fillViewport="false"
+                app:layout_scrollFlags="scroll"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabIndicatorHeight="2.0dp"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorAccent"
+                app:tabTextColor="@color/menu_color_default">
 
-            <android.support.design.widget.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/bookmark" />
+                <android.support.design.widget.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/table_of_contents" />
 
-        </android.support.design.widget.TabLayout>
+                <android.support.design.widget.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/bookmark" />
 
-    </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.TabLayout>
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/action_bar"
         android:layout_alignParentStart="true"
         android:background="@color/background"
         android:descendantFocusability="blocksDescendants">
@@ -110,5 +119,5 @@
 
     <View
         style="@style/Style.Shadow.Top"
-        android:layout_below="@id/toolbar" />
-</com.monke.monkeybook.widget.ScrimInsetsRelativeLayout>
+        android:layout_below="@id/action_bar" />
+</RelativeLayout>
