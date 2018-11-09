@@ -104,7 +104,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         if (bookShelf == null || TextUtils.isEmpty(bookShelf.getBookInfoBean().getName())) {
                             mView.finish();
                         } else {
-                            mView.setHpbReadProgressMax(0);
                             mView.startLoadingBook();
                             mView.upMenu();
                         }

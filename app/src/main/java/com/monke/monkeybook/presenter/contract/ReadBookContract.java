@@ -22,8 +22,6 @@ public interface ReadBookContract {
 
         void startLoadingBook();
 
-        void setHpbReadProgressMax(int count);
-
         void upMenu();
 
         void openBookFromOther();
