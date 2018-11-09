@@ -1,5 +1,6 @@
 package com.monke.monkeybook.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
@@ -69,6 +70,7 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     private void init(Context context) {
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(context).inflate(R.layout.pop_read_menu, null);
         addView(view);
         ButterKnife.bind(this, view);
