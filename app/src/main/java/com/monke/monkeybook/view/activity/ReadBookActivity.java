@@ -558,6 +558,27 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         });
     }
 
+    @Override
+    protected void bindEvent() {
+        //打开URL
+        atvUrl.setOnClickListener(view -> {
+            try {
+                String url = atvUrl.getText().toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+                toast(R.string.can_not_open);
+            }
+        });
+    }
+
+    @Override
+    public void startLoadingBook() {
+        initPageView();
+    }
+
     /**
      * 加载阅读页面
      */
@@ -661,26 +682,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mPageLoader.refreshChapterList();
     }
 
-    @Override
-    protected void bindEvent() {
-        //打开URL
-        atvUrl.setOnClickListener(view -> {
-            try {
-                String url = atvUrl.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
-            } catch (Exception e) {
-                e.printStackTrace();
-                toast(R.string.can_not_open);
-            }
-        });
-    }
-
-    @Override
-    public void startLoadingBook() {
-        initPageView();
-    }
 
     //设置ToolBar
     private void setupActionBar() {
