@@ -132,6 +132,31 @@ public class BookShelfBean implements Parcelable, Cloneable {
         return bookShelfBean;
     }
 
+
+    public ChapterListBean getChapter(int index) {
+        if (realChapterListEmpty() || index < 0) {
+            ChapterListBean chapterListBean = new ChapterListBean();
+            chapterListBean.setDurChapterName("暂无");
+            chapterListBean.setDurChapterUrl("暂无");
+            return chapterListBean;
+        } else if (index < getChapterList().size()) {
+            return getChapterList().get(index);
+        } else {
+            durChapter = getChapterList().size() - 1;
+            return getChapterList().get(durChapter);
+        }
+    }
+
+    public BookmarkBean getBookmark(int index) {
+        if (realBookmarkListEmpty() || index < 0) {
+            return null;
+        } else if (index < getBookmarkList().size()) {
+            return getBookmarkList().get(index);
+        } else {
+            return getBookmarkList().get(getChapterList().size() - 1);
+        }
+    }
+
     public String getNoteUrl() {
         return noteUrl;
     }
@@ -318,4 +343,18 @@ public class BookShelfBean implements Parcelable, Cloneable {
     public void setChapterList(List<ChapterListBean> chapterList) {
         this.bookInfoBean.setChapterList(chapterList);
     }
+
+    public boolean realBookmarkListEmpty() {
+        return getBookmarkList().isEmpty();
+    }
+
+    public List<BookmarkBean> getBookmarkList() {
+        return this.bookInfoBean.getBookmarkList();
+    }
+
+    public int getBookmarkListSize() {
+        return getBookmarkList().size();
+    }
+
+
 }

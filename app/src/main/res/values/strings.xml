@@ -24,6 +24,7 @@
     <string name="navigation_drawer_close">关闭侧边栏</string>
 
     <string name="local">本地</string>
+    <string name="search">搜索</string>
     <string name="net_error_10001">没有网络</string>
     <string name="net_error_10002">网络连接超时</string>
     <string name="net_error_10003">数据解析失败</string>
@@ -266,5 +267,6 @@
     <string name="update_chapter">更新目录</string>
     <string name="txt_chapter_regex">目录正则</string>
     <string name="set_charset">设置编码</string>
+    <string name="swap_vert">倒序-顺序</string>
 
 </resources>

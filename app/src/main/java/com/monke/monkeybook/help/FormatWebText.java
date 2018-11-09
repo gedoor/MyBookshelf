@@ -1,5 +1,7 @@
 package com.monke.monkeybook.help;
 
+import android.text.TextUtils;
+
 /**
  * Created by GKF on 2017/12/27.
  * 去除空格等
@@ -20,6 +22,20 @@ public class FormatWebText {
                 .trim();
     }
 
+    public static String getBookName(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return "";
+        }
+
+        return trim(str.replace("&nbsp;", "")
+                .replace(":", "：")
+                .replace(",", "，")
+                .replaceAll("[\\u3000 ]+", "")
+                .replaceAll("\\s", " ")
+                .replaceAll("[?？!！。~]", "")
+                .replaceAll("([(（].*[）)])", ""));
+    }
+
     public static String getAuthor(String str) {
         if (str == null) {
             return "";
@@ -36,5 +52,13 @@ public class FormatWebText {
                 .replace(",","")
                 .replaceAll("作.*?者", "")
                 .trim();
+    }
+
+    public static String trim(String s) {
+        String result = "";
+        if (null != s && !"".equals(s)) {
+            result = s.replaceAll("^[　*| *| *|//s*]*", "").replaceAll("[　*| *| *|//s*]*$", "");
+        }
+        return result;
     }
 }

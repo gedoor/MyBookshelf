@@ -4,6 +4,7 @@ package com.monke.monkeybook.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
@@ -197,4 +198,7 @@ public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
         this.end = end;
     }
 
+    public Boolean getHasCache(BookInfoBean bookInfoBean) {
+        return BookshelfHelp.isChapterCached(bookInfoBean, this);
+    }
 }

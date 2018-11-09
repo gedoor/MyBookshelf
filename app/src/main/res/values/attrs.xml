@@ -52,4 +52,9 @@
         <attr name="bubbleTextColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="ScrimInsetsRelativeLayout">
+        <attr name="appInsetForeground" />
+        <attr name="appConsumeInsets" />
+    </declare-styleable>
+
 </resources>

@@ -49,7 +49,6 @@ import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
-import com.monke.monkeybook.widget.ChapterListView;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 import com.monke.monkeybook.widget.page.Enum;
@@ -73,6 +72,7 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
+    private static final int CHAPTER_SKIP_RESULT = 11;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -96,8 +96,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
     LinearLayout llSetting;
-    @BindView(R.id.clp_chapterList)
-    ChapterListView chapterListView;
     @BindView(R.id.tv_read_aloud_timer)
     TextView tvReadAloudTimer;
     @BindView(R.id.ll_read_aloud_timer)
@@ -240,17 +238,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.statusBarDarkFont(false);
             }
             mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-        } else if (chapterListView.getVisibility() == View.VISIBLE) {
-            if (isImmersionBarEnabled() && !isNightTheme()) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else {
-                mImmersionBar.statusBarDarkFont(false);
-            }
-            if (readBookControl.getHideNavigationBar()) {
-                mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
-            } else {
-                mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-            }
         } else {
             if (!isImmersionBarEnabled()) {
                 mImmersionBar.statusBarDarkFont(false);
@@ -577,7 +564,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().getBookInfoBean().setChapterList(chapters);
                         mPresenter.getBookShelf().setChapterListSize(chapters.size());
                         mPresenter.getBookShelf().upLastChapterName();
-                        initChapterList();
+                        mPresenter.saveProgress();
                     }
 
                     @Override
@@ -638,36 +625,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
         });
         mPageLoader.refreshChapterList();
-    }
-
-    /**
-     * 初始化目录列表
-     */
-    @Override
-    public void initChapterList() {
-        chapterListView.setOnChangeListener(new ChapterListView.OnChangeListener() {
-            @Override
-            public void animIn() {
-                initImmersionBar();
-            }
-
-            @Override
-            public void animOut() {
-                initImmersionBar();
-            }
-        });
-        chapterListView.setData(mPresenter.getBookShelf(), new ChapterListView.OnItemClickListener() {
-            @Override
-            public void itemClick(int index, int page, int tabPosition) {
-                mPageLoader.skipToChapter(index, page);
-            }
-
-            @Override
-            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
-                chapterListView.dismissChapterList();
-                showBookmark(bookmarkBean);
-            }
-        });
     }
 
     @Override
@@ -779,8 +736,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         //目录
         llCatalog.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            if (chapterListView.hasData()) {
-                mHandler.postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+            if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().realChapterListEmpty()) {
+                mHandler.postDelayed(() -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf(), CHAPTER_SKIP_RESULT), menuTopOut.getDuration());
             }
         });
 
@@ -1178,8 +1135,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (flMenu.getVisibility() == View.VISIBLE) {
                     finish();
                     return true;
-                } else if (chapterListView.dismissChapterList()) {
-                    return true;
                 } else if (ReadAloudService.running && aloudStatus == PLAY) {
                     ReadAloudService.pause(this);
                     toast(R.string.read_aloud_pause);
@@ -1195,7 +1150,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     popMenuIn();
                 }
                 return true;
-            } else if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE) {
+            } else if (flMenu.getVisibility() != View.VISIBLE) {
                 if (readBookControl.getCanKeyTurn(aloudStatus == ReadAloudService.PLAY) && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                     if (mPageLoader != null) {
                         mPageLoader.skipToNextPage();
@@ -1219,7 +1174,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (flMenu.getVisibility() != View.VISIBLE && chapterListView.getVisibility() != View.VISIBLE) {
+        if (flMenu.getVisibility() != View.VISIBLE) {
             if (readBookControl.getCanKeyTurn(aloudStatus == ReadAloudService.PLAY)
                     && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                 return true;
@@ -1297,16 +1252,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
-     * 更新目录
-     */
-    @Override
-    public void chapterChange(ChapterListBean chapterListBean) {
-        if (chapterListView.hasData()) {
-            chapterListView.upChapterList(chapterListBean);
-        }
-    }
-
-    /**
      * 朗读按钮
      */
     @Override
@@ -1354,6 +1299,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         initImmersionBar();
+        if (requestCode == CHAPTER_SKIP_RESULT && resultCode == RESULT_OK) {
+            int what = data.getIntExtra("what", -1);
+            switch (what) {
+                case 0:
+                    mPageLoader.skipToChapter(data.getIntExtra("chapter", 0), data.getIntExtra("page", 0));
+                    break;
+                case 1:
+                    showBookmark(data.getParcelableExtra("bookmark"));
+                    break;
+            }
+        }
     }
 
     @SuppressLint("DefaultLocale")

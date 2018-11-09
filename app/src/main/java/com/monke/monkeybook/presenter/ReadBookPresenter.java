@@ -26,7 +26,6 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.BookmarkBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
@@ -432,13 +431,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Override
     public void detachView() {
         RxBus.get().unregister(this);
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.CHAPTER_CHANGE)})
-    public void chapterChange(ChapterListBean chapterListBean) {
-        if (bookShelf != null && bookShelf.getNoteUrl().equals(chapterListBean.getNoteUrl())) {
-            mView.chapterChange(chapterListBean);
-        }
     }
 
     /////////////////////RxBus////////////////////////

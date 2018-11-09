@@ -6,16 +6,12 @@ import com.monke.basemvplib.impl.IPresenter;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
-import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.presenter.ReadBookPresenter;
 
 public interface ReadBookContract {
     interface View extends IView {
 
-        /**
-         * @return Book标志
-         */
         String getNoteUrl();
 
         Boolean getAdd();
@@ -24,20 +20,13 @@ public interface ReadBookContract {
 
         void changeSourceFinish(BookShelfBean book);
 
-        /**
-         * 开始加载
-         */
         void startLoadingBook();
 
         void setHpbReadProgressMax(int count);
 
-        void initChapterList();
-
         void upMenu();
 
         void openBookFromOther();
-
-        void chapterChange(ChapterListBean chapterListBean);
 
         void onMediaButton();
 
