@@ -164,8 +164,6 @@
     <string name="bookshelf_px_1">按更新时间排序</string>
     <string name="bookshelf_px_2">手动排序</string>
     <string name="read_type">阅读方式</string>
-    <string name="horizontal_page_turning">水平翻页</string>
-    <string name="vertical_scroll">垂直滚动</string>
     <string name="del_select">删除所选</string>
     <string name="clear_font">默认字体</string>
     <string name="find_on_www">发现</string>

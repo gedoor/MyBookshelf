@@ -238,7 +238,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
         if (bookShelfBeanList.size() > 0) {
             rlEmptyView.setVisibility(View.GONE);
         } else {
-            tvEmpty.setText("书架空空，去搜索添加书籍吧！");
+            tvEmpty.setText(R.string.bookshelf_empty);
             rlEmptyView.setVisibility(View.VISIBLE);
         }
     }

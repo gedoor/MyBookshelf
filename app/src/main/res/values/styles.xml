@@ -59,21 +59,6 @@
         <item name="android:windowExitAnimation">@anim/anim_pop_chapterlist_out</item>
     </style>
 
-    <style name="anim_pop_moresetting">
-        <item name="android:windowEnterAnimation">@anim/anim_pop_moresetting_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_pop_moresetting_out</item>
-    </style>
-
-    <style name="anim_pop_windowlight">
-        <item name="android:windowEnterAnimation">@anim/anim_pop_windowlight_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_pop_windowlight_out</item>
-    </style>
-
-    <style name="anim_pop_windowmenumore">
-        <item name="android:windowEnterAnimation">@anim/anim_pop_windowmenumore_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_pop_windowmenumore_out</item>
-    </style>
-
     <style name="NopaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
