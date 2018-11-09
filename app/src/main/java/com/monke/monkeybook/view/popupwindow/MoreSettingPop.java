@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -93,6 +94,7 @@ public class MoreSettingPop extends FrameLayout {
     }
 
     private void init(Context context) {
+        @SuppressLint("InflateParams")
         View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, null);
         addView(view);
         ButterKnife.bind(this, view);
