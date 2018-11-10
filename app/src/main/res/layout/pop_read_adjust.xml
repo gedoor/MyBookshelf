@@ -51,14 +51,14 @@
 
                 <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
                     android:id="@+id/scb_follow_sys"
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
-                    app:color_checked="#767676"
-                    app:color_tick="#ffffff"
-                    app:color_unchecked="#ffffff"
-                    app:color_unchecked_stroke="#c1c1c1"
+                    app:color_checked="@color/background_card"
+                    app:color_tick="@color/colorAccent"
+                    app:color_unchecked="@color/background_menu"
+                    app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 
@@ -122,14 +122,14 @@
 
                 <com.monke.monkeybook.widget.checkbox.SmoothCheckBox
                     android:id="@+id/scb_tts_follow_sys"
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
-                    app:color_checked="#767676"
-                    app:color_tick="#ffffff"
-                    app:color_unchecked="#ffffff"
-                    app:color_unchecked_stroke="#c1c1c1"
+                    app:color_checked="@color/background_card"
+                    app:color_tick="@color/colorAccent"
+                    app:color_unchecked="@color/background_menu"
+                    app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 
