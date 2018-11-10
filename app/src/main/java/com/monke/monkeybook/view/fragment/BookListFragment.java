@@ -148,7 +148,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             rvBookshelf.setAdapter(bookShelfListAdapter);
             rvBookshelf.setLayoutManager(new LinearLayoutManager(getContext()));
         } else {
-            bookShelfGridAdapter = new BookShelfGridAdapter(getActivity(), getNeedAnim());
+            bookShelfGridAdapter = new BookShelfGridAdapter(getActivity());
             rvBookshelf.setAdapter(bookShelfGridAdapter);
             rvBookshelf.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
