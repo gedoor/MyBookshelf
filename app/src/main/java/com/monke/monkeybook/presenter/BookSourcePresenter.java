@@ -53,10 +53,10 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
         AsyncTask.execute(() -> {
-            if (MApplication.getInstance().getConfigPreferences().getInt("SourceSort", 0) != 0)
-                return;
-            for (int i = 1; i <= bookSourceBeans.size(); i++) {
-                bookSourceBeans.get(i - 1).setSerialNumber(i);
+            if (MApplication.getInstance().getConfigPreferences().getInt("SourceSort", 0) == 0) {
+                for (int i = 1; i <= bookSourceBeans.size(); i++) {
+                    bookSourceBeans.get(i - 1).setSerialNumber(i);
+                }
             }
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
             BookSourceManager.refreshBookSource();

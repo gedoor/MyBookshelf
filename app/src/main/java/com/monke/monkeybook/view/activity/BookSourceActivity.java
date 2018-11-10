@@ -160,15 +160,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         if (itemTouchHelpCallback == null) {
             return;
         }
+        adapter.setSort(sort);
         if (sort == 0) {
             itemTouchHelpCallback.setDragEnable(true);
         } else {
             itemTouchHelpCallback.setDragEnable(false);
-        }
-        if (sort == 2) {
-            adapter.setCanTop(false);
-        } else {
-            adapter.setCanTop(true);
         }
     }
 

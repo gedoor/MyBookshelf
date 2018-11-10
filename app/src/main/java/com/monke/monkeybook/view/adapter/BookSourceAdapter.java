@@ -34,7 +34,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     private List<BookSourceBean> allDataList;
     private BookSourceActivity activity;
     private int index;
-    private boolean canTop;
+    private int sort;
 
     private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
         @Override
@@ -90,8 +90,8 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return itemTouchCallbackListener;
     }
 
-    public void setCanTop(boolean canTop) {
-        this.canTop = canTop;
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     @NonNull
@@ -103,7 +103,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if (canTop) {
+        if (sort != 2) {
             holder.topView.setVisibility(View.VISIBLE);
         } else {
             holder.topView.setVisibility(View.GONE);
@@ -140,14 +140,18 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         holder.topView.setOnClickListener(view -> {
             allDataList(BookSourceManager.getAllBookSource());
             BookSourceBean moveData = dataList.get(position);
-            int maxWeight = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .orderRaw("-WEIGHT ASC").limit(1).unique().getWeight();
-            moveData.setWeight(maxWeight + 1);
-            BookshelfHelp.saveBookSource(moveData);
+            if (sort == 0) {
+                moveData.setSerialNumber(0);
+            } else if (sort == 1) {
+                int maxWeight = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                        .orderRaw("-WEIGHT ASC").limit(1).unique().getWeight();
+                moveData.setWeight(maxWeight + 1);
+                BookshelfHelp.saveBookSource(moveData);
+            }
             dataList.remove(position);
-            notifyItemInserted(0);
+            notifyItemRemoved(position);
             dataList.add(0, moveData);
-            notifyItemRemoved(position + 1);
+            notifyItemInserted(0);
 
             if (dataList.size() != allDataList.size()) {
                 for (int i = 0; i < allDataList.size(); i++) {
@@ -158,12 +162,9 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
                 }
                 BookSourceBean moveDataA = allDataList.get(index);
                 allDataList.remove(index);
-                notifyItemInserted(0);
                 allDataList.add(0, moveDataA);
-                notifyItemRemoved(index + 1);
             }
-            notifyDataSetChanged();
-            activity.saveDate(dataList);
+            activity.saveDate(allDataList);
         });
     }
 
