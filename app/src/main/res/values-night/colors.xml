@@ -23,10 +23,9 @@
     <color name="tv_chapter_color_selected">#b7b7b7</color>
     <color name="tv_chapter_color_normal">#969696</color>
 
-    <color name="tv_text_button_nor">#434343</color>
-    <color name="tv_text_button_pre">#657a8b</color>
-    <color name="tv_text_button_disable">#536573</color>
-    <color name="tv_text_button_deep_pre">#354953</color>
+    <color name="tv_text_button_nor">#303030</color>
+    <color name="tv_text_button_disable">#434343</color>
 
     <color name="welcome">#67000000</color>
+
 </resources>
