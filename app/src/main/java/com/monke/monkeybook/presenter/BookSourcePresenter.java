@@ -11,6 +11,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -52,6 +53,8 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
         AsyncTask.execute(() -> {
+            if (MApplication.getInstance().getConfigPreferences().getInt("SourceSort", 0) != 0)
+                return;
             for (int i = 1; i <= bookSourceBeans.size(); i++) {
                 bookSourceBeans.get(i - 1).setSerialNumber(i);
             }
