@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
-static def increasedVersionCode() {
-    return (int) (System.currentTimeMillis() / 1000 / 60 / 60 - 17141)
+static def releaseTime() {
+    return new Date().format("yy.MMddhh", TimeZone.getTimeZone("GMT+8"))
 }
 
 def name = "MONKOVEL"
-def version = "2.0." + increasedVersionCode()
+def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 def keystorePSW = ''
