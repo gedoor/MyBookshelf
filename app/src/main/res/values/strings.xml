@@ -267,6 +267,10 @@
     <string name="update_chapter">更新目录</string>
     <string name="txt_chapter_regex">目录正则</string>
     <string name="set_charset">设置编码</string>
-    <string name="swap_vert">倒序-顺序</string>
+    <string name="swap_sort">倒序-顺序</string>
+    <string name="sort">排序</string>
+    <string name="sort_auto">智能排序</string>
+    <string name="sort_manual">手动排序</string>
+    <string name="sort_ping_yin">拼音排序</string>
 
 </resources>

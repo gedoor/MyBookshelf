@@ -28,6 +28,30 @@
     </item>
 
     <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_format_line_spacing_black_24dp"
+        android:title="@string/sort"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction">
+
+        <menu>
+            <item
+                android:id="@+id/sort_auto"
+                android:title="@string/sort_auto" />
+
+            <item
+                android:id="@+id/sort_manual"
+                android:title="@string/sort_manual" />
+
+            <item
+                android:id="@+id/sort_ping_yin"
+                android:title="@string/sort_ping_yin" />
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/action_add_book_source"
         android:icon="@drawable/ic_add_black_24dp_new"
         android:title="@string/add_book_source"
