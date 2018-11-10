@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="@color/background_menu"
-            app:menu="@menu/menu_drawer" />
+            app:menu="@menu/menu_main_drawer" />
 
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

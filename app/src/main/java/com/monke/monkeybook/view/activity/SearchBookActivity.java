@@ -159,7 +159,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_book_search_activity, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
