@@ -3,7 +3,7 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
 static def releaseTime() {
-    return new Date().format("yy.MMddhh", TimeZone.getTimeZone("GMT+8"))
+    return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
 }
 
 def name = "MONKOVEL"
