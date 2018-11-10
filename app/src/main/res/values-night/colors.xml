@@ -6,7 +6,6 @@
 
     <color name="colorPrimary">#464646</color>
     <color name="colorPrimaryDark">#2e2e2e</color>
-    <color name="colorAccent">#FF4081</color>
 
     <color name="bg_divider_line">#363636</color>
     <color name="btn_bg_press">#222222</color>

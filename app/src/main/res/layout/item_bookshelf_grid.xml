@@ -41,7 +41,7 @@
                 android:layout_height="26dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_circle_red_24dp"
-                app:tint="@color/colorAccent"
+                app:tint="@color/red"
                 android:visibility="invisible" />
 
             <com.victor.loading.rotate.RotateLoading
@@ -50,7 +50,7 @@
                 android:layout_height="26dp"
                 android:layout_gravity="center"
                 android:visibility="invisible"
-                app:loading_color="@color/white"
+                app:loading_color="@color/colorAccent"
                 app:loading_width="2dp" />
 
         </FrameLayout>
@@ -83,7 +83,7 @@
         android:visibility="invisible"
         app:bgdrawable="@color/white"
         app:cantouch="false"
-        app:fontdrawable="@color/d_blue"
+        app:fontdrawable="@color/colorAccent"
         tools:ignore="RtlHardcoded" />
 
     <View

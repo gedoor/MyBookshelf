@@ -5,13 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/icon_read_book"
-        android:contentDescription="@string/app_name" />
+        android:tint="@color/colorAccent" />
 
     <TextView
         android:id="@+id/tv_user"
@@ -28,7 +29,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.9dp"
-        android:background="@color/btn_bg_press"/>
+        android:background="@color/btn_bg_press" />
 
 </LinearLayout>
 

@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:src="@drawable/ic_welcome"
         android:scaleType="fitCenter"
-        android:contentDescription="@string/welcome" />
+        android:contentDescription="@string/welcome"
+        android:tint="@color/colorAccent" />
 
     <ImageView
         android:layout_width="match_parent"

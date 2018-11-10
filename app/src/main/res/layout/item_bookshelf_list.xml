@@ -52,7 +52,7 @@
             android:padding="6dp"
             android:src="@drawable/ic_circle_red_24dp"
             android:visibility="invisible"
-            app:tint="@color/colorAccent" />
+            app:tint="@color/red" />
 
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/rl_loading"
@@ -60,7 +60,7 @@
             android:layout_height="26dp"
             android:layout_gravity="center"
             android:visibility="invisible"
-            app:loading_color="@color/tv_text_default"
+            app:loading_color="@color/colorAccent"
             app:loading_width="2dp" />
 
     </FrameLayout>
@@ -114,7 +114,7 @@
             android:visibility="invisible"
             app:bgdrawable="@color/btn_bg_press"
             app:cantouch="false"
-            app:fontdrawable="@color/d_blue"
+            app:fontdrawable="@color/colorAccent"
             tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
