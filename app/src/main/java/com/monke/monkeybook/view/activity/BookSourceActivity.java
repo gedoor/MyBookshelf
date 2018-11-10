@@ -165,6 +165,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         } else {
             itemTouchHelpCallback.setDragEnable(false);
         }
+        if (sort == 2) {
+            adapter.setCanTop(false);
+        } else {
+            adapter.setCanTop(true);
+        }
     }
 
     public void upDateSelectAll() {

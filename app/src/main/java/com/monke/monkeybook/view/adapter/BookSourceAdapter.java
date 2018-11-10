@@ -34,6 +34,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
     private List<BookSourceBean> allDataList;
     private BookSourceActivity activity;
     private int index;
+    private boolean canTop;
 
     private MyItemTouchHelpCallback.OnItemTouchCallbackListener itemTouchCallbackListener = new MyItemTouchHelpCallback.OnItemTouchCallbackListener() {
         @Override
@@ -89,6 +90,10 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
         return itemTouchCallbackListener;
     }
 
+    public void setCanTop(boolean canTop) {
+        this.canTop = canTop;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -98,6 +103,11 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        if (canTop) {
+            holder.topView.setVisibility(View.VISIBLE);
+        } else {
+            holder.topView.setVisibility(View.GONE);
+        }
         if (TextUtils.isEmpty(dataList.get(position).getBookSourceGroup())) {
             holder.cbView.setText(dataList.get(position).getBookSourceName());
         } else {
