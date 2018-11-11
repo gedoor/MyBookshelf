@@ -34,7 +34,11 @@ import java.util.Objects;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -57,10 +61,13 @@ public class ChangeSourceView {
     private SearchBookModel searchBookModel;
     private BookShelfBean book;
     private List<SearchBookBean> needUpLastChapter;
+    private int upLastChapterIndex;
     private String bookTag;
     private String bookName;
     private String bookAuthor;
     private int shelfLastChapter;
+    private CompositeDisposable compositeDisposable;
+    private Disposable loadDBDisposable;
 
     private ChangeSourceView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
@@ -138,6 +145,7 @@ public class ChangeSourceView {
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.onClickSource = onClickSource;
+        compositeDisposable = new CompositeDisposable();
         book = bookShelf;
         bookTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
@@ -149,13 +157,15 @@ public class ChangeSourceView {
     }
 
     void stopChangeSource() {
+        compositeDisposable.dispose();
         if (searchBookModel != null) {
             searchBookModel.stopSearch();
         }
     }
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {
-        Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
+        if (loadDBDisposable != null) return;
+        Single.create((SingleOnSubscribe<List<SearchBookBean>>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
             if (searchBookBeans == null) searchBookBeans = new ArrayList<>();
@@ -169,13 +179,18 @@ public class ChangeSourceView {
                 }
                 Collections.sort(searchBookBeans, this::compareSearchBooks);
             }
-            e.onNext(searchBookBeans);
-            e.onComplete();
+            e.onSuccess(searchBookBeans);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+                .subscribe(new SingleObserver<List<SearchBookBean>>() {
                     @Override
-                    public void onNext(List<SearchBookBean> searchBookBeans) {
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                        loadDBDisposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(List<SearchBookBean> searchBookBeans) {
                         if (searchBookBeans.size() > 0) {
                             adapter.addAllSourceAdapter(searchBookBeans);
                             ibtStop.setVisibility(View.INVISIBLE);
@@ -183,11 +198,13 @@ public class ChangeSourceView {
                         } else {
                             reSearchBook();
                         }
+                        loadDBDisposable = null;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         reSearchBook();
+                        loadDBDisposable = null;
                     }
                 });
     }
@@ -226,7 +243,8 @@ public class ChangeSourceView {
                         adapter.reSetSourceAdapter();
                         adapter.addAllSourceAdapter(searchBookBeans);
                         needUpLastChapter = searchBookBeans;
-                        upLastChapter(0);
+                        upLastChapterIndex = -1;
+                        upLastChapter();
                     }
 
                     @Override
@@ -236,34 +254,35 @@ public class ChangeSourceView {
                 });
     }
 
-    private void upLastChapter(int index) {
-        if (index < needUpLastChapter.size() - 1) {
-            return;
-        }
+    private synchronized void upLastChapter() {
+        final int index = upLastChapterIndex + 1;
+        if (index > needUpLastChapter.size() - 1) return;
         UpLastChapterModel upLastChapterModel = UpLastChapterModel.getInstance();
-        upLastChapterModel.toBookshelf(needUpLastChapter.get(0))
+        upLastChapterModel.toBookshelf(needUpLastChapter.get(index))
                 .flatMap(upLastChapterModel::getChapterList)
                 .flatMap(upLastChapterModel::saveSearchBookBean)
+                .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<SearchBookBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
                         handler.postDelayed(() -> {
                             if (!d.isDisposed()) {
                                 d.dispose();
-                                upLastChapter(index + 1);
+                                upLastChapter();
                             }
                         }, 20 * 1000);
                     }
 
                     @Override
                     public void onNext(SearchBookBean searchBookBean) {
-                        getSearchBookInDb(book);
-                        upLastChapter(index + 1);
+
+                        upLastChapter();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        upLastChapter(index + 1);
+                        upLastChapter();
                     }
 
                     @Override

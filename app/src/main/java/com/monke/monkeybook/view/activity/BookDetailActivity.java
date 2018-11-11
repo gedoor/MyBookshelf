@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -368,4 +369,16 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        if (mo) return true;
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        moProgressHUD.dismiss();
+        super.onDestroy();
+    }
 }
