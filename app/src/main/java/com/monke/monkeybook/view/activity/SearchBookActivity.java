@@ -378,7 +378,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
      */
     private void toSearch() {
         if (!TextUtils.isEmpty(searchKey)) {
-            mPresenter.setHasSearch(true);
             mPresenter.insertSearchHistory();
             //执行搜索请求
             new Handler().postDelayed(() -> {

@@ -310,7 +310,7 @@ public class MoProgressHUD {
         rootView.setOnClickListener(v -> dismiss());
         ChangeSourceView changeSourceView = ChangeSourceView.getInstance(mSharedView);
         changeSourceView.showChangeSource(bookShelf, clickSource, this);
-        dismissListener = changeSourceView::stopChangeSource;
+        dismissListener = changeSourceView::onDestroy;
         if (!isShowing()) {
             onAttached();
         }

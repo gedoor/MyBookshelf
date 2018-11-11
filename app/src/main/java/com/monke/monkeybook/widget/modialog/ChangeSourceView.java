@@ -168,6 +168,13 @@ public class ChangeSourceView {
         }
     }
 
+    void onDestroy() {
+        compositeDisposable.dispose();
+        if (searchBookModel != null) {
+            searchBookModel.onDestroy();
+        }
+    }
+
     private void getSearchBookInDb(BookShelfBean bookShelf) {
         if (loadDBDisposable != null) return;
         Single.create((SingleOnSubscribe<List<SearchBookBean>>) e -> {

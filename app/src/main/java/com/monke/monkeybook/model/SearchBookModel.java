@@ -96,6 +96,11 @@ public class SearchBookModel {
         });
     }
 
+    public void onDestroy() {
+        stopSearch();
+        executorService.shutdown();
+    }
+
     public void setSearchTime(long searchTime) {
         this.startThisSearchTime = searchTime;
     }

@@ -13,10 +13,6 @@ import java.util.List;
 public interface SearchBookContract {
     interface Presenter extends IPresenter {
 
-        Boolean getHasSearch();
-
-        void setHasSearch(Boolean hasSearch);
-
         void insertSearchHistory();
 
         void querySearchHistory(String content);

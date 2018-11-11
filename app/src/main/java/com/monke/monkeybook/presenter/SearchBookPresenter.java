@@ -34,8 +34,6 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
     private static final int BOOK = 2;
 
-    private Boolean hasSearch = false;   //判断是否搜索过
-
     private long startThisSearchTime;
     private String durSearchKey;
 
@@ -101,16 +99,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         };
         //搜索引擎初始化
         searchBookModel = new SearchBookModel(context, onSearchListener, useMy716);
-    }
-
-    @Override
-    public Boolean getHasSearch() {
-        return hasSearch;
-    }
-
-    @Override
-    public void setHasSearch(Boolean hasSearch) {
-        this.hasSearch = hasSearch;
     }
 
     @Override
@@ -318,6 +306,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void detachView() {
         RxBus.get().unregister(this);
+        searchBookModel.onDestroy();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
