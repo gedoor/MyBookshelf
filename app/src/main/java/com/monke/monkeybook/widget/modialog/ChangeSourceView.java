@@ -33,7 +33,6 @@ import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
@@ -161,7 +160,7 @@ public class ChangeSourceView {
         getSearchBookInDb(bookShelf);
     }
 
-    void stopChangeSource() {
+    private void stopChangeSource() {
         compositeDisposable.dispose();
         if (searchBookModel != null) {
             searchBookModel.stopSearch();
@@ -273,39 +272,7 @@ public class ChangeSourceView {
             if (searchIsFinish) rvSource.finishRefresh(true, false);
             return;
         }
-        UpLastChapterModel upLastChapterModel = new UpLastChapterModel();
-        upLastChapterModel.toBookshelf(needUpLastChapter.get(upLastChapterIndex))
-                .flatMap(upLastChapterModel::getChapterList)
-                .flatMap(upLastChapterModel::saveSearchBookBean)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(new Observer<SearchBookBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                        handler.postDelayed(() -> {
-                            if (!d.isDisposed()) {
-                                d.dispose();
-                                upLastChapter();
-                            }
-                        }, 20 * 1000);
-                    }
-
-                    @Override
-                    public void onNext(SearchBookBean searchBookBean) {
-
-                        upLastChapter();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        upLastChapter();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        UpLastChapterModel.getInstance().startUpdate(needUpLastChapter.get(upLastChapterIndex));
     }
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {

@@ -558,7 +558,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     public void onDestroy() {
         if (preferences.getBoolean("fadeTTS", false))
             mPresenter.resetVolume();
-        UpLastChapterModel.getInstance().stopUp();
+        UpLastChapterModel.getInstance().onDestroy();
         super.onDestroy();
     }
 

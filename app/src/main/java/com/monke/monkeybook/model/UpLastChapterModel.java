@@ -1,5 +1,6 @@
 package com.monke.monkeybook.model;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -13,12 +14,16 @@ import com.monke.monkeybook.utils.RxUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 更新换源列表里最新章节
@@ -26,12 +31,20 @@ import io.reactivex.disposables.Disposable;
 public class UpLastChapterModel {
     private static UpLastChapterModel model;
     private CompositeDisposable compositeDisposable;
+    private ExecutorService executorService;
+    private Scheduler scheduler;
+    private Handler handler = new Handler();
 
     public static UpLastChapterModel getInstance() {
         if (model == null) {
             model = new UpLastChapterModel();
         }
         return model;
+    }
+
+    private UpLastChapterModel() {
+        executorService = Executors.newFixedThreadPool(5);
+        scheduler = Schedulers.from(executorService);
     }
 
     public void startUpdate() {
@@ -49,7 +62,8 @@ public class UpLastChapterModel {
                 .flatMap(this::toBookshelf)
                 .flatMap(this::getChapterList)
                 .flatMap(this::saveSearchBookBean)
-                .compose(RxUtils::toSimpleSingle)
+                .subscribeOn(scheduler)
+                .observeOn(scheduler)
                 .subscribe(new Observer<SearchBookBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -74,11 +88,51 @@ public class UpLastChapterModel {
                 });
     }
 
+    public synchronized void startUpdate(SearchBookBean searchBookBean) {
+        toBookshelf(searchBookBean)
+                .flatMap(this::getChapterList)
+                .flatMap(this::saveSearchBookBean)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribeOn(scheduler)
+                .observeOn(scheduler)
+                .subscribe(new Observer<SearchBookBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                        handler.postDelayed(() -> {
+                            if (!d.isDisposed()) {
+                                d.dispose();
+                            }
+                        }, 20 * 1000);
+                    }
+
+                    @Override
+                    public void onNext(SearchBookBean searchBookBean) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public void stopUp() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
         compositeDisposable = null;
+    }
+
+    public void onDestroy() {
+        stopUp();
+        executorService.shutdownNow();
     }
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {
@@ -98,7 +152,7 @@ public class UpLastChapterModel {
         });
     }
 
-    public Observable<BookShelfBean> toBookshelf(SearchBookBean searchBookBean) {
+    private Observable<BookShelfBean> toBookshelf(SearchBookBean searchBookBean) {
         return Observable.create(e -> {
             BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
             e.onNext(bookShelfBean);
@@ -106,7 +160,7 @@ public class UpLastChapterModel {
         });
     }
 
-    public Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
+    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
         if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
             return WebBookModel.getInstance().getBookInfo(bookShelfBean)
                     .flatMap(bookShelf -> WebBookModel.getInstance().getChapterList(bookShelf));
@@ -115,7 +169,7 @@ public class UpLastChapterModel {
         }
     }
 
-    public Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
+    private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             SearchBookBean searchBookBean = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
