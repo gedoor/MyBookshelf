@@ -9,13 +9,10 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.ChapterListBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.content.DefaultModelImpl;
+import com.monke.monkeybook.model.content.DefaultModel;
 import com.monke.monkeybook.model.impl.IStationBookModel;
-import com.monke.monkeybook.model.impl.IWebBookModel;
 import com.monke.monkeybook.model.source.My716;
 
 import java.util.ArrayList;
@@ -24,10 +21,10 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 
-public class WebBookModelImpl implements IWebBookModel {
+public class WebBookModel {
 
-    public static WebBookModelImpl getInstance() {
-        return new WebBookModelImpl();
+    public static WebBookModel getInstance() {
+        return new WebBookModel();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +33,6 @@ public class WebBookModelImpl implements IWebBookModel {
      * 网络请求并解析书籍信息
      * return BookShelfBean
      */
-    @Override
     public Observable<BookShelfBean> getBookInfo(BookShelfBean bookShelfBean) {
         IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
@@ -52,12 +48,11 @@ public class WebBookModelImpl implements IWebBookModel {
      * 网络解析图书目录
      * return BookShelfBean
      */
-    @Override
     public Observable<BookShelfBean> getChapterList(final BookShelfBean bookShelfBean) {
         IStationBookModel bookModel = getBookSourceModel(bookShelfBean.getTag());
         if (bookModel != null) {
             return bookModel.getChapterList(bookShelfBean)
-                    .flatMap((chapterList) -> getChapterList(bookShelfBean, chapterList));
+                    .flatMap((chapterList) -> upChapterList(bookShelfBean, chapterList));
         } else {
             return Observable.error(new Throwable(bookShelfBean.getBookInfoBean().getName() + "没有书源"));
         }
@@ -68,7 +63,6 @@ public class WebBookModelImpl implements IWebBookModel {
     /**
      * 章节缓存
      */
-    @Override
     public Observable<BookContentBean> getBookContent(final Scheduler scheduler, BaseChapterBean chapterBean, String bookName) {
         IStationBookModel bookModel = getBookSourceModel(chapterBean.getTag());
         if (bookModel != null) {
@@ -84,7 +78,6 @@ public class WebBookModelImpl implements IWebBookModel {
     /**
      * 其他站点集合搜索
      */
-    @Override
     public Observable<List<SearchBookBean>> searchOtherBook(String content, int page, String tag) {
         //获取所有书源类
         IStationBookModel bookModel = getBookSourceModel(tag);
@@ -101,7 +94,6 @@ public class WebBookModelImpl implements IWebBookModel {
     /**
      * 发现页
      */
-    @Override
     public Observable<List<SearchBookBean>> findBook(String url, int page, String tag) {
         IStationBookModel bookModel = getBookSourceModel(tag);
         if (bookModel != null) {
@@ -122,11 +114,11 @@ public class WebBookModelImpl implements IWebBookModel {
             case My716.TAG:
                 return My716.getInstance();
             default:
-                return DefaultModelImpl.getInstance(tag);
+                return DefaultModel.getInstance(tag);
         }
     }
 
-    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
+    private Observable<BookShelfBean> upChapterList(BookShelfBean bookShelfBean, List<ChapterListBean> chapterList) {
         return Observable.create(e -> {
             for (int i = 0; i < chapterList.size(); i++) {
                 ChapterListBean chapter = chapterList.get(i);
@@ -144,9 +136,7 @@ public class WebBookModelImpl implements IWebBookModel {
             bookShelfBean.getBookInfoBean().setChapterList(chapterList);
             bookShelfBean.upDurChapterName();
             bookShelfBean.upLastChapterName();
-            DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
-                    .where(ChapterListBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
-                    .buildDelete().executeDeleteWithoutDetachingEntities();
+            BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
             e.onNext(bookShelfBean);
             e.onComplete();
         });

@@ -29,15 +29,14 @@ import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.model.ImportBookModelImpl;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.ImportBookModel;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.DownloadService;
@@ -54,7 +53,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.monke.monkeybook.widget.modialog.ChangeSourceView.savedSource;
 
-public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
+public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
     public final static int OPEN_FROM_OTHER = 0;
     public final static int OPEN_FROM_APP = 1;
 
@@ -70,7 +69,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             loadBook(intent);
         } else {
             mView.openBookFromOther();
-            mView.showMenu();
+            mView.upMenu();
         }
     }
 
@@ -93,6 +92,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
             if (bookShelf != null) {
                 bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
+                mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
             }
             e.onNext(bookShelf);
             e.onComplete();
@@ -107,8 +107,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                         } else {
                             mView.setHpbReadProgressMax(0);
                             mView.startLoadingBook();
-                            mView.showMenu();
-                            checkInShelf();
+                            mView.upMenu();
                         }
                     }
 
@@ -191,7 +190,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 .subscribe(new SimpleObserver<String>() {
                     @Override
                     public void onNext(String value) {
-                        ImportBookModelImpl.getInstance().importBook(new File(value))
+                        ImportBookModel.getInstance().importBook(new File(value))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe(new SimpleObserver<LocBookShelfBean>() {
@@ -200,7 +199,7 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                                         if (value.getNew())
                                             RxBus.get().post(RxBusTag.HAD_ADD_BOOK, value);
                                         bookShelf = value.getBookShelfBean();
-                                        checkInShelf();
+                                        mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
                                     }
 
                                     @Override
@@ -245,8 +244,8 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         bookShelfBean.setDurChapterName(bookShelf.getDurChapterName());
         bookShelfBean.setDurChapter(bookShelf.getDurChapter());
         bookShelfBean.setDurChapterPage(bookShelf.getDurChapterPage());
-        WebBookModelImpl.getInstance().getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+        WebBookModel.getInstance().getBookInfo(bookShelfBean)
+                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
@@ -352,13 +351,6 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
         return bookShelf;
     }
 
-    private void checkInShelf() {
-        AsyncTask.execute(() -> {
-            List<BookShelfBean> temp = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder().where(BookShelfBeanDao.Properties.NoteUrl.eq(bookShelf.getNoteUrl())).build().list();
-            mView.setAdd(temp != null && temp.size() > 0);
-        });
-    }
-
     @Override
     public void addToShelf(final OnAddListener addListener) {
         if (bookShelf != null) {
@@ -366,7 +358,9 @@ public class ReadBookPresenterImpl extends BasePresenterImpl<ReadBookContract.Vi
                 BookshelfHelp.saveBookToShelf(bookShelf);
                 RxBus.get().post(RxBusTag.HAD_ADD_BOOK, bookShelf);
                 mView.setAdd(true);
-                addListener.addSuccess();
+                if (addListener != null) {
+                    addListener.addSuccess();
+                }
             });
         }
     }

@@ -5,17 +5,12 @@ import android.os.Environment;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.utils.IOUtils;
 
-import org.mozilla.universalchardet.UniversalDetector;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,27 +197,18 @@ public class FileHelp {
         });
     }
 
-    //获取文件的编码格式
-    public static Charset getCharset(String filePatch) {
-        UniversalDetector detector = new UniversalDetector(null);
-        BufferedInputStream bis = null;
-        Charset charset = Charset.defaultCharset();
-        byte[] firstBytes = new byte[1024];
-        try {
-            bis = new BufferedInputStream(new FileInputStream(filePatch));
-            bis.mark(0);
-            int read = bis.read(firstBytes, 0, 1024);
-            if (read == -1) {
-                return charset;
-            }
-            detector.handleData(firstBytes, 0, 1024);
-            detector.dataEnd();
-            return Charset.forName(detector.getDetectedCharset());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.close(bis);
+
+    public static String getFileSuffix(String filePath) {
+        File file = new File(filePath);
+        return getFileSuffix(file);
+    }
+
+    public static String getFileSuffix(File file) {
+        if (file == null || !file.exists() || file.isDirectory()) {
+            return "";
         }
-        return charset;
+        String fileName = file.getName();
+        int dotIndex = fileName.lastIndexOf(".");
+        return dotIndex > 0 ? fileName.substring(dotIndex) : "";
     }
 }

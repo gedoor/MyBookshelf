@@ -38,7 +38,7 @@ import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
@@ -66,7 +66,7 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.monke.monkeybook.presenter.ReadBookPresenterImpl.OPEN_FROM_OTHER;
+import static com.monke.monkeybook.presenter.ReadBookPresenter.OPEN_FROM_OTHER;
 import static com.monke.monkeybook.service.ReadAloudService.NEXT;
 import static com.monke.monkeybook.service.ReadAloudService.PAUSE;
 import static com.monke.monkeybook.service.ReadAloudService.PLAY;
@@ -90,8 +90,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     MHorProgressBar hpbReadProgress;
     @BindView(R.id.ll_catalog)
     LinearLayout llCatalog;
-    @BindView(R.id.ll_light)
-    LinearLayout llLight;
+    @BindView(R.id.ll_adjust)
+    LinearLayout llAdjust;
     @BindView(R.id.ll_font)
     LinearLayout llFont;
     @BindView(R.id.ll_setting)
@@ -114,6 +114,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     Toolbar toolbar;
     @BindView(R.id.atv_url)
     TextView atvUrl;
+    @BindView(R.id.atv_line)
+    View atvLine;
     @BindView(R.id.ll_menu_top)
     LinearLayout llMenuTop;
     @BindView(R.id.appBar)
@@ -136,6 +138,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     FloatingActionButton fabAutoPage;
     @BindView(R.id.hpb_next_page_progress)
     MHorProgressBar hpbNextPageProgress;
+    @BindView(R.id.readAdjustPop)
+    ReadAdjustPop readAdjustPop;
+    @BindView(R.id.readInterfacePop)
+    ReadInterfacePop readInterfacePop;
+    @BindView(R.id.moreSettingPop)
+    MoreSettingPop moreSettingPop;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -155,9 +163,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private int upHpbInterval = 100;
     private Menu menu;
     private CheckAddShelfPop checkAddShelfPop;
-    private ReadAdjustPop readAdjustPop;
-    private ReadInterfacePop readInterfacePop;
-    private MoreSettingPop moreSettingPop;
     private MoProgressHUD moProgressHUD;
     private ThisBatInfoReceiver batInfoReceiver;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
@@ -167,7 +172,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     protected ReadBookContract.Presenter initInjector() {
-        return new ReadBookPresenterImpl();
+        return new ReadBookPresenter();
     }
 
     @Override
@@ -230,7 +235,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             hpbNextPageProgress.setY(ImmersionBar.getStatusBarHeight(this));
         }
 
-        if (flMenu.getVisibility() == View.VISIBLE) {
+        if (llMenuBottom.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
@@ -366,7 +371,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mPresenter.saveProgress();
         //显示菜单
         menuTopIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_in);
-        menuTopIn.setAnimationListener(new Animation.AnimationListener() {
+        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
+        menuBottomIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 initImmersionBar();
@@ -383,10 +389,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             }
         });
-        menuBottomIn = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_in);
+
         //隐藏菜单
         menuTopOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_top_out);
-        menuTopOut.setAnimationListener(new Animation.AnimationListener() {
+        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
+        menuBottomOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 vMenuBg.setOnClickListener(null);
@@ -396,6 +403,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void onAnimationEnd(Animation animation) {
                 flMenu.setVisibility(View.INVISIBLE);
+                llMenuTop.setVisibility(View.INVISIBLE);
+                llMenuBottom.setVisibility(View.INVISIBLE);
+                readAdjustPop.setVisibility(View.INVISIBLE);
+                readInterfacePop.setVisibility(View.INVISIBLE);
+                moreSettingPop.setVisibility(View.INVISIBLE);
                 initImmersionBar();
             }
 
@@ -404,8 +416,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             }
         });
-        menuBottomOut = AnimationUtils.loadAnimation(this, R.anim.anim_readbook_bottom_out);
-
     }
 
     @Override
@@ -433,7 +443,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 调节
      */
     private void initReadAdjustPop() {
-        readAdjustPop = new ReadAdjustPop(this, new ReadAdjustPop.OnAdjustListener() {
+        readAdjustPop.setListener(this, new ReadAdjustPop.OnAdjustListener() {
             @Override
             public void changeSpeechRate(int speechRate) {
                 if (ReadAloudService.running) {
@@ -456,7 +466,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 界面设置
      */
     private void initReadInterfacePop() {
-        readInterfacePop = new ReadInterfacePop(this, new ReadInterfacePop.OnChangeProListener() {
+        readInterfacePop.setListener(this, new ReadInterfacePop.OnChangeProListener() {
 
             @Override
             public void upPageMode() {
@@ -503,7 +513,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 其它设置
      */
     private void initMoreSettingPop() {
-        moreSettingPop = new MoreSettingPop(this, new MoreSettingPop.OnChangeProListener() {
+        moreSettingPop.setListener(new MoreSettingPop.OnChangeProListener() {
             @Override
             public void keepScreenOnChange(int keepScreenOn) {
                 screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[keepScreenOn];
@@ -512,7 +522,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
             @Override
             public void recreate() {
-                moreSettingPop.dismiss();
                 ReadBookActivity.this.recreate();
             }
 
@@ -773,26 +782,26 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         llCatalog.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
             if (chapterListView.hasData()) {
-                new Handler().postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
+                mHandler.postDelayed(() -> chapterListView.show(mPresenter.getBookShelf().getDurChapter()), menuTopOut.getDuration());
             }
         });
 
-        //亮度
-        llLight.setOnClickListener(view -> {
+        //调节
+        llAdjust.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readAdjustPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(this::readAdjustIn, menuBottomOut.getDuration() + 100);
         });
 
         //界面
         llFont.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> readInterfacePop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(this::readInterfaceIn, menuBottomOut.getDuration() + 100);
         });
 
         //设置
         llSetting.setOnClickListener(view -> {
             ReadBookActivity.this.popMenuOut();
-            new Handler().postDelayed(() -> moreSettingPop.showAtLocation(flContent, Gravity.BOTTOM, 0, 0), menuTopOut.getDuration());
+            mHandler.postDelayed(this::moreSettingIn, menuBottomOut.getDuration() + 100);
         });
 
         tvReadAloudTimer.setOnClickListener(null);
@@ -821,7 +830,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
-        showMenu();
+        upMenu();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -856,10 +865,16 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_book_info:
                 BookInfoActivity.startThis(this, mPresenter.getBookShelf().getNoteUrl());
                 break;
+            case R.id.action_set_charset:
+                setCharset();
+                break;
             case R.id.update_chapter_list:
                 if (mPageLoader != null) {
                     mPageLoader.updateChapter();
                 }
+                break;
+            case R.id.action_set_regex:
+                setTextChapterRegex();
                 break;
             case android.R.id.home:
                 finish();
@@ -959,13 +974,63 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     /**
-     * 隐藏菜单
+     * 设置编码
      */
-    private void popMenuOut() {
-        if (flMenu.getVisibility() == View.VISIBLE) {
-            llMenuTop.startAnimation(menuTopOut);
-            llMenuBottom.startAnimation(menuBottomOut);
+    private void setCharset() {
+        final String charset = getBook().getBookInfoBean().getCharset();
+        moProgressHUD.showInputBox("输入编码",
+                charset,
+		new String[]{"UTF-8", "GBK", "ASCII", "BIG-5"},
+                (inputText -> {
+                    inputText = inputText.trim();
+                    if (!Objects.equals(charset, inputText)) {
+                        getBook().getBookInfoBean().setCharset(inputText);
+                        mPresenter.saveProgress();
+                        if (mPageLoader != null) {
+                            mPageLoader.updateChapter();
+                        }
+                    }
+                }));
+    }
+
+    /**
+     * 设置TXT目录正则
+     */
+    private void setTextChapterRegex() {
+        if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+            final String regex = getBook().getBookInfoBean().getChapterUrl();
+            moProgressHUD.showInputBox("TXT目录规则",
+                    regex,
+                    null,
+                    (inputText -> {
+                        if (!Objects.equals(regex, inputText)) {
+                            getBook().getBookInfoBean().setChapterUrl(inputText);
+                            mPresenter.saveProgress();
+                            if (mPageLoader != null) {
+                                mPageLoader.updateChapter();
+                            }
+                        }
+                    }));
         }
+    }
+
+    private void readAdjustIn() {
+        flMenu.setVisibility(View.VISIBLE);
+        readAdjustPop.show();
+        readAdjustPop.setVisibility(View.VISIBLE);
+        readAdjustPop.startAnimation(menuBottomIn);
+    }
+
+    private void readInterfaceIn() {
+        flMenu.setVisibility(View.VISIBLE);
+        readInterfacePop.setVisibility(View.VISIBLE);
+        readInterfacePop.startAnimation(menuBottomIn);
+    }
+
+    private void moreSettingIn() {
+        flMenu.setVisibility(View.VISIBLE);
+        moreSettingPop.setVisibility(View.VISIBLE);
+        moreSettingPop.startAnimation(menuBottomIn);
     }
 
     /**
@@ -973,9 +1038,33 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void popMenuIn() {
         flMenu.setVisibility(View.VISIBLE);
+        llMenuTop.setVisibility(View.VISIBLE);
+        llMenuBottom.setVisibility(View.VISIBLE);
         llMenuTop.startAnimation(menuTopIn);
         llMenuBottom.startAnimation(menuBottomIn);
         hideSnackBar();
+    }
+
+    /**
+     * 隐藏菜单
+     */
+    private void popMenuOut() {
+        if (flMenu.getVisibility() == View.VISIBLE) {
+            if (llMenuTop.getVisibility() == View.VISIBLE) {
+                llMenuTop.startAnimation(menuTopOut);
+                llMenuBottom.startAnimation(menuBottomOut);
+            }
+            if (moreSettingPop.getVisibility() == View.VISIBLE) {
+                moreSettingPop.startAnimation(menuBottomOut);
+            }
+            if (readAdjustPop.getVisibility() == View.VISIBLE) {
+                readAdjustPop.startAnimation(menuBottomOut);
+                readAdjustPop.dismiss();
+            }
+            if (readInterfacePop.getVisibility() == View.VISIBLE) {
+                readInterfacePop.startAnimation(menuBottomOut);
+            }
+        }
     }
 
     public BookShelfBean getBook() {
@@ -1142,28 +1231,34 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void showMenu() {
-        if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+    public void upMenu() {
+        if (menu == null) return;
+        boolean onLine = mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG);
+        if (onLine) {
             atvUrl.setVisibility(View.VISIBLE);
-            if (menu != null) {
-                for (int i = 0; i < menu.size(); i++) {
-                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
-                        menu.getItem(i).setVisible(true);
-                        menu.getItem(i).setEnabled(true);
-                    }
-                }
-            }
-        } else if (mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+            atvLine.setVisibility(View.VISIBLE);
+        } else {
             atvUrl.setVisibility(View.GONE);
-            if (menu != null) {
-                for (int i = 0; i < menu.size(); i++) {
-                    if (menu.getItem(i).getGroupId() == R.id.menuOnLine) {
-                        menu.getItem(i).setVisible(false);
-                        menu.getItem(i).setEnabled(false);
-                    }
-                }
+            atvLine.setVisibility(View.GONE);
+        }
+        for (int i = 0; i < menu.size(); i++) {
+            switch (menu.getItem(i).getGroupId()) {
+                case R.id.menuOnLine:
+                    menu.getItem(i).setVisible(onLine);
+                    menu.getItem(i).setEnabled(onLine);
+                    break;
+                case R.id.menuLocal:
+                    menu.getItem(i).setVisible(!onLine);
+                    menu.getItem(i).setEnabled(!onLine);
+                    break;
+                case R.id.menu_text:
+                    boolean isTxt = getBook() != null && getBook().getNoteUrl().toLowerCase().endsWith(".txt");
+                    menu.getItem(i).setVisible(isTxt);
+                    menu.getItem(i).setEnabled(isTxt);
+                    break;
             }
         }
+
     }
 
     @Override

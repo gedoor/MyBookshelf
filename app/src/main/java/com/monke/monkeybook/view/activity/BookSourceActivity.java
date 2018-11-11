@@ -29,7 +29,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
-import com.monke.monkeybook.presenter.BookSourcePresenterImpl;
+import com.monke.monkeybook.presenter.BookSourcePresenter;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
@@ -76,7 +76,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected BookSourceContract.Presenter initInjector() {
-        return new BookSourcePresenterImpl();
+        return new BookSourcePresenter();
     }
 
     @Override
@@ -86,7 +86,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onCreateActivity() {
-        setContentView(R.layout.activity_recycler_serach_vew);
+        setContentView(R.layout.activity_book_source);
+        ButterKnife.bind(this);
+        this.setSupportActionBar(toolbar);
+        setupActionBar();
+        moProgressHUD = new MoProgressHUD(this);
     }
 
     @Override
@@ -107,12 +111,15 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
-        this.setSupportActionBar(toolbar);
-        setupActionBar();
+        super.bindView();
         initSearchView();
         initRecyclerView();
-        moProgressHUD = new MoProgressHUD(this);
+    }
+
+    @Override
+    protected void firstRequest() {
+        super.firstRequest();
+        refreshBookSource();
     }
 
     private void initSearchView() {
@@ -139,7 +146,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new BookSourceAdapter(this);
         recyclerView.setAdapter(adapter);
-        adapter.resetDataS(BookSourceManager.getAllBookSource());
         MyItemTouchHelpCallback itemTouchHelpCallback = new MyItemTouchHelpCallback();
         itemTouchHelpCallback.setOnItemTouchCallbackListener(adapter.getItemTouchCallbackListener());
         itemTouchHelpCallback.setDragEnable(true);
@@ -247,7 +253,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 break;
             case R.id.action_import_book_source_onLine:
                 String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-                moProgressHUD.showInputBox("输入书源网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                moProgressHUD.showInputBox("输入书源网址",
+                        TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
+                        new String[]{getString(R.string.default_source_url)},
                         inputText -> {
                             ACache.get(this).put("sourceUrl", inputText);
                             mPresenter.importBookSource(inputText);

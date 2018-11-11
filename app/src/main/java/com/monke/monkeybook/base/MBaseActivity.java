@@ -47,7 +47,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         if (mImmersionBar != null) {
             mImmersionBar.destroy();  //在BaseActivity里销毁}
         }
-
     }
 
     @Override

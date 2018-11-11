@@ -20,13 +20,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/et_input"
             android:maxLines="5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:inputType=""
+            android:completionThreshold="0"
             tools:ignore="LabelFor" />
 
         <TextView

@@ -217,7 +217,9 @@ public class FileCategoryFragment extends BaseFileFragment {
 
             //文件内容为空,或者不以txt为开头
             return pathname.isDirectory() ||
-                    (pathname.length() != 0 && pathname.getName().endsWith(FileHelp.SUFFIX_TXT));
+                    (pathname.length() != 0
+                            && (pathname.getName().toLowerCase().endsWith(FileHelp.SUFFIX_TXT)
+                            || pathname.getName().toLowerCase().endsWith(FileHelp.SUFFIX_EPUB)));
         }
     }
 }

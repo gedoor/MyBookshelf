@@ -3,7 +3,6 @@ package com.monke.monkeybook.help;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -140,7 +139,6 @@ public class BookshelfHelp {
             setChapterIsCached(folderName, index, true);
             return true;
         } catch (IOException e) {
-            MApplication.getInstance().setDownloadPath(FileHelp.getCachePath());
             e.printStackTrace();
             return false;
         }
@@ -266,7 +264,7 @@ public class BookshelfHelp {
     public static void removeFromBookShelf(BookShelfBean bookShelfBean, boolean keepCaches) {
         DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().deleteByKey(bookShelfBean.getNoteUrl());
         DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().deleteByKey(bookShelfBean.getBookInfoBean().getNoteUrl());
-        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().deleteInTx(bookShelfBean.getChapterList());
+        delChapterList(bookShelfBean.getNoteUrl());
         if (!keepCaches) {
             String bookName = bookShelfBean.getBookInfoBean().getName();
             // 如果书架上有其他同名书籍，只删除本书源的缓存
@@ -288,6 +286,17 @@ public class BookshelfHelp {
             } catch (Exception e) {
             }
         }
+    }
+
+    public static boolean isInBookShelf(String bookUrl) {
+        if (bookUrl == null) {
+            return false;
+        }
+
+        long count = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
+                .where(BookShelfBeanDao.Properties.NoteUrl.eq(bookUrl))
+                .count();
+        return count > 0;
     }
 
     public static void removeFromBookShelf(BookShelfBean bookShelfBean) {
@@ -334,6 +343,12 @@ public class BookshelfHelp {
                 .orderAsc(ChapterListBeanDao.Properties.DurChapterIndex)
                 .build()
                 .list();
+    }
+
+    public static void delChapterList(String noteUrl) {
+        DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                .where(ChapterListBeanDao.Properties.NoteUrl.eq(noteUrl))
+                .buildDelete().executeDeleteWithoutDetachingEntities();
     }
 
     public static void saveBookmark(BookmarkBean bookmarkBean) {

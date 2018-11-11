@@ -144,7 +144,18 @@ public class ChangeSourceView {
         Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
-            e.onNext(searchBookBeans == null ? new ArrayList<>() : searchBookBeans);
+            if (searchBookBeans == null) searchBookBeans = new ArrayList<>();
+            if (searchBookBeans.size() > 0) {
+                for (SearchBookBean searchBookBean : searchBookBeans) {
+                    if (searchBookBean.getTag().equals(bookShelf.getTag())) {
+                        searchBookBean.setIsAdd(true);
+                    } else {
+                        searchBookBean.setIsAdd(false);
+                    }
+                }
+                Collections.sort(searchBookBeans, this::compareSearchBooks);
+            }
+            e.onNext(searchBookBeans);
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -152,14 +163,6 @@ public class ChangeSourceView {
                     @Override
                     public void onNext(List<SearchBookBean> searchBookBeans) {
                         if (searchBookBeans.size() > 0) {
-                            for (SearchBookBean searchBookBean : searchBookBeans) {
-                                if (searchBookBean.getTag().equals(bookShelf.getTag())) {
-                                    searchBookBean.setIsAdd(true);
-                                } else {
-                                    searchBookBean.setIsAdd(false);
-                                }
-                            }
-                            Collections.sort(searchBookBeans, (s1, s2) -> compareSearchBooks(s1, s2));
                             adapter.addAllSourceAdapter(searchBookBeans);
                             ibtStop.setVisibility(View.INVISIBLE);
                             rvSource.finishRefresh(true, true);
@@ -264,7 +267,7 @@ public class ChangeSourceView {
         long saveTime;
         BookSourceBean bookSource;
 
-        public SavedSource() {
+        SavedSource() {
             this.bookName = "";
             saveTime = 0;
         }

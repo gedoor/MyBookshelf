@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
@@ -118,10 +118,10 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
                 itemClickListener.itemClick(chapterListBean.getDurChapterIndex(), 0, tabPosition);
             });
             if (chapterListBean.getDurChapterIndex() == index) {
-                holder.flContent.setBackgroundResource(R.color.btn_bg_press);
+                holder.tvName.setBackgroundResource(R.color.btn_bg_press);
                 holder.flContent.setClickable(false);
             } else {
-                holder.flContent.setBackgroundResource(R.drawable.bg_ib_pre);
+                holder.tvName.setBackgroundResource(R.drawable.bg_ib_pre);
                 holder.flContent.setClickable(true);
             }
         } else {
@@ -168,7 +168,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     }
 
     class ThisViewHolder extends RecyclerView.ViewHolder {
-        private FrameLayout flContent;
+        private LinearLayout flContent;
         private TextView tvName;
 
         ThisViewHolder(View itemView) {

@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.BaseTabActivity;
-import com.monke.monkeybook.presenter.ImportBookPresenterImpl;
+import com.monke.monkeybook.presenter.ImportBookPresenter;
 import com.monke.monkeybook.presenter.contract.ImportBookContract;
 import com.monke.monkeybook.view.fragment.BaseFileFragment;
 import com.monke.monkeybook.view.fragment.FileCategoryFragment;
@@ -67,7 +67,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected ImportBookContract.Presenter initInjector() {
-        return new ImportBookPresenterImpl();
+        return new ImportBookPresenter();
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.ImportBookModelImpl;
+import com.monke.monkeybook.model.ImportBookModel;
 import com.monke.monkeybook.presenter.contract.ImportBookContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -18,12 +18,12 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class ImportBookPresenterImpl extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
+public class ImportBookPresenter extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
 
     @Override
     public void importBooks(List<File> books) {
         Observable.fromIterable(books)
-                .flatMap(file -> ImportBookModelImpl.getInstance().importBook(file))
+                .flatMap(file -> ImportBookModel.getInstance().importBook(file))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))

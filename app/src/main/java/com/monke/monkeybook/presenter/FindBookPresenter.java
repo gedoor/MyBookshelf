@@ -12,37 +12,40 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
 import com.monke.monkeybook.bean.FindKindGroupBean;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
+import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.Disposable;
 
-public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
+public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> implements FindBookContract.Presenter {
+    private Disposable disposable;
 
     @Override
     public void initData() {
-        Observable.create((ObservableOnSubscribe<List<RecyclerViewData>>) e -> {
+        if (disposable != null) return;
+        Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
-            List<BookSourceBean> sourceBeans = showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource();
+            List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
-                        String kindA[] = sourceBean.getRuleFindUrl().split("&&");
+                        String kindA[] = sourceBean.getRuleFindUrl().split("(&&|\n)+");
                         List<FindKindBean> children = new ArrayList<>();
                         for (String kindB : kindA) {
+                            if (kindB.trim().isEmpty()) continue;
                             String kind[] = kindB.split("::");
                             FindKindBean findKindBean = new FindKindBean();
                             findKindBean.setGroup(sourceBean.getBookSourceName());
@@ -57,24 +60,31 @@ public class FindBookPresenterImpl extends BasePresenterImpl<FindBookContract.Vi
                         group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {
-                    e.onError(new Throwable(sourceBean.getBookSourceName() + "\n发现规则有误\n" + exception.getMessage()));
+                    sourceBean.addGroup("发现规则语法错误");
+                    BookSourceManager.addBookSource(sourceBean);
                 }
             }
-            e.onNext(group);
-            e.onComplete();
+            e.onSuccess(group);
         })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<RecyclerViewData>>() {
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<List<RecyclerViewData>>() {
                     @Override
-                    public void onNext(List<RecyclerViewData> value) {
-                        //执行刷新界面
-                        mView.updateUI(value);
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                    }
+
+                    @Override
+                    public void onSuccess(List<RecyclerViewData> recyclerViewData) {
+                        mView.updateUI(recyclerViewData);
+                        disposable.dispose();
+                        disposable = null;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Toast.makeText(mView.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        disposable.dispose();
+                        disposable = null;
                     }
                 });
     }

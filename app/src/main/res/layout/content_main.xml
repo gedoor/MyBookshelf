@@ -39,7 +39,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="11dp"
                     android:gravity="center_vertical"
-                    android:text="@string/search_book_key" />
+                    android:text="@string/search_book_key"
+                    tools:ignore="RtlHardcoded" />
             </android.support.v7.widget.CardView>
         </android.support.v7.widget.Toolbar>
 
@@ -49,6 +50,8 @@
             android:layout_height="32dp"
             app:tabBackground="?attr/colorPrimary"
             app:tabGravity="fill"
+            app:tabIndicatorGravity="bottom"
+            app:tabIndicatorFullWidth="false"
             app:tabIndicatorColor="@color/darker_gray"
             app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>

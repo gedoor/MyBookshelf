@@ -39,7 +39,7 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@color/background_menu</item>
     </style>
 
@@ -77,4 +77,17 @@
     <style name="NopaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
+
+    <style name="Style.Shadow.Top" parent="android:Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/shadow_height</item>
+        <item name="android:background">@drawable/bg_shadow_top</item>
+    </style>
+
+    <style name="Style.Shadow.Bottom" parent="android:Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/shadow_height</item>
+        <item name="android:background">@drawable/bg_shadow_bottom</item>
+    </style>
+
 </resources>

@@ -50,6 +50,8 @@
 
     <color name="menu_color_default">#383838</color>
 
+    <color name="tv_chapter_color_selected">#5e5e5e</color>
+    <color name="tv_chapter_color_normal">#737373</color>
 
     <color name="tv_text_button_nor">#ffffff</color>
     <color name="tv_text_button_pre">#7891A5</color>

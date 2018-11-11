@@ -9,7 +9,7 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DocumentHelper;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class PageLoaderNet extends PageLoader {
             // 打开章节
             skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
         } else {
-            WebBookModelImpl.getInstance().getChapterList(getBook())
+            WebBookModel.getInstance().getChapterList(getBook())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookShelfBean>() {
@@ -105,7 +105,7 @@ public class PageLoaderNet extends PageLoader {
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModelImpl.getInstance().getBookContent(scheduler, getBook().getChapterList(chapterIndex), getBook().getBookInfoBean().getName()))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, getBook().getChapterList(chapterIndex), getBook().getBookInfoBean().getName()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .compose(((BaseActivity) mPageView.getActivity()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new Observer<BookContentBean>() {
@@ -234,7 +234,7 @@ public class PageLoaderNet extends PageLoader {
     @Override
     public void updateChapter() {
         mPageView.getActivity().toast("目录更新中");
-        WebBookModelImpl.getInstance().getChapterList(getBook())
+        WebBookModel.getInstance().getChapterList(getBook())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BookShelfBean>() {

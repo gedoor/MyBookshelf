@@ -1,27 +1,25 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.popupwindow;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.view.activity.ReadBookActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MoreSettingPop extends PopupWindow {
+public class MoreSettingPop extends FrameLayout {
 
     @BindView(R.id.sb_click_all_next)
     Switch sbClickAllNext;
@@ -72,31 +70,44 @@ public class MoreSettingPop extends PopupWindow {
     @BindView(R.id.ll_click_all_next)
     LinearLayout llClickAllNext;
 
-    private ReadBookActivity activity;
+    private Context context;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private OnChangeProListener changeProListener;
 
-    @SuppressLint("InflateParams")
-    public MoreSettingPop(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
-        super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.activity = readBookActivity;
-        this.changeProListener = changeProListener;
+    public MoreSettingPop(Context context) {
+        super(context);
+        this.context = context;
+        init(context);
+    }
 
-        View view = LayoutInflater.from(activity).inflate(R.layout.pop_more_setting, null);
-        ImmersionBar.navigationBarPadding(activity, view);
-        this.setContentView(view);
+    public MoreSettingPop(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
+        init(context);
+    }
+
+    public MoreSettingPop(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.context = context;
+        init(context);
+    }
+
+    private void init(Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_more_setting, null);
+        addView(view);
         ButterKnife.bind(this, view);
+        view.setOnClickListener(null);
         initData();
         bindEvent();
+    }
 
-        setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.shape_pop_checkaddshelf_bg));
-        setFocusable(true);
-        setTouchable(true);
-        setClippingEnabled(false);
-        setAnimationStyle(R.style.anim_pop_windowlight);
+    public void setListener(@NonNull OnChangeProListener changeProListener) {
+        this.changeProListener = changeProListener;
+
     }
 
     private void bindEvent() {
+        this.setOnClickListener(view -> this.setVisibility(GONE));
         sbHideStatusBar.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (buttonView.isPressed()) {
                 readBookControl.setHideStatusBar(isChecked);
@@ -162,9 +173,9 @@ public class MoreSettingPop extends PopupWindow {
             }
         });
         llScreenTimeOut.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setTitle(activity.getString(R.string.keep_light))
-                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_time_out), readBookControl.getScreenTimeOut(), (dialogInterface, i) -> {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.keep_light))
+                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.screen_time_out), readBookControl.getScreenTimeOut(), (dialogInterface, i) -> {
                         readBookControl.setScreenTimeOut(i);
                         upScreenTimeOut(i);
                         changeProListener.keepScreenOnChange(i);
@@ -174,9 +185,9 @@ public class MoreSettingPop extends PopupWindow {
             dialog.show();
         });
         llJFConvert.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setTitle(activity.getString(R.string.jf_convert))
-                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.jf_convert))
+                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.convert_s), readBookControl.getTextConvert(), (dialogInterface, i) -> {
                         readBookControl.setTextConvert(i);
                         upFConvert(i);
                         dialogInterface.dismiss();
@@ -186,9 +197,9 @@ public class MoreSettingPop extends PopupWindow {
             dialog.show();
         });
         llNavigationBarColor.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setTitle(activity.getString(R.string.re_navigation_bar_color))
-                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.NavbarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.re_navigation_bar_color))
+                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.NavbarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
                         readBookControl.setNavbarColor(i);
                         upNavbarColor(i);
                         dialogInterface.dismiss();
@@ -198,9 +209,9 @@ public class MoreSettingPop extends PopupWindow {
             dialog.show();
         });
         llScreenDirection.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(activity)
-                    .setTitle(activity.getString(R.string.screen_direction))
-                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.screen_direction_list_title), readBookControl.getScreenDirection(), (dialogInterface, i) -> {
+            AlertDialog dialog = new AlertDialog.Builder(context)
+                    .setTitle(context.getString(R.string.screen_direction))
+                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.screen_direction_list_title), readBookControl.getScreenDirection(), (dialogInterface, i) -> {
                         readBookControl.setScreenDirection(i);
                         upScreenDirection(i);
                         dialogInterface.dismiss();
@@ -253,19 +264,19 @@ public class MoreSettingPop extends PopupWindow {
     }
 
     private void upScreenTimeOut(int screenTimeOut) {
-        tvScreenTimeOut.setText(activity.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
+        tvScreenTimeOut.setText(context.getResources().getStringArray(R.array.screen_time_out)[screenTimeOut]);
     }
 
     private void upFConvert(int fConvert) {
-        tvJFConvert.setText(activity.getResources().getStringArray(R.array.convert_s)[fConvert]);
+        tvJFConvert.setText(context.getResources().getStringArray(R.array.convert_s)[fConvert]);
     }
 
     private void upNavbarColor(int nColor) {
-        reNavbarcolor_val.setText(activity.getResources().getStringArray(R.array.NavbarColors)[nColor]);
+        reNavbarcolor_val.setText(context.getResources().getStringArray(R.array.NavbarColors)[nColor]);
     }
 
     private void upScreenDirection(int screenDirection) {
-        String[] screenDirectionListTitle = activity.getResources().getStringArray(R.array.screen_direction_list_title);
+        String[] screenDirectionListTitle = context.getResources().getStringArray(R.array.screen_direction_list_title);
         if (screenDirection >= screenDirectionListTitle.length) {
             tvScreenDirection.setText(screenDirectionListTitle[0]);
         } else {

@@ -2,7 +2,6 @@ package com.monke.monkeybook.widget.page;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
@@ -12,8 +11,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.utils.ScreenUtils;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.widget.animation.CoverPageAnim;
@@ -24,6 +25,8 @@ import com.monke.monkeybook.widget.animation.SimulationPageAnim;
 import com.monke.monkeybook.widget.animation.SlidePageAnim;
 
 import java.util.Objects;
+
+import static com.monke.monkeybook.utils.ScreenUtils.getDisplayMetrics;
 
 
 /**
@@ -59,8 +62,8 @@ public class PageView extends View {
     // 动画监听类
     private PageAnimation.OnPageChangeListener mPageAnimListener = new PageAnimation.OnPageChangeListener() {
         @Override
-        public void changePage(PageAnimation.Direction direction) {
-            mPageLoader.pagingEnd(direction);
+        public void resetScroll() {
+            mPageLoader.resetPageOffset();
         }
 
         @Override
@@ -74,13 +77,13 @@ public class PageView extends View {
         }
 
         @Override
-        public void drawBackground(int pos) {
-            PageView.this.drawBackground(pos);
+        public void drawContent(Canvas canvas, float offset) {
+            PageView.this.drawContent(canvas, offset);
         }
 
         @Override
-        public void drawContent(int pos) {
-            PageView.this.drawContent(pos);
+        public void drawBackground(Canvas canvas) {
+            PageView.this.drawBackground(canvas);
         }
 
     };
@@ -211,10 +214,18 @@ public class PageView extends View {
     public void drawPage(int pageOnCur) {
         if (!isPrepare) return;
         if (mPageLoader != null) {
-            mPageLoader.drawPage(getBgBitmap(pageOnCur), getContentBitmap(pageOnCur), pageOnCur);
+            Bitmap content = (mPageAnim instanceof ScrollPageAnim) ? getBgBitmap(pageOnCur) : getContentBitmap(pageOnCur);
+            mPageLoader.drawPage(getBgBitmap(pageOnCur), content, pageOnCur);
             if (mPageAnim instanceof SimulationPageAnim) {
                 ((SimulationPageAnim) mPageAnim).onPageDrawn(pageOnCur);
             }
+        }
+    }
+
+    public void drawBackground(Canvas canvas) {
+        if (!isPrepare) return;
+        if (mPageLoader != null) {
+            mPageLoader.drawBackground(canvas);
         }
     }
 
@@ -222,6 +233,13 @@ public class PageView extends View {
         if (!isPrepare) return;
         if (mPageLoader != null) {
             mPageLoader.drawPage(getBgBitmap(pageOnCur), null, pageOnCur);
+        }
+    }
+
+    public void drawContent(Canvas canvas, float offset) {
+        if (!isPrepare) return;
+        if (mPageLoader != null) {
+            mPageLoader.drawContent(canvas, offset);
         }
     }
 
@@ -234,6 +252,8 @@ public class PageView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (mPageAnim instanceof ScrollPageAnim)
+            super.onDraw(canvas);
         //绘制动画
         if (mPageAnim != null) {
             mPageAnim.draw(canvas);
@@ -280,7 +300,7 @@ public class PageView extends View {
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(20) || event.getRawY() > Resources.getSystem().getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(20)) {
+                if (event.getEdgeFlags() != 0 || event.getRawY() < ScreenUtils.dpToPx(20) || event.getRawY() > getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(20)) {
                     actionFromEdge = true;
                     return true;
                 }
@@ -321,6 +341,10 @@ public class PageView extends View {
                     if (!readBookControl.getCanClickTurn()) {
                         return true;
                     }
+
+                    if (mPageAnim instanceof ScrollPageAnim && SharedPreferencesUtil.getBoolean("disableScrollClickTurn", false)) {
+                        return true;
+                    }
                 }
                 mPageAnim.onTouchEvent(event);
                 break;
@@ -335,7 +359,7 @@ public class PageView extends View {
         if (mPageLoader.hasPrev()) {
             return true;
         } else {
-            activity.showSnackBar(this, "没有上一页");
+            showSnackBar("没有上一页");
             return false;
         }
     }
@@ -347,7 +371,7 @@ public class PageView extends View {
         if (mPageLoader.hasNext(pageOnCur)) {
             return true;
         } else {
-            activity.showSnackBar(this, "没有下一页");
+            showSnackBar("没有下一页");
             return false;
         }
     }
@@ -373,9 +397,6 @@ public class PageView extends View {
      * 重置滚动位移
      */
     public void resetScroll() {
-        if (mPageAnim instanceof ScrollPageAnim) {
-            ((ScrollPageAnim) mPageAnim).resetBitmap();
-        }
     }
 
     @Override
@@ -401,10 +422,15 @@ public class PageView extends View {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-        if (Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
-            mPageLoader = new PageLoaderText(this);
-        } else {
+        if (!Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
             mPageLoader = new PageLoaderNet(this);
+        } else {
+            String fileSuffix = FileHelp.getFileSuffix(activity.getBook().getNoteUrl());
+            if (fileSuffix.equalsIgnoreCase(FileHelp.SUFFIX_EPUB)) {
+                mPageLoader = new PageLoaderEpub(this);
+            } else {
+                mPageLoader = new PageLoaderText(this);
+            }
         }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {
@@ -413,6 +439,10 @@ public class PageView extends View {
         }
 
         return mPageLoader;
+    }
+
+    public void showSnackBar(String msg) {
+        activity.showSnackBar(this, msg);
     }
 
     public interface TouchListener {

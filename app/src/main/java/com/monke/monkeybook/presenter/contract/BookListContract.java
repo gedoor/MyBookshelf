@@ -30,8 +30,6 @@ public interface BookListContract {
 
         SharedPreferences getPreferences();
 
-        void recreate();
-
         /**
          * 更新Group
          */

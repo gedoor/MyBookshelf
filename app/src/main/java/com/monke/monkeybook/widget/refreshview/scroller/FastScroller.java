@@ -495,7 +495,7 @@ public class FastScroller extends LinearLayout {
         @ColorInt int textColor = Color.WHITE;
         boolean fadeScrollbar = true;
         boolean showBubble = false;
-        boolean showTrack = true;
+        boolean showTrack = false;
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.FastScroller, 0, 0);
             if (typedArray != null) {

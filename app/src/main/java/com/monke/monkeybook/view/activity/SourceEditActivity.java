@@ -27,7 +27,7 @@ import com.monke.monkeybook.BuildConfig;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.presenter.SourceEditPresenterImpl;
+import com.monke.monkeybook.presenter.SourceEditPresenter;
 import com.monke.monkeybook.presenter.contract.SourceEditContract;
 import com.monke.monkeybook.utils.SoftInputUtil;
 
@@ -159,7 +159,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
     @Override
     protected SourceEditContract.Presenter initInjector() {
-        return new SourceEditPresenterImpl();
+        return new SourceEditPresenter();
     }
 
     @Override

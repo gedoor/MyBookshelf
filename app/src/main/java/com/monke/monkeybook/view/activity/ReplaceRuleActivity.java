@@ -26,7 +26,7 @@ import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.ReplaceRuleManager;
-import com.monke.monkeybook.presenter.ReplaceRulePresenterImpl;
+import com.monke.monkeybook.presenter.ReplaceRulePresenter;
 import com.monke.monkeybook.presenter.contract.ReplaceRuleContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.ReplaceRuleAdapter;
@@ -70,7 +70,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     protected ReplaceRuleContract.Presenter initInjector() {
-        return new ReplaceRulePresenterImpl();
+        return new ReplaceRulePresenter();
     }
 
     @Override
@@ -191,7 +191,9 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
                 break;
             case R.id.action_import_onLine:
                 String cacheUrl = ACache.get(this).getAsString("replaceUrl");
-                moProgressHUD.showInputBox("输入替换规则网址", TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_replace_url) : cacheUrl,
+                moProgressHUD.showInputBox("输入替换规则网址",
+                        TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_replace_url) : cacheUrl,
+                        new String[]{getString(R.string.default_replace_url)},
                         inputText -> {
                             ACache.get(this).put("replaceUrl", inputText);
                             mPresenter.importDataS(inputText);

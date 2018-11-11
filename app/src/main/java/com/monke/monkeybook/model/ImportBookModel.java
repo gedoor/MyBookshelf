@@ -9,7 +9,6 @@ import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.impl.IImportBookModel;
 
 import java.io.File;
 
@@ -17,13 +16,12 @@ import io.reactivex.Observable;
 
 import static com.monke.monkeybook.utils.StringUtils.getString;
 
-public class ImportBookModelImpl extends BaseModelImpl implements IImportBookModel {
+public class ImportBookModel extends BaseModelImpl {
 
-    public static ImportBookModelImpl getInstance() {
-        return new ImportBookModelImpl();
+    public static ImportBookModel getInstance() {
+        return new ImportBookModel();
     }
 
-    @Override
     public Observable<LocBookShelfBean> importBook(final File file) {
         return Observable.create(e -> {
             //判断文件是否存在
@@ -38,18 +36,28 @@ public class ImportBookModelImpl extends BaseModelImpl implements IImportBookMod
                 bookShelfBean.setFinalDate(System.currentTimeMillis());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);
+                bookShelfBean.setGroup(3);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
                 bookShelfBean.setAllowUpdate(false);
 
                 BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-                String fileName = file.getName().replace(".txt", "").replace(".TXT", "");
+                String fileName = file.getName();
+                int lastDotIndex = file.getName().lastIndexOf(".");
+                if (lastDotIndex > 0)
+                    fileName = fileName.substring(0, lastDotIndex);
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
                     bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
-                    bookInfoBean.setName(fileName.substring(0, authorIndex));
+                    fileName = fileName.substring(0, authorIndex).trim();
                 } else {
                     bookInfoBean.setAuthor("");
+                }
+                int smhStart = fileName.indexOf("《");
+                int smhEnd = fileName.indexOf("》");
+                if (smhStart != -1 && smhEnd != -1) {
+                    bookInfoBean.setName(fileName.substring(smhStart + 1, smhEnd));
+                } else {
                     bookInfoBean.setName(fileName);
                 }
                 bookInfoBean.setFinalRefreshData(file.lastModified());

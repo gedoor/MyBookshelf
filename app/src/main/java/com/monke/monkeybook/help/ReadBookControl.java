@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.monke.monkeybook.utils.ScreenUtils.getDisplayMetrics;
 import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_WIDTH;
 
 public class ReadBookControl {
@@ -181,7 +182,7 @@ public class ReadBookControl {
                 bgIsColor = false;
                 bgPath = getBgPath(textDrawableIndex);
                 bgBitmap = BitmapFactory.decodeFile(bgPath);
-                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, 600);
+                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, getDisplayMetrics().widthPixels);
                 return;
             } else if (getBgCustom(textDrawableIndex) == 1) {
                 bgIsColor = true;

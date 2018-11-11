@@ -177,15 +177,16 @@ public abstract class PageAnimation {
     }
 
     public interface OnPageChangeListener {
-        void changePage(Direction direction);
+
+        void resetScroll();
 
         boolean hasPrev();
 
         boolean hasNext(int pageOnCur);
 
-        void drawBackground(int pos);
+        void drawContent(Canvas canvas, float offset);
 
-        void drawContent(int pos);
+        void drawBackground(Canvas canvas);
     }
 
 }

@@ -92,7 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_margin="6dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_update"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">阅读</string>
+    <string name="app_name">阅读.fork</string>
     <string name="last_read">最后阅读</string>
     <string name="read_summary">让阅读成为一种习惯。</string>
     <string name="update_log">更新日志</string>
@@ -265,5 +265,7 @@
     <string name="pt_show_all_find">显示所有发现</string>
     <string name="ps_show_all_find">关闭则只显示勾选源的发现</string>
     <string name="update_chapter">更新目录</string>
+    <string name="txt_chapter_regex">目录正则</string>
+    <string name="set_charset">设置编码</string>
 
 </resources>

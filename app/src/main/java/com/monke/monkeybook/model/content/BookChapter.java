@@ -51,7 +51,7 @@ public class BookChapter {
             List<ChapterListBean> chapterList = webChapterBean.getData();
 
             while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
-                Call<String> call = DefaultModelImpl.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
                         .create(IHttpGetApi.class).getWebContentCall(webChapterBean.getNextUrl(), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
                 String response = "";
                 try {

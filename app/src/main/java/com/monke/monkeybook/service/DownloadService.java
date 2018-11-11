@@ -28,7 +28,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.DownloadChapterBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.view.activity.DownloadActivity;
 
 import java.util.ArrayList;
@@ -237,7 +237,7 @@ public class DownloadService extends Service {
                 e.onComplete();
             }).flatMap(result -> {
                 if (result) {
-                    return WebBookModelImpl.getInstance().getBookContent(scheduler, data, data.getBookName());
+                    return WebBookModel.getInstance().getBookContent(scheduler, data, data.getBookName());
                 } else {
                     return Observable.create(e -> {
                         e.onNext(new BookContentBean());

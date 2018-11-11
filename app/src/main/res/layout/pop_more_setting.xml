@@ -2,13 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background_menu"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.8dp"
-        android:background="@color/btn_bg_press" />
+    <View style="@style/Style.Shadow.Bottom" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -185,13 +181,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llNavigationBarColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/background_menu"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/llNavigationBarColor"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@color/background_menu"

@@ -77,6 +77,7 @@ public class FileHolder extends ViewHolderImpl<File> {
         mTvSubCount.setVisibility(View.GONE);
 
         mTvName.setText(file.getName());
+        mTvTag.setText(file.getName().substring(file.getName().lastIndexOf(".") + 1).toUpperCase());
         mTvSize.setText(FileHelp.getFileSize(file.length()));
         mTvDate.setText(StringUtils.dateConvert(file.lastModified(), Constant.FORMAT_FILE_DATE));
     }

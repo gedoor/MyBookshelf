@@ -1,8 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -12,7 +10,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -24,7 +21,7 @@ import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.DataRestore;
 import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.MainContract;
 
 import java.net.URL;
@@ -34,7 +31,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
 
     @Override
     public void backupData() {
@@ -92,6 +89,7 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
                 bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
                 bookShelfBean.setNoteUrl(url.toString());
                 bookShelfBean.setDurChapter(0);
+                bookShelfBean.setGroup(mView.getGroup() % 3);
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setFinalDate(System.currentTimeMillis());
                 e.onNext(bookShelfBean);
@@ -139,9 +137,9 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
     }
 
     private void getBook(BookShelfBean bookShelfBean) {
-        WebBookModelImpl.getInstance()
+        WebBookModel.getInstance()
                 .getBookInfo(bookShelfBean)
-                .flatMap(bookShelfBean1 -> WebBookModelImpl.getInstance().getChapterList(bookShelfBean1))
+                .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .flatMap(this::saveBookToShelfO)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -198,16 +196,4 @@ public class MainPresenterImpl extends BasePresenterImpl<MainContract.View> impl
         mView.recreate();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RESET_VOLUME)})
-    public void resetVolume(int stream) {
-        if (!MApplication.getInstance().getConfigPreferences().getBoolean("fadeTTS", false))
-            return;
-        AudioManager audioManager = ((AudioManager) mView.getContext().getSystemService(Context.AUDIO_SERVICE));
-        if (!audioManager.isMusicActive())
-            audioManager.setStreamVolume(stream, MApplication.VOLUME, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-    }
-
-    public void resetVolume() {
-        resetVolume(AudioManager.STREAM_MUSIC);
-    }
 }

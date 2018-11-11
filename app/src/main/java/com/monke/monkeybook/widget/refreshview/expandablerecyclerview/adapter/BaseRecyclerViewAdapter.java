@@ -133,7 +133,7 @@ public abstract class BaseRecyclerViewAdapter<T, S, VH extends BaseExpandAbleVie
                 if (null != itemClickListener) {
                     itemClickListener.onGroupItemClick(position, gp, holder.groupView);
                 }
-                if (item instanceof GroupItem && ((GroupItem) item).isExpand()) {
+                if (((GroupItem) item).isExpand()) {
                     collapseGroup(position);
                 } else {
                     expandGroup(position);

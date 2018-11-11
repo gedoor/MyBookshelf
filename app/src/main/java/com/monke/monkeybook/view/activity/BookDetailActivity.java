@@ -31,8 +31,8 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.presenter.BookDetailPresenterImpl;
-import com.monke.monkeybook.presenter.ReadBookPresenterImpl;
+import com.monke.monkeybook.presenter.BookDetailPresenter;
+import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
-import static com.monke.monkeybook.presenter.BookDetailPresenterImpl.FROM_BOOKSHELF;
+import static com.monke.monkeybook.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
@@ -94,7 +94,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected BookDetailContract.Presenter initInjector() {
-        return new BookDetailPresenterImpl();
+        return new BookDetailPresenter();
     }
 
     @Override
@@ -164,6 +164,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
                     //放入书架
+                    bookShelfBean.setGroup(preferences.getInt("bookshelfGroup", 0) % 3);
                     mPresenter.addToBookShelf();
                 });
             }
@@ -237,7 +238,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        if (mPresenter.getOpenFrom() == BookDetailPresenterImpl.FROM_SEARCH) {
+        if (mPresenter.getOpenFrom() == BookDetailPresenter.FROM_SEARCH) {
             //网络请求
             mPresenter.getBookShelfInfo();
         }
@@ -255,7 +256,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     }
 
     private void initView() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             ((RadioButton) rgBookGroup.getChildAt(i)).setText(BOOK_GROUPS[i].substring(0, 2));
         }
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
@@ -336,7 +337,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvRead.setOnClickListener(v -> {
             //进入阅读
             Intent intent = new Intent(BookDetailActivity.this, ReadBookActivity.class);
-            intent.putExtra("openFrom", ReadBookPresenterImpl.OPEN_FROM_APP);
+            intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
             String key = String.valueOf(System.currentTimeMillis());
             intent.putExtra("data_key", key);
             try {

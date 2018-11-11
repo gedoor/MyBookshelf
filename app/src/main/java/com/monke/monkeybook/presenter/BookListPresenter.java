@@ -18,7 +18,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.WebBookModelImpl;
+import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -33,7 +33,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
+public class BookListPresenter extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
     private int threadsNum = 6;
     private int refreshIndex;
     private List<BookShelfBean> bookShelfBeans;
@@ -125,7 +125,7 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
                 int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
-                WebBookModelImpl.getInstance().getChapterList(bookShelfBean)
+                WebBookModel.getInstance().getChapterList(bookShelfBean)
                         .flatMap(this::saveBookToShelfO)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -209,11 +209,6 @@ public class BookListPresenterImpl extends BasePresenterImpl<BookListContract.Vi
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.REFRESH_BOOK_LIST)})
     public void reFlashBookList(Boolean needRefresh) {
         queryBookShelf(needRefresh, group);
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
-    public void updatePx(Boolean px) {
-        mView.recreate();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.DOWNLOAD_ALL)})

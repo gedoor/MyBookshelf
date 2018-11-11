@@ -1,5 +1,6 @@
 package com.monke.monkeybook.presenter;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.provider.DocumentFile;
@@ -36,33 +37,27 @@ import static android.text.TextUtils.isEmpty;
  * 书源管理
  */
 
-public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
+public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.View> implements BookSourceContract.Presenter {
     private BookSourceBean delBookSource;
     private Snackbar progressSnackBar;
 
     @Override
     public void saveData(BookSourceBean bookSourceBean) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        AsyncTask.execute(() -> {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
             BookSourceManager.refreshBookSource();
-            e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        });
     }
 
     @Override
     public void saveData(List<BookSourceBean> bookSourceBeans) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+        AsyncTask.execute(() -> {
             for (int i = 1; i <= bookSourceBeans.size(); i++) {
                 bookSourceBeans.get(i - 1).setSerialNumber(i);
             }
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(bookSourceBeans);
             BookSourceManager.refreshBookSource();
-            e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        });
     }
 
     @Override
@@ -151,7 +146,13 @@ public class BookSourcePresenterImpl extends BasePresenterImpl<BookSourceContrac
     @Override
     public void importBookSourceLocal(String path) {
         String json;
-        DocumentFile file = DocumentFile.fromFile(new File(path));
+        DocumentFile file;
+        try {
+            file = DocumentFile.fromFile(new File(path));
+        } catch (Exception e) {
+            mView.toast(path + "无法打开！");
+            return;
+        }
         json = DocumentHelper.readString(file);
         if (!isEmpty(json)) {
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
