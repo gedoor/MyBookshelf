@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -18,6 +22,7 @@ import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.UpLastChapterModel;
@@ -147,6 +152,7 @@ public class ChangeSourceView {
         atvTitle.setText(String.format("%s (%s)", bookName, bookAuthor));
         rvSource.startRefresh();
         getSearchBookInDb(bookShelf);
+        RxBus.get().register(this);
     }
 
     private void stopChangeSource() {
@@ -157,6 +163,7 @@ public class ChangeSourceView {
     }
 
     void onDestroy() {
+        RxBus.get().unregister(this);
         compositeDisposable.dispose();
         if (searchBookModel != null) {
             searchBookModel.onDestroy();
@@ -349,6 +356,21 @@ public class ChangeSourceView {
 
         public void setBookSource(BookSourceBean bookSource) {
             this.bookSource = bookSource;
+        }
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UP_SEARCH_BOOK)})
+    public void upSearchBook(SearchBookBean searchBookBean) {
+        if (!Objects.equals(book.getBookInfoBean().getName(), searchBookBean.getName())
+                || !Objects.equals(book.getBookInfoBean().getAuthor(), searchBookBean.getAuthor())) {
+            return;
+        }
+        for (int i = 0; i < adapter.getSearchBookBeans().size(); i++) {
+            if (adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())
+                    && !adapter.getSearchBookBeans().get(i).getLastChapter().equals(searchBookBean.getLastChapter())) {
+                adapter.getSearchBookBeans().get(i).setLastChapter(searchBookBean.getLastChapter());
+                adapter.notifyItemChanged(i);
+            }
         }
     }
 }
