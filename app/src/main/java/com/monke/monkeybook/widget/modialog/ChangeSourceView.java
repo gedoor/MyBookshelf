@@ -14,6 +14,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -209,7 +210,14 @@ public class ChangeSourceView {
         rvSource.startRefresh();
         Single.create((SingleOnSubscribe<Boolean>) e -> {
             List<SearchBookBean> searchBookList = new ArrayList<>(adapter.getSearchBookBeans());
-            List<BookSourceBean> bookSourceList = new ArrayList<>(BookSourceManager.getAllBookSource());
+            List<BookSourceBean> bookSourceList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
+                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                    .list();
+            if (bookSourceList == null || bookSourceList.size() == 0) {
+                e.onSuccess(false);
+                return;
+            }
             for (SearchBookBean searchBookBean : new ArrayList<>(adapter.getSearchBookBeans())) {
                 boolean hasSource = false;
                 for (BookSourceBean bookSourceBean : new ArrayList<>(BookSourceManager.getAllBookSource())) {
