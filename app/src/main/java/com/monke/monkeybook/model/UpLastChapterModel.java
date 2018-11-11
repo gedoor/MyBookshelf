@@ -4,12 +4,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 
+import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.source.My716;
 
 import java.util.ArrayList;
@@ -121,6 +123,7 @@ public class UpLastChapterModel {
 
                         @Override
                         public void onNext(SearchBookBean searchBookBean) {
+                            RxBus.get().post(RxBusTag.UP_SEARCH_BOOK, searchBookBean);
                             doUpdate();
                         }
 
@@ -147,6 +150,7 @@ public class UpLastChapterModel {
     public void onDestroy() {
         stopUp();
         executorService.shutdownNow();
+        model = null;
     }
 
     private Observable<SearchBookBean> findSearchBookBean(BookShelfBean bookShelf) {
