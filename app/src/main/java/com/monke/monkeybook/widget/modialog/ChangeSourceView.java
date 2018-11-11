@@ -86,7 +86,6 @@ public class ChangeSourceView {
             @Override
             public void refreshSearchBook() {
                 ibtStop.setVisibility(View.VISIBLE);
-                adapter.reSetSourceAdapter();
             }
 
             @Override
