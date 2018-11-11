@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
@@ -77,6 +78,31 @@ public class ChangeSourceView {
         adapter.setOnItemClickListener((view, index) -> {
             moProgressHUD.dismiss();
             onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
+        });
+        adapter.setOnItemLongClickListener((view, pos) -> {
+            PopupMenu popupMenu = new PopupMenu(context, view);
+            popupMenu.getMenu().add(0, 0, 0, "禁用书源");
+            popupMenu.getMenu().add(0, 0, 0, "删除书源");
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                final String url = adapter.getSearchBookBeans().get(pos).getTag();
+                BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
+                adapter.getSearchBookBeans().remove(pos);
+                adapter.notifyItemRemoved(pos);
+                if (sourceBean != null) {
+                    switch (menuItem.getOrder()) {
+                        case 1:
+                            sourceBean.setEnable(false);
+                            BookSourceManager.addBookSource(sourceBean);
+                            break;
+                        case 2:
+                            BookSourceManager.removeBookSource(sourceBean);
+                            break;
+                    }
+                }
+                return true;
+            });
+            popupMenu.show();
+            return true;
         });
         View viewRefreshError = LayoutInflater.from(context).inflate(R.layout.view_searchbook_refresh_error, null);
         viewRefreshError.setBackgroundResource(R.color.background_card);

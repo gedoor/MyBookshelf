@@ -26,8 +26,8 @@ import static android.text.TextUtils.isEmpty;
 
 public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     private List<SearchBookBean> searchBookBeans;
-    private BaseListAdapter.OnItemClickListener itemClickListener;
-    private BaseListAdapter.OnItemLongClickListener itemLongClickListener;
+    private BaseListAdapter.OnItemClickListener onItemClickListener;
+    private BaseListAdapter.OnItemLongClickListener onItemLongClickListener;
     private Context mContext;
 
     public ChangeSourceAdapter(Context context, Boolean needLoadMore) {
@@ -52,7 +52,11 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     }
 
     public void setOnItemClickListener(BaseListAdapter.OnItemClickListener listener) {
-        this.itemClickListener = listener;
+        this.onItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(BaseListAdapter.OnItemLongClickListener itemLongClickListener) {
+        this.onItemLongClickListener = itemLongClickListener;
     }
 
     public List<SearchBookBean> getSearchBookBeans() {
@@ -80,13 +84,13 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.ivChecked.setVisibility(View.INVISIBLE);
         }
         myViewHolder.llContent.setOnClickListener(view -> {
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(view, position);
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(view, position);
             }
         });
         myViewHolder.llContent.setOnLongClickListener(view -> {
-            if (itemLongClickListener != null) {
-                itemLongClickListener.onItemLongClick(view, position);
+            if (onItemLongClickListener != null) {
+                return onItemLongClickListener.onItemLongClick(view, position);
             }
             return true;
         });
