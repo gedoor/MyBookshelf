@@ -68,6 +68,8 @@ public class ChangeSourceView {
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
     private Disposable loadDBDisposable;
+    private boolean searchIsFinish;
+
 
     private ChangeSourceView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
@@ -98,7 +100,10 @@ public class ChangeSourceView {
             @Override
             public void refreshFinish(Boolean value) {
                 ibtStop.setVisibility(View.INVISIBLE);
-                rvSource.finishRefresh(true, true);
+                searchIsFinish = true;
+                if (upLastChapterIndex > needUpLastChapter.size() - 1) {
+                    rvSource.finishRefresh(true, true);
+                }
             }
 
             @Override
@@ -228,6 +233,7 @@ public class ChangeSourceView {
                 }
             }
             searchBookModel.searchReNew();
+            searchIsFinish = false;
             searchBookModel.initSearchEngineS(bookSourceList);
             long startThisSearchTime = System.currentTimeMillis();
             searchBookModel.setSearchTime(startThisSearchTime);
@@ -255,10 +261,13 @@ public class ChangeSourceView {
     }
 
     private synchronized void upLastChapter() {
-        final int index = upLastChapterIndex + 1;
-        if (index > needUpLastChapter.size() - 1) return;
-        UpLastChapterModel upLastChapterModel = UpLastChapterModel.getInstance();
-        upLastChapterModel.toBookshelf(needUpLastChapter.get(index))
+        upLastChapterIndex = upLastChapterIndex + 1;
+        if (upLastChapterIndex > needUpLastChapter.size() - 1) {
+            if (searchIsFinish) rvSource.finishRefresh(true, false);
+            return;
+        }
+        UpLastChapterModel upLastChapterModel = new UpLastChapterModel();
+        upLastChapterModel.toBookshelf(needUpLastChapter.get(upLastChapterIndex))
                 .flatMap(upLastChapterModel::getChapterList)
                 .flatMap(upLastChapterModel::saveSearchBookBean)
                 .compose(RxUtils::toSimpleSingle)

@@ -18,8 +18,11 @@ import com.monke.monkeybook.model.source.My716;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -32,6 +35,8 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookModel {
     private Context context;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private ExecutorService executorService;
+    private Scheduler scheduler;
     private long startThisSearchTime;
     private List<SearchEngine> searchEngineS = new ArrayList<>();
     private int threadsNum;
@@ -48,6 +53,8 @@ public class SearchBookModel {
         this.useMy716 = useMy716;
         SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
         threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
+        executorService = Executors.newFixedThreadPool(threadsNum);
+        scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
         initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
@@ -132,8 +139,8 @@ public class SearchBookModel {
             if (searchEngine.getHasMore()) {
                 WebBookModel.getInstance()
                         .searchOtherBook(content, page, searchEngine.getTag())
-                        .observeOn(Schedulers.io())
-                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(scheduler)
+                        .subscribeOn(scheduler)
                         .subscribe(new Observer<List<SearchBookBean>>() {
                             @Override
                             public void onSubscribe(Disposable d) {
