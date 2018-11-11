@@ -1,6 +1,7 @@
 package com.monke.monkeybook.model;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.monke.monkeybook.bean.BookShelfBean;
@@ -33,7 +34,8 @@ public class UpLastChapterModel {
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private List<SearchBookBean> searchBookBeanList;
 
     public static UpLastChapterModel getInstance() {
         if (model == null) {
@@ -45,11 +47,11 @@ public class UpLastChapterModel {
     private UpLastChapterModel() {
         executorService = Executors.newFixedThreadPool(5);
         scheduler = Schedulers.from(executorService);
+        compositeDisposable = new CompositeDisposable();
     }
 
     public void startUpdate() {
-        if (compositeDisposable != null) return;
-        compositeDisposable = new CompositeDisposable();
+        if (compositeDisposable.size() > 0) return;
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
             for (BookShelfBean bookShelfBean : bookShelfBeans) {
@@ -88,7 +90,11 @@ public class UpLastChapterModel {
                 });
     }
 
-    public synchronized void startUpdate(SearchBookBean searchBookBean) {
+    public synchronized void startUpdate(List<SearchBookBean> beanList) {
+        this.searchBookBeanList = beanList;
+    }
+
+    private synchronized void startUpdate(SearchBookBean searchBookBean) {
         toBookshelf(searchBookBean)
                 .flatMap(this::getChapterList)
                 .flatMap(this::saveSearchBookBean)
@@ -123,11 +129,11 @@ public class UpLastChapterModel {
                 });
     }
 
-    public void stopUp() {
+    private void stopUp() {
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
-        compositeDisposable = null;
+        compositeDisposable = new CompositeDisposable();
     }
 
     public void onDestroy() {

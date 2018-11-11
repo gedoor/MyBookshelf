@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -31,8 +30,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
@@ -59,16 +56,11 @@ public class ChangeSourceView {
     private ChangeSourceAdapter adapter;
     private SearchBookModel searchBookModel;
     private BookShelfBean book;
-    private List<SearchBookBean> needUpLastChapter;
-    private int upLastChapterIndex;
     private String bookTag;
     private String bookName;
     private String bookAuthor;
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
-    private Disposable loadDBDisposable;
-    private boolean searchIsFinish;
-
 
     private ChangeSourceView(MoProgressView moProgressView) {
         this.moProgressView = moProgressView;
@@ -99,10 +91,7 @@ public class ChangeSourceView {
             @Override
             public void refreshFinish(Boolean value) {
                 ibtStop.setVisibility(View.INVISIBLE);
-                searchIsFinish = true;
-                if (upLastChapterIndex > needUpLastChapter.size() - 1) {
-                    rvSource.finishRefresh(true, true);
-                }
+                rvSource.finishRefresh(true, true);
             }
 
             @Override
@@ -175,7 +164,6 @@ public class ChangeSourceView {
     }
 
     private void getSearchBookInDb(BookShelfBean bookShelf) {
-        if (loadDBDisposable != null) return;
         Single.create((SingleOnSubscribe<List<SearchBookBean>>) e -> {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
@@ -197,7 +185,6 @@ public class ChangeSourceView {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
-                        loadDBDisposable = d;
                     }
 
                     @Override
@@ -209,20 +196,18 @@ public class ChangeSourceView {
                         } else {
                             reSearchBook();
                         }
-                        loadDBDisposable = null;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         reSearchBook();
-                        loadDBDisposable = null;
                     }
                 });
     }
 
     private void reSearchBook() {
         rvSource.startRefresh();
-        Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
             List<SearchBookBean> searchBookList = new ArrayList<>(adapter.getSearchBookBeans());
             List<BookSourceBean> bookSourceList = new ArrayList<>(BookSourceManager.getAllBookSource());
             for (SearchBookBean searchBookBean : new ArrayList<>(adapter.getSearchBookBeans())) {
@@ -239,40 +224,16 @@ public class ChangeSourceView {
                 }
             }
             searchBookModel.searchReNew();
-            searchIsFinish = false;
             searchBookModel.initSearchEngineS(bookSourceList);
             long startThisSearchTime = System.currentTimeMillis();
             searchBookModel.setSearchTime(startThisSearchTime);
             List<BookShelfBean> bookList = new ArrayList<>();
             bookList.add(book);
             searchBookModel.search(bookName, startThisSearchTime, bookList, false);
-            e.onNext(searchBookList);
-            e.onComplete();
+            UpLastChapterModel.getInstance().startUpdate(searchBookList);
+            e.onSuccess(true);
         }).compose(RxUtils::toSimpleSingle)
-                .subscribe(new SimpleObserver<List<SearchBookBean>>() {
-                    @Override
-                    public void onNext(List<SearchBookBean> searchBookBeans) {
-                        adapter.reSetSourceAdapter();
-                        adapter.addAllSourceAdapter(searchBookBeans);
-                        needUpLastChapter = searchBookBeans;
-                        upLastChapterIndex = -1;
-                        upLastChapter();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
-    }
-
-    private synchronized void upLastChapter() {
-        upLastChapterIndex = upLastChapterIndex + 1;
-        if (upLastChapterIndex > needUpLastChapter.size() - 1) {
-            if (searchIsFinish) rvSource.finishRefresh(true, false);
-            return;
-        }
-        UpLastChapterModel.getInstance().startUpdate(needUpLastChapter.get(upLastChapterIndex));
+                .subscribe();
     }
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {
