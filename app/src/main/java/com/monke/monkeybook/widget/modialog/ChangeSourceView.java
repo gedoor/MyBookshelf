@@ -235,6 +235,7 @@ public class ChangeSourceView {
                 }
                 if (!hasSource && !My716.TAG.equals(searchBookBean.getTag())) {
                     searchBookList.remove(searchBookBean);
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
                 }
             }
             searchBookModel.searchReNew();
