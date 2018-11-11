@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
@@ -48,13 +49,13 @@ public class SearchBookModel {
         SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
         threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
         compositeDisposable = new CompositeDisposable();
-        initSearchEngineS();
+        initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
     /**
      * 搜索引擎初始化
      */
-    public void initSearchEngineS() {
+    public void initSearchEngineS(@NonNull List<BookSourceBean> sourceBeanList) {
         searchEngineS.clear();
         if (Objects.equals(ACache.get(context).getAsString("getZfbHb"), "True") && useMy716) {
             SearchEngine my716 = new SearchEngine();
@@ -62,7 +63,7 @@ public class SearchBookModel {
             my716.setHasMore(true);
             searchEngineS.add(my716);
         }
-        for (BookSourceBean bookSourceBean : BookSourceManager.getSelectedBookSource()) {
+        for (BookSourceBean bookSourceBean : sourceBeanList) {
             SearchEngine se = new SearchEngine();
             se.setTag(bookSourceBean.getBookSourceUrl());
             se.setHasMore(true);
@@ -82,8 +83,10 @@ public class SearchBookModel {
     public void stopSearch() {
         compositeDisposable.dispose();
         compositeDisposable = new CompositeDisposable();
-        searchListener.refreshFinish(true);
-        searchListener.loadMoreFinish(true);
+        handler.post(() -> {
+            searchListener.refreshFinish(true);
+            searchListener.loadMoreFinish(true);
+        });
     }
 
     public void setSearchTime(long searchTime) {
@@ -101,12 +104,14 @@ public class SearchBookModel {
             page = 1;
         }
         if (page == 1) {
-            searchListener.refreshSearchBook();
+            handler.post(() -> searchListener.refreshSearchBook());
         }
         if (searchEngineS.size() == 0) {
-            handler.post(() -> Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show());
-            searchListener.refreshFinish(true);
-            searchListener.loadMoreFinish(true);
+            handler.post(() -> {
+                Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show();
+                searchListener.refreshFinish(true);
+                searchListener.loadMoreFinish(true);
+            });
             return;
         }
         searchSuccessNum = 0;
@@ -211,7 +216,7 @@ public class SearchBookModel {
 
     public void setUseMy716(boolean useMy716) {
         this.useMy716 = useMy716;
-        initSearchEngineS();
+        initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
     public interface OnSearchListener {

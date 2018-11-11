@@ -18,17 +18,24 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
+import com.monke.monkeybook.model.UpLastChapterModel;
+import com.monke.monkeybook.model.source.My716;
+import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -48,7 +55,8 @@ public class ChangeSourceView {
     private Handler handler = new Handler(Looper.getMainLooper());
     private ChangeSourceAdapter adapter;
     private SearchBookModel searchBookModel;
-    private List<BookShelfBean> bookShelfS = new ArrayList<>();
+    private BookShelfBean book;
+    private List<SearchBookBean> needUpLastChapter;
     private String bookTag;
     private String bookName;
     private String bookAuthor;
@@ -130,7 +138,7 @@ public class ChangeSourceView {
     void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoProgressHUD moProgressHUD) {
         this.moProgressHUD = moProgressHUD;
         this.onClickSource = onClickSource;
-        bookShelfS.add(bookShelf);
+        book = bookShelf;
         bookTag = bookShelf.getTag();
         bookName = bookShelf.getBookInfoBean().getName();
         bookAuthor = bookShelf.getBookInfoBean().getAuthor();
@@ -186,12 +194,83 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
-        DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().deleteInTx(adapter.getSearchBookBeans());
-        adapter.reSetSourceAdapter();
-        long startThisSearchTime = System.currentTimeMillis();
-        searchBookModel.setSearchTime(startThisSearchTime);
-        searchBookModel.searchReNew();
-        searchBookModel.search(bookName, startThisSearchTime, bookShelfS, false);
+        Observable.create((ObservableOnSubscribe<List<SearchBookBean>>) e -> {
+            List<SearchBookBean> searchBookList = new ArrayList<>(adapter.getSearchBookBeans());
+            List<BookSourceBean> bookSourceList = new ArrayList<>(BookSourceManager.getAllBookSource());
+            for (SearchBookBean searchBookBean : new ArrayList<>(adapter.getSearchBookBeans())) {
+                boolean hasSource = false;
+                for (BookSourceBean bookSourceBean : new ArrayList<>(BookSourceManager.getAllBookSource())) {
+                    if (Objects.equals(searchBookBean.getTag(), bookSourceBean.getBookSourceUrl())) {
+                        bookSourceList.remove(bookSourceBean);
+                        hasSource = true;
+                        break;
+                    }
+                }
+                if (!hasSource && !My716.TAG.equals(searchBookBean.getTag())) {
+                    searchBookList.remove(searchBookBean);
+                }
+            }
+            searchBookModel.initSearchEngineS(bookSourceList);
+            long startThisSearchTime = System.currentTimeMillis();
+            searchBookModel.setSearchTime(startThisSearchTime);
+            searchBookModel.searchReNew();
+            List<BookShelfBean> bookList = new ArrayList<>();
+            bookList.add(book);
+            searchBookModel.search(bookName, startThisSearchTime, bookList, false);
+            e.onNext(searchBookList);
+            e.onComplete();
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+                    @Override
+                    public void onNext(List<SearchBookBean> searchBookBeans) {
+                        adapter.reSetSourceAdapter();
+                        adapter.addAllSourceAdapter(searchBookBeans);
+                        needUpLastChapter = searchBookBeans;
+                        upLastChapter(0);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
+    }
+
+    private void upLastChapter(int index) {
+        if (index < needUpLastChapter.size() - 1) {
+            return;
+        }
+        UpLastChapterModel upLastChapterModel = UpLastChapterModel.getInstance();
+        upLastChapterModel.toBookshelf(needUpLastChapter.get(0))
+                .flatMap(upLastChapterModel::getChapterList)
+                .flatMap(upLastChapterModel::saveSearchBookBean)
+                .subscribe(new Observer<SearchBookBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        handler.postDelayed(() -> {
+                            if (!d.isDisposed()) {
+                                d.dispose();
+                                upLastChapter(index + 1);
+                            }
+                        }, 20 * 1000);
+                    }
+
+                    @Override
+                    public void onNext(SearchBookBean searchBookBean) {
+                        getSearchBookInDb(book);
+                        upLastChapter(index + 1);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        upLastChapter(index + 1);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {

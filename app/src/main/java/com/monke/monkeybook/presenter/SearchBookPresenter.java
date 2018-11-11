@@ -17,6 +17,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchHistoryBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
@@ -360,7 +361,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
     public void sourceListChange(Boolean change) {
-        searchBookModel.initSearchEngineS();
+        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})

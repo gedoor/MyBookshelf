@@ -98,7 +98,7 @@ public class UpLastChapterModel {
         });
     }
 
-    private Observable<BookShelfBean> toBookshelf(SearchBookBean searchBookBean) {
+    public Observable<BookShelfBean> toBookshelf(SearchBookBean searchBookBean) {
         return Observable.create(e -> {
             BookShelfBean bookShelfBean = BookshelfHelp.getBookFromSearchBook(searchBookBean);
             e.onNext(bookShelfBean);
@@ -106,7 +106,7 @@ public class UpLastChapterModel {
         });
     }
 
-    private Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
+    public Observable<BookShelfBean> getChapterList(BookShelfBean bookShelfBean) {
         if (TextUtils.isEmpty(bookShelfBean.getBookInfoBean().getChapterUrl())) {
             return WebBookModel.getInstance().getBookInfo(bookShelfBean)
                     .flatMap(bookShelf -> WebBookModel.getInstance().getChapterList(bookShelf));
@@ -115,7 +115,7 @@ public class UpLastChapterModel {
         }
     }
 
-    private Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
+    public Observable<SearchBookBean> saveSearchBookBean(BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             SearchBookBean searchBookBean = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.NoteUrl.eq(bookShelfBean.getNoteUrl()))
