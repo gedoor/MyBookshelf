@@ -81,11 +81,12 @@ public class ChangeSourceView {
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
             PopupMenu popupMenu = new PopupMenu(context, view);
-            popupMenu.getMenu().add(0, 0, 0, "禁用书源");
-            popupMenu.getMenu().add(0, 0, 0, "删除书源");
+            popupMenu.getMenu().add(0, 0, 1, "禁用书源");
+            popupMenu.getMenu().add(0, 0, 2, "删除书源");
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 final String url = adapter.getSearchBookBeans().get(pos).getTag();
                 BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
+                DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(adapter.getSearchBookBeans().get(pos));
                 adapter.getSearchBookBeans().remove(pos);
                 adapter.notifyItemRemoved(pos);
                 if (sourceBean != null) {
@@ -93,6 +94,7 @@ public class ChangeSourceView {
                         case 1:
                             sourceBean.setEnable(false);
                             BookSourceManager.addBookSource(sourceBean);
+                            BookSourceManager.refreshBookSource();
                             break;
                         case 2:
                             BookSourceManager.removeBookSource(sourceBean);
