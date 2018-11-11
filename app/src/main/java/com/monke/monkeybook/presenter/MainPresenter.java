@@ -188,6 +188,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         RxBus.get().unregister(this);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.IMMERSION_CHANGE)})
     public void initImmersionBar(Boolean immersion) {
         mView.initImmersionBar();
