@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -224,6 +225,18 @@ public class BookInfoActivity extends MBaseActivity {
         finish();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        if (mo) return true;
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onDestroy() {
+        moProgressHUD.dismiss();
+        super.onDestroy();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
