@@ -164,6 +164,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvRead.setText("开始阅读");
                 tvShelf.setOnClickListener(v -> {
                     //放入书架
+                    bookShelfBean.setGroup(preferences.getInt("bookshelfGroup", 0) % 3);
                     mPresenter.addToBookShelf();
                 });
             }
@@ -255,7 +256,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     }
 
     private void initView() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             ((RadioButton) rgBookGroup.getChildAt(i)).setText(BOOK_GROUPS[i].substring(0, 2));
         }
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {

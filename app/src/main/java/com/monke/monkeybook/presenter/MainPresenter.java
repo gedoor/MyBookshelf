@@ -1,8 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -12,7 +10,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookInfoBean;
@@ -92,6 +89,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
                 bookShelfBean.setNoteUrl(url.toString());
                 bookShelfBean.setDurChapter(0);
+                bookShelfBean.setGroup(mView.getGroup() % 3);
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setFinalDate(System.currentTimeMillis());
                 e.onNext(bookShelfBean);
@@ -198,16 +196,4 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         mView.recreate();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RESET_VOLUME)})
-    public void resetVolume(int stream) {
-        if (!MApplication.getInstance().getConfigPreferences().getBoolean("fadeTTS", false))
-            return;
-        AudioManager audioManager = ((AudioManager) mView.getContext().getSystemService(Context.AUDIO_SERVICE));
-        if (!audioManager.isMusicActive())
-            audioManager.setStreamVolume(stream, MApplication.VOLUME, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-    }
-
-    public void resetVolume() {
-        resetVolume(AudioManager.STREAM_MUSIC);
-    }
 }

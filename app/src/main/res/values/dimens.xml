@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="fast_scroll_min_thumb_height">24dp</dimen>
+    <dimen name="fast_scroll_min_thumb_height">36dp</dimen>
 
     <dimen name="line_height">0.8dp</dimen>
     <dimen name="shadow_height">10dp</dimen>
@@ -14,10 +14,10 @@
     <dimen name="fastscroll_bubble_padding">16dp</dimen>
 
     <dimen name="fastscroll_handle_height">40dp</dimen>
-    <dimen name="fastscroll_handle_width">8dp</dimen>
-    <dimen name="fastscroll_handle_radius">0dp</dimen>
+    <dimen name="fastscroll_handle_width">24dp</dimen>
+    <dimen name="fastscroll_handle_radius">6dp</dimen>
 
-    <dimen name="fastscroll_track_width">8dp</dimen>
+    <dimen name="fastscroll_track_width">2dp</dimen>
 
     <dimen name="fastscroll_scrollbar_margin_top">8dp</dimen>
     <dimen name="fastscroll_scrollbar_margin_bottom">8dp</dimen>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#464646</color>
-    <color name="background_card">#353535</color>
-    <color name="background_menu">#282828</color>
+    <color name="background">#000000</color>
+    <color name="background_card">#222222</color>
+    <color name="background_menu">#111111</color>
 
-    <color name="colorPrimary">#464646</color>
-    <color name="colorPrimaryDark">#2e2e2e</color>
-    <color name="colorAccent">#FF4081</color>
-
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#269afd</color>
+    <!-- # 1296db -->
     <color name="bg_divider_line">#363636</color>
     <color name="btn_bg_press">#222222</color>
     <color name="btn_bg_press_2">#363636</color>
@@ -24,10 +24,10 @@
     <color name="tv_chapter_color_selected">#b7b7b7</color>
     <color name="tv_chapter_color_normal">#969696</color>
 
-    <color name="tv_text_button_nor">#434343</color>
     <color name="tv_text_button_pre">#657a8b</color>
-    <color name="tv_text_button_disable">#536573</color>
     <color name="tv_text_button_deep_pre">#354953</color>
+    <color name="tv_text_button_nor">#434343</color>
+    <color name="tv_text_button_disable">#536573</color>
 
     <color name="welcome">#67000000</color>
 </resources>

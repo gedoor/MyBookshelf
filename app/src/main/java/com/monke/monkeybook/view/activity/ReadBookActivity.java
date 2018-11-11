@@ -114,6 +114,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     Toolbar toolbar;
     @BindView(R.id.atv_url)
     TextView atvUrl;
+    @BindView(R.id.atv_line)
+    View atvLine;
     @BindView(R.id.ll_menu_top)
     LinearLayout llMenuTop;
     @BindView(R.id.appBar)
@@ -978,7 +980,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         final String charset = getBook().getBookInfoBean().getCharset();
         moProgressHUD.showInputBox("输入编码",
                 charset,
-                new String[]{"UTF-8", "GB2312"},
+		new String[]{"UTF-8", "GBK", "ASCII", "BIG-5"},
                 (inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
@@ -997,7 +999,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void setTextChapterRegex() {
         if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
             final String regex = getBook().getBookInfoBean().getChapterUrl();
-            moProgressHUD.showInputBox("TXT目录正则",
+            moProgressHUD.showInputBox("TXT目录规则",
                     regex,
                     null,
                     (inputText -> {
@@ -1234,37 +1236,25 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         boolean onLine = mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG);
         if (onLine) {
             atvUrl.setVisibility(View.VISIBLE);
+            atvLine.setVisibility(View.VISIBLE);
         } else {
             atvUrl.setVisibility(View.GONE);
+            atvLine.setVisibility(View.GONE);
         }
         for (int i = 0; i < menu.size(); i++) {
             switch (menu.getItem(i).getGroupId()) {
                 case R.id.menuOnLine:
-                    if (onLine) {
-                        menu.getItem(i).setVisible(true);
-                        menu.getItem(i).setEnabled(true);
-                    } else {
-                        menu.getItem(i).setVisible(false);
-                        menu.getItem(i).setEnabled(false);
-                    }
+                    menu.getItem(i).setVisible(onLine);
+                    menu.getItem(i).setEnabled(onLine);
                     break;
                 case R.id.menuLocal:
-                    if (!onLine) {
-                        menu.getItem(i).setVisible(true);
-                        menu.getItem(i).setEnabled(true);
-                    } else {
-                        menu.getItem(i).setVisible(false);
-                        menu.getItem(i).setEnabled(false);
-                    }
+                    menu.getItem(i).setVisible(!onLine);
+                    menu.getItem(i).setEnabled(!onLine);
                     break;
                 case R.id.menu_text:
-                    if (getBook() != null && getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-                        menu.getItem(i).setVisible(true);
-                        menu.getItem(i).setEnabled(true);
-                    } else {
-                        menu.getItem(i).setVisible(false);
-                        menu.getItem(i).setEnabled(false);
-                    }
+                    boolean isTxt = getBook() != null && getBook().getNoteUrl().toLowerCase().endsWith(".txt");
+                    menu.getItem(i).setVisible(isTxt);
+                    menu.getItem(i).setEnabled(isTxt);
                     break;
             }
         }

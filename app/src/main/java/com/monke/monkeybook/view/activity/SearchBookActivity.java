@@ -342,7 +342,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     private void parseSecretCode(String code) {
-        code = code.toLowerCase().replaceAll("^set:", "").trim();
+        code = code.toLowerCase().replaceAll("^\\s*set:", "").trim();
         String[] param = code.split("\\s+");
         String msg = null;
         boolean enable = param.length == 1 || !param[1].equals("false");
@@ -364,9 +364,20 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 SharedPreferencesUtil.saveData("blurSimBack", enable);
                 msg = "已" + (enable ? "启" : "禁") + "用仿真翻页背景虚化！";
                 break;
+            case "async_draw":
+                SharedPreferencesUtil.saveData("asyncDraw", enable);
+                msg = "已" + (enable ? "启" : "禁") + "用异步加载！";
+                break;
+            case "disable_scroll_click_turn":
+                SharedPreferencesUtil.saveData("disableScrollClickTurn", enable);
+                msg = "已" + (enable ? "禁" : "启") + "用滚动模式点击翻页！";
+                break;
         }
-        if (msg != null)
-            toast(msg);
+        if (msg == null) {
+            toast("无法识别设置密码: " + code, 0, -1);
+        } else {
+            toast(msg, 0, 1);
+        }
     }
 
     /**

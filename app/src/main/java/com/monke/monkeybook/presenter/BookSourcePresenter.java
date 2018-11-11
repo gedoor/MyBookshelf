@@ -146,7 +146,13 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     @Override
     public void importBookSourceLocal(String path) {
         String json;
-        DocumentFile file = DocumentFile.fromFile(new File(path));
+        DocumentFile file;
+        try {
+            file = DocumentFile.fromFile(new File(path));
+        } catch (Exception e) {
+            mView.toast(path + "无法打开！");
+            return;
+        }
         json = DocumentHelper.readString(file);
         if (!isEmpty(json)) {
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);

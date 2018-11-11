@@ -31,6 +31,7 @@
         android:id="@+id/action_change_icon"
         android:icon="@drawable/ic_face"
         android:title="@string/change_icon"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item

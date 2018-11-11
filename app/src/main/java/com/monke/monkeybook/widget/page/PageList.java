@@ -6,7 +6,6 @@ import android.text.StaticLayout;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -76,10 +75,9 @@ class PageList {
         while (showTitle || i < allLine.length) {
             // 重置段落
             if (!showTitle) {
-                paragraph = allLine[i].replaceAll("\\s", " ").trim();
+                paragraph = "\u3000\u3000" + allLine[i].replaceAll("\\s", " ").trim() + "\n";
                 i++;
-                if (paragraph.equals("")) continue;
-                paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
+                if (paragraph.equals("\u3000\u3000\n")) continue;
             }
             int wordCount;
             String subStr;

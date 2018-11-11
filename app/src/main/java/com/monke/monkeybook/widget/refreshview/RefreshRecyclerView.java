@@ -15,6 +15,9 @@ import android.widget.LinearLayout;
 
 import com.monke.monkeybook.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -30,8 +33,10 @@ public class RefreshRecyclerView extends FrameLayout {
 
     private View noDataView;
     private View refreshErrorView;
+    private boolean isLongClickModule = false;
     private float durTouchX = -1000000;
     private float durTouchY = -1000000;
+    private Timer timer;
     private BaseRefreshListener baseRefreshListener;
     private OnLoadMoreListener loadMoreListener;
     private OnTouchListener refreshTouchListener = new OnTouchListener() {
@@ -42,33 +47,40 @@ public class RefreshRecyclerView extends FrameLayout {
                 case MotionEvent.ACTION_DOWN:
                     durTouchX = event.getX();
                     durTouchY = event.getY();
+                    upLongClickTimer();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (durTouchX == -1000000) {
                         durTouchX = event.getX();
+                        upLongClickTimer();
                     }
                     if (durTouchY == -1000000)
                         durTouchY = event.getY();
                     double deltaX = Math.sqrt((event.getX() - durTouchX) * (event.getX() - durTouchX) + (event.getY() - durTouchY) * (event.getY() - durTouchY));
-
-                    float dY = event.getY() - durTouchY;  //>0下拉
-                    durTouchY = event.getY();
-                    if (baseRefreshListener != null && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0 && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress()) {
-                        if (rpb.getVisibility() != View.VISIBLE) {
-                            rpb.setVisibility(View.VISIBLE);
-                        }
-                        if (recyclerView.getAdapter().getItemCount() > 0) {
-                            if (0 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()) {
+                    if (deltaX > 10 && timer != null) { // 移动大于10像素
+                        timer.cancel();
+                        timer = null;
+                    }
+                    if (!isLongClickModule) {
+                        float dY = event.getY() - durTouchY;  //>0下拉
+                        durTouchY = event.getY();
+                        if (baseRefreshListener != null && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0 && rpb.getSecondDurProgress() == rpb.getSecondFinalProgress()) {
+                            if (rpb.getVisibility() != View.VISIBLE) {
+                                rpb.setVisibility(View.VISIBLE);
+                            }
+                            if (recyclerView.getAdapter().getItemCount() > 0) {
+                                if (0 == ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition()) {
+                                    rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                                }
+                            } else {
                                 rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
                             }
-                        } else {
-                            rpb.setSecondDurProgress((int) (rpb.getSecondDurProgress() + dY));
+                            return rpb.getSecondDurProgress() > 0;
                         }
-                        return rpb.getSecondDurProgress() > 0;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
+                    if (!isLongClickModule && baseRefreshListener != null && rpb.getSecondMaxProgress() > 0 && rpb.getSecondDurProgress() > 0) {
                         if (rpb.getSecondDurProgress() >= rpb.getSecondMaxProgress() && ((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getIsRequesting() == 0) {
                             if (baseRefreshListener instanceof OnRefreshWithProgressListener) {
                                 //带有进度的
@@ -101,6 +113,7 @@ public class RefreshRecyclerView extends FrameLayout {
                                 rpb.setSecondDurProgressWithAnim(0);
                         }
                     }
+                    isLongClickModule = false;
                     durTouchX = -1000000;
                     durTouchY = -1000000;
                     break;
@@ -297,6 +310,16 @@ public class RefreshRecyclerView extends FrameLayout {
             addView(refreshErrorView, 2);
             refreshErrorView.setVisibility(GONE);
         }
+    }
+
+    private void upLongClickTimer() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isLongClickModule = true;
+            }
+        }, 100);
     }
 
 }

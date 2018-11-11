@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_content"
@@ -9,12 +9,18 @@
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background">
 
             <ImageView
                 android:id="@+id/iv_cover"
-                android:layout_width="56dp"
-                android:layout_height="80dp"
+                android:layout_width="49dp"
+                android:layout_height="70dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_cover_default"
                 android:contentDescription="@string/img_cover"
@@ -72,12 +78,11 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/iv_cover"
             android:paddingStart="12dp"
-            android:layout_marginTop="5dp"
             android:paddingEnd="2dp"
             android:singleLine="true"
             android:text="@string/read_dur_progress"
             android:textColor="@color/tv_text_default"
-            android:textSize="12sp"
+            android:textSize="13sp"
             app:minTextSize="10sp" />
 
         <me.grantland.widget.AutofitTextView
@@ -92,30 +97,15 @@
             android:singleLine="true"
             android:text="@string/book_search_last"
             android:textColor="@color/tv_text_default"
-            android:textSize="12sp"
+            android:textSize="13sp"
             app:minTextSize="10sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_last"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_toEndOf="@+id/iv_cover">
-
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/mpb_durProgress"
-            android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:visibility="invisible"
-            app:bgdrawable="@color/btn_bg_press"
-            android:layout_alignParentBottom="true"
-            app:cantouch="false"
-            app:fontdrawable="@color/d_blue"
-            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:background="@color/btn_bg_press" />
 
+</FrameLayout>

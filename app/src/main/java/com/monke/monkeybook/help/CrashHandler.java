@@ -1,6 +1,5 @@
 package com.monke.monkeybook.help;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -23,6 +22,8 @@ import java.util.Map;
 
 /**
  * 异常管理类
+ * <p/>
+ * Created by imtianx on 2016-7-10.
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
@@ -44,12 +45,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * 格式化时间
      */
-    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
     private String TAG = this.getClass().getSimpleName();
 
-    @SuppressLint("StaticFieldLeak")
     private static CrashHandler mInstance;
 
     private CrashHandler() {
@@ -111,7 +110,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             public void run() {
                 Looper.prepare();
                 //在此处处理出现异常的情况
-                Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
         }.start();
@@ -123,8 +122,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 收集设备参数信息
+     *
+     * @param ctx
      */
-    private void collectDeviceInfo(Context ctx) {
+    public void collectDeviceInfo(Context ctx) {
         //获取versionName,versionCode
         try {
             PackageManager pm = ctx.getPackageManager();
@@ -165,11 +166,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      */
     private String saveCrashInfo2File(Throwable ex) {
 
-        StringBuilder sb = new StringBuilder();
+        StringBuffer sb = new StringBuffer();
         for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            sb.append(key).append("=").append(value).append("\n");
+            sb.append(key + "=" + value + "\n");
         }
 
         Writer writer = new StringWriter();
@@ -187,16 +188,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             long timestamp = System.currentTimeMillis();
             String time = format.format(new Date());
             String fileName = "crash-" + time + "-" + timestamp + ".log";
-            String path = FileHelp.getCachePath() + "/crash/";
-            File dir = new File(path);
-            if (!dir.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                dir.mkdirs();
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/YueDu/crash/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(path + fileName);
+                fos.write(sb.toString().getBytes());
+                Log.i(TAG, "saveCrashInfo2File: "+sb.toString());
+                fos.close();
             }
-            FileOutputStream fos = new FileOutputStream(path + fileName);
-            fos.write(sb.toString().getBytes());
-            Log.i(TAG, "saveCrashInfo2File: "+sb.toString());
-            fos.close();
             return fileName;
         } catch (Exception e) {
             Log.e(TAG, "an error occured while writing file...", e);

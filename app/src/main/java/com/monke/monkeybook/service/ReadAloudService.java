@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -27,7 +28,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.help.RunMediaPlayer;
+import com.monke.monkeybook.help.MediaManager;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.view.activity.ReadBookActivity;
 
@@ -66,7 +67,6 @@ public class ReadAloudService extends Service {
             | PlaybackStateCompat.ACTION_STOP
             | PlaybackStateCompat.ACTION_SEEK_TO;
     public static Boolean running = false;
-    private final int TTS_STREAM = TextToSpeech.Engine.DEFAULT_STREAM;
     private TextToSpeech textToSpeech;
     private Boolean ttsInitSuccess = false;
     private Boolean speak = true;
@@ -84,10 +84,10 @@ public class ReadAloudService extends Service {
     private int speechRate;
     private String title;
     private String text;
-    private float volume;
     private boolean fadeTts;
     private Handler handler = new Handler();
     private Runnable dsRunnable;
+    private MediaManager mediaManager;
 
     public ReadAloudService() {
     }
@@ -148,7 +148,8 @@ public class ReadAloudService extends Service {
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
+        mediaManager = MediaManager.getInstance();
+        mediaManager.setStream(TextToSpeech.Engine.DEFAULT_STREAM);
         fadeTts = preference.getBoolean("fadeTTS", false);
         dsRunnable = this::doDs;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -216,9 +217,8 @@ public class ReadAloudService extends Service {
 
     public void playTTS() {
         if (fadeTts) {
-            MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
-            startAudioFade(1, MApplication.VOLUME);
-            handler.postDelayed(() -> playTTSN(), 400);
+            AsyncTask.execute(() -> mediaManager.fadeInVolume());
+            handler.postDelayed(() -> playTTSN(), 200);
         } else {
             playTTSN();
         }
@@ -280,35 +280,12 @@ public class ReadAloudService extends Service {
         updateNotification();
         updateMediaSessionPlaybackState();
         if (fadeTts) {
-            MApplication.VOLUME = audioManager.getStreamVolume(TTS_STREAM);
-            startAudioFade(MApplication.VOLUME, 1);
-            handler.postDelayed(() -> textToSpeech.stop(), 500);
+            AsyncTask.execute(() -> mediaManager.fadeOutVolume());
+            handler.postDelayed(() -> textToSpeech.stop(), 300);
         } else {
             textToSpeech.stop();
         }
         RxBus.get().post(RxBusTag.ALOUD_STATE, PAUSE);
-    }
-
-    private void startAudioFade(float from, float to) {
-        volume = from;
-        final int FADE_DURATION = 1000;
-        final int FADE_INTERVAL = 250;
-        int numberOfSteps = FADE_DURATION / FADE_INTERVAL;
-        final float deltaVolume = (to - from) / numberOfSteps;
-        final Timer timer = new Timer(true);
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                audioManager.setStreamVolume(TTS_STREAM, (int) volume, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-                volume += deltaVolume;
-                if ((from > to && volume <= to) || (from <= to && volume >= to)) {
-                    timer.cancel();
-                    timer.purge();
-                    audioManager.setStreamVolume(TTS_STREAM, MApplication.VOLUME, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-                }
-            }
-        };
-        timer.schedule(timerTask, FADE_INTERVAL, FADE_INTERVAL);
     }
 
     /**
@@ -393,7 +370,7 @@ public class ReadAloudService extends Service {
         builder.addAction(R.drawable.ic_time_add_24dp, getString(R.string.set_timer), getThisServicePendingIntent(ActionSetTimer));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                 .setMediaSession(mediaSessionCompat.getSessionToken())
-                .setShowActionsInCompactView(0,1,2));
+                .setShowActionsInCompactView(0));
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
@@ -408,10 +385,8 @@ public class ReadAloudService extends Service {
     @Override
     public void onDestroy() {
         running = false;
+        AsyncTask.execute(() -> mediaManager.fadeOutVolume());
         clearTTS();
-        if (fadeTts) {
-            RxBus.get().post(RxBusTag.RESET_VOLUME, TTS_STREAM);
-        }
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
         super.onDestroy();
@@ -419,6 +394,7 @@ public class ReadAloudService extends Service {
 
     private void clearTTS() {
         if (textToSpeech != null) {
+            AsyncTask.execute(() -> mediaManager.fadeOutVolume());
             textToSpeech.stop();
             textToSpeech.shutdown();
             textToSpeech = null;
@@ -438,7 +414,7 @@ public class ReadAloudService extends Service {
      * @return 音频焦点
      */
     private boolean requestFocus() {
-        RunMediaPlayer.playSilentSound(this);
+        mediaManager.playSilentSound(this);
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             request = audioManager.requestAudioFocus(mFocusRequest);

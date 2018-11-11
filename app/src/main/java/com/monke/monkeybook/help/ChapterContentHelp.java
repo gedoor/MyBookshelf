@@ -30,7 +30,7 @@ public class ChapterContentHelp {
         }
     }
 
-    public void updateReplaceRules() {
+    private void updateReplaceRules() {
         if (validReplaceRules == null)
             validReplaceRules = new ArrayList<>();
         else
@@ -64,7 +64,7 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public String replaceContent(BookShelfBean mBook, String content) {
+    public synchronized String replaceContent(BookShelfBean mBook, String content) {
         updateBookShelf(mBook, ReplaceRuleManager.getLastUpTime());
         int convertCTS = ReadBookControl.getInstance().getTextConvert();
         if (validReplaceRules.size() == 0)
