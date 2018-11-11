@@ -78,6 +78,7 @@ public class BookSourceManager extends BaseModelImpl {
     public static void removeBookSource(BookSourceBean sourceBean) {
         if (sourceBean == null) return;
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(sourceBean);
+        refreshBookSource();
     }
 
     public static void refreshBookSource() {
