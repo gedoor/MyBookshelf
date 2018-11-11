@@ -227,11 +227,10 @@ public class ChangeSourceView {
                     searchBookList.remove(searchBookBean);
                 }
             }
-            searchBookModel.stopSearch();
+            searchBookModel.searchReNew();
             searchBookModel.initSearchEngineS(bookSourceList);
             long startThisSearchTime = System.currentTimeMillis();
             searchBookModel.setSearchTime(startThisSearchTime);
-            searchBookModel.searchReNew();
             List<BookShelfBean> bookList = new ArrayList<>();
             bookList.add(book);
             searchBookModel.search(bookName, startThisSearchTime, bookList, false);
