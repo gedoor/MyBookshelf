@@ -11,8 +11,8 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.model.source.My716;
-import com.monke.monkeybook.utils.RxUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -36,6 +36,7 @@ public class UpLastChapterModel {
     private Scheduler scheduler;
     private Handler handler = new Handler(Looper.getMainLooper());
     private List<SearchBookBean> searchBookBeanList;
+    private int upIndex;
 
     public static UpLastChapterModel getInstance() {
         if (model == null) {
@@ -48,10 +49,12 @@ public class UpLastChapterModel {
         executorService = Executors.newFixedThreadPool(5);
         scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
+        searchBookBeanList = new ArrayList<>();
     }
 
     public void startUpdate() {
         if (compositeDisposable.size() > 0) return;
+        List<SearchBookBean> beanList = new ArrayList<>();
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
             List<BookShelfBean> bookShelfBeans = BookshelfHelp.getAllBook();
             for (BookShelfBean bookShelfBean : bookShelfBeans) {
@@ -61,9 +64,6 @@ public class UpLastChapterModel {
             }
             e.onComplete();
         }).flatMap(this::findSearchBookBean)
-                .flatMap(this::toBookshelf)
-                .flatMap(this::getChapterList)
-                .flatMap(this::saveSearchBookBean)
                 .subscribeOn(scheduler)
                 .observeOn(scheduler)
                 .subscribe(new Observer<SearchBookBean>() {
@@ -74,59 +74,67 @@ public class UpLastChapterModel {
 
                     @Override
                     public void onNext(SearchBookBean searchBookBean) {
-
+                        beanList.add(searchBookBean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        stopUp();
                     }
 
                     @Override
                     public void onComplete() {
-                        stopUp();
+                        startUpdate(beanList);
                     }
                 });
     }
 
     public synchronized void startUpdate(List<SearchBookBean> beanList) {
+        compositeDisposable.dispose();
+        compositeDisposable = new CompositeDisposable();
         this.searchBookBeanList = beanList;
+        upIndex = -1;
+        for (int i = 0; i < 5; i++) {
+            doUpdate();
+        }
     }
 
-    private synchronized void startUpdate(SearchBookBean searchBookBean) {
-        toBookshelf(searchBookBean)
-                .flatMap(this::getChapterList)
-                .flatMap(this::saveSearchBookBean)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribeOn(scheduler)
-                .observeOn(scheduler)
-                .subscribe(new Observer<SearchBookBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                        handler.postDelayed(() -> {
-                            if (!d.isDisposed()) {
-                                d.dispose();
-                            }
-                        }, 20 * 1000);
-                    }
+    private synchronized void doUpdate() {
+        upIndex++;
+        if (upIndex < searchBookBeanList.size()) {
+            toBookshelf(searchBookBeanList.get(upIndex))
+                    .flatMap(this::getChapterList)
+                    .flatMap(this::saveSearchBookBean)
+                    .subscribeOn(scheduler)
+                    .observeOn(scheduler)
+                    .subscribe(new Observer<SearchBookBean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                            handler.postDelayed(() -> {
+                                if (!d.isDisposed()) {
+                                    d.dispose();
+                                    doUpdate();
+                                }
+                            }, 20 * 1000);
+                        }
 
-                    @Override
-                    public void onNext(SearchBookBean searchBookBean) {
+                        @Override
+                        public void onNext(SearchBookBean searchBookBean) {
+                            doUpdate();
+                        }
 
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            doUpdate();
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
+                        @Override
+                        public void onComplete() {
 
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                        }
+                    });
+        }
     }
 
     private void stopUp() {
