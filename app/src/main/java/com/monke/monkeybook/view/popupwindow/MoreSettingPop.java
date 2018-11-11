@@ -99,13 +99,12 @@ public class MoreSettingPop extends FrameLayout {
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
-        initData();
-        bindEvent();
     }
 
     public void setListener(@NonNull OnChangeProListener changeProListener) {
         this.changeProListener = changeProListener;
-
+        initData();
+        bindEvent();
     }
 
     private void bindEvent() {

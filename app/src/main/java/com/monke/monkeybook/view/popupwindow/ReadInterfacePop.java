@@ -92,13 +92,13 @@ public class ReadInterfacePop extends FrameLayout {
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
-        bindEvent();
     }
 
     public void setListener(ReadBookActivity readBookActivity, @NonNull OnChangeProListener changeProListener) {
         this.activity = readBookActivity;
         this.changeProListener = changeProListener;
         initData();
+        bindEvent();
     }
 
     private void initData() {

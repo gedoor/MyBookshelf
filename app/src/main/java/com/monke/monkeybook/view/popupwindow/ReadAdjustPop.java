@@ -71,18 +71,17 @@ public class ReadAdjustPop extends FrameLayout {
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
-        bindEvent();
     }
 
     public void setListener(Activity activity, OnAdjustListener adjustListener) {
         this.context = activity;
         this.adjustListener = adjustListener;
+        initData();
+        bindEvent();
+        initLight();
     }
 
     public void show() {
-        initData();
-        hpbLight.setDurProgress(light);
-        scbFollowSys.setChecked(isFollowSys);
         initLight();
     }
 
@@ -91,8 +90,6 @@ public class ReadAdjustPop extends FrameLayout {
     }
 
     private void initData() {
-        isFollowSys = getIsFollowSys();
-        light = getLight();
         scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
         if (readBookControl.isSpeechRateFollowSys()) {
             hpbTtsSpeechRate.setCanTouch(false);
@@ -245,7 +242,7 @@ public class ReadAdjustPop extends FrameLayout {
         SharedPreferences.Editor editor = preference.edit();
         editor.putInt("light", light);
         editor.putBoolean("isfollowsys", isFollowSys);
-        editor.commit();
+        editor.apply();
     }
 
     private int getLight() {
@@ -257,6 +254,10 @@ public class ReadAdjustPop extends FrameLayout {
     }
 
     public void initLight() {
+        isFollowSys = getIsFollowSys();
+        light = getLight();
+        hpbLight.setDurProgress(light);
+        scbFollowSys.setChecked(isFollowSys);
         if (!isFollowSys) {
             setScreenBrightness(light);
         }

@@ -75,7 +75,6 @@ public class ReadBottomMenu extends FrameLayout {
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
-        bindEvent();
     }
 
     public void setListener(OnMenuListener menuListener) {
@@ -109,7 +108,6 @@ public class ReadBottomMenu extends FrameLayout {
 
             }
         });
-
 
         //朗读定时
         fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(getContext()));
