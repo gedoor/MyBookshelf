@@ -71,10 +71,12 @@ public class SearchBookModel {
             searchEngineS.add(my716);
         }
         for (BookSourceBean bookSourceBean : sourceBeanList) {
-            SearchEngine se = new SearchEngine();
-            se.setTag(bookSourceBean.getBookSourceUrl());
-            se.setHasMore(true);
-            searchEngineS.add(se);
+            if (bookSourceBean.getEnable()) {
+                SearchEngine se = new SearchEngine();
+                se.setTag(bookSourceBean.getBookSourceUrl());
+                se.setHasMore(true);
+                searchEngineS.add(se);
+            }
         }
     }
 
