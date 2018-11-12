@@ -9,8 +9,6 @@ import com.monke.monkeybook.MApplication;
 
 import org.greenrobot.greendao.database.Database;
 
-import java.util.Locale;
-
 public class DbHelper {
     private static DbHelper instance;
     private DaoOpenHelper mHelper;
@@ -18,19 +16,18 @@ public class DbHelper {
     private DaoMaster mDaoMaster;
     private DaoSession mDaoSession;
 
-    private DbHelper() {
-        mHelper = new DaoOpenHelper(MApplication.getInstance(), "monkebook.db", null);
+    private DbHelper(){
+        mHelper = new DaoOpenHelper(MApplication.getInstance(), "monkebook_db", null);
         db = mHelper.getWritableDatabase();
-        db.setLocale(Locale.CHINESE);
         // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
         mDaoMaster = new DaoMaster(db);
         mDaoSession = mDaoMaster.newSession();
     }
 
-    public static DbHelper getInstance() {
-        if (null == instance) {
-            synchronized (DbHelper.class) {
-                if (null == instance) {
+    public static DbHelper getInstance(){
+        if(null == instance){
+            synchronized (DbHelper.class){
+                if(null == instance){
                     instance = new DbHelper();
                 }
             }
@@ -50,7 +47,6 @@ public class DbHelper {
         DaoOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
             super(context, name, factory);
         }
-
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             MigrationHelper.migrate(db,
@@ -59,7 +55,6 @@ public class DbHelper {
                         public void onCreateAllTables(Database db, boolean ifNotExists) {
                             DaoMaster.createAllTables(db, ifNotExists);
                         }
-
                         @Override
                         public void onDropAllTables(Database db, boolean ifExists) {
                             DaoMaster.dropAllTables(db, ifExists);
