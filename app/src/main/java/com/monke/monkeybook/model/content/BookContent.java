@@ -93,10 +93,10 @@ public class BookContent {
         for (int i = 0, size = clients.length; i < size; i++) {
             int item = Integer.parseInt(clients[i]);
             if (item < 3) {
-                textArray.append(item, childNotes.get(i+star).wholeText());
+                textArray.append(item, childNotes.get(i + star).wholeText());
                 j++;
             } else {
-                textArray.append(item - j, childNotes.get(i+star).wholeText());
+                textArray.append(item - j, childNotes.get(i + star).wholeText());
                 j += 2;
             }
         }

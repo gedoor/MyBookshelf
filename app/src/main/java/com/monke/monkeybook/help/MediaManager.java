@@ -46,7 +46,8 @@ public class MediaManager {
         }
         while (isFading) try {
             Thread.sleep(10);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         cancelFading = false;
         startAudioFade(1, VOLUME);
         setSysVolume(VOLUME);
@@ -60,7 +61,8 @@ public class MediaManager {
         }
         while (isFading) try {
             Thread.sleep(FADE_INTERVAL);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         cancelFading = false;
         startAudioFade(VOLUME, 1);
         setSysVolume(VOLUME);

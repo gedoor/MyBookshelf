@@ -224,4 +224,12 @@ public abstract class HorizonPageAnim extends PageAnimation {
         }
         return mCurBitmap;
     }
+
+    public void setCancel(boolean cancel) {
+        isCancel = cancel;
+    }
+
+    public void setNoNext(boolean noNext) {
+        this.noNext = noNext;
+    }
 }

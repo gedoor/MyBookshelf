@@ -115,14 +115,14 @@ public abstract class PageLoader {
     int textPara;
     int titleInterval;
     int titlePara;
-    private float tipMarginHeight ;
-    private float tipBottomTop ;
-    private float tipBottomBot ;
-    private float tipDistance ;
-    private float tipMarginLeft ;
-    private float tipMarginRight ;
-    private float displayRightEnd ;
-    private float tipVisibleWidth ;
+    private float tipMarginHeight;
+    private float tipBottomTop;
+    private float tipBottomBot;
+    private float tipDistance;
+    private float tipMarginLeft;
+    private float tipMarginRight;
+    private float displayRightEnd;
+    private float tipVisibleWidth;
 
     private boolean hideStatusBar;
     private boolean showTimeBattery;
@@ -551,7 +551,6 @@ public abstract class PageLoader {
         if (mPageMode != Enum.PageMode.SCROLL) {
             upPage();
         } else {
-            mPageView.resetScroll();
             mPageView.drawPage(0);
         }
         mPageView.invalidate();
@@ -646,7 +645,6 @@ public abstract class PageLoader {
             if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < getBook().getChapterList().size() - 1) {
                 mPageView.drawPage(1);
             }
-        } else {
         }
     }
 
@@ -737,13 +735,11 @@ public abstract class PageLoader {
         }
     }
 
-    public void drawBackground(Canvas canvas) {
+    void drawBackground(Canvas canvas) {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
         }
-        if (mCurChapter != null) {
-            drawBackground(canvas, mCurChapter, mCurChapter.getPage(mCurPagePos));
-        }
+        drawBackground(canvas, mCurChapter, mCurChapter.getPage(mCurPagePos));
     }
 
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
@@ -880,11 +876,11 @@ public abstract class PageLoader {
     public void drawCover(Canvas canvas, float top) {
     }
 
-    public int getCoverHeight() {
+    private int getCoverHeight() {
         return cover == null ? 0 : cover.getHeight() + 20;
     }
 
-    public void resetPageOffset() {
+    void resetPageOffset() {
         pageOffset = 0;
         linePos = 0;
         isLastPage = false;
@@ -921,11 +917,12 @@ public abstract class PageLoader {
         }
     }
 
-    public void drawContent(Canvas canvas, float offset) {
+    @SuppressWarnings("ConstantConditions")
+    void drawContent(Canvas canvas, float offset) {
         if (offset > MAX_SCROLL_OFFSET) {
             offset = MAX_SCROLL_OFFSET;
         } else if (offset < 0 - MAX_SCROLL_OFFSET) {
-            offset = - MAX_SCROLL_OFFSET;
+            offset = -MAX_SCROLL_OFFSET;
         }
 
         boolean pageChanged = false;
@@ -996,7 +993,7 @@ public abstract class PageLoader {
             if (chapter == null || chapterPos - mCurChapterPos > 1) break;
             if (chapter.getStatus() != Enum.PageStatus.FINISH) {
                 String tip = getStatusText(chapter);
-                drawErrorMsg(canvas, tip, 0-top);
+                drawErrorMsg(canvas, tip, 0 - top);
                 top += mVisibleHeight;
                 chapterPos += 1;
                 pagePos = 0;
@@ -1326,7 +1323,7 @@ public abstract class PageLoader {
             return;
         }
         if (mPreChapter == null) mPreChapter = new TxtChapter(prevChapterPos);
-        if (mPreChapter.getStatus() == Enum.PageStatus.FINISH || prevChapterPos < 0) {
+        if (mPreChapter.getStatus() == Enum.PageStatus.FINISH) {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
@@ -1426,7 +1423,7 @@ public abstract class PageLoader {
         float x = mMarginLeft;
 
         if (isFirstLineOfParagraph(line)) {
-            String blanks = "\u3000\u3000";
+            String blanks = StringUtils.halfToFull("  ");
             canvas.drawText(blanks, x, top, paint);
             float bw = StaticLayout.getDesiredWidth(blanks, paint);
             x += bw;

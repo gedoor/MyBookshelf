@@ -5,18 +5,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -92,20 +89,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
-        if (needAnim) {
-            final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
-            animation.setAnimationListener(new AnimationStartListener() {
-                @Override
-                void onAnimStart(Animation animation) {
-                    needAnim = false;
-                    holder.flContent.setVisibility(View.VISIBLE);
-                }
-            });
-            long DUR_ANIM_ITEM = 30;
-            new Handler().postDelayed(() -> holder.flContent.startAnimation(animation), index * DUR_ANIM_ITEM);
-        } else {
-            holder.flContent.setVisibility(View.VISIBLE);
-        }
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
                 Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
@@ -126,6 +109,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         }
+        holder.tvReadY.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(books.get(index))));
         holder.tvRead.setText(holder.tvRead.getContext().getString(R.string.read_dur_progress, books.get(index).getDurChapterName()));
         holder.tvLast.setText(holder.tvLast.getContext().getString(R.string.book_search_last, books.get(index).getLastChapterName()));
         if (books.get(index).getHasUpdate()) {
@@ -200,6 +184,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
+        TextView tvReadY;
         View ibContent;
         RotateLoading rotateLoading;
 
@@ -211,28 +196,10 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
+            tvReadY = itemView.findViewById(R.id.tv_read_y);
             ibContent = itemView.findViewById(R.id.ib_content);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
         }
     }
 
-    abstract class AnimationStartListener implements Animation.AnimationListener {
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-            onAnimStart(animation);
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-
-        abstract void onAnimStart(Animation animation);
-    }
 }
