@@ -1,5 +1,8 @@
 package com.monke.monkeybook.widget.page;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.text.TextUtils;
 
 import com.monke.basemvplib.CharsetDetector;
@@ -70,6 +73,33 @@ public class PageLoaderEpub extends PageLoader {
         }
     }
 
+    private void extractScaledCoverImage() {
+        try {
+            byte[] data = book.getCoverImage().getData();
+            Bitmap rawCover = BitmapFactory.decodeByteArray(data, 0, data.length);
+            int width = rawCover.getWidth();
+            int height = rawCover.getHeight();
+            if (width <= mVisibleWidth && width >= 0.8 * mVisibleWidth) {
+                cover = rawCover;
+                return;
+            }
+            height = Math.round(mVisibleWidth * 1.0f * height / width);
+            cover = Bitmap.createScaledBitmap(rawCover, mVisibleWidth, height, true);
+        } catch (Exception e) {
+        }
+    }
+
+    @Override
+    public void drawCover(Canvas canvas, float top) {
+        if (cover == null) {
+            extractScaledCoverImage();
+        }
+        if (cover == null)
+            return;
+        int left = (mDisplayWidth - cover.getWidth()) / 2;
+        canvas.drawBitmap(cover, left, top, mTextPaint);
+    }
+
     private String getCharset(Book book) {
         try {
             Resource resource = book.getCoverPage();
@@ -90,11 +120,13 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private List<ChapterListBean> loadChapters() {
+        BookShelfBean bookShelf = getBook();
         Metadata metadata = book.getMetadata();
-        getBook().getBookInfoBean().setName(metadata.getFirstTitle());
-        getBook().getBookInfoBean().setAuthor(FormatWebText.getAuthor(metadata.getAuthors().toString()));
+        bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
+        String author = metadata.getAuthors().get(0).toString().replaceAll("^, |, $", "");
+        bookShelf.getBookInfoBean().setAuthor(FormatWebText.getAuthor(author));
         if (metadata.getDescriptions().size() > 0) {
-            getBook().getBookInfoBean().setIntroduce(metadata.getDescriptions().get(0));
+            bookShelf.getBookInfoBean().setIntroduce(Jsoup.parse(metadata.getDescriptions().get(0)).text());
         }
         chapterList = new ArrayList<>();
         List<TOCReference> refs = book.getTableOfContents().getTocReferences();
@@ -102,21 +134,23 @@ public class PageLoaderEpub extends PageLoader {
             List<SpineReference> spineReferences = book.getSpine().getSpineReferences();
             for (int i = 0, size = spineReferences.size(); i < size; i++) {
                 Resource resource = spineReferences.get(i).getResource();
-                String title = "";
-                try {
-                    Document doc = Jsoup.parse(new String(resource.getData(), mCharset));
-                    Elements elements = doc.getElementsByTag("title");
-                    if (elements.size() > 0) {
-                        title = elements.get(0).text();
+                String title = resource.getTitle();
+                if (TextUtils.isEmpty(title)) {
+                    try {
+                        Document doc = Jsoup.parse(new String(resource.getData(), mCharset));
+                        Elements elements = doc.getElementsByTag("title");
+                        if (elements.size() > 0) {
+                            title = elements.get(0).text();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 ChapterListBean bean = new ChapterListBean();
                 bean.setDurChapterIndex(i);
-                bean.setNoteUrl(getBook().getNoteUrl());
+                bean.setNoteUrl(bookShelf.getNoteUrl());
                 bean.setDurChapterUrl(resource.getHref());
-                if (i == 0) {
+                if (i == 0 && title.isEmpty()) {
                     bean.setDurChapterName("封面");
                 } else {
                     bean.setDurChapterName(title);
@@ -205,22 +239,23 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        if (getBook() == null) return;
+        BookShelfBean bookShelf = getBook();
+        if (bookShelf == null) return;
 
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
-            File bookFile = new File(getBook().getNoteUrl());
+            File bookFile = new File(bookShelf.getNoteUrl());
             book = readBook(bookFile);
 
             if (book == null) {
                 e.onError(new Exception("文件解析失败"));
                 return;
             }
-            if (TextUtils.isEmpty(getBook().getBookInfoBean().getCharset())) {
-                getBook().getBookInfoBean().setCharset(getCharset(book));
+            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
+                bookShelf.getBookInfoBean().setCharset(getCharset(book));
             }
-            mCharset = Charset.forName(getBook().getBookInfoBean().getCharset());
+            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
 
-            e.onNext(getBook());
+            e.onNext(bookShelf);
             e.onComplete();
         }).subscribeOn(Schedulers.single())
                 .flatMap(this::checkChapterList)
@@ -254,15 +289,16 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void updateChapter() {
+        BookShelfBean bookShelf = getBook();
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
-            getBook().setChapterList(null);
-            BookshelfHelp.delChapterList(getBook().getNoteUrl());
-            if (TextUtils.isEmpty(getBook().getBookInfoBean().getCharset())) {
-                getBook().getBookInfoBean().setCharset(getCharset(book));
+            bookShelf.setChapterList(null);
+            BookshelfHelp.delChapterList(bookShelf.getNoteUrl());
+            if (TextUtils.isEmpty(bookShelf.getBookInfoBean().getCharset())) {
+                bookShelf.getBookInfoBean().setCharset(getCharset(book));
             }
-            mCharset = Charset.forName(getBook().getBookInfoBean().getCharset());
-            e.onNext(getBook());
+            mCharset = Charset.forName(bookShelf.getBookInfoBean().getCharset());
+            e.onNext(bookShelf);
             e.onComplete();
         }).flatMap(this::checkChapterList)
                 .compose(RxUtils::toSimpleSingle)

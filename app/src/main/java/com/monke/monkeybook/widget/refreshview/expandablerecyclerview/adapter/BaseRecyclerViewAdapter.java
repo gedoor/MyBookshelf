@@ -127,7 +127,7 @@ public abstract class BaseRecyclerViewAdapter<T, S, VH extends BaseExpandAbleVie
         final Object item = showingDatas.get(position);
         final int gp = getGroupPosition(position);
         final int cp = getChildPosition(gp, position);
-        if (item instanceof GroupItem) {
+        if (item != null && item instanceof GroupItem) {
             onBindGroupHolder(holder, gp, position, (T) ((GroupItem) item).getGroupData());
             holder.groupView.setOnClickListener(v -> {
                 if (null != itemClickListener) {

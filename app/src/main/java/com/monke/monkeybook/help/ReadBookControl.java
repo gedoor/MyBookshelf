@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.monke.monkeybook.utils.ScreenUtils.getDisplayMetrics;
 import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_WIDTH;
 
 public class ReadBookControl {
@@ -176,13 +177,12 @@ public class ReadBookControl {
 
     private void initPageStyle(Context context) {
         try {
-            //noinspection ConstantConditions
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
             if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
                 bgIsColor = false;
                 bgPath = getBgPath(textDrawableIndex);
                 bgBitmap = BitmapFactory.decodeFile(bgPath);
-                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, 600);
+                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, getDisplayMetrics().widthPixels);
                 return;
             } else if (getBgCustom(textDrawableIndex) == 1) {
                 bgIsColor = true;
@@ -190,7 +190,6 @@ public class ReadBookControl {
                 return;
             }
             bgIsColor = true;
-            //noinspection ConstantConditions
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
         } catch (Exception e) {
             setBgCustom(textDrawableIndex, 0);

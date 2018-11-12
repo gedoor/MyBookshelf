@@ -97,7 +97,7 @@ public class CharsetDetector {
         }
 
         if (isAscii) {
-            return "ascii";
+            return "UTF-8";
         }
 
         String prob[] = detector.getProbableCharsets();

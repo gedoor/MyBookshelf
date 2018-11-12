@@ -5,17 +5,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,7 +24,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
-import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -36,11 +33,10 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> {
+public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> implements BookShelfAdapter {
 
     private Activity activity;
     private List<BookShelfBean> books;
-    private Boolean needAnim;
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
 
@@ -60,16 +56,17 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
     };
 
+    @Override
     public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfListAdapter(Activity activity, boolean needAnim) {
+    public BookShelfListAdapter(Activity activity) {
         this.activity = activity;
-        this.needAnim = needAnim;
         books = new ArrayList<>();
     }
 
+    @Override
     public void refreshBook(String noteUrl) {
         for (int i = 0; i < books.size(); i++) {
             if (Objects.equals(books.get(i).getNoteUrl(), noteUrl)) {
@@ -92,20 +89,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
-        if (needAnim) {
-            final Animation animation = AnimationUtils.loadAnimation(holder.flContent.getContext(), R.anim.anim_bookshelf_item);
-            animation.setAnimationListener(new AnimationStartListener() {
-                @Override
-                void onAnimStart(Animation animation) {
-                    needAnim = false;
-                    holder.flContent.setVisibility(View.VISIBLE);
-                }
-            });
-            long DUR_ANIM_ITEM = 30;
-            new Handler().postDelayed(() -> holder.flContent.startAnimation(animation), index * DUR_ANIM_ITEM);
-        } else {
-            holder.flContent.setVisibility(View.VISIBLE);
-        }
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
                 Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
@@ -126,24 +109,13 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         }
+        holder.tvReadY.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(books.get(index))));
         holder.tvRead.setText(holder.tvRead.getContext().getString(R.string.read_dur_progress, books.get(index).getDurChapterName()));
         holder.tvLast.setText(holder.tvLast.getContext().getString(R.string.book_search_last, books.get(index).getLastChapterName()));
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
             holder.ivHasNew.setVisibility(View.INVISIBLE);
-        }
-        //进度条
-        holder.mpbDurProgress.setVisibility(View.VISIBLE);
-        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
-        float speed = books.get(index).getChapterListSize() * 1.0f / 60;
-
-        holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
-
-        if (needAnim) {
-            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter() + 1);
-        } else {
-            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
         }
         holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
@@ -186,10 +158,12 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
     }
 
+    @Override
     public void setItemClickListener(OnItemClickListenerTwo itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
+    @Override
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
         if (null != newDataS && newDataS.size() > 0) {
@@ -201,20 +175,21 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         notifyDataSetChanged();
     }
 
+    @Override
     public List<BookShelfBean> getBooks() {
         return books;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout flContent;
+        FrameLayout flContent;
         ImageView ivCover;
         ImageView ivHasNew;
         AutofitTextView tvName;
         AutofitTextView tvRead;
         AutofitTextView tvLast;
+        TextView tvReadY;
         View ibContent;
         RotateLoading rotateLoading;
-        MHorProgressBar mpbDurProgress;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -224,29 +199,10 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
+            tvReadY = itemView.findViewById(R.id.tv_read_y);
             ibContent = itemView.findViewById(R.id.ib_content);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
-            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
         }
     }
 
-    abstract class AnimationStartListener implements Animation.AnimationListener {
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-            onAnimStart(animation);
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-
-        }
-
-        abstract void onAnimStart(Animation animation);
-    }
 }

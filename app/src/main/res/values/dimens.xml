@@ -17,7 +17,7 @@
     <dimen name="fastscroll_handle_width">8dp</dimen>
     <dimen name="fastscroll_handle_radius">0dp</dimen>
 
-    <dimen name="fastscroll_track_width">8dp</dimen>
+    <dimen name="fastscroll_track_width">2dp</dimen>
 
     <dimen name="fastscroll_scrollbar_margin_top">8dp</dimen>
     <dimen name="fastscroll_scrollbar_margin_bottom">8dp</dimen>

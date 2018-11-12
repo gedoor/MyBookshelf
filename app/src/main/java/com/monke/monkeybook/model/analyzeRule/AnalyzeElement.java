@@ -234,6 +234,7 @@ public class AnalyzeElement {
                     }
                     break;
                 case "html":
+                    elements.select("script").remove();
                     String html = elements.html();
                     String[] htmlS = html.replaceAll("<(br|p.*?|div.*?|/p|/div)>", "\n")
                             .replaceAll("<.*?>", "")
