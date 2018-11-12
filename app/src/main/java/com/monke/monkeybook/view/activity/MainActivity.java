@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -36,8 +37,10 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.BaseTabActivity;
 import com.monke.monkeybook.help.BookshelfHelp;
+import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.DataBackup;
 import com.monke.monkeybook.help.LauncherIcon;
+import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.UpLastChapterModel;
@@ -195,7 +198,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void showBookGroupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
-        for (int j = 0; j < BOOK_GROUPS.length; j++) {
+        for (int j = 0; j < 3; j++) {
             popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
         }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
@@ -395,6 +398,9 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
+                case R.id.action_group_bd:
+                    upGroup(3);
+                    break;
                 case R.id.action_book_source_manage:
                     handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
@@ -500,6 +506,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (!isRecreate) {
             versionUpRun();
             requestPermission();
+            handler.postDelayed(this::preloadReader, 200);
         }
         handler.postDelayed(() -> UpLastChapterModel.getInstance().startUpdate(), 60 * 1000);
     }
@@ -509,7 +516,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         moProgressHUD.dismiss();
     }
 
-    @Override
     public void onRestore(String msg) {
         moProgressHUD.showLoading(msg);
     }
@@ -555,17 +561,17 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     @Override
-    public void onDestroy() {
-        if (preferences.getBoolean("fadeTTS", false))
-            mPresenter.resetVolume();
         UpLastChapterModel.getInstance().onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+    }
+
+    private void preloadReader() {
+        AsyncTask.execute(() -> {
+            ReadBookControl.getInstance();
+            ChapterContentHelp.getInstance();
+        });
     }
 
 }

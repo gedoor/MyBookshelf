@@ -24,6 +24,8 @@ public interface MainContract {
         void toast(String msg);
 
         void toast(int strId);
+
+        int getGroup();
     }
 
     interface Presenter extends IPresenter {
@@ -35,8 +37,6 @@ public interface MainContract {
         void addBookUrl(String bookUrl);
 
         void clearBookshelf();
-
-        void resetVolume();
     }
 
 }

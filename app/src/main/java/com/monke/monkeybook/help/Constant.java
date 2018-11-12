@@ -22,7 +22,7 @@ public class Constant {
     public static final String FORMAT_FILE_DATE = "yyyy-MM-dd";
     //RxBus
     public static final int MSG_SELECTOR = 1;
-    public static final String[] BOOK_GROUPS = new String[]{"追更区", "养肥区", "完结区"};
+    public static final String[] BOOK_GROUPS = new String[]{"追更区", "养肥区", "完结区", "本地书籍"};
     //BookCachePath (因为getCachePath引用了Context，所以必须是静态变量，不能够是静态常量)
     public static String BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
     //文件阅读记录保存的路径

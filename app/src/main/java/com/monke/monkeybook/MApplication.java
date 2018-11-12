@@ -29,7 +29,6 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     private SharedPreferences configPreferences;
-    public static int VOLUME = -1;
 
     public static MApplication getInstance() {
         return instance;
@@ -112,4 +111,5 @@ public class MApplication extends Application {
             notificationManager.createNotificationChannel(firstChannel);
         }
     }
+
 }

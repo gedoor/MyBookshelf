@@ -1,6 +1,7 @@
 package com.monke.monkeybook.utils;
 
 import android.support.annotation.StringRes;
+import android.util.Base64;
 
 import com.monke.monkeybook.MApplication;
 
@@ -204,4 +205,14 @@ public class StringUtils {
         }
         return -1;
     }
+
+    public static String base64Decode(String str) {
+        byte[] bytes = Base64.decode(str, Base64.DEFAULT);
+        try {
+            return new String(bytes, "UTF-8");
+        } catch (Exception e) {
+            return new String(bytes);
+        }
+    }
+
 }
