@@ -99,7 +99,7 @@ public class BookSourceManager extends BaseModelImpl {
             case 1:
                 return BookSourceBeanDao.Properties.Weight.columnName + " DESC";
             case 2:
-                return BookSourceBeanDao.Properties.BookSourceName.columnName + " ASC";
+                return BookSourceBeanDao.Properties.BookSourceName.columnName + " COLLATE LOCALIZED ASC";
             default:
                 return BookSourceBeanDao.Properties.SerialNumber.columnName + " ASC";
         }
