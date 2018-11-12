@@ -269,7 +269,7 @@
     <string name="sort">排序</string>
     <string name="sort_auto">智能排序</string>
     <string name="sort_manual">手动排序</string>
-    <string name="sort_ping_yin">拼音排序</string>
-    <string name="read_y">已读:%s</string>
+    <string name="sort_pin_yin">拼音排序</string>
+    <string name="read_y">已读: %s</string>
 
 </resources>

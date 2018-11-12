@@ -289,7 +289,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.sort_auto:
                 upSourceSort(1);
                 break;
-            case R.id.sort_ping_yin:
+            case R.id.sort_pin_yin:
                 upSourceSort(2);
                 break;
             case android.R.id.home:

@@ -47,9 +47,9 @@
                 android:title="@string/sort_auto" />
 
             <item
-                android:id="@+id/sort_ping_yin"
+                android:id="@+id/sort_pin_yin"
                 android:checkable="true"
-                android:title="@string/sort_ping_yin" />
+                android:title="@string/sort_pin_yin" />
 
         </menu>
 
