@@ -33,11 +33,10 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> {
+public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> implements BookShelfAdapter {
 
     private Activity activity;
     private List<BookShelfBean> books;
-    private Boolean needAnim;
     private OnItemClickListenerTwo itemClickListener;
     private String bookshelfPx;
 
@@ -57,16 +56,17 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
     };
 
+    @Override
     public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
-    public BookShelfListAdapter(Activity activity, boolean needAnim) {
+    public BookShelfListAdapter(Activity activity) {
         this.activity = activity;
-        this.needAnim = needAnim;
         books = new ArrayList<>();
     }
 
+    @Override
     public void refreshBook(String noteUrl) {
         for (int i = 0; i < books.size(); i++) {
             if (Objects.equals(books.get(i).getNoteUrl(), noteUrl)) {
@@ -158,10 +158,12 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         }
     }
 
+    @Override
     public void setItemClickListener(OnItemClickListenerTwo itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
+    @Override
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
         if (null != newDataS && newDataS.size() > 0) {
@@ -173,6 +175,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         notifyDataSetChanged();
     }
 
+    @Override
     public List<BookShelfBean> getBooks() {
         return books;
     }

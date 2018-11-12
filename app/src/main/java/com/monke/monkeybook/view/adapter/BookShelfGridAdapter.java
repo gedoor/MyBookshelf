@@ -33,7 +33,7 @@ import java.util.Objects;
 
 import me.grantland.widget.AutofitTextView;
 
-public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdapter.MyViewHolder> {
+public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdapter.MyViewHolder> implements BookShelfAdapter {
 
     private List<BookShelfBean> books;
     private OnItemClickListenerTwo itemClickListener;
@@ -66,10 +66,12 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         books = new ArrayList<>();
     }
 
+    @Override
     public MyItemTouchHelpCallback.OnItemTouchCallbackListener getItemTouchCallbackListener() {
         return itemTouchCallbackListener;
     }
 
+    @Override
     public void refreshBook(String noteUrl) {
         for (int i = 0; i < books.size(); i++) {
             if (Objects.equals(books.get(i).getNoteUrl(), noteUrl)) {
@@ -149,10 +151,12 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         }
     }
 
+    @Override
     public void setItemClickListener(OnItemClickListenerTwo itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
+    @Override
     public synchronized void replaceAll(List<BookShelfBean> newDataS, String bookshelfPx) {
         this.bookshelfPx = bookshelfPx;
         if (null != newDataS && newDataS.size() > 0) {
@@ -164,6 +168,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         notifyDataSetChanged();
     }
 
+    @Override
     public List<BookShelfBean> getBooks() {
         return books;
     }
