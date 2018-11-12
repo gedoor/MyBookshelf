@@ -8,7 +8,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
@@ -29,7 +31,6 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     private SharedPreferences configPreferences;
-    public static int VOLUME = -1;
 
     public static MApplication getInstance() {
         return instance;
@@ -71,7 +72,7 @@ public class MApplication extends Application {
         MApplication.downloadPath = downloadPath;
         Constant.BOOK_CACHE_PATH = MApplication.downloadPath + File.separator + "book_cache" + File.separator;
         SharedPreferences.Editor editor = configPreferences.edit();
-        editor.putString(getString(R.string.pk_download_path), downloadPath);
+        editor.putString(getString(R.string.pk_download_path), FileHelp.getCachePath());
         editor.apply();
     }
 
@@ -112,4 +113,5 @@ public class MApplication extends Application {
             notificationManager.createNotificationChannel(firstChannel);
         }
     }
+
 }

@@ -9,7 +9,9 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.base.observer.SimpleObserver;
+<<<<<<< .mine=======import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.base.MBaseActivity;
+>>>>>>> .theirsimport com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
@@ -21,6 +23,7 @@ import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
+import com.monke.monkeybook.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +104,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel = new SearchBookModel(context, onSearchListener, useMy716);
     }
 
-    @Override
     public void insertSearchHistory() {
         final int type = SearchBookPresenter.BOOK;
         final String content = mView.getEdtContent().getText().toString().trim();
@@ -237,7 +239,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    //添加书集
+    //添加书籍
     @Override
     public void addBookToShelf(final SearchBookBean searchBookBean) {
         final BookShelfBean bookShelfResult = BookshelfHelp.getBookFromSearchBook(searchBookBean);
@@ -248,6 +250,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
+                        bookShelfBean.setGroup(getShelfGroup() % 3);
                         saveBookToShelf(bookShelfBean);
                     }
 
@@ -283,6 +286,10 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
                         mView.addBookShelfFailed(String.format("保存书籍失败%s", e.getMessage()));
                     }
                 });
+    }
+
+    private int getShelfGroup() {
+        return MApplication.getInstance().getConfigPreferences().getInt("bookshelfGroup", 0);
     }
 
     private void saveSearchBookToDb(String bookName) {
@@ -350,6 +357,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
     public void sourceListChange(Boolean change) {
+
         searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 

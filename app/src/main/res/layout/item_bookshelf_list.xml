@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_content"
@@ -9,17 +9,9 @@
     android:background="@color/background"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <com.monke.monkeybook.widget.FilletImageView
-        android:id="@+id/iv_cover"
-        android:layout_width="56dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/img_cover"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_cover_default"
-        android:transitionName="img_cover"
-        tools:ignore="UnusedAttribute" />
 
     <me.grantland.widget.AutofitTextView
         android:id="@+id/tv_name"
@@ -96,27 +88,12 @@
         android:textSize="12sp"
         app:minTextSize="10sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_last"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_toEndOf="@+id/iv_cover">
-
-        <com.monke.mprogressbar.MHorProgressBar
-            android:id="@+id/mpb_durProgress"
-            android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible"
-            app:bgdrawable="@color/btn_bg_press"
-            app:cantouch="false"
-            app:fontdrawable="@color/colorAccent"
-            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_gravity="bottom"
+        android:background="@color/btn_bg_press" />
 
+</FrameLayout>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -26,7 +27,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
-import com.monke.mprogressbar.MHorProgressBar;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -133,18 +133,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         } else {
             holder.ivHasNew.setVisibility(View.INVISIBLE);
         }
-        //进度条
-        holder.mpbDurProgress.setVisibility(View.VISIBLE);
-        holder.mpbDurProgress.setMaxProgress(books.get(index).getChapterListSize());
-        float speed = books.get(index).getChapterListSize() * 1.0f / 60;
-
-        holder.mpbDurProgress.setSpeed(speed <= 0 ? 1 : speed);
-
-        if (needAnim) {
-            holder.mpbDurProgress.setDurProgressWithAnim(books.get(index).getDurChapter() + 1);
-        } else {
-            holder.mpbDurProgress.setDurProgress(books.get(index).getDurChapter() + 1);
-        }
         holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
@@ -206,7 +194,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout flContent;
+        FrameLayout flContent;
         ImageView ivCover;
         ImageView ivHasNew;
         AutofitTextView tvName;
@@ -214,7 +202,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         AutofitTextView tvLast;
         View ibContent;
         RotateLoading rotateLoading;
-        MHorProgressBar mpbDurProgress;
 
         MyViewHolder(View itemView) {
             super(itemView);
@@ -226,7 +213,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvLast = itemView.findViewById(R.id.tv_last);
             ibContent = itemView.findViewById(R.id.ib_content);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
-            mpbDurProgress = itemView.findViewById(R.id.mpb_durProgress);
         }
     }
 

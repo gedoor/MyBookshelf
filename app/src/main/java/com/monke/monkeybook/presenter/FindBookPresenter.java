@@ -60,7 +60,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                         group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {
-                    sourceBean.setBookSourceGroup("发现规则语法错误");
+                    sourceBean.addGroup("发现规则语法错误");
                     BookSourceManager.addBookSource(sourceBean);
                 }
             }

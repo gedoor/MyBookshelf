@@ -110,7 +110,7 @@
 
                         <TextView
                             android:id="@+id/tv_author"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
@@ -121,6 +121,12 @@
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/transparent" />
 
                         <TextView
                             android:id="@+id/tv_update"
@@ -158,7 +164,7 @@
 
                         <TextView
                             android:id="@+id/tv_origin"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
@@ -169,6 +175,12 @@
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/transparent" />
 
                         <TextView
                             android:id="@+id/tv_change_origin"
@@ -206,7 +218,7 @@
 
                         <TextView
                             android:id="@+id/tv_chapter"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ellipsize="end"
@@ -217,13 +229,12 @@
                             android:text="@string/read_dur_progress"
                             android:textColor="@color/tv_text_book_detail"
                             android:textSize="13sp" />
-
                         <TextView
                             android:id="@+id/tv_chapter_size"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/tv_text_book_detail"
-                            android:textSize="13sp"/>
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <RadioGroup
@@ -284,7 +295,7 @@
                             tools:ignore="RtlHardcoded" />
 
                         <RadioButton
-                            android:id="@+id/rb_zdy"
+                            android:id="@+id/rb_bd"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/selector_radio_book_group"
@@ -294,10 +305,8 @@
                             android:paddingTop="1dp"
                             android:paddingBottom="1dp"
                             android:includeFontPadding="false"
-                            android:text="@string/local"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
-                            android:visibility="invisible" />
+                            android:textSize="13sp" />
 
                     </RadioGroup>
 

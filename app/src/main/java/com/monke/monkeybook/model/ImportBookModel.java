@@ -36,16 +36,20 @@ public class ImportBookModel extends BaseModelImpl {
                 bookShelfBean.setFinalDate(System.currentTimeMillis());
                 bookShelfBean.setDurChapter(0);
                 bookShelfBean.setDurChapterPage(0);
+                bookShelfBean.setGroup(3);
                 bookShelfBean.setTag(BookShelfBean.LOCAL_TAG);
                 bookShelfBean.setNoteUrl(file.getAbsolutePath());
                 bookShelfBean.setAllowUpdate(false);
 
                 BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
-                String fileName = file.getName().substring(0, file.getName().lastIndexOf("."));
+                String fileName = file.getName();
+                int lastDotIndex = file.getName().lastIndexOf(".");
+                if (lastDotIndex > 0)
+                    fileName = fileName.substring(0, lastDotIndex);
                 int authorIndex = fileName.indexOf("作者");
                 if (authorIndex != -1) {
                     bookInfoBean.setAuthor(FormatWebText.getAuthor(fileName.substring(authorIndex)));
-                    fileName = fileName.substring(0, authorIndex-1);
+                    fileName = fileName.substring(0, authorIndex).trim();
                 } else {
                     bookInfoBean.setAuthor("");
                 }
