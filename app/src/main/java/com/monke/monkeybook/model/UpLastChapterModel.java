@@ -162,7 +162,8 @@ public class UpLastChapterModel {
                         .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(searchBookBean.getTag())).count();
                 if (count == 0 && !Objects.equals(searchBookBean.getTag(), My716.TAG)) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
-                } else if (System.currentTimeMillis() - searchBookBean.getAddTime() > 1000 * 60 * 60) {
+                } else if (System.currentTimeMillis() - searchBookBean.getUpTime() > 1000 * 60 * 60
+                        && BookSourceManager.getBookSourceByUrl(searchBookBean.getTag()).getEnable()) {
                     e.onNext(searchBookBean);
                 }
             }

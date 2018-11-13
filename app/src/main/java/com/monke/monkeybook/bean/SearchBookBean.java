@@ -27,6 +27,7 @@ public class SearchBookBean implements Parcelable{
     private String introduce; //简介
     private String chapterUrl;//目录URL
     private Long addTime = 0L;
+    private Long upTime = 0L;
     @Transient
     private long words;
     @Transient
@@ -63,12 +64,13 @@ public class SearchBookBean implements Parcelable{
         introduce = in.readString();
         chapterUrl = in.readString();
         addTime = in.readLong();
+        upTime = in.readLong();
     }
 
-    @Generated(hash = 1805065778)
+    @Generated(hash = 1330499490)
     public SearchBookBean(String noteUrl, String coverUrl, String name, String author,
             String tag, String kind, String origin, String desc, String lastChapter,
-            String introduce, String chapterUrl, Long addTime) {
+            String introduce, String chapterUrl, Long addTime, Long upTime) {
         this.noteUrl = noteUrl;
         this.coverUrl = coverUrl;
         this.name = name;
@@ -81,6 +83,7 @@ public class SearchBookBean implements Parcelable{
         this.introduce = introduce;
         this.chapterUrl = chapterUrl;
         this.addTime = addTime;
+        this.upTime = upTime;
     }
 
     @Override
@@ -101,6 +104,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(introduce);
         dest.writeString(chapterUrl);
         dest.writeLong(addTime);
+        dest.writeLong(upTime);
     }
 
     @Override
@@ -282,5 +286,13 @@ public class SearchBookBean implements Parcelable{
 
     public void setSearchTime(int searchTime) {
         this.searchTime = searchTime;
+    }
+
+    public Long getUpTime() {
+        return this.upTime;
+    }
+
+    public void setUpTime(Long upTime) {
+        this.upTime = upTime;
     }
 }

@@ -119,6 +119,7 @@ public class ChangeSourceView {
             @Override
             public void refreshSearchBook() {
                 ibtStop.setVisibility(View.VISIBLE);
+                adapter.reSetSourceAdapter();
             }
 
             @Override
@@ -203,17 +204,43 @@ public class ChangeSourceView {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
             if (searchBookBeans == null) searchBookBeans = new ArrayList<>();
-            if (searchBookBeans.size() > 0) {
-                for (SearchBookBean searchBookBean : searchBookBeans) {
+            List<SearchBookBean> searchBookList = new ArrayList<>();
+            List<BookSourceBean> bookSourceList = BookSourceManager.getSelectedBookSource();
+            if (bookSourceList != null && bookSourceList.size() > 0) {
+                for (BookSourceBean bookSourceBean : new ArrayList<>(bookSourceList)) {
+                    boolean hasSource = false;
+                    for (SearchBookBean searchBookBean : new ArrayList<>(searchBookBeans)) {
+                        if (Objects.equals(searchBookBean.getTag(), bookSourceBean.getBookSourceUrl())) {
+                            bookSourceList.remove(bookSourceBean);
+                            searchBookList.add(searchBookBean);
+                            hasSource = true;
+                            break;
+                        }
+                    }
+                    if (hasSource) {
+                        bookSourceList.remove(bookSourceBean);
+                    }
+                }
+                searchBookModel.searchReNew();
+                searchBookModel.initSearchEngineS(bookSourceList);
+                long startThisSearchTime = System.currentTimeMillis();
+                searchBookModel.setSearchTime(startThisSearchTime);
+                List<BookShelfBean> bookList = new ArrayList<>();
+                bookList.add(book);
+                searchBookModel.search(bookName, startThisSearchTime, bookList, false);
+                UpLastChapterModel.getInstance().startUpdate(searchBookList);
+            }
+            if (searchBookList.size() > 0) {
+                for (SearchBookBean searchBookBean : searchBookList) {
                     if (searchBookBean.getTag().equals(bookShelf.getTag())) {
                         searchBookBean.setIsAdd(true);
                     } else {
                         searchBookBean.setIsAdd(false);
                     }
                 }
-                Collections.sort(searchBookBeans, this::compareSearchBooks);
+                Collections.sort(searchBookList, this::compareSearchBooks);
             }
-            e.onSuccess(searchBookBeans);
+            e.onSuccess(searchBookList);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<SearchBookBean>>() {
@@ -242,41 +269,12 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
-        Single.create((SingleOnSubscribe<Boolean>) e -> {
-            List<SearchBookBean> searchBookList = new ArrayList<>(adapter.getSearchBookBeans());
-            List<BookSourceBean> bookSourceList = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .orderRaw(BookSourceBeanDao.Properties.Weight.columnName + " DESC")
-                    .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
-                    .list();
-            if (bookSourceList == null || bookSourceList.size() == 0) {
-                e.onSuccess(false);
-                return;
-            }
-            for (SearchBookBean searchBookBean : new ArrayList<>(adapter.getSearchBookBeans())) {
-                boolean hasSource = false;
-                for (BookSourceBean bookSourceBean : new ArrayList<>(BookSourceManager.getAllBookSource())) {
-                    if (Objects.equals(searchBookBean.getTag(), bookSourceBean.getBookSourceUrl())) {
-                        bookSourceList.remove(bookSourceBean);
-                        hasSource = true;
-                        break;
-                    }
-                }
-                if (!hasSource && !My716.TAG.equals(searchBookBean.getTag())) {
-                    searchBookList.remove(searchBookBean);
-                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
-                }
-            }
-            searchBookModel.searchReNew();
-            searchBookModel.initSearchEngineS(bookSourceList);
-            long startThisSearchTime = System.currentTimeMillis();
-            searchBookModel.setSearchTime(startThisSearchTime);
-            List<BookShelfBean> bookList = new ArrayList<>();
-            bookList.add(book);
-            searchBookModel.search(bookName, startThisSearchTime, bookList, false);
-            UpLastChapterModel.getInstance().startUpdate(searchBookList);
-            e.onSuccess(true);
-        }).compose(RxUtils::toSimpleSingle)
-                .subscribe();
+        searchBookModel.searchReNew();
+        long startThisSearchTime = System.currentTimeMillis();
+        searchBookModel.setSearchTime(startThisSearchTime);
+        List<BookShelfBean> bookList = new ArrayList<>();
+        bookList.add(book);
+        searchBookModel.search(bookName, startThisSearchTime, bookList, false);
     }
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {
