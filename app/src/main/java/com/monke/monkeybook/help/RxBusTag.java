@@ -28,7 +28,7 @@ public class RxBusTag {
     public final static String UPDATE_APK_STATE = "updateApkState";
     public final static String DOWNLOAD_ALL = "downloadAll";
     public final static String UPDATE_BOOK_SOURCE = "updateBookSource";
-    public final static String RESET_VOLUME = "resetVolume";
     public final static String UP_SEARCH_BOOK = "upSearchBook";
-
+    public final static String SKIP_TO_CHAPTER = "skipToChapter";
+    public final static String OPEN_BOOK_MARK = "openBookMark";
 }

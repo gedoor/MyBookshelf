@@ -26,6 +26,10 @@ public interface ReadBookContract {
 
         void openBookFromOther();
 
+        void showBookmark(BookmarkBean bookmarkBean);
+
+        void skipToChapter(int chapterIndex, int pageIndex);
+
         void onMediaButton();
 
         /**

@@ -39,6 +39,7 @@ import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.DownloadService;
+import com.monke.monkeybook.view.activity.ChapterListActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -461,9 +462,18 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         mView.upAloudTimer(timer);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SKIP_TO_CHAPTER)})
+    public void skipToChapter(ChapterListActivity.OpenChapterBean openChapterBean) {
+        mView.skipToChapter(openChapterBean.getChapterIndex(), openChapterBean.getPageIndex());
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.OPEN_BOOK_MARK)})
+    public void openBookmark(BookmarkBean bookmarkBean) {
+        mView.showBookmark(bookmarkBean);
+    }
+
     public interface OnAddListener {
         void addSuccess();
     }
-
 
 }

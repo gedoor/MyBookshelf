@@ -64,7 +64,7 @@ public class ChapterListActivity extends MBaseActivity {
 
     private boolean isChapterReverse;
 
-    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf, int requestCode) {
+    public static void startThis(MBaseActivity activity, BookShelfBean bookShelf) {
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
         intent.putExtra("data_key", key);
@@ -74,7 +74,7 @@ public class ChapterListActivity extends MBaseActivity {
             BitIntentDataManager.getInstance().putData(key, bookShelf);
             e.printStackTrace();
         }
-        activity.startActivityForResult(intent, requestCode);
+        activity.startActivity(intent);
     }
 
     @Override
@@ -222,11 +222,7 @@ public class ChapterListActivity extends MBaseActivity {
             public void itemClick(int index, int page, int tabPosition) {
                 searchViewCollapsed();
                 if (index != bookShelf.getDurChapter()) {
-                    Intent data = new Intent();
-                    data.putExtra("what", 0);
-                    data.putExtra("chapter", index);
-                    data.putExtra("page", page);
-                    setResult(RESULT_OK, data);
+                    RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
                 }
                 finish();
             }
@@ -234,10 +230,7 @@ public class ChapterListActivity extends MBaseActivity {
             @Override
             public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
                 searchViewCollapsed();
-                Intent data = new Intent();
-                data.putExtra("what", tabPosition);
-                data.putExtra("bookmark", bookmarkBean);
-                setResult(RESULT_OK, data);
+                RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
                 finish();
             }
         });
@@ -292,6 +285,24 @@ public class ChapterListActivity extends MBaseActivity {
     public void chapterChange(BookContentBean bookContentBean) {
         if (bookShelf != null && bookShelf.getNoteUrl().equals(bookContentBean.getNoteUrl())) {
             chapterListAdapter.upChapter(bookContentBean.getDurChapterIndex());
+        }
+    }
+
+    public class OpenChapterBean {
+        private int chapterIndex;
+        private int pageIndex;
+
+        OpenChapterBean(int chapterIndex, int pageIndex) {
+            this.chapterIndex = chapterIndex;
+            this.pageIndex = pageIndex;
+        }
+
+        public int getChapterIndex() {
+            return chapterIndex;
+        }
+
+        public int getPageIndex() {
+            return pageIndex;
         }
     }
 }

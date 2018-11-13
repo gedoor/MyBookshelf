@@ -70,7 +70,6 @@ import static com.monke.monkeybook.service.ReadAloudService.PLAY;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
-    private static final int CHAPTER_SKIP_RESULT = 11;
 
     @BindView(R.id.fl_content)
     FrameLayout flContent;
@@ -435,7 +434,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void openChapterList() {
                 ReadBookActivity.this.popMenuOut();
                 if (mPresenter.getBookShelf() != null && !mPresenter.getBookShelf().realChapterListEmpty()) {
-                    mHandler.postDelayed(() -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf(), CHAPTER_SKIP_RESULT), menuTopOut.getDuration());
+                    mHandler.postDelayed(() -> ChapterListActivity.startThis(ReadBookActivity.this, mPresenter.getBookShelf()), menuTopOut.getDuration());
                 }
             }
 
@@ -773,7 +772,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     /**
      * 书签
      */
-    private void showBookmark(BookmarkBean bookmarkBean) {
+    @Override
+    public void showBookmark(BookmarkBean bookmarkBean) {
         this.popMenuOut();
         boolean isAdd = false;
         if (mPresenter.getBookShelf() != null) {
@@ -804,6 +804,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             });
         }
 
+    }
+
+    @Override
+    public void skipToChapter(int chapterIndex, int pageIndex) {
+        mPageLoader.skipToChapter(chapterIndex, pageIndex);
     }
 
     /**
@@ -1205,17 +1210,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         initImmersionBar();
-        if (requestCode == CHAPTER_SKIP_RESULT && resultCode == RESULT_OK) {
-            int what = data.getIntExtra("what", -1);
-            switch (what) {
-                case 0:
-                    mPageLoader.skipToChapter(data.getIntExtra("chapter", 0), data.getIntExtra("page", 0));
-                    break;
-                case 1:
-                    showBookmark(data.getParcelableExtra("bookmark"));
-                    break;
-            }
-        }
     }
 
     @SuppressLint("DefaultLocale")
