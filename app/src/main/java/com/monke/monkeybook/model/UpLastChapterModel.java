@@ -13,6 +13,7 @@ import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.source.My716;
+import com.monke.monkeybook.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,7 @@ public class UpLastChapterModel {
             }
             e.onComplete();
         }).flatMap(this::findSearchBookBean)
-                .subscribeOn(scheduler)
-                .observeOn(scheduler)
+                .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<SearchBookBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -93,6 +93,9 @@ public class UpLastChapterModel {
 
     public synchronized void startUpdate(List<SearchBookBean> beanList) {
         compositeDisposable.dispose();
+        executorService.shutdown();
+        executorService = Executors.newFixedThreadPool(5);
+        scheduler = Schedulers.from(executorService);
         compositeDisposable = new CompositeDisposable();
         this.searchBookBeanList = beanList;
         upIndex = -1;

@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -146,8 +147,8 @@ public class SearchBookModel {
             if (searchEngine.getHasMore()) {
                 WebBookModel.getInstance()
                         .searchOtherBook(content, page, searchEngine.getTag())
-                        .observeOn(scheduler)
                         .subscribeOn(scheduler)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Observer<List<SearchBookBean>>() {
                             @Override
                             public void onSubscribe(Disposable d) {
