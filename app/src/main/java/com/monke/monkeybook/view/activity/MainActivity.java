@@ -303,7 +303,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 if (!isNetWorkAvailable())
                     toast("网络连接不可用，无法下载！");
                 else
-                    RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 1000);
+                    RxBus.get().post(RxBusTag.DOWNLOAD_ALL, 10000);
                 break;
             case R.id.action_list_grid:
                 editor.putBoolean("bookshelfIsList", !viewIsList);
