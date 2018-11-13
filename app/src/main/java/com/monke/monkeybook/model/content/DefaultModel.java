@@ -9,6 +9,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeSearchUrl;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
@@ -53,10 +54,9 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
 
     private Boolean initBookSourceBean() {
         if (bookSourceBean == null) {
-            List<BookSourceBean> bookSourceBeans = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(tag)).build().list();
-            if (bookSourceBeans != null && bookSourceBeans.size() > 0) {
-                bookSourceBean = bookSourceBeans.get(0);
+            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(tag);
+            if (sourceBean != null) {
+                bookSourceBean = sourceBean;
                 name = bookSourceBean.getBookSourceName();
                 headerMap = AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent());
                 return true;
