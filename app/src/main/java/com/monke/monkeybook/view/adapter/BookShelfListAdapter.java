@@ -184,9 +184,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         FrameLayout flContent;
         ImageView ivCover;
         ImageView ivHasNew;
-        AutofitTextView tvName;
-        AutofitTextView tvRead;
-        AutofitTextView tvLast;
+        TextView tvName;
+        TextView tvRead;
+        TextView tvLast;
         TextView tvReadY;
         View ibContent;
         RotateLoading rotateLoading;
