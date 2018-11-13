@@ -65,5 +65,5 @@
     <color name="bg_divider_line">#FFD4D4D4</color>
     <!--statusBarBackground-->
     <color name="status_bar_bag">#64000000</color>
-
+    <color name="navigation_bar_bag">#bababa</color>
 </resources>

@@ -118,6 +118,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         } else {
             mImmersionBar.statusBarDarkFont(false);
         }
+        mImmersionBar.navigationBarColor(R.color.navigation_bar_bag);
         mImmersionBar.init();
     }
 
