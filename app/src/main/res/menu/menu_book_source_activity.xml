@@ -57,19 +57,19 @@
 
     <item
         android:id="@+id/action_add_book_source"
-        android:icon="@drawable/ic_add_black_24dp_new"
+        android:icon="@drawable/ic_add"
         android:title="@string/add_book_source"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_local"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_book_source_local"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_import_book_source_onLine"
-        android:icon="@drawable/ic_settings_ethernet_black_24dp_new"
+        android:icon="@drawable/ic_import"
         android:title="@string/import_book_source_on_line"
         app:showAsAction="never" />
 

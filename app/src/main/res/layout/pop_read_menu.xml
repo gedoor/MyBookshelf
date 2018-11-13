@@ -216,7 +216,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/table_of_contents"
-                    android:src="@drawable/ic_list_black_24dp_new_read"
+                    android:src="@drawable/ic_chapter_list"
                     app:tint="@color/tv_text_default"
                     tools:ignore="NestedWeights" />
 
@@ -286,7 +286,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/interface_setting"
-                    android:src="@drawable/ic_font_black_24dp_new"
+                    android:src="@drawable/ic_interface_setting"
                     app:tint="@color/tv_text_default"
                     tools:ignore="NestedWeights" />
 
@@ -321,7 +321,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:contentDescription="@string/setting"
-                    android:src="@drawable/ic_setting_hollow_black_24dp_new"
+                    android:src="@drawable/ic_settings"
                     app:tint="@color/tv_text_default"
                     tools:ignore="NestedWeights" />
 

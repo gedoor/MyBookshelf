@@ -42,7 +42,7 @@
     <group android:id="@+id/drawer_menu_setting">
         <item
             android:id="@+id/action_setting"
-            android:icon="@drawable/ic_settings_black_24dp_new"
+            android:icon="@drawable/ic_settings"
             android:title="@string/setting"
             app:tint="@color/tv_text_default" />
 
