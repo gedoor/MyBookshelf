@@ -10,6 +10,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.WebBookModel;
+import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -59,8 +60,7 @@ public class PageLoaderNet extends PageLoader {
             skipToChapter(getBook().getDurChapter(), getBook().getDurChapterPage());
         } else {
             WebBookModel.getInstance().getChapterList(getBook())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtils::toSimpleSingle)
                     .subscribe(new Observer<BookShelfBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
@@ -107,7 +107,6 @@ public class PageLoaderNet extends PageLoader {
             })
                     .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, getBook().getChapterList(chapterIndex), getBook().getBookInfoBean().getName()))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .compose(((BaseActivity) mPageView.getActivity()).bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
