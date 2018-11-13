@@ -19,7 +19,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -27,8 +26,6 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.UpLastChapterModel;
-import com.monke.monkeybook.model.source.My716;
-import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -269,6 +266,7 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
+        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
         searchBookModel.searchReNew();
         long startThisSearchTime = System.currentTimeMillis();
         searchBookModel.setSearchTime(startThisSearchTime);
