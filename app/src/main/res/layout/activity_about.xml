@@ -186,7 +186,7 @@
                     android:layout_margin="6dp"
                     android:background="@drawable/bg_ib_pre"
                     android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_local_cafe_black_24dp_new"
+                    android:drawableStart="@drawable/ic_local_cafe"
                     android:gravity="center_vertical"
                     android:text="@string/donate" />
 

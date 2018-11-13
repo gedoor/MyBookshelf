@@ -7,11 +7,11 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/icon_read_book"
+        android:src="@drawable/ic_read"
         app:tint="@color/colorAccent"
         android:contentDescription="@string/app_name" />
 

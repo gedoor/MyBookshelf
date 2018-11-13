@@ -13,7 +13,7 @@
     <group android:id="@+id/drawer_menu_book_source">
         <item
             android:id="@+id/action_book_source_manage"
-            android:icon="@drawable/ic_list_black_24dp_new"
+            android:icon="@drawable/ic_book_source_manage"
             android:title="@string/book_source_manage"
             app:tint="@color/tv_text_default" />
 
@@ -48,13 +48,13 @@
 
         <item
             android:id="@+id/action_about"
-            android:icon="@drawable/ic_beach_access_black_24dp_new"
+            android:icon="@drawable/ic_about"
             android:title="@string/about"
             app:tint="@color/tv_text_default" />
 
         <item
             android:id="@+id/action_donate"
-            android:icon="@drawable/ic_local_cafe_black_24dp_new"
+            android:icon="@drawable/ic_local_cafe"
             android:title="@string/donate"
             app:tint="@color/tv_text_default" />
     </group>
@@ -68,7 +68,7 @@
 
         <item
             android:id="@+id/action_restore"
-            android:icon="@drawable/ic_restore_black_24dp_new"
+            android:icon="@drawable/ic_restore"
             android:title="@string/restore"
             app:tint="@color/tv_text_default" />
     </group>
