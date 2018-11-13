@@ -61,7 +61,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_delete_forever_black_24dp"
+            android:src="@drawable/ic_clear_all"
             app:tint="@color/tv_text_default" />
 
 
