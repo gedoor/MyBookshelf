@@ -32,10 +32,6 @@ public class MoreSettingPop extends FrameLayout {
     Switch sbShowTimeBattery;
     @BindView(R.id.sb_hideStatusBar)
     Switch sbHideStatusBar;
-    @BindView(R.id.reNavbarcolor)
-    TextView reNavbarcolor;
-    @BindView(R.id.reNavbarcolor_val)
-    TextView reNavbarcolor_val;
     @BindView(R.id.ll_hideStatusBar)
     LinearLayout llHideStatusBar;
     @BindView(R.id.ll_showTimeBattery)
@@ -66,8 +62,6 @@ public class MoreSettingPop extends FrameLayout {
     LinearLayout llReadAloudKey;
     @BindView(R.id.sb_tip_margin_change)
     Switch sbTipMarginChange;
-    @BindView(R.id.llNavigationBarColor)
-    LinearLayout llNavigationBarColor;
     @BindView(R.id.ll_click_all_next)
     LinearLayout llClickAllNext;
 
@@ -197,18 +191,6 @@ public class MoreSettingPop extends FrameLayout {
                     .create();
             dialog.show();
         });
-        llNavigationBarColor.setOnClickListener(view -> {
-            AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setTitle(context.getString(R.string.re_navigation_bar_color))
-                    .setSingleChoiceItems(context.getResources().getStringArray(R.array.NavbarColors), readBookControl.getNavbarColor(), (dialogInterface, i) -> {
-                        readBookControl.setNavbarColor(i);
-                        upNavbarColor(i);
-                        dialogInterface.dismiss();
-                        changeProListener.recreate();
-                    })
-                    .create();
-            dialog.show();
-        });
         llScreenDirection.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.screen_direction))
@@ -227,7 +209,6 @@ public class MoreSettingPop extends FrameLayout {
         upScreenDirection(readBookControl.getScreenDirection());
         upScreenTimeOut(readBookControl.getScreenTimeOut());
         upFConvert(readBookControl.getTextConvert());
-        upNavbarColor(readBookControl.getNavbarColor());
         swVolumeNextPage.setChecked(readBookControl.getCanKeyTurn());
         swReadAloudKey.setChecked(readBookControl.getAloudCanKeyTurn());
         sbHideStatusBar.setChecked(readBookControl.getHideStatusBar());
@@ -252,11 +233,6 @@ public class MoreSettingPop extends FrameLayout {
         } else {
             llReadAloudKey.setVisibility(View.GONE);
         }
-        if (readBookControl.getHideNavigationBar()) {
-            llNavigationBarColor.setVisibility(View.GONE);
-        } else {
-            llNavigationBarColor.setVisibility(View.VISIBLE);
-        }
         if (readBookControl.getCanClickTurn()) {
             llClickAllNext.setVisibility(View.VISIBLE);
         } else {
@@ -270,10 +246,6 @@ public class MoreSettingPop extends FrameLayout {
 
     private void upFConvert(int fConvert) {
         tvJFConvert.setText(context.getResources().getStringArray(R.array.convert_s)[fConvert]);
-    }
-
-    private void upNavbarColor(int nColor) {
-        reNavbarcolor_val.setText(context.getResources().getStringArray(R.array.NavbarColors)[nColor]);
     }
 
     private void upScreenDirection(int screenDirection) {

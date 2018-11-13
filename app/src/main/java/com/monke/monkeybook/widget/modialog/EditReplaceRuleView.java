@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.utils.SharedPreferencesUtil;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.utils.SoftInputUtil;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -90,7 +90,7 @@ public class EditReplaceRuleView {
             saveReplaceRule.saveReplaceRule(replaceRuleBean);
             moProgressHUD.dismiss();
         });
-        ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
+        SoftInputUtil.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
 
     /**

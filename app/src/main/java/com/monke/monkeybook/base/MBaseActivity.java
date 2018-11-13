@@ -4,6 +4,7 @@ package com.monke.monkeybook.base;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -14,11 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 
 import java.lang.reflect.Method;
 
@@ -39,11 +40,16 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // 如果你的app可以横竖屏切换，并且适配4.4或者emui3手机请务必在onConfigurationChanged方法里添加这句话
+        ImmersionBar.with(this).init();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mImmersionBar != null) {
-            mImmersionBar.destroy();  //在BaseActivity里销毁}
-        }
+        ImmersionBar.with(this).destroy();
     }
 
     @Override
@@ -107,24 +113,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         } catch (Exception e) {
             Log.e("MonkBook", e.getLocalizedMessage());
         }
-        try {
-            if (isImmersionBarEnabled() && !isNightTheme()) {
-                mImmersionBar.statusBarDarkFont(true, 0.2f);
-            } else {
-                mImmersionBar.statusBarDarkFont(false);
-            }
-            if (ImmersionBar.canNavigationBarDarkFont()) {
-                mImmersionBar.navigationBarColor(R.color.background);
-                if (isNightTheme()) {
-                    mImmersionBar.navigationBarDarkFont(false);
-                } else {
-                    mImmersionBar.navigationBarDarkFont(true);
-                }
-            }
-            mImmersionBar.init();
-        } catch (Exception e) {
-            Log.e("MonkBook", e.getLocalizedMessage());
+        if (isImmersionBarEnabled() && !isNightTheme()) {
+            mImmersionBar.statusBarDarkFont(true, 0.2f);
+        } else {
+            mImmersionBar.statusBarDarkFont(false);
         }
+        mImmersionBar.init();
     }
 
     /**

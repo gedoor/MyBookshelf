@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookmarkBean;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.monke.monkeybook.utils.SoftInputUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -95,7 +95,7 @@ public class EditBookmarkView {
 
         llEdit = moProgressView.findViewById(R.id.llEdit);
 
-        ImmersionBar.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
+        SoftInputUtil.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
     }
 
     /**

@@ -27,6 +27,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.BarHide;
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -41,8 +43,6 @@ import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.SystemUtil;
-import com.monke.monkeybook.utils.barUtil.BarHide;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
@@ -212,12 +212,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
             } else if (readBookControl.getHideStatusBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
-                changeNavbarColor();
             } else if (readBookControl.getHideNavigationBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
             } else {
                 mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-                changeNavbarColor();
             }
 
         }
@@ -225,27 +223,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mImmersionBar.init();
         keepScreenOn(screenTimeOut != 0);
         screenOffTimerStart();
-    }
-
-    /**
-     * 修改导航栏颜色
-     */
-    private void changeNavbarColor() {
-        mImmersionBar.hideBarDivider();
-        switch (readBookControl.getNavbarColor()) {
-            case 1:
-                mImmersionBar.navigationBarDarkFont(false, 0.2f);
-                mImmersionBar.navigationBarColor(R.color.black);
-                break;
-            case 2:
-                mImmersionBar.navigationBarDarkFont(true, 0.2f);
-                mImmersionBar.navigationBarColor(R.color.white);
-                break;
-            case 3:
-                mImmersionBar.navigationBarDarkFont(true, 0.2f);
-                mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
-                break;
-        }
     }
 
     private void unKeepScreenOn() {
