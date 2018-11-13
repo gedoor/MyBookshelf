@@ -31,8 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import me.grantland.widget.AutofitTextView;
-
 public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdapter.MyViewHolder> implements BookShelfAdapter {
 
     private Activity activity;
@@ -104,14 +102,10 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                 holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(books.get(index).getCustomCoverPath()));
             }
         }
-        if (!TextUtils.isEmpty(books.get(index).getBookInfoBean().getAuthor())) {
-            holder.tvName.setText(String.format("%s (%s)", books.get(index).getBookInfoBean().getName(), books.get(index).getBookInfoBean().getAuthor()));
-        } else {
-            holder.tvName.setText(books.get(index).getBookInfoBean().getName());
-        }
-        holder.tvReadY.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(books.get(index))));
-        holder.tvRead.setText(holder.tvRead.getContext().getString(R.string.read_dur_progress, books.get(index).getDurChapterName()));
-        holder.tvLast.setText(holder.tvLast.getContext().getString(R.string.book_search_last, books.get(index).getLastChapterName()));
+        holder.tvName.setText(String.format("%s (%s)", books.get(index).getBookInfoBean().getName(), BookshelfHelp.getReadProgress(books.get(index))));
+        holder.tvAuthor.setText(books.get(index).getBookInfoBean().getAuthor());
+        holder.tvRead.setText(books.get(index).getDurChapterName());
+        holder.tvLast.setText(books.get(index).getLastChapterName());
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
@@ -185,9 +179,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         ImageView ivCover;
         ImageView ivHasNew;
         TextView tvName;
+        TextView tvAuthor;
         TextView tvRead;
         TextView tvLast;
-        TextView tvReadY;
         View ibContent;
         RotateLoading rotateLoading;
 
@@ -199,7 +193,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
-            tvReadY = itemView.findViewById(R.id.tv_read_y);
+            tvAuthor = itemView.findViewById(R.id.tv_author);
             ibContent = itemView.findViewById(R.id.ib_content);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
         }

@@ -17,7 +17,9 @@
     <color name="tv_btn_normal_black">#737373</color>
     <color name="tv_btn_press_black">#565656</color>
 
-    <color name="tv_text_default">#b7b7b7</color>
+    <color name="tv_text_default">#ffffffff</color>
+    <color name="tv_text_secondary">#e5ffffff</color>
+    <color name="tv_text_summary">#b3ffffff</color>
     <color name="menu_color_default">#b7b7b7</color>
 
     <color name="tv_chapter_color_selected">#b7b7b7</color>

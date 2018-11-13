@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="5dp">
 
     <RelativeLayout
@@ -36,8 +36,8 @@
                 android:layout_height="26dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_circle_red_24dp"
-                app:tint="@color/red"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                app:tint="@color/red" />
 
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/rl_loading"
@@ -64,6 +64,7 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="@string/app_name"
+        android:textColor="@color/tv_text_default"
         android:textSize="15sp"
         app:minTextSize="13sp" />
 
@@ -73,6 +74,7 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="@string/read_y"
+        android:textColor="@color/tv_text_secondary"
         android:textSize="12sp" />
 
 </LinearLayout>
