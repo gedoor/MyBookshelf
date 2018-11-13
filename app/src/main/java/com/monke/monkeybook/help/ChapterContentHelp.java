@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChapterContentHelp {
-    private List<ReplaceRuleBean> validReplaceRules;
     private static ChapterContentHelp instance;
+    private List<ReplaceRuleBean> validReplaceRules;
     private BookShelfBean book;
     private long lastUpdateTime = 0;
 
