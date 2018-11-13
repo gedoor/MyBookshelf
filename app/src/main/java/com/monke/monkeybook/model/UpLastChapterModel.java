@@ -25,6 +25,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -111,7 +112,7 @@ public class UpLastChapterModel {
                     .flatMap(this::getChapterList)
                     .flatMap(this::saveSearchBookBean)
                     .subscribeOn(scheduler)
-                    .observeOn(scheduler)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<SearchBookBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
