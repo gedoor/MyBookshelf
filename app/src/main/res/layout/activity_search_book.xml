@@ -17,7 +17,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/NopaddingToolbar"
+            style="@style/NoPaddingToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -41,7 +41,7 @@
                     app:searchIcon="@null"
                     app:queryBackground="@null"
                     app:submitBackground="@null"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="RtlHardcoded,UnusedAttribute" />
             </android.support.v7.widget.CardView>
 
         </android.support.v7.widget.Toolbar>

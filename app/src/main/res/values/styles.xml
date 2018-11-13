@@ -49,17 +49,7 @@
         <item name="overlapAnchor">false</item>
     </style>
 
-    <style name="anim_pop_checkaddshelf">
-        <item name="android:windowEnterAnimation">@anim/anim_pop_checkaddshelf_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_pop_checkaddshelf_out</item>
-    </style>
-
-    <style name="anim_pop_chapterlist">
-        <item name="android:windowEnterAnimation">@anim/anim_pop_chapterlist_in</item>
-        <item name="android:windowExitAnimation">@anim/anim_pop_chapterlist_out</item>
-    </style>
-
-    <style name="NopaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
+    <style name="NoPaddingToolbar" parent="Base.Widget.AppCompat.Toolbar">
         <item name="contentInsetStartWithNavigation">0dp</item>
     </style>
 

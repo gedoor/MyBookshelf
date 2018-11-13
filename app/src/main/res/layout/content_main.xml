@@ -18,7 +18,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            style="@style/NopaddingToolbar"
+            style="@style/NoPaddingToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -52,7 +52,7 @@
             app:tabGravity="fill"
             app:tabIndicatorGravity="bottom"
             app:tabIndicatorFullWidth="false"
-            app:tabIndicatorColor="@color/darker_gray"
+            app:tabIndicatorColor="@color/colorAccent"
             app:tabMode="fixed" />
     </android.support.design.widget.AppBarLayout>
 
