@@ -198,7 +198,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void showBookGroupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < BOOK_GROUPS.length; j++) {
             popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
         }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
