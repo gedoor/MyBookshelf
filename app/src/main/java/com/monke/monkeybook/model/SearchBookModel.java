@@ -131,7 +131,7 @@ public class SearchBookModel {
         }
         searchSuccessNum = 0;
         searchEngineIndex = -1;
-        for (int i = 1; i <= threadsNum; i++) {
+        for (int i = 0; i < threadsNum; i++) {
             searchOnEngine(content, bookShelfS, searchTime);
         }
     }
