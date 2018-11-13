@@ -62,7 +62,7 @@
     <group android:id="@+id/drawer_menu_backup">
         <item
             android:id="@+id/action_backup"
-            android:icon="@drawable/ic_settings_backup_restore"
+            android:icon="@drawable/ic_backup_black_24dp"
             android:title="@string/backup"
             app:tint="@color/tv_text_default" />
 
