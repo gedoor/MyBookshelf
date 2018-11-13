@@ -135,8 +135,7 @@ public class PageLoaderNet extends PageLoader {
                         }
 
                         @Override
-                        public void onComplete() {
-                        }
+                        public void onComplete() { }
                     });
         }
     }
