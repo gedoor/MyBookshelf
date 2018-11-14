@@ -23,13 +23,13 @@
     <group android:id="@+id/menu_jz">
         <item
             android:id="@+id/action_donate"
-            android:icon="@drawable/ic_local_cafe"
+            android:icon="@drawable/ic_donate"
             android:title="@string/donate"
             app:showAsAction="never" />
 
         <item
             android:id="@+id/action_get_hb"
-            android:icon="@drawable/ic_local_cafe"
+            android:icon="@drawable/ic_donate"
             android:title="领支付宝红包"
             app:showAsAction="never" />
     </group>

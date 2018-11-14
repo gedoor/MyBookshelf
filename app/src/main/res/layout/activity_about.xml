@@ -10,13 +10,13 @@
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/action_bar"    
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/colorPrimary"
-        android:transitionName="sharedView"
         android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:transitionName="sharedView"
         tools:ignore="UnusedAttribute">
 
         <android.support.v7.widget.Toolbar
@@ -41,8 +41,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_margin="6dp"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -68,22 +68,72 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/vw_version"
-                app:cardBackgroundColor="@color/background_card"
+                android:id="@+id/vw_share"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_version"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_turned_in_not_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/version_name" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_share"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/share" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/vw_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_turned_in_not_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/version_name" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -91,20 +141,34 @@
                 android:id="@+id/vw_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_update"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_update_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/check_update" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_update_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/check_update" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -112,20 +176,34 @@
                 android:id="@+id/vw_update_log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_update_log"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_list_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/update_log" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_list_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_update_log"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/update_log" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -133,20 +211,34 @@
                 android:id="@+id/vw_faq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_faq"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_launch_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/faq" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_faq"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/faq" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -154,20 +246,34 @@
                 android:id="@+id/vw_qq"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_qq"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_qq_group"
-                    android:gravity="center_vertical"
-                    android:text="@string/qqq" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_qq_group"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_qq"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/qqq" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -175,20 +281,34 @@
                 android:id="@+id/vw_donate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_donate"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_local_cafe"
-                    android:gravity="center_vertical"
-                    android:text="@string/donate" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_donate"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_donate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/donate" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -196,20 +316,34 @@
                 android:id="@+id/vw_scoring"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_scoring"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_scoring"
-                    android:gravity="center_vertical"
-                    android:text="@string/scoring" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_scoring"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_scoring"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/scoring" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -217,20 +351,34 @@
                 android:id="@+id/vw_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_mail"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_mail"
-                    android:gravity="center_vertical"
-                    android:text="@string/send_mail" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_mail"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_mail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/send_mail" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -238,20 +386,34 @@
                 android:id="@+id/vw_git"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_git"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_launch_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/git_hub" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_git"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/git_hub" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -259,20 +421,34 @@
                 android:id="@+id/vw_home_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_home_page"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_launch_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/home_page" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_home_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/home_page" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -280,22 +456,37 @@
                 android:id="@+id/vw_disclaimer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="6dp">
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
-                <TextView
-                    android:id="@+id/tv_disclaimer"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="6dp"
-                    android:background="@drawable/bg_ib_pre"
-                    android:drawablePadding="6dp"
-                    android:drawableStart="@drawable/ic_launch_black_24dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/disclaimer" />
+                    android:padding="5dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        app:tint="@color/tv_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_disclaimer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/disclaimer" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 

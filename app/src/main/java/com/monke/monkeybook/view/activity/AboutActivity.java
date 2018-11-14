@@ -117,22 +117,6 @@ public class AboutActivity extends MBaseActivity {
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
         tvQq.setText(getString(R.string.qq_group, qq));
-
-        setTextViewIconColor(tvDisclaimer);
-        setTextViewIconColor(tvGit);
-        setTextViewIconColor(tvDonate);
-        setTextViewIconColor(tvHomePage);
-        setTextViewIconColor(tvMail);
-        setTextViewIconColor(tvQq);
-        setTextViewIconColor(tvScoring);
-        setTextViewIconColor(tvUpdate);
-        setTextViewIconColor(tvUpdateLog);
-        setTextViewIconColor(tvVersion);
-        setTextViewIconColor(tvFaq);
-    }
-
-    private void setTextViewIconColor(TextView textView) {
-        textView.getCompoundDrawablesRelative()[0].setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
