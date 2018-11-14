@@ -1,15 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/drawer_menu_book_group">
-        <item
-            android:id="@+id/action_group_bd"
-            android:icon="@drawable/ic_bookshelf"
-            android:title="本地书籍"
-            android:visible="false"
-            app:tint="@color/tv_text_default" />
-    </group>
-
     <group android:id="@+id/drawer_menu_book_source">
         <item
             android:id="@+id/action_book_source_manage"

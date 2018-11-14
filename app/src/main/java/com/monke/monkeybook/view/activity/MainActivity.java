@@ -398,9 +398,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             drawer.closeDrawers();
             switch (menuItem.getItemId()) {
-                case R.id.action_group_bd:
-                    upGroup(3);
-                    break;
                 case R.id.action_book_source_manage:
                     handler.postDelayed(() -> BookSourceActivity.startThis(this), 200);
                     break;
