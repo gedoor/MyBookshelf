@@ -388,7 +388,6 @@ public class ReadAloudService extends Service {
     @Override
     public void onDestroy() {
         running = false;
-        AsyncTask.execute(() -> mediaManager.fadeOutVolume());
         clearTTS();
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
