@@ -220,7 +220,7 @@ public class ReadAloudService extends Service {
     public void playTTS() {
         if (fadeTts) {
             AsyncTask.execute(() -> mediaManager.fadeInVolume());
-            handler.postDelayed(() -> playTTSN(), 200);
+            handler.postDelayed(this::playTTSN, 200);
         } else {
             playTTSN();
         }
@@ -373,7 +373,7 @@ public class ReadAloudService extends Service {
         builder.addAction(R.drawable.ic_time_add_24dp, getString(R.string.set_timer), getThisServicePendingIntent(ActionSetTimer));
         builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                 .setMediaSession(mediaSessionCompat.getSessionToken())
-                .setShowActionsInCompactView(0));
+                .setShowActionsInCompactView(0, 1, 2));
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
@@ -382,7 +382,7 @@ public class ReadAloudService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return new MyBinder();
+        return null;
     }
 
     @Override
@@ -483,12 +483,6 @@ public class ReadAloudService extends Service {
                         .setState(speak ? PlaybackStateCompat.STATE_PLAYING : PlaybackStateCompat.STATE_PAUSED,
                                 nowSpeak, 1)
                         .build());
-    }
-
-    public class MyBinder extends Binder {
-        public ReadAloudService getService() {
-            return ReadAloudService.this;
-        }
     }
 
     private final class TTSListener implements TextToSpeech.OnInitListener {
