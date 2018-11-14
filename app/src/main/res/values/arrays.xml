@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="book_group_array">
+        <item>@string/all_book</item>
+        <item>@string/pursue_more_book</item>
+        <item>@string/fattening_book</item>
+        <item>@string/finish_book</item>
+        <item>@string/local_book</item>
+    </string-array>
+
     <string-array name="text_suffix">
         <item>.txt</item>
         <item>.json</item>

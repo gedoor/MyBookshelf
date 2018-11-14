@@ -59,7 +59,6 @@ import butterknife.ButterKnife;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.utils.NetworkUtil.isNetWorkAvailable;
 
 public class MainActivity extends BaseTabActivity<MainContract.Presenter> implements MainContract.View, BookListFragment.CallBackValue {
@@ -198,16 +197,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
      */
     private void showBookGroupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
-        for (int j = 0; j < BOOK_GROUPS.length; j++) {
-            popupMenu.getMenu().add(0, 0, j, BOOK_GROUPS[j]);
+        for (int j = 0; j < getResources().getStringArray(R.array.book_group_array).length; j++) {
+            popupMenu.getMenu().add(0, 0, j, getResources().getStringArray(R.array.book_group_array)[j]);
         }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             upGroup(menuItem.getOrder());
             return true;
         });
-        popupMenu.setOnDismissListener(popupMenu1 -> {
-            updateTabItemIcon(false);
-        });
+        popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(false));
         popupMenu.show();
         updateTabItemIcon(true);
     }
@@ -231,7 +228,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         View customView = tab.getCustomView();
         if (customView == null) return;
         TextView tv = customView.findViewById(R.id.tabtext);
-        tv.setText(BOOK_GROUPS[group]);
+        tv.setText(getResources().getStringArray(R.array.book_group_array)[group]);
     }
 
     private View tab_icon(String name, Integer iconID) {

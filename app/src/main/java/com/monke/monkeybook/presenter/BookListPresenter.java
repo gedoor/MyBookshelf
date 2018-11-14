@@ -49,7 +49,12 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
             errBooks.clear();
         }
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
-            List<BookShelfBean> bookShelfList = BookshelfHelp.getBooksByGroup(group);
+            List<BookShelfBean> bookShelfList;
+            if (group == 0) {
+                bookShelfList = BookshelfHelp.getAllBook();
+            } else {
+                bookShelfList = BookshelfHelp.getBooksByGroup(group - 1);
+            }
             e.onNext(bookShelfList == null ? new ArrayList<>() : bookShelfList);
             e.onComplete();
         })
