@@ -42,7 +42,8 @@
         <activity
             android:name=".view.activity.WelcomeBookActivity"
             android:enabled="false"
-            android:icon="@mipmap/book_launcher">
+            android:icon="@mipmap/book_launcher"
+            android:roundIcon="@mipmap/book_launcher_round">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
