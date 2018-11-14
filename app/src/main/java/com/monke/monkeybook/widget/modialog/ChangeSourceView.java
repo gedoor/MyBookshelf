@@ -202,8 +202,8 @@ public class ChangeSourceView {
                     .where(SearchBookBeanDao.Properties.Name.eq(bookName), SearchBookBeanDao.Properties.Author.eq(bookAuthor)).build().list();
             if (searchBookBeans == null) searchBookBeans = new ArrayList<>();
             List<SearchBookBean> searchBookList = new ArrayList<>();
-            List<BookSourceBean> bookSourceList = BookSourceManager.getSelectedBookSource();
-            if (bookSourceList != null && bookSourceList.size() > 0) {
+            List<BookSourceBean> bookSourceList = new ArrayList<>(BookSourceManager.getSelectedBookSource());
+            if (bookSourceList.size() > 0) {
                 for (BookSourceBean bookSourceBean : new ArrayList<>(bookSourceList)) {
                     boolean hasSource = false;
                     for (SearchBookBean searchBookBean : new ArrayList<>(searchBookBeans)) {
