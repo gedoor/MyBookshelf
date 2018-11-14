@@ -45,7 +45,6 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.presenter.BookDetailPresenter.FROM_BOOKSHELF;
 import static com.monke.monkeybook.utils.BitmapUtil.stackBlur;
 
@@ -118,9 +117,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
-        for (int i = 0; i < 3; i++) {
-            ((RadioButton) rgBookGroup.getChildAt(i)).setText(BOOK_GROUPS[i].substring(0, 2));
-        }
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             updateView();
         } else {
@@ -365,7 +361,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (!checkView.isPressed()) {
                 return;
             }
-            int idx = radioGroup.indexOfChild(checkView) % BOOK_GROUPS.length;
+            int idx = radioGroup.indexOfChild(checkView) % (getResources().getStringArray(R.array.book_group_array).length - 1);
             mPresenter.getBookShelf().setGroup(idx);
             if (mPresenter.getInBookShelf()) {
                 mPresenter.addToBookShelf();
