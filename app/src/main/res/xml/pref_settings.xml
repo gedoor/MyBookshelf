@@ -5,7 +5,14 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_ImmersionStatusBar"
-        android:title="@string/immersion_status_bar" />
+        android:title="@string/immersion_status_bar"
+        android:summary="@string/status_bar_immersion"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pk_navigationBarColorChange"
+        android:title="@string/navigation_bar_color_change"
+        android:summary="@string/navigation_bar_color_change_s"/>
 
     <ListPreference
         android:defaultValue="0"

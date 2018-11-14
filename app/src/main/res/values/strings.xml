@@ -279,5 +279,8 @@
     <string name="fattening_book">养肥书籍</string>
     <string name="finish_book">完结书籍</string>
     <string name="local_book">本地书籍</string>
+    <string name="status_bar_immersion">状态栏颜色透明</string>
+    <string name="navigation_bar_color_change">导航栏变色</string>
+    <string name="navigation_bar_color_change_s">导航栏根据夜间模式变化</string>
 
 </resources>

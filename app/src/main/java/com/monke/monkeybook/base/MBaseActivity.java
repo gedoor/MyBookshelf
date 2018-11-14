@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -113,12 +114,21 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         } catch (Exception e) {
             Log.e("MonkBook", e.getLocalizedMessage());
         }
-        if (isImmersionBarEnabled() && !isNightTheme()) {
-            mImmersionBar.statusBarDarkFont(true, 0.2f);
-        } else {
-            mImmersionBar.statusBarDarkFont(false);
+        try {
+            if (isImmersionBarEnabled() && !isNightTheme()) {
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
+            } else {
+                mImmersionBar.statusBarDarkFont(false);
+            }
+            if (isNavigationBarColorChange()) {
+                mImmersionBar.navigationBarColor(R.color.navigation_bar_bag);
+            } else {
+                mImmersionBar.navigationBarColorInt(Color.BLACK);
+            }
+            mImmersionBar.init();
+        } catch (Exception e) {
+            Log.e("MonkBook", e.getLocalizedMessage());
         }
-        mImmersionBar.navigationBarColor(R.color.navigation_bar_bag);
         mImmersionBar.init();
     }
 
@@ -127,6 +137,10 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     protected boolean isImmersionBarEnabled() {
         return preferences.getBoolean("immersionStatusBar", false);
+    }
+
+    private boolean isNavigationBarColorChange() {
+        return preferences.getBoolean("navigationBarColorChange", false);
     }
 
     /**
