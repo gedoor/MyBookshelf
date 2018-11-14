@@ -36,8 +36,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,8 +58,11 @@
                 android:id="@+id/vw_zfb_hb_ssm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -72,7 +75,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝红包搜索码" />
 
                 </LinearLayout>
@@ -83,8 +85,11 @@
                 android:id="@+id/vw_zfb_tz"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -97,7 +102,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝收款,支持红包" />
 
                 </LinearLayout>
@@ -108,8 +112,11 @@
                 android:id="@+id/vw_zfb_hb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -122,7 +129,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝红包二维码" />
 
                 </LinearLayout>
@@ -133,8 +139,11 @@
                 android:id="@+id/vw_zfb_rwm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,7 +156,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="支付宝收款二维码" />
 
                 </LinearLayout>
@@ -158,8 +166,11 @@
                 android:id="@+id/vw_wx_rwm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,7 +183,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="微信赞赏码" />
 
                 </LinearLayout>
@@ -183,8 +193,11 @@
                 android:id="@+id/vw_qq_rwm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/background_card"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/background_card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -197,7 +210,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:background="@drawable/bg_ib_pre"
                         android:text="QQ收款码" />
 
                 </LinearLayout>
