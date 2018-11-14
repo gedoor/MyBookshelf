@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -81,6 +80,10 @@ public class AboutActivity extends MBaseActivity {
     TextView tvFaq;
     @BindView(R.id.vw_faq)
     CardView vwFaq;
+    @BindView(R.id.tv_share)
+    TextView tvShare;
+    @BindView(R.id.vw_share)
+    CardView vwShare;
 
     private MoProgressHUD moProgressHUD;
     private String qq = "701903217 788025059";
@@ -138,6 +141,9 @@ public class AboutActivity extends MBaseActivity {
         });
         vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
         vwFaq.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("faq.md"));
+        vwShare.setOnClickListener(view -> {
+
+        });
     }
 
     @Override
