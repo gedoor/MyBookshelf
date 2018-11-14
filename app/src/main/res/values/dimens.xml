@@ -8,7 +8,7 @@
     <dimen name="line_height">0.8dp</dimen>
     <dimen name="shadow_height">10dp</dimen>
 
-    <dimen name="desc_icon_size">17.5sp</dimen>
+    <dimen name="desc_icon_size">16sp</dimen>
 
     <dimen name="fastscroll_bubble_radius">44dp</dimen>
     <dimen name="fastscroll_bubble_size">88dp</dimen>

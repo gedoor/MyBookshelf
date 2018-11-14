@@ -102,9 +102,9 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                 holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(books.get(index).getCustomCoverPath()));
             }
         }
-        holder.tvName.setText(String.format("%s (%s)", books.get(index).getBookInfoBean().getName(), BookshelfHelp.getReadProgress(books.get(index))));
+        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
         holder.tvAuthor.setText(books.get(index).getBookInfoBean().getAuthor());
-        holder.tvRead.setText(books.get(index).getDurChapterName());
+        holder.tvRead.setText(String.format("%s - %s", books.get(index).getDurChapterName(), BookshelfHelp.getReadProgress(books.get(index))));
         holder.tvLast.setText(books.get(index).getLastChapterName());
         if (books.get(index).getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
