@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_select_all"
-        android:icon="@drawable/ic_done_all_black_24dp_new"
+        android:icon="@drawable/ic_done_all_black"
         android:title="@string/select_all"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
@@ -93,7 +93,7 @@
 
     <item
         android:id="@+id/action_check_book_source"
-        android:icon="@drawable/ic_refresh_black_24dp"
+        android:icon="@drawable/ic_check_source"
         android:title="@string/check_book_source"
         app:showAsAction="never" />
 
