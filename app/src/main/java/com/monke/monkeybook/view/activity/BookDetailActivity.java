@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +45,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.monke.monkeybook.help.Constant.BOOK_GROUPS;
 import static com.monke.monkeybook.presenter.BookDetailPresenter.FROM_BOOKSHELF;
+import static com.monke.monkeybook.utils.BitmapUtil.stackBlur;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
@@ -115,6 +118,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         //弹窗
         moProgressHUD = new MoProgressHUD(this);
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
+        for (int i = 0; i < 3; i++) {
+            ((RadioButton) rgBookGroup.getChildAt(i)).setText(BOOK_GROUPS[i].substring(0, 2));
+        }
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             updateView();
         } else {
@@ -224,7 +230,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     .apply(RequestOptions.bitmapTransform(new BlurTransformation(this, 25)))
                     .into(ivBlurCover);
         } else {
-            ivCover.setImageBitmap(BitmapFactory.decodeFile(coverPath));
+            Bitmap cover = BitmapFactory.decodeFile(coverPath);
+            ivCover.setImageBitmap(cover);
+            ivBlurCover.setImageBitmap(stackBlur(cover));
         }
     }
 
@@ -357,7 +365,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (!checkView.isPressed()) {
                 return;
             }
-            int idx = radioGroup.indexOfChild(checkView) % (getResources().getStringArray(R.array.book_group_array).length - 1);
+            int idx = radioGroup.indexOfChild(checkView) % BOOK_GROUPS.length;
             mPresenter.getBookShelf().setGroup(idx);
             if (mPresenter.getInBookShelf()) {
                 mPresenter.addToBookShelf();

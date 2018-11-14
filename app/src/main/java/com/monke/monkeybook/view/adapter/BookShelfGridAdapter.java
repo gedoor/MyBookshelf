@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -94,25 +95,27 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
-        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
-        holder.tvRead.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(books.get(index))));
-        holder.ibContent.setContentDescription(books.get(index).getBookInfoBean().getName());
+        BookShelfBean bookShelfBean = books.get(index);
+        BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
+        holder.tvName.setText(bookInfoBean.getName());
+        holder.tvRead.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(bookShelfBean)));
+        holder.ibContent.setContentDescription(bookInfoBean.getName());
         if (!activity.isFinishing()) {
-            if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
-                Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
+            if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
+                Glide.with(activity).load(bookInfoBean.getCoverUrl())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);
-            } else if (books.get(index).getCustomCoverPath().startsWith("http")) {
-                Glide.with(activity).load(books.get(index).getCustomCoverPath())
+            } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
+                Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);
             } else {
-                holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(books.get(index).getCustomCoverPath()));
+                holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(bookShelfBean.getCustomCoverPath()));
             }
         }
-        if (books.get(index).getHasUpdate()) {
+        if (bookShelfBean.getHasUpdate()) {
             holder.ivHasNew.setVisibility(View.VISIBLE);
         } else {
             holder.ivHasNew.setVisibility(View.INVISIBLE);
@@ -134,15 +137,15 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
                 }
                 return true;
             });
-        } else if (books.get(index).getSerialNumber() != index) {
-            books.get(index).setSerialNumber(index);
+        } else if (bookShelfBean.getSerialNumber() != index) {
+            bookShelfBean.setSerialNumber(index);
             new Thread() {
                 public void run() {
-                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index));
+                    DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 }
             }.start();
         }
-        if (books.get(index).isLoading()) {
+        if (bookShelfBean.isLoading()) {
             holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {

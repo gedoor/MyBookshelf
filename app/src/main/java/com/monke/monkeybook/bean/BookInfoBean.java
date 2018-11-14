@@ -1,22 +1,32 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.bean;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.help.FileHelp;
+import com.monke.monkeybook.utils.MD5Utils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.monke.monkeybook.bean.BookShelfBean.LOCAL_TAG;
 import static com.monke.monkeybook.utils.StringUtils.getString;
+import static com.monke.monkeybook.widget.page.PageLoaderEpub.readBook;
 
 /**
  * 书本信息
@@ -40,6 +50,9 @@ public class BookInfoBean implements Parcelable,Cloneable{
     private List<ChapterListBean> chapterList = new ArrayList<>();    //章节列表
     @Transient
     private List<BookmarkBean> bookmarkList = new ArrayList<>();    //书签列表
+
+    @Transient
+    private static String coverPath = FileHelp.getCachePath() + "/cover/";
 
     public BookInfoBean(){
 
@@ -193,6 +206,14 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public String getCoverUrl() {
+        if (isEpub() && TextUtils.isEmpty(coverUrl) && !(new File(coverUrl)).exists()) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    BookInfoBean.this.extractEpubCoverImage();
+                }
+            });
+        }
         return coverUrl;
     }
 
@@ -217,7 +238,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public String getOrigin() {
-        return TextUtils.isEmpty(origin) && tag.equals(BookShelfBean.LOCAL_TAG) ? getString(R.string.local) : origin;
+        return TextUtils.isEmpty(origin) && tag.equals(LOCAL_TAG) ? getString(R.string.local) : origin;
     }
 
     public void setOrigin(String origin) {
@@ -241,6 +262,26 @@ public class BookInfoBean implements Parcelable,Cloneable{
 
     public void setCharset(String charset) {
         this.charset = charset;
+    }
+
+    private void extractEpubCoverImage() {
+        try {
+            FileHelp.createFolderIfNotExists(coverPath);
+            Bitmap cover = BitmapFactory.decodeStream(readBook(new File(noteUrl)).getCoverImage().getInputStream());
+            String md5Path = coverPath + MD5Utils.strToMd5By32(noteUrl) + ".jpg";
+            FileOutputStream out = new FileOutputStream(new File(md5Path));
+            cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+            coverUrl = md5Path;
+            DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isEpub() {
+        return tag.equals(LOCAL_TAG) && noteUrl.toLowerCase().matches(".*\\.epub$");
     }
 
 }
