@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -359,6 +360,18 @@ public class MoProgressHUD {
         rootView.setOnClickListener(v -> dismiss());
         EditBookmarkView.getInstance(mSharedView)
                 .showBookmark(bookmarkBean, isAdd, bookmarkClick, this);
+        if (!isShowing()) {
+            onAttached();
+        }
+        mSharedView.getChildAt(0).startAnimation(inAnim);
+    }
+
+    public void showImageText(Bitmap bitmap, String text) {
+        initCenter();
+        initAnimation();
+        canBack = true;
+        rootView.setOnClickListener(v -> dismiss());
+        mSharedView.showImageText(bitmap, text);
         if (!isShowing()) {
             onAttached();
         }

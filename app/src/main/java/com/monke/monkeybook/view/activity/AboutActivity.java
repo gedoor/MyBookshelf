@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -14,12 +15,21 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.UpdateManager;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+
+import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,7 +152,11 @@ public class AboutActivity extends MBaseActivity {
         vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
         vwFaq.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("faq.md"));
         vwShare.setOnClickListener(view -> {
-
+            String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
+            Bitmap bitmap = encodeAsBitmap(url);
+            if (bitmap != null) {
+                moProgressHUD.showImageText(bitmap, url);
+            }
         });
     }
 
@@ -187,5 +201,24 @@ public class AboutActivity extends MBaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
         return mo || super.onKeyDown(keyCode, event);
+    }
+
+    public Bitmap encodeAsBitmap(String str) {
+        Bitmap bitmap = null;
+        BitMatrix result;
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        try {
+            Hashtable<EncodeHintType, Object> hst = new Hashtable();
+            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600, hst);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            bitmap = barcodeEncoder.createBitmap(result);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException iae) { // ?
+            return null;
+        }
+        return bitmap;
     }
 }

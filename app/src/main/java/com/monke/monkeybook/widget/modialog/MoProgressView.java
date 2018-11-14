@@ -1,9 +1,12 @@
 package com.monke.monkeybook.widget.modialog;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -103,6 +106,23 @@ public class MoProgressView extends LinearLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_markdown, this, true);
         TextView tvMarkdown = findViewById(R.id.tv_markdown);
         Markwon.setMarkdown(tvMarkdown, ReadAssets.getText(context, assetFileName));
+    }
+
+    /**
+     * 显示图像和文本
+     */
+    public void showImageText(Bitmap bitmap, String text) {
+        removeAllViews();
+        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_image_text, this, true);
+        CardView cardView = findViewById(R.id.cv_content);
+        cardView.setOnClickListener(null);
+        ImageView imageView = findViewById(R.id.image_view);
+        TextView tvCanCopy = findViewById(R.id.tv_can_copy);
+        int imageWidth = Math.min(cardView.getWidth(), cardView.getHeight());
+        imageView.setMaxWidth(imageWidth - 20);
+        imageView.setMaxHeight(imageWidth - 20);
+        imageView.setImageBitmap(bitmap);
+        tvCanCopy.setText(text);
     }
 
 }
