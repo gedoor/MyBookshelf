@@ -112,37 +112,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="@dimen/desc_icon_size"
-                    android:layout_height="@dimen/desc_icon_size"
-                    android:contentDescription="@string/book_search_last"
-                    android:paddingEnd="2dp"
-                    android:src="@drawable/ic_book_last_24dp"
-                    app:tint="@color/tv_text_secondary"
-                    tools:ignore="RtlSymmetry" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_last"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:text="@string/book_search_last"
-                    android:textColor="@color/tv_text_secondary"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -166,6 +135,37 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/read_dur_progress"
+                    android:textColor="@color/tv_text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/desc_icon_size"
+                    android:layout_height="@dimen/desc_icon_size"
+                    android:contentDescription="@string/book_search_last"
+                    android:paddingEnd="2dp"
+                    android:src="@drawable/ic_book_last_24dp"
+                    app:tint="@color/tv_text_secondary"
+                    tools:ignore="RtlSymmetry" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_last"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="@string/book_search_last"
                     android:textColor="@color/tv_text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
