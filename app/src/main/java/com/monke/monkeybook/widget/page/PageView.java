@@ -165,7 +165,7 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.PRE);
         } else {
-            startPageAnim(PageAnimation.Direction.PRE);
+            startHorizonPageAnim(PageAnimation.Direction.PRE);
         }
     }
 
@@ -173,11 +173,11 @@ public class PageView extends View {
         if (mPageAnim instanceof ScrollPageAnim) {
             ((ScrollPageAnim) mPageAnim).startAnim(PageAnimation.Direction.NEXT);
         } else {
-            startPageAnim(PageAnimation.Direction.NEXT);
+            startHorizonPageAnim(PageAnimation.Direction.NEXT);
         }
     }
 
-    private void startPageAnim(PageAnimation.Direction direction) {
+    private void startHorizonPageAnim(PageAnimation.Direction direction) {
         if (mTouchListener == null) return;
         //是否正在执行动画
         abortAnimation();

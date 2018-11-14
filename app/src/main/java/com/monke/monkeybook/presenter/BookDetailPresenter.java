@@ -116,7 +116,8 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.toast(e.getMessage());
+                        e.printStackTrace();
+                        mView.toast(e.getLocalizedMessage());
                         mView.getBookShelfError();
                     }
                 });

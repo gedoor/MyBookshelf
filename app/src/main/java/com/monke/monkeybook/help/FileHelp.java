@@ -211,4 +211,11 @@ public class FileHelp {
         int dotIndex = fileName.lastIndexOf(".");
         return dotIndex > 0 ? fileName.substring(dotIndex) : "";
     }
+
+    public static void createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+    }
 }

@@ -55,7 +55,7 @@ public class PageLoaderEpub extends PageLoader {
         super(pageView);
     }
 
-    private Book readBook(File file) {
+    public static Book readBook(File file) {
         try {
             EpubReader epubReader = new EpubReader();
             MediaType[] lazyTypes = {
