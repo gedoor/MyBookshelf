@@ -204,7 +204,7 @@ public class ChangeSourceView {
             List<SearchBookBean> searchBookList = new ArrayList<>();
             List<BookSourceBean> bookSourceList = new ArrayList<>(BookSourceManager.getSelectedBookSource());
             if (bookSourceList.size() > 0) {
-                for (BookSourceBean bookSourceBean : new ArrayList<>(bookSourceList)) {
+                for (BookSourceBean bookSourceBean : BookSourceManager.getSelectedBookSource()) {
                     boolean hasSource = false;
                     for (SearchBookBean searchBookBean : new ArrayList<>(searchBookBeans)) {
                         if (Objects.equals(searchBookBean.getTag(), bookSourceBean.getBookSourceUrl())) {
