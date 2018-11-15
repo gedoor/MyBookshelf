@@ -1036,17 +1036,17 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             return true;
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                if (flMenu.getVisibility() == View.VISIBLE) {
+                if (llMenuTop.getVisibility() == View.VISIBLE && readBookControl.getHideNavigationBar()) {
                     finish();
-                    return true;
+                }else if (flMenu.getVisibility() == View.VISIBLE) {
+                    popMenuOut();
                 } else if (ReadAloudService.running && aloudStatus == PLAY) {
                     ReadAloudService.pause(this);
                     toast(R.string.read_aloud_pause);
-                    return true;
                 } else {
                     finish();
-                    return true;
                 }
+                return true;
             } else if (keyCode == KeyEvent.KEYCODE_MENU) {
                 if (flMenu.getVisibility() == View.VISIBLE) {
                     popMenuOut();
