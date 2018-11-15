@@ -184,7 +184,7 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     protected String getChapterContent(ChapterListBean chapter) throws Exception {
-        Resource resource = book.getSpine().getResource(chapter.getDurChapterIndex());
+        Resource resource = book.getResources().getByHref(chapter.getDurChapterUrl());
         StringBuilder content = new StringBuilder();
         Document doc = Jsoup.parse(new String(resource.getData(), mCharset));
         Elements elements = doc.getAllElements();
