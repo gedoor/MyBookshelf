@@ -123,8 +123,10 @@ public class PageLoaderEpub extends PageLoader {
         BookShelfBean bookShelf = getBook();
         Metadata metadata = book.getMetadata();
         bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
-        String author = metadata.getAuthors().get(0).toString().replaceAll("^, |, $", "");
-        bookShelf.getBookInfoBean().setAuthor(FormatWebText.getAuthor(author));
+        if (metadata.getAuthors().size() > 0) {
+            String author = metadata.getAuthors().get(0).toString().replaceAll("^, |, $", "");
+            bookShelf.getBookInfoBean().setAuthor(FormatWebText.getAuthor(author));
+        }
         if (metadata.getDescriptions().size() > 0) {
             bookShelf.getBookInfoBean().setIntroduce(Jsoup.parse(metadata.getDescriptions().get(0)).text());
         }
