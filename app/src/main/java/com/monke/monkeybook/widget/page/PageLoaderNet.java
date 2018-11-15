@@ -3,7 +3,6 @@ package com.monke.monkeybook.widget.page;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 
-import com.monke.basemvplib.BaseActivity;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -11,7 +10,6 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.DocumentHelper;
 import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.utils.RxUtils;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -96,12 +94,12 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     public synchronized void loadContent(final int chapterIndex) {
         if (downloadingChapterList.size() >= 9) return;
-        if (DownloadingList(listHandle.CHECK, getBook().getChapterList(chapterIndex).getDurChapterUrl())) return;
+        if (DownloadingList(listHandle.CHECK, getBook().getChapterList(chapterIndex).getDurChapterUrl()))
+            return;
         DownloadingList(listHandle.ADD, getBook().getChapterList(chapterIndex).getDurChapterUrl());
         if (null != getBook() && getBook().getChapterList().size() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
-                if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
-                        chapterIndex, getBook().getChapterList(chapterIndex).getDurChapterName())) {
+                if (shouldRequestChapter(chapterIndex)) {
                     e.onNext(chapterIndex);
                 }
                 e.onComplete();
@@ -199,8 +197,8 @@ public class PageLoaderNet extends PageLoader {
     // 装载上一章节的内容
     @Override
     void parsePrevChapter() {
-        if (mPageChangeListener != null && mCurChapterPos >= 1 && shouldRequestChapter(mCurChapterPos - 1)) {
-            loadContent(Math.max(0, mCurChapterPos - 1));
+        if (mPageChangeListener != null && mCurChapterPos >= 1) {
+            loadContent(mCurChapterPos - 1);
         }
         super.parsePrevChapter();
     }
@@ -208,10 +206,9 @@ public class PageLoaderNet extends PageLoader {
     // 装载当前章内容。
     @Override
     void parseCurChapter() {
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize() -1) ; i++) {
-            if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
-                loadContent(i);
-            }
+        BookShelfBean bookShelfBean = getBook();
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, bookShelfBean.getChapterListSize()); i++) {
+            loadContent(i);
         }
         super.parseCurChapter();
     }
@@ -219,10 +216,8 @@ public class PageLoaderNet extends PageLoader {
     // 装载下一章节的内容
     @Override
     void parseNextChapter() {
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize() -1); i++) {
-            if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
-                loadContent(i);
-            }
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize()); i++) {
+            loadContent(i);
         }
         super.parseNextChapter();
     }

@@ -313,7 +313,10 @@ public class BookShelfBean implements Parcelable, Cloneable {
     }
 
     public Integer getChapterListSize() {
-        return this.chapterListSize == null ? 0 : this.chapterListSize;
+        if (getChapterList().size() == 0) {
+            return this.chapterListSize == null ? 0 : this.chapterListSize;
+        }
+        return getChapterList().size();
     }
 
     public void setChapterListSize(Integer chapterListSize) {
