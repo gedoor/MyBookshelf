@@ -84,7 +84,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_turned_in_not_black_24dp"
+                        android:src="@drawable/ic_version"
                         app:tint="@color/tv_text_secondary" />
 
                     <TextView
@@ -224,7 +224,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_launch_black_24dp"
+                        android:src="@drawable/ic_faq"
                         app:tint="@color/tv_text_secondary" />
 
                     <TextView
@@ -469,7 +469,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_launch_black_24dp"
+                        android:src="@drawable/ic_disclaimer"
                         app:tint="@color/tv_text_secondary" />
 
                     <TextView

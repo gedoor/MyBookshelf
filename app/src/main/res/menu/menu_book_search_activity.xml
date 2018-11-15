@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_book_source_manage"
-        android:icon="@drawable/ic_list_black_24dp"
+        android:icon="@drawable/ic_book_source_manage"
         android:title="@string/book_source_manage"
         app:showAsAction="never" />
 
