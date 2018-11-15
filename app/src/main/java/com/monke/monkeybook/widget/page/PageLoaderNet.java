@@ -96,12 +96,12 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     public synchronized void loadContent(final int chapterIndex) {
         if (downloadingChapterList.size() >= 9) return;
+        if (!DownloadingList(listHandle.CHECK, getBook().getChapterList(chapterIndex).getDurChapterUrl())) return;
+        DownloadingList(listHandle.ADD, getBook().getChapterList(chapterIndex).getDurChapterUrl());
         if (null != getBook() && getBook().getChapterList().size() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                 if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),
-                        chapterIndex, getBook().getChapterList(chapterIndex).getDurChapterName())
-                        && !DownloadingList(listHandle.CHECK, getBook().getChapterList(chapterIndex).getDurChapterUrl())) {
-                    DownloadingList(listHandle.ADD, getBook().getChapterList(chapterIndex).getDurChapterUrl());
+                        chapterIndex, getBook().getChapterList(chapterIndex).getDurChapterName())) {
                     e.onNext(chapterIndex);
                 }
                 e.onComplete();
