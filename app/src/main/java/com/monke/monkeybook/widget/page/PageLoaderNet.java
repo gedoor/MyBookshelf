@@ -200,7 +200,7 @@ public class PageLoaderNet extends PageLoader {
     @Override
     void parsePrevChapter() {
         if (mPageChangeListener != null && mCurChapterPos >= 1 && shouldRequestChapter(mCurChapterPos - 1)) {
-            loadContent(mCurChapterPos - 1);
+            loadContent(Math.max(0, mCurChapterPos - 1));
         }
         super.parsePrevChapter();
     }
@@ -208,7 +208,7 @@ public class PageLoaderNet extends PageLoader {
     // 装载当前章内容。
     @Override
     void parseCurChapter() {
-        for (int i = mCurChapterPos; i < mCurChapterPos + 5; i++) {
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize() -1) ; i++) {
             if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
                 loadContent(i);
             }
@@ -219,7 +219,7 @@ public class PageLoaderNet extends PageLoader {
     // 装载下一章节的内容
     @Override
     void parseNextChapter() {
-        for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize() -1); i++) {
             if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
                 loadContent(i);
             }
