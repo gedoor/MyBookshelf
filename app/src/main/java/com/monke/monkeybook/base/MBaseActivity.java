@@ -20,7 +20,7 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.gyf.barlibrary.ImmersionBar;
 
 import java.lang.reflect.Method;
 
@@ -120,22 +120,55 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
-            if (ImmersionBar.canNavigationBarDarkFont()) {
-                mImmersionBar.navigationBarColor(R.color.background);
-                if (isNightTheme()) {
-                    mImmersionBar.navigationBarDarkFont(false);
-                } else {
-                    mImmersionBar.navigationBarDarkFont(true);
-                }
-            }
-            if (!preferences.getBoolean("navigationBarColorChange", false)) {
-                mImmersionBar.navigationBarColor(R.color.black);
-                mImmersionBar.navigationBarDarkFont(false);
-            }
+            changeNavigationBarColor(R.color.background);
             mImmersionBar.init();
         } catch (Exception e) {
             Log.e("MonkBook", e.getLocalizedMessage());
         }
+    }
+
+    /**
+     * 导航栏变色
+     */
+    protected void changeNavigationBarColor(int navigationBarColor){
+        changeNavigationBarColorInt(Build.VERSION.SDK_INT >= 23 ? getColor(navigationBarColor) : getResources().getColor(navigationBarColor));
+    }
+
+    protected void changeNavigationBarColorInt(int navigationBarColor){
+        String navBarColorConfig = preferences.getString(getString(R.string.pk_navbar_color), "0");
+        switch (navBarColorConfig) {
+            case "1":
+                mImmersionBar.navigationBarColorInt(Color.BLACK);
+                mImmersionBar.navigationBarDarkIcon(false);
+                break;
+            case "2":
+                mImmersionBar.navigationBarColorInt(Color.WHITE);
+                mImmersionBar.navigationBarDarkIcon(true);
+                break;
+            default: //使用传入的颜色, 保持底部与界面一致
+                mImmersionBar.navigationBarColorInt(navigationBarColor);
+                mImmersionBar.navigationBarDarkIcon(!isColorDark(navigationBarColor));
+                break;
+        }
+    }
+
+    private boolean isColorDark(int color){
+        double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
+        if(darkness<0.5){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * 在阅读文章时, 底部有一个颜色分明的分割线, 实在是让我有点看不过去, 所以将底部分割线去除掉
+     */
+    protected void changeNavigationBarColorInt(int navigationBarColor, boolean inReading) {
+        if(inReading && Build.VERSION.SDK_INT >= 28){
+            getWindow().setNavigationBarDividerColor(Color.TRANSPARENT);
+        }
+        changeNavigationBarColorInt(navigationBarColor);
     }
 
     /**

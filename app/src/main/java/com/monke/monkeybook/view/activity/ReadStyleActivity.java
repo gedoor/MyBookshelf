@@ -29,7 +29,7 @@ import com.monke.monkeybook.help.ReadBookControl;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.FileUtil;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.widget.modialog.MoProgressHUD;
 
 import butterknife.BindView;

@@ -41,8 +41,8 @@ import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.SystemUtil;
-import com.monke.monkeybook.utils.barUtil.BarHide;
-import com.monke.monkeybook.utils.barUtil.ImmersionBar;
+import com.gyf.barlibrary.BarHide;
+import com.gyf.barlibrary.ImmersionBar;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
@@ -192,12 +192,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             hpbNextPageProgress.setY(ImmersionBar.getStatusBarHeight(this));
         }
 
-        if (llMenuBottom.getVisibility() == View.VISIBLE) {
+        if (flMenu.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
+            // 保持导航栏与设置界面颜色一致
+            changeNavigationBarColor(R.color.background_menu);
             mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
         } else {
             if (!isImmersionBarEnabled()) {
@@ -218,6 +220,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
             }
 
+            // 保持导航栏与阅读背景颜色一致
+            changeNavigationBarColorInt(readBookControl.getBgColor(), true);
         }
 
         mImmersionBar.init();

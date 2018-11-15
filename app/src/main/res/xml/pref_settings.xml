@@ -8,11 +8,14 @@
         android:title="@string/immersion_status_bar"
         android:summary="@string/status_bar_immersion"/>
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_navigationBarColorChange"
+    <ListPreference
+        android:key="@string/pk_navbar_color"
         android:title="@string/navigation_bar_color_change"
-        android:summary="@string/navigation_bar_color_change_s"/>
+        android:summary="@string/navigation_bar_color_change_s"
+        android:entries="@array/NavbarColors"
+        android:entryValues="@array/NavbarColorsValue"
+        android:defaultValue="0">
+    </ListPreference>
 
     <ListPreference
         android:defaultValue="0"

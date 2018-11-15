@@ -9,11 +9,11 @@
     <string name="pk_read_type">read_type</string>
     <string name="pk_find_expand_group">expandGroupFind</string>
     <string name="pk_ImmersionStatusBar">immersionStatusBar</string>
-    <string name="pk_navigationBarColorChange">navigationBarColorChange</string>
     <string name="pk_default_read">defaultToRead</string>
     <string name="pk_auto_download">autoDownload</string>
     <string name="pk_download_path">downloadPath</string>
     <string name="pk_check_update">checkUpdate</string>
+    <string name="pk_navbar_color">navBarColorConfig</string>
 
     <string name="pv_user_agent">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.2357.134 Safari/537.36</string>
 
