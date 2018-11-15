@@ -95,6 +95,7 @@ public class PageLoaderNet extends PageLoader {
 
     @SuppressLint("DefaultLocale")
     public synchronized void loadContent(final int chapterIndex) {
+        if (downloadingChapterList.size() >= 9) return;
         if (null != getBook() && getBook().getChapterList().size() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                 if (!BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(getBook().getBookInfoBean()),

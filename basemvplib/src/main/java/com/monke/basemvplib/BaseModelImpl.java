@@ -81,11 +81,9 @@ public class BaseModelImpl {
                 @JavascriptInterface
                 @SuppressWarnings("unused")
                 public void processHTML(String html) {
-                    try {
-                        e.onNext(html);
-                        e.onComplete();
-                        webView.destroy();
-                    } catch (Exception ignored) { }
+                    e.onNext(html);
+                    e.onComplete();
+                    webView.destroy();
                 }
             }
             WebView webView = new WebView(context);
@@ -94,7 +92,7 @@ public class BaseModelImpl {
             webView.addJavascriptInterface(new MyJavaScriptInterface(webView), "HTMLOUT");
             webView.setWebViewClient(new WebViewClient() {
                 @Override
-                public void onPageFinished (WebView view, String url){
+                public void onPageFinished(WebView view, String url) {
                     webView.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
                 }
             });
