@@ -206,8 +206,7 @@ public class PageLoaderNet extends PageLoader {
     // 装载当前章内容。
     @Override
     void parseCurChapter() {
-        BookShelfBean bookShelfBean = getBook();
-        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, bookShelfBean.getChapterListSize()); i++) {
+        for (int i = mCurChapterPos; i < Math.min(mCurChapterPos + 5, getBook().getChapterListSize()); i++) {
             loadContent(i);
         }
         super.parseCurChapter();
