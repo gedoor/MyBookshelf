@@ -27,8 +27,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.gyf.barlibrary.BarHide;
-import com.gyf.barlibrary.ImmersionBar;
 import com.monke.basemvplib.AppActivityManager;
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
@@ -43,6 +41,8 @@ import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.BatteryUtil;
 import com.monke.monkeybook.utils.SystemUtil;
+import com.monke.monkeybook.utils.barUtil.BarHide;
+import com.monke.monkeybook.utils.barUtil.ImmersionBar;
 import com.monke.monkeybook.view.popupwindow.CheckAddShelfPop;
 import com.monke.monkeybook.view.popupwindow.MoreSettingPop;
 import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
