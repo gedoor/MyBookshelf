@@ -120,13 +120,17 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
-            if (com.monke.monkeybook.utils.barUtil.ImmersionBar.canNavigationBarDarkFont()) {
+            if (ImmersionBar.canNavigationBarDarkFont()) {
                 mImmersionBar.navigationBarColor(R.color.background);
                 if (isNightTheme()) {
                     mImmersionBar.navigationBarDarkFont(false);
                 } else {
                     mImmersionBar.navigationBarDarkFont(true);
                 }
+            }
+            if (!preferences.getBoolean("navigationBarColorChange", false)) {
+                mImmersionBar.navigationBarColor(R.color.black);
+                mImmersionBar.navigationBarDarkFont(false);
             }
             mImmersionBar.init();
         } catch (Exception e) {
@@ -139,10 +143,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     protected boolean isImmersionBarEnabled() {
         return preferences.getBoolean("immersionStatusBar", false);
-    }
-
-    private boolean isNavigationBarColorChange() {
-        return preferences.getBoolean("navigationBarColorChange", false);
     }
 
     /**
