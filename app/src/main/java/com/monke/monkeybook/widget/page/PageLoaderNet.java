@@ -136,7 +136,8 @@ public class PageLoaderNet extends PageLoader {
                         }
 
                         @Override
-                        public void onComplete() { }
+                        public void onComplete() {
+                        }
                     });
         }
     }
@@ -207,11 +208,9 @@ public class PageLoaderNet extends PageLoader {
     // 装载当前章内容。
     @Override
     void parseCurChapter() {
-        if (mPageChangeListener != null) {
-            for (int i = mCurChapterPos - 1; i < mCurChapterPos + 5; i++) {
-                if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
-                    loadContent(i);
-                }
+        for (int i = mCurChapterPos; i < mCurChapterPos + 5; i++) {
+            if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
+                loadContent(i);
             }
         }
         super.parseCurChapter();
@@ -220,11 +219,9 @@ public class PageLoaderNet extends PageLoader {
     // 装载下一章节的内容
     @Override
     void parseNextChapter() {
-        if (mPageChangeListener != null) {
-            for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
-                if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
-                    loadContent(i);
-                }
+        for (int i = mCurChapterPos + 1; i < mCurChapterPos + 6; i++) {
+            if (i < getBook().getChapterListSize() && shouldRequestChapter(i)) {
+                loadContent(i);
             }
         }
         super.parseNextChapter();
