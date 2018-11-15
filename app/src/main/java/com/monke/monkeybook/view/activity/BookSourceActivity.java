@@ -127,6 +127,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private void initSearchView() {
         mSearchAutoComplete = searchView.findViewById(R.id.search_src_text);
+        mSearchAutoComplete.setTextSize(16);
         searchView.setQueryHint(getString(R.string.search_book_source));
         searchView.onActionViewExpanded();
         searchView.clearFocus();
