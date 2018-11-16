@@ -68,6 +68,7 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         this.delBookSource = bookSourceBean;
         Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceBean);
+            BookSourceManager.refreshBookSource();
             e.onNext(true);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
