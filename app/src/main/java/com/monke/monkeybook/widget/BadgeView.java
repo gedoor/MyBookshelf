@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.util.AttributeSet;
@@ -49,7 +48,7 @@ public class BadgeView extends AppCompatTextView {
                     new LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT,
-                            Gravity.RIGHT | Gravity.TOP);
+                            Gravity.CENTER);
             setLayoutParams(layoutParams);
         }
 
@@ -57,8 +56,8 @@ public class BadgeView extends AppCompatTextView {
         setTextColor(Color.WHITE);
         //setTypeface(Typeface.DEFAULT_BOLD);
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-        setPadding(dip2Px(5), dip2Px(1.5f), dip2Px(5), dip2Px(1.5f));
-        radius = 7;
+        setPadding(dip2Px(5), dip2Px(1), dip2Px(5), dip2Px(1));
+        radius = 8;
 
         // set default background
         setBackground(radius, Color.parseColor("#d3321b"));
@@ -68,6 +67,8 @@ public class BadgeView extends AppCompatTextView {
         // default values
         setHideOnNull(true);
         setBadgeCount(0);
+        setMinWidth(dip2Px(16));
+        setMinHeight(dip2Px(16));
     }
 
     public void setBackground(float dipRadius, int badgeColor) {
@@ -179,14 +180,14 @@ public class BadgeView extends AppCompatTextView {
         incrementBadgeCount(-decrement);
     }
 
-       /*
+    /*
      * Attach the BadgeView to the TabWidget
      *
      * @param target the TabWidget to attach the BadgeView
      *
      * @param tabIndex index of the tab
      */
- /*
+    /*
      * Attach the BadgeView to the TabWidget
      *
      * @param target the TabWidget to attach the BadgeView
