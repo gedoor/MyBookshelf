@@ -89,7 +89,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 bookShelfBean.setTag(String.format("%s://%s", url.getProtocol(), url.getHost()));
                 bookShelfBean.setNoteUrl(url.toString());
                 bookShelfBean.setDurChapter(0);
-                bookShelfBean.setGroup(mView.getGroup() % 3);
+                bookShelfBean.setGroup(mView.getGroup() % 4);
                 bookShelfBean.setDurChapterPage(0);
                 bookShelfBean.setFinalDate(System.currentTimeMillis());
                 e.onNext(bookShelfBean);

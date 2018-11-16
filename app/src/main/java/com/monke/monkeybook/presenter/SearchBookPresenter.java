@@ -248,7 +248,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
                 .subscribe(new SimpleObserver<BookShelfBean>() {
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
-                        bookShelfBean.setGroup(getShelfGroup() % 3);
+                        bookShelfBean.setGroup(getShelfGroup() % 4);
                         saveBookToShelf(bookShelfBean);
                     }
 
