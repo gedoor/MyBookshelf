@@ -413,7 +413,7 @@ public class PageView extends View {
     /**
      * 获取 PageLoader
      */
-    public PageLoader getPageLoader(ReadBookActivity activity) {
+    public PageLoader getPageLoader(ReadBookActivity activity, BookShelfBean bookShelfBean) {
         this.activity = activity;
         this.statusBarHeight = ImmersionBar.getStatusBarHeight(activity);
         // 判是否已经存在
@@ -422,13 +422,13 @@ public class PageView extends View {
         }
         // 根据书籍类型，获取具体的加载器
         if (!Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
-            mPageLoader = new PageLoaderNet(this);
+            mPageLoader = new PageLoaderNet(this, bookShelfBean);
         } else {
             String fileSuffix = FileHelp.getFileSuffix(activity.getBook().getNoteUrl());
             if (fileSuffix.equalsIgnoreCase(FileHelp.SUFFIX_EPUB)) {
-                mPageLoader = new PageLoaderEpub(this);
+                mPageLoader = new PageLoaderEpub(this, bookShelfBean);
             } else {
-                mPageLoader = new PageLoaderText(this);
+                mPageLoader = new PageLoaderText(this, bookShelfBean);
             }
         }
         // 判断是否 PageView 已经初始化完成

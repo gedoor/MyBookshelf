@@ -51,8 +51,8 @@ public class PageLoaderEpub extends PageLoader {
 
     private List<ChapterListBean> chapterList;
 
-    PageLoaderEpub(PageView pageView) {
-        super(pageView);
+    PageLoaderEpub(PageView pageView, BookShelfBean bookShelfBean) {
+        super(pageView, bookShelfBean);
     }
 
     public static Book readBook(File file) {
@@ -120,7 +120,7 @@ public class PageLoaderEpub extends PageLoader {
     }
 
     private List<ChapterListBean> loadChapters() {
-        BookShelfBean bookShelf = getBook();
+        BookShelfBean bookShelf = bookShelfBean;
         Metadata metadata = book.getMetadata();
         bookShelf.getBookInfoBean().setName(metadata.getFirstTitle());
         if (metadata.getAuthors().size() > 0) {
@@ -174,7 +174,7 @@ public class PageLoaderEpub extends PageLoader {
         for (TOCReference ref : refs) {
             if (ref.getResource() != null) {
                 ChapterListBean chapterListBean = new ChapterListBean();
-                chapterListBean.setNoteUrl(getBook().getNoteUrl());
+                chapterListBean.setNoteUrl(bookShelfBean.getNoteUrl());
                 chapterListBean.setDurChapterName(ref.getTitle());
                 chapterListBean.setDurChapterUrl(ref.getCompleteHref());
                 chapterList.add(chapterListBean);
@@ -241,7 +241,7 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void refreshChapterList() {
-        BookShelfBean bookShelf = getBook();
+        BookShelfBean bookShelf = bookShelfBean;
         if (bookShelf == null) return;
 
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
@@ -291,7 +291,7 @@ public class PageLoaderEpub extends PageLoader {
 
     @Override
     public void updateChapter() {
-        BookShelfBean bookShelf = getBook();
+        BookShelfBean bookShelf = bookShelfBean;
         mPageView.getActivity().toast("目录更新中");
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e->{
             bookShelf.setChapterList(null);

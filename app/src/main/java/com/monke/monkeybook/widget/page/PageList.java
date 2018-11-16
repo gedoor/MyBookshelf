@@ -60,8 +60,8 @@ class PageList {
     private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
-        if (pageLoader.getBook() == null) return pages;
-        content = contentHelper.replaceContent(pageLoader.getBook(), content);
+        if (pageLoader.bookShelfBean == null) return pages;
+        content = contentHelper.replaceContent(pageLoader.bookShelfBean, content);
         String allLine[] = content.split("\n");
         List<String> lines = new ArrayList<>();
         int rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
@@ -69,7 +69,7 @@ class PageList {
         boolean showTitle = pageLoader.readBookControl.getShowTitle(); // 是否展示标题
         String paragraph = null;
         if (showTitle) {
-            paragraph = contentHelper.replaceContent(pageLoader.getBook(), chapter.getDurChapterName());
+            paragraph = contentHelper.replaceContent(pageLoader.bookShelfBean, chapter.getDurChapterName());
             paragraph = paragraph.trim() + "\n";
         }
         int i = 1;
