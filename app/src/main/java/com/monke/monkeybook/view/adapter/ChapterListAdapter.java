@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.view.adapter;
 
-import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +13,6 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.widget.AppCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,8 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.monke.monkeybook.MApplication.getAppResources;
+
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
 
     private BookShelfBean bookShelfBean;
@@ -35,10 +34,14 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     private int index = 0;
     private int tabPosition;
     private boolean isSearch = false;
+    private int normalColor;
+    private int highlightColor;
 
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
+        normalColor = getAppResources().getColor(R.color.color_chapter_item);
+        highlightColor = getAppResources().getColor(R.color.colorAccent);
     }
 
     public void upChapter(int index) {
@@ -118,29 +121,22 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         if (tabPosition == 0) {
             if (payloads.size() > 0) {
                 holder.tvName.setSelected(true);
-                holder.indicator.setSelected(true);
                 holder.tvName.getPaint().setFakeBoldText(true);
                 return;
             }
             ChapterListBean chapterListBean = isSearch ? chapterListBeans.get(realPosition) : bookShelfBean.getChapter(realPosition);
             if (chapterListBean.getDurChapterIndex() == index) {
-                int color = holder.indicator.getResources().getColor(R.color.colorAccent);
-                holder.tvName.setTextColor(color);
-                AppCompat.setTint(holder.indicator, color);
+                holder.tvName.setTextColor(highlightColor);
             } else {
-                ColorStateList colors = holder.indicator.getResources().getColorStateList(R.color.color_chapter_item);
-                holder.tvName.setTextColor(colors);
-                AppCompat.setTintList(holder.indicator, colors);
+                holder.tvName.setTextColor(normalColor);
             }
 
-            holder.tvName.setText(FormatWebText.trim(chapterListBean.getDurChapterName()));
+            holder.tvName.setText(chapterListBean.getDurChapterName());
             if (Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) || chapterListBean.getHasCache(bookShelfBean.getBookInfoBean())) {
                 holder.tvName.setSelected(true);
-                holder.indicator.setSelected(true);
                 holder.tvName.getPaint().setFakeBoldText(true);
             } else {
                 holder.tvName.setSelected(false);
-                holder.indicator.setSelected(false);
                 holder.tvName.getPaint().setFakeBoldText(false);
             }
 
@@ -193,14 +189,12 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         private TextView tvName;
         private View line;
         private View llName;
-        private View indicator;
 
         ThisViewHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_name);
             line = itemView.findViewById(R.id.v_line);
             llName = itemView.findViewById(R.id.ll_name);
-            indicator = itemView.findViewById(R.id.iv_indicator);
         }
     }
 

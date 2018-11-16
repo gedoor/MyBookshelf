@@ -7,7 +7,7 @@ import android.os.Parcelable;
 /**
  * 书本缓存内容
  */
-public class BookContentBean implements Parcelable{
+public class BookContentBean implements Parcelable {
     private String noteUrl; //对应BookInfoBean noteUrl;
 
     private String durChapterUrl;
@@ -18,7 +18,7 @@ public class BookContentBean implements Parcelable{
 
     private String tag;   //来源  某个网站/本地
 
-    public BookContentBean(){
+    public BookContentBean() {
 
     }
 

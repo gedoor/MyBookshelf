@@ -75,14 +75,14 @@ public class BookShelfBean implements Parcelable, Cloneable {
         lastChapterName = in.readString();
         chapterListSize = in.readInt();
         customCoverPath = in.readString();
-        allowUpdate = in.readByte()!=0 && !tag.equals(LOCAL_TAG);
+        allowUpdate = in.readByte() != 0 && !tag.equals(LOCAL_TAG);
     }
 
     @Generated(hash = 1626436040)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
-            Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber,
-            Long finalRefreshData, Integer group, String durChapterName, String lastChapterName,
-            Integer chapterListSize, String customCoverPath, Boolean allowUpdate) {
+                         Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber,
+                         Long finalRefreshData, Integer group, String durChapterName, String lastChapterName,
+                         Integer chapterListSize, String customCoverPath, Boolean allowUpdate) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -312,7 +312,12 @@ public class BookShelfBean implements Parcelable, Cloneable {
         }
     }
 
-    public Integer getChapterListSize() {
+    public int getUnreadChapterNum() {
+        int num = getChapterListSize() - getDurChapter() - 1;
+        return num < 0 ? 0 : num;
+    }
+
+    public int getChapterListSize() {
         if (getChapterList().size() == 0) {
             return this.chapterListSize == null ? 0 : this.chapterListSize;
         }

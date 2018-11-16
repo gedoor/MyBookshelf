@@ -37,6 +37,7 @@
     <color name="colorPrimary">#f4f4f4</color>
     <color name="colorPrimaryDark">#949494</color>
     <color name="colorAccent">#199589</color>
+    <color name="highlight">#eb4333</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>
