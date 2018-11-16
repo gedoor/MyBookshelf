@@ -89,7 +89,6 @@ public class ReplaceRuleManager extends BaseModelImpl {
                 .getReplaceRuleBeanDao().queryBuilder()
                 .orderAsc(ReplaceRuleBeanDao.Properties.SerialNumber)
                 .list();
-        ReadBookControl.getInstance().setLineChange(System.currentTimeMillis());
         lastUpTime = System.currentTimeMillis();
     }
 
