@@ -56,7 +56,6 @@ public class ReadBookControl {
     private Boolean showTitle;
     private Boolean showTimeBattery;
     private Boolean showLine;
-    private long lineChange;
     private Boolean darkStatusIcon;
     private int screenTimeOut;
     private int paddingLeft;
@@ -107,7 +106,6 @@ public class ReadBookControl {
         this.showTitle = readPreference.getBoolean("showTitle", true);
         this.showTimeBattery = readPreference.getBoolean("showTimeBattery", true);
         this.showLine = readPreference.getBoolean("showLine", true);
-        this.lineChange = readPreference.getLong("lineChange", System.currentTimeMillis());
         this.screenTimeOut = readPreference.getInt("screenTimeOut", 0);
         this.paddingLeft = readPreference.getInt("paddingLeft", DEFAULT_MARGIN_WIDTH);
         this.paddingTop = readPreference.getInt("paddingTop", 0);
@@ -573,17 +571,6 @@ public class ReadBookControl {
         this.showLine = showLine;
         SharedPreferences.Editor editor = readPreference.edit();
         editor.putBoolean("showLine", showLine);
-        editor.apply();
-    }
-
-    public long getLineChange() {
-        return lineChange;
-    }
-
-    public void setLineChange(long lineChange) {
-        this.lineChange = lineChange;
-        SharedPreferences.Editor editor = readPreference.edit();
-        editor.putLong("lineChange", lineChange);
         editor.apply();
     }
 

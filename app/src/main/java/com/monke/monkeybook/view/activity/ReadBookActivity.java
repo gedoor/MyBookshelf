@@ -139,7 +139,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             aloudStatus = savedInstanceState.getInt("aloudStatus");
             isAdd = savedInstanceState.getBoolean("isAdd");
         }
-        readBookControl.setLineChange(System.currentTimeMillis());
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
@@ -212,10 +211,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
             } else if (readBookControl.getHideStatusBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
+                changeNavigationBarColor();
             } else if (readBookControl.getHideNavigationBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
             } else {
                 mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
+                changeNavigationBarColor();
             }
 
         }
@@ -223,6 +224,27 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         mImmersionBar.init();
         keepScreenOn(screenTimeOut != 0);
         screenOffTimerStart();
+    }
+
+    /**
+     * 修改导航栏颜色
+     */
+    private void changeNavigationBarColor() {
+        mImmersionBar.hideBarDivider();
+        switch (readBookControl.getNavbarColor()) {
+            case 1:
+                mImmersionBar.navigationBarDarkFont(false, 0.2f);
+                mImmersionBar.navigationBarColor(R.color.black);
+                break;
+            case 2:
+                mImmersionBar.navigationBarDarkFont(true, 0.2f);
+                mImmersionBar.navigationBarColor(R.color.white);
+                break;
+            case 3:
+                mImmersionBar.navigationBarDarkFont(true, 0.2f);
+                mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
+                break;
+        }
     }
 
     private void unKeepScreenOn() {
