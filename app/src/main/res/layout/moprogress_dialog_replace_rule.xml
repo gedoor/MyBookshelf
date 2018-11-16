@@ -90,14 +90,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/selector_book_detail_read_bg"
+                android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:text="@string/ok"
-                android:textColor="#ffffff" />
+                android:textColor="@color/tv_text_default" />
 
         </LinearLayout>
     </ScrollView>

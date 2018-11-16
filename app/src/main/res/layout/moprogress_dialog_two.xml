@@ -1,7 +1,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="260dp"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/background_card">
 
@@ -38,9 +38,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/selector_book_detail_shelf_bg"
+                android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
+                android:layout_margin="3dp"
                 android:gravity="center"
                 android:textColor="@color/tv_text_default"
                 android:textSize="15sp" />
@@ -50,11 +51,12 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/selector_book_detail_read_bg"
+                android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
+                android:layout_margin="3dp"
                 android:gravity="center"
-                android:textColor="#ffffff"
+                android:textColor="@color/tv_text_default"
                 android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>

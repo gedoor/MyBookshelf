@@ -15,6 +15,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -1140,7 +1141,7 @@ public abstract class PageLoader {
         String tip = "";
         switch (chapter.getStatus()) {
             case LOADING:
-                tip = "正在拼命加载中...";
+                tip = mContext.getString(R.string.loading);
                 break;
             case ERROR:
                 tip = String.format("加载失败\n%s", mCurChapter.getMsg());

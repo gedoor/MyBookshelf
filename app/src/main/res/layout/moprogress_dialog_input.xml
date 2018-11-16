@@ -37,11 +37,11 @@
             android:layout_margin="5dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="@drawable/selector_book_detail_read_bg"
+            android:background="@drawable/selector_fillet_btn_bg"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:textColor="#ffffff" />
+            android:textColor="@color/tv_text_default" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

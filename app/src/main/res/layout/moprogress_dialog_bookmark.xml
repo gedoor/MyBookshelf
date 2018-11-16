@@ -49,13 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/selector_book_detail_read_bg"
+            android:background="@drawable/selector_fillet_btn_bg"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/ok"
-            android:textColor="#ffffff" />
+            android:textColor="@color/tv_text_default" />
 
         <LinearLayout
             android:id="@+id/llEdit"
@@ -69,13 +69,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:background="@drawable/selector_book_detail_read_bg"
+                android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="@string/action_save"
-                android:textColor="#ffffff" />
+                android:textColor="@color/tv_text_default" />
 
             <TextView
                 android:id="@+id/tv_del"
@@ -83,13 +83,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_margin="10dp"
-                android:background="@drawable/selector_book_detail_read_bg"
+                android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="@string/action_del"
-                android:textColor="#ffffff" />
+                android:textColor="@color/tv_text_default" />
 
         </LinearLayout>
 
