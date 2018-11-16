@@ -57,7 +57,7 @@
 
     <color name="tv_text_button_nor">#efefef</color>
     <color name="tv_text_button_pre">@color/colorAccent</color>
-    <color name="tv_text_button_deep_pre">#11665e</color>
+    <color name="tv_text_button_deep_pre">@color/colorAccentDark</color>
     <color name="tv_text_button_disable">#dddddd</color>
 
     <color name="welcome">#00000000</color>
