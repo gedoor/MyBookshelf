@@ -50,6 +50,12 @@
                 android:textSize="16sp"
                 app:minTextSize="13sp" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
+
             <LinearLayout
                 android:id="@+id/ll_author"
                 android:layout_width="match_parent"
