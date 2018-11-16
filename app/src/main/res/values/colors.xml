@@ -36,7 +36,7 @@
 
     <color name="colorPrimary">#f4f4f4</color>
     <color name="colorPrimaryDark">#949494</color>
-    <color name="colorAccent">#0277BD</color>
+    <color name="colorAccent">#039BE5</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>
@@ -55,8 +55,8 @@
     <color name="tv_chapter_color_normal">#737373</color>
 
     <color name="tv_text_button_nor">#efefef</color>
-    <color name="tv_text_button_pre">#0277BD</color>
-    <color name="tv_text_button_deep_pre">#039BE5</color>
+    <color name="tv_text_button_pre">#039BE5</color>
+    <color name="tv_text_button_deep_pre">#0288D1</color>
     <color name="tv_text_button_disable">#dddddd</color>
 
     <color name="welcome">#00000000</color>
