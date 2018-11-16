@@ -203,9 +203,8 @@ public class BitmapUtil {
         matrix.postScale(scaleWidth, scaleHeight);
         Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix,
                 true);
-        if (bm != null & !bm.isRecycled()) {
+        if (!bm.isRecycled()) {
             bm.recycle();
-            bm = null;
         }
         return newbm;
     }
@@ -219,15 +218,13 @@ public class BitmapUtil {
         Matrix matrix = new Matrix();
         float scaleWidth = ((float) newWidth) / width;
         // float scaleHeight = ((float)newHeight) / height;
-        int newHeight = (int) (scaleWidth * height);
         matrix.postScale(scaleWidth, scaleWidth);
         // Bitmap result = Bitmap.createBitmap(target,0,0,width,height,
         // matrix,true);
         Bitmap bmp = Bitmap.createBitmap(target, 0, 0, width, height, matrix,
                 true);
-        if (target != null && !target.equals(bmp) && !target.isRecycled()) {
+        if (!target.equals(bmp) && !target.isRecycled()) {
             target.recycle();
-            target = null;
         }
         return bmp;// Bitmap.createBitmap(target, 0, 0, width, height, matrix,
         // true);
@@ -265,23 +262,18 @@ public class BitmapUtil {
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);// 把ByteArrayInputStream数据生成图片
-        if (baos != null) {
-            try {
-                baos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (isBm != null) {
-            try {
-                isBm.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            isBm.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (image != null && !image.isRecycled()) {
+        if (!image.isRecycled()) {
             image.recycle();
-            image = null;
         }
         return bitmap;
     }
@@ -300,7 +292,7 @@ public class BitmapUtil {
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
+        Bitmap bitmap;
         newOpts.inJustDecodeBounds = false;
         int w = newOpts.outWidth;
         int h = newOpts.outHeight;
@@ -320,16 +312,13 @@ public class BitmapUtil {
         // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         isBm = new ByteArrayInputStream(baos.toByteArray());
         bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
-        if (isBm != null) {
-            try {
-                isBm.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            isBm.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        if (image != null && !image.isRecycled()) {
+        if (!image.isRecycled()) {
             image.recycle();
-            image = null;
         }
         return compressImage(bitmap);// 压缩好比例大小后再进行质量压缩
     }
@@ -349,17 +338,7 @@ public class BitmapUtil {
     }
 
     public static Bitmap stackBlur(Bitmap srcBitmap) {
-
-        // Stack Blur v1.0 from
-        // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
-        //
-        // Java Author: Mario Klingemann <mario at quasimondo.com>
-        // http://incubator.quasimondo.com
-        // created Feburary 29, 2004
-        // Android port : Yahel Bouaziz <yahel at kayenko.com>
-        // http://www.kayenko.com
-        // ported april 5th, 2012
-        // Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
+        if (srcBitmap == null) return null;
 
         int radius = 5;
 

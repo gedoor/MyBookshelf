@@ -227,8 +227,10 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     .into(ivBlurCover);
         } else {
             Bitmap cover = BitmapFactory.decodeFile(coverPath);
-            ivCover.setImageBitmap(cover);
-            ivBlurCover.setImageBitmap(stackBlur(cover));
+            if (cover != null) {
+                ivCover.setImageBitmap(cover);
+                ivBlurCover.setImageBitmap(stackBlur(cover));
+            }
         }
     }
 
