@@ -421,10 +421,10 @@ public class PageView extends View {
             return mPageLoader;
         }
         // 根据书籍类型，获取具体的加载器
-        if (!Objects.equals(activity.getBook().getTag(), BookShelfBean.LOCAL_TAG)) {
+        if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG)) {
             mPageLoader = new PageLoaderNet(this, bookShelfBean);
         } else {
-            String fileSuffix = FileHelp.getFileSuffix(activity.getBook().getNoteUrl());
+            String fileSuffix = FileHelp.getFileSuffix(bookShelfBean.getNoteUrl());
             if (fileSuffix.equalsIgnoreCase(FileHelp.SUFFIX_EPUB)) {
                 mPageLoader = new PageLoaderEpub(this, bookShelfBean);
             } else {

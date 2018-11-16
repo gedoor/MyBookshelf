@@ -854,14 +854,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 设置编码
      */
     private void setCharset() {
-        final String charset = getBook().getBookInfoBean().getCharset();
+        final String charset = mPresenter.getBookShelf().getBookInfoBean().getCharset();
         moProgressHUD.showInputBox("输入编码",
                 charset,
                 new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "ASCII"},
                 (inputText -> {
                     inputText = inputText.trim();
                     if (!Objects.equals(charset, inputText)) {
-                        getBook().getBookInfoBean().setCharset(inputText);
+                        mPresenter.getBookShelf().getBookInfoBean().setCharset(inputText);
                         mPresenter.saveProgress();
                         if (mPageLoader != null) {
                             mPageLoader.updateChapter();
@@ -874,14 +874,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      * 设置TXT目录正则
      */
     private void setTextChapterRegex() {
-        if (getBook().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
-            final String regex = getBook().getBookInfoBean().getChapterUrl();
+        if (mPresenter.getBookShelf().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
+            final String regex = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
             moProgressHUD.showInputBox("TXT目录规则",
                     regex,
                     null,
                     (inputText -> {
                         if (!Objects.equals(regex, inputText)) {
-                            getBook().getBookInfoBean().setChapterUrl(inputText);
+                            mPresenter.getBookShelf().getBookInfoBean().setChapterUrl(inputText);
                             mPresenter.saveProgress();
                             if (mPageLoader != null) {
                                 mPageLoader.updateChapter();
@@ -942,10 +942,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 readInterfacePop.startAnimation(menuBottomOut);
             }
         }
-    }
-
-    public BookShelfBean getBook() {
-        return mPresenter.getBookShelf();
     }
 
     /**
@@ -1127,7 +1123,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     menu.getItem(i).setEnabled(!onLine);
                     break;
                 case R.id.menu_text:
-                    boolean isTxt = getBook() != null && getBook().getNoteUrl().toLowerCase().endsWith(".txt");
+                    boolean isTxt = mPresenter.getBookShelf() != null && mPresenter.getBookShelf().getNoteUrl().toLowerCase().endsWith(".txt");
                     menu.getItem(i).setVisible(isTxt);
                     menu.getItem(i).setEnabled(isTxt);
                     break;
