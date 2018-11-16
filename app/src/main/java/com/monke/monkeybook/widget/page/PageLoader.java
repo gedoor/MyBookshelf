@@ -438,7 +438,6 @@ public abstract class PageLoader {
         if (!isChapterListPrepare) {
             return;
         }
-        // mCurPagePos = pos;
         openChapter(pos);
     }
 
