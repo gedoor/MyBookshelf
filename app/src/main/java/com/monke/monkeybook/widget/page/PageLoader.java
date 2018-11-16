@@ -88,8 +88,8 @@ public abstract class PageLoader {
     int mVisibleWidth;
     int mVisibleHeight;
     //应用的宽高
-    public int mDisplayWidth;
-    public int mDisplayHeight;
+    int mDisplayWidth;
+    private int mDisplayHeight;
     //间距
     private int mMarginTop;
     private int mMarginBottom;
@@ -111,10 +111,10 @@ public abstract class PageLoader {
     //段落距离(基于行间距的额外距离)
     int mTextPara;
     int mTitlePara;
-    int textInterval;
-    int textPara;
-    int titleInterval;
-    int titlePara;
+    private int textInterval;
+    private int textPara;
+    private int titleInterval;
+    private int titlePara;
     private float tipMarginHeight;
     private float tipBottomTop;
     private float tipBottomBot;
