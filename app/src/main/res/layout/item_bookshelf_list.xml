@@ -91,7 +91,7 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="@dimen/desc_icon_size"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/desc_icon_size"
                     android:contentDescription="@string/author"
                     android:paddingEnd="2dp"
                     android:src="@drawable/ic_author_black_24dp"
