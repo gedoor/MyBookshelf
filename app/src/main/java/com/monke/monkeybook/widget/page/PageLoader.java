@@ -363,11 +363,12 @@ public abstract class PageLoader {
     /**
      * 换源结束
      */
-    public void changeSourceFinish(BookShelfBean bookShelfBean) {
-        if (bookShelfBean == null) {
-            openChapter(bookShelfBean.getDurChapterPage());
+    public void changeSourceFinish(BookShelfBean book) {
+        if (book == null) {
+            openChapter(mCurPagePos);
         } else {
-            mPageChangeListener.onCategoryFinish(bookShelfBean.getChapterList());
+            bookShelfBean = book;
+            mPageChangeListener.onCategoryFinish(book.getChapterList());
             skipToChapter(bookShelfBean.getDurChapter(), bookShelfBean.getDurChapterPage());
         }
     }
