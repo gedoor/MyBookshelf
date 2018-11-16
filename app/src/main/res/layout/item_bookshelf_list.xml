@@ -31,56 +31,24 @@
             tools:ignore="UnusedAttribute" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="80dp"
+            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="2dp"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">
 
-
-            <LinearLayout
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/tv_name"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <me.grantland.widget.AutofitTextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:includeFontPadding="false"
-                    android:singleLine="true"
-                    android:text="@string/tv_book_name"
-                    android:textColor="@color/tv_text_default"
-                    android:textSize="16sp"
-                    app:minTextSize="13sp" />
-
-                <FrameLayout
-                    android:id="@+id/fl_has_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_gravity="right">
-
-                    <com.monke.monkeybook.widget.BadgeView
-                        android:id="@+id/bv_unread"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:includeFontPadding="false" />
-
-                    <com.victor.loading.rotate.RotateLoading
-                        android:id="@+id/rl_loading"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:layout_gravity="center"
-                        android:visibility="invisible"
-                        app:loading_color="@color/colorAccent"
-                        app:loading_width="2dp" />
-                </FrameLayout>
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:singleLine="true"
+                android:text="@string/tv_book_name"
+                android:textColor="@color/tv_text_default"
+                android:textSize="16sp"
+                app:minTextSize="13sp" />
 
             <LinearLayout
                 android:id="@+id/ll_author"
@@ -115,8 +83,8 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
-
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -181,6 +149,28 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_has_new"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp">
+
+            <com.monke.monkeybook.widget.BadgeView
+                android:id="@+id/bv_unread"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:includeFontPadding="false" />
+
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/rl_loading"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:loading_color="@color/colorAccent"
+                app:loading_width="2dp" />
+        </FrameLayout>
 
     </LinearLayout>
 
