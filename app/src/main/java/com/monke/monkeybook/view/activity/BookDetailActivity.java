@@ -130,14 +130,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvOrigin.setText(origin);
             tvChapter.setText(searchBookBean.getLastChapter());  // newest
             tvIntro.setText(searchBookBean.getIntroduce());
-            tvShelf.setText("放入书架");
-            tvRead.setText("开始阅读");
+            tvShelf.setText(R.string.add_to_shelf);
+            tvRead.setText(R.string.start_read);
             tvRead.setOnClickListener(v -> {
                 //放入书架
             });
             tvIntro.setVisibility(View.INVISIBLE);
             tvLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText("加载中...");
+            tvLoading.setText(R.string.loading);
             tvLoading.setOnClickListener(null);
             setTvUpdate(false, false);
         }
@@ -156,7 +156,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (mPresenter.getInBookShelf()) {
                 tvChapter.setText(bookShelfBean.getDurChapterName()); // last
                 tvShelf.setText(R.string.remove_from_bookshelf);
-                tvRead.setText("继续阅读");
+                tvRead.setText(R.string.continue_read);
                 setTvUpdate(bookShelfBean.getAllowUpdate(), true);
                 tvShelf.setOnClickListener(v -> {
                     //从书架移出
@@ -167,8 +167,8 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 if (!TextUtils.isEmpty(bookShelfBean.getLastChapterName())) {
                     tvChapter.setText(bookShelfBean.getLastChapterName()); // last
                 }
-                tvShelf.setText("放入书架");
-                tvRead.setText("开始阅读");
+                tvShelf.setText(R.string.add_to_shelf);
+                tvRead.setText(R.string.start_read);
                 tvShelf.setOnClickListener(v -> {
                     //放入书架
                     mPresenter.addToBookShelf();
@@ -204,7 +204,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvLoading.setVisibility(View.VISIBLE);
         tvLoading.setText("加载失败,点击重试");
         tvLoading.setOnClickListener(v -> {
-            tvLoading.setText("加载中...");
+            tvLoading.setText(R.string.loading);
             tvLoading.setOnClickListener(null);
             mPresenter.getBookShelfInfo();
         });
@@ -291,7 +291,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 searchBookBean -> {
                     tvOrigin.setText(searchBookBean.getOrigin());
                     tvLoading.setVisibility(View.VISIBLE);
-                    tvLoading.setText("加载中...");
+                    tvLoading.setText(R.string.loading);
                     tvLoading.setOnClickListener(null);
                     if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
                         mPresenter.changeBookSource(searchBookBean);
@@ -337,7 +337,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             animationSet.addAnimation(rotateAnimation);
             ivRefresh.startAnimation(animationSet);
             tvLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText("加载中...");
+            tvLoading.setText(R.string.loading);
             tvLoading.setOnClickListener(null);
             mPresenter.getBookShelfInfo();
         });
