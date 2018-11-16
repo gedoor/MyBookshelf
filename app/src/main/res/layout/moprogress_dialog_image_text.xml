@@ -33,6 +33,8 @@
             android:layout_height="wrap_content"
             android:lineSpacingExtra="2dp"
             android:padding="10dp"
+            android:text="@string/app_name"
+            android:textColor="@color/tv_text_default"
             android:textIsSelectable="true"
             android:textSize="16sp" />
         <Space
