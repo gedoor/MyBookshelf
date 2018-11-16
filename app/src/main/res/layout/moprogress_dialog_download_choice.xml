@@ -119,6 +119,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:padding="3dp"
             android:orientation="horizontal">
 
             <TextView
@@ -129,11 +130,14 @@
                 android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:gravity="center"
-                android:layout_margin="3dp"
                 android:text="取消"
                 android:textColor="@color/tv_text_default"
                 android:textSize="15sp"
                 tools:ignore="KeyboardInaccessibleWidget" />
+
+            <Space
+                android:layout_width="3dp"
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/tv_download"
@@ -143,7 +147,6 @@
                 android:background="@drawable/selector_fillet_btn_bg"
                 android:clickable="true"
                 android:gravity="center"
-                android:layout_margin="3dp"
                 android:text="下载"
                 android:textColor="@color/tv_text_default"
                 android:textSize="15sp"
