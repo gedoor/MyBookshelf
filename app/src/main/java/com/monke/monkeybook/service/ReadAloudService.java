@@ -47,6 +47,7 @@ import static android.text.TextUtils.isEmpty;
  * 朗读服务
  */
 public class ReadAloudService extends Service {
+    private static final String TAG = ReadAloudService.class.getSimpleName();
     public static final int PLAY = 1;
     public static final int STOP = 0;
     public static final int PAUSE = 2;
@@ -56,7 +57,6 @@ public class ReadAloudService extends Service {
     public static final String ActionDoneService = "doneService";
     public static final String ActionPauseService = "pauseService";
     public static final String ActionResumeService = "resumeService";
-    private static final String TAG = ReadAloudService.class.getSimpleName();
     private static final String ActionReadActivity = "readActivity";
     private static final String ActionSetTimer = "updateTimer";
     private static final int notificationId = 3222;
