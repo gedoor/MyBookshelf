@@ -7,8 +7,6 @@ import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookSourceBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeSearchUrl;

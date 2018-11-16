@@ -32,7 +32,7 @@ import static com.monke.monkeybook.widget.page.PageLoaderEpub.readBook;
  * 书本信息
  */
 @Entity
-public class BookInfoBean implements Parcelable,Cloneable{
+public class BookInfoBean implements Parcelable, Cloneable {
 
     private String name; //小说名
     private String tag;
@@ -54,7 +54,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     @Transient
     private static String coverPath = FileHelp.getCachePath() + "/cover/";
 
-    public BookInfoBean(){
+    public BookInfoBean() {
 
     }
 
@@ -88,7 +88,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
 
     @Generated(hash = 1022173528)
     public BookInfoBean(String name, String tag, String noteUrl, String chapterUrl, long finalRefreshData, String coverUrl,
-            String author, String introduce, String origin, String charset) {
+                        String author, String introduce, String origin, String charset) {
         this.name = name;
         this.tag = tag;
         this.noteUrl = noteUrl;
@@ -121,7 +121,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
     public int describeContents() {
         return 0;
     }
-    
+
     @Override
     protected Object clone() throws CloneNotSupportedException {
         BookInfoBean bookInfoBean = (BookInfoBean) super.clone();
@@ -134,10 +134,10 @@ public class BookInfoBean implements Parcelable,Cloneable{
         bookInfoBean.introduce = introduce;
         bookInfoBean.origin = origin;
         bookInfoBean.charset = charset;
-        if(chapterList !=null){
+        if (chapterList != null) {
             List<ChapterListBean> newListC = new ArrayList<>();
             Iterator<ChapterListBean> iteratorC = chapterList.iterator();
-            while(iteratorC.hasNext()){
+            while (iteratorC.hasNext()) {
                 newListC.add((ChapterListBean) iteratorC.next().clone());
             }
             bookInfoBean.setChapterList(newListC);
@@ -145,7 +145,7 @@ public class BookInfoBean implements Parcelable,Cloneable{
         if (bookmarkList != null) {
             List<BookmarkBean> newListM = new ArrayList<>();
             Iterator<BookmarkBean> iteratorM = bookmarkList.iterator();
-            while(iteratorM.hasNext()){
+            while (iteratorM.hasNext()) {
                 newListM.add((BookmarkBean) iteratorM.next().clone());
             }
             bookInfoBean.setBookmarkList(newListM);
@@ -206,13 +206,14 @@ public class BookInfoBean implements Parcelable,Cloneable{
     }
 
     public String getCoverUrl() {
-        if (isEpub() && TextUtils.isEmpty(coverUrl) && !(new File(coverUrl)).exists()) {
+        if (isEpub() && (TextUtils.isEmpty(coverUrl) || !(new File(coverUrl)).exists())) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     BookInfoBean.this.extractEpubCoverImage();
                 }
             });
+            return "";
         }
         return coverUrl;
     }
@@ -268,12 +269,12 @@ public class BookInfoBean implements Parcelable,Cloneable{
         try {
             FileHelp.createFolderIfNotExists(coverPath);
             Bitmap cover = BitmapFactory.decodeStream(readBook(new File(noteUrl)).getCoverImage().getInputStream());
-            String md5Path = coverPath + MD5Utils.strToMd5By32(noteUrl) + ".jpg";
+            String md5Path = coverPath + MD5Utils.strToMd5By16(noteUrl) + ".jpg";
             FileOutputStream out = new FileOutputStream(new File(md5Path));
             cover.compress(Bitmap.CompressFormat.JPEG, 90, out);
             out.flush();
             out.close();
-            coverUrl = md5Path;
+            setCoverUrl(md5Path);
             DbHelper.getInstance().getmDaoSession().getBookInfoBeanDao().insertOrReplace(this);
         } catch (Exception e) {
             e.printStackTrace();

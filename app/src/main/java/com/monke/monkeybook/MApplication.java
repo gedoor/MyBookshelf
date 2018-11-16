@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
@@ -40,6 +41,10 @@ public class MApplication extends Application {
 
     public static String getVersionName() {
         return versionName;
+    }
+
+    public static Resources getAppResources() {
+        return getInstance().getResources();
     }
 
     @Override

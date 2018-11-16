@@ -14,14 +14,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@color/background"
         android:orientation="horizontal"
         android:padding="5dp">
 
         <com.monke.monkeybook.widget.FilletImageView
             android:id="@+id/iv_cover"
-            android:layout_width="60dp"
-            android:layout_height="85dp"
+            android:layout_width="56dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/img_cover"
             android:scaleType="centerCrop"
             android:src="@drawable/img_cover_default"
@@ -30,41 +32,43 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="2dp"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/tv_name"
                     android:layout_width="0dp"
-                    android:layout_height="26dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
                     android:singleLine="true"
                     android:text="@string/tv_book_name"
                     android:textColor="@color/tv_text_default"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:minTextSize="13sp" />
 
                 <FrameLayout
                     android:id="@+id/fl_has_new"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp">
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_gravity="right">
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/iv_has_new"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_circle_red_24dp"
-                        android:visibility="invisible"
-                        app:tint="@color/red" />
+                    <com.monke.monkeybook.widget.BadgeView
+                        android:id="@+id/bv_unread"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:includeFontPadding="false" />
 
                     <com.victor.loading.rotate.RotateLoading
                         android:id="@+id/rl_loading"
@@ -74,8 +78,8 @@
                         android:visibility="invisible"
                         app:loading_color="@color/colorAccent"
                         app:loading_width="2dp" />
-
                 </FrameLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -87,17 +91,18 @@
 
                 <android.support.v7.widget.AppCompatImageView
                     android:layout_width="@dimen/desc_icon_size"
-                    android:layout_height="@dimen/desc_icon_size"
+                    android:layout_height="match_parent"
                     android:contentDescription="@string/author"
                     android:paddingEnd="2dp"
                     android:src="@drawable/ic_author_black_24dp"
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/tv_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:maxLines="1"
                     android:paddingEnd="6dp"
                     android:text="@string/author"
@@ -128,15 +133,16 @@
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/tv_read"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
+                    android:includeFontPadding="false"
                     android:singleLine="true"
                     android:text="@string/read_dur_progress"
                     android:textColor="@color/tv_text_secondary"
-                    android:textSize="12sp" />
+                    android:textSize="13sp"
+                    app:minTextSize="10sp" />
             </LinearLayout>
 
             <Space
@@ -159,17 +165,21 @@
                     app:tint="@color/tv_text_secondary"
                     tools:ignore="RtlSymmetry" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <me.grantland.widget.AutofitTextView
                     android:id="@+id/tv_last"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
                     android:singleLine="true"
                     android:text="@string/book_search_last"
                     android:textColor="@color/tv_text_secondary"
-                    android:textSize="12sp" />
+                    android:textSize="13sp"
+                    app:minTextSize="10sp" />
             </LinearLayout>
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
     </LinearLayout>

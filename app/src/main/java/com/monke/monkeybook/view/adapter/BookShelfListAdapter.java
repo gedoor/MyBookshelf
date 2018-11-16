@@ -19,11 +19,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
+import com.monke.monkeybook.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -87,30 +89,29 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int index) {
+        BookShelfBean bookShelfBean = books.get(index);
+        BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         if (!activity.isFinishing()) {
-            if (TextUtils.isEmpty(books.get(index).getCustomCoverPath())) {
-                Glide.with(activity).load(books.get(index).getBookInfoBean().getCoverUrl())
+            if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
+                Glide.with(activity).load(bookInfoBean.getCoverUrl())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);
-            } else if (books.get(index).getCustomCoverPath().startsWith("http")) {
-                Glide.with(activity).load(books.get(index).getCustomCoverPath())
+            } else if (bookShelfBean.getCustomCoverPath().startsWith("http")) {
+                Glide.with(activity).load(bookShelfBean.getCustomCoverPath())
                         .apply(new RequestOptions().dontAnimate().diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                 .centerCrop().placeholder(R.drawable.img_cover_default))
                         .into(holder.ivCover);
             } else {
-                holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(books.get(index).getCustomCoverPath()));
+                holder.ivCover.setImageBitmap(BitmapFactory.decodeFile(bookShelfBean.getCustomCoverPath()));
             }
         }
-        holder.tvName.setText(books.get(index).getBookInfoBean().getName());
-        holder.tvAuthor.setText(books.get(index).getBookInfoBean().getAuthor());
-        holder.tvRead.setText(String.format("%s - %s", books.get(index).getDurChapterName(), BookshelfHelp.getReadProgress(books.get(index))));
-        holder.tvLast.setText(books.get(index).getLastChapterName());
-        if (books.get(index).getHasUpdate()) {
-            holder.ivHasNew.setVisibility(View.VISIBLE);
-        } else {
-            holder.ivHasNew.setVisibility(View.INVISIBLE);
-        }
+        holder.tvName.setText(bookInfoBean.getName());
+        holder.tvAuthor.setText(bookInfoBean.getAuthor());
+        holder.tvRead.setText(bookShelfBean.getDurChapterName());
+        holder.tvLast.setText(bookShelfBean.getLastChapterName());
+        holder.bvUnread.setBadgeCount(bookShelfBean.getUnreadChapterNum());
+        holder.bvUnread.setHighlight(bookShelfBean.getHasUpdate());
         holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
@@ -139,11 +140,11 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
                 }
             });
         }
-        if (Objects.equals(bookshelfPx, "2") && books.get(index).getSerialNumber() != index) {
-            books.get(index).setSerialNumber(index);
-            AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(books.get(index)));
+        if (Objects.equals(bookshelfPx, "2") && bookShelfBean.getSerialNumber() != index) {
+            bookShelfBean.setSerialNumber(index);
+            AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
         }
-        if (books.get(index).isLoading()) {
+        if (bookShelfBean.isLoading()) {
             holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {
@@ -177,7 +178,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
     class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
         ImageView ivCover;
-        ImageView ivHasNew;
+        BadgeView bvUnread;
         TextView tvName;
         TextView tvAuthor;
         TextView tvRead;
@@ -189,7 +190,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             super(itemView);
             flContent = itemView.findViewById(R.id.cv_content);
             ivCover = itemView.findViewById(R.id.iv_cover);
-            ivHasNew = itemView.findViewById(R.id.iv_has_new);
+            bvUnread = itemView.findViewById(R.id.bv_unread);
             tvName = itemView.findViewById(R.id.tv_name);
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
