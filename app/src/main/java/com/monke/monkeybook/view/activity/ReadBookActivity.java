@@ -798,7 +798,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                 @Override
                 public void openChapter(int chapterIndex, int pageIndex) {
-                    mPageLoader.skipToChapter(chapterIndex, pageIndex);
+                    skipToChapter(chapterIndex, pageIndex);
                 }
             });
         }
@@ -807,7 +807,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void skipToChapter(int chapterIndex, int pageIndex) {
-        mPageLoader.skipToChapter(chapterIndex, pageIndex);
+        if (mPageLoader != null) {
+            mPageLoader.skipToChapter(chapterIndex, pageIndex);
+        }
     }
 
     /**
