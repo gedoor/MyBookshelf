@@ -68,7 +68,7 @@ public abstract class PageLoader {
     private Paint mBatteryPaint;
     // 绘制提示的画笔(章节名称和时间)
     private TextPaint mTipPaint;
-    float pageOffset = 0;
+    private float pageOffset = 0;
     // 绘制标题的画笔
     TextPaint mTitlePaint;
     // 绘制小说内容的画笔
