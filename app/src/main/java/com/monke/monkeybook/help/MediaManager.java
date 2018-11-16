@@ -81,7 +81,6 @@ public class MediaManager {
         cancelFading = false;
         int numberOfSteps = FADE_DURATION / FADE_INTERVAL;
         float deltaVolume = (to - from) / numberOfSteps;
-        long st = System.currentTimeMillis();
         for (float vol = from; (vol - to) * (vol - from) <= 0 && !cancelFading; vol += deltaVolume) {
             setSysVolume(vol);
             try {
