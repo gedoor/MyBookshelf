@@ -296,7 +296,6 @@ public class ChangeSourceView {
                     if (saveBookSource) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
-                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                     handler.post(() -> adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
