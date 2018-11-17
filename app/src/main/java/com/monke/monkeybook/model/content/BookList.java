@@ -50,7 +50,7 @@ public class BookList {
                         item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setName(analyzeElement.getResult(bookSourceBean.getRuleSearchName()));
+                        item.setName(FormatWebText.getBookName(analyzeElement.getResult(bookSourceBean.getRuleSearchName())));
                         item.setNoteUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchNoteUrl()));
                         if (isEmpty(item.getNoteUrl())) {
                             item.setNoteUrl(baseURI);

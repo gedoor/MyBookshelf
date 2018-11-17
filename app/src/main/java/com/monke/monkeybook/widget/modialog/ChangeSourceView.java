@@ -16,6 +16,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.monkeybook.R;
+import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -26,6 +27,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.UpLastChapterModel;
+import com.monke.monkeybook.utils.ListUtil;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -219,9 +221,6 @@ public class ChangeSourceView {
                         bookSourceList.remove(bookSourceBean);
                     }
                 }
-                searchBookModel.initSearchEngineS(bookSourceList);
-                int id = (int) System.currentTimeMillis();
-                searchBookModel.startSearch(id, bookName);
                 UpLastChapterModel.getInstance().startUpdate(searchBookList);
             }
             if (searchBookList.size() > 0) {

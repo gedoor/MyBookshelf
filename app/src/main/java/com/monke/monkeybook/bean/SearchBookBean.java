@@ -12,6 +12,9 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class SearchBookBean implements Parcelable{
     @Id
@@ -42,6 +45,8 @@ public class SearchBookBean implements Parcelable{
     private int lastChapterNum = -2;
     @Transient
     private int searchTime = Integer.MAX_VALUE;
+    @Transient
+    private List<String> originUrls;
 
     public SearchBookBean(){
 
@@ -65,6 +70,7 @@ public class SearchBookBean implements Parcelable{
         chapterUrl = in.readString();
         addTime = in.readLong();
         upTime = in.readLong();
+        originUrls = in.createStringArrayList();
     }
 
     @Generated(hash = 1330499490)
@@ -105,6 +111,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeString(chapterUrl);
         dest.writeLong(addTime);
         dest.writeLong(upTime);
+        dest.writeStringList(originUrls);
     }
 
     @Override
@@ -235,6 +242,21 @@ public class SearchBookBean implements Parcelable{
 
     public int getOriginNum() {
         return originNum;
+    }
+
+    public void addOriginUrl(String origin) {
+        if (this.originUrls == null) {
+            this.originUrls = new ArrayList<>();
+        }
+
+        if (!this.originUrls.contains(origin)) {
+            this.originUrls.add(origin);
+        }
+        originNum = this.originUrls.size();
+    }
+
+    public List<String> getOriginUrls() {
+        return this.originUrls == null ? new ArrayList<String>() : this.originUrls;
     }
 
     public String getIntroduce() {

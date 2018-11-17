@@ -24,6 +24,7 @@ import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -128,53 +129,48 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
-                for (SearchBookBean temp : newDataS) {
-                    if (temp.getName().equals(keyWord)) {
-                        if (copyDataS.size() == 0) {
-                            copyDataS.add(temp);
-                        } else if (temp.getName().equals(keyWord) && !copyDataS.get(0).getName().equals(keyWord)) {
-                            copyDataS.add(0, temp);
-                        } else {
-                            copyDataS.add(temp);
-                        }
-                    }
-                }
+                copyDataS.addAll(newDataS);
+                sortSearchBooks(copyDataS, keyWord);
             } else {
-                //已有
+                //存在
                 for (SearchBookBean temp : newDataS) {
                     Boolean hasSame = false;
-                    for (int i = 0; i < copyDataS.size(); i++) {
+                    for (int i = 0, size = copyDataS.size(); i < size; i++) {
                         SearchBookBean searchBook = copyDataS.get(i);
-                        if (Objects.equals(temp.getName(), searchBook.getName()) && Objects.equals(temp.getAuthor(), searchBook.getAuthor())) {
-                            if (temp.getIsAdd()) {
-                                searchBook.setIsAdd(true);
-                            }
+                        if (TextUtils.equals(temp.getName(), searchBook.getName())
+                                && TextUtils.equals(temp.getAuthor(), searchBook.getAuthor())) {
                             hasSame = true;
-                            searchBook.originNumAdd();
+                            searchBook.addOriginUrl(temp.getTag());
                             break;
                         }
                     }
+
                     if (!hasSame) {
                         searchBookBeansAdd.add(temp);
                     }
                 }
                 //添加
                 for (SearchBookBean temp : searchBookBeansAdd) {
-                    if (temp.getName().equals(keyWord)) {
-                        if (TextUtils.isEmpty(copyDataS.get(0).getAuthor())) {
-                            copyDataS.add(0, temp);
-                            break;
-                        } else {
-                            for (int i = 1; i < copyDataS.size(); i++) {
-                                if (!Objects.equals(keyWord, copyDataS.get(i).getName())) {
-                                    copyDataS.add(i, temp);
-                                    break;
-                                }
+                    if (TextUtils.equals(keyWord, temp.getName())) {
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            SearchBookBean searchBook = copyDataS.get(i);
+                            if (!TextUtils.equals(keyWord, searchBook.getName())) {
+                                copyDataS.add(i, temp);
+                                break;
                             }
                         }
-                    } else if (temp.getAuthor().contains(keyWord) || temp.getName().contains(keyWord)) {
+                    } else if (TextUtils.equals(keyWord, temp.getAuthor())) {
                         for (int i = 0; i < copyDataS.size(); i++) {
-                            if (!copyDataS.get(i).getName().contains(keyWord) && !copyDataS.get(i).getAuthor().contains(keyWord)) {
+                            SearchBookBean searchBook = copyDataS.get(i);
+                            if (!TextUtils.equals(keyWord, searchBook.getName()) && !TextUtils.equals(keyWord, searchBook.getAuthor())) {
+                                copyDataS.add(i, temp);
+                                break;
+                            }
+                        }
+                    } else if (temp.getName().contains(keyWord) || temp.getAuthor().contains(keyWord)) {
+                        for (int i = 0; i < copyDataS.size(); i++) {
+                            SearchBookBean searchBook = copyDataS.get(i);
+                            if (!TextUtils.equals(keyWord, searchBook.getName()) && !TextUtils.equals(keyWord, searchBook.getAuthor())) {
                                 copyDataS.add(i, temp);
                                 break;
                             }
@@ -184,9 +180,11 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                     }
                 }
             }
+            searchBooks = copyDataS;
+            if(activity != null) {
+                activity.runOnUiThread(this::notifyDataSetChanged);
+            }
         }
-        searchBooks = copyDataS;
-        activity.runOnUiThread(this::notifyDataSetChanged);
     }
 
     public void clearAll() {
@@ -209,6 +207,24 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private void saveSearchToDb(List<SearchBookBean> newDataS) {
         AsyncTask.execute(()-> DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao()
                 .insertOrReplaceInTx(newDataS));
+    }
+
+    private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {
+        Collections.sort(searchBookBeans, (o1, o2) -> {
+            if (TextUtils.equals(keyWord, o1.getName())
+                    || TextUtils.equals(keyWord, o1.getAuthor())) {
+                return -1;
+            } else if (TextUtils.equals(keyWord, o2.getName())
+                    || TextUtils.equals(keyWord, o2.getAuthor())) {
+                return 1;
+            } else if (o1.getName().contains(keyWord) || o1.getAuthor().contains(keyWord)) {
+                return -1;
+            } else if (o2.getName().contains(keyWord) || o2.getAuthor().contains(keyWord)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
     }
 
     public SearchBookBean getItemData(int pos) {

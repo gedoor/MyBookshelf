@@ -32,7 +32,7 @@ public class FormatWebText {
                 .replace(",", "，")
                 .replaceAll("[\\u3000 ]+", "")
                 .replaceAll("\\s", " ")
-                .replaceAll("[?？!！。~]", "")
+                .replaceAll("[?？!！。~《》【】]", "")
                 .replaceAll("([(（].*[）)])", ""));
     }
 
