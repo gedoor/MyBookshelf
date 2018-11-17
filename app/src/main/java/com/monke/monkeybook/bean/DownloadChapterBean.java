@@ -9,12 +9,11 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
-@Entity
 public class DownloadChapterBean implements Parcelable, BaseChapterBean {
     private String noteUrl;
 
     private int durChapterIndex;  //当前章节数
-    @Id
+
     private String durChapterUrl;  //当前章节对应的文章地址
 
     private String durChapterName;  //当前章节名称
@@ -23,8 +22,6 @@ public class DownloadChapterBean implements Parcelable, BaseChapterBean {
 
     private String bookName;
 
-    private String coverUrl; //小说封面
-
     protected DownloadChapterBean(Parcel in) {
         noteUrl = in.readString();
         durChapterIndex = in.readInt();
@@ -32,19 +29,6 @@ public class DownloadChapterBean implements Parcelable, BaseChapterBean {
         durChapterName = in.readString();
         tag = in.readString();
         bookName = in.readString();
-        coverUrl = in.readString();
-    }
-
-    @Generated(hash = 757008458)
-    public DownloadChapterBean(String noteUrl, int durChapterIndex, String durChapterUrl,
-            String durChapterName, String tag, String bookName, String coverUrl) {
-        this.noteUrl = noteUrl;
-        this.durChapterIndex = durChapterIndex;
-        this.durChapterUrl = durChapterUrl;
-        this.durChapterName = durChapterName;
-        this.tag = tag;
-        this.bookName = bookName;
-        this.coverUrl = coverUrl;
     }
 
     @Generated(hash = 301211198)
@@ -77,7 +61,6 @@ public class DownloadChapterBean implements Parcelable, BaseChapterBean {
         dest.writeString(durChapterName);
         dest.writeString(tag);
         dest.writeString(bookName);
-        dest.writeString(coverUrl);
     }
 
     @Override
@@ -133,11 +116,4 @@ public class DownloadChapterBean implements Parcelable, BaseChapterBean {
         this.bookName = bookName;
     }
 
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public void setCoverUrl(String coverUrl) {
-        this.coverUrl = coverUrl;
-    }
 }

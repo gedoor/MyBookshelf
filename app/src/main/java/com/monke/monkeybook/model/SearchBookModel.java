@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
@@ -12,8 +13,11 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
+import com.monke.monkeybook.bean.SearchEngine;
 import com.monke.monkeybook.help.ACache;
+import com.monke.monkeybook.model.impl.ISearchTask;
 import com.monke.monkeybook.model.source.My716;
+import com.monke.monkeybook.model.tsak.SearchTaskImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,242 +37,189 @@ import io.reactivex.schedulers.Schedulers;
  * 搜索
  */
 
-public class SearchBookModel {
-    private Context context;
-    private Handler handler = new Handler(Looper.getMainLooper());
-    private ExecutorService executorService;
-    private Scheduler scheduler;
-    private long startThisSearchTime;
-    private List<SearchEngine> searchEngineS = new ArrayList<>();
+public class SearchBookModel implements ISearchTask.OnSearchingListener {
+    private int startThisId;
     private int threadsNum;
-    private int page = 0;
-    private int searchEngineIndex;
-    private int searchSuccessNum;
-    private CompositeDisposable compositeDisposable;
     private OnSearchListener searchListener;
     private boolean useMy716;
+    private boolean searchEngineChanged = false;
+
+    private ExecutorService executor;
+    private Scheduler scheduler;
+
+    private final List<SearchEngine> searchEngineS = new ArrayList<>();
+    private final List<ISearchTask> searchTasks = new ArrayList<>();
+
 
     public SearchBookModel(Context context, OnSearchListener searchListener, boolean useMy716) {
-        this.context = context;
         this.searchListener = searchListener;
         this.useMy716 = useMy716;
-        SharedPreferences preference = MApplication.getInstance().getConfigPreferences();
-        threadsNum = preference.getInt(this.context.getString(R.string.pk_threads_num), 6);
-        executorService = Executors.newFixedThreadPool(threadsNum);
-        scheduler = Schedulers.from(executorService);
-        compositeDisposable = new CompositeDisposable();
+        SharedPreferences preference = context.getSharedPreferences("CONFIG", 0);
+        threadsNum = preference.getInt(context.getString(R.string.pk_threads_num), 4);
+        executor = Executors.newFixedThreadPool(threadsNum);
+        scheduler = Schedulers.from(executor);
         initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
     /**
      * 搜索引擎初始化
      */
-    public void initSearchEngineS(@NonNull List<BookSourceBean> sourceBeanList) {
+    public void initSearchEngineS(List<BookSourceBean> bookSourceBeans) {
         searchEngineS.clear();
-        if (Objects.equals(ACache.get(context).getAsString("getZfbHb"), "True") && useMy716) {
-            SearchEngine my716 = new SearchEngine();
-            my716.setTag(My716.TAG);
-            my716.setHasMore(true);
-            searchEngineS.add(my716);
+        if (useMy716 && Objects.equals(ACache.get(MApplication.getInstance()).getAsString("getZfbHb"), "True")) {
+            searchEngineS.add(new SearchEngine(My716.TAG));
         }
-        for (BookSourceBean bookSourceBean : sourceBeanList) {
-            if (bookSourceBean.getEnable()) {
-                SearchEngine se = new SearchEngine();
-                se.setTag(bookSourceBean.getBookSourceUrl());
-                se.setHasMore(true);
-                searchEngineS.add(se);
+        if(bookSourceBeans != null) {
+            for (BookSourceBean bookSourceBean : bookSourceBeans) {
+                searchEngineS.add(new SearchEngine(bookSourceBean.getBookSourceUrl()));
             }
         }
+        searchEngineChanged = false;
     }
 
-    public void searchReNew() {
-        compositeDisposable.dispose();
-        compositeDisposable = new CompositeDisposable();
-        page = 0;
-        for (SearchEngine searchEngine : searchEngineS) {
-            searchEngine.setHasMore(true);
-        }
-    }
-
-    public void stopSearch() {
-        compositeDisposable.dispose();
-        compositeDisposable = new CompositeDisposable();
-        handler.post(() -> {
-            searchListener.refreshFinish(true);
-            searchListener.loadMoreFinish(true);
-        });
-    }
-
-    public void onDestroy() {
-        stopSearch();
-        executorService.shutdown();
-    }
-
-    public void setSearchTime(long searchTime) {
-        this.startThisSearchTime = searchTime;
-    }
-
-    public void search(final String content, final long searchTime, List<BookShelfBean> bookShelfS, Boolean fromError) {
-        if (searchTime != startThisSearchTime) {
-            return;
-        }
-        if (!fromError) {
-            page++;
-        }
-        if (page == 0) {
-            page = 1;
-        }
-        if (page == 1) {
-            handler.post(() -> searchListener.refreshSearchBook());
-        }
-        if (searchEngineS.size() == 0) {
-            handler.post(() -> {
-                Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show();
-                searchListener.refreshFinish(true);
-                searchListener.loadMoreFinish(true);
-            });
-            return;
-        }
-        searchSuccessNum = 0;
-        searchEngineIndex = -1;
-        for (int i = 0; i < threadsNum; i++) {
-            searchOnEngine(content, bookShelfS, searchTime);
-        }
-    }
-
-    private synchronized void searchOnEngine(final String content, List<BookShelfBean> bookShelfS, final long searchTime) {
-        if (searchTime != startThisSearchTime) {
-            return;
-        }
-        searchEngineIndex++;
-        long startTime = System.currentTimeMillis();
-        if (searchEngineIndex < searchEngineS.size()) {
-            final SearchEngine searchEngine = searchEngineS.get(searchEngineIndex);
-            if (searchEngine.getHasMore()) {
-                WebBookModel.getInstance()
-                        .searchOtherBook(content, page, searchEngine.getTag())
-                        .subscribeOn(scheduler)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<List<SearchBookBean>>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-                                compositeDisposable.add(d);
-                            }
-
-                            @Override
-                            public void onNext(List<SearchBookBean> searchBookBeans) {
-                                if (searchTime == startThisSearchTime) {
-                                    searchSuccessNum++;
-                                    if (searchBookBeans.size() > 0) {
-                                        for (SearchBookBean temp : searchBookBeans) {
-                                            int searchTime = (int) (System.currentTimeMillis() - startTime) / 1000;
-                                            temp.setSearchTime(searchTime);
-                                            for (BookShelfBean bookShelfBean : bookShelfS) {
-                                                if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                                                    temp.setIsAdd(true);
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (!searchListener.checkIsExist(searchBookBeans.get(0))) {
-                                            searchListener.loadMoreSearchBook(searchBookBeans);
-                                        } else {
-                                            searchEngine.setHasMore(false);
-                                        }
-                                    } else {
-                                        searchEngine.setHasMore(false);
-                                    }
-                                    searchOnEngine(content, bookShelfS, searchTime);
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                                searchEngine.setHasMore(false);
-                                searchOnEngine(content, bookShelfS, searchTime);
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
-            } else {
-                searchOnEngine(content, bookShelfS, searchTime);
-            }
+    private void resetSearchEngineS(boolean init) {
+        if (init || searchEngineS.isEmpty()) {
+            initSearchEngineS(BookSourceManager.getSelectedBookSource());
         } else {
-            if (searchEngineIndex >= searchEngineS.size() + threadsNum - 1) {
-                if (searchSuccessNum == 0 && searchListener.getItemCount() == 0) {
-                    if (page == 1) {
-                        handler.post(() -> searchListener.searchBookError(true));
-                    } else {
-                        handler.post(() -> searchListener.searchBookError(false));
-                    }
-                } else {
-                    if (page == 1) {
-                        handler.post(() -> searchListener.refreshFinish(false));
-                    }
-                    for (SearchEngine engine : searchEngineS) {
-                        if (engine.hasMore) {
-                            handler.post(() -> searchListener.loadMoreFinish(false));
-                            return;
-                        }
-                    }
-                    handler.post(() -> searchListener.loadMoreFinish(true));
+            for (SearchEngine searchEngine : searchEngineS) {
+                searchEngine.setPage(1);
+                searchEngine.setHasMore(true);
+            }
+        }
+    }
+
+    private void resetSearch(boolean clear, int id) {
+        if (!searchTasks.isEmpty()) {
+            for (ISearchTask searchTask : searchTasks) {
+                searchTask.stopSearch();
+                searchTask.setId(id);
+            }
+            if (clear) {
+                searchTasks.clear();
+            }
+        }
+    }
+
+    public void startSearch(int id, String query) {
+        if (TextUtils.isEmpty(query)) {
+            return;
+        }
+
+        startThisId = id;
+        resetSearch(searchEngineChanged, startThisId);
+        resetSearchEngineS(searchEngineChanged);
+
+        if (searchEngineS.isEmpty()) {
+            searchListener.searchSourceEmpty();
+            return;
+        }
+
+        searchListener.resetSearchBook();
+
+        search(id, query);
+    }
+
+    private void search(int id, String query) {
+        if (searchTasks.isEmpty()) {
+            int length = searchEngineS.size();
+            int seek = length % threadsNum == 0 ? length / threadsNum : (length / threadsNum + 1);
+            for (int i = 0, size = Math.min(length, threadsNum); i < size; i++) {
+                int end = (i + 1) * seek;
+                List<SearchEngine> engines = searchEngineS.subList(i * seek, end >= length ? length : end);
+                ISearchTask searchTask = new SearchTaskImpl(id, new ArrayList<>(engines), this);
+                searchTask.startSearch(query, scheduler);
+                searchTasks.add(searchTask);
+                if (end >= length) {
+                    break;
                 }
             }
+        } else {
+            for (ISearchTask searchTask : searchTasks) {
+                searchTask.startSearch(query, scheduler);
+            }
         }
     }
 
-    public int getPage() {
-        return page;
+    public void stopSearch(boolean callEvent) {
+        resetSearch(false, 0);
+        if(callEvent) {
+            searchListener.searchBookFinish();
+        }
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void shutdownSearch() {
+        resetSearch(true, 0);
+        executor.shutdown();
     }
 
     public void setUseMy716(boolean useMy716) {
         this.useMy716 = useMy716;
-        initSearchEngineS(BookSourceManager.getSelectedBookSource());
+        setSearchEngineChanged();
+    }
+
+    public void setSearchEngineChanged() {
+        searchEngineChanged = true;
+    }
+
+    @Override
+    public boolean checkSameTask(int id) {
+        return startThisId == id;
+    }
+
+    @Override
+    public boolean checkSearchEngine(SearchEngine engine) {
+        return engine != null && engine.getHasMore();
+    }
+
+    @Override
+    public boolean checkExists(SearchBookBean searchBook) {
+        return searchListener.checkExists(searchBook);
+    }
+
+    @Override
+    public int getShowingItemCount() {
+        return searchListener.getItemCount();
+    }
+
+    @Override
+    public void onSearchResult(List<SearchBookBean> searchBooks) {
+        searchListener.loadMoreSearchBook(searchBooks);
+    }
+
+    @Override
+    public void onSearchError() {
+        for (ISearchTask searchTask : searchTasks) {
+            if (!searchTask.isComplete()) {
+                return;
+            }
+        }
+        searchListener.searchBookError();
+    }
+
+    @Override
+    public void onSearchComplete() {
+        for (ISearchTask searchTask : searchTasks) {
+            if (!searchTask.isComplete()) {
+                return;
+            }
+        }
+        searchListener.searchBookFinish();
     }
 
     public interface OnSearchListener {
-        void refreshSearchBook();
+        void searchSourceEmpty();
 
-        void refreshFinish(Boolean isAll);
+        void resetSearchBook();
 
-        void loadMoreFinish(Boolean isAll);
+        void searchBookFinish();
 
-        Boolean checkIsExist(SearchBookBean searchBookBean);
+        boolean checkExists(SearchBookBean searchBook);
 
         void loadMoreSearchBook(List<SearchBookBean> searchBookBeanList);
 
-        void searchBookError(Boolean isRefresh);
+        void searchBookError();
 
         int getItemCount();
     }
 
-    private class SearchEngine {
-        private String tag;
-        private Boolean hasMore;
-
-        public String getTag() {
-            return tag;
-        }
-
-        public void setTag(String tag) {
-            this.tag = tag;
-        }
-
-        Boolean getHasMore() {
-            return hasMore;
-        }
-
-        void setHasMore(Boolean hasMore) {
-            this.hasMore = hasMore;
-        }
-
-    }
 }

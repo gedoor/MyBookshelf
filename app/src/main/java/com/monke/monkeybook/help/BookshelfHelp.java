@@ -3,6 +3,7 @@ package com.monke.monkeybook.help;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -31,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,6 +76,10 @@ public class BookshelfHelp {
         return formatFolderName(book.getName() + "-" + book.getTag());
     }
 
+    public static String getCacheFileName(int chapterIndex, String chapterName) {
+        return formatFileName(chapterIndex, chapterName);
+    }
+
     public static void setChapterIsCached(String bookName, ChapterListBean chapter, boolean cached) {
         setChapterIsCached(bookName + "-" + chapter.getTag(), chapter.getDurChapterIndex(), cached);
     }
@@ -100,7 +106,7 @@ public class BookshelfHelp {
         return cached;
     }
 
-    public static boolean isChapterCached(BookInfoBean book, ChapterListBean chapter) {
+    public static boolean isChapterCached(BookInfoBean book, BaseChapterBean chapter) {
         final String path = getCachePathName(book);
         return chapterCaches.containsKey(path) && chapterCaches.get(path).contains(chapter.getDurChapterIndex());
     }

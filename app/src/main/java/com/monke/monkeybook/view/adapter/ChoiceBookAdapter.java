@@ -95,6 +95,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
         }
 
         myViewHolder.tvAddShelf.setText("搜索");
+        myViewHolder.tvAddShelf.setVisibility(View.VISIBLE);
         myViewHolder.tvAddShelf.setEnabled(true);
 
         myViewHolder.flContent.setOnClickListener(v -> {

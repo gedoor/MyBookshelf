@@ -3,6 +3,7 @@ package com.monke.monkeybook.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
+import com.monke.monkeybook.view.adapter.base.BaseListAdapter;
 import com.monke.monkeybook.widget.FilletImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
@@ -31,7 +33,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private Activity activity;
     private List<SearchBookBean> searchBooks;
-    private OnItemClickListener itemClickListener;
+    private BaseListAdapter.OnItemClickListener itemClickListener;
 
     public SearchBookAdapter(Activity activity) {
         super(true);
@@ -98,21 +100,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         }
         myViewHolder.tvOriginNum.setText(String.format("共%d个源", searchBooks.get(position).getOriginNum()));
-        if (searchBooks.get(position).getIsAdd()) {
-            myViewHolder.tvAddShelf.setText("已添加");
-            myViewHolder.tvAddShelf.setEnabled(false);
-        } else {
-            myViewHolder.tvAddShelf.setText("+添加");
-            myViewHolder.tvAddShelf.setEnabled(true);
-        }
 
         myViewHolder.flContent.setOnClickListener(v -> {
             if (itemClickListener != null)
-                itemClickListener.clickItem(myViewHolder.ivCover, position, searchBooks.get(position));
-        });
-        myViewHolder.tvAddShelf.setOnClickListener(v -> {
-            if (itemClickListener != null)
-                itemClickListener.clickAddShelf(myViewHolder.tvAddShelf, position, searchBooks.get(position));
+                itemClickListener.onItemClick(v, position);
         });
     }
 
@@ -126,7 +117,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         return searchBooks.size();
     }
 
-    public void setItemClickListener(OnItemClickListener itemClickListener) {
+    public void setItemClickListener(BaseListAdapter.OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
@@ -200,21 +191,12 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     }
 
     private void saveSearchToDb(List<SearchBookBean> newDataS) {
-        Observable.create(e -> {
-            DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao()
-                    .insertOrReplaceInTx(newDataS);
-            e.onNext(true);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        AsyncTask.execute(()-> DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao()
+                .insertOrReplaceInTx(newDataS));
     }
 
-    public interface OnItemClickListener {
-        void clickAddShelf(View clickView, int position, SearchBookBean searchBookBean);
-
-        void clickItem(View animView, int position, SearchBookBean searchBookBean);
+    public SearchBookBean getItemData(int pos) {
+        return searchBooks.get(pos);
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -225,7 +207,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         TextView tvWords;
         TextView tvKind;
         TextView tvLasted;
-        TextView tvAddShelf;
         TextView tvOrigin;
         TextView tvOriginNum;
 
@@ -237,7 +218,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             tvState = itemView.findViewById(R.id.tv_state);
             tvWords = itemView.findViewById(R.id.tv_words);
             tvLasted = itemView.findViewById(R.id.tv_lasted);
-            tvAddShelf = itemView.findViewById(R.id.tv_add_shelf);
             tvKind = itemView.findViewById(R.id.tv_kind);
             tvOrigin = itemView.findViewById(R.id.tv_origin);
             tvOriginNum = itemView.findViewById(R.id.tv_origin_num);

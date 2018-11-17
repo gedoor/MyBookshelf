@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
@@ -162,9 +163,8 @@ public class UpLastChapterModel {
             List<SearchBookBean> searchBookBeans = DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().queryBuilder()
                     .where(SearchBookBeanDao.Properties.Name.eq(bookShelf.getBookInfoBean().getName())).list();
             for (SearchBookBean searchBookBean : searchBookBeans) {
-                long count = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                        .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(searchBookBean.getTag())).count();
-                if (count == 0 && !Objects.equals(searchBookBean.getTag(), My716.TAG)) {
+                BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(searchBookBean.getTag());
+                if (sourceBean == null && !Objects.equals(searchBookBean.getTag(), My716.TAG)) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
                 } else if (System.currentTimeMillis() - searchBookBean.getUpTime() > 1000 * 60 * 60
                         && BookSourceManager.getBookSourceByUrl(searchBookBean.getTag()).getEnable()) {

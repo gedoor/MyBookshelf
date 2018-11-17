@@ -132,7 +132,7 @@
             android:layout_marginEnd="30dp"
             android:src="@drawable/ic_stop_black_24dp"
             app:elevation="5dp"
-            app:fabSize="normal"
+            app:fabSize="mini"
             app:layout_anchorGravity="right|bottom" />
 
     </RelativeLayout>

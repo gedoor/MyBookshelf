@@ -1,5 +1,6 @@
 package com.monke.monkeybook.presenter.contract;
 
+import android.content.Intent;
 import android.widget.EditText;
 
 import com.monke.basemvplib.impl.IPresenter;
@@ -13,25 +14,21 @@ import java.util.List;
 public interface SearchBookContract {
     interface Presenter extends IPresenter {
 
+        void fromIntentSearch(Intent intent);
+
         void insertSearchHistory();
 
-        void querySearchHistory(String content);
+        void querySearchHistory(String query);
 
         void cleanSearchHistory();
 
         void cleanSearchHistory(SearchHistoryBean searchHistoryBean);
 
-        int getPage();
-
-        void initPage();
-
         void setUseMy716(boolean useMy716);
 
-        void toSearchBooks(String key, Boolean fromError);
+        void toSearchBooks(String key);
 
-        void addBookToShelf(final SearchBookBean searchBookBean);
-
-        void stopSearch();
+        void stopSearch(boolean callEvent);
     }
 
     interface View extends IView {
@@ -49,9 +46,9 @@ public interface SearchBookContract {
         void querySearchHistorySuccess(List<SearchHistoryBean> datas);
 
         /**
-         * 首次查询成功 更新UI
+         * 清空搜索列表
          */
-        void refreshSearchBook();
+        void resetSearchBook();
 
         /**
          * 加载更多书籍成功 更新UI
@@ -61,17 +58,12 @@ public interface SearchBookContract {
         /**
          * 刷新成功
          */
-        void refreshFinish(Boolean isAll);
-
-        /**
-         * 加载成功
-         */
-        void loadMoreFinish(Boolean isAll);
+        void refreshFinish();
 
         /**
          * 搜索失败
          */
-        void searchBookError(Boolean isRefresh);
+        void searchBookError();
 
         /**
          * 获取搜索内容EditText
@@ -79,24 +71,11 @@ public interface SearchBookContract {
         EditText getEdtContent();
 
         /**
-         * 添加书籍失败
-         */
-        void addBookShelfFailed(String massage);
-
-        /**
          * @return SearchBookAdapter
          */
         SearchBookAdapter getSearchBookAdapter();
 
-        /**
-         * @param index
-         */
-        void updateSearchItem(int index);
-
-        /**
-         * 判断书籍是否已经在书架上
-         */
-        Boolean checkIsExist(SearchBookBean searchBookBean);
+        void showBookSourceEmptyTip();
 
         void upMenu();
     }

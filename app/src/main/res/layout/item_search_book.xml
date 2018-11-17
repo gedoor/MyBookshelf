@@ -167,7 +167,8 @@
                         android:lines="1"
                         android:text="+书架"
                         android:textColor="@drawable/selector_tv_first_text"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

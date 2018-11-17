@@ -1,7 +1,10 @@
 package com.monke.monkeybook.view.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,33 +15,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Subscribe;
-import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.base.observer.SimpleObserver;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadBookBean;
-import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.dao.DownloadChapterBeanDao;
-import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.adapter.DownloadAdapter;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+
+import static com.monke.monkeybook.service.DownloadService.addDownloadAction;
+import static com.monke.monkeybook.service.DownloadService.finishDownloadAction;
+import static com.monke.monkeybook.service.DownloadService.obtainDownloadListAction;
+import static com.monke.monkeybook.service.DownloadService.progressDownloadAction;
+import static com.monke.monkeybook.service.DownloadService.removeDownloadAction;
 
 public class DownloadActivity extends MBaseActivity {
 
@@ -50,7 +44,7 @@ public class DownloadActivity extends MBaseActivity {
     LinearLayout llContent;
 
     private DownloadAdapter adapter;
-    private boolean downloadPause;
+    private DownloadReceiver receiver;
 
     public static void startThis(Activity activity) {
         Intent intent = new Intent(activity, DownloadActivity.class);
@@ -65,8 +59,10 @@ public class DownloadActivity extends MBaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
         super.onDestroy();
-        RxBus.get().unregister(this);
     }
 
     /**
@@ -93,44 +89,28 @@ public class DownloadActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
-        downloadPause = !DownloadService.isStartDownload;
+        receiver = new DownloadReceiver(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(addDownloadAction);
+        filter.addAction(removeDownloadAction);
+        filter.addAction(progressDownloadAction);
+        filter.addAction(obtainDownloadListAction);
+        filter.addAction(finishDownloadAction);
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void bindView() {
         initRecyclerView();
-        RxBus.get().register(this);
     }
 
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DownloadAdapter(this);
         recyclerView.setAdapter(adapter);
-        downloadUp();
-    }
+        recyclerView.setItemAnimator(null);
 
-    public void delDownload(String noteUrl) {
-        Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
-            List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder()
-                    .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(noteUrl))
-                    .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
-            DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteInTx(downloadChapterList);
-            downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder().list();
-            emitter.onNext(downloadChapterList == null ? 0 : downloadChapterList.size());
-            emitter.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SimpleObserver<Integer>() {
-                    @Override
-                    public void onNext(Integer size) {
-                        if (downloadPause & size == 0) {
-                            RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, downloadPause);
-                        } else {
-                            downloadUp();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+        DownloadService.obtainDownloadList(this);
     }
 
     //设置ToolBar
@@ -145,14 +125,6 @@ public class DownloadActivity extends MBaseActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem pauseMenu = menu.getItem(0);
-        if (downloadPause) {
-            pauseMenu.setIcon(R.drawable.ic_play_24dp);
-            pauseMenu.setTitle(R.string.start);
-        } else {
-            pauseMenu.setIcon(R.drawable.ic_pause_24dp);
-            pauseMenu.setTitle(R.string.pause);
-        }
-        // pauseMenu.getIcon().mutate();
         pauseMenu.getIcon().setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -170,14 +142,7 @@ public class DownloadActivity extends MBaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_cancel:
-                RxBus.get().post(RxBusTag.CANCEL_DOWNLOAD, downloadPause);
-                break;
-            case R.id.action_pause_resume:
-                if (downloadPause) {
-                    RxBus.get().post(RxBusTag.START_DOWNLOAD, downloadPause);
-                } else {
-                    RxBus.get().post(RxBusTag.PAUSE_DOWNLOAD, downloadPause);
-                }
+                DownloadService.cancelDownload(this);
                 break;
             case android.R.id.home:
                 finish();
@@ -186,67 +151,45 @@ public class DownloadActivity extends MBaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void downloadPause() {
-        downloadPause = true;
-        supportInvalidateOptionsMenu();
-    }
+    private static class DownloadReceiver extends BroadcastReceiver {
 
-    private void downloadUp() {
-        Observable.create((ObservableOnSubscribe<List<DownloadBookBean>>) emitter -> {
-            List<DownloadBookBean> downloadBookBeanList = new ArrayList<>();
-            List<BookShelfBean> bookShelfBeanList = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                    .where(BookShelfBeanDao.Properties.Tag.notEq(BookShelfBean.LOCAL_TAG))
-                    .orderDesc(BookShelfBeanDao.Properties.FinalDate).list();
-            if (bookShelfBeanList != null && bookShelfBeanList.size() > 0) {
-                for (BookShelfBean bookItem : bookShelfBeanList) {
-                    List<DownloadChapterBean> downloadChapterList = DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().queryBuilder()
-                            .where(DownloadChapterBeanDao.Properties.NoteUrl.eq(bookItem.getNoteUrl()))
-                            .orderAsc(DownloadChapterBeanDao.Properties.DurChapterIndex).list();
-                    if (downloadChapterList != null && downloadChapterList.size() > 0) {
-                        DownloadBookBean downloadBookBean = new DownloadBookBean();
-                        downloadBookBean.setName(bookItem.getBookInfoBean().getName());
-                        downloadBookBean.setNoteUrl(bookItem.getNoteUrl());
-                        downloadBookBean.setCoverUrl(bookItem.getBookInfoBean().getCoverUrl());
-                        downloadBookBean.setDownload(downloadChapterList.size());
-                        downloadBookBeanList.add(downloadBookBean);
-                    }
-                }
-                emitter.onNext(downloadBookBeanList);
-            } else {
-                DbHelper.getInstance().getmDaoSession().getDownloadChapterBeanDao().deleteAll();
-                emitter.onNext(new ArrayList<>());
+        WeakReference<DownloadActivity> ref;
+
+        public DownloadReceiver(DownloadActivity activity) {
+            this.ref = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            DownloadAdapter adapter = ref.get().adapter;
+            if (adapter == null || intent == null) {
+                return;
             }
-            emitter.onComplete();
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SimpleObserver<List<DownloadBookBean>>() {
-                    @Override
-                    public void onNext(List<DownloadBookBean> downloadBookBeans) {
-                        adapter.upDataS(downloadBookBeans);
-                    }
+            String action = intent.getAction();
+            if (action != null) {
+                switch (action) {
+                    case addDownloadAction:
+                        DownloadBookBean downloadBook = intent.getParcelableExtra("downloadBook");
+                        adapter.addData(downloadBook);
+                        break;
+                    case removeDownloadAction:
+                        downloadBook = intent.getParcelableExtra("downloadBook");
+                        adapter.removeData(downloadBook);
+                        break;
+                    case progressDownloadAction:
+                        downloadBook = intent.getParcelableExtra("downloadBook");
+                        adapter.upData(downloadBook);
+                        break;
+                    case finishDownloadAction:
+                        adapter.upDataS(null);
+                        break;
+                    case obtainDownloadListAction:
+                        ArrayList<DownloadBookBean> downloadBooks = intent.getParcelableArrayListExtra("downloadBooks");
+                        adapter.upDataS(downloadBooks);
+                        break;
 
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
-    }
-
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PAUSE_DOWNLOAD_LISTENER)})
-    public void pauseTask(Object o) {
-        downloadPause();
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.FINISH_DOWNLOAD_LISTENER)})
-    public void finishTask(Object o) {
-        downloadUp();
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.PROGRESS_DOWNLOAD_LISTENER)})
-    public void progressTask(DownloadChapterBean downloadChapterBean) {
-        downloadPause = false;
-        supportInvalidateOptionsMenu();
-        downloadUp();
+                }
+            }
+        }
     }
 }
