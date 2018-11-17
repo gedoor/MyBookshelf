@@ -116,9 +116,9 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
-                    mCurFragment = mLocalFragment;
-                } else {
                     mCurFragment = mCategoryFragment;
+                } else {
+                    mCurFragment = mLocalFragment;
                 }
                 //改变菜单状态
                 changeMenuStatus();
