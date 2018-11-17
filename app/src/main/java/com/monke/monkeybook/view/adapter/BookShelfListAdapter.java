@@ -110,8 +110,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         holder.tvAuthor.setText(bookInfoBean.getAuthor());
         holder.tvRead.setText(bookShelfBean.getDurChapterName());
         holder.tvLast.setText(bookShelfBean.getLastChapterName());
-        holder.bvUnread.setBadgeCount(bookShelfBean.getUnreadChapterNum());
-        holder.bvUnread.setHighlight(bookShelfBean.getHasUpdate());
         holder.ivCover.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onClick(v, index);
@@ -149,7 +147,8 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {
-            holder.bvUnread.setVisibility(View.VISIBLE);
+            holder.bvUnread.setBadgeCount(bookShelfBean.getUnreadChapterNum());
+            holder.bvUnread.setHighlight(bookShelfBean.getHasUpdate());
             holder.rotateLoading.setVisibility(View.INVISIBLE);
             holder.rotateLoading.stop();
         }
