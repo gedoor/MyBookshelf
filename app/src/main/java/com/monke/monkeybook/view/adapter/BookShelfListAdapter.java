@@ -145,9 +145,11 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             AsyncTask.execute(() -> DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean));
         }
         if (bookShelfBean.isLoading()) {
+            holder.bvUnread.setVisibility(View.INVISIBLE);
             holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {
+            holder.bvUnread.setVisibility(View.VISIBLE);
             holder.rotateLoading.setVisibility(View.INVISIBLE);
             holder.rotateLoading.stop();
         }
