@@ -16,21 +16,25 @@ import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.DownloadBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
+import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.schedulers.Schedulers;
 
 public class BookListPresenter extends BasePresenterImpl<BookListContract.View> implements BookListContract.Presenter {
@@ -84,29 +88,20 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         if (bookShelfBeans == null || mView.getContext() == null) {
             return;
         }
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
-            for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
-                if (!Objects.equals(bookShelfBean.getTag(), BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
-                    int chapterNum = bookShelfBean.getChapterListSize();
-                    for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
-                            Intent intent = new Intent(mView.getContext(), DownloadService.class);
-                            intent.setAction("addDownload");
-                            intent.putExtra("noteUrl", bookShelfBean.getNoteUrl());
-                            intent.putExtra("start", start);
-                            int end = downloadNum > 0 ? Math.min(chapterNum - 1, start + downloadNum - 1) : chapterNum - 1;
-                            intent.putExtra("end", end);
-                            mView.getContext().startService(intent);
-                            break;
-                        }
-                    }
-                }
-            }
-            e.onNext(true);
-            e.onComplete();
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        Observable<BookShelfBean> data = Observable.fromIterable(new ArrayList<>(bookShelfBeans));
+        Observable<Long> time = Observable.interval(1, TimeUnit.SECONDS);
+        Observable.zip(data, time, (bookShelfBean, aLong) -> {
+            int chapterNum = bookShelfBean.getChapterListSize();
+            DownloadBookBean downloadBook = new DownloadBookBean();
+            downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
+            downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
+            downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
+            downloadBook.setStart(bookShelfBean.getDurChapter());
+            downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, bookShelfBean.getDurChapter() + downloadNum - 1) : chapterNum - 1);
+            downloadBook.setFinalDate(System.currentTimeMillis());
+            DownloadService.addDownload(mView.getContext(), downloadBook);
+            return bookShelfBean;
+        }).compose(RxUtils::toSimpleSingle)
                 .subscribe();
     }
 

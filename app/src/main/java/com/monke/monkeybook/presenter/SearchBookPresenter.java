@@ -241,7 +241,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     @Override
     public void stopSearch(boolean callEvent) {
-        searchBookModel.setSearchEngineChanged();
         searchBookModel.stopSearch(callEvent);
     }
 
@@ -257,6 +256,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     public void detachView() {
         RxBus.get().unregister(this);
         if (searchBookModel != null) {
+            searchBookModel.stopSearch(true);
             searchBookModel.shutdownSearch();
         }
     }

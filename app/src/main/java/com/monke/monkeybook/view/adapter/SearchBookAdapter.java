@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,7 +128,17 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
-                copyDataS.addAll(newDataS);
+                for (SearchBookBean temp : newDataS) {
+                    if (temp.getName().equals(keyWord)) {
+                        if (copyDataS.size() == 0) {
+                            copyDataS.add(temp);
+                        } else if (temp.getName().equals(keyWord) && !copyDataS.get(0).getName().equals(keyWord)) {
+                            copyDataS.add(0, temp);
+                        } else {
+                            copyDataS.add(temp);
+                        }
+                    }
+                }
             } else {
                 //已有
                 for (SearchBookBean temp : newDataS) {
@@ -150,15 +161,20 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 //添加
                 for (SearchBookBean temp : searchBookBeansAdd) {
                     if (temp.getName().equals(keyWord)) {
-                        for (int i = 0; i < copyDataS.size(); i++) {
-                            if (!Objects.equals(keyWord, copyDataS.get(i).getName())) {
-                                copyDataS.add(i, temp);
-                                break;
+                        if (TextUtils.isEmpty(copyDataS.get(0).getAuthor())) {
+                            copyDataS.add(0, temp);
+                            break;
+                        } else {
+                            for (int i = 1; i < copyDataS.size(); i++) {
+                                if (!Objects.equals(keyWord, copyDataS.get(i).getName())) {
+                                    copyDataS.add(i, temp);
+                                    break;
+                                }
                             }
                         }
                     } else if (temp.getAuthor().contains(keyWord) || temp.getName().contains(keyWord)) {
                         for (int i = 0; i < copyDataS.size(); i++) {
-                            if (!Objects.equals(keyWord, copyDataS.get(i).getName()) && !Objects.equals(keyWord, copyDataS.get(i).getAuthor())) {
+                            if (!copyDataS.get(i).getName().contains(keyWord) && !copyDataS.get(i).getAuthor().contains(keyWord)) {
                                 copyDataS.add(i, temp);
                                 break;
                             }

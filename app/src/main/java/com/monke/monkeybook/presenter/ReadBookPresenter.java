@@ -26,6 +26,7 @@ import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.BookmarkBean;
+import com.monke.monkeybook.bean.DownloadBookBean;
 import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
@@ -223,12 +224,14 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Override
     public void addDownload(int start, int end) {
         addToShelf(() -> {
-            Intent intent = new Intent(mView.getContext(), DownloadService.class);
-            intent.setAction("addDownload");
-            intent.putExtra("noteUrl", bookShelf.getNoteUrl());
-            intent.putExtra("start", start);
-            intent.putExtra("end", end);
-            mView.getContext().startService(intent);
+            DownloadBookBean downloadBook = new DownloadBookBean();
+            downloadBook.setName(bookShelf.getBookInfoBean().getName());
+            downloadBook.setNoteUrl(bookShelf.getNoteUrl());
+            downloadBook.setCoverUrl(bookShelf.getBookInfoBean().getCoverUrl());
+            downloadBook.setStart(start);
+            downloadBook.setEnd(end);
+            downloadBook.setFinalDate(System.currentTimeMillis());
+            DownloadService.addDownload(mView.getContext(), downloadBook);
         });
     }
 

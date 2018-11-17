@@ -117,7 +117,7 @@ public class DownloadService extends Service {
         return null;
     }
 
-    private void addDownload(DownloadBookBean downloadBook) {
+    private synchronized void addDownload(DownloadBookBean downloadBook) {
         if (checkDownloadTaskExist(downloadBook)) {
             Toast.makeText(this, "下载任务已存在", Toast.LENGTH_SHORT).show();
             return;
@@ -246,7 +246,7 @@ public class DownloadService extends Service {
     }
 
 
-    private boolean checkDownloadTaskExist(DownloadBookBean downloadBook) {
+    private synchronized boolean checkDownloadTaskExist(DownloadBookBean downloadBook) {
         for (int i = downloadTasks.size() - 1; i >= 0; i--) {
             IDownloadTask downloadTask = downloadTasks.valueAt(i);
             if (Objects.equals(downloadTask.getDownloadBook(), downloadBook)) {
