@@ -85,14 +85,14 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected List<Fragment> createTabFragments() {
-        mLocalFragment = new LocalBookFragment();
         mCategoryFragment = new FileCategoryFragment();
-        return Arrays.asList(mLocalFragment, mCategoryFragment);
+        mLocalFragment = new LocalBookFragment();
+        return Arrays.asList(mCategoryFragment, mLocalFragment);
     }
 
     @Override
     protected List<String> createTabTitles() {
-        return Arrays.asList("智能导入", "手机目录");
+        return Arrays.asList("手机目录", "智能导入");
     }
 
     @Override
