@@ -126,7 +126,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     public synchronized void addAll(List<SearchBookBean> newDataS, String keyWord) {
         List<SearchBookBean> copyDataS = new ArrayList<>(searchBooks);
         if (newDataS != null && newDataS.size() > 0) {
-            saveSearchToDb(newDataS);
             List<SearchBookBean> searchBookBeansAdd = new ArrayList<>();
             if (copyDataS.size() == 0) {
                 copyDataS.addAll(newDataS);
@@ -202,11 +201,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     public List<SearchBookBean> getSearchBooks() {
         return searchBooks;
-    }
-
-    private void saveSearchToDb(List<SearchBookBean> newDataS) {
-        AsyncTask.execute(()-> DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao()
-                .insertOrReplaceInTx(newDataS));
     }
 
     private void sortSearchBooks(List<SearchBookBean> searchBookBeans, String keyWord) {
