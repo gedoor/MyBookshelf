@@ -49,7 +49,7 @@ public class BookList {
                         AnalyzeElement analyzeElement = new AnalyzeElement(booksE.get(i), baseURI);
                         item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
-                        item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter()));
+                        item.setLastChapter(FormatWebText.trim(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter())));
                         item.setName(FormatWebText.getBookName(analyzeElement.getResult(bookSourceBean.getRuleSearchName())));
                         item.setNoteUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchNoteUrl()));
                         if (isEmpty(item.getNoteUrl())) {

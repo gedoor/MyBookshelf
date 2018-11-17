@@ -37,21 +37,14 @@ public class FormatWebText {
     }
 
     public static String getAuthor(String str) {
-        if (str == null) {
+        if (TextUtils.isEmpty(str)) {
             return "";
         }
-        return str
-                .replace("&nbsp;", " ")
+
+        return trim(str.replace("&nbsp;", "")
+                .replaceAll("[：:()【】\\[\\]（）\\u3000 ]+", "")
                 .replaceAll("\\s", " ")
-                .replaceAll("[：（）]", "")
-                .replace(":", "")
-                .replace("(", "")
-                .replace(")", "")
-                .replace("[", "")
-                .replace("]","")
-                .replace(",","")
-                .replaceAll("作.*?者", "")
-                .trim();
+                .replaceAll("作.*?者", ""));
     }
 
     public static String trim(String s) {
