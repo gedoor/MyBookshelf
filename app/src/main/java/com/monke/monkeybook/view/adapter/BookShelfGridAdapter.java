@@ -25,6 +25,7 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.view.adapter.base.OnItemClickListenerTwo;
+import com.monke.monkeybook.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -98,7 +99,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         BookShelfBean bookShelfBean = books.get(index);
         BookInfoBean bookInfoBean = bookShelfBean.getBookInfoBean();
         holder.tvName.setText(bookInfoBean.getName());
-        holder.tvRead.setText(activity.getString(R.string.read_y, BookshelfHelp.getReadProgress(bookShelfBean)));
         holder.ibContent.setContentDescription(bookInfoBean.getName());
         if (!activity.isFinishing()) {
             if (TextUtils.isEmpty(bookShelfBean.getCustomCoverPath())) {
@@ -146,9 +146,12 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             }.start();
         }
         if (bookShelfBean.isLoading()) {
+            holder.bvUnread.setVisibility(View.INVISIBLE);
             holder.rotateLoading.setVisibility(View.VISIBLE);
             holder.rotateLoading.start();
         } else {
+            holder.bvUnread.setBadgeCount(bookShelfBean.getUnreadChapterNum());
+            holder.bvUnread.setHighlight(bookShelfBean.getHasUpdate());
             holder.rotateLoading.setVisibility(View.INVISIBLE);
             holder.rotateLoading.stop();
         }
@@ -181,8 +184,8 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
         ImageView ivCover;
         ImageView ivHasNew;
         AutofitTextView tvName;
-        TextView tvRead;
         ImageButton ibContent;
+        BadgeView bvUnread;
         RotateLoading rotateLoading;
 
         MyViewHolder(View itemView) {
@@ -191,8 +194,8 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             ivCover = itemView.findViewById(R.id.iv_cover);
             ivHasNew = itemView.findViewById(R.id.iv_has_new);
             tvName = itemView.findViewById(R.id.tv_name);
-            tvRead = itemView.findViewById(R.id.tv_read);
             ibContent = itemView.findViewById(R.id.ib_content);
+            bvUnread = itemView.findViewById(R.id.bv_unread);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
         }
     }

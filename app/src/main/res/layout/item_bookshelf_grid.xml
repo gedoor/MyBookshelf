@@ -30,20 +30,18 @@
             android:layout_alignParentRight="true"
             tools:ignore="RtlHardcoded">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/iv_has_new"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:padding="6dp"
-                android:src="@drawable/ic_circle_red_24dp"
-                android:visibility="invisible"
-                app:tint="@color/red" />
+            <com.monke.monkeybook.widget.BadgeView
+                android:id="@+id/bv_unread"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:includeFontPadding="false" />
 
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/rl_loading"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_gravity="center"
+                android:layout_gravity="right"
                 android:visibility="invisible"
                 app:loading_color="@color/colorAccent"
                 app:loading_width="2dp" />
@@ -67,14 +65,5 @@
         android:textColor="@color/tv_text_default"
         android:textSize="15sp"
         app:minTextSize="13sp" />
-
-    <TextView
-        android:id="@+id/tv_read"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="@string/read_y"
-        android:textColor="@color/tv_text_secondary"
-        android:textSize="12sp" />
 
 </LinearLayout>
