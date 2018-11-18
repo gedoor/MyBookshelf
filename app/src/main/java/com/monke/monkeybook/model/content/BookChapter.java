@@ -17,7 +17,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -48,21 +47,39 @@ public class BookChapter {
                 ruleChapterList = ruleChapterList.substring(1);
             }
             WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList);
-            List<ChapterListBean> chapterList = webChapterBean.getData();
+            List<ChapterListBean> chapterList = webChapterBean.data;
 
-            while (!TextUtils.isEmpty(webChapterBean.getNextUrl())) {
-                Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                        .create(IHttpGetApi.class).getWebContentCall(webChapterBean.getNextUrl(), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
-                String response = "";
-                try {
-                    response = call.execute().body();
-                } catch (Exception exception) {
-                    if (!e.isDisposed()) {
-                        e.onError(exception);
+            if (webChapterBean.nextUrlList.size() > 1) {
+                List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
+                for (int i = 0; i < chapterUrlS.size(); i++) {
+                    Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                            .create(IHttpGetApi.class).getWebContentCall(chapterUrlS.get(i), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                    String response = "";
+                    try {
+                        response = call.execute().body();
+                    } catch (Exception exception) {
+                        if (!e.isDisposed()) {
+                            e.onError(exception);
+                        }
                     }
+                    webChapterBean = analyzeChapterList(response, chapterUrlS.get(i), ruleChapterList);
+                    chapterList.addAll(webChapterBean.data);
                 }
-                webChapterBean = analyzeChapterList(response, webChapterBean.getNextUrl(), ruleChapterList);
-                chapterList.addAll(webChapterBean.getData());
+            } else if (webChapterBean.nextUrlList.size() == 1) {
+                while (!TextUtils.isEmpty(webChapterBean.nextUrlList.get(0))) {
+                    Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                            .create(IHttpGetApi.class).getWebContentCall(webChapterBean.nextUrlList.get(0), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                    String response = "";
+                    try {
+                        response = call.execute().body();
+                    } catch (Exception exception) {
+                        if (!e.isDisposed()) {
+                            e.onError(exception);
+                        }
+                    }
+                    webChapterBean = analyzeChapterList(response, webChapterBean.nextUrlList.get(0), ruleChapterList);
+                    chapterList.addAll(webChapterBean.data);
+                }
             }
             if (dx) {
                 Collections.reverse(chapterList);
@@ -74,15 +91,16 @@ public class BookChapter {
 
     private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws Exception {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
-        String nextUrl = "";
+        List<String> nextUrlList = new ArrayList<>();
         Document doc = Jsoup.parse(s);
         AnalyzeElement analyzeElement;
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
             analyzeElement = new AnalyzeElement(doc, chapterUrl);
-            nextUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrlNext());
-            if (Objects.equals(nextUrl, chapterUrl)) {
-                nextUrl = "";
-            }
+            nextUrlList = analyzeElement.getAllResultList(bookSourceBean.getRuleChapterUrlNext());
+        }
+        int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
+        if (thisUrlIndex != -1) {
+            nextUrlList.remove(thisUrlIndex);
         }
         Elements elements = AnalyzeElement.getElements(doc, ruleChapterList);
         for (Element element : elements) {
@@ -96,26 +114,17 @@ public class BookChapter {
                 chapterBeans.add(temp);
             }
         }
-        return new WebChapterBean<>(chapterBeans, nextUrl);
+        return new WebChapterBean<>(chapterBeans, nextUrlList);
     }
 
     private class WebChapterBean<T> {
         private T data;
 
-        private String nextUrl;
+        private List<String> nextUrlList;
 
-        private WebChapterBean(T data, String nextUrl) {
+        private WebChapterBean(T data, List<String> nextUrlList) {
             this.data = data;
-            this.nextUrl = nextUrl;
+            this.nextUrlList = nextUrlList;
         }
-
-        private T getData() {
-            return data;
-        }
-
-        private String getNextUrl() {
-            return nextUrl;
-        }
-
     }
 }
