@@ -176,7 +176,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     class MyViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout flContent;
         ImageView ivCover;
-        AutofitTextView tvName;
+        TextView tvName;
         BadgeView bvUnread;
         RotateLoading rotateLoading;
 

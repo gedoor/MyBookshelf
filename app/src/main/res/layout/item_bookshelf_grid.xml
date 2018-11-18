@@ -49,14 +49,13 @@
 
     </RelativeLayout>
 
-    <me.grantland.widget.AutofitTextView
+    <TextView
         android:id="@+id/tv_name"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="@string/app_name"
         android:textColor="@color/tv_text_default"
-        android:textSize="15sp"
-        app:minTextSize="13sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>
