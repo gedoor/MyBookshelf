@@ -22,6 +22,7 @@ import com.monke.monkeybook.view.adapter.base.BaseListAdapter;
 import com.monke.monkeybook.widget.FilletImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,13 +34,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
-    private Activity activity;
+    private WeakReference<Activity> activityRef;
     private List<SearchBookBean> searchBooks;
     private BaseListAdapter.OnItemClickListener itemClickListener;
 
     public SearchBookAdapter(Activity activity) {
         super(true);
-        this.activity = activity;
+        this.activityRef = new WeakReference<>(activity);
         searchBooks = new ArrayList<>();
     }
 
@@ -52,6 +53,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
+        Activity activity = activityRef.get();
         if (!activity.isFinishing()) {
             Glide.with(activity)
                     .load(searchBooks.get(position).getCoverUrl())
@@ -103,7 +105,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         }
         myViewHolder.tvOriginNum.setText(String.format("共%d个源", searchBooks.get(position).getOriginNum()));
 
-        myViewHolder.flContent.setOnClickListener(v -> {
+        myViewHolder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null)
                 itemClickListener.onItemClick(v, position);
         });
@@ -180,6 +182,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                 }
             }
             searchBooks = copyDataS;
+            Activity activity = activityRef.get();
             if(activity != null) {
                 activity.runOnUiThread(this::notifyDataSetChanged);
             }
@@ -190,7 +193,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
         int bookSize = searchBooks.size();
         if (bookSize > 0) {
             try {
-                Glide.with(activity).onDestroy();
+                Glide.with(activityRef.get()).onDestroy();
             } catch (Exception e) {
                 e.printStackTrace();
             }
