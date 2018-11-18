@@ -22,6 +22,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
+import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
@@ -161,7 +162,7 @@ public class ChangeSourceView {
                 return adapter.getItemCount();
             }
         };
-        searchBookModel = new SearchBookModel(context, searchListener, true);
+        searchBookModel = new SearchBookModel(context, searchListener, !TextUtils.equals(ACache.get(context).getAsString("useMy716"), "False"));
     }
 
     public static ChangeSourceView getInstance(MoDialogView moDialogView) {
@@ -261,7 +262,7 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
-        searchBookModel.stopSearch(true);
+        searchBookModel.stopSearch(false);
         searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
         searchBookModel.setSearchEngineChanged();
         int id = (int) System.currentTimeMillis();
