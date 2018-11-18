@@ -26,19 +26,15 @@
             android:transitionName="img_cover"
             tools:ignore="UnusedAttribute" />
 
-        <FrameLayout
-            android:id="@+id/fl_has_new"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_alignParentRight="true"
-            tools:ignore="RtlHardcoded">
-
             <com.monke.monkeybook.widget.BadgeView
                 android:id="@+id/bv_unread"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:includeFontPadding="false" />
+                android:includeFontPadding="false"
+                android:layout_alignParentRight="true"
+                tools:ignore="RtlHardcoded" />
 
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/rl_loading"
@@ -47,9 +43,9 @@
                 android:layout_gravity="right"
                 android:visibility="invisible"
                 app:loading_color="@color/colorAccent"
-                app:loading_width="2dp" />
-
-        </FrameLayout>
+                app:loading_width="2dp"
+                android:layout_alignParentRight="true"
+                tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
