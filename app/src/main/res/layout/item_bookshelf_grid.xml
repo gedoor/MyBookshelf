@@ -12,7 +12,10 @@
         android:id="@+id/fl_content"
         android:layout_width="92dp"
         android:layout_height="130dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <com.monke.monkeybook.widget.FilletImageView
             android:id="@+id/iv_cover"
@@ -47,12 +50,6 @@
                 app:loading_width="2dp" />
 
         </FrameLayout>
-
-        <ImageButton
-            android:id="@+id/ib_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg_ib_pre" />
 
     </RelativeLayout>
 

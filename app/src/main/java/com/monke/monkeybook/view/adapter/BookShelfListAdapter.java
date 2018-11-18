@@ -184,7 +184,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
         TextView tvAuthor;
         TextView tvRead;
         TextView tvLast;
-        View ibContent;
         RotateLoading rotateLoading;
 
         MyViewHolder(View itemView) {
@@ -196,7 +195,6 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvRead = itemView.findViewById(R.id.tv_read);
             tvLast = itemView.findViewById(R.id.tv_last);
             tvAuthor = itemView.findViewById(R.id.tv_author);
-            ibContent = itemView.findViewById(R.id.ib_content);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
         }
     }
