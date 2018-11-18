@@ -277,8 +277,12 @@ public class AnalyzeElement {
                     }
                     break;
                 default:
-                    String absURL = NetworkUtil.getAbsoluteURL(baseURL, elements.get(0).attr(lastRule));
-                    textS.add(absURL);
+                    for (Element element : elements) {
+                        String url = element.attr(lastRule);
+                        if (!TextUtils.isEmpty(url)) {
+                            textS.add(NetworkUtil.getAbsoluteURL(baseURL, url));
+                        }
+                    }
             }
             return textS;
         } catch (Exception e) {
