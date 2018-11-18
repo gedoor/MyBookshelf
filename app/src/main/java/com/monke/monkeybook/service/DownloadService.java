@@ -305,7 +305,7 @@ public class DownloadService extends Service {
     }
 
     public static void addDownload(Context context, DownloadBookBean downloadBook) {
-        if (downloadBook == null) {
+        if (context == null || downloadBook == null) {
             return;
         }
         Intent intent = new Intent(context, DownloadService.class);
