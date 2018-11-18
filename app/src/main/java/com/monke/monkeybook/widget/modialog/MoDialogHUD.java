@@ -21,13 +21,13 @@ import com.monke.monkeybook.utils.SoftInputUtil;
 /**
  * 对话框
  */
-public class MoProgressHUD {
+public class MoDialogHUD {
     private Boolean isFinishing = false;
 
     private Context context;
     private ViewGroup decorView;//activity的根View
     private ViewGroup rootView;// mSharedView 的 根View
-    private MoProgressView mSharedView;
+    private MoDialogView mSharedView;
 
     private OnDismissListener dismissListener;
     private Animation inAnim;
@@ -51,7 +51,7 @@ public class MoProgressHUD {
         }
     };
 
-    public MoProgressHUD(Context context) {
+    public MoDialogHUD(Context context) {
         this.context = context;
         initViews();
         initCenter();
@@ -124,7 +124,7 @@ public class MoProgressHUD {
         rootView.setClickable(true);
         rootView.setBackgroundColor(context.getResources().getColor(R.color.btn_bg_press_tp));
 
-        mSharedView = new MoProgressView(context);
+        mSharedView = new MoDialogView(context);
 
     }
 

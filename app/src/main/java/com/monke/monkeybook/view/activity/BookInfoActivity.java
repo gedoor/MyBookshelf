@@ -28,7 +28,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.SoftInputUtil;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +66,7 @@ public class BookInfoActivity extends MBaseActivity {
 
     private String noteUrl;
     private BookShelfBean book;
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
 
 
     public static void startThis(Context context, String noteUrl) {
@@ -110,7 +110,7 @@ public class BookInfoActivity extends MBaseActivity {
         tilBookAuthor.setHint("作者");
         tilCoverUrl.setHint("封面地址");
         tilBookJj.setHint("简介");
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
     }
 
     /**
@@ -154,7 +154,7 @@ public class BookInfoActivity extends MBaseActivity {
             }
         });
         tvChangeCover.setOnClickListener(view ->
-                moProgressHUD.showChangeSource(book, searchBookBean -> {
+                moDialogHUD.showChangeSource(book, searchBookBean -> {
                     tieCoverUrl.setText(searchBookBean.getCoverUrl());
                     book.setCustomCoverPath(tieCoverUrl.getText().toString());
                     initCover();
@@ -227,14 +227,14 @@ public class BookInfoActivity extends MBaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         if (mo) return true;
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void onDestroy() {
-        moProgressHUD.dismiss();
+        moDialogHUD.dismiss();
         super.onDestroy();
     }
 

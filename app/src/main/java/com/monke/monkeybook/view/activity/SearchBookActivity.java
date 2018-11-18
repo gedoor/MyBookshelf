@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,9 +35,8 @@ import com.monke.monkeybook.utils.SharedPreferencesUtil;
 import com.monke.monkeybook.utils.SoftInputUtil;
 import com.monke.monkeybook.view.adapter.SearchBookAdapter;
 import com.monke.monkeybook.view.adapter.SearchHistoryAdapter;
-import com.monke.monkeybook.view.adapter.base.BaseListAdapter;
 import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -75,7 +73,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private boolean useMy716;
     private String searchKey;
 
-    private MoProgressHUD moDialogHUD;
+    private MoDialogHUD moDialogHUD;
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -469,7 +467,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void showBookSourceEmptyTip() {
         if (moDialogHUD == null) {
-            moDialogHUD = new MoProgressHUD(this);
+            moDialogHUD = new MoDialogHUD(this);
         }
 
         moDialogHUD.showTwoButton("您没有选择任何书源", "去选择"

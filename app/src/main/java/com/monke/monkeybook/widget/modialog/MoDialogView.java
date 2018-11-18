@@ -19,18 +19,18 @@ import ru.noties.markwon.Markwon;
 /**
  * 对话框
  */
-public class MoProgressView extends LinearLayout {
+public class MoDialogView extends LinearLayout {
     private Context context;
 
-    public MoProgressView(Context context) {
+    public MoDialogView(Context context) {
         this(context, null);
     }
 
-    public MoProgressView(Context context, AttributeSet attrs) {
+    public MoDialogView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MoProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MoDialogView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         setOrientation(VERTICAL);
@@ -39,7 +39,7 @@ public class MoProgressView extends LinearLayout {
     //转圈的载入
     public void showLoading(String text) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_loading, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_loading, this, true);
         TextView msgTv = findViewById(R.id.msg_tv);
         if (text != null && text.length() > 0) {
             msgTv.setText(text);
@@ -52,7 +52,7 @@ public class MoProgressView extends LinearLayout {
     //单个按钮的信息提示框
     public void showInfo(String msg, final OnClickListener listener) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_infor, this, true);
         View llContent = findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
         TextView msgTv = findViewById(R.id.msg_tv);
@@ -64,7 +64,7 @@ public class MoProgressView extends LinearLayout {
     //单个按钮的信息提示框
     public void showInfo(String msg, String btnText, final OnClickListener listener) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_infor, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_infor, this, true);
         View llContent = findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
         TextView msgTv = findViewById(R.id.msg_tv);
@@ -77,7 +77,7 @@ public class MoProgressView extends LinearLayout {
     //////////////////////两个不同等级的按钮//////////////////////
     public void showTwoButton(String msg, String b_f, OnClickListener c_f, String b_s, OnClickListener c_s) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_two, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_two, this, true);
         TextView tvMsg = findViewById(R.id.tv_msg);
         TextView tvCancel = findViewById(R.id.tv_cancel);
         TextView tvDone = findViewById(R.id.tv_done);
@@ -93,7 +93,7 @@ public class MoProgressView extends LinearLayout {
      */
     public void showText(String text) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_text_large, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_text_large, this, true);
         TextView textView = findViewById(R.id.tv_can_copy);
         textView.setText(text);
     }
@@ -103,7 +103,7 @@ public class MoProgressView extends LinearLayout {
      */
     public void showAssetMarkdown(String assetFileName) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_markdown, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_markdown, this, true);
         TextView tvMarkdown = findViewById(R.id.tv_markdown);
         Markwon.setMarkdown(tvMarkdown, ReadAssets.getText(context, assetFileName));
     }
@@ -113,7 +113,7 @@ public class MoProgressView extends LinearLayout {
      */
     public void showImageText(Bitmap bitmap, String text) {
         removeAllViews();
-        LayoutInflater.from(getContext()).inflate(R.layout.moprogress_dialog_image_text, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.mo_dialog_image_text, this, true);
         CardView cardView = findViewById(R.id.cv_content);
         cardView.setOnClickListener(null);
         ImageView imageView = findViewById(R.id.image_view);

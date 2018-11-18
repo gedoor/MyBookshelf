@@ -25,24 +25,24 @@ public class EditBookmarkView {
     private View llEdit;
     private View tvOk;
 
-    private MoProgressHUD moProgressHUD;
-    private MoProgressView moProgressView;
+    private MoDialogHUD moDialogHUD;
+    private MoDialogView moDialogView;
     private OnBookmarkClick bookmarkClick;
     private Context context;
     private BookmarkBean bookmarkBean;
 
-    private EditBookmarkView(MoProgressView moProgressView) {
-        this.moProgressView = moProgressView;
-        this.context = moProgressView.getContext();
+    private EditBookmarkView(MoDialogView moDialogView) {
+        this.moDialogView = moDialogView;
+        this.context = moDialogView.getContext();
         bindView();
     }
 
-    public static EditBookmarkView getInstance(MoProgressView moProgressView) {
-        return new EditBookmarkView(moProgressView);
+    public static EditBookmarkView getInstance(MoDialogView moDialogView) {
+        return new EditBookmarkView(moDialogView);
     }
 
-    void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoProgressHUD moProgressHUD) {
-        this.moProgressHUD = moProgressHUD;
+    void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoDialogHUD moDialogHUD) {
+        this.moDialogHUD = moDialogHUD;
         this.bookmarkClick = bookmarkClick;
         this.bookmarkBean = bookmarkBean;
 
@@ -59,43 +59,43 @@ public class EditBookmarkView {
     }
 
     private void bindView() {
-        moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_bookmark, moProgressView, true);
+        moDialogView.removeAllViews();
+        LayoutInflater.from(context).inflate(R.layout.mo_dialog_bookmark, moDialogView, true);
 
-        View llContent = moProgressView.findViewById(R.id.ll_content);
+        View llContent = moDialogView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
 
-        TextInputLayout tilReplaceTo = moProgressView.findViewById(R.id.til_content);
+        TextInputLayout tilReplaceTo = moDialogView.findViewById(R.id.til_content);
         tilReplaceTo.setHint(context.getString(R.string.content));
-        tvChapterName = moProgressView.findViewById(R.id.tvChapterName);
+        tvChapterName = moDialogView.findViewById(R.id.tvChapterName);
         tvChapterName.setOnClickListener(view -> {
             bookmarkClick.openChapter(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
-            moProgressHUD.dismiss();
+            moDialogHUD.dismiss();
         });
-        tvContent = moProgressView.findViewById(R.id.tie_content);
+        tvContent = moDialogView.findViewById(R.id.tie_content);
 
-        tvOk = moProgressView.findViewById(R.id.tv_ok);
+        tvOk = moDialogView.findViewById(R.id.tv_ok);
         tvOk.setOnClickListener(view -> {
             bookmarkBean.setContent(tvContent.getText().toString());
             bookmarkClick.saveBookmark(bookmarkBean);
-            moProgressHUD.dismiss();
+            moDialogHUD.dismiss();
         });
 
-        View tvSave = moProgressView.findViewById(R.id.tv_save);
+        View tvSave = moDialogView.findViewById(R.id.tv_save);
         tvSave.setOnClickListener(view -> {
             bookmarkBean.setContent(tvContent.getText().toString());
             bookmarkClick.saveBookmark(bookmarkBean);
-            moProgressHUD.dismiss();
+            moDialogHUD.dismiss();
         });
-        View tvDel = moProgressView.findViewById(R.id.tv_del);
+        View tvDel = moDialogView.findViewById(R.id.tv_del);
         tvDel.setOnClickListener(view -> {
             bookmarkClick.delBookmark(bookmarkBean);
-            moProgressHUD.dismiss();
+            moDialogHUD.dismiss();
         });
 
-        llEdit = moProgressView.findViewById(R.id.llEdit);
+        llEdit = moDialogView.findViewById(R.id.llEdit);
 
-        SoftInputUtil.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
+        SoftInputUtil.resetBoxPosition((Activity) context, moDialogView, R.id.cv_root);
     }
 
     /**

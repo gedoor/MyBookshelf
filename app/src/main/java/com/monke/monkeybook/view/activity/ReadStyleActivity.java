@@ -30,7 +30,7 @@ import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.utils.ColorUtil;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.utils.barUtil.ImmersionBar;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +57,7 @@ public class ReadStyleActivity extends MBaseActivity {
     Switch swDarkStatusIcon;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private int textDrawableIndex;
     private int textColor;
     private int bgColor;
@@ -90,7 +90,7 @@ public class ReadStyleActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         setTextKind(readBookControl);
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectTextColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入文字颜色",
+            moDialogHUD.showInputBox("输入文字颜色",
                     ColorUtil.intToString(textColor),
                     null,
                     inputText -> {
@@ -190,7 +190,7 @@ public class ReadStyleActivity extends MBaseActivity {
                 .build()
                 .show());
         tvSelectBgColor.setOnLongClickListener((View view) -> {
-            moProgressHUD.showInputBox("输入背景颜色",
+            moDialogHUD.showInputBox("输入背景颜色",
                     ColorUtil.intToString(bgColor),
                     null,
                     inputText -> {

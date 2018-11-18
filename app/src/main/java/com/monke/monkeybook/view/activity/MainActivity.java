@@ -48,7 +48,7 @@ import com.monke.monkeybook.presenter.MainPresenter;
 import com.monke.monkeybook.presenter.contract.MainContract;
 import com.monke.monkeybook.view.fragment.BookListFragment;
 import com.monke.monkeybook.view.fragment.FindBookFragment;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import java.util.Arrays;
 import java.util.List;
@@ -82,7 +82,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private int group;
     private boolean viewIsList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private long exitTime = 0;
     private boolean resumed = false;
     private Handler handler = new Handler();
@@ -162,7 +162,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         initDrawer();
         initTabLayout();
         upGroup(group);
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
 
         //点击跳转搜索页
         cardSearch.setOnClickListener(view -> startActivityByAnim(new Intent(this, SearchBookActivity.class),
@@ -291,7 +291,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 }
                 break;
             case R.id.action_add_url:
-                moProgressHUD.showInputBox("添加书籍网址",
+                moDialogHUD.showInputBox("添加书籍网址",
                         null,
                         null,
                         inputText -> mPresenter.addBookUrl(inputText));
@@ -484,7 +484,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             //书源为空时加载默认书源
             BookSourceManager.initDefaultBookSource(this);
             //更新日志
-            moProgressHUD.showAssetMarkdown("updateLog.md");
+            moDialogHUD.showAssetMarkdown("updateLog.md");
         }
     }
 
@@ -507,11 +507,11 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public void dismissHUD() {
-        moProgressHUD.dismiss();
+        moDialogHUD.dismiss();
     }
 
     public void onRestore(String msg) {
-        moProgressHUD.showLoading(msg);
+        moDialogHUD.showLoading(msg);
     }
 
     @Override
@@ -523,7 +523,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         if (mo) {
             return true;
         } else if (mTlIndicator.getSelectedTabPosition() != 0) {

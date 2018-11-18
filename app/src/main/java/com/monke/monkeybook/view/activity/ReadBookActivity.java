@@ -49,7 +49,7 @@ import com.monke.monkeybook.view.popupwindow.ReadAdjustPop;
 import com.monke.monkeybook.view.popupwindow.ReadBottomMenu;
 import com.monke.monkeybook.view.popupwindow.ReadInterfacePop;
 import com.monke.monkeybook.widget.modialog.EditBookmarkView;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 import com.monke.monkeybook.widget.page.Enum;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
@@ -120,7 +120,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private int upHpbInterval = 100;
     private Menu menu;
     private CheckAddShelfPop checkAddShelfPop;
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private ThisBatInfoReceiver batInfoReceiver;
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
 
@@ -369,7 +369,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         llISB.setPadding(0, ImmersionBar.getStatusBarHeight(this), 0, 0);
         llMenuBottom.setFabNightTheme(isNightTheme());
         //弹窗
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
         initBottomMenu();
         initReadInterfacePop();
         initReadAdjustPop();
@@ -727,7 +727,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_copy_text:
                 popMenuOut();
                 if (mPageLoader != null) {
-                    moProgressHUD.showText(mPageLoader.getContent(mPageLoader.getCurPagePos()));
+                    moDialogHUD.showText(mPageLoader.getContent(mPageLoader.getCurPagePos()));
                 }
                 break;
             case R.id.disable_book_source:
@@ -785,7 +785,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 bookmarkBean.setPageIndex(mPresenter.getBookShelf().getDurChapterPage());
                 bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
             }
-            moProgressHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
+            moDialogHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
                 @Override
                 public void saveBookmark(BookmarkBean bookmarkBean) {
                     mPresenter.saveBookmark(bookmarkBean);
@@ -822,7 +822,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
         ReadBookActivity.this.popMenuOut();
         if (mPresenter.getBookShelf() != null) {
-            moProgressHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
+            moDialogHUD.showChangeSource(mPresenter.getBookShelf(), searchBookBean -> {
                 if (!Objects.equals(searchBookBean.getNoteUrl(), mPresenter.getBookShelf().getNoteUrl())) {
                     mPageLoader.setStatus(Enum.PageStatus.CHANGE_SOURCE);
                     mPresenter.changeBookSource(searchBookBean);
@@ -843,10 +843,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (mPresenter.getBookShelf() != null) {
             //弹出离线下载界面
             int endIndex = mPresenter.getBookShelf().getChapterListSize() - 1;
-            moProgressHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
+            moDialogHUD.showDownloadList(mPresenter.getBookShelf().getDurChapter(), endIndex,
                     mPresenter.getBookShelf().getChapterListSize(),
                     (start, end) -> {
-                        moProgressHUD.dismiss();
+                        moDialogHUD.dismiss();
                         mPresenter.addDownload(start, end);
                     });
         }
@@ -857,7 +857,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     private void setCharset() {
         final String charset = mPresenter.getBookShelf().getBookInfoBean().getCharset();
-        moProgressHUD.showInputBox("输入编码",
+        moDialogHUD.showInputBox("输入编码",
                 charset,
                 new String[]{"UTF-8", "GB2312", "GBK", "Unicode", "UTF-16", "ASCII"},
                 (inputText -> {
@@ -878,7 +878,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private void setTextChapterRegex() {
         if (mPresenter.getBookShelf().getNoteUrl().toLowerCase().matches(".*\\.txt")) {
             final String regex = mPresenter.getBookShelf().getBookInfoBean().getChapterUrl();
-            moProgressHUD.showInputBox("TXT目录规则",
+            moDialogHUD.showInputBox("TXT目录规则",
                     regex,
                     null,
                     (inputText -> {
@@ -1047,7 +1047,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         if (mo) {
             return true;
         } else {

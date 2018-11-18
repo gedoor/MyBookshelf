@@ -60,12 +60,13 @@ public abstract class RefreshRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == LOAD_MORE_TYPE) {
+            LoadMoreViewHolder loadHolder = (LoadMoreViewHolder) holder;
             if (!loadMoreError) {
-                ((LoadMoreViewHolder) holder).tvLoadMore.setText("正在加载...");
+                loadHolder.tvLoadMore.setText("正在加载...");
             } else {
-                ((LoadMoreViewHolder) holder).tvLoadMore.setText("加载失败,点击重试");
+                loadHolder.tvLoadMore.setText("加载失败,点击重试");
             }
-            ((LoadMoreViewHolder) holder).tvLoadMore.setOnClickListener(v -> {
+            ((LoadMoreViewHolder) holder).llLoadMore.setOnClickListener(v -> {
                 if (null != clickTryAgainListener && loadMoreError) {
                     clickTryAgainListener.loadMoreErrorTryAgain();
                     loadMoreError = false;

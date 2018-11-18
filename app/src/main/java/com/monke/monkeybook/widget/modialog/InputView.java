@@ -20,27 +20,27 @@ public class InputView {
     private AutoCompleteTextView etInput;
     private TextView tvOk;
 
-    private MoProgressHUD moProgressHUD;
-    private MoProgressView moProgressView;
+    private MoDialogHUD moDialogHUD;
+    private MoDialogView moDialogView;
     private OnInputOk onInputOk;
     private Context context;
 
-    private InputView(MoProgressView moProgressView) {
-        this.moProgressView = moProgressView;
-        this.context = moProgressView.getContext();
+    private InputView(MoDialogView moDialogView) {
+        this.moDialogView = moDialogView;
+        this.context = moDialogView.getContext();
         bindView();
         tvOk.setOnClickListener(view -> {
             onInputOk.setInputText(etInput.getText().toString());
-            moProgressHUD.dismiss();
+            moDialogHUD.dismiss();
         });
     }
 
-    public static InputView getInstance(MoProgressView moProgressView) {
-        return new InputView(moProgressView);
+    public static InputView getInstance(MoDialogView moDialogView) {
+        return new InputView(moDialogView);
     }
 
-    void showInputView(final OnInputOk onInputOk, MoProgressHUD moProgressHUD, String title, String defaultValue, String[] adapterValues) {
-        this.moProgressHUD = moProgressHUD;
+    void showInputView(final OnInputOk onInputOk, MoDialogHUD moDialogHUD, String title, String defaultValue, String[] adapterValues) {
+        this.moDialogHUD = moDialogHUD;
         this.onInputOk = onInputOk;
         tvTitle.setText(title);
         if (defaultValue != null) {
@@ -55,16 +55,16 @@ public class InputView {
     }
 
     private void bindView() {
-        moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_input, moProgressView, true);
+        moDialogView.removeAllViews();
+        LayoutInflater.from(context).inflate(R.layout.mo_dialog_input, moDialogView, true);
 
-        View llContent = moProgressView.findViewById(R.id.ll_content);
+        View llContent = moDialogView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
-        tvTitle = moProgressView.findViewById(R.id.tv_title);
-        etInput = moProgressView.findViewById(R.id.et_input);
-        tvOk = moProgressView.findViewById(R.id.tv_ok);
+        tvTitle = moDialogView.findViewById(R.id.tv_title);
+        etInput = moDialogView.findViewById(R.id.et_input);
+        tvOk = moDialogView.findViewById(R.id.tv_ok);
 
-        SoftInputUtil.resetBoxPosition((Activity) context, moProgressView, R.id.cv_root);
+        SoftInputUtil.resetBoxPosition((Activity) context, moDialogView, R.id.cv_root);
     }
 
     /**

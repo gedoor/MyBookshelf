@@ -65,7 +65,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             return;
         }
         searchBook = searchBookBean;
-        inBookShelf = searchBookBean.getIsAdd();
+        inBookShelf = searchBookBean.getIsCurrentSource();
         bookShelf = BookshelfHelp.getBookFromSearchBook(searchBookBean);
     }
 
@@ -128,7 +128,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 BookshelfHelp.saveBookToShelf(bookShelf);
-                searchBook.setIsAdd(true);
+                searchBook.setIsCurrentSource(true);
                 inBookShelf = true;
                 e.onNext(true);
                 e.onComplete();
@@ -160,7 +160,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<Boolean>) e -> {
                 BookshelfHelp.removeFromBookShelf(bookShelf);
-                searchBook.setIsAdd(false);
+                searchBook.setIsCurrentSource(false);
                 inBookShelf = false;
                 e.onNext(true);
                 e.onComplete();

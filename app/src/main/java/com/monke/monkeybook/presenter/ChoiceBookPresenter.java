@@ -93,7 +93,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                             for (SearchBookBean temp : value) {
                                 for (BookShelfBean bookShelfBean : bookShelfs) {
                                     if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                                        temp.setIsAdd(true);
+                                        temp.setIsCurrentSource(true);
                                         break;
                                     }
                                 }
@@ -196,7 +196,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
         List<SearchBookBean> datas = mView.getSearchBookAdapter().getSearchBooks();
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                datas.get(i).setIsAdd(true);
+                datas.get(i).setIsCurrentSource(true);
                 mView.updateSearchItem(i);
                 break;
             }
@@ -221,7 +221,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
         List<SearchBookBean> datas = mView.getSearchBookAdapter().getSearchBooks();
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
-                datas.get(i).setIsAdd(false);
+                datas.get(i).setIsCurrentSource(false);
                 mView.updateSearchItem(i);
                 break;
             }

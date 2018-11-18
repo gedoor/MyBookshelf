@@ -36,7 +36,7 @@ public class SearchBookBean implements Parcelable{
     @Transient
     private String state;
     @Transient
-    private Boolean isAdd = false;
+    private Boolean isCurrentSource = false;
     @Transient
     private int originNum = 1;
     @Transient
@@ -60,7 +60,7 @@ public class SearchBookBean implements Parcelable{
         words = in.readLong();
         state = in.readString();
         lastChapter = in.readString();
-        isAdd = in.readByte() != 0;
+        isCurrentSource = in.readByte() != 0;
         tag = in.readString();
         kind = in.readString();
         origin = in.readString();
@@ -101,7 +101,7 @@ public class SearchBookBean implements Parcelable{
         dest.writeLong(words);
         dest.writeString(state);
         dest.writeString(lastChapter);
-        dest.writeByte((byte)(isAdd?1:0));
+        dest.writeByte((byte)(isCurrentSource ?1:0));
         dest.writeString(tag);
         dest.writeString(kind);
         dest.writeString(origin);
@@ -226,13 +226,13 @@ public class SearchBookBean implements Parcelable{
         this.desc = desc;
     }
 
-    public Boolean getIsAdd() {
-        return this.isAdd;
+    public Boolean getIsCurrentSource() {
+        return this.isCurrentSource;
     }
 
-    public void setIsAdd(Boolean isAdd) {
-        this.isAdd = isAdd;
-        if (isAdd)
+    public void setIsCurrentSource(Boolean isCurrentSource) {
+        this.isCurrentSource = isCurrentSource;
+        if (isCurrentSource)
             this.addTime = System.currentTimeMillis();
     }
 

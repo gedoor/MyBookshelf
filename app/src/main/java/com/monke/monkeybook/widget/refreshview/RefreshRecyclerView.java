@@ -228,10 +228,13 @@ public class RefreshRecyclerView extends FrameLayout {
 
         if (isAll) {
             if (noDataView != null) {
-                if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0)
-                    noDataView.setVisibility(VISIBLE);
-                else
-                    noDataView.setVisibility(GONE);
+                recyclerView.post(() -> {
+                    if (((RefreshRecyclerViewAdapter) recyclerView.getAdapter()).getICount() == 0) {
+                        noDataView.setVisibility(VISIBLE);
+                    } else {
+                        noDataView.setVisibility(GONE);
+                    }
+                });
             }
             if (refreshErrorView != null) {
                 refreshErrorView.setVisibility(GONE);

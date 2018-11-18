@@ -34,7 +34,7 @@ import com.monke.monkeybook.presenter.BookSourcePresenter;
 import com.monke.monkeybook.presenter.contract.BookSourceContract;
 import com.monke.monkeybook.utils.FileUtil;
 import com.monke.monkeybook.view.adapter.BookSourceAdapter;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private SubMenu groupMenu;
     private SubMenu sortMenu;
     private BookSourceAdapter adapter;
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean isSearch;
 
@@ -93,7 +93,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -359,7 +359,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
-        moProgressHUD.showInputBox("输入书源网址",
+        moDialogHUD.showInputBox("输入书源网址",
                 TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
                 new String[]{getString(R.string.default_source_url)},
                 inputText -> {

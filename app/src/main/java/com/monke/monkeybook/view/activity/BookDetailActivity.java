@@ -38,7 +38,7 @@ import com.monke.monkeybook.presenter.BookDetailPresenter;
 import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.monke.monkeybook.widget.FilletImageView;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import java.util.Objects;
 
@@ -84,7 +84,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     @BindView(R.id.tv_chapter_size)
     TextView tvChapterSize;
 
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private String author;
     private BookShelfBean bookShelfBean;
     private String coverPath;
@@ -115,7 +115,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     protected void bindView() {
         ButterKnife.bind(this);
         //弹窗
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
         tvIntro.setMovementMethod(ScrollingMovementMethod.getInstance());
         if (mPresenter.getOpenFrom() == FROM_BOOKSHELF) {
             updateView();
@@ -287,7 +287,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
         });
 
-        tvChangeOrigin.setOnClickListener(view -> moProgressHUD.showChangeSource(mPresenter.getBookShelf(),
+        tvChangeOrigin.setOnClickListener(view -> moDialogHUD.showChangeSource(mPresenter.getBookShelf(),
                 searchBookBean -> {
                     tvOrigin.setText(searchBookBean.getOrigin());
                     tvLoading.setVisibility(View.VISIBLE);
@@ -373,14 +373,14 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         if (mo) return true;
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void onDestroy() {
-        moProgressHUD.dismiss();
+        moDialogHUD.dismiss();
         super.onDestroy();
     }
 }

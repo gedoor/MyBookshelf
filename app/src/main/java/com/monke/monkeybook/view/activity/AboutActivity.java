@@ -27,7 +27,7 @@ import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.help.UpdateManager;
-import com.monke.monkeybook.widget.modialog.MoProgressHUD;
+import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 
 import java.util.Hashtable;
 
@@ -95,7 +95,7 @@ public class AboutActivity extends MBaseActivity {
     @BindView(R.id.vw_share)
     CardView vwShare;
 
-    private MoProgressHUD moProgressHUD;
+    private MoDialogHUD moDialogHUD;
     private String qq = "701903217 788025059";
 
     public static void startThis(Context context) {
@@ -120,7 +120,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     protected void initData() {
-        moProgressHUD = new MoProgressHUD(this);
+        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class AboutActivity extends MBaseActivity {
         vwScoring.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, "market://details?id=" + getPackageName()));
         vwMail.setOnClickListener(view -> openIntent(Intent.ACTION_SENDTO, "mailto:kunfei.ge@gmail.com"));
         vwGit.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.this_github_url)));
-        vwDisclaimer.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("disclaimer.md"));
+        vwDisclaimer.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("disclaimer.md"));
         vwUpdate.setOnClickListener(view -> UpdateManager.getInstance(this).checkUpdate(true));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {
@@ -149,13 +149,13 @@ public class AboutActivity extends MBaseActivity {
                 toast(R.string.copy_complete);
             }
         });
-        vwUpdateLog.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("updateLog.md"));
-        vwFaq.setOnClickListener(view -> moProgressHUD.showAssetMarkdown("faq.md"));
+        vwUpdateLog.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("updateLog.md"));
+        vwFaq.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("faq.md"));
         vwShare.setOnClickListener(view -> {
             String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
             Bitmap bitmap = encodeAsBitmap(url);
             if (bitmap != null) {
-                moProgressHUD.showImageText(bitmap, url);
+                moDialogHUD.showImageText(bitmap, url);
             }
         });
     }
@@ -199,7 +199,7 @@ public class AboutActivity extends MBaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Boolean mo = moProgressHUD.onKeyDown(keyCode, event);
+        Boolean mo = moDialogHUD.onKeyDown(keyCode, event);
         return mo || super.onKeyDown(keyCode, event);
     }
 

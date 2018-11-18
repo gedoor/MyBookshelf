@@ -48,7 +48,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
 
     public void reSetSourceAdapter() {
         searchBookBeans.clear();
-        notifyDataSetChanged();
+            notifyDataSetChanged();
     }
 
     public void setOnItemClickListener(BaseListAdapter.OnItemClickListener listener) {
@@ -78,7 +78,7 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
         } else {
             myViewHolder.tvLastChapter.setText(searchBookBeans.get(position).getLastChapter());
         }
-        if (searchBookBeans.get(position).getIsAdd()) {
+        if (searchBookBeans.get(position).getIsCurrentSource()) {
             myViewHolder.ivChecked.setVisibility(View.VISIBLE);
         } else {
             myViewHolder.ivChecked.setVisibility(View.INVISIBLE);

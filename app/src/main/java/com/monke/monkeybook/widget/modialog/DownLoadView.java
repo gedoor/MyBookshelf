@@ -17,7 +17,7 @@ import com.monke.monkeybook.R;
  */
 
 class DownLoadView {
-    private MoProgressView moProgressView;
+    private MoDialogView moDialogView;
     private Context context;
 
     private EditText edtStart;
@@ -25,14 +25,14 @@ class DownLoadView {
     private TextView tvCancel;
     private TextView tvDownload;
 
-    private DownLoadView(MoProgressView moProgressView) {
-        this.moProgressView = moProgressView;
-        this.context = moProgressView.getContext();
+    private DownLoadView(MoDialogView moDialogView) {
+        this.moDialogView = moDialogView;
+        this.context = moDialogView.getContext();
         bindView();
     }
 
-    public static DownLoadView getInstance(MoProgressView moProgressView) {
-        return new DownLoadView(moProgressView);
+    public static DownLoadView getInstance(MoDialogView moDialogView) {
+        return new DownLoadView(moDialogView);
     }
 
     void showDownloadList(int startIndex, int endIndex, final int all, final OnClickDownload clickDownload, View.OnClickListener cancel) {
@@ -115,15 +115,15 @@ class DownLoadView {
     }
 
     private void bindView() {
-        moProgressView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.moprogress_dialog_download_choice, moProgressView, true);
+        moDialogView.removeAllViews();
+        LayoutInflater.from(context).inflate(R.layout.mo_dialog_download_choice, moDialogView, true);
 
-        View llContent = moProgressView.findViewById(R.id.ll_content);
+        View llContent = moDialogView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
-        edtStart = moProgressView.findViewById(R.id.edt_start);
-        edtEnd = moProgressView.findViewById(R.id.edt_end);
-        tvCancel = moProgressView.findViewById(R.id.tv_cancel);
-        tvDownload = moProgressView.findViewById(R.id.tv_download);
+        edtStart = moDialogView.findViewById(R.id.edt_start);
+        edtEnd = moDialogView.findViewById(R.id.edt_end);
+        tvCancel = moDialogView.findViewById(R.id.tv_cancel);
+        tvDownload = moDialogView.findViewById(R.id.tv_download);
     }
 
 
