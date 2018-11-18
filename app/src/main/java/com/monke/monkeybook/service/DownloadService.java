@@ -119,7 +119,6 @@ public class DownloadService extends Service {
 
     private synchronized void addDownload(DownloadBookBean downloadBook) {
         if (checkDownloadTaskExist(downloadBook)) {
-            Toast.makeText(this, "下载任务已存在", Toast.LENGTH_SHORT).show();
             return;
         }
         new DownloadTaskImpl(notificationId, downloadBook) {
@@ -130,7 +129,6 @@ public class DownloadService extends Service {
                 }
                 downloadTasks.put(getId(), this);
                 sendUpDownloadBook(addDownloadAction, downloadBook);
-                toast(String.format(Locale.getDefault(), "%s：任务已添加", downloadBook.getName()));
             }
 
             @Override
