@@ -182,7 +182,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
     class MyViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout flContent;
         ImageView ivCover;
-        ImageView ivHasNew;
         AutofitTextView tvName;
         ImageButton ibContent;
         BadgeView bvUnread;
@@ -192,7 +191,6 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             super(itemView);
             flContent = itemView.findViewById(R.id.fl_content);
             ivCover = itemView.findViewById(R.id.iv_cover);
-            ivHasNew = itemView.findViewById(R.id.iv_has_new);
             tvName = itemView.findViewById(R.id.tv_name);
             ibContent = itemView.findViewById(R.id.ib_content);
             bvUnread = itemView.findViewById(R.id.bv_unread);
