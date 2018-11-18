@@ -53,6 +53,10 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     @Override
     public void onBindIViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder myViewHolder = (MyViewHolder) holder;
+        myViewHolder.flContent.setOnClickListener(v -> {
+            if (itemClickListener != null)
+                itemClickListener.onItemClick(v, position);
+        });
         Activity activity = activityRef.get();
         if (!activity.isFinishing()) {
             Glide.with(activity)
@@ -104,11 +108,6 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
             myViewHolder.tvOrigin.setVisibility(View.GONE);
         }
         myViewHolder.tvOriginNum.setText(String.format("共%d个源", searchBooks.get(position).getOriginNum()));
-
-        myViewHolder.itemView.setOnClickListener(v -> {
-            if (itemClickListener != null)
-                itemClickListener.onItemClick(v, position);
-        });
     }
 
     @Override

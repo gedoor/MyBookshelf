@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -22,13 +21,11 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.UpLastChapterModel;
-import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.view.adapter.ChangeSourceAdapter;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
@@ -40,8 +37,10 @@ import java.util.Objects;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -53,8 +52,8 @@ public class ChangeSourceView {
     private TextView atvTitle;
     private ImageButton ibtStop;
     private RefreshRecyclerView rvSource;
-    private MoDialogHUD moDialogHUD;
-    private MoDialogView moDialogView;
+    private MoDialogHUD moProgressHUD;
+    private MoDialogView moProgressView;
     private OnClickSource onClickSource;
     private Context context;
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -67,14 +66,14 @@ public class ChangeSourceView {
     private int shelfLastChapter;
     private CompositeDisposable compositeDisposable;
 
-    private ChangeSourceView(MoDialogView moDialogView) {
-        this.moDialogView = moDialogView;
-        this.context = moDialogView.getContext();
+    private ChangeSourceView(MoDialogView moProgressView) {
+        this.moProgressView = moProgressView;
+        this.context = moProgressView.getContext();
         bindView();
         adapter = new ChangeSourceAdapter(context, false);
         rvSource.setRefreshRecyclerViewAdapter(adapter, new LinearLayoutManager(context));
         adapter.setOnItemClickListener((view, index) -> {
-            moDialogHUD.dismiss();
+            moProgressHUD.dismiss();
             onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
@@ -114,31 +113,29 @@ public class ChangeSourceView {
                 viewRefreshError);
 
         SearchBookModel.OnSearchListener searchListener = new SearchBookModel.OnSearchListener() {
-
             @Override
-            public void searchSourceEmpty() {
-                Toast.makeText(context, "没有选中任何书源", Toast.LENGTH_SHORT).show();
-                ibtStop.setVisibility(View.INVISIBLE);
-                rvSource.finishRefresh(true, false);
-            }
-
-            @Override
-            public void resetSearchBook() {
+            public void refreshSearchBook() {
                 ibtStop.setVisibility(View.VISIBLE);
                 adapter.reSetSourceAdapter();
             }
 
             @Override
-            public void searchBookFinish() {
+            public void refreshFinish(Boolean value) {
                 ibtStop.setVisibility(View.INVISIBLE);
-                rvSource.finishRefresh(true, false);
+                rvSource.finishRefresh(true, true);
             }
 
             @Override
-            public boolean checkExists(SearchBookBean searchBook) {
+            public void loadMoreFinish(Boolean value) {
+                ibtStop.setVisibility(View.INVISIBLE);
+                rvSource.finishRefresh(true);
+            }
+
+            @Override
+            public Boolean checkIsExist(SearchBookBean searchBookBean) {
                 Boolean result = false;
                 for (int i = 0; i < adapter.getICount(); i++) {
-                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBook.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBook.getTag())) {
+                    if (adapter.getSearchBookBeans().get(i).getNoteUrl().equals(searchBookBean.getNoteUrl()) && adapter.getSearchBookBeans().get(i).getTag().equals(searchBookBean.getTag())) {
                         result = true;
                         break;
                     }
@@ -152,25 +149,25 @@ public class ChangeSourceView {
             }
 
             @Override
-            public void searchBookError() {
+            public void searchBookError(Boolean value) {
                 ibtStop.setVisibility(View.INVISIBLE);
-                rvSource.finishRefresh(false);
+                rvSource.finishRefresh(true);
             }
 
             @Override
             public int getItemCount() {
-                return adapter.getItemCount();
+                return 0;
             }
         };
-        searchBookModel = new SearchBookModel(context, searchListener, !TextUtils.equals(ACache.get(context).getAsString("useMy716"), "False"));
+        searchBookModel = new SearchBookModel(context, searchListener, true);
     }
 
-    public static ChangeSourceView getInstance(MoDialogView moDialogView) {
-        return new ChangeSourceView(moDialogView);
+    public static ChangeSourceView getInstance(MoDialogView moProgressView) {
+        return new ChangeSourceView(moProgressView);
     }
 
-    void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoDialogHUD moDialogHUD) {
-        this.moDialogHUD = moDialogHUD;
+    void showChangeSource(BookShelfBean bookShelf, final OnClickSource onClickSource, MoDialogHUD moProgressHUD) {
+        this.moProgressHUD = moProgressHUD;
         this.onClickSource = onClickSource;
         compositeDisposable = new CompositeDisposable();
         book = bookShelf;
@@ -187,7 +184,7 @@ public class ChangeSourceView {
     private void stopChangeSource() {
         compositeDisposable.dispose();
         if (searchBookModel != null) {
-            searchBookModel.stopSearch(true);
+            searchBookModel.stopSearch();
         }
     }
 
@@ -195,8 +192,7 @@ public class ChangeSourceView {
         RxBus.get().unregister(this);
         compositeDisposable.dispose();
         if (searchBookModel != null) {
-            searchBookModel.stopSearch(true);
-            searchBookModel.shutdownSearch();
+            searchBookModel.onDestroy();
         }
     }
 
@@ -222,6 +218,13 @@ public class ChangeSourceView {
                         bookSourceList.remove(bookSourceBean);
                     }
                 }
+                searchBookModel.searchReNew();
+                searchBookModel.initSearchEngineS(bookSourceList);
+                long startThisSearchTime = System.currentTimeMillis();
+                searchBookModel.setSearchTime(startThisSearchTime);
+                List<BookShelfBean> bookList = new ArrayList<>();
+                bookList.add(book);
+                searchBookModel.search(bookName, startThisSearchTime, bookList, false);
                 UpLastChapterModel.getInstance().startUpdate(searchBookList);
             }
             if (searchBookList.size() > 0) {
@@ -235,7 +238,8 @@ public class ChangeSourceView {
                 Collections.sort(searchBookList, this::compareSearchBooks);
             }
             e.onSuccess(searchBookList);
-        }).compose(RxUtils::toSimpleSingle)
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SingleObserver<List<SearchBookBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -262,11 +266,13 @@ public class ChangeSourceView {
 
     private void reSearchBook() {
         rvSource.startRefresh();
-        searchBookModel.stopSearch(false);
         searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
-        searchBookModel.setSearchEngineChanged();
-        int id = (int) System.currentTimeMillis();
-        searchBookModel.startSearch(id, bookName);
+        searchBookModel.searchReNew();
+        long startThisSearchTime = System.currentTimeMillis();
+        searchBookModel.setSearchTime(startThisSearchTime);
+        List<BookShelfBean> bookList = new ArrayList<>();
+        bookList.add(book);
+        searchBookModel.search(bookName, startThisSearchTime, bookList, false);
     }
 
     private synchronized void addSearchBook(List<SearchBookBean> value) {
@@ -296,6 +302,7 @@ public class ChangeSourceView {
                     if (saveBookSource) {
                         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
                     }
+                    DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().insertOrReplace(searchBookBean);
                     handler.post(() -> adapter.addSourceAdapter(searchBookBean));
                     break;
                 }
@@ -304,14 +311,14 @@ public class ChangeSourceView {
     }
 
     private void bindView() {
-        moDialogView.removeAllViews();
-        LayoutInflater.from(context).inflate(R.layout.mo_dialog_change_source, moDialogView, true);
+        moProgressView.removeAllViews();
+        LayoutInflater.from(context).inflate(R.layout.mo_dialog_change_source, moProgressView, true);
 
-        View llContent = moDialogView.findViewById(R.id.ll_content);
+        View llContent = moProgressView.findViewById(R.id.ll_content);
         llContent.setOnClickListener(null);
-        atvTitle = moDialogView.findViewById(R.id.atv_title);
-        ibtStop = moDialogView.findViewById(R.id.ibt_stop);
-        rvSource = moDialogView.findViewById(R.id.rf_rv_change_source);
+        atvTitle = moProgressView.findViewById(R.id.atv_title);
+        ibtStop = moProgressView.findViewById(R.id.ibt_stop);
+        rvSource = moProgressView.findViewById(R.id.rf_rv_change_source);
         ibtStop.setVisibility(View.INVISIBLE);
 
         rvSource.setBaseRefreshListener(this::reSearchBook);

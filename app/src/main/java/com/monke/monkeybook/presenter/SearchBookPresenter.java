@@ -1,8 +1,6 @@
 package com.monke.monkeybook.presenter;
 
-import android.content.ClipData;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
@@ -24,7 +22,6 @@ import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
 import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
-import com.monke.monkeybook.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,32 +35,51 @@ import io.reactivex.schedulers.Schedulers;
 public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.View> implements SearchBookContract.Presenter {
     private static final int BOOK = 2;
 
-    private String searchKey;
+    private long startThisSearchTime;
+    private String durSearchKey;
+
+    private List<BookShelfBean> bookShelfS = new ArrayList<>();   //用来比对搜索的书籍是否已经添加进书架
+
     private SearchBookModel searchBookModel;
 
     public SearchBookPresenter(Context context, boolean useMy716) {
+        Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
+            List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
+            e.onNext(booAll == null ? new ArrayList<>() : booAll);
+            e.onComplete();
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                    @Override
+                    public void onNext(List<BookShelfBean> value) {
+                        bookShelfS.addAll(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
 
         //搜索监听
         SearchBookModel.OnSearchListener onSearchListener = new SearchBookModel.OnSearchListener() {
-
             @Override
-            public void searchSourceEmpty() {
-                mView.refreshFinish();
-                mView.showBookSourceEmptyTip();
+            public void refreshSearchBook() {
+                mView.refreshSearchBook();
             }
 
             @Override
-            public void resetSearchBook() {
-                mView.resetSearchBook();
+            public void refreshFinish(Boolean value) {
+                mView.refreshFinish(value);
             }
 
             @Override
-            public void searchBookFinish() {
-                mView.refreshFinish();
+            public void loadMoreFinish(Boolean value) {
+                mView.loadMoreFinish(value);
             }
 
             @Override
-            public boolean checkExists(SearchBookBean searchBook) {
+            public Boolean checkIsExist(SearchBookBean value) {
                 return false;
             }
 
@@ -73,8 +89,8 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
 
             @Override
-            public void searchBookError() {
-                mView.searchBookError();
+            public void searchBookError(Boolean value) {
+                mView.searchBookError(value);
             }
 
             @Override
@@ -84,28 +100,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         };
         //搜索引擎初始化
         searchBookModel = new SearchBookModel(context, onSearchListener, useMy716);
-    }
-
-    @Override
-    public void fromIntentSearch(Intent intent) {
-        String keyWord = null;
-        if (intent != null) {
-            keyWord = intent.getStringExtra("searchKey");
-            if (keyWord == null && intent.getClipData() != null && intent.getClipData().getItemCount() > 0) {
-                ClipData.Item item = intent.getClipData().getItemAt(0);
-                keyWord = item.getText().toString();
-            }
-        }
-        if (keyWord != null) {
-            int start = keyWord.indexOf("《");
-            int end = keyWord.indexOf("》");
-            if (start >= 0 && end > 1) {
-                keyWord = keyWord.substring(start + 1, end);
-            } else if (keyWord.length() > 12) {
-                keyWord = keyWord.substring(0, 12);
-            }
-        }
-        mView.searchBook(keyWord);
     }
 
     public void insertSearchHistory() {
@@ -217,31 +211,36 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     }
 
     @Override
+    public int getPage() {
+        return searchBookModel.getPage();
+    }
+
+    @Override
+    public void initPage() {
+        searchBookModel.setPage(0);
+    }
+
+    @Override
     public void setUseMy716(boolean useMy716) {
         searchBookModel.setUseMy716(useMy716);
     }
 
     @Override
-    public void toSearchBooks(String key) {
+    public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
-            searchKey = key;
+            durSearchKey = key;
+            startThisSearchTime = System.currentTimeMillis();
+            searchBookModel.setSearchTime(startThisSearchTime);
+            searchBookModel.searchReNew();
         }
-        if (!NetworkUtil.isNetWorkAvailable()) {
-            mView.searchBookError();
-            return;
-        }
-
-        int id = (int) System.currentTimeMillis();
-        if (key == null) {
-            searchBookModel.startSearch(id, searchKey);
-        } else {
-            searchBookModel.startSearch(id, key);
-        }
+        searchBookModel.search(durSearchKey, startThisSearchTime, bookShelfS, fromError);
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     @Override
-    public void stopSearch(boolean callEvent) {
-        searchBookModel.stopSearch(callEvent);
+    public void stopSearch() {
+        searchBookModel.stopSearch();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,10 +254,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     @Override
     public void detachView() {
         RxBus.get().unregister(this);
-        if (searchBookModel != null) {
-            searchBookModel.stopSearch(true);
-            searchBookModel.shutdownSearch();
-        }
+        searchBookModel.onDestroy();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SEARCH_BOOK)})
@@ -268,7 +264,8 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SOURCE_LIST_CHANGE)})
     public void sourceListChange(Boolean change) {
-        searchBookModel.setSearchEngineChanged();
+
+        searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})

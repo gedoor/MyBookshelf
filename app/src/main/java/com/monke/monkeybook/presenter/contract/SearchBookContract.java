@@ -1,6 +1,5 @@
 package com.monke.monkeybook.presenter.contract;
 
-import android.content.Intent;
 import android.widget.EditText;
 
 import com.monke.basemvplib.impl.IPresenter;
@@ -14,21 +13,23 @@ import java.util.List;
 public interface SearchBookContract {
     interface Presenter extends IPresenter {
 
-        void fromIntentSearch(Intent intent);
-
         void insertSearchHistory();
 
-        void querySearchHistory(String query);
+        void querySearchHistory(String content);
 
         void cleanSearchHistory();
 
         void cleanSearchHistory(SearchHistoryBean searchHistoryBean);
 
+        int getPage();
+
+        void initPage();
+
         void setUseMy716(boolean useMy716);
 
-        void toSearchBooks(String key);
+        void toSearchBooks(String key, Boolean fromError);
 
-        void stopSearch(boolean callEvent);
+        void stopSearch();
     }
 
     interface View extends IView {
@@ -46,9 +47,9 @@ public interface SearchBookContract {
         void querySearchHistorySuccess(List<SearchHistoryBean> datas);
 
         /**
-         * 清空搜索列表
+         * 首次查询成功 更新UI
          */
-        void resetSearchBook();
+        void refreshSearchBook();
 
         /**
          * 加载更多书籍成功 更新UI
@@ -58,12 +59,17 @@ public interface SearchBookContract {
         /**
          * 刷新成功
          */
-        void refreshFinish();
+        void refreshFinish(Boolean isAll);
+
+        /**
+         * 加载成功
+         */
+        void loadMoreFinish(Boolean isAll);
 
         /**
          * 搜索失败
          */
-        void searchBookError();
+        void searchBookError(Boolean isRefresh);
 
         /**
          * 获取搜索内容EditText
@@ -74,8 +80,6 @@ public interface SearchBookContract {
          * @return SearchBookAdapter
          */
         SearchBookAdapter getSearchBookAdapter();
-
-        void showBookSourceEmptyTip();
 
         void upMenu();
     }
