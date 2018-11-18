@@ -47,8 +47,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
         disposables = new CompositeDisposable();
 
         Observable.create((ObservableOnSubscribe<DownloadBookBean>) emitter -> {
-            BookShelfBean book = DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().queryBuilder()
-                    .where(BookShelfBeanDao.Properties.NoteUrl.eq(downloadBook.getNoteUrl())).build().unique();
+            BookShelfBean book = BookshelfHelp.getBook(downloadBook.getNoteUrl());
             if (book != null) {
                 if (!book.realChapterListEmpty()) {
                     for (int i = downloadBook.getStart(); i <= downloadBook.getEnd(); i++) {
