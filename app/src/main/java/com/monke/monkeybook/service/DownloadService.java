@@ -160,13 +160,6 @@ public class DownloadService extends Service {
                 if (downloadTasks.indexOfValue(this) >= 0) {
                     managerCompat.cancel(getId());
                     downloadTasks.remove(getId());
-                    if (downloadBook.getSuccessCount() == 0) {
-                        toast(String.format(Locale.getDefault(), "%s：无章节可下载", downloadBook.getName()));
-                    } else {
-                        toast(String.format(Locale.getDefault(), "%s：共下载%d章", downloadBook.getName(), downloadBook.getSuccessCount()));
-                    }
-                } else if (!downloadBook.isValid()) {
-                    toast(String.format(Locale.getDefault(), "%s：所有章节已缓存，无需重复下载", downloadBook.getName()));
                 }
                 startNextTaskAfterRemove(downloadBook);
             }
