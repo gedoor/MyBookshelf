@@ -20,7 +20,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.DownloadBookBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
 import com.monke.monkeybook.model.impl.IDownloadTask;
-import com.monke.monkeybook.model.tsak.DownloadTaskImpl;
+import com.monke.monkeybook.model.task.DownloadTaskImpl;
 import com.monke.monkeybook.view.activity.DownloadActivity;
 
 import java.util.ArrayList;

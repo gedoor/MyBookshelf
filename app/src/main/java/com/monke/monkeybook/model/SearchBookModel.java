@@ -2,22 +2,17 @@ package com.monke.monkeybook.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchEngine;
 import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.model.impl.ISearchTask;
 import com.monke.monkeybook.model.source.My716;
-import com.monke.monkeybook.model.tsak.SearchTaskImpl;
+import com.monke.monkeybook.model.task.SearchTaskImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +20,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.reactivex.Observer;
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
