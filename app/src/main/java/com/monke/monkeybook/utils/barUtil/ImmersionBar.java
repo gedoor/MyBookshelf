@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.database.ContentObserver;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
@@ -21,7 +20,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +27,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
-import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

@@ -111,14 +111,17 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <com.monke.monkeybook.widget.flowlayout.TagFlowLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/tfl_search_history"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
-                android:layout_marginTop="10dp"
-                android:clickable="false" />
+                android:layout_height="wrap_content"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:showDivider="middle"
+                app:dividerDrawable="@drawable/shape_space_divider"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:padding="15dp" />
 
         </LinearLayout>
 
