@@ -277,11 +277,15 @@ public class AnalyzeElement {
                     }
                     break;
                 default:
+                    List<String> urlList = new ArrayList<>();
                     for (Element element : elements) {
-                        String url = NetworkUtil.getAbsoluteURL(baseURL, element.attr(lastRule));
-                        if (!TextUtils.isEmpty(url) && textS.indexOf(url) == -1) {
-                            textS.add(url);
+                        String url = element.attr(lastRule);
+                        if (!TextUtils.isEmpty(url) && urlList.indexOf(url) == -1) {
+                            urlList.add(url);
                         }
+                    }
+                    for (String url : urlList) {
+                        textS.add(NetworkUtil.getAbsoluteURL(baseURL, url));
                     }
             }
             return textS;
