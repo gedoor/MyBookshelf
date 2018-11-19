@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.monke.monkeybook.widget.flowlayout.TagFlowLayout;
-
 public class SoftInputUtil {
 
     //隐藏输入法
@@ -29,10 +27,10 @@ public class SoftInputUtil {
                 Rect rect = new Rect();
                 decorView.getWindowVisibleDisplayFrame(rect);
                 int screenHeight = getScreenHeight(activity);
-                int heightDifference = screenHeight - rect.bottom;//计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
+                int heightDifference = screenHeight - rect.bottom;  //计算软键盘占有的高度  = 屏幕高度 - 视图可见高度
                 View view = prentView.findViewById(viewId);
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-                layoutParams.setMargins(TagFlowLayout.dip2px(activity, 20), 0, TagFlowLayout.dip2px(activity, 20), heightDifference);//设置rlContent的marginBottom的值为软键盘占有的高度即可
+                layoutParams.bottomMargin = heightDifference;   //设置rlContent的marginBottom的值为软键盘占有的高度即可
                 view.setLayoutParams(layoutParams);
                 view.requestLayout();
             } catch (Exception e) {
