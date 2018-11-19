@@ -79,11 +79,14 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         }
     };
 
-    private final View.OnLongClickListener historyItemLongClick = v -> {
-        SearchHistoryBean searchHistoryBean = (SearchHistoryBean) v.getTag();
-        explosionField.explode(v);
-        mPresenter.cleanSearchHistory(searchHistoryBean);
-        return false;
+    private final View.OnLongClickListener historyItemLongClick = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            SearchHistoryBean searchHistoryBean = (SearchHistoryBean) view.getTag();
+            explosionField.explode(view);
+            mPresenter.cleanSearchHistory(searchHistoryBean);
+            return false;
+        }
     };
 
     public static void startByKey(Context context, String searchKey) {
@@ -123,7 +126,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         initSearchView();
         fabSearchStop.hide();
         llSearchHistory.setOnClickListener(null);
-
         rfRvSearchBooks.setRefreshRecyclerViewAdapter(searchBookAdapter, new LinearLayoutManager(this));
 
         View viewRefreshError = LayoutInflater.from(this).inflate(R.layout.view_searchbook_refresh_error, null);

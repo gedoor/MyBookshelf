@@ -191,7 +191,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
                     .queryBuilder()
                     .where(SearchHistoryBeanDao.Properties.Type.eq(SearchBookPresenter.BOOK), SearchHistoryBeanDao.Properties.Content.like("%" + content + "%"))
                     .orderDesc(SearchHistoryBeanDao.Properties.Date)
-                    .limit(20)
+                    .limit(50)
                     .build().list();
             e.onNext(data);
         }).subscribeOn(Schedulers.newThread())

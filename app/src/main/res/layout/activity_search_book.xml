@@ -35,11 +35,11 @@
                     android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
                     android:layout_marginLeft="-5dp"
+                    android:imeOptions="actionSearch"
                     app:iconifiedByDefault="false"
-                    app:searchIcon="@null"
                     app:queryBackground="@null"
+                    app:searchIcon="@null"
                     app:submitBackground="@null"
                     tools:ignore="RtlHardcoded,UnusedAttribute" />
             </android.support.v7.widget.CardView>
@@ -81,9 +81,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="18dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:text="@string/searchHistory"
                     android:textColor="#767676"
                     android:textSize="16sp"
@@ -102,26 +102,31 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:paddingBottom="5dp"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="5dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="5dp"
                     android:text="@string/clear"
                     android:textColor="@drawable/selector_tv_black"
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/tfl_search_history"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:flexDirection="row"
-                app:flexWrap="wrap"
-                app:showDivider="middle"
-                app:dividerDrawable="@drawable/shape_space_divider"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:padding="15dp" />
+                android:layout_height="match_parent">
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:id="@+id/tfl_search_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:padding="15dp"
+                    app:dividerDrawable="@drawable/shape_space_divider"
+                    app:flexDirection="row"
+                    app:flexWrap="wrap"
+                    app:showDivider="middle" />
+            </ScrollView>
 
         </LinearLayout>
 
@@ -129,10 +134,10 @@
             android:id="@+id/fabSearchStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
             android:src="@drawable/ic_stop_black_24dp"
             app:elevation="5dp"
             app:fabSize="mini"
