@@ -116,7 +116,7 @@ public class BookContent {
             AnalyzeElement analyzeElement = new AnalyzeElement(doc, chapterUrl);
             webContentBean.content = analyzeElement.getResult(ruleBookContent);
             if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
-                webContentBean.nextUrl = analyzeElement.getResult(bookSourceBean.getRuleContentUrlNext());
+                webContentBean.nextUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleContentUrlNext());
             }
         }
         return webContentBean;

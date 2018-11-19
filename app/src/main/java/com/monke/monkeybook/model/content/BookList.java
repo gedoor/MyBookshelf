@@ -51,11 +51,11 @@ public class BookList {
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(FormatWebText.trim(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter())));
                         item.setName(FormatWebText.getBookName(analyzeElement.getResult(bookSourceBean.getRuleSearchName())));
-                        item.setNoteUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchNoteUrl()));
+                        item.setNoteUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleSearchNoteUrl()));
                         if (isEmpty(item.getNoteUrl())) {
                             item.setNoteUrl(baseURI);
                         }
-                        item.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchCoverUrl()));
+                        item.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleSearchCoverUrl()));
                         if (!isEmpty(item.getName())) {
                             books.add(item);
                         }

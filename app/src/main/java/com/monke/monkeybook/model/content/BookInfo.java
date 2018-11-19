@@ -43,7 +43,7 @@ public class BookInfo {
             Document doc = Jsoup.parse(s);
             AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
             if (isEmpty(bookInfoBean.getCoverUrl())) {
-                bookInfoBean.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleCoverUrl()));
+                bookInfoBean.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleCoverUrl()));
             }
             if (isEmpty(bookInfoBean.getName())) {
                 bookInfoBean.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
@@ -52,7 +52,7 @@ public class BookInfo {
                 bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
             }
             bookInfoBean.setIntroduce(analyzeElement.getResult(bookSourceBean.getRuleIntroduce()));
-            String chapterUrl = analyzeElement.getResult(bookSourceBean.getRuleChapterUrl());
+            String chapterUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleChapterUrl());
             if (isEmpty(chapterUrl)) {
                 bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
             } else {

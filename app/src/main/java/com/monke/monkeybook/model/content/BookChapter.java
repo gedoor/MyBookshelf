@@ -109,7 +109,7 @@ public class BookChapter {
         for (Element element : elements) {
             analyzeElement = new AnalyzeElement(element, chapterUrl);
             ChapterListBean temp = new ChapterListBean();
-            temp.setDurChapterUrl(analyzeElement.getResult(bookSourceBean.getRuleContentUrl()));   //id
+            temp.setDurChapterUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleContentUrl()));   //id
             temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));
             temp.setTag(tag);
             if (!isEmpty(temp.getDurChapterUrl()) && !isEmpty(temp.getDurChapterName())) {

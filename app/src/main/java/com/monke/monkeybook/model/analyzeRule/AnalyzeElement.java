@@ -167,6 +167,14 @@ public class AnalyzeElement {
         return result;
     }
 
+    public String getResultUrl(String ruleStr) {
+        List<String> urlList = getAllResultList(ruleStr);
+        if (urlList.size() > 0) {
+            return urlList.get(0);
+        }
+        return null;
+    }
+
     /**
      * 获取所有内容列表
      */
