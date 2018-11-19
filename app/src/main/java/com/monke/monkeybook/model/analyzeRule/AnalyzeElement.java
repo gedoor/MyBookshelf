@@ -278,9 +278,9 @@ public class AnalyzeElement {
                     break;
                 default:
                     for (Element element : elements) {
-                        String url = element.attr(lastRule);
-                        if (!TextUtils.isEmpty(url)) {
-                            textS.add(NetworkUtil.getAbsoluteURL(baseURL, url));
+                        String url = NetworkUtil.getAbsoluteURL(baseURL, element.attr(lastRule));
+                        if (!TextUtils.isEmpty(url) && textS.indexOf(url) == -1) {
+                            textS.add(url);
                         }
                     }
             }
