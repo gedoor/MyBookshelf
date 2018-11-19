@@ -55,7 +55,7 @@ public class BookList {
                         if (isEmpty(item.getNoteUrl())) {
                             item.setNoteUrl(baseURI);
                         }
-                        item.setCoverUrl(analyzeElement.getAllResultList(bookSourceBean.getRuleSearchCoverUrl()).get(0));
+                        item.setCoverUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchCoverUrl()));
                         if (!isEmpty(item.getName())) {
                             books.add(item);
                         }
