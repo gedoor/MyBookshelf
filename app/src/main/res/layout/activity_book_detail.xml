@@ -104,7 +104,7 @@
                             android:layout_height="18sp"
                             android:contentDescription="@string/author"
                             android:paddingRight="2dp"
-                            android:src="@drawable/ic_person_outline_24dp"
+                            android:src="@drawable/ic_author_black_24dp"
                             app:tint="@color/tv_text_book_detail"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
@@ -192,7 +192,7 @@
                             android:layout_height="18sp"
                             android:contentDescription="@string/last_read"
                             android:paddingRight="2dp"
-                            android:src="@drawable/ic_last_read"
+                            android:src="@drawable/ic_book_last_24dp"
                             app:tint="@color/tv_text_book_detail"
                             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
