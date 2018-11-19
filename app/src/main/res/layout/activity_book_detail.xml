@@ -82,11 +82,11 @@
                             tools:ignore="RtlHardcoded" />
 
                         <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/iv_refresh"
+                            android:id="@+id/iv_menu"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:contentDescription="@string/refresh"
-                            android:src="@drawable/ic_refresh_white_24dp"
+                            android:contentDescription="@string/menu"
+                            android:src="@drawable/ic_more_vert_black_24dp"
                             app:tint="@android:color/white" />
 
                     </LinearLayout>
@@ -127,20 +127,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="@color/transparent" />
-
-                        <TextView
-                            android:id="@+id/tv_update"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/selector_tv_first_button"
-                            android:includeFontPadding="false"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
-                            android:text="@string/allow_update"
-                            android:textColor="@color/white"
-                            android:textSize="13sp" />
 
                     </LinearLayout>
 

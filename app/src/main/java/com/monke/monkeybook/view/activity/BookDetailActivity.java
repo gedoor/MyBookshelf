@@ -10,13 +10,12 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -51,6 +50,8 @@ import static com.monke.monkeybook.utils.BitmapUtil.stackBlur;
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
     FrameLayout iflContent;
+    @BindView(R.id.iv_menu)
+    ImageView ivMenu;
     @BindView(R.id.iv_blur_cover)
     AppCompatImageView ivBlurCover;
     @BindView(R.id.iv_cover)
@@ -59,8 +60,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvName;
     @BindView(R.id.tv_author)
     TextView tvAuthor;
-    @BindView(R.id.tv_update)
-    TextView tvUpdate;
     @BindView(R.id.tv_origin)
     TextView tvOrigin;
     @BindView(R.id.iv_web)
@@ -75,8 +74,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
     TextView tvRead;
     @BindView(R.id.tv_loading)
     TextView tvLoading;
-    @BindView(R.id.iv_refresh)
-    ImageView ivRefresh;
     @BindView(R.id.tv_change_origin)
     TextView tvChangeOrigin;
     @BindView(R.id.rg_book_group)
@@ -139,7 +136,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             tvLoading.setVisibility(View.VISIBLE);
             tvLoading.setText(R.string.loading);
             tvLoading.setOnClickListener(null);
-            setTvUpdate(false, false);
         }
     }
 
@@ -157,13 +153,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 tvChapter.setText(bookShelfBean.getDurChapterName()); // last
                 tvShelf.setText(R.string.remove_from_bookshelf);
                 tvRead.setText(R.string.continue_read);
-                setTvUpdate(bookShelfBean.getAllowUpdate(), true);
                 tvShelf.setOnClickListener(v -> {
                     //从书架移出
                     mPresenter.removeFromBookShelf();
                 });
             } else {
-                setTvUpdate(false, false);
                 if (!TextUtils.isEmpty(bookShelfBean.getLastChapterName())) {
                     tvChapter.setText(bookShelfBean.getLastChapterName()); // last
                 }
@@ -234,12 +228,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         }
     }
 
-    private void setTvUpdate(boolean update, boolean show) {
-        tvUpdate.setVisibility(show ? View.VISIBLE : View.GONE);
-        if (show) {
-            tvUpdate.setText(update ? R.string.allow_update : R.string.disable_update);
-            tvUpdate.setTextColor(getResources().getColor(update ? R.color.white : R.color.darker_gray));
-        }
+    private void refresh() {
+        tvLoading.setVisibility(View.VISIBLE);
+        tvLoading.setText(R.string.loading);
+        tvLoading.setOnClickListener(null);
+        mPresenter.getBookShelfInfo();
     }
 
     @Override
@@ -275,15 +268,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             } else {
                 finish();
                 overridePendingTransition(0, android.R.anim.fade_out);
-            }
-        });
-
-        tvUpdate.setOnClickListener(view -> {
-            boolean update = !mPresenter.getBookShelf().getAllowUpdate();
-            mPresenter.getBookShelf().setAllowUpdate(update);
-            setTvUpdate(update, true);
-            if (mPresenter.getInBookShelf()) {
-                mPresenter.addToBookShelf();
             }
         });
 
@@ -328,18 +312,29 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
         });
 
-        ivRefresh.setOnClickListener(view -> {
-            AnimationSet animationSet = new AnimationSet(true);
-            RotateAnimation rotateAnimation = new RotateAnimation(0, 360,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f);
-            rotateAnimation.setDuration(1000);
-            animationSet.addAnimation(rotateAnimation);
-            ivRefresh.startAnimation(animationSet);
-            tvLoading.setVisibility(View.VISIBLE);
-            tvLoading.setText(R.string.loading);
-            tvLoading.setOnClickListener(null);
-            mPresenter.getBookShelfInfo();
+        ivMenu.setOnClickListener(view -> {
+            PopupMenu popupMenu = new PopupMenu(this, view, Gravity.END);
+            popupMenu.getMenu().add(R.string.refresh);
+            if (mPresenter.getInBookShelf() && !mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                if (mPresenter.getBookShelf().getAllowUpdate()) {
+                    popupMenu.getMenu().add(R.string.disable_update);
+                } else {
+                    popupMenu.getMenu().add(R.string.allow_update);
+                }
+            }
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                if (menuItem.getTitle().toString().equals(getString(R.string.refresh))) {
+                    refresh();
+                } else if (menuItem.getTitle().toString().equals(getString(R.string.allow_update))) {
+                    mPresenter.getBookShelf().setAllowUpdate(true);
+                    mPresenter.addToBookShelf();
+                } else if (menuItem.getTitle().toString().equals(getString(R.string.disable_update))) {
+                    mPresenter.getBookShelf().setAllowUpdate(false);
+                    mPresenter.addToBookShelf();
+                }
+                return true;
+            });
+            popupMenu.show();
         });
 
         ivCover.setOnClickListener(view -> {
