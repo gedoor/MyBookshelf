@@ -51,7 +51,7 @@ public class BookList {
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(FormatWebText.trim(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter())));
                         item.setName(FormatWebText.getBookName(analyzeElement.getResult(bookSourceBean.getRuleSearchName())));
-                        item.setNoteUrl(analyzeElement.getAllResultList(bookSourceBean.getRuleSearchNoteUrl()).get(0));
+                        item.setNoteUrl(analyzeElement.getResult(bookSourceBean.getRuleSearchNoteUrl()));
                         if (isEmpty(item.getNoteUrl())) {
                             item.setNoteUrl(baseURI);
                         }
