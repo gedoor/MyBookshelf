@@ -121,7 +121,7 @@
                 app:dividerDrawable="@drawable/shape_space_divider"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:padding="10dp" />
+                android:padding="15dp" />
 
         </LinearLayout>
 
