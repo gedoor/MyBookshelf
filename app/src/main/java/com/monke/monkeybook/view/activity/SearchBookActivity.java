@@ -85,7 +85,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             SearchHistoryBean searchHistoryBean = (SearchHistoryBean) view.getTag();
             explosionField.explode(view);
             mPresenter.cleanSearchHistory(searchHistoryBean);
-            return false;
+            return true;
         }
     };
 
@@ -261,8 +261,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             public boolean onQueryTextChange(String newText) {
                 if (!newText.toLowerCase().startsWith("set:")) {
                     mPresenter.querySearchHistory(newText);
-                } else {
-
                 }
                 return false;
             }
