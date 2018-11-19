@@ -66,7 +66,10 @@ public class BookChapter {
                     chapterList.addAll(webChapterBean.data);
                 }
             } else if (webChapterBean.nextUrlList.size() == 1) {
-                while (!TextUtils.isEmpty(webChapterBean.nextUrlList.get(0))) {
+                List<String> usedUrl = new ArrayList<>();
+                usedUrl.add(bookShelfBean.getBookInfoBean().getChapterUrl());
+                while (webChapterBean.nextUrlList.size() > 0 && usedUrl.indexOf(webChapterBean.nextUrlList.get(0)) == -1) {
+                    usedUrl.add(webChapterBean.nextUrlList.get(0));
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class).getWebContentCall(webChapterBean.nextUrlList.get(0), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
                     String response = "";
