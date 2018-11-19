@@ -114,14 +114,14 @@
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/tfl_search_history"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 app:flexDirection="row"
                 app:flexWrap="wrap"
                 app:showDivider="middle"
                 app:dividerDrawable="@drawable/shape_space_divider"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
-                android:padding="15dp" />
+                android:padding="10dp" />
 
         </LinearLayout>
 
