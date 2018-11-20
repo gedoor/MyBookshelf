@@ -21,7 +21,7 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <com.monke.monkeybook.widget.FilletImageView
+        <com.monke.monkeybook.widget.CoverImageView
             android:id="@+id/iv_cover"
             android:layout_width="56dp"
             android:layout_height="80dp"

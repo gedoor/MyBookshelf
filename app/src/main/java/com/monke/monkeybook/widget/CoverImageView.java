@@ -7,18 +7,18 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 
 
-public class FilletImageView extends android.support.v7.widget.AppCompatImageView {
+public class CoverImageView extends android.support.v7.widget.AppCompatImageView {
     float width,height;
 
-    public FilletImageView(Context context) {
+    public CoverImageView(Context context) {
         super(context);
     }
 
-    public FilletImageView(Context context, AttributeSet attrs) {
+    public CoverImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public FilletImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CoverImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -27,6 +27,13 @@ public class FilletImageView extends android.support.v7.widget.AppCompatImageVie
         super.onLayout(changed, left, top, right, bottom);
         width = getWidth();
         height = getHeight();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int measuredHeight = measuredWidth * 7 / 5;
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(measuredHeight, MeasureSpec.EXACTLY));
     }
 
     @Override

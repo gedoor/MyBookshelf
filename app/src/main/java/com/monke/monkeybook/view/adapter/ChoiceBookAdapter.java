@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.widget.FilletImageView;
+import com.monke.monkeybook.widget.CoverImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
@@ -153,7 +153,7 @@ public class ChoiceBookAdapter extends RefreshRecyclerViewAdapter {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
-        FilletImageView ivCover;
+        CoverImageView ivCover;
         TextView tvName;
         TextView tvState;
         TextView tvWords;

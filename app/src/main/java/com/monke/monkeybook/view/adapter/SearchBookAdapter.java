@@ -19,7 +19,7 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.view.adapter.base.BaseListAdapter;
-import com.monke.monkeybook.widget.FilletImageView;
+import com.monke.monkeybook.widget.CoverImageView;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
@@ -27,11 +27,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
     private WeakReference<Activity> activityRef;
@@ -230,7 +225,7 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         FrameLayout flContent;
-        FilletImageView ivCover;
+        CoverImageView ivCover;
         TextView tvName;
         TextView tvState;
         TextView tvWords;

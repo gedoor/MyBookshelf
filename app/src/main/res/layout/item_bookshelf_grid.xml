@@ -17,7 +17,7 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
 
-        <com.monke.monkeybook.widget.FilletImageView
+        <com.monke.monkeybook.widget.CoverImageView
             android:id="@+id/iv_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
