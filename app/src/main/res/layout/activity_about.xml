@@ -129,7 +129,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
                         android:gravity="center_vertical"
-                        android:text="@string/share" />
+                        android:text="@string/share_app" />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
