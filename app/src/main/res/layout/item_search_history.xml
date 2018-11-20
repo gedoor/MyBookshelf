@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
     android:gravity="center"
-    android:background="@drawable/shape_fillet_btn"
+    android:background="@drawable/shape_card_view"
     android:clickable="true"
     android:focusable="true"
     android:padding="8dp"
