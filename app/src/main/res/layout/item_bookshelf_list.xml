@@ -17,6 +17,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/background"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -24,6 +25,7 @@
             android:id="@+id/iv_cover"
             android:layout_width="56dp"
             android:layout_height="80dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/img_cover"
             android:scaleType="centerCrop"
             android:src="@drawable/img_cover_default"
@@ -32,10 +34,10 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="2dp"
+            android:layout_weight="1"
             android:orientation="vertical"
             tools:ignore="RtlHardcoded">
 
@@ -49,12 +51,6 @@
                 android:textColor="@color/tv_text_default"
                 android:textSize="16sp"
                 app:minTextSize="13sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                tools:ignore="NestedWeights" />
 
             <LinearLayout
                 android:id="@+id/ll_author"
@@ -86,12 +82,6 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                tools:ignore="NestedWeights" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,11 +109,6 @@
                     app:minTextSize="10sp" />
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -150,23 +135,21 @@
                     app:minTextSize="10sp" />
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/fl_has_new"
             android:layout_width="wrap_content"
-            android:layout_height="26dp">
+            android:layout_height="match_parent">
 
             <com.monke.monkeybook.widget.BadgeView
                 android:id="@+id/bv_unread"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:includeFontPadding="false" />
+                android:layout_gravity="right"
+                android:layout_margin="5dp"
+                android:includeFontPadding="false"
+                tools:ignore="RtlHardcoded" />
 
             <com.victor.loading.rotate.RotateLoading
                 android:id="@+id/rl_loading"
