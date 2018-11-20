@@ -57,5 +57,8 @@ public class CoverImageView extends android.support.v7.widget.AppCompatImageView
         super.onDraw(canvas);
     }
 
-
+    public void setHeight(int height) {
+        int width = height * 5 / 7;
+        setMinimumWidth(width);
+    }
 }
