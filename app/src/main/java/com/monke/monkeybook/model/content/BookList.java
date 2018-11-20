@@ -38,6 +38,7 @@ public class BookList {
                 } else {
                     baseURI = response.raw().request().url().toString();
                 }
+                assert response.body() != null;
                 Document doc = Jsoup.parse(response.body());
                 Elements booksE = AnalyzeElement.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
