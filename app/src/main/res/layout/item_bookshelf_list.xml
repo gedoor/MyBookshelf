@@ -25,7 +25,6 @@
             android:id="@+id/iv_cover"
             android:layout_width="56dp"
             android:layout_height="80dp"
-            android:adjustViewBounds="true"
             android:contentDescription="@string/img_cover"
             android:scaleType="centerCrop"
             android:src="@drawable/img_cover_default"
