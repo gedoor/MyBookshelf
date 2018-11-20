@@ -65,7 +65,7 @@ public class BookContent {
                 ChapterListBean nextChapter = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), ChapterListBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
                         .build().unique();
-                while (!TextUtils.isEmpty(webContentBean.nextUrl) && !webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl()) && usedUrlList.indexOf(webContentBean.nextUrl) == -1) {
+                while (!TextUtils.isEmpty(webContentBean.nextUrl) && !webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl()) && !usedUrlList.contains(webContentBean.nextUrl)) {
                     usedUrlList.add(webContentBean.nextUrl);
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
