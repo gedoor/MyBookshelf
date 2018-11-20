@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.model.impl;
 
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ChapterListBean;
@@ -36,12 +37,9 @@ public interface IStationBookModel {
 
     /**
      * 获取章节
-     *
      * @param scheduler       　执行进程
-     * @param durChapterUrl   　章节地址
-     * @param durChapterIndex 　章节序号
      */
-    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, final int durChapterIndex);
+    Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean);
 
 
 }

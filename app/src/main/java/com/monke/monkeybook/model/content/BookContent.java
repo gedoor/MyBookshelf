@@ -3,8 +3,12 @@ package com.monke.monkeybook.model.content;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
+import com.monke.monkeybook.bean.ChapterListBean;
+import com.monke.monkeybook.dao.ChapterListBeanDao;
+import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
@@ -34,7 +38,7 @@ public class BookContent {
         }
     }
 
-    Observable<BookContentBean> analyzeBookContent(final String s, final String durChapterUrl, final int durChapterIndex) {
+    Observable<BookContentBean> analyzeBookContent(final String s, final BaseChapterBean chapterBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("内容获取失败"));
@@ -42,27 +46,35 @@ public class BookContent {
                 return;
             }
             BookContentBean bookContentBean = new BookContentBean();
-            bookContentBean.setDurChapterIndex(durChapterIndex);
-            bookContentBean.setDurChapterUrl(durChapterUrl);
+            bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
+            bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
             bookContentBean.setTag(tag);
 
-            WebContentBean webContentBean = analyzeBookContent(s, durChapterUrl);
+            WebContentBean webContentBean = analyzeBookContent(s, chapterBean.getDurChapterUrl());
             bookContentBean.setDurChapterContent(webContentBean.content);
 
-            while (!TextUtils.isEmpty(webContentBean.nextUrl)) {
-                Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                        .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
-                String response = "";
-                try {
-                    response = call.execute().body();
-                } catch (Exception exception) {
-                    if (!e.isDisposed()) {
-                        e.onError(exception);
+            /*
+             * 处理分页
+             */
+            if (!TextUtils.isEmpty(webContentBean.nextUrl)) {
+                ChapterListBean nextChapter = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
+                        .where(ChapterListBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), ChapterListBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
+                        .build().unique();
+                while (!TextUtils.isEmpty(webContentBean.nextUrl) && !webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl())) {
+                    Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
+                            .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                    String response = "";
+                    try {
+                        response = call.execute().body();
+                    } catch (Exception exception) {
+                        if (!e.isDisposed()) {
+                            e.onError(exception);
+                        }
                     }
-                }
-                webContentBean = analyzeBookContent(response, webContentBean.nextUrl);
-                if (!TextUtils.isEmpty(webContentBean.content)) {
-                    bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
+                    webContentBean = analyzeBookContent(response, webContentBean.nextUrl);
+                    if (!TextUtils.isEmpty(webContentBean.content)) {
+                        bookContentBean.setDurChapterContent(bookContentBean.getDurChapterContent() + "\n" + webContentBean.content);
+                    }
                 }
             }
 

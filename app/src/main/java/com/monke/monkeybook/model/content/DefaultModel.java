@@ -2,6 +2,7 @@ package com.monke.monkeybook.model.content;
 
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -203,7 +204,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
      * 获取正文
      */
     @Override
-    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final String durChapterUrl, final int durChapterIndex) {
+    public Observable<BookContentBean> getBookContent(final Scheduler scheduler, final BaseChapterBean chapterBean) {
         if (!initBookSourceBean()) {
             return Observable.create(emitter -> {
                 emitter.onNext(new BookContentBean());
@@ -212,16 +213,16 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         }
         BookContent bookContent = new BookContent(tag, bookSourceBean);
         if (bookSourceBean.getRuleBookContent().startsWith("$")) {
-            return getAjaxHtml(MApplication.getInstance(), durChapterUrl, AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
+            return getAjaxHtml(MApplication.getInstance(), chapterBean.getDurChapterUrl(), AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()))
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(scheduler)
-                    .flatMap(response -> bookContent.analyzeBookContent(response, durChapterUrl, durChapterIndex));
+                    .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
         } else {
             return getRetrofitString(tag)
                     .create(IHttpGetApi.class)
-                    .getWebContent(durChapterUrl, headerMap)
+                    .getWebContent(chapterBean.getDurChapterUrl(), headerMap)
                     .subscribeOn(scheduler)
-                    .flatMap(response -> bookContent.analyzeBookContent(response.body(), durChapterUrl, durChapterIndex));
+                    .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
         }
     }
 

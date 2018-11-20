@@ -66,7 +66,7 @@ public class WebBookModel {
     public Observable<BookContentBean> getBookContent(final Scheduler scheduler, BaseChapterBean chapterBean, String bookName) {
         IStationBookModel bookModel = getBookSourceModel(chapterBean.getTag());
         if (bookModel != null) {
-            return bookModel.getBookContent(scheduler, chapterBean.getDurChapterUrl(), chapterBean.getDurChapterIndex())
+            return bookModel.getBookContent(scheduler, chapterBean)
                     .flatMap((bookContentBean -> saveContent(bookName, chapterBean, bookContentBean)));
         } else
             return Observable.create(e -> {
