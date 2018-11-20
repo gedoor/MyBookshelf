@@ -19,6 +19,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 
@@ -57,10 +60,13 @@ public class BookContent {
              * 处理分页
              */
             if (!TextUtils.isEmpty(webContentBean.nextUrl)) {
+                List<String> usedUrlList = new ArrayList<>();
+                usedUrlList.add(chapterBean.getDurChapterUrl());
                 ChapterListBean nextChapter = DbHelper.getInstance().getmDaoSession().getChapterListBeanDao().queryBuilder()
                         .where(ChapterListBeanDao.Properties.NoteUrl.eq(chapterBean.getNoteUrl()), ChapterListBeanDao.Properties.DurChapterIndex.eq(chapterBean.getDurChapterIndex() + 1))
                         .build().unique();
-                while (!TextUtils.isEmpty(webContentBean.nextUrl) && !webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl())) {
+                while (!TextUtils.isEmpty(webContentBean.nextUrl) && !webContentBean.nextUrl.equals(nextChapter.getDurChapterUrl()) && usedUrlList.indexOf(webContentBean.nextUrl) == -1) {
+                    usedUrlList.add(webContentBean.nextUrl);
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
                     String response = "";
