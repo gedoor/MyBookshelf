@@ -612,17 +612,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 llMenuBottom.setTvNext(true);
                             }
                         }
-                        //继续朗读
-                        if ((ReadAloudService.running)) {
-                            if (mPageLoader.getUnReadContent() != null) {
-                                ReadAloudService.play(ReadBookActivity.this,
-                                        false,
-                                        mPageLoader.getUnReadContent(),
-                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(pos))
-                                );
-                            }
-                        }
                     }
 
                     @Override
@@ -654,14 +643,27 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setDurProgress(pageIndex)
                         );
-                        if (resetReadAloud && mPageLoader.getUnReadContent() != null) {
-                            ReadAloudService.play(ReadBookActivity.this,
-                                    false,
-                                    mPageLoader.getUnReadContent(),
-                                    mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                    ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
-                            );
+                        if ((ReadAloudService.running)) {
+                            if (resetReadAloud && mPageLoader.getUnReadContent() != null) {
+                                ReadAloudService.play(ReadBookActivity.this,
+                                        false,
+                                        mPageLoader.getUnReadContent(),
+                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                );
+                                return;
+                            }
+                            if (pageIndex == 0 && mPageLoader.getUnReadContent() != null) {
+                                ReadAloudService.play(ReadBookActivity.this,
+                                        false,
+                                        mPageLoader.getUnReadContent(),
+                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                );
+                                return;
+                            }
                         }
+
                         //启动朗读
                         if (getIntent().getBooleanExtra("readAloud", false)
                                 && pageIndex >= 0 && mPageLoader.getContent() != null) {
