@@ -76,7 +76,7 @@ public abstract class PageLoader {
     // 绘制小说内容的画笔
     TextPaint mTextPaint;
     // 绘制结束的画笔
-    TextPaint mTextEndPaint;
+    private TextPaint mTextEndPaint;
     // 阅读器的配置选项
     ReadBookControl readBookControl = ReadBookControl.getInstance();
 
@@ -531,7 +531,7 @@ public abstract class PageLoader {
     /**
      * 获取当前页的页码
      */
-    public int getCurPagePos() {
+    private int getCurPagePos() {
         return mCurPagePos;
     }
 
