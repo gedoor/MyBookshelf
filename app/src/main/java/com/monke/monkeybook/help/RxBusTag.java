@@ -7,12 +7,6 @@ public class RxBusTag {
     public final static String REFRESH_BOOK_LIST = "reFresh_book";
     public final static String UPDATE_GROUP = "UPDATE_GROUP";
     public final static String UPDATE_BOOK_PROGRESS = "update_book_progress";
-    public final static String PAUSE_DOWNLOAD_LISTENER = "pause_download_listener";
-    public final static String PROGRESS_DOWNLOAD_LISTENER = "progress_download_listener";
-    public final static String FINISH_DOWNLOAD_LISTENER = "finish_download_listener";
-    public final static String PAUSE_DOWNLOAD = "pause_download";
-    public final static String START_DOWNLOAD = "start_download";
-    public final static String CANCEL_DOWNLOAD = "cancel_download";
     public final static String UPDATE_READ = "update_read";
     public final static String CHAPTER_CHANGE = "chapter_change";
     public final static String MEDIA_BUTTON = "media_button";
@@ -31,4 +25,5 @@ public class RxBusTag {
     public final static String UP_SEARCH_BOOK = "upSearchBook";
     public final static String SKIP_TO_CHAPTER = "skipToChapter";
     public final static String OPEN_BOOK_MARK = "openBookMark";
+    public final static String READ_ALOUD_NUMBER = "readAloudNumber";
 }

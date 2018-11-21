@@ -475,6 +475,11 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         mView.showBookmark(bookmarkBean);
     }
 
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.READ_ALOUD_NUMBER)})
+    public void readAloudStart(Integer start) {
+        mView.readAloudStart(start);
+    }
+
     public interface OnAddListener {
         void addSuccess();
     }

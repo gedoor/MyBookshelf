@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +10,7 @@ import java.util.List;
 class TxtChapter {
     private int position;
     private List<TxtPage> txtPageList;
+    private List<Integer> txtPageLengthList = new ArrayList<>();
     private Enum.PageStatus status = Enum.PageStatus.LOADING;
     private String msg;
 
@@ -22,6 +24,14 @@ class TxtChapter {
 
     void setTxtPageList(List<TxtPage> txtPageList) {
         this.txtPageList = txtPageList;
+        txtPageLengthList.clear();
+        for (int i = 0; i < txtPageList.size(); i++) {
+            if (i == 0) {
+                txtPageLengthList.add(txtPageList.get(i).getContent().length());
+            } else {
+                txtPageLengthList.add(txtPageLengthList.get(i - 1) + txtPageList.get(i).getContent().length());
+            }
+        }
     }
 
     List<TxtPage> getTxtPageList() {
@@ -53,5 +63,9 @@ class TxtChapter {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public int getPageLength(int position) {
+        return txtPageLengthList.get(position);
     }
 }

@@ -32,18 +32,18 @@ public interface ReadBookContract {
 
         void onMediaButton();
 
-        /**
-         * 更新朗读状态
-         */
         void upAloudState(int state);
 
         void upAloudTimer(String timer);
+
+        void readAloudStart(int start);
 
         void speakIndex(int index);
 
         void refresh(boolean recreate);
 
         void finish();
+
     }
 
     interface Presenter extends IPresenter {

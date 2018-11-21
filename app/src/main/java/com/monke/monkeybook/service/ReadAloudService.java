@@ -14,7 +14,6 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -90,9 +89,7 @@ public class ReadAloudService extends Service {
     private Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable dsRunnable;
     private MediaManager mediaManager;
-
-    public ReadAloudService() {
-    }
+    private int readAloudNumber;
 
     /**
      * 朗读
@@ -202,6 +199,7 @@ public class ReadAloudService extends Service {
         this.text = text;
         this.title = title;
         nowSpeak = 0;
+        readAloudNumber = 0;
         contentList.clear();
         String[] splitSpeech = content.split("\n");
         for (String aSplitSpeech : splitSpeech) {
@@ -516,6 +514,7 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onDone(String s) {
+            readAloudNumber = readAloudNumber + contentList.get(nowSpeak).length() + 1;
             nowSpeak = nowSpeak + 1;
             if (nowSpeak >= contentList.size()) {
                 RxBus.get().post(RxBusTag.ALOUD_STATE, NEXT);
@@ -526,6 +525,12 @@ public class ReadAloudService extends Service {
         public void onError(String s) {
             pauseReadAloud(true);
             RxBus.get().post(RxBusTag.ALOUD_STATE, PAUSE);
+        }
+
+        @Override
+        public void onRangeStart(String utteranceId, int start, int end, int frame) {
+            super.onRangeStart(utteranceId, start, end, frame);
+            RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber + start);
         }
     }
 
