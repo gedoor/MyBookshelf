@@ -598,7 +598,10 @@ public abstract class PageLoader {
     }
 
     public void readAloudStart(int start) {
-        Log.d(TAG, Integer.toString(start) + "---" + mCurChapter.getPageLength(mCurPagePos));
+        Log.d(TAG, Integer.toString(start) + "---" + mCurChapter.getPageLength(mCurPagePos) + "----" + mCurPagePos);
+        if (start > mCurChapter.getPageLength(mCurPagePos)) {
+            noAnimationToNextPage();
+        }
     }
 
     /**
