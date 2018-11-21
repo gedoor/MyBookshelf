@@ -80,6 +80,8 @@
 #### RuleChapterUrlNext 目录页面里的下一页目录地址
 - 如果没有下一页则留空
 - 例:class.page.0@text.下一页.0@href
+**也可以获取所有目录页url的列表,会依次获取**
+- 例:class.chapter.0@tag.a@href  (class.chapter.0)里包含第1页第2页第三页等
 
 #### RuleChapterList 目录页面的目录列表
 - 前面加 - 号倒序排列
