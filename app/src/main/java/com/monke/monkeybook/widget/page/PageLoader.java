@@ -135,7 +135,8 @@ public abstract class PageLoader {
     // 当前章
     int mCurChapterPos;
     int mCurPagePos;
-    int readTextLength;
+    private int readTextLength;
+    private boolean resetReadAloud;
 
     public Bitmap cover;
     private int linePos = 0;
@@ -598,8 +599,10 @@ public abstract class PageLoader {
     }
 
     public void readAloudStart(int start) {
+        start = readTextLength + start;
         Log.d(TAG, Integer.toString(start) + "---" + mCurChapter.getPageLength(mCurPagePos) + "----" + mCurPagePos);
         if (start > mCurChapter.getPageLength(mCurPagePos)) {
+            resetReadAloud = false;
             noAnimationToNextPage();
         }
     }
@@ -723,7 +726,8 @@ public abstract class PageLoader {
         mPageView.setContentDescription(getContent());
         bookShelfBean.setDurChapter(mCurChapterPos);
         bookShelfBean.setDurChapterPage(mCurPagePos);
-        mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos());
+        mPageChangeListener.onPageChange(mCurChapterPos, getCurPagePos(), resetReadAloud);
+        resetReadAloud = true;
     }
 
     /**
@@ -1544,6 +1548,6 @@ public abstract class PageLoader {
         /**
          * 作用：当页面改变的时候回调
          */
-        void onPageChange(int chapterIndex, int pageIndex);
+        void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud);
     }
 }

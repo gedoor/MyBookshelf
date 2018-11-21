@@ -647,13 +647,21 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     }
 
                     @Override
-                    public void onPageChange(int chapterIndex, int pageIndex) {
+                    public void onPageChange(int chapterIndex, int pageIndex, boolean resetReadAloud) {
                         mPresenter.getBookShelf().setDurChapter(chapterIndex);
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
                         llMenuBottom.getReadProgress().post(
                                 () -> llMenuBottom.getReadProgress().setDurProgress(pageIndex)
                         );
+                        if (resetReadAloud && mPageLoader.getUnReadContent() != null) {
+                            ReadAloudService.play(ReadBookActivity.this,
+                                    false,
+                                    mPageLoader.getUnReadContent(),
+                                    mPresenter.getBookShelf().getBookInfoBean().getName(),
+                                    ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                            );
+                        }
                         //启动朗读
                         if (getIntent().getBooleanExtra("readAloud", false)
                                 && pageIndex >= 0 && mPageLoader.getContent() != null) {
