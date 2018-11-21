@@ -968,7 +968,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     ReadAloudService.stop(this);
                     break;
                 }
-                if (!mPageLoader.noAnimationToNextPage()) {
+                if (!mPageLoader.skipNextChapter()) {
                     ReadAloudService.stop(this);
                 }
                 break;

@@ -515,6 +515,7 @@ public class ReadAloudService extends Service {
         @Override
         public void onDone(String s) {
             readAloudNumber = readAloudNumber + contentList.get(nowSpeak).length() + 1;
+            RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber + 1);
             nowSpeak = nowSpeak + 1;
             if (nowSpeak >= contentList.size()) {
                 RxBus.get().post(RxBusTag.ALOUD_STATE, NEXT);
