@@ -559,7 +559,7 @@ public abstract class PageLoader {
     }
 
     /**
-     * 获取正文
+     * @return 本页未读内容
      */
     public String getContent(int pagePos) {
         if (mCurChapter == null || mCurChapter.getStatus() != Enum.PageStatus.FINISH || mCurChapter.getPageSize() <= pagePos) {
@@ -571,6 +571,20 @@ public abstract class PageLoader {
         int start = mPageMode == Enum.PageMode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
         for (int i = start; i < size; i++) {
             s.append(txtPage.lines.get(i));
+        }
+        return s.toString();
+    }
+
+    /**
+     * @return 本章未读内容
+     */
+    public String getUnReadContent() {
+        StringBuilder s = new StringBuilder();
+        s.append(getContent(mCurPagePos));
+        if (mCurChapter.getPageSize() > mCurPagePos + 1) {
+            for (int i = mCurPagePos + 1; i < mCurChapter.getPageSize(); i++) {
+                s.append(mCurChapter.getPage(i).getContent());
+            }
         }
         return s.toString();
     }
