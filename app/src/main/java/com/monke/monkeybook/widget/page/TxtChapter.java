@@ -25,6 +25,7 @@ class TxtChapter {
     void setTxtPageList(List<TxtPage> txtPageList) {
         this.txtPageList = txtPageList;
         txtPageLengthList.clear();
+        if (txtPageList == null) return;
         for (int i = 0; i < txtPageList.size(); i++) {
             if (i == 0) {
                 txtPageLengthList.add(txtPageList.get(i).getContent().length());
