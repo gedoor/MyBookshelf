@@ -3,17 +3,18 @@ package com.monke.monkeybook.help;
 import android.text.TextUtils;
 
 import com.luhuiguo.chinese.ChineseUtils;
-import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.model.ReplaceRuleManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChapterContentHelp {
     private static ChapterContentHelp instance;
     private List<ReplaceRuleBean> validReplaceRules;
-    private BookShelfBean book;
+    private String bookName;
+    private String bookTag;
     private long lastUpdateTime = 0;
 
     public static synchronized ChapterContentHelp getInstance() {
@@ -22,9 +23,10 @@ public class ChapterContentHelp {
         return instance;
     }
 
-    public void updateBookShelf(BookShelfBean bookShelf, long upTime) {
-        if (book == null || !book.equals(bookShelf) || lastUpdateTime != upTime) {
-            book = bookShelf;
+    public void updateBookShelf(String bookName, String bookTag, long upTime) {
+        if (!Objects.equals(this.bookName, bookName) || !Objects.equals(this.bookTag, bookTag) || lastUpdateTime != upTime) {
+            this.bookName = bookName;
+            this.bookTag = bookTag;
             lastUpdateTime = upTime;
             updateReplaceRules();
         }
@@ -37,7 +39,7 @@ public class ChapterContentHelp {
             validReplaceRules.clear();
         if (ReplaceRuleManager.getEnabled() == null) return;
         for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
-            if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(book, replaceRule.getUseTo())) {
+            if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(replaceRule.getUseTo())) {
                 validReplaceRules.add(replaceRule);
             }
         }
@@ -64,8 +66,8 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public synchronized String replaceContent(BookShelfBean mBook, String content) {
-        updateBookShelf(mBook, ReplaceRuleManager.getLastUpTime());
+    public synchronized String replaceContent(String bookName, String bookTag, String content) {
+        updateBookShelf(bookName, bookTag, ReplaceRuleManager.getLastUpTime());
         int convertCTS = ReadBookControl.getInstance().getTextConvert();
         if (validReplaceRules.size() == 0)
             return toTraditional(convertCTS, content);
@@ -101,9 +103,9 @@ public class ChapterContentHelp {
         return toTraditional(convertCTS, content);
     }
 
-    private boolean isUseTo(BookShelfBean mBook, String useTo) {
-        return useTo.contains(mBook.getTag())
-                || useTo.contains(mBook.getBookInfoBean().getName());
+    private boolean isUseTo(String useTo) {
+        return useTo.contains(bookTag)
+                || useTo.contains(bookName);
     }
 
 }
