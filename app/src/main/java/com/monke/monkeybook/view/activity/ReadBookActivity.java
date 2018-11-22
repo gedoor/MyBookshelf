@@ -1182,6 +1182,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     public void onMediaButton() {
         if (!ReadAloudService.running) {
             aloudStatus = ReadAloudService.STOP;
+            SystemUtil.ignoreBatteryOptimization(this);
         }
         switch (aloudStatus) {
             case PAUSE:
