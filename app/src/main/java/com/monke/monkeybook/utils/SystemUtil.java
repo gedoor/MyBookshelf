@@ -1,12 +1,10 @@
 package com.monke.monkeybook.utils;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 
@@ -25,11 +23,10 @@ public class SystemUtil {
         return screenOffTime;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     public static void ignoreBatteryOptimization(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) return;
 
         PowerManager powerManager = (PowerManager) activity.getSystemService(POWER_SERVICE);
-
         boolean hasIgnored = powerManager.isIgnoringBatteryOptimizations(activity.getPackageName());
         //  判断当前APP是否有加入电池优化的白名单，如果没有，弹出加入电池优化的白名单的设置对话框。
         if (!hasIgnored) {
@@ -40,7 +37,6 @@ public class SystemUtil {
                 activity.startActivity(intent);
             } catch (Throwable ignored) {
             }
-
         }
     }
 }
