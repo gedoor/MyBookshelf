@@ -179,8 +179,9 @@ public class PageLoaderEpub extends PageLoader {
                 chapterListBean.setDurChapterUrl(ref.getCompleteHref());
                 chapterList.add(chapterListBean);
             }
-            //继续遍历它的儿子
-            parseMenu(ref.getChildren(), level + 1);
+            if (ref.getChildren() != null && !ref.getChildren().isEmpty()) {
+                parseMenu(ref.getChildren(), level + 1);
+            }
         }
     }
 
