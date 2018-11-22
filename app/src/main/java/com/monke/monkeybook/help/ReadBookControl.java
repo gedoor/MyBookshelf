@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.utils.BitmapUtil;
 import com.monke.monkeybook.widget.page.Enum;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.monke.monkeybook.utils.ScreenUtils.getDisplayMetrics;
 import static com.monke.monkeybook.widget.page.PageLoader.DEFAULT_MARGIN_WIDTH;
 
 public class ReadBookControl {
@@ -180,7 +178,6 @@ public class ReadBookControl {
                 bgIsColor = false;
                 bgPath = getBgPath(textDrawableIndex);
                 bgBitmap = BitmapFactory.decodeFile(bgPath);
-                bgBitmap = BitmapUtil.fitBitmap(bgBitmap, getDisplayMetrics().widthPixels);
                 return;
             } else if (getBgCustom(textDrawableIndex) == 1) {
                 bgIsColor = true;
