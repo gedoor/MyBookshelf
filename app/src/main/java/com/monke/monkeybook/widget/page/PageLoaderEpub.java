@@ -85,7 +85,7 @@ public class PageLoaderEpub extends PageLoader {
             }
             height = Math.round(mVisibleWidth * 1.0f * height / width);
             cover = Bitmap.createScaledBitmap(rawCover, mVisibleWidth, height, true);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
