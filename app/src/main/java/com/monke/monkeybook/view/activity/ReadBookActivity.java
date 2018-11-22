@@ -649,7 +649,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getUnReadContent(),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(chapterIndex))
                                 );
                                 return;
                             }
@@ -658,7 +658,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                         false,
                                         mPageLoader.getUnReadContent(),
                                         mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(chapterIndex))
+                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(chapterIndex))
                                 );
                                 return;
                             }
@@ -1197,7 +1197,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 if (mPresenter.getBookShelf() != null && mPageLoader != null) {
                     ReadAloudService.play(this, true, mPageLoader.getUnReadContent(),
                             mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
+                            ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
                     );
                 }
         }

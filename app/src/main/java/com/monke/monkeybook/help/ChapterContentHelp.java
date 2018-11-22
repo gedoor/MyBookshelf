@@ -12,10 +12,10 @@ import java.util.Objects;
 
 public class ChapterContentHelp {
     private static ChapterContentHelp instance;
-    private List<ReplaceRuleBean> validReplaceRules;
-    private String bookName;
-    private String bookTag;
-    private long lastUpdateTime = 0;
+    private static List<ReplaceRuleBean> validReplaceRules;
+    private static String bookName;
+    private static String bookTag;
+    private static long lastUpdateTime = 0;
 
     public static synchronized ChapterContentHelp getInstance() {
         if (instance == null)
@@ -23,10 +23,10 @@ public class ChapterContentHelp {
         return instance;
     }
 
-    public void updateBookShelf(String bookName, String bookTag, long upTime) {
-        if (!Objects.equals(this.bookName, bookName) || !Objects.equals(this.bookTag, bookTag) || lastUpdateTime != upTime) {
-            this.bookName = bookName;
-            this.bookTag = bookTag;
+    private void updateBookShelf(String bookName, String bookTag, long upTime) {
+        if (!Objects.equals(ChapterContentHelp.bookName, bookName) || !Objects.equals(ChapterContentHelp.bookTag, bookTag) || lastUpdateTime != upTime) {
+            ChapterContentHelp.bookName = bookName;
+            ChapterContentHelp.bookTag = bookTag;
             lastUpdateTime = upTime;
             updateReplaceRules();
         }

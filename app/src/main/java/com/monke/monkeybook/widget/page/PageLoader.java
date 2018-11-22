@@ -23,7 +23,6 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
-import com.monke.monkeybook.model.ReplaceRuleManager;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
@@ -800,7 +799,7 @@ public abstract class PageLoader {
 
         if (!bookShelfBean.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? bookShelfBean.getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
-            title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean, title);
+            title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
             String page = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
                     : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
             String progress = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
@@ -1315,7 +1314,6 @@ public abstract class PageLoader {
      * 解析数据
      */
     void parseCurChapter() {
-        ChapterContentHelp.getInstance().updateBookShelf(bookShelfBean, ReplaceRuleManager.getLastUpTime());
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 PageList pageList = new PageList(this);
