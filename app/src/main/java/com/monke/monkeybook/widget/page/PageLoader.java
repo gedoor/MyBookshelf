@@ -580,6 +580,8 @@ public abstract class PageLoader {
      * @return 本章未读内容
      */
     public String getUnReadContent() {
+        if (mCurChapter == null) return null;
+        if (mCurChapter.getTxtPageList() == null) return null;
         StringBuilder s = new StringBuilder();
         s.append(getContent());
         if (mCurChapter.getPageSize() > mCurPagePos + 1) {

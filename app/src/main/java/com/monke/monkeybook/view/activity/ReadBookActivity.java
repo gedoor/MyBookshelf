@@ -652,11 +652,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                                 () -> llMenuBottom.getReadProgress().setDurProgress(pageIndex)
                         );
                         if ((ReadAloudService.running)) {
-                            if (resetReadAloud && mPageLoader.getUnReadContent() != null) {
+                            if (resetReadAloud && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
                                 readAloud();
                                 return;
                             }
-                            if (pageIndex == 0 && mPageLoader.getUnReadContent() != null) {
+                            if (pageIndex == 0 && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {
                                 readAloud();
                                 return;
                             }
