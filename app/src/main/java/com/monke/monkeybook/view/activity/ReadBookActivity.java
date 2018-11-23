@@ -595,6 +595,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void onChapterChange(int pos) {
+                        mPresenter.getBookShelf().upDurChapterName();
+                        mPresenter.getBookShelf().upLastChapterName();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
                             atvUrl.setText(mPresenter.getBookShelf().getChapterList(pos).getDurChapterUrl());
@@ -623,6 +625,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     public void onCategoryFinish(List<ChapterListBean> chapters) {
                         mPresenter.getBookShelf().getBookInfoBean().setChapterList(chapters);
                         mPresenter.getBookShelf().setChapterListSize(chapters.size());
+                        mPresenter.getBookShelf().upDurChapterName();
                         mPresenter.getBookShelf().upLastChapterName();
                         mPresenter.saveProgress();
                     }
@@ -650,21 +653,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         );
                         if ((ReadAloudService.running)) {
                             if (resetReadAloud && mPageLoader.getUnReadContent() != null) {
-                                ReadAloudService.play(ReadBookActivity.this,
-                                        false,
-                                        mPageLoader.getUnReadContent(),
-                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(chapterIndex))
-                                );
+                                readAloud();
                                 return;
                             }
                             if (pageIndex == 0 && mPageLoader.getUnReadContent() != null) {
-                                ReadAloudService.play(ReadBookActivity.this,
-                                        false,
-                                        mPageLoader.getUnReadContent(),
-                                        mPresenter.getBookShelf().getBookInfoBean().getName(),
-                                        ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(chapterIndex))
-                                );
+                                readAloud();
                                 return;
                             }
                         }
@@ -797,7 +790,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 bookmarkBean.setBookName(mPresenter.getBookShelf().getBookInfoBean().getName());
                 bookmarkBean.setChapterIndex(mPresenter.getBookShelf().getDurChapter());
                 bookmarkBean.setPageIndex(mPresenter.getBookShelf().getDurChapterPage());
-                bookmarkBean.setChapterName(mPresenter.getChapterTitle(mPresenter.getBookShelf().getDurChapter()));
+                bookmarkBean.setChapterName(mPresenter.getBookShelf().getDurChapterName());
             }
             moDialogHUD.showBookmark(bookmarkBean, isAdd, new EditBookmarkView.OnBookmarkClick() {
                 @Override
@@ -960,6 +953,45 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    private void readAloud() {
+        if (mPresenter.getBookShelf() != null && mPageLoader != null) {
+            ReadAloudService.play(ReadBookActivity.this,
+                    false,
+                    mPageLoader.getUnReadContent(),
+                    mPresenter.getBookShelf().getBookInfoBean().getName(),
+                    ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getBookShelf().getDurChapterName()));
+        }
+    }
+
+    /**
+     * 检查是否加入书架
+     */
+    public boolean checkAddShelf() {
+        if (isAdd || mPresenter.getBookShelf() == null || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
+            return true;
+        } else {
+            if (checkAddShelfPop == null) {
+                checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
+                        new CheckAddShelfPop.OnItemClickListener() {
+                            @Override
+                            public void clickExit() {
+                                mPresenter.removeFromShelf();
+                            }
+
+                            @Override
+                            public void clickAddShelf() {
+                                mPresenter.addToShelf(null);
+                                checkAddShelfPop.dismiss();
+                            }
+                        });
+            }
+            if (!checkAddShelfPop.isShowing()) {
+                checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
+            }
+            return false;
+        }
+    }
+
     /**
      * 更新朗读状态
      */
@@ -1019,35 +1051,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             }
             readInterfacePop.setBg();
             initImmersionBar();
-        }
-    }
-
-    /**
-     * 检查是否加入书架
-     */
-    public boolean checkAddShelf() {
-        if (isAdd || mPresenter.getBookShelf() == null || TextUtils.isEmpty(mPresenter.getBookShelf().getBookInfoBean().getName())) {
-            return true;
-        } else {
-            if (checkAddShelfPop == null) {
-                checkAddShelfPop = new CheckAddShelfPop(this, mPresenter.getBookShelf().getBookInfoBean().getName(),
-                        new CheckAddShelfPop.OnItemClickListener() {
-                            @Override
-                            public void clickExit() {
-                                mPresenter.removeFromShelf();
-                            }
-
-                            @Override
-                            public void clickAddShelf() {
-                                mPresenter.addToShelf(null);
-                                checkAddShelfPop.dismiss();
-                            }
-                        });
-            }
-            if (!checkAddShelfPop.isShowing()) {
-                checkAddShelfPop.showAtLocation(flContent, Gravity.CENTER, 0, 0);
-            }
-            return false;
         }
     }
 
@@ -1200,12 +1203,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 break;
             default:
                 ReadBookActivity.this.popMenuOut();
-                if (mPresenter.getBookShelf() != null && mPageLoader != null) {
-                    ReadAloudService.play(this, true, mPageLoader.getUnReadContent(),
-                            mPresenter.getBookShelf().getBookInfoBean().getName(),
-                            ChapterContentHelp.getInstance().replaceContent(mPresenter.getBookShelf().getBookInfoBean().getName(), mPresenter.getBookShelf().getTag(), mPresenter.getChapterTitle(mPageLoader.getCurChapterPos()))
-                    );
-                }
+                readAloud();
         }
     }
 

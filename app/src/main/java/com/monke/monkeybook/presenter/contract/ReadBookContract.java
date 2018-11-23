@@ -54,8 +54,6 @@ public interface ReadBookContract {
 
         void saveProgress();
 
-        String getChapterTitle(int chapterIndex);
-
         void addToShelf(final ReadBookPresenter.OnAddListener Listener);
 
         void removeFromShelf();

@@ -150,8 +150,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         if (bookShelf != null) {
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
-                bookShelf.upDurChapterName();
-                bookShelf.upLastChapterName();
                 BookshelfHelp.saveBookToShelf(bookShelf);
                 e.onNext(bookShelf);
                 e.onComplete();
@@ -168,14 +166,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         }
                     });
         }
-    }
-
-    @Override
-    public String getChapterTitle(int chapterIndex) {
-        if (bookShelf.getChapterListSize() == 0) {
-            return mView.getContext().getString(R.string.no_chapter);
-        } else
-            return bookShelf.getChapterList(chapterIndex).getDurChapterName();
     }
 
     /**
