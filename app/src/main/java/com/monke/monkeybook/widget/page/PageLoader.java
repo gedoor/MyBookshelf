@@ -13,7 +13,6 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.monke.monkeybook.R;
@@ -599,8 +598,7 @@ public abstract class PageLoader {
 
     public void readAloudStart(int start) {
         start = readTextLength + start;
-        Log.d(TAG, Integer.toString(start) + "---" + mCurChapter.getPageLength(mCurPagePos) + "----" + mCurPagePos);
-        if (start > mCurChapter.getPageLength(mCurPagePos)) {
+        if (mCurChapter.getPageLength(mCurPagePos) > 0 && start > mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
             noAnimationToNextPage();
         }
