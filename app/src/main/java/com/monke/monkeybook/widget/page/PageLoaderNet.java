@@ -159,16 +159,14 @@ public class PageLoaderNet extends PageLoader {
      * 章节下载完成
      */
     private void finishContent(int chapterIndex) {
-        if (chapterIndex == mCurChapterPos || mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
-            openChapter(mCurPagePos);
+        if (chapterIndex == mCurChapterPos) {
+            super.parseCurChapter();
         }
         if (chapterIndex == mCurChapterPos - 1) {
-            parsePrevChapter();
-            mPageView.drawPage(-1);
+            super.parsePrevChapter();
         }
         if (chapterIndex == mCurChapterPos + 1) {
-            parseNextChapter();
-            mPageView.drawPage(1);
+            super.parseNextChapter();
         }
     }
 
