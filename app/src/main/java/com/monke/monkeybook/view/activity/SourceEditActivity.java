@@ -1,6 +1,7 @@
 package com.monke.monkeybook.view.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,6 +46,7 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class SourceEditActivity extends MBaseActivity<SourceEditContract.Presenter> implements SourceEditContract.View {
+    public final static int EDIT_SOURCE = 1101;
     private final int REQUEST_QR_IMAGE = 202;
 
     @BindView(R.id.toolbar)
@@ -156,6 +158,19 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private int serialNumber;
     private boolean enable;
     private String title;
+
+    public static void startThis(Activity activity, BookSourceBean sourceBean) {
+        Intent intent = new Intent(activity, SourceEditActivity.class);
+        String key = String.valueOf(System.currentTimeMillis());
+        intent.putExtra("data_key", key);
+        try {
+            BitIntentDataManager.getInstance().putData(key, sourceBean.clone());
+        } catch (CloneNotSupportedException e) {
+            BitIntentDataManager.getInstance().putData(key, sourceBean);
+            e.printStackTrace();
+        }
+        activity.startActivityForResult(intent, EDIT_SOURCE);
+    }
 
     @Override
     protected SourceEditContract.Presenter initInjector() {

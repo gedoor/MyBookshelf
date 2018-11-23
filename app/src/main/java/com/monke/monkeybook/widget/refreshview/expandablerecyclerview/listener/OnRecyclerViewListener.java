@@ -23,7 +23,7 @@ public interface OnRecyclerViewListener {
     }
 
     /**
-     * 双击事件
+     * 长按事件
      */
     interface OnItemLongClickListener {
         void onGroupItemLongClick(int position, int groupPosition, View view);

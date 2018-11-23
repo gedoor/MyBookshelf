@@ -1,6 +1,5 @@
 package com.monke.monkeybook.view.adapter;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.monke.monkeybook.BitIntentDataManager;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.DbHelper;
@@ -119,18 +117,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             activity.saveDate(dataList.get(position));
             activity.upDateSelectAll();
         });
-        holder.editView.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, SourceEditActivity.class);
-            String key = String.valueOf(System.currentTimeMillis());
-            intent.putExtra("data_key", key);
-            try {
-                BitIntentDataManager.getInstance().putData(key, dataList.get(position).clone());
-            } catch (CloneNotSupportedException e) {
-                BitIntentDataManager.getInstance().putData(key, dataList.get(position));
-                e.printStackTrace();
-            }
-            activity.startActivityForResult(intent, BookSourceActivity.EDIT_SOURCE);
-        });
+        holder.editView.setOnClickListener(view -> SourceEditActivity.startThis(activity, dataList.get(position)));
         holder.delView.setOnClickListener(view -> {
             activity.delBookSource(dataList.get(position));
             dataList.remove(position);

@@ -45,13 +45,14 @@ import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.monke.monkeybook.view.activity.SourceEditActivity.EDIT_SOURCE;
+
 /**
  * Created by GKF on 2017/12/16.
  * 书源管理
  */
 
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
-    public static final int EDIT_SOURCE = 101;
     private final int IMPORT_SOURCE = 102;
 
     @BindView(R.id.toolbar)

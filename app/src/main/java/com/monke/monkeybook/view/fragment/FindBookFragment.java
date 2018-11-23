@@ -11,10 +11,13 @@ import android.widget.TextView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseFragment;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.FindKindBean;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.FindBookPresenter;
 import com.monke.monkeybook.presenter.contract.FindBookContract;
 import com.monke.monkeybook.view.activity.ChoiceBookActivity;
+import com.monke.monkeybook.view.activity.SourceEditActivity;
 import com.monke.monkeybook.view.adapter.FindKindAdapter;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 import com.monke.monkeybook.widget.refreshview.expandablerecyclerview.listener.OnRecyclerViewListener;
@@ -26,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener {
+public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener, OnRecyclerViewListener.OnItemLongClickListener {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.expandable_list)
@@ -102,6 +105,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         expandableList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new FindKindAdapter(getActivity(), new ArrayList<>());
         adapter.setOnItemClickListener(this);
+        adapter.setOnItemLongClickListener(this);
         expandableList.setAdapter(adapter);
         adapter.setCanExpandAll(false);
     }
@@ -129,5 +133,18 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         intent.putExtra("title", kindBean.getKindName());
         intent.putExtra("tag", kindBean.getTag());
         startActivityByAnim(intent, view, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void onGroupItemLongClick(int position, int groupPosition, View view) {
+        if (getActivity() == null) return;
+        FindKindBean kindBean = (FindKindBean) adapter.getAllDatas().get(groupPosition).getChild(0);
+        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(kindBean.getTag());
+        SourceEditActivity.startThis(getActivity(), sourceBean);
+    }
+
+    @Override
+    public void onChildItemLongClick(int position, int groupPosition, int childPosition, View view) {
+
     }
 }
