@@ -33,7 +33,8 @@ public class AnalyzeSearchUrl {
             analyzeQt(ruleUrlS[1]);
         }
         //设置页数
-        ruleUrlS[0] = setPage(ruleUrlS[0]);
+        setPage(ruleUrlS);
+
         //分离post参数
         ruleUrlS = ruleUrlS[0].split("@");
         if (ruleUrlS.length == 1) {
@@ -44,27 +45,29 @@ public class AnalyzeSearchUrl {
             String url = ruleUrlS[0].replace("searchPage-1", String.valueOf(page - 1))
                     .replace("searchPage", String.valueOf(page));
             generateUrlPath(url);
-            return;
+        } else {
+            generateUrlPath(ruleUrlS[0]);
+            queryMap = getQueryMap(ruleUrlS[1]);
         }
-        generateUrlPath(ruleUrlS[0]);
-        queryMap = getQueryMap(ruleUrlS[1]);
     }
 
     /**
      * 解析页数
      */
-    private String setPage(String urlStr) {
+    private void setPage(String[] ruleUrlS) {
         Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
-        Matcher matcher = pattern.matcher(urlStr);
+        Matcher matcher = pattern.matcher(ruleUrlS[0]);
         if (matcher.find()) {
             String[] pages = matcher.group(0).split(",");
             if (searchPage <= pages.length) {
-                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
+                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
             } else {
-                urlStr = urlStr.replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
+                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
             }
+            ruleUrlS[0] = ruleUrlS[0].replace("searchPage-1", String.valueOf(searchPage - 1))
+                    .replace("searchPage+1", String.valueOf(searchPage + 1))
+                    .replace("searchPage", String.valueOf(searchPage));
         }
-        return urlStr;
     }
 
     /**
