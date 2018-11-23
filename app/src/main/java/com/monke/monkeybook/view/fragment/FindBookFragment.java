@@ -140,7 +140,9 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         if (getActivity() == null) return;
         FindKindBean kindBean = (FindKindBean) adapter.getAllDatas().get(groupPosition).getChild(0);
         BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(kindBean.getTag());
-        SourceEditActivity.startThis(getActivity(), sourceBean);
+        if (sourceBean != null) {
+            SourceEditActivity.startThis(getActivity(), sourceBean);
+        }
     }
 
     @Override
