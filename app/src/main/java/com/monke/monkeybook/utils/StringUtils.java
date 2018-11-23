@@ -218,7 +218,7 @@ public class StringUtils {
     public static String escape(String src) {
         int i;
         char j;
-        StringBuffer tmp = new StringBuffer();
+        StringBuilder tmp = new StringBuilder();
         tmp.ensureCapacity(src.length() * 6);
         for (i = 0; i < src.length(); i++) {
             j = src.charAt(i);
