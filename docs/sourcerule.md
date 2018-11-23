@@ -28,7 +28,7 @@
 - ?为get @为post
 - searchKey为关键字标识,运行时会替换为搜索关键字,
 - searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,
-- page规则还可以写成{index,index2,index3}
+- page规则还可以写成{index（第一页）, indexSecond（第二页）, indexThird（第三页）, index-searchPage+1 或 index-searchPage-1 或 index-searchPage}
 - 要添加转码编码在最后加 |char=gbk
 - |char=escape 会模拟js escape方法进行编码
 
