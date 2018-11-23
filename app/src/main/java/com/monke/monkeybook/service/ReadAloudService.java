@@ -168,7 +168,7 @@ public class ReadAloudService extends Service {
             if (action != null) {
                 switch (action) {
                     case ActionDoneService:
-                        doneService();
+                        stopSelf();
                         break;
                     case ActionPauseService:
                         pauseReadAloud(true);
@@ -263,15 +263,6 @@ public class ReadAloudService extends Service {
     }
 
     /**
-     * 关闭服务
-     */
-    private void doneService() {
-        handler.removeCallbacks(dsRunnable);
-        RxBus.get().post(RxBusTag.ALOUD_STATE, STOP);
-        stopSelf();
-    }
-
-    /**
      * @param pause true 暂停, false 失去焦点
      */
     private void pauseReadAloud(Boolean pause) {
@@ -308,7 +299,7 @@ public class ReadAloudService extends Service {
         } else if (timeMinute <= 0) {
             if (timerEnable) {
                 handler.removeCallbacks(dsRunnable);
-                doneService();
+                stopSelf();
             }
         } else {
             timerEnable = true;
@@ -385,11 +376,15 @@ public class ReadAloudService extends Service {
 
     @Override
     public void onDestroy() {
-        running = false;
-        clearTTS();
+        super.onDestroy();
+        stopForeground(true);
+        handler.removeCallbacks(dsRunnable);
+        RxBus.get().post(RxBusTag.ALOUD_STATE, STOP);
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
-        super.onDestroy();
+        clearTTS();
+
+        running = false;
     }
 
     private void clearTTS() {
@@ -496,7 +491,7 @@ public class ReadAloudService extends Service {
                 }
             } else {
                 mainHandler.post(() -> Toast.makeText(ReadAloudService.this, getString(R.string.tts_init_failed), Toast.LENGTH_SHORT).show());
-                doneService();
+                ReadAloudService.this.stopSelf();
             }
         }
     }

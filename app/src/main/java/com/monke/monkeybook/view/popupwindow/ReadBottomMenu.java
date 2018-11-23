@@ -51,6 +51,8 @@ public class ReadBottomMenu extends FrameLayout {
     LinearLayout llSetting;
     @BindView(R.id.llNavigationBar)
     LinearLayout llNavigationBar;
+    @BindView(R.id.ll_floating_button)
+    LinearLayout llFloatingButton;
 
     private OnMenuListener menuListener;
 
@@ -83,6 +85,12 @@ public class ReadBottomMenu extends FrameLayout {
     }
 
     private void bindEvent() {
+        llReadAloudTimer.setOnClickListener(view -> {
+            menuListener.dismiss();
+        });
+        llFloatingButton.setOnClickListener(view -> {
+            menuListener.dismiss();
+        });
         //阅读进度
         hpbReadProgress.setProgressListener(new OnProgressListener() {
             @Override
@@ -175,7 +183,7 @@ public class ReadBottomMenu extends FrameLayout {
         if (visibility) {
             llReadAloudTimer.setVisibility(VISIBLE);
         } else {
-            llReadAloudTimer.setVisibility(INVISIBLE);
+            llReadAloudTimer.setVisibility(GONE);
         }
     }
 
@@ -245,6 +253,8 @@ public class ReadBottomMenu extends FrameLayout {
         void openMoreSetting();
 
         void toast(int id);
+
+        void dismiss();
     }
 
 }

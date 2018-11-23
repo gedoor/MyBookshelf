@@ -459,6 +459,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             public void toast(int id) {
                 ReadBookActivity.this.toast(id);
             }
+
+            @Override
+            public void dismiss() {
+                popMenuOut();
+            }
         });
     }
 
