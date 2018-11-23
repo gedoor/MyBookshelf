@@ -343,7 +343,6 @@ public class ReadBookControl {
             if (!TextUtils.isEmpty(bgPath)) {
                 bgBitmap = BitmapFactory.decodeFile(bgPath);
             }
-            return null;
         }
         return bgBitmap.copy(Bitmap.Config.RGB_565, true);
     }
