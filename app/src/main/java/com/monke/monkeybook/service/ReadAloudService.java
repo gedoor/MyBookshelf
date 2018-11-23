@@ -411,7 +411,7 @@ public class ReadAloudService extends Service {
      * @return 音频焦点
      */
     private boolean requestFocus() {
-        mediaManager.playSilentSound(this);
+        MediaManager.playSilentSound(this);
         int request;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             request = audioManager.requestAudioFocus(mFocusRequest);

@@ -92,7 +92,7 @@ public class MediaManager {
         cancelFading = false;
     }
 
-    public void playSilentSound(Context mContext) {
+    public static void playSilentSound(Context mContext) {
         // Stupid Android 8 "Oreo" hack to make media buttons work
         final MediaPlayer mMediaPlayer = MediaPlayer.create(mContext, R.raw.silent_sound);
         mMediaPlayer.setOnCompletionListener(mediaPlayer -> mMediaPlayer.release());
