@@ -14,6 +14,7 @@ import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -198,6 +199,18 @@ public class ReadAloudService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new MyBinder();
+    }
+
+    public class MyBinder extends Binder {
+        public ReadAloudService getService() {
+            return ReadAloudService.this;
+        }
+    }
+
     private void newReadAloud(String content, Boolean aloudButton, String title, String text) {
         if (content == null) {
             stopSelf();
@@ -369,12 +382,6 @@ public class ReadAloudService extends Service {
         builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         Notification notification = builder.build();
         startForeground(notificationId, notification);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
     @Override
