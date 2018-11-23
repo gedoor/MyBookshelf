@@ -340,9 +340,7 @@ public class ReadBookControl {
 
     public Bitmap getBgBitmap() {
         if (bgBitmap == null || bgBitmap.isRecycled()) {
-            if (!TextUtils.isEmpty(bgPath)) {
-                bgBitmap = BitmapFactory.decodeFile(bgPath);
-            }
+            initPageStyle();
         }
         return bgBitmap.copy(Bitmap.Config.RGB_565, true);
     }
