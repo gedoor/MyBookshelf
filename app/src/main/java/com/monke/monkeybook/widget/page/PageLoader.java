@@ -563,9 +563,8 @@ public abstract class PageLoader {
      * @return 本页未读内容
      */
     public String getContent() {
-        if (mCurChapter == null || mCurChapter.getStatus() != Enum.PageStatus.FINISH || mCurChapter.getPageSize() <= mCurPagePos) {
-            return null;
-        }
+        if (mCurChapter == null) return null;
+        if (mCurChapter.getTxtPageList() == null) return null;
         TxtPage txtPage = mCurChapter.getPage(mCurPagePos);
         StringBuilder s = new StringBuilder();
         int size = txtPage.lines.size();
