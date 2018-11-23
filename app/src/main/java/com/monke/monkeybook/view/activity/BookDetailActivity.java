@@ -30,9 +30,11 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
+import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BlurTransformation;
 import com.monke.monkeybook.help.RxBusTag;
+import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.presenter.BookDetailPresenter;
 import com.monke.monkeybook.presenter.ReadBookPresenter;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
@@ -322,6 +324,9 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                     popupMenu.getMenu().add(R.string.allow_update);
                 }
             }
+            if (!mPresenter.getBookShelf().getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                popupMenu.getMenu().add(R.string.edit_book_source);
+            }
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 if (menuItem.getTitle().toString().equals(getString(R.string.refresh))) {
                     refresh();
@@ -331,6 +336,11 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
                 } else if (menuItem.getTitle().toString().equals(getString(R.string.disable_update))) {
                     mPresenter.getBookShelf().setAllowUpdate(false);
                     mPresenter.addToBookShelf();
+                } else if (menuItem.getTitle().toString().equals(getString(R.string.edit_book_source))) {
+                    BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(mPresenter.getBookShelf().getTag());
+                    if (sourceBean != null) {
+                        SourceEditActivity.startThis(this, sourceBean);
+                    }
                 }
                 return true;
             });
