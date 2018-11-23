@@ -89,6 +89,14 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         }
     };
 
+    private final View.OnClickListener hideSettingItemClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String text = "set:" + view.getTag();
+            searchView.setQuery(text, false);
+        }
+    };
+
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
         intent.putExtra("searchKey", searchKey);
@@ -259,8 +267,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (!newText.toLowerCase().startsWith("set:")) {
+                if (!newText.toLowerCase().startsWith("set")) {
                     mPresenter.querySearchHistory(newText);
+                } else {
+                    showHideSetting();
                 }
                 return false;
             }
@@ -331,6 +341,20 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             mPresenter.querySearchHistory("");
         }
         openOrCloseHistory(showHistory);
+    }
+
+    private void showHideSetting() {
+        tflSearchHistory.removeAllViews();
+        TextView tagView;
+        String hideSettings[] = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
+
+        for (String text : hideSettings) {
+            tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, tflSearchHistory, false);
+            tagView.setTag(text);
+            tagView.setText(text);
+            tagView.setOnClickListener(hideSettingItemClick);
+            tflSearchHistory.addView(tagView);
+        }
     }
 
     private void parseSecretCode(String code) {
