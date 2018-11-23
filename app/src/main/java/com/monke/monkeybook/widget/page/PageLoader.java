@@ -598,7 +598,8 @@ public abstract class PageLoader {
 
     public void readAloudStart(int start) {
         start = readTextLength + start;
-        if (mCurChapter.getPageLength(mCurPagePos) > 0 && start > mCurChapter.getPageLength(mCurPagePos)) {
+        if (mCurChapter == null || mCurChapter.getPageLength(mCurPagePos) < 0) return;
+        if (start > mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
             noAnimationToNextPage();
         }
