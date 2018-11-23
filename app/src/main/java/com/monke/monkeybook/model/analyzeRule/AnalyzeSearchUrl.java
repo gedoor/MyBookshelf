@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model.analyzeRule;
 
+import com.monke.monkeybook.utils.StringUtils;
+
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -93,6 +95,8 @@ public class AnalyzeSearchUrl {
                 default:
                     if (isEmpty(charCode)) {
                         map.put(queryM[0], queryM[1]);
+                    } else if (charCode.equals("escape")) {
+                        map.put(queryM[0], StringUtils.escape(queryM[1]));
                     } else {
                         map.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
                     }

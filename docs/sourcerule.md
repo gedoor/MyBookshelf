@@ -30,6 +30,7 @@
 - searchPage,searchPage-1为搜索页数,从0开始的用searchPage-1,
 - page规则还可以写成{index,index2,index3}
 - 要添加转码编码在最后加 |char=gbk
+- |char=escape 会模拟js escape方法进行编码
 
 #### ruleFindUrl 发现规则
 - 发现规则分为两段,名称和url用::分开,如
