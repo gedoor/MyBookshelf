@@ -118,7 +118,7 @@ public class ReadBottomMenu extends FrameLayout {
         });
 
         //朗读定时
-        fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(getContext()));
+        fabReadAloudTimer.setOnClickListener(view -> ReadAloudService.setTimer(getContext(), 10));
 
         //朗读
         fabReadAloud.setOnClickListener(view -> menuListener.onMediaButton());

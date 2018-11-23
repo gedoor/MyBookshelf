@@ -109,7 +109,6 @@ public class ReadAloudService extends Service {
      */
     public static void stop(Context context) {
         if (running) {
-            running = false;
             Intent intent = new Intent(context, ReadAloudService.class);
             intent.setAction(ActionDoneService);
             context.startService(intent);
@@ -120,29 +119,37 @@ public class ReadAloudService extends Service {
      * @param context 暂停
      */
     public static void pause(Context context) {
-        Intent intent = new Intent(context, ReadAloudService.class);
-        intent.setAction(ActionPauseService);
-        context.startService(intent);
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionPauseService);
+            context.startService(intent);
+        }
     }
 
     /**
      * @param context 继续
      */
     public static void resume(Context context) {
-        Intent intent = new Intent(context, ReadAloudService.class);
-        intent.setAction(ActionResumeService);
-        context.startService(intent);
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionResumeService);
+            context.startService(intent);
+        }
     }
 
-    public static void setTimer(Context context) {
-        Intent intent = new Intent(context, ReadAloudService.class);
-        intent.setAction(ActionSetTimer);
-        context.startService(intent);
+    public static void setTimer(Context context, int minute) {
+        if (running) {
+            Intent intent = new Intent(context, ReadAloudService.class);
+            intent.setAction(ActionSetTimer);
+            intent.putExtra("minute", minute);
+            context.startService(intent);
+        }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        running = true;
         preference = MApplication.getInstance().getConfigPreferences();
         textToSpeech = new TextToSpeech(this, new TTSListener());
         audioFocusChangeListener = new AudioFocusChangeListener();
@@ -207,7 +214,6 @@ public class ReadAloudService extends Service {
                 contentList.add(aSplitSpeech);
             }
         }
-        running = true;
         if (aloudButton || speak) {
             speak = false;
             pause = false;
@@ -311,10 +317,7 @@ public class ReadAloudService extends Service {
 
     private void doDs() {
         if (!pause) {
-            Intent setTimerIntent = new Intent(getApplicationContext(), ReadAloudService.class);
-            setTimerIntent.setAction(ActionSetTimer);
-            setTimerIntent.putExtra("minute", -1);
-            startService(setTimerIntent);
+            setTimer(this, -1);
         }
     }
 
@@ -376,6 +379,7 @@ public class ReadAloudService extends Service {
 
     @Override
     public void onDestroy() {
+        running = false;
         super.onDestroy();
         stopForeground(true);
         handler.removeCallbacks(dsRunnable);
@@ -383,8 +387,6 @@ public class ReadAloudService extends Service {
         unRegisterMediaButton();
         unregisterReceiver(broadcastReceiver);
         clearTTS();
-
-        running = false;
     }
 
     private void clearTTS() {
