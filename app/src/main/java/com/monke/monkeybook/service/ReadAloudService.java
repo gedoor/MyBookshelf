@@ -389,7 +389,9 @@ public class ReadAloudService extends Service {
 
     private void clearTTS() {
         if (textToSpeech != null) {
-            AsyncTask.execute(() -> mediaManager.fadeOutVolume());
+            if (fadeTts) {
+                AsyncTask.execute(() -> mediaManager.fadeOutVolume());
+            }
             textToSpeech.stop();
             textToSpeech.shutdown();
             textToSpeech = null;
