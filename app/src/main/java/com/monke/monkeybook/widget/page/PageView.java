@@ -279,7 +279,6 @@ public class PageView extends View {
             }
         }
         super.computeScroll();
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
