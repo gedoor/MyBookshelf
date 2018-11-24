@@ -338,10 +338,11 @@ public class ReadBookControl {
         return bgPath;
     }
 
+    public boolean bgBitmapIsNull() {
+        return bgBitmap == null || bgBitmap.isRecycled();
+    }
+
     public Bitmap getBgBitmap() {
-        if (bgBitmap == null || bgBitmap.isRecycled()) {
-            initPageStyle();
-        }
         return bgBitmap.copy(Bitmap.Config.RGB_565, true);
     }
 

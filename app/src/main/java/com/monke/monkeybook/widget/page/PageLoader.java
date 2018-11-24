@@ -781,11 +781,11 @@ public abstract class PageLoader {
         Canvas canvas = new Canvas(bitmap);
         if (mPageMode == Enum.PageMode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
-        } else if (readBookControl.bgIsColor()) {
-            canvas.drawColor(readBookControl.getBgColor());
-        } else {
+        } else if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
             canvas.drawBitmap(readBookControl.getBgBitmap(), null, mDestRect, null);
+        } else {
+            canvas.drawColor(readBookControl.getBgColor());
         }
         drawBackground(canvas, txtChapter, txtPage);
     }
