@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.text.TextUtils.indexOf;
 import static android.text.TextUtils.isEmpty;
 
 /**
@@ -105,8 +106,9 @@ public class AnalyzeElement {
                     String[] rulePcs = rulePc[1].split(":");
                     if (rulePcs.length < elements.size() - 1) {
                         for (String pc : rulePcs) {
-                            if (pc.equals("%")) {
-                                elements.set(elements.size() - 1, null);
+                            int pcInt = Integer.parseInt(pc);
+                            if (pcInt < 0 && elements.size() + pcInt >= 0) {
+                                elements.set(elements.size() + pcInt, null);
                             } else if (Integer.parseInt(pc) < elements.size()) {
                                 elements.set(Integer.parseInt(pc), null);
                             }
