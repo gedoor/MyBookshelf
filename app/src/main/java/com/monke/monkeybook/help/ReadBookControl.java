@@ -35,7 +35,6 @@ public class ReadBookControl {
     private float lineMultiplier;
     private float paragraphSize;
     private int pageMode;
-    private String bgPath;
     private Bitmap bgBitmap;
 
     private int textDrawableIndex = DEFAULT_BG;
@@ -171,12 +170,13 @@ public class ReadBookControl {
         setTextDrawable();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void initPageStyle() {
         try {
             bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
             if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
                 bgIsColor = false;
-                bgPath = getBgPath(textDrawableIndex);
+                String bgPath = getBgPath(textDrawableIndex);
                 bgBitmap = BitmapFactory.decodeFile(bgPath);
                 return;
             } else if (getBgCustom(textDrawableIndex) == 1) {
@@ -213,6 +213,7 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public Drawable getBgDrawable(int textDrawableIndex, Context context) {
         int color;
         try {
@@ -243,6 +244,7 @@ public class ReadBookControl {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public Drawable getDefaultBgDrawable(int textDrawableIndex, Context context) {
         if (textDrawable.get(textDrawableIndex).get("bgIsColor") != 0) {
             return new ColorDrawable(textDrawable.get(textDrawableIndex).get("textBackground"));
@@ -271,10 +273,12 @@ public class ReadBookControl {
         editor.apply();
     }
 
+    @SuppressWarnings("ConstantConditions")
     public int getDefaultTextColor(int textDrawableIndex) {
         return textDrawable.get(textDrawableIndex).get("textColor");
     }
 
+    @SuppressWarnings("ConstantConditions")
     private int getDefaultBg(int textDrawableIndex) {
         return textDrawable.get(textDrawableIndex).get("textBackground");
     }
@@ -289,7 +293,7 @@ public class ReadBookControl {
         editor.apply();
     }
 
-    public boolean getIsNightTheme() {
+    private boolean getIsNightTheme() {
         return readPreference.getBoolean("nightTheme", false);
     }
 
@@ -326,16 +330,8 @@ public class ReadBookControl {
         return textBackground;
     }
 
-    public int getDefaultBgColor() {
-        return getDefaultBg(textDrawableIndex);
-    }
-
     public int getBgColor() {
         return bgColor;
-    }
-
-    public String getBgPath() {
-        return bgPath;
     }
 
     public boolean bgBitmapIsNull() {
@@ -405,10 +401,6 @@ public class ReadBookControl {
 
     public Boolean getTextBold() {
         return textBold;
-    }
-
-    public List<Map<String, Integer>> getTextDrawable() {
-        return textDrawable;
     }
 
     public Boolean getCanKeyTurn(Boolean isPlay) {
@@ -579,6 +571,7 @@ public class ReadBookControl {
         return darkStatusIcon;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public boolean getDarkStatusIcon(int textDrawableIndex) {
         return readPreference.getBoolean("darkStatusIcon" + textDrawableIndex, textDrawable.get(textDrawableIndex).get("darkStatusIcon") != 0);
     }
