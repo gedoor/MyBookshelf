@@ -38,20 +38,41 @@ public class AnalyzeElement {
         if (temp == null || isEmpty(rule)) {
             return elements;
         }
-        boolean isAnd;
+        String elementsType;
         String[] ruleStrS;
         if (rule.contains("&")) {
-            isAnd = true;
+            elementsType = "&";
             ruleStrS = rule.split("&");
+        } else if (rule.contains("%")) {
+            elementsType = "%";
+            ruleStrS = rule.split("%");
         } else {
-            isAnd = false;
+            elementsType = "|";
             ruleStrS = rule.split("\\|");
         }
+        List<Elements> elementsList = new ArrayList<>();
         for (String ruleStr : ruleStrS) {
             Elements tempS = getElementsSingle(temp, ruleStr);
-            elements.addAll(tempS);
-            if (elements.size() > 0 && !isAnd) {
+            elementsList.add(tempS);
+            if (elements.size() > 0 && elementsType.equals("|")) {
                 break;
+            }
+        }
+        if (elementsList.size() > 0) {
+            switch (elementsType) {
+                case "%":
+                    for (int i = 0; i < elementsList.get(0).size(); i++) {
+                        for (Elements es : elementsList) {
+                            if (i < es.size()) {
+                                elements.add(es.get(i));
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    for (Elements es : elementsList) {
+                        elements.addAll(es);
+                    }
             }
         }
         return elements;
