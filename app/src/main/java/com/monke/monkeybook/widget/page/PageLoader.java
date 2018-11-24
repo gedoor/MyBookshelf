@@ -598,8 +598,11 @@ public abstract class PageLoader {
     }
 
     public void readAloudStart(int start) {
+        mPageView.invalidate();
+        if (mCurChapter == null) return;
+        if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
+        if (mPageView.isRunning()) return;
         start = readTextLength + start;
-        if (mCurChapter == null || mCurChapter.getPageLength(mCurPagePos) < 0) return;
         if (start > mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
             noAnimationToNextPage();
@@ -619,7 +622,7 @@ public abstract class PageLoader {
     /**
      * 章节数据是否存在
      */
-    protected abstract boolean hasChapterData(ChapterListBean chapter);
+    protected abstract boolean noChapterData(ChapterListBean chapter);
 
     /**
      * 打开当前章节指定页

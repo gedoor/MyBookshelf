@@ -331,8 +331,8 @@ public class PageLoaderText extends PageLoader {
     }
 
     @Override
-    protected boolean hasChapterData(ChapterListBean chapter) {
-        return true;
+    protected boolean noChapterData(ChapterListBean chapter) {
+        return false;
     }
 
     @Override

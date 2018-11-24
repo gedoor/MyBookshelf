@@ -92,7 +92,7 @@ public class PageLoaderNet extends PageLoader {
     }
 
     @SuppressLint("DefaultLocale")
-    public synchronized void loadContent(final int chapterIndex) {
+    private synchronized void loadContent(final int chapterIndex) {
         if (downloadingChapterList.size() >= 9) return;
         if (DownloadingList(listHandle.CHECK, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl()))
             return;
@@ -183,13 +183,13 @@ public class PageLoaderNet extends PageLoader {
 
     @SuppressLint("DefaultLocale")
     @Override
-    protected boolean hasChapterData(ChapterListBean chapter) {
-        return BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
+    protected boolean noChapterData(ChapterListBean chapter) {
+        return !BookshelfHelp.isChapterCached(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()),
                 chapter.getDurChapterIndex(), chapter.getDurChapterName());
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return isNetWorkAvailable() && !hasChapterData(bookShelfBean.getChapterList(chapterIndex));
+        return isNetWorkAvailable() && noChapterData(bookShelfBean.getChapterList(chapterIndex));
     }
 
     // 装载上一章节的内容
