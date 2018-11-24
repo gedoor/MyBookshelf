@@ -591,7 +591,6 @@ public abstract class PageLoader {
     }
 
     public void readAloudStart(int start) {
-        mPageView.invalidate();
         if (mCurChapter == null) return;
         if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
         if (mPageView.isRunning()) return;
@@ -599,6 +598,7 @@ public abstract class PageLoader {
         if (start > mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
             noAnimationToNextPage();
+            mPageView.invalidate();
         }
     }
 
