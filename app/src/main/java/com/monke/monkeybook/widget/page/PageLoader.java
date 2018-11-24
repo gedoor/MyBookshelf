@@ -520,13 +520,6 @@ public abstract class PageLoader {
     }
 
     /**
-     * 获取当前章节位置
-     */
-    public int getCurChapterPos() {
-        return mCurChapterPos;
-    }
-
-    /**
      * 获取当前页的页码
      */
     private int getCurPagePos() {
