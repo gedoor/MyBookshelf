@@ -923,11 +923,16 @@ public abstract class PageLoader {
                     mCurPagePos = mCurPagePos + 1;
                 } else if (mCurChapterPos < bookShelfBean.getChapterListSize() - 1) {
                     mCurChapterPos = mCurChapterPos + 1;
-                    mCurPagePos = 0;
                     mPreChapter = mCurChapter;
                     mCurChapter = mNextChapter;
                     mNextChapter = null;
-                    parseNextChapter();
+                    mCurPagePos = 0;
+                    if (mCurChapter == null) {
+                        mCurChapter = new TxtChapter(mCurChapterPos);
+                        parseCurChapter();
+                    } else {
+                        parseNextChapter();
+                    }
                 }
                 break;
             case -1:
@@ -935,11 +940,17 @@ public abstract class PageLoader {
                     mCurPagePos = mCurPagePos - 1;
                 } else if (mCurChapterPos > 0) {
                     mCurChapterPos = mCurChapterPos - 1;
-                    mCurPagePos = mPreChapter.getPageSize() - 1;
                     mNextChapter = mCurChapter;
                     mCurChapter = mPreChapter;
                     mPreChapter = null;
-                    parsePrevChapter();
+                    if (mCurChapter == null) {
+                        mCurChapter = new TxtChapter(mCurChapterPos);
+                        mCurPagePos = 0;
+                        parseCurChapter();
+                    } else {
+                        mCurPagePos = mCurChapter.getPageSize() - 1;
+                        parsePrevChapter();
+                    }
                 }
                 break;
             default:
