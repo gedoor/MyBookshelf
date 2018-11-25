@@ -40,7 +40,6 @@ public class ChapterContentHelp {
                 validReplaceRules.add(replaceRule);
             }
         }
-
     }
 
     /**
