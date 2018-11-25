@@ -65,6 +65,7 @@ public class ChapterListActivity extends MBaseActivity {
     private boolean isChapterReverse;
 
     public static void startThis(MBaseActivity activity, BookShelfBean bookShelf) {
+        if (bookShelf.getChapterList().size() == 0) return;
         Intent intent = new Intent(activity, ChapterListActivity.class);
         String key = String.valueOf(System.currentTimeMillis());
         intent.putExtra("data_key", key);
