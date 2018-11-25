@@ -289,12 +289,8 @@ public class BookShelfBean implements Parcelable, Cloneable {
     }
 
     public void upDurChapterName() {
-        if (getChapterListSize() > 0) {
-            if (durChapter < getChapterListSize()) {
-                durChapterName = getChapterList().get(durChapter).getDurChapterName();
-            } else {
-                durChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
-            }
+        if (getChapterList().size() > durChapter) {
+            durChapterName = getChapterList().get(durChapter).getDurChapterName();
         }
     }
 
@@ -307,7 +303,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
     }
 
     public void upLastChapterName() {
-        if (getChapterListSize() > 0) {
+        if (getChapterList().size() > 0) {
             lastChapterName = getChapterList().get(getChapterListSize() - 1).getDurChapterName();
         }
     }
