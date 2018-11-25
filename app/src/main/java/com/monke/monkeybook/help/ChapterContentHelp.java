@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ChapterContentHelp {
     private static ChapterContentHelp instance;
-    private static List<ReplaceRuleBean> validReplaceRules;
+    private static List<ReplaceRuleBean> validReplaceRules = new ArrayList<>();
     private static String bookName;
     private static String bookTag;
     private static long lastUpdateTime = 0;
@@ -33,10 +33,7 @@ public class ChapterContentHelp {
     }
 
     private void updateReplaceRules() {
-        if (validReplaceRules == null)
-            validReplaceRules = new ArrayList<>();
-        else
-            validReplaceRules.clear();
+        validReplaceRules.clear();
         if (ReplaceRuleManager.getEnabled() == null) return;
         for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
             if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(replaceRule.getUseTo())) {
