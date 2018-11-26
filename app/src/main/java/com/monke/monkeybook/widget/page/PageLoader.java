@@ -668,11 +668,14 @@ public abstract class PageLoader {
     private void upPage() {
         if (mPageMode != Enum.PageMode.SCROLL) {
             mPageView.drawPage(0);
+            mPageView.invalidate();
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
                 mPageView.drawPage(-1);
+                mPageView.invalidate();
             }
             if (mCurPagePos < mCurChapter.getPageSize() - 1 || mCurChapter.getPosition() < bookShelfBean.getChapterList().size() - 1) {
                 mPageView.drawPage(1);
+                mPageView.invalidate();
             }
         }
     }
