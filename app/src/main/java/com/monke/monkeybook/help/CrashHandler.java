@@ -158,11 +158,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 保存错误信息到文件中
-     *
-     * @param ex
-     * @return 返回文件名称, 便于将文件传送到服务器
      */
-    private String saveCrashInfo2File(Throwable ex) {
+    private void saveCrashInfo2File(Throwable ex) {
 
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : paramsMap.entrySet()) {
@@ -196,10 +193,8 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             fos.write(sb.toString().getBytes());
             Log.i(TAG, "saveCrashInfo2File: "+sb.toString());
             fos.close();
-            return fileName;
         } catch (Exception e) {
             Log.e(TAG, "an error occured while writing file...", e);
         }
-        return null;
     }
 }
