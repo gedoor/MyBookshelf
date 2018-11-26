@@ -5,9 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.monke.basemvplib.impl.IPresenter;
 import com.monke.monkeybook.R;
@@ -29,7 +26,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     /**************Adapter***************/
     protected TabFragmentPageAdapter tabFragmentPageAdapter;
     /************Params*******************/
-    private List<Fragment> mFragmentList;
+    protected List<Fragment> mFragmentList;
     private List<String> mTitleList;
 
     /**************abstract***********/

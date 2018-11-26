@@ -27,9 +27,8 @@ import butterknife.ButterKnife;
 
 
 /**
- * Created by newbiechen on 17-5-27.
+ * 导入本地书籍
  */
-
 public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Presenter> implements ImportBookContract.View {
     private static final String TAG = "ImportBookActivity";
 
@@ -115,11 +114,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    mCurFragment = mCategoryFragment;
-                } else {
-                    mCurFragment = mLocalFragment;
-                }
+                mCurFragment = (BaseFileFragment) mFragmentList.get(position);
                 //改变菜单状态
                 changeMenuStatus();
             }
@@ -155,15 +150,14 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
                             .show();
                 }
         );
-
-        mLocalFragment.setOnFileCheckedListener(mListener);
         mCategoryFragment.setOnFileCheckedListener(mListener);
+        mLocalFragment.setOnFileCheckedListener(mListener);
     }
 
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        mCurFragment = mLocalFragment;
+        mCurFragment = (BaseFileFragment) mFragmentList.get(0);
     }
 
     //设置ToolBar
