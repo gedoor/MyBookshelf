@@ -2,6 +2,7 @@ package com.monke.monkeybook.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookmarkBean;
 import com.monke.monkeybook.utils.SoftInputUtil;
 
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by GKF on 2018/1/17.
@@ -41,7 +41,7 @@ public class EditBookmarkView {
         return new EditBookmarkView(moDialogView);
     }
 
-    void showBookmark(@NotNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoDialogHUD moDialogHUD) {
+    void showBookmark(@NonNull BookmarkBean bookmarkBean, boolean isAdd, final OnBookmarkClick bookmarkClick, MoDialogHUD moDialogHUD) {
         this.moDialogHUD = moDialogHUD;
         this.bookmarkClick = bookmarkClick;
         this.bookmarkBean = bookmarkBean;

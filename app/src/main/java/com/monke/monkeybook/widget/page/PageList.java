@@ -1,5 +1,6 @@
 package com.monke.monkeybook.widget.page;
 
+import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 
@@ -7,8 +8,6 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.utils.NetworkUtil;
 import com.monke.monkeybook.utils.StringUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ class PageList {
      * @param chapter：章节信息
      * @param content：章节的文本
      */
-    private List<TxtPage> loadPageList(ChapterListBean chapter, @NotNull String content) {
+    private List<TxtPage> loadPageList(ChapterListBean chapter, @NonNull String content) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         if (pageLoader.bookShelfBean == null) return pages;

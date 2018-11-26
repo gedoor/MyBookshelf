@@ -1,6 +1,7 @@
 package com.monke.monkeybook.widget.number;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -9,8 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
@@ -49,7 +48,7 @@ public class NumberButton extends FrameLayout implements View.OnClickListener {
 
     }
 
-    public NumberButton setTitle(@NotNull String title) {
+    public NumberButton setTitle(@NonNull String title) {
         this.tile = title;
         return this;
     }

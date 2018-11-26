@@ -1,7 +1,6 @@
 package com.monke.monkeybook.widget.number;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,8 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.monke.monkeybook.R;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 
