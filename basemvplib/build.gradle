@@ -38,7 +38,6 @@ dependencies {
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
     api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2'  // If you want to bind to Android-specific lifecycles
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'  // If you want pre-written Activities and Fragments you can subclass as providers
-    api 'com.trello.rxlifecycle2:rxlifecycle-navi:2.2.2'  // If you want to use Navi for providers
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.4.0'
