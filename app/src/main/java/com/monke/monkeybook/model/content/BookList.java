@@ -17,7 +17,7 @@ import retrofit2.Response;
 
 import static android.text.TextUtils.isEmpty;
 
-public class BookList {
+class BookList {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
@@ -28,7 +28,7 @@ public class BookList {
         this.bookSourceBean = bookSourceBean;
     }
 
-    public Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
+    Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             try {
                 String baseURI;

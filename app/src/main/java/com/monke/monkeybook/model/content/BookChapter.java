@@ -23,7 +23,7 @@ import retrofit2.Call;
 
 import static android.text.TextUtils.isEmpty;
 
-public class BookChapter {
+class BookChapter {
     private String tag;
     private BookSourceBean bookSourceBean;
 
@@ -32,7 +32,7 @@ public class BookChapter {
         this.bookSourceBean = bookSourceBean;
     }
 
-    public Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
+    Observable<List<ChapterListBean>> analyzeChapterList(final String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("目录获取失败"));

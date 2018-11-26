@@ -15,7 +15,7 @@ import io.reactivex.Observable;
 
 import static android.text.TextUtils.isEmpty;
 
-public class BookInfo {
+class BookInfo {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
@@ -26,7 +26,7 @@ public class BookInfo {
         this.bookSourceBean = bookSourceBean;
     }
 
-    public Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
+    Observable<BookShelfBean> analyzeBookInfo(String s, final BookShelfBean bookShelfBean) {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("书籍信息获取失败"));

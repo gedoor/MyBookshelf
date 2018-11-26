@@ -25,7 +25,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.Call;
 
-public class BookContent {
+class BookContent {
     private String tag;
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
