@@ -60,7 +60,7 @@ public abstract class PageLoader {
     // 上一章的页面列表缓存
     private TxtChapter mPreChapter;
     // 当前章节的页面列表
-    TxtChapter mCurChapter;
+    private TxtChapter mCurChapter;
     // 下一章的页面列表缓存
     private TxtChapter mNextChapter;
 
