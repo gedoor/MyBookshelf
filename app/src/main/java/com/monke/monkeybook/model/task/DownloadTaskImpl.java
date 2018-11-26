@@ -8,8 +8,6 @@ import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.DownloadBookBean;
 import com.monke.monkeybook.bean.DownloadChapterBean;
-import com.monke.monkeybook.dao.BookShelfBeanDao;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModel;
@@ -40,7 +38,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
 
     private CompositeDisposable disposables;
 
-    public DownloadTaskImpl(int id, DownloadBookBean downloadBook) {
+    protected DownloadTaskImpl(int id, DownloadBookBean downloadBook) {
         this.id = id;
         this.downloadBook = downloadBook;
         downloadChapters = new ArrayList<>();
