@@ -391,8 +391,8 @@ public abstract class PageLoader {
         mPreChapter = null;
         parsePrevChapter();
 
-        openChapter(mCurPagePos);
         chapterChangeCallback();
+        openChapter(mCurPagePos);
         pagingEnd(PageAnimation.Direction.NONE);
     }
 
@@ -412,8 +412,8 @@ public abstract class PageLoader {
         mNextChapter = null;
         parseNextChapter();
 
-        openChapter(mCurPagePos);
         chapterChangeCallback();
+        openChapter(mCurPagePos);
         pagingEnd(PageAnimation.Direction.NONE);
         return true;
     }
