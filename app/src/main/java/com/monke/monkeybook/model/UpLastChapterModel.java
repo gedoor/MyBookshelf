@@ -8,7 +8,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
@@ -35,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
  * 更新换源列表里最新章节
  */
 public class UpLastChapterModel {
-    private static UpLastChapterModel model;
+    public static UpLastChapterModel model;
     private CompositeDisposable compositeDisposable;
     private ExecutorService executorService;
     private Scheduler scheduler;

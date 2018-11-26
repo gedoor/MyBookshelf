@@ -13,9 +13,11 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
+import com.monke.monkeybook.help.AppFrontBackHelper;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.CrashHandler;
 import com.monke.monkeybook.help.FileHelp;
+import com.monke.monkeybook.model.UpLastChapterModel;
 
 import java.io.File;
 
@@ -69,6 +71,20 @@ public class MApplication extends Application {
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
+        AppFrontBackHelper frontBackHelper = new AppFrontBackHelper();
+        frontBackHelper.register(this, new AppFrontBackHelper.OnAppStatusListener() {
+            @Override
+            public void onFront() {
+
+            }
+
+            @Override
+            public void onBack() {
+                if (UpLastChapterModel.model != null) {
+                    UpLastChapterModel.model.onDestroy();
+                }
+            }
+        });
     }
 
     public void setDownloadPath(String downloadPath) {
