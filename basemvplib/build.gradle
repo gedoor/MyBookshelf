@@ -31,8 +31,8 @@ dependencies {
     api "com.android.support:appcompat-v7:$support_library_version"
 
     //RxAndroid
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
     api 'io.reactivex.rxjava2:rxjava:2.2.4'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     //Rx_lifecycle
     api 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
@@ -40,12 +40,12 @@ dependencies {
     api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'  // If you want pre-written Activities and Fragments you can subclass as providers
 
     //Retrofit
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
-    api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    api 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.5.0'
 
     //RxBus
-    api ('com.hwangjr.rxbus:rxbus:2.0.0')
+    api 'com.hwangjr.rxbus:rxbus:2.0.0'
 
     //J_SOUP
     api 'org.jsoup:jsoup:1.11.3'
