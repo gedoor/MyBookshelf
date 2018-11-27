@@ -6,40 +6,13 @@ import com.luhuiguo.chinese.ChineseUtils;
 import com.monke.monkeybook.bean.ReplaceRuleBean;
 import com.monke.monkeybook.model.ReplaceRuleManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 public class ChapterContentHelp {
     private static ChapterContentHelp instance;
-    private static List<ReplaceRuleBean> validReplaceRules = new ArrayList<>();
-    private static String bookName;
-    private static String bookTag;
-    private static long lastUpdateTime = 0;
 
     public static synchronized ChapterContentHelp getInstance() {
         if (instance == null)
             instance = new ChapterContentHelp();
         return instance;
-    }
-
-    private void updateBookShelf(String bookName, String bookTag, long upTime) {
-        if (!Objects.equals(ChapterContentHelp.bookName, bookName) || !Objects.equals(ChapterContentHelp.bookTag, bookTag) || lastUpdateTime != upTime) {
-            ChapterContentHelp.bookName = bookName;
-            ChapterContentHelp.bookTag = bookTag;
-            lastUpdateTime = upTime;
-            updateReplaceRules();
-        }
-    }
-
-    private void updateReplaceRules() {
-        validReplaceRules.clear();
-        if (ReplaceRuleManager.getEnabled() == null) return;
-        for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
-            if (TextUtils.isEmpty(replaceRule.getUseTo()) || isUseTo(replaceRule.getUseTo())) {
-                validReplaceRules.add(replaceRule);
-            }
-        }
     }
 
     /**
@@ -62,10 +35,9 @@ public class ChapterContentHelp {
     /**
      * 替换净化
      */
-    public synchronized String replaceContent(String bookName, String bookTag, String content) {
-        updateBookShelf(bookName, bookTag, ReplaceRuleManager.getLastUpTime());
+    public String replaceContent(String bookName, String bookTag, String content) {
         int convertCTS = ReadBookControl.getInstance().getTextConvert();
-        if (validReplaceRules.size() == 0)
+        if (ReplaceRuleManager.getEnabled().size() == 0)
             return toTraditional(convertCTS, content);
         String allLine[] = content.split("\n");
         StringBuilder contentBuilder = new StringBuilder();
@@ -73,12 +45,13 @@ public class ChapterContentHelp {
         for (String line : allLine) {
             line = line.replaceAll("^[\\s\u3000]+", "").trim();
             if (line.length() == 0) continue;
-            for (ReplaceRuleBean replaceRule : validReplaceRules) {
+            for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
                 try {
-                    line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement()).trim();
+                    if (isUseTo(replaceRule.getUseTo(), bookTag, bookName)) {
+                        line = line.replaceAll(replaceRule.getRegex(), replaceRule.getReplacement()).trim();
+                    }
                     if (line.length() == 0) break;
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                } catch (Exception ignored) {
                 }
             }
             if (line.length() == 0) continue;
@@ -86,9 +59,9 @@ public class ChapterContentHelp {
         }
 
         content = contentBuilder.toString();
-        for (ReplaceRuleBean replaceRule : validReplaceRules) {
+        for (ReplaceRuleBean replaceRule : ReplaceRuleManager.getEnabled()) {
             String rule = replaceRule.getRegex();
-            if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n")) {
+            if (replaceRule.getIsRegex() && !TextUtils.isEmpty(rule) && rule.contains("\\n") && isUseTo(rule, bookTag, bookName)) {
                 try {
                     content = content.replaceAll(rule, replaceRule.getReplacement());
                 } catch (Exception e1) {
@@ -99,8 +72,9 @@ public class ChapterContentHelp {
         return toTraditional(convertCTS, content);
     }
 
-    private boolean isUseTo(String useTo) {
-        return useTo.contains(bookTag)
+    private boolean isUseTo(String useTo, String bookTag, String bookName) {
+        return TextUtils.isEmpty(useTo)
+                || useTo.contains(bookTag)
                 || useTo.contains(bookName);
     }
 
