@@ -116,9 +116,6 @@ dependencies {
     //AutoFitTextView
     implementation 'me.grantland:autofittextview:0.2.1'
 
-    //删除粒子效果
-    implementation 'tyrantgit:explosionfield:1.0.1'
-
     //View简易动画
     implementation 'com.daimajia.easing:library:2.1@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'

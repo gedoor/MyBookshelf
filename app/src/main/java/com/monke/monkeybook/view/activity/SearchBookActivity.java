@@ -44,7 +44,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
 
@@ -64,7 +63,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     FloatingActionButton fabSearchStop;
 
     private Menu menu;
-    private ExplosionField explosionField;
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
@@ -83,7 +81,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         @Override
         public boolean onLongClick(View view) {
             SearchHistoryBean searchHistoryBean = (SearchHistoryBean) view.getTag();
-            explosionField.explode(view);
             mPresenter.cleanSearchHistory(searchHistoryBean);
             return true;
         }
@@ -121,7 +118,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected void initData() {
-        explosionField = ExplosionField.attach2Window(this);
         searchBookAdapter = new SearchBookAdapter(this);
     }
 
@@ -291,9 +287,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void bindEvent() {
         tvSearchHistoryClean.setOnClickListener(v -> {
-            for (int i = 0; i < tflSearchHistory.getChildCount(); i++) {
-                explosionField.explode(tflSearchHistory.getChildAt(i));
-            }
             mPresenter.cleanSearchHistory();
         });
 
@@ -489,7 +482,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onDestroy() {
         mPresenter.stopSearch();
-        explosionField.clear();
         super.onDestroy();
     }
 
