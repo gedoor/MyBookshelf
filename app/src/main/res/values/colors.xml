@@ -49,6 +49,17 @@
     <color name="translucent">#99343434</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="grey50">#FAFAFA</color>
+    <color name="grey100">#F5F5F5</color>
+    <color name="grey200">#EEEEEE</color>
+    <color name="grey300">#E0E0E0</color>
+    <color name="grey400">#BDBDBD</color>
+    <color name="grey500">#9E9E9E</color>
+    <color name="grey600">#757575</color>
+    <color name="grey700">#616161</color>
+    <color name="grey800">#424242</color>
+    <color name="grey900">#212121</color>
     <color name="bright_pink">#FF007F</color>
     <color name="red">#FF0000</color>
     <color name="red50">#FFEBEE</color>
