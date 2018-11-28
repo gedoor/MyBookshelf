@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ifl_content"
@@ -11,11 +11,16 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="380dp"
+        android:layout_height="420dp"
         android:layout_gravity="center"
-        android:layout_margin="40dp"
+        android:layout_margin="30dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="@color/background_card"
@@ -72,8 +77,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
-                            android:includeFontPadding="false"
                             android:gravity="center|start"
+                            android:includeFontPadding="false"
                             android:singleLine="true"
                             android:text="@string/tv_book_name"
                             android:textColor="@color/white"
@@ -169,8 +174,8 @@
                             android:background="@drawable/selector_tv_first_button"
                             android:includeFontPadding="false"
                             android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
                             android:paddingTop="1dp"
+                            android:paddingEnd="4dp"
                             android:paddingBottom="1dp"
                             android:text="@string/change_origin"
                             android:textColor="#ffffff"
@@ -222,9 +227,9 @@
                         android:id="@+id/rg_book_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:paddingTop="3dp"
-                        android:paddingBottom="3dp"
-                        android:orientation="horizontal">
+                        android:paddingBottom="3dp">
 
                         <RadioButton
                             android:id="@+id/rb_zg"
@@ -234,11 +239,11 @@
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
                             android:checked="true"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
                             android:includeFontPadding="false"
+                            android:paddingStart="4dp"
+                            android:paddingTop="1dp"
+                            android:paddingEnd="4dp"
+                            android:paddingBottom="1dp"
                             android:text="@string/pursue_more"
                             android:textColor="@color/white"
                             android:textSize="13sp"
@@ -251,11 +256,11 @@
                             android:layout_marginRight="4dp"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
                             android:includeFontPadding="false"
+                            android:paddingStart="4dp"
+                            android:paddingTop="1dp"
+                            android:paddingEnd="4dp"
+                            android:paddingBottom="1dp"
                             android:text="@string/fattening"
                             android:textColor="@color/white"
                             android:textSize="13sp"
@@ -268,11 +273,11 @@
                             android:layout_marginRight="4dp"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
                             android:includeFontPadding="false"
+                            android:paddingStart="4dp"
+                            android:paddingTop="1dp"
+                            android:paddingEnd="4dp"
+                            android:paddingBottom="1dp"
                             android:text="@string/finish"
                             android:textColor="@color/white"
                             android:textSize="13sp"
@@ -284,11 +289,11 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/selector_radio_book_group"
                             android:button="@null"
-                            android:paddingStart="4dp"
-                            android:paddingEnd="4dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
                             android:includeFontPadding="false"
+                            android:paddingStart="4dp"
+                            android:paddingTop="1dp"
+                            android:paddingEnd="4dp"
+                            android:paddingBottom="1dp"
                             android:text="@string/local"
                             android:textColor="@color/white"
                             android:textSize="13sp" />
@@ -335,8 +340,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background_menu"
-                    android:padding="3dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="3dp">
 
                     <TextView
                         android:id="@+id/tv_shelf"
@@ -347,8 +352,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:text="@string/remove_from_bookshelf"
                         android:includeFontPadding="false"
+                        android:text="@string/remove_from_bookshelf"
                         android:textColor="@color/tv_text_default"
                         android:textSize="15sp" />
 
@@ -365,8 +370,8 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:text="@string/start_read"
                         android:includeFontPadding="false"
+                        android:text="@string/start_read"
                         android:textColor="@color/tv_text_default"
                         android:textSize="15sp" />
 
@@ -388,4 +393,8 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-</FrameLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
