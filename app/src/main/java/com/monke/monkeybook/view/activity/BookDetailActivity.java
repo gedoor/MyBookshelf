@@ -13,7 +13,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RadioButton;
@@ -51,7 +50,7 @@ import static com.monke.monkeybook.utils.BitmapUtil.stackBlur;
 
 public class BookDetailActivity extends MBaseActivity<BookDetailContract.Presenter> implements BookDetailContract.View {
     @BindView(R.id.ifl_content)
-    FrameLayout iflContent;
+    View vwContent;
     @BindView(R.id.iv_menu)
     ImageView ivMenu;
     @BindView(R.id.iv_blur_cover)
@@ -259,7 +258,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected void bindEvent() {
-        iflContent.setOnClickListener(v -> {
+        vwContent.setOnClickListener(v -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (getStart_share_ele()) {
                     finishAfterTransition();
