@@ -40,7 +40,7 @@ public class PageLoaderNet extends PageLoader {
 
     PageLoaderNet(PageView pageView, BookShelfBean bookShelfBean) {
         super(pageView, bookShelfBean);
-        executorService = Executors.newFixedThreadPool(10);
+        executorService = Executors.newFixedThreadPool(20);
         scheduler = Schedulers.from(executorService);
     }
 
@@ -93,13 +93,13 @@ public class PageLoaderNet extends PageLoader {
 
     @SuppressLint("DefaultLocale")
     private synchronized void loadContent(final int chapterIndex) {
-        if (downloadingChapterList.size() >= 9) return;
+        if (downloadingChapterList.size() >= 20) return;
         if (DownloadingList(listHandle.CHECK, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl()))
             return;
-        DownloadingList(listHandle.ADD, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl());
         if (null != bookShelfBean && bookShelfBean.getChapterList().size() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                 if (shouldRequestChapter(chapterIndex)) {
+                    DownloadingList(listHandle.ADD, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl());
                     e.onNext(chapterIndex);
                 }
                 e.onComplete();
