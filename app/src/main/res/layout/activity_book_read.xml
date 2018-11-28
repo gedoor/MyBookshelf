@@ -127,6 +127,6 @@
         android:visibility="invisible"
         app:bgdrawable="@color/btn_bg_press"
         app:cantouch="false"
-        app:fontdrawable="@color/d_blue" />
+        app:fontdrawable="?attr/colorAccent" />
 
 </FrameLayout>
