@@ -40,8 +40,10 @@
 - 起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage
 - url规则和搜索规则一样,多个规则用&&或换行分开,如
 - 起点风云榜::https://www.qidian.com/rank/yuepiao?page=searchPage&&原创风云榜::https://www.qidian.com/rank/yuepiao?style=1&page=searchPage
-- 也可以写成,域名可以省略,如省略会调用书源域名
+- 也可以每行写一个,域名可以省略,如省略会调用书源域名
+
 起点风云榜::/rank/yuepiao?page=searchPage
+
 原创风云榜::/rank/yuepiao?style=1&page=searchPage
 
 #### RuleSearchList 搜索列表
