@@ -1076,7 +1076,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             return true;
         } else {
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                if (flMenu.getVisibility() == View.VISIBLE) {
+                if (readInterfacePop.getVisibility() == View.VISIBLE
+                        || readAdjustPop.getVisibility() == View.VISIBLE
+                        || moreSettingPop.getVisibility() == View.VISIBLE) {
+                    popMenuOut();
+                    return true;
+                } else if (flMenu.getVisibility() == View.VISIBLE) {
                     finish();
                     return true;
                 } else if (ReadAloudService.running && aloudStatus == PLAY) {
