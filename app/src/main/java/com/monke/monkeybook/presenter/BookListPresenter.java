@@ -88,15 +88,17 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         Observable<BookShelfBean> data = Observable.fromIterable(new ArrayList<>(bookShelfBeans));
         Observable<Long> time = Observable.interval(1, TimeUnit.SECONDS);
         Observable.zip(data, time, (bookShelfBean, aLong) -> {
-            int chapterNum = bookShelfBean.getChapterListSize();
-            DownloadBookBean downloadBook = new DownloadBookBean();
-            downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
-            downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
-            downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
-            downloadBook.setStart(bookShelfBean.getDurChapter());
-            downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, bookShelfBean.getDurChapter() + downloadNum - 1) : chapterNum - 1);
-            downloadBook.setFinalDate(System.currentTimeMillis());
-            DownloadService.addDownload(mView.getContext(), downloadBook);
+            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                int chapterNum = bookShelfBean.getChapterListSize();
+                DownloadBookBean downloadBook = new DownloadBookBean();
+                downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
+                downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
+                downloadBook.setCoverUrl(bookShelfBean.getBookInfoBean().getCoverUrl());
+                downloadBook.setStart(bookShelfBean.getDurChapter());
+                downloadBook.setEnd(downloadNum > 0 ? Math.min(chapterNum - 1, bookShelfBean.getDurChapter() + downloadNum - 1) : chapterNum - 1);
+                downloadBook.setFinalDate(System.currentTimeMillis());
+                DownloadService.addDownload(mView.getContext(), downloadBook);
+            }
             return bookShelfBean;
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe();
