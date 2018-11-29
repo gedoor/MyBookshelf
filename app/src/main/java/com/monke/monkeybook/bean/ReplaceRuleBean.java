@@ -106,7 +106,7 @@ public class ReplaceRuleBean implements Parcelable {
     }
 
     public String getFixedRegex() {
-        if (isRegex)
+        if (getIsRegex())
             return this.regex;
         else
             return Pattern.quote(regex);
