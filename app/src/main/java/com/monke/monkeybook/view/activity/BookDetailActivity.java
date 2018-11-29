@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -256,6 +257,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
         tvChapterSize.setText(chapterSize);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void bindEvent() {
         vwContent.setOnClickListener(v -> {
@@ -372,6 +374,21 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             if (mPresenter.getInBookShelf()) {
                 mPresenter.addToBookShelf();
             }
+        });
+
+        tvIntro.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                //通知父控件不要干扰,即屏蔽父控件的该事件以及该事件之后的一切action
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                //通知父控件不要干扰,即屏蔽父控件的该事件以及该事件之后的一切action
+                view.getParent().requestDisallowInterceptTouchEvent(true);
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                view.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+            return false;
         });
     }
 
