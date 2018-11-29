@@ -376,20 +376,6 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
             }
         });
 
-        tvIntro.setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                //通知父控件不要干扰,即屏蔽父控件的该事件以及该事件之后的一切action
-                view.getParent().requestDisallowInterceptTouchEvent(true);
-            }
-            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                //通知父控件不要干扰,即屏蔽父控件的该事件以及该事件之后的一切action
-                view.getParent().requestDisallowInterceptTouchEvent(true);
-            }
-            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                view.getParent().requestDisallowInterceptTouchEvent(false);
-            }
-            return false;
-        });
     }
 
     @Override
