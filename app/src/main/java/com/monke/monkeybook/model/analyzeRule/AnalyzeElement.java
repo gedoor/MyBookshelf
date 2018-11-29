@@ -13,7 +13,6 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.text.TextUtils.indexOf;
 import static android.text.TextUtils.isEmpty;
 
 /**
@@ -308,15 +307,11 @@ public class AnalyzeElement {
                     }
                     break;
                 default:
-                    List<String> urlList = new ArrayList<>();
                     for (Element element : elements) {
-                        String url = element.attr(lastRule);
-                        if (!TextUtils.isEmpty(url) && urlList.indexOf(url) == -1) {
-                            urlList.add(url);
+                        String url = NetworkUtil.getAbsoluteURL(baseURL, element.attr(lastRule));
+                        if (!TextUtils.isEmpty(url) && !textS.contains(url)) {
+                            textS.add(url);
                         }
-                    }
-                    for (String url : urlList) {
-                        textS.add(NetworkUtil.getAbsoluteURL(baseURL, url));
                     }
             }
             return textS;
