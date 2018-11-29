@@ -131,9 +131,7 @@ public class WebBookModel {
                 bookShelfBean.setFinalRefreshData(System.currentTimeMillis());
                 bookShelfBean.getBookInfoBean().setFinalRefreshData(System.currentTimeMillis());
             }
-            if (chapterList.isEmpty()) {
-                e.onError(new Throwable("获取目录为空"));
-            } else {
+            if (!chapterList.isEmpty()) {
                 bookShelfBean.setChapterListSize(chapterList.size());
                 bookShelfBean.setDurChapter(Math.min(bookShelfBean.getDurChapter(), bookShelfBean.getChapterListSize() - 1));
                 bookShelfBean.getBookInfoBean().setChapterList(chapterList);
