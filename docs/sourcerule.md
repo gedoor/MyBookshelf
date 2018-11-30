@@ -67,6 +67,9 @@
 #### RuleSearchCoverUrl 搜索里的书封面
 - 例:tag.img.0@src
 
+#### RuleBookUrlPattern 书籍页面里的URL正则
+- 例:https?://www.piaotian.com/bookinfo/.*"
+
 #### RuleBookName 书籍页面里的书名称
 - 例:class.active.0@text
 
@@ -78,6 +81,12 @@
 
 #### RuleCoverUrl 书籍页面里的封面
 - 例:class.panel-body.0@class.img-thumbnail.0@src
+
+#### RuleBookKind 书籍页面里的分类
+- 例:id.centerm@tag.td.3@text#.*：
+
+#### RuleBookLastChapter 书籍页面里的最新章节
+- 例class.grid.0@tag.td.0@tag.a@text
 
 #### RuleChapterUrl 书籍页面里的目录地址
 - 如果目录地址和书籍地址一样则留空
