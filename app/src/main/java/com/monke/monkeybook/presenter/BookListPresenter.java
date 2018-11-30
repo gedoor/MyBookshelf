@@ -91,7 +91,8 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
             if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                 int chapterNum = bookShelfBean.getChapterListSize();
                 for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                    if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))) {
+                    if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))
+                            && start < chapterNum - 1) {
                         DownloadBookBean downloadBook = new DownloadBookBean();
                         downloadBook.setName(bookShelfBean.getBookInfoBean().getName());
                         downloadBook.setNoteUrl(bookShelfBean.getNoteUrl());
