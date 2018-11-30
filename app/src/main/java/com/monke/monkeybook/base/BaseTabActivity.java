@@ -69,7 +69,7 @@ public abstract class BaseTabActivity<T extends IPresenter> extends MBaseActivit
     /******************inner class*****************/
     public class TabFragmentPageAdapter extends FragmentPagerAdapter {
 
-        public TabFragmentPageAdapter(FragmentManager fm) {
+        TabFragmentPageAdapter(FragmentManager fm) {
             super(fm);
         }
 
