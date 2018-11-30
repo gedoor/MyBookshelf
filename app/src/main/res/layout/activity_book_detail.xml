@@ -26,7 +26,6 @@
             android:layout_height="400dp"
             android:layout_gravity="center"
             android:layout_margin="30dp"
-            app:cardBackgroundColor="@color/background_card"
             app:cardCornerRadius="5dp"
             app:cardElevation="10dp">
 
