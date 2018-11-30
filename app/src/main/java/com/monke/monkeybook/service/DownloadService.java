@@ -39,7 +39,8 @@ public class DownloadService extends Service {
     public static final String progressDownloadAction = "progressDownloadAction";
     public static final String obtainDownloadListAction = "obtainDownloadListAction";
     public static final String finishDownloadAction = "finishDownloadAction";
-    private int notificationId = 19931118;
+    private int notificationId = 19901122;
+    private int downloadTaskId = 0;
     private NotificationManagerCompat managerCompat;
     private long currentTime;
 
@@ -121,7 +122,7 @@ public class DownloadService extends Service {
         if (checkDownloadTaskExist(downloadBook)) {
             return;
         }
-        new DownloadTaskImpl(notificationId, downloadBook) {
+        new DownloadTaskImpl(downloadTaskId, downloadBook) {
             @Override
             public void onDownloadPrepared(DownloadBookBean downloadBook) {
                 if (canStartNextTask()) {
@@ -133,7 +134,7 @@ public class DownloadService extends Service {
 
             @Override
             public void onDownloadProgress(DownloadChapterBean chapterBean) {
-                isProgress(getId(), chapterBean);
+                isProgress(chapterBean);
             }
 
             @Override
@@ -162,7 +163,7 @@ public class DownloadService extends Service {
                 startNextTaskAfterRemove(downloadBook);
             }
         };
-        notificationId += 1;
+        downloadTaskId += 1;
     }
 
     private void cancelDownload() {
@@ -271,7 +272,7 @@ public class DownloadService extends Service {
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void isProgress(int notificationId, DownloadChapterBean downloadChapterBean) {
+    private void isProgress(DownloadChapterBean downloadChapterBean) {
         if (!isRunning) {
             return;
         }
