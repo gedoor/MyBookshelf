@@ -1,7 +1,6 @@
 package com.monke.monkeybook.model.analyzeRule;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.utils.NetworkUtil;
@@ -11,6 +10,7 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
@@ -77,13 +77,39 @@ public class AnalyzeElement {
         return elements;
     }
 
+    private static Elements filterElements(Elements elements, String[] rules) {
+        if (rules == null || rules.length < 2) return elements;
+        Elements selectedEls = new Elements();
+        for (Element ele : elements) {
+            boolean isOk = false;
+            switch (rules[0]) {
+                case "class":
+                    isOk = ele.getElementsByClass(rules[1]).size() > 0;
+                    break;
+                case "id":
+                    isOk = ele.getElementById(rules[1]) != null;
+                    break;
+                case "tag":
+                    isOk = ele.getElementsByTag(rules[1]).size() > 0;
+                    break;
+                case "text":
+                    isOk = ele.getElementsContainingOwnText(rules[1]).size() > 0;
+                    break;
+            }
+            if (isOk) {
+                selectedEls.add(ele);
+            }
+        }
+        return selectedEls;
+    }
+
     /**
      * 获取Elements按照一个规则
      */
     private static Elements getElementsSingle(Element temp, String rule) {
         Elements elements = new Elements();
         try {
-            String[] rs = rule.split("@");
+            String[] rs = rule.trim().split("@");
             if (rs.length > 1) {
                 elements.add(temp);
                 for (String rl : rs) {
@@ -95,35 +121,69 @@ public class AnalyzeElement {
                     elements.addAll(es);
                 }
             } else {
-                String[] rulePc = rule.split("!");
-                String[] rules = rulePc[0].split("\\.");
+                String[] rulePcx = rule.split("!");
+                String[] rulePc = rulePcx[0].trim().split(">");
+                String[] rules = rulePc[0].trim().split("\\.");
+                String[] filterRules = null;
+                boolean needFilterElements = rulePc.length > 1 && !isEmpty(rulePc[1].trim());
+                if (needFilterElements) {
+                    filterRules = rulePc[1].trim().split("\\.");
+                    filterRules[0] = filterRules[0].trim();
+                    List<String> validKeys = Arrays.asList("class", "id", "tag", "text");
+                    if (filterRules.length < 2 || !validKeys.contains(filterRules[0]) || isEmpty(filterRules[1].trim())) {
+                        needFilterElements = false;
+                    }
+                    filterRules[1] = filterRules[1].trim();
+                }
                 switch (rules[0]) {
                     case "children":
-                        elements.addAll(temp.children());
+                        Elements children = temp.children();
+                        if (needFilterElements)
+                            children = filterElements(children, filterRules);
+                        elements.addAll(children);
                         break;
                     case "class":
+                        Elements elementsByClass = temp.getElementsByClass(rules[1]);
                         if (rules.length == 3) {
-                            elements.add(temp.getElementsByClass(rules[1]).get(Integer.parseInt(rules[2])));
+                            int index = Integer.parseInt(rules[2]);
+                            if (index < 0) {
+                                elements.add(elementsByClass.get(elementsByClass.size() + index));
+                            } else {
+                                elements.add(elementsByClass.get(index));
+                            }
                         } else {
-                            elements.addAll(temp.getElementsByClass(rules[1]));
+                            if (needFilterElements)
+                                elementsByClass = filterElements(elementsByClass, filterRules);
+                            elements.addAll(elementsByClass);
                         }
                         break;
                     case "tag":
+                        Elements elementsByTag = temp.getElementsByTag(rules[1]);
                         if (rules.length == 3) {
-                            elements.add(temp.getElementsByTag(rules[1]).get(Integer.parseInt(rules[2])));
+                            int index = Integer.parseInt(rules[2]);
+                            if (index < 0) {
+                                elements.add(elementsByTag.get(elementsByTag.size() + index));
+                            } else {
+                                elements.add(elementsByTag.get(index));
+                            }
                         } else {
-                            elements.addAll(temp.getElementsByTag(rules[1]));
+                            if (needFilterElements)
+                                elementsByTag = filterElements(elementsByTag, filterRules);
+                            elements.addAll(elementsByTag);
                         }
                         break;
                     case "id":
                         elements.add(temp.getElementById(rules[1]));
                         break;
                     case "text":
-                        elements.addAll(temp.getElementsContainingOwnText(rules[1]));
+                        Elements elementsByText = temp.getElementsContainingOwnText(rules[1]);
+                        if (needFilterElements)
+                            elementsByText = filterElements(elementsByText, filterRules);
+                        elements.addAll(elementsByText);
                         break;
                 }
-                if (rulePc.length > 1) {
-                    String[] rulePcs = rulePc[1].split(":");
+                if (rulePcx.length > 1) {
+                    String[] rulePcs = rulePcx[1].split(":");
                     if (rulePcs.length < elements.size() - 1) {
                         for (String pc : rulePcs) {
                             int pcInt = Integer.parseInt(pc);
@@ -139,9 +199,7 @@ public class AnalyzeElement {
                     }
                 }
             }
-        } catch (Exception e) {
-            // e.printStackTrace();
-            // Log.e("getElements", rule + e.getMessage());
+        } catch (Exception ignore) {
         }
         return elements;
     }
@@ -154,11 +212,15 @@ public class AnalyzeElement {
             return null;
         }
         String regex = null;
+        String replacement = "";
         String result = "";
         //分离正则表达式
         String[] ruleStrS = ruleStr.trim().split("#");
         if (ruleStrS.length > 1) {
             regex = ruleStrS[1];
+        }
+        if (ruleStrS.length > 2 && !isEmpty(ruleStrS[2])) {
+            replacement = ruleStrS[2];
         }
         if (isEmpty(ruleStrS[0])) {
             result = element.data();
@@ -173,7 +235,7 @@ public class AnalyzeElement {
                 if (textS.size() > 1) {
                     if (text.length() > 0) {
                         if (content.length() > 0) {
-                            content.append("\r\n");
+                            content.append("\n");
                         }
                         content.append("\u3000\u3000").append(text);
                     }
@@ -184,9 +246,9 @@ public class AnalyzeElement {
             }
         }
         if (!isEmpty(regex)) {
-            result = result.replaceAll(regex, "");
+            result = result.replaceAll(regex, replacement);
         }
-        return result;
+        return result.trim();
     }
 
     public String getResultUrl(String ruleStr) {
@@ -232,7 +294,7 @@ public class AnalyzeElement {
                 }
             }
         }
-        if (!TextUtils.isEmpty(regex)) {
+        if (!isEmpty(regex)) {
             List<String> tempList = new ArrayList<>(textS);
             textS.clear();
             for (String text : tempList) {
@@ -273,13 +335,32 @@ public class AnalyzeElement {
      * 根据最后一个规则获取内容
      */
     private List<String> getResultLast(Elements elements, String lastRule) {
+        List<String> textS = new ArrayList<>();
         try {
-            List<String> textS = new ArrayList<>();
             switch (lastRule) {
                 case "text":
                     for (Element element : elements) {
                         String text = element.text();
                         textS.add(text);
+                    }
+                    break;
+                case "ownText":
+                    List<String> keptTags = Arrays.asList("br", "b", "em", "strong");
+                    for (Element element : elements) {
+                        Element ele = element.clone();
+                        for (Element child: ele.children()) {
+                            if (!keptTags.contains(child.tagName())) {
+                                child.remove();
+                            }
+                        }
+                        String[] htmlS = ele.html().replaceAll("(?i)<br[\\s/]*>", "\n")
+                                .replaceAll("<.*?>", "").split("\n");
+                        for (String temp : htmlS) {
+                            temp = FormatWebText.getContent(temp);
+                            if (!TextUtils.isEmpty(temp)) {
+                                textS.add(temp);
+                            }
+                        }
                     }
                     break;
                 case "textNodes":
@@ -288,7 +369,7 @@ public class AnalyzeElement {
                         for (int i = 0; i < contentEs.size(); i++) {
                             String temp = contentEs.get(i).text().trim();
                             temp = FormatWebText.getContent(temp);
-                            if (!TextUtils.isEmpty(temp)) {
+                            if (!isEmpty(temp)) {
                                 textS.add(temp);
                             }
                         }
@@ -297,29 +378,31 @@ public class AnalyzeElement {
                 case "html":
                     elements.select("script").remove();
                     String html = elements.html();
-                    String[] htmlS = html.replaceAll("<(br|p.*?|div.*?|/p|/div)>", "\n")
+                    String[] htmlS = html.replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
                             .replaceAll("<.*?>", "")
                             .split("\n");
                     for (String temp : htmlS) {
-                        if (!TextUtils.isEmpty(FormatWebText.getContent(temp))) {
+                        temp = FormatWebText.getContent(temp);
+                        if (!isEmpty(temp)) {
                             textS.add(temp);
                         }
                     }
                     break;
                 default:
+                    List<String> urlList = new ArrayList<>();
                     for (Element element : elements) {
-                        String url = NetworkUtil.getAbsoluteURL(baseURL, element.attr(lastRule));
-                        if (!TextUtils.isEmpty(url) && !textS.contains(url)) {
-                            textS.add(url);
+                        String url = element.attr(lastRule);
+                        if (!isEmpty(url) && urlList.indexOf(url) == -1) {
+                            urlList.add(url);
                         }
                     }
+                    for (String url : urlList) {
+                        textS.add(NetworkUtil.getAbsoluteURL(baseURL, url));
+                    }
             }
-            return textS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("getResultList", e.getMessage());
-            return null;
+        } catch (Exception ignore) {
         }
+        return textS;
     }
 
 }
