@@ -180,6 +180,7 @@
                                 android:paddingTop="1dp"
                                 android:paddingEnd="4dp"
                                 android:paddingBottom="1dp"
+                                android:singleLine="true"
                                 android:text="@string/change_origin"
                                 android:textColor="#ffffff"
                                 android:textSize="13sp" />
@@ -222,6 +223,7 @@
                                 android:id="@+id/tv_chapter_size"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:singleLine="true"
                                 android:textColor="@color/tv_text_book_detail"
                                 android:textSize="13sp" />
                         </LinearLayout>
@@ -247,6 +249,7 @@
                                 android:paddingTop="1dp"
                                 android:paddingEnd="4dp"
                                 android:paddingBottom="1dp"
+                                android:singleLine="true"
                                 android:text="@string/pursue_more"
                                 android:textColor="@color/white"
                                 android:textSize="13sp"
@@ -264,6 +267,7 @@
                                 android:paddingTop="1dp"
                                 android:paddingEnd="4dp"
                                 android:paddingBottom="1dp"
+                                android:singleLine="true"
                                 android:text="@string/fattening"
                                 android:textColor="@color/white"
                                 android:textSize="13sp"
@@ -281,6 +285,7 @@
                                 android:paddingTop="1dp"
                                 android:paddingEnd="4dp"
                                 android:paddingBottom="1dp"
+                                android:singleLine="true"
                                 android:text="@string/finish"
                                 android:textColor="@color/white"
                                 android:textSize="13sp"
@@ -297,6 +302,7 @@
                                 android:paddingTop="1dp"
                                 android:paddingEnd="4dp"
                                 android:paddingBottom="1dp"
+                                android:singleLine="true"
                                 android:text="@string/local"
                                 android:textColor="@color/white"
                                 android:textSize="13sp" />
