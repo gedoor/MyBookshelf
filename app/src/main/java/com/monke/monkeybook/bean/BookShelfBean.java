@@ -40,6 +40,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
     private Integer chapterListSize = 0;
     private String customCoverPath;
     private Boolean allowUpdate = true;
+    private Boolean useReplaceRule = true;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -76,13 +77,14 @@ public class BookShelfBean implements Parcelable, Cloneable {
         chapterListSize = in.readInt();
         customCoverPath = in.readString();
         allowUpdate = in.readByte() != 0 && !tag.equals(LOCAL_TAG);
+        useReplaceRule = in.readByte() != 0;
     }
 
-    @Generated(hash = 1626436040)
+    @Generated(hash = 2111310267)
     public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
-                         Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber,
-                         Long finalRefreshData, Integer group, String durChapterName, String lastChapterName,
-                         Integer chapterListSize, String customCoverPath, Boolean allowUpdate) {
+                         Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData,
+                         Integer group, String durChapterName, String lastChapterName, Integer chapterListSize,
+                         String customCoverPath, Boolean allowUpdate, Boolean useReplaceRule) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -98,6 +100,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.chapterListSize = chapterListSize;
         this.customCoverPath = customCoverPath;
         this.allowUpdate = allowUpdate;
+        this.useReplaceRule = useReplaceRule;
     }
 
     @Override
@@ -116,6 +119,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         dest.writeInt(chapterListSize);
         dest.writeString(customCoverPath);
         dest.writeByte((byte) (allowUpdate ? 1 : 0));
+        dest.writeByte((byte) (useReplaceRule ? 1 : 0));
     }
 
     @Override
@@ -358,6 +362,14 @@ public class BookShelfBean implements Parcelable, Cloneable {
 
     public int getBookmarkListSize() {
         return getBookmarkList().size();
+    }
+
+    public Boolean getUseReplaceRule() {
+        return this.useReplaceRule;
+    }
+
+    public void setUseReplaceRule(Boolean useReplaceRule) {
+        this.useReplaceRule = useReplaceRule;
     }
 
 

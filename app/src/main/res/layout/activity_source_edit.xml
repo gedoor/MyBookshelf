@@ -192,6 +192,18 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_ruleBookUrlPattern"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ruleBookUrlPattern">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/tie_ruleBookUrlPattern"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_ruleBookName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,6 +235,30 @@
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/tie_ruleCoverUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_ruleBookKind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ruleBookKind">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/tie_ruleBookKind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_ruleBookLastChapter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="ruleBookLastChapter">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/tie_ruleBookLastChapter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
@@ -336,6 +372,5 @@
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
     </ScrollView>
-
 
 </LinearLayout>
