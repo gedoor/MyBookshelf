@@ -246,6 +246,7 @@ public class AnalyzeElement {
             }
         }
         if (!isEmpty(regex)) {
+            assert regex != null;
             result = result.replaceAll(regex, replacement);
         }
         return result.trim();
@@ -298,6 +299,7 @@ public class AnalyzeElement {
             List<String> tempList = new ArrayList<>(textS);
             textS.clear();
             for (String text : tempList) {
+                assert regex != null;
                 text = text.replaceAll(regex, "");
                 if (text.length() > 0) {
                     textS.add(text);
@@ -348,7 +350,7 @@ public class AnalyzeElement {
                     List<String> keptTags = Arrays.asList("br", "b", "em", "strong");
                     for (Element element : elements) {
                         Element ele = element.clone();
-                        for (Element child: ele.children()) {
+                        for (Element child : ele.children()) {
                             if (!keptTags.contains(child.tagName())) {
                                 child.remove();
                             }
