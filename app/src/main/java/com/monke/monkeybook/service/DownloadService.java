@@ -99,6 +99,9 @@ public class DownloadService extends Service {
                         }
                         break;
                     case removeDownloadAction:
+                        String noteUrl = intent.getStringExtra("noteUrl");
+                        removeDownload(noteUrl);
+                        break;
                     case cancelAction:
                         cancelDownload();
                         break;
@@ -122,6 +125,7 @@ public class DownloadService extends Service {
         if (checkDownloadTaskExist(downloadBook)) {
             return;
         }
+        downloadTaskId++;
         new DownloadTaskImpl(downloadTaskId, downloadBook) {
             @Override
             public void onDownloadPrepared(DownloadBookBean downloadBook) {
@@ -163,7 +167,6 @@ public class DownloadService extends Service {
                 startNextTaskAfterRemove(downloadBook);
             }
         };
-        downloadTaskId += 1;
     }
 
     private void cancelDownload() {
@@ -269,11 +272,11 @@ public class DownloadService extends Service {
 
     private PendingIntent getChancelPendingIntent() {
         Intent intent = new Intent(this, DownloadService.class);
-        intent.setAction(DownloadService.removeDownloadAction);
+        intent.setAction(DownloadService.cancelAction);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void isProgress(DownloadChapterBean downloadChapterBean) {
+    private synchronized void isProgress(DownloadChapterBean downloadChapterBean) {
         if (!isRunning) {
             return;
         }
