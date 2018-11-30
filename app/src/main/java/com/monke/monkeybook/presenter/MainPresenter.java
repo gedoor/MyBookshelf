@@ -58,7 +58,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         if (value) {
                             //更新书架并刷新
                             mView.toast(R.string.restore_success);
-                            // RxBus.get().post(RxBusTag.UPDATE_PX, true);
                             mView.recreate();
                             ReadBookControl.getInstance().updateReaderSettings();
                         } else {
