@@ -106,10 +106,10 @@ public class BookInfoActivity extends MBaseActivity {
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        tilBookName.setHint("书名");
-        tilBookAuthor.setHint("作者");
-        tilCoverUrl.setHint("封面地址");
-        tilBookJj.setHint("简介");
+        tilBookName.setHint(getString(R.string.book_name));
+        tilBookAuthor.setHint(getString(R.string.author));
+        tilCoverUrl.setHint(getString(R.string.cover_path));
+        tilBookJj.setHint(getString(R.string.book_intro));
         moDialogHUD = new MoDialogHUD(this);
     }
 

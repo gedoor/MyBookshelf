@@ -30,7 +30,7 @@
     <string name="net_error_10003">数据解析失败</string>
     <string name="origin_format">来源: %s</string>
     <string name="read_dur_progress">最近: %s</string>
-    <string name="tv_book_name">《%s》</string>
+    <string name="book_name">书名</string>
     <string name="book_search_last">最新: %s</string>
     <string name="check_add_bookshelf">是否将《%s》放入书架？</string>
     <string name="import_books_count">共%s个Text文件</string>
@@ -285,5 +285,6 @@
     <string name="navigation_bar_color_change_s">导航栏根据夜间模式变化</string>
     <string name="add_to_shelf">放入书架</string>
     <string name="continue_read">继续阅读</string>
+    <string name="cover_path">封面地址</string>
 
 </resources>
