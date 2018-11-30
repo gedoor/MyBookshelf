@@ -47,7 +47,7 @@ public class ScrollTextView extends AppCompatTextView {
         paddingBottom = getTotalPaddingBottom();
 
         //获得控件的实际高度
-        mHeight = getHeight();
+        mHeight = getMeasuredHeight();
 
         //计算滑动距离的边界
         mOffsetHeight = mLayoutHeight + paddingTop + paddingBottom - mHeight;
