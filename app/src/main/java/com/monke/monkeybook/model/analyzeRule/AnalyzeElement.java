@@ -269,10 +269,14 @@ public class AnalyzeElement {
             return textS;
         }
         String regex = null;
+        String replacement = "";
         //分离正则表达式
         String[] ruleStrS = ruleStr.trim().split("#");
         if (ruleStrS.length > 1) {
             regex = ruleStrS[1];
+        }
+        if (ruleStrS.length > 2 && !isEmpty(ruleStrS[2])) {
+            replacement = ruleStrS[2];
         }
         if (isEmpty(ruleStrS[0])) {
             textS.add(element.data());
@@ -300,7 +304,7 @@ public class AnalyzeElement {
             textS.clear();
             for (String text : tempList) {
                 assert regex != null;
-                text = text.replaceAll(regex, "");
+                text = text.replaceAll(regex, replacement);
                 if (text.length() > 0) {
                     textS.add(text);
                 }
