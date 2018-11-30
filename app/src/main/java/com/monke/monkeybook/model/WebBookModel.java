@@ -138,8 +138,8 @@ public class WebBookModel {
                 bookShelfBean.upDurChapterName();
                 bookShelfBean.upLastChapterName();
                 BookshelfHelp.delChapterList(bookShelfBean.getNoteUrl());
-                e.onNext(bookShelfBean);
             }
+            e.onNext(bookShelfBean);
             e.onComplete();
         });
     }
