@@ -55,12 +55,14 @@ public class ScrollTextView extends AppCompatTextView {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             //如果是新的按下事件，则对mBottomFlag重新初始化
             mBottomFlag = mOffsetHeight <= 0;
+        }
         //如果已经不要这次事件，则传出取消的信号，这里的作用不大
-        if (mBottomFlag)
+        if (mBottomFlag) {
             event.setAction(MotionEvent.ACTION_CANCEL);
+        }
         return super.dispatchTouchEvent(event);
     }
 
