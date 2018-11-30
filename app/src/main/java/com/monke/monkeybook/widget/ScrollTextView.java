@@ -31,7 +31,16 @@ public class ScrollTextView extends AppCompatTextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        initOffsetHeight();
+    }
 
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+        initOffsetHeight();
+    }
+
+    private void initOffsetHeight() {
         int paddingTop;
         int paddingBottom;
         int mHeight;
@@ -39,6 +48,7 @@ public class ScrollTextView extends AppCompatTextView {
 
         //获得内容面板
         Layout mLayout = getLayout();
+        if (mLayout == null) return;
         //获得内容面板的高度
         mLayoutHeight = mLayout.getHeight();
         //获取上内边距
