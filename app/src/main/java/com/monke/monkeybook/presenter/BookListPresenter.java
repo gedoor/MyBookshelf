@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.monke.monkeybook.presenter;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -22,7 +23,6 @@ import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.BookListContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.utils.NetworkUtil;
-import com.monke.monkeybook.utils.RxUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
@@ -30,7 +30,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -85,7 +84,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         if (bookShelfBeans == null || mView.getContext() == null) {
             return;
         }
-        Single.create(emitter -> {
+        AsyncTask.execute(() -> {
             for (BookShelfBean bookShelfBean : new ArrayList<>(bookShelfBeans)) {
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
@@ -105,8 +104,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                     }
                 }
             }
-        }).compose(RxUtils::toSimpleSingle)
-                .subscribe();
+        });
     }
 
     private void startRefreshBook() {
