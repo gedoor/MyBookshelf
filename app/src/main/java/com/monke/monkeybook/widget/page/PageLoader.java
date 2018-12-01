@@ -601,6 +601,7 @@ public abstract class PageLoader {
             noAnimationToNextPage();
             mPageView.invalidate();
         }
+
     }
 
     /**

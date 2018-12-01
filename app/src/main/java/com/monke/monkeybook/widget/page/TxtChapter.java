@@ -9,8 +9,9 @@ import java.util.List;
 
 class TxtChapter {
     private int position;
-    private List<TxtPage> txtPageList;
+    private List<TxtPage> txtPageList = new ArrayList<>();
     private List<Integer> txtPageLengthList = new ArrayList<>();
+    private List<Integer> paragraphLengthList = new ArrayList<>();
     private Enum.PageStatus status = Enum.PageStatus.LOADING;
     private String msg;
 
@@ -22,22 +23,12 @@ class TxtChapter {
         return position;
     }
 
-    void setTxtPageList(List<TxtPage> txtPageList) {
-        this.txtPageList = txtPageList;
-        txtPageLengthList.clear();
-        if (txtPageList != null) {
-            for (int i = 0; i < txtPageList.size(); i++) {
-                if (i == 0) {
-                    txtPageLengthList.add(txtPageList.get(i).getContent().length());
-                } else {
-                    txtPageLengthList.add(txtPageLengthList.get(i - 1) + txtPageList.get(i).getContent().length());
-                }
-            }
-        }
-    }
-
     List<TxtPage> getTxtPageList() {
         return txtPageList;
+    }
+
+    void addPage(TxtPage txtPage) {
+        txtPageList.add(txtPage);
     }
 
     int getPageSize() {
@@ -45,7 +36,7 @@ class TxtChapter {
     }
 
     TxtPage getPage(int page) {
-        if (txtPageList != null) {
+        if (!txtPageList.isEmpty()) {
             return txtPageList.get(Math.max(0, Math.min(page, txtPageList.size() - 1)));
         }
         return null;
@@ -72,5 +63,9 @@ class TxtChapter {
             return -1;
         }
         return txtPageLengthList.get(position);
+    }
+
+    List<Integer> getTxtPageLengthList() {
+        return txtPageLengthList;
     }
 }
