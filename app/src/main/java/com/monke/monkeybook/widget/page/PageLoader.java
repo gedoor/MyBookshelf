@@ -22,6 +22,7 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.ChapterContentHelp;
 import com.monke.monkeybook.help.Constant;
 import com.monke.monkeybook.help.ReadBookControl;
+import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
@@ -601,7 +602,12 @@ public abstract class PageLoader {
             noAnimationToNextPage();
             mPageView.invalidate();
         }
-
+        int x = mCurChapter.getParagraphIndex(start);
+        if (readAloudParagraph != x) {
+            readAloudParagraph = x;
+            mPageView.drawPage(0);
+            mPageView.invalidate();
+        }
     }
 
     /**
@@ -1229,6 +1235,8 @@ public abstract class PageLoader {
             for (int i = 0; i < txtPage.titleLines; ++i) {
                 str = txtPage.lines.get(i);
 
+                mTitlePaint.setUnderlineText(ReadAloudService.running && readAloudParagraph == 0);
+
                 //进行绘制
                 canvas.drawText(str, mDisplayWidth / 2, top, mTitlePaint);
 
@@ -1244,12 +1252,14 @@ public abstract class PageLoader {
             if (txtPage.lines == null) {
                 return;
             }
+            int strLength = 0;
             //对内容进行绘制
             for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
                 str = txtPage.lines.get(i);
+                strLength = strLength + str.length();
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                 float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
-
+                mTextPaint.setUnderlineText(ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(readTextLength + strLength));
                 if (needScale(str)) {
                     drawScaledText(canvas, str, width, mTextPaint, top);
                 } else {
