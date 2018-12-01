@@ -1038,6 +1038,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             default:
                 llMenuBottom.setFabReadAloudImage(R.drawable.ic_read_aloud);
                 llMenuBottom.setReadAloudTimer(false);
+                pageView.drawPage(0);
+                pageView.invalidate();
         }
     }
 
