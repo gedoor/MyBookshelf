@@ -191,17 +191,14 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             hpbNextPageProgress.setY(ImmersionBar.getStatusBarHeight(this));
         }
 
-        if (llMenuBottom.getVisibility() == View.VISIBLE
-                || readAdjustPop.getVisibility() == View.VISIBLE
-                || readInterfacePop.getVisibility() == View.VISIBLE
-                || moreSettingPop.getVisibility() == View.VISIBLE) {
+        if (llMenuBottom.getVisibility() == View.VISIBLE) {
             if (isImmersionBarEnabled() && !isNightTheme()) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
             mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-            changeNavigationBarColor(false, 0);
+            changeNavigationBarColor(false);
         } else {
             if (!isImmersionBarEnabled()) {
                 mImmersionBar.statusBarDarkFont(false);
@@ -215,12 +212,12 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_BAR);
             } else if (readBookControl.getHideStatusBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_STATUS_BAR);
-                changeNavigationBarColor(true, readBookControl.getNavbarColor());
+                changeNavigationBarColor(true);
             } else if (readBookControl.getHideNavigationBar()) {
                 mImmersionBar.hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR);
             } else {
                 mImmersionBar.hideBar(BarHide.FLAG_SHOW_BAR);
-                changeNavigationBarColor(true, readBookControl.getNavbarColor());
+                changeNavigationBarColor(true);
             }
 
         }
@@ -233,11 +230,18 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     /**
      * 修改导航栏颜色
      */
-    private void changeNavigationBarColor(boolean hideBarDivider, int barColorType) {
+    private void changeNavigationBarColor(boolean hideBarDivider) {
         if (hideBarDivider) {
             mImmersionBar.hideBarDivider();
         } else {
             mImmersionBar.showBarDivider();
+        }
+        int barColorType = readBookControl.getNavbarColor();
+        if (llMenuBottom.getVisibility() == View.VISIBLE
+                || readAdjustPop.getVisibility() == View.VISIBLE
+                || readInterfacePop.getVisibility() == View.VISIBLE
+                || moreSettingPop.getVisibility() == View.VISIBLE) {
+            barColorType = 0;
         }
         switch (barColorType) {
             case 1:
@@ -251,6 +255,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case 3:
                 mImmersionBar.navigationBarDarkFont(readBookControl.getDarkStatusIcon(), 0.2f);
                 mImmersionBar.navigationBarColorInt(readBookControl.getBgColor());
+                break;
+            default:
+
                 break;
         }
     }
