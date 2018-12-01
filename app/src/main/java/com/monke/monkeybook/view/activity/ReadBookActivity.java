@@ -1051,11 +1051,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
-    public void speakIndex(int speakIndex) {
-//        runOnUiThread(() -> csvBook.speakStart(speakIndex));
-    }
-
-    @Override
     public void refresh(boolean recreate) {
         if (recreate) {
             recreate();

@@ -133,8 +133,8 @@ public abstract class PageLoader {
     // 当前章
     int mCurChapterPos;
     int mCurPagePos;
-    private int readTextLength;
-    private boolean resetReadAloud;
+    private int readTextLength; //已读字符数
+    private boolean resetReadAloud; //是否重新朗读
 
     public Bitmap cover;
     private int linePos = 0;

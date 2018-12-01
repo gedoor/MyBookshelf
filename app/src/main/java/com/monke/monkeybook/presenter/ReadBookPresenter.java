@@ -21,7 +21,6 @@ import com.monke.basemvplib.BaseActivity;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
 import com.monke.monkeybook.BitIntentDataManager;
-import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -444,11 +443,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_STATE)})
     public void upAloudState(Integer state) {
         mView.upAloudState(state);
-    }
-
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_INDEX)})
-    public void speakIndex(Integer index) {
-        mView.speakIndex(index);
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.ALOUD_TIMER)})

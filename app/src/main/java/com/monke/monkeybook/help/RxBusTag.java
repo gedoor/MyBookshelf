@@ -11,7 +11,6 @@ public class RxBusTag {
     public final static String CHAPTER_CHANGE = "chapter_change";
     public final static String MEDIA_BUTTON = "media_button";
     public final static String ALOUD_STATE = "aloud_state";
-    public final static String ALOUD_INDEX = "aloud_index";
     public final static String ALOUD_TIMER = "aloud_timer";
     public final static String UPDATE_PX = "update_px";
     public final static String CHECK_SOURCE_STATE = "checkSourceState";

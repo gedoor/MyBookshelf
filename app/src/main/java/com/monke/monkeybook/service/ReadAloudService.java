@@ -334,9 +334,9 @@ public class ReadAloudService extends Service {
         }
     }
 
-    private PendingIntent getReadBookActivityPendingIntent(String actionStr) {
+    private PendingIntent getReadBookActivityPendingIntent() {
         Intent intent = new Intent(this, ReadBookActivity.class);
-        intent.setAction(actionStr);
+        intent.setAction(ReadAloudService.ActionReadActivity);
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -368,7 +368,7 @@ public class ReadAloudService extends Service {
                 .setOngoing(true)
                 .setContentTitle(nTitle)
                 .setContentText(text)
-                .setContentIntent(getReadBookActivityPendingIntent(ActionReadActivity));
+                .setContentIntent(getReadBookActivityPendingIntent());
         if (pause) {
             builder.addAction(R.drawable.ic_play_24dp, getString(R.string.resume), getThisServicePendingIntent(ActionResumeService));
         } else {
@@ -514,7 +514,6 @@ public class ReadAloudService extends Service {
 
         @Override
         public void onStart(String s) {
-            RxBus.get().post(RxBusTag.ALOUD_INDEX, nowSpeak);
             updateMediaSessionPlaybackState();
         }
 
