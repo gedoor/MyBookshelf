@@ -65,7 +65,19 @@ class TxtChapter {
         return txtPageLengthList.get(position);
     }
 
+    void addTxtPageLength(int length) {
+        txtPageLengthList.add(length);
+    }
+
     List<Integer> getTxtPageLengthList() {
         return txtPageLengthList;
+    }
+
+    List<Integer> getParagraphLengthList() {
+        return paragraphLengthList;
+    }
+
+    void addParagraphLength(int length) {
+        paragraphLengthList.add(length);
     }
 }

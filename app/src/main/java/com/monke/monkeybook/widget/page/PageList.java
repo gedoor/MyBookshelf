@@ -75,6 +75,7 @@ class PageList {
                 if (paragraph.equals("")) continue;
                 paragraph = StringUtils.halfToFull("  ") + paragraph + "\n";
             }
+            addParagraphLength(txtChapter, paragraph.length());
             int wordCount;
             String subStr;
             while (paragraph.length() > 0) {
@@ -93,7 +94,7 @@ class PageList {
                     page.lines = new ArrayList<>(lines);
                     page.titleLines = titleLinesCount;
                     txtChapter.addPage(page);
-                    addTxtPageLengthList(txtChapter, page.getContent().length());
+                    addTxtPageLength(txtChapter, page.getContent().length());
                     // 重置Lines
                     lines.clear();
                     rHeight = pageLoader.mVisibleHeight - pageLoader.contentMarginHeight * 2;
@@ -116,7 +117,6 @@ class PageList {
                 if (!subStr.equals("\n")) {
                     //将一行字节，存储到lines中
                     lines.add(subStr);
-
                     //设置段落间距
                     if (showTitle) {
                         titleLinesCount += 1;
@@ -148,7 +148,7 @@ class PageList {
             page.lines = new ArrayList<>(lines);
             page.titleLines = titleLinesCount;
             txtChapter.addPage(page);
-            addTxtPageLengthList(txtChapter, page.getContent().length());
+            addTxtPageLength(txtChapter, page.getContent().length());
             //重置Lines
             lines.clear();
         }
@@ -156,11 +156,19 @@ class PageList {
         return txtChapter;
     }
 
-    private void addTxtPageLengthList(TxtChapter txtChapter, int length) {
+    private void addTxtPageLength(TxtChapter txtChapter, int length) {
         if (txtChapter.getTxtPageLengthList().isEmpty()) {
-            txtChapter.getTxtPageLengthList().add(length);
+            txtChapter.addTxtPageLength(length);
         } else {
-            txtChapter.getTxtPageLengthList().add(txtChapter.getTxtPageLengthList().get(txtChapter.getTxtPageLengthList().size() - 1) + length);
+            txtChapter.addTxtPageLength(txtChapter.getTxtPageLengthList().get(txtChapter.getTxtPageLengthList().size() - 1) + length);
+        }
+    }
+
+    private void addParagraphLength(TxtChapter txtChapter, int length) {
+        if (txtChapter.getParagraphLengthList().isEmpty()) {
+            txtChapter.addParagraphLength(length);
+        } else {
+            txtChapter.addParagraphLength(txtChapter.getParagraphLengthList().get(txtChapter.getParagraphLengthList().size() - 1) + length);
         }
     }
 }
