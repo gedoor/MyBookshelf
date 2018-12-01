@@ -16,4 +16,9 @@
 - https://gedoor.github.io/MyBookshelf/disclaimer.html
 
 ### 软件截图
-![image](https://gedoor.github.io/MyBookshelf/image/mybookshelf.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook1.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook2.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook3.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook4.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook5.jpg)
+![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybook6.jpg)
