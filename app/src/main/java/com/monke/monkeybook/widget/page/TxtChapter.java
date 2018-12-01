@@ -32,7 +32,7 @@ class TxtChapter {
     }
 
     int getPageSize() {
-        return txtPageList != null ? txtPageList.size() : 0;
+        return txtPageList.size();
     }
 
     TxtPage getPage(int page) {
