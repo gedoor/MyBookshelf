@@ -596,7 +596,7 @@ public abstract class PageLoader {
         if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
         if (mPageView.isRunning()) return;
         start = readTextLength + start;
-        if (start > mCurChapter.getPageLength(mCurPagePos)) {
+        if (start >= mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
             noAnimationToNextPage();
             mPageView.invalidate();
