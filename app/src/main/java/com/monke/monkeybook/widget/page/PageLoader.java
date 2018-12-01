@@ -135,6 +135,7 @@ public abstract class PageLoader {
     int mCurPagePos;
     private int readTextLength; //已读字符数
     private boolean resetReadAloud; //是否重新朗读
+    private int readAloudParagraph;
 
     public Bitmap cover;
     private int linePos = 0;

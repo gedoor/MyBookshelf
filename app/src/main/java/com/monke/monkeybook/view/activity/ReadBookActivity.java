@@ -274,6 +274,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
+    /**
+     * 重置黑屏时间
+     */
     private void screenOffTimerStart() {
         int screenOffTime = screenTimeOut * 1000 - SystemUtil.getScreenOffTime(this);
         if (screenOffTime > 0) {
@@ -1121,9 +1124,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     }
                     return true;
                 } else if (keyCode == KeyEvent.KEYCODE_SPACE) {
-                    if (mPageLoader != null) {
-                        mPageLoader.skipToNextPage();
-                    }
+                    nextPage();
                     return true;
                 }
             }
