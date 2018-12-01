@@ -558,7 +558,7 @@ public abstract class PageLoader {
      */
     public String getContent() {
         if (mCurChapter == null) return null;
-        if (mCurChapter.getTxtPageList() == null) return null;
+        if (mCurChapter.getPageSize() == 0) return null;
         TxtPage txtPage = mCurChapter.getPage(mCurPagePos);
         StringBuilder s = new StringBuilder();
         int size = txtPage.lines.size();
