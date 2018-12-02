@@ -607,6 +607,9 @@ public abstract class PageLoader {
             readAloudParagraph = x;
             mPageView.drawPage(0);
             mPageView.invalidate();
+            mPageView.drawPage(-1);
+            mPageView.drawPage(1);
+            mPageView.invalidate();
         }
     }
 
@@ -1023,6 +1026,7 @@ public abstract class PageLoader {
 
         int chapterPos = mCurChapterPos;
         int pagePos = mCurPagePos;
+        boolean isLight;
 
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
             String tip = getStatusText(mCurChapter);
@@ -1056,6 +1060,8 @@ public abstract class PageLoader {
             if (page.lines == null) break;
             if (top > totalHeight) break;
             float topi = top;
+            isLight = ReadAloudService.running && readAloudParagraph == 0;
+            mTitlePaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
             for (int i = 0; i < page.titleLines; i++) {
                 if (top > totalHeight) {
                     break;
@@ -1077,8 +1083,12 @@ public abstract class PageLoader {
                 top += getCoverHeight();
             }
             if (top > totalHeight) break;
+            int strLength = 0;
             for (int i = page.titleLines, size = page.lines.size(); i < size; i++) {
                 str = page.lines.get(i);
+                strLength = strLength + str.length();
+                isLight = ReadAloudService.running && page.position == mCurPagePos && readAloudParagraph == mCurChapter.getParagraphIndex(readTextLength + strLength);
+                mTextPaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
                 if (top > totalHeight) {
                     break;
                 } else if (top > startHeight) {
@@ -1232,10 +1242,12 @@ public abstract class PageLoader {
 
             //对标题进行绘制
             String str;
+            boolean isLight;
             for (int i = 0; i < txtPage.titleLines; ++i) {
                 str = txtPage.lines.get(i);
 
-                mTitlePaint.setUnderlineText(ReadAloudService.running && readAloudParagraph == 0);
+                isLight = ReadAloudService.running && readAloudParagraph == 0;
+                mTitlePaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
 
                 //进行绘制
                 canvas.drawText(str, mDisplayWidth / 2, top, mTitlePaint);
@@ -1257,9 +1269,10 @@ public abstract class PageLoader {
             for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
                 str = txtPage.lines.get(i);
                 strLength = strLength + str.length();
+                isLight = ReadAloudService.running && txtPage.position == mCurPagePos && readAloudParagraph == txtChapter.getParagraphIndex(readTextLength + strLength);
+                mTextPaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                 float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
-                mTextPaint.setUnderlineText(ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(readTextLength + strLength));
                 if (needScale(str)) {
                     drawScaledText(canvas, str, width, mTextPaint, top);
                 } else {

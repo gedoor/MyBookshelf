@@ -1040,6 +1040,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 llMenuBottom.setReadAloudTimer(false);
                 pageView.drawPage(0);
                 pageView.invalidate();
+                pageView.drawPage(-1);
+                pageView.drawPage(1);
+                pageView.invalidate();
         }
     }
 
