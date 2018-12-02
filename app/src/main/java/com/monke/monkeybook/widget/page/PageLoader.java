@@ -593,15 +593,7 @@ public abstract class PageLoader {
     }
 
     public void readAloudStart(int start) {
-        if (mCurChapter == null) return;
-        if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
-        if (mPageView.isRunning()) return;
         start = readTextLength + start;
-        if (start >= mCurChapter.getPageLength(mCurPagePos)) {
-            resetReadAloud = false;
-            noAnimationToNextPage();
-            mPageView.invalidate();
-        }
         int x = mCurChapter.getParagraphIndex(start);
         if (readAloudParagraph != x) {
             readAloudParagraph = x;
@@ -609,6 +601,18 @@ public abstract class PageLoader {
             mPageView.invalidate();
             mPageView.drawPage(-1);
             mPageView.drawPage(1);
+            mPageView.invalidate();
+        }
+    }
+
+    public void readAloudLength(int readAloudLength) {
+        if (mCurChapter == null) return;
+        if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
+        if (mPageView.isRunning()) return;
+        readAloudLength = readTextLength + readAloudLength;
+        if (readAloudLength >= mCurChapter.getPageLength(mCurPagePos)) {
+            resetReadAloud = false;
+            noAnimationToNextPage();
             mPageView.invalidate();
         }
     }

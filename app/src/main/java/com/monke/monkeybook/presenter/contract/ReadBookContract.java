@@ -38,6 +38,8 @@ public interface ReadBookContract {
 
         void readAloudStart(int start);
 
+        void readAloudLength(int readAloudLength);
+
         void refresh(boolean recreate);
 
         void finish();

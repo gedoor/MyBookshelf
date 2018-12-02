@@ -1059,6 +1059,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     @Override
+    public void readAloudLength(int readAloudLength) {
+        if (mPageLoader != null) {
+            mPageLoader.readAloudLength(readAloudLength);
+        }
+    }
+
+    @Override
     public void refresh(boolean recreate) {
         if (recreate) {
             recreate();
