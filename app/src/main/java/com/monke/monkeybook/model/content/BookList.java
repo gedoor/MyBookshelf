@@ -42,6 +42,9 @@ class BookList {
                 assert response.body() != null;
                 Document doc = Jsoup.parse(response.body());
                 String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
+                if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
+                    bookUrlPattern += ".*";
+                }
                 if (!isEmpty(bookUrlPattern) && baseURI.matches(bookUrlPattern)
                         && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
                     AnalyzeElement analyzeElement = new AnalyzeElement(doc, baseURI);
