@@ -1087,7 +1087,8 @@ public abstract class PageLoader {
             for (int i = page.titleLines, size = page.lines.size(); i < size; i++) {
                 str = page.lines.get(i);
                 strLength = strLength + str.length();
-                isLight = ReadAloudService.running && page.position == mCurPagePos && readAloudParagraph == mCurChapter.getParagraphIndex(readTextLength + strLength);
+                int paragraphLength = page.position == mCurPagePos ? readTextLength + strLength : mCurChapter.getPageLength(page.position) + strLength;
+                isLight = ReadAloudService.running && readAloudParagraph == mCurChapter.getParagraphIndex(paragraphLength);
                 mTextPaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
                 if (top > totalHeight) {
                     break;
@@ -1269,7 +1270,8 @@ public abstract class PageLoader {
             for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
                 str = txtPage.lines.get(i);
                 strLength = strLength + str.length();
-                isLight = ReadAloudService.running && txtPage.position == mCurPagePos && readAloudParagraph == txtChapter.getParagraphIndex(readTextLength + strLength);
+                int paragraphLength = txtPage.position == mCurPagePos ? readTextLength + strLength : txtChapter.getPageLength(txtPage.position) + strLength;
+                isLight = ReadAloudService.running && readAloudParagraph == txtChapter.getParagraphIndex(paragraphLength);
                 mTextPaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
                 Layout tempLayout = new StaticLayout(str, mTextPaint, mVisibleWidth, Layout.Alignment.ALIGN_NORMAL, 0, 0, false);
                 float width = StaticLayout.getDesiredWidth(str, tempLayout.getLineStart(0), tempLayout.getLineEnd(0), mTextPaint);
