@@ -81,10 +81,6 @@ class TxtChapter {
         paragraphLengthList.add(length);
     }
 
-    int getParagraphLength(int index) {
-        return paragraphLengthList.get(index);
-    }
-
     int getParagraphIndex(int length) {
         for (int i = 0; i < paragraphLengthList.size(); i++) {
             if ((i == 0 || paragraphLengthList.get(i - 1) < length) && length <= paragraphLengthList.get(i)) {

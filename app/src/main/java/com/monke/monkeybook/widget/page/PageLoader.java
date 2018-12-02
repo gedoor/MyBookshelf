@@ -1522,7 +1522,7 @@ public abstract class PageLoader {
 
     private void chapterChangeCallback() {
         if (mPageChangeListener != null) {
-            readAloudParagraph = 0;
+            readAloudParagraph = -1;
             mPageChangeListener.onChapterChange(mCurChapterPos);
             mPageChangeListener.onPageCountChange(mCurChapter != null ? mCurChapter.getPageSize() : 0);
         }
