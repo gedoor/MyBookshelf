@@ -976,6 +976,9 @@ public abstract class PageLoader {
         }
     }
 
+    /**
+     * 绘制内容-滚动
+     */
     @SuppressWarnings("ConstantConditions")
     void drawContent(Canvas canvas, float offset) {
         if (offset > MAX_SCROLL_OFFSET) {
