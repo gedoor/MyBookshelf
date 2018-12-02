@@ -1064,6 +1064,7 @@ public abstract class PageLoader {
             if (page.lines == null) break;
             if (top > totalHeight) break;
             float topi = top;
+            int strLength = 0;
             isLight = ReadAloudService.running && readAloudParagraph == 0;
             mTitlePaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
             for (int i = 0; i < page.titleLines; i++) {
@@ -1071,6 +1072,7 @@ public abstract class PageLoader {
                     break;
                 } else if (top > startHeight) {
                     str = page.lines.get(i);
+                    strLength = strLength + str.length();
                     //进行绘制
                     canvas.drawText(str, mDisplayWidth / 2, top, mTitlePaint);
                 }
@@ -1087,7 +1089,6 @@ public abstract class PageLoader {
                 top += getCoverHeight();
             }
             if (top > totalHeight) break;
-            int strLength = 0;
             for (int i = page.titleLines, size = page.lines.size(); i < size; i++) {
                 str = page.lines.get(i);
                 strLength = strLength + str.length();
@@ -1247,10 +1248,11 @@ public abstract class PageLoader {
 
             //对标题进行绘制
             String str;
+            int strLength = 0;
             boolean isLight;
             for (int i = 0; i < txtPage.titleLines; ++i) {
                 str = txtPage.lines.get(i);
-
+                strLength = strLength + str.length();
                 isLight = ReadAloudService.running && readAloudParagraph == 0;
                 mTitlePaint.setColor(isLight ? mContext.getResources().getColor(R.color.colorAccent) : readBookControl.getTextColor());
 
@@ -1269,7 +1271,6 @@ public abstract class PageLoader {
             if (txtPage.lines == null) {
                 return;
             }
-            int strLength = 0;
             //对内容进行绘制
             for (int i = txtPage.titleLines; i < txtPage.lines.size(); ++i) {
                 str = txtPage.lines.get(i);
