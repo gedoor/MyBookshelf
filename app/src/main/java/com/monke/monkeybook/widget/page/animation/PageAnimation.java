@@ -13,7 +13,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 
 /**
- * Created by newbiechen on 17-7-24.
  * 翻页动画抽象类
  */
 
@@ -24,49 +23,45 @@ public abstract class PageAnimation {
     protected View mView;
     protected ReadBookControl readBookControl = ReadBookControl.getInstance();
     //滑动装置
-    protected Scroller mScroller;
+    Scroller mScroller;
     //监听器
     protected OnPageChangeListener mListener;
     //移动方向
-    protected Direction mDirection = Direction.NONE;
+    Direction mDirection = Direction.NONE;
 
     //屏幕的尺寸
-    protected int mScreenWidth;
-    protected int mScreenHeight;
-    //屏幕的间距
-    protected int mMarginWidth;
-    protected int mMarginTop;
-    protected int mMarginBottom;
+    int mScreenWidth;
+    int mScreenHeight;
+    int mMarginTop;
     //视图的尺寸
-    protected int mViewWidth;
-    protected int mViewHeight;
+    int mViewWidth;
+    int mViewHeight;
     //起始点
-    protected float mStartX;
-    protected float mStartY;
+    float mStartX;
+    float mStartY;
     //触碰点
-    protected float mTouchX;
-    protected float mTouchY;
+    float mTouchX;
+    float mTouchY;
     //上一个触碰点
-    protected float mLastX;
-    protected float mLastY;
+    float mLastX;
+    float mLastY;
 
-    protected boolean isRunning = false;
-    protected boolean changePage = false;
+    boolean isRunning = false;
+    boolean changePage = false;
 
-    public PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
+    PageAnimation(int w, int h, View view, OnPageChangeListener listener) {
         this(w, h, 0, 0, 0, view, listener);
     }
 
-    public PageAnimation(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
+    PageAnimation(int w, int h, int marginWidth, int marginTop, int marginBottom, View view, OnPageChangeListener listener) {
         mScreenWidth = w;
         mScreenHeight = h;
 
-        mMarginWidth = marginWidth;
+        //屏幕的间距
         mMarginTop = marginTop;
-        mMarginBottom = marginBottom;
 
-        mViewWidth = mScreenWidth - mMarginWidth * 2;
-        mViewHeight = mScreenHeight - mMarginTop - mMarginBottom;
+        mViewWidth = mScreenWidth - marginWidth * 2;
+        mViewHeight = mScreenHeight - mMarginTop - marginBottom;
 
         mView = view;
         mListener = listener;
@@ -181,7 +176,6 @@ public abstract class PageAnimation {
         PageMode(String name) {
             this.name = name;
         }
-
 
         public static PageAnimation.PageMode getPageMode(int pageMode) {
             switch (pageMode) {
