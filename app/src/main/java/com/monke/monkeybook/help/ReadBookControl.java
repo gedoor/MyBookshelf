@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.widget.page.animation.PageAnimation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -638,23 +637,6 @@ public class ReadBookControl {
 
     public int getPageMode() {
         return pageMode;
-    }
-
-    public PageAnimation.PageMode getPageMode(int pageMode) {
-        switch (pageMode) {
-            case 0:
-                return PageAnimation.PageMode.COVER;
-            case 1:
-                return PageAnimation.PageMode.SIMULATION;
-            case 2:
-                return PageAnimation.PageMode.SLIDE;
-            case 3:
-                return PageAnimation.PageMode.SCROLL;
-            case 4:
-                return PageAnimation.PageMode.NONE;
-            default:
-                return PageAnimation.PageMode.COVER;
-        }
     }
 
     public void setPageMode(int pageMode) {

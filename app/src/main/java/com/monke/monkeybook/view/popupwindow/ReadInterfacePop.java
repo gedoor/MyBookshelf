@@ -19,6 +19,7 @@ import com.monke.monkeybook.view.activity.ReadBookActivity;
 import com.monke.monkeybook.view.activity.ReadStyleActivity;
 import com.monke.monkeybook.widget.font.FontSelector;
 import com.monke.monkeybook.widget.number.NumberButton;
+import com.monke.monkeybook.widget.page.animation.PageAnimation;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -186,7 +187,7 @@ public class ReadInterfacePop extends FrameLayout {
         tvPageMode.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
                     .setTitle(activity.getString(R.string.page_mode))
-                    .setSingleChoiceItems(activity.getResources().getStringArray(R.array.page_mode), readBookControl.getPageMode(), (dialogInterface, i) -> {
+                    .setSingleChoiceItems(PageAnimation.PageMode.getAllPageMode(), readBookControl.getPageMode(), (dialogInterface, i) -> {
                         readBookControl.setPageMode(i);
                         updatePageMode(i);
                         changeProListener.upPageMode();
@@ -281,7 +282,7 @@ public class ReadInterfacePop extends FrameLayout {
     }
 
     private void updatePageMode(int pageMode) {
-        tvPageMode.setText(String.format(activity.getString(R.string.page_mode) + ":%s", activity.getResources().getStringArray(R.array.page_mode)[pageMode]));
+        tvPageMode.setText(String.format(activity.getString(R.string.page_mode) + ":%s", PageAnimation.PageMode.getPageMode(pageMode)));
     }
 
     private void updateBoldText(Boolean isBold) {

@@ -2,11 +2,14 @@ package com.monke.monkeybook.widget.page.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.help.ReadBookControl;
 
 /**
@@ -167,7 +170,45 @@ public abstract class PageAnimation {
     public abstract Bitmap getContentBitmap(int pageOnCur);
 
     public enum PageMode {
-        COVER, SIMULATION, SLIDE, SCROLL, NONE
+        COVER(MApplication.getAppResources().getString(R.string.page_mode_COVER)),
+        SIMULATION(MApplication.getAppResources().getString(R.string.page_mode_SIMULATION)),
+        SLIDE(MApplication.getAppResources().getString(R.string.page_mode_SLIDE)),
+        SCROLL(MApplication.getAppResources().getString(R.string.page_mode_SCROLL)),
+        NONE(MApplication.getAppResources().getString(R.string.page_mode_NONE));
+
+        private String name;
+
+        PageMode(String name) {
+            this.name = name;
+        }
+
+
+        public static PageAnimation.PageMode getPageMode(int pageMode) {
+            switch (pageMode) {
+                case 0:
+                    return COVER;
+                case 1:
+                    return SIMULATION;
+                case 2:
+                    return SLIDE;
+                case 3:
+                    return SCROLL;
+                case 4:
+                    return NONE;
+                default:
+                    return COVER;
+            }
+        }
+
+        public static String[] getAllPageMode() {
+            return new String[]{COVER.name, SIMULATION.name, SLIDE.name, SCROLL.name, NONE.name};
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return this.name;
+        }
     }
 
     public enum Direction {

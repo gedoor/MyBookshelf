@@ -53,6 +53,7 @@ import com.monke.monkeybook.widget.modialog.MoDialogHUD;
 import com.monke.monkeybook.widget.page.PageLoader;
 import com.monke.monkeybook.widget.page.PageView;
 import com.monke.monkeybook.widget.page.TxtChapter;
+import com.monke.monkeybook.widget.page.animation.PageAnimation;
 import com.monke.mprogressbar.MHorProgressBar;
 
 import java.util.List;
@@ -518,7 +519,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void upPageMode() {
                 if (mPageLoader != null) {
-                    mPageLoader.setPageMode(readBookControl.getPageMode(readBookControl.getPageMode()));
+                    mPageLoader.setPageMode(PageAnimation.PageMode.getPageMode(readBookControl.getPageMode()));
                 }
             }
 

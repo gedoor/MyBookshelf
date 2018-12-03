@@ -167,7 +167,7 @@ public abstract class PageLoader {
         // 获取配置参数
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
-        mPageMode = readBookControl.getPageMode(readBookControl.getPageMode());
+        mPageMode = PageAnimation.PageMode.getPageMode(readBookControl.getPageMode());
         // 初始化参数
         mMarginTop = hideStatusBar ?
                 ScreenUtils.dpToPx(readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)

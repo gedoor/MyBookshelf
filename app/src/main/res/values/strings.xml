@@ -286,5 +286,10 @@
     <string name="add_to_shelf">放入书架</string>
     <string name="continue_read">继续阅读</string>
     <string name="cover_path">封面地址</string>
+    <string name="page_mode_COVER">覆盖</string>
+    <string name="page_mode_SIMULATION">仿真</string>
+    <string name="page_mode_SLIDE">滑动</string>
+    <string name="page_mode_SCROLL">滚动</string>
+    <string name="page_mode_NONE">无动画</string>
 
 </resources>

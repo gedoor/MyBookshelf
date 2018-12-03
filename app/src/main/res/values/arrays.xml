@@ -13,14 +13,6 @@
         <item>.json</item>
         <item>.xml</item>
     </string-array>
-    
-    <string-array name="page_mode">
-        <item>覆盖</item>
-        <item>仿真</item>
-        <item>滑动</item>
-        <item>滚动</item>
-        <item>无动画</item>
-    </string-array>
 
     <string-array name="convert_s">
         <item>@string/jf_convert_o</item>
