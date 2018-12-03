@@ -34,7 +34,7 @@ class BookList {
             try {
                 String baseURI;
                 okhttp3.Response networkResponse = response.raw().networkResponse();
-                if (networkResponse != null && networkResponse.request() != null) {
+                if (networkResponse != null) {
                     baseURI = networkResponse.request().url().toString();
                 } else {
                     baseURI = response.raw().request().url().toString();
