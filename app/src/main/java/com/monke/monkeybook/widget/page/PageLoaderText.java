@@ -76,6 +76,7 @@ public class PageLoaderText extends PageLoader {
         int blockPos = 0;
         //读取的长度
         int length;
+        int allLength = 0;
 
         //获取文件中的数据到buffer，直到没有数据为止
         while ((length = bookStream.read(buffer, 0, buffer.length)) > 0) {
@@ -84,6 +85,13 @@ public class PageLoaderText extends PageLoader {
             if (hasChapter) {
                 //将数据转换成String
                 String blockContent = new String(buffer, 0, length, mCharset);
+                int lastN = blockContent.lastIndexOf("\n");
+                if (lastN != 0) {
+                    blockContent = blockContent.substring(0, lastN);
+                    length = blockContent.getBytes(mCharset).length;
+                    allLength = allLength + length;
+                    bookStream.seek(allLength);
+                }
                 //当前Block下使过的String的指针
                 int seekPos = 0;
                 //进行正则匹配
@@ -101,7 +109,7 @@ public class PageLoaderText extends PageLoader {
                         //设置指针偏移
                         seekPos += chapterContent.length();
 
-                        if (curOffset == 0) { //如果当前对整个文件的偏移位置为0的话，那么就是序章
+                        if (mChapterList.size() == 0) { //如果当前没有章节，那么就是序章
                             //加入简介
                             bookShelfBean.getBookInfoBean().setIntroduce(chapterContent);
 
@@ -142,6 +150,7 @@ public class PageLoaderText extends PageLoader {
                             ChapterListBean curChapter = new ChapterListBean();
                             curChapter.setDurChapterName(matcher.group());
                             curChapter.setStart(0L);
+                            curChapter.setEnd(0L);
                             mChapterList.add(curChapter);
                         }
                     }
