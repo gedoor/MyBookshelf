@@ -12,11 +12,11 @@ import com.monke.monkeybook.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-class PageList {
+class ChapterProvider {
     private PageLoader pageLoader;
     private ChapterContentHelp contentHelper = new ChapterContentHelp();
 
-    PageList(PageLoader pageLoader) {
+    ChapterProvider(PageLoader pageLoader) {
         this.pageLoader = pageLoader;
     }
 

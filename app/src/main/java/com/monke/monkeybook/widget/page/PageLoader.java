@@ -1361,8 +1361,8 @@ public abstract class PageLoader {
     void parseCurChapter() {
         if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
-                PageList pageList = new PageList(this);
-                TxtChapter txtChapter = pageList.dealLoadPageList(bookShelfBean.getChapterList(mCurChapterPos), mPageView.isPrepare());
+                ChapterProvider chapterProvider = new ChapterProvider(this);
+                TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(mCurChapterPos), mPageView.isPrepare());
                 e.onSuccess(txtChapter);
             })
                     .compose(RxUtils::toSimpleSingle)
@@ -1405,8 +1405,8 @@ public abstract class PageLoader {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
-            PageList pageList = new PageList(this);
-            TxtChapter txtChapter = pageList.dealLoadPageList(bookShelfBean.getChapterList(prevChapterPos), mPageView.isPrepare());
+            ChapterProvider chapterProvider = new ChapterProvider(this);
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(prevChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -1446,8 +1446,8 @@ public abstract class PageLoader {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
-            PageList pageList = new PageList(this);
-            TxtChapter txtChapter = pageList.dealLoadPageList(bookShelfBean.getChapterList(nextChapterPos), mPageView.isPrepare());
+            ChapterProvider chapterProvider = new ChapterProvider(this);
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(nextChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)
