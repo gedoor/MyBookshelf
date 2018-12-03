@@ -26,7 +26,7 @@ import com.monke.monkeybook.service.ReadAloudService;
 import com.monke.monkeybook.utils.RxUtils;
 import com.monke.monkeybook.utils.ScreenUtils;
 import com.monke.monkeybook.utils.StringUtils;
-import com.monke.monkeybook.widget.animation.PageAnimation;
+import com.monke.monkeybook.widget.page.animation.PageAnimation;
 
 import java.util.ArrayList;
 import java.util.List;

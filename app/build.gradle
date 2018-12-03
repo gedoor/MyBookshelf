@@ -86,6 +86,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //fireBase
+    //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
 

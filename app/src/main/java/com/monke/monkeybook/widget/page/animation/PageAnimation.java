@@ -1,4 +1,4 @@
-package com.monke.monkeybook.widget.animation;
+package com.monke.monkeybook.widget.page.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
