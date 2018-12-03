@@ -84,7 +84,7 @@ public abstract class PageLoader {
     boolean isChapterListPrepare;
     private boolean isClose;
     // 页面的翻页效果模式
-    private Enum.PageMode mPageMode;
+    private PageAnimation.PageMode mPageMode;
     //书籍绘制区域的宽高
     int mVisibleWidth;
     int mVisibleHeight;
@@ -315,7 +315,7 @@ public abstract class PageLoader {
     /**
      * 设置翻页动画
      */
-    public void setPageMode(Enum.PageMode pageMode) {
+    public void setPageMode(PageAnimation.PageMode pageMode) {
         mPageMode = pageMode;
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
         skipToChapter(mCurChapterPos, mCurPagePos);
@@ -483,7 +483,7 @@ public abstract class PageLoader {
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         if (!mPageView.isRunning() && showTimeBattery) {
-            if (mPageMode == Enum.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.PageMode.SCROLL) {
                 mPageView.drawBackground(0);
             } else {
                 upPage();
@@ -503,7 +503,7 @@ public abstract class PageLoader {
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         if (!mPageView.isRunning() && showTimeBattery) {
-            if (mPageMode == Enum.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.PageMode.SCROLL) {
                 mPageView.drawBackground(0);
             } else if (mCurChapter != null) {
                 upPage();
@@ -517,8 +517,8 @@ public abstract class PageLoader {
     /**
      * 获取当前页的状态
      */
-    public Enum.PageStatus getPageStatus() {
-        return mCurChapter != null ? mCurChapter.getStatus() : Enum.PageStatus.LOADING;
+    public TxtChapter.Status getPageStatus() {
+        return mCurChapter != null ? mCurChapter.getStatus() : TxtChapter.Status.LOADING;
     }
 
     /**
@@ -531,7 +531,7 @@ public abstract class PageLoader {
     /**
      * 更新状态
      */
-    public void setStatus(Enum.PageStatus status) {
+    public void setStatus(TxtChapter.Status status) {
         mCurChapter.setStatus(status);
         reSetPage();
         mPageView.invalidate();
@@ -544,9 +544,9 @@ public abstract class PageLoader {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
         }
-        mCurChapter.setStatus(Enum.PageStatus.ERROR);
+        mCurChapter.setStatus(TxtChapter.Status.ERROR);
         mCurChapter.setMsg(msg);
-        if (mPageMode != Enum.PageMode.SCROLL) {
+        if (mPageMode != PageAnimation.PageMode.SCROLL) {
             upPage();
         } else {
             mPageView.drawPage(0);
@@ -563,7 +563,7 @@ public abstract class PageLoader {
         TxtPage txtPage = mCurChapter.getPage(mCurPagePos);
         StringBuilder s = new StringBuilder();
         int size = txtPage.lines.size();
-        int start = mPageMode == Enum.PageMode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
+        int start = mPageMode == PageAnimation.PageMode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
         for (int i = start; i < size; i++) {
             s.append(txtPage.lines.get(i));
         }
@@ -584,7 +584,7 @@ public abstract class PageLoader {
             }
         }
         readTextLength = mCurPagePos > 0 ? mCurChapter.getPageLength(mCurPagePos - 1) : 0;
-        if (mPageMode == Enum.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.PageMode.SCROLL) {
             for (int i = 0; i < Math.min(Math.max(0, linePos), mCurChapter.getPage(mCurPagePos).lines.size() - 1); i++) {
                 readTextLength += mCurChapter.getPage(mCurPagePos).lines.get(i).length();
             }
@@ -644,7 +644,7 @@ public abstract class PageLoader {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
             reSetPage();
-        } else if (mCurChapter.getStatus() == Enum.PageStatus.FINISH) {
+        } else if (mCurChapter.getStatus() == TxtChapter.Status.FINISH) {
             reSetPage();
             mPageView.invalidate();
             pagingEnd(PageAnimation.Direction.NONE);
@@ -653,7 +653,7 @@ public abstract class PageLoader {
 
         // 如果章节目录没有准备好
         if (!isChapterListPrepare) {
-            mCurChapter.setStatus(Enum.PageStatus.LOADING);
+            mCurChapter.setStatus(TxtChapter.Status.LOADING);
             reSetPage();
             mPageView.invalidate();
             return;
@@ -661,7 +661,7 @@ public abstract class PageLoader {
 
         // 如果获取到的章节目录为空
         if (bookShelfBean.getChapterList().isEmpty()) {
-            mCurChapter.setStatus(Enum.PageStatus.CATEGORY_EMPTY);
+            mCurChapter.setStatus(TxtChapter.Status.CATEGORY_EMPTY);
             reSetPage();
             mPageView.invalidate();
             return;
@@ -672,7 +672,7 @@ public abstract class PageLoader {
     }
 
     private void reSetPage() {
-        if (mPageMode == Enum.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.PageMode.SCROLL) {
             resetPageOffset();
             mPageView.invalidate();
         } else {
@@ -681,7 +681,7 @@ public abstract class PageLoader {
     }
 
     private void upPage() {
-        if (mPageMode != Enum.PageMode.SCROLL) {
+        if (mPageMode != PageAnimation.PageMode.SCROLL) {
             mPageView.drawPage(0);
             mPageView.invalidate();
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
@@ -715,7 +715,7 @@ public abstract class PageLoader {
                     parseNextChapter();
                     chapterChangeCallback();
                 }
-                if (mPageMode != Enum.PageMode.SCROLL) {
+                if (mPageMode != PageAnimation.PageMode.SCROLL) {
                     mPageView.drawPage(1);
                 }
                 break;
@@ -731,7 +731,7 @@ public abstract class PageLoader {
                     parsePrevChapter();
                     chapterChangeCallback();
                 }
-                if (mPageMode != Enum.PageMode.SCROLL) {
+                if (mPageMode != PageAnimation.PageMode.SCROLL) {
                     mPageView.drawPage(-1);
                 }
                 break;
@@ -793,7 +793,7 @@ public abstract class PageLoader {
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == Enum.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.PageMode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
         } else if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -814,9 +814,9 @@ public abstract class PageLoader {
         if (!bookShelfBean.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? bookShelfBean.getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
-            String page = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
+            String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
                     : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
-            String progress = (txtChapter.getStatus() != Enum.PageStatus.FINISH) ? ""
+            String progress = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
                     : BookshelfHelp.getReadProgress(mCurChapterPos, bookShelfBean.getChapterListSize(), mCurPagePos, mCurChapter.getPageSize());
 
             float tipBottom;
@@ -824,7 +824,7 @@ public abstract class PageLoader {
             //初始化标题的参数
             //需要注意的是:绘制text的y的起始点是text的基准线的位置，而不是从text的头部的位置
             if (!hideStatusBar) { //显示状态栏
-                if (txtChapter.getStatus() != Enum.PageStatus.FINISH) {
+                if (txtChapter.getStatus() != TxtChapter.Status.FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
                         title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
@@ -847,7 +847,7 @@ public abstract class PageLoader {
                     canvas.drawRect(tipMarginLeft, tipBottom, displayRightEnd, tipBottom + 2, mTipPaint);
                 }
             } else { //隐藏状态栏
-                if (getPageStatus() != Enum.PageStatus.FINISH) {
+                if (getPageStatus() != TxtChapter.Status.FINISH) {
                     if (isChapterListPrepare) {
                         //绘制标题
                         title = TextUtils.ellipsize(title, mTipPaint, tipVisibleWidth, TextUtils.TruncateAt.END).toString();
@@ -1035,7 +1035,7 @@ public abstract class PageLoader {
         int pagePos = mCurPagePos;
         boolean isLight;
 
-        if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
+        if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) {
             String tip = getStatusText(mCurChapter);
             drawErrorMsg(canvas, tip, pageOffset);
             top += mVisibleHeight;
@@ -1054,7 +1054,7 @@ public abstract class PageLoader {
         while (top < totalHeight) {
             TxtChapter chapter = chapterPos == mCurChapterPos ? mCurChapter : mNextChapter;
             if (chapter == null || chapterPos - mCurChapterPos > 1) break;
-            if (chapter.getStatus() != Enum.PageStatus.FINISH) {
+            if (chapter.getStatus() != TxtChapter.Status.FINISH) {
                 String tip = getStatusText(chapter);
                 drawErrorMsg(canvas, tip, 0 - top);
                 top += mVisibleHeight;
@@ -1167,7 +1167,7 @@ public abstract class PageLoader {
 
     private float getPageHeight(TxtChapter chapter, int pagePos) {
         float height = 0;
-        if (chapter == null || chapter.getStatus() != Enum.PageStatus.FINISH) {
+        if (chapter == null || chapter.getStatus() != TxtChapter.Status.FINISH) {
             return height;
         }
         if (pagePos >= 0 && pagePos < chapter.getPageSize()) {
@@ -1233,19 +1233,19 @@ public abstract class PageLoader {
     private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == Enum.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.PageMode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
         }
 
         Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
 
-        if (txtChapter.getStatus() != Enum.PageStatus.FINISH) {
+        if (txtChapter.getStatus() != TxtChapter.Status.FINISH) {
             //绘制字体
             String tip = getStatusText(txtChapter);
             drawErrorMsg(canvas, tip, 0);
         } else {
             float top = contentMarginHeight - fontMetrics.ascent;
-            if (mPageMode != Enum.PageMode.SCROLL) {
+            if (mPageMode != PageAnimation.PageMode.SCROLL) {
                 top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
             }
 
@@ -1329,7 +1329,7 @@ public abstract class PageLoader {
         if (canNotTurnPage()) {
             return false;
         }
-        if (getPageStatus() == Enum.PageStatus.FINISH) {
+        if (getPageStatus() == TxtChapter.Status.FINISH) {
             // 先查看是否存在上一页
             if (mCurPagePos > 0) {
                 return true;
@@ -1346,7 +1346,7 @@ public abstract class PageLoader {
         if (canNotTurnPage()) {
             return false;
         }
-        if (getPageStatus() == Enum.PageStatus.FINISH) {
+        if (getPageStatus() == TxtChapter.Status.FINISH) {
             // 先查看是否存在下一页
             if (mCurPagePos + pageOnCur < mCurChapter.getPageSize() - 1) {
                 return true;
@@ -1359,7 +1359,7 @@ public abstract class PageLoader {
      * 解析数据
      */
     void parseCurChapter() {
-        if (mCurChapter.getStatus() != Enum.PageStatus.FINISH) {
+        if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 ChapterProvider chapterProvider = new ChapterProvider(this);
                 TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(mCurChapterPos), mPageView.isPrepare());
@@ -1379,9 +1379,9 @@ public abstract class PageLoader {
 
                         @Override
                         public void onError(Throwable e) {
-                            if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
+                            if (mPreChapter == null || mPreChapter.getStatus() != TxtChapter.Status.FINISH) {
                                 mPreChapter = new TxtChapter(mCurChapterPos);
-                                mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                                mPreChapter.setStatus(TxtChapter.Status.ERROR);
                                 mPreChapter.setMsg(e.getMessage());
                             }
                         }
@@ -1401,7 +1401,7 @@ public abstract class PageLoader {
             return;
         }
         if (mPreChapter == null) mPreChapter = new TxtChapter(prevChapterPos);
-        if (mPreChapter.getStatus() == Enum.PageStatus.FINISH) {
+        if (mPreChapter.getStatus() == TxtChapter.Status.FINISH) {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
@@ -1423,9 +1423,9 @@ public abstract class PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        if (mPreChapter == null || mPreChapter.getStatus() != Enum.PageStatus.FINISH) {
+                        if (mPreChapter == null || mPreChapter.getStatus() != TxtChapter.Status.FINISH) {
                             mPreChapter = new TxtChapter(prevChapterPos);
-                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setStatus(TxtChapter.Status.ERROR);
                             mPreChapter.setMsg(e.getMessage());
                         }
                     }
@@ -1442,7 +1442,7 @@ public abstract class PageLoader {
             return;
         }
         if (mNextChapter == null) mNextChapter = new TxtChapter(nextChapterPos);
-        if (mNextChapter.getStatus() == Enum.PageStatus.FINISH) {
+        if (mNextChapter.getStatus() == TxtChapter.Status.FINISH) {
             return;
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
@@ -1464,9 +1464,9 @@ public abstract class PageLoader {
 
                     @Override
                     public void onError(Throwable e) {
-                        if (mNextChapter == null || mNextChapter.getStatus() != Enum.PageStatus.FINISH) {
+                        if (mNextChapter == null || mNextChapter.getStatus() != TxtChapter.Status.FINISH) {
                             mPreChapter = new TxtChapter(nextChapterPos);
-                            mPreChapter.setStatus(Enum.PageStatus.ERROR);
+                            mPreChapter.setStatus(TxtChapter.Status.ERROR);
                             mPreChapter.setMsg(e.getMessage());
                         }
                     }
@@ -1476,7 +1476,7 @@ public abstract class PageLoader {
     private void upTextChapter(TxtChapter txtChapter) {
         if (txtChapter.getPosition() == mCurChapterPos - 1) {
             mPreChapter = txtChapter;
-            if (mPageMode == Enum.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.PageMode.SCROLL) {
                 mPageView.drawContent(-1);
             } else {
                 mPageView.drawPage(-1);
@@ -1488,7 +1488,7 @@ public abstract class PageLoader {
             pagingEnd(PageAnimation.Direction.NONE);
         } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
             mNextChapter = txtChapter;
-            if (mPageMode == Enum.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.PageMode.SCROLL) {
                 mPageView.drawContent(1);
             } else {
                 mPageView.drawPage(1);
@@ -1543,7 +1543,7 @@ public abstract class PageLoader {
      */
     private boolean canNotTurnPage() {
         return !isChapterListPrepare
-                || getPageStatus() == Enum.PageStatus.CHANGE_SOURCE;
+                || getPageStatus() == TxtChapter.Status.CHANGE_SOURCE;
     }
 
     /**

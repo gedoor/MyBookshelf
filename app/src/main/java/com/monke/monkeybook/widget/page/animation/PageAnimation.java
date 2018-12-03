@@ -166,6 +166,10 @@ public abstract class PageAnimation {
      */
     public abstract Bitmap getContentBitmap(int pageOnCur);
 
+    public enum PageMode {
+        COVER, SIMULATION, SLIDE, SCROLL, NONE
+    }
+
     public enum Direction {
         NONE(true), NEXT(true), PRE(true), UP(false), DOWN(false);
 

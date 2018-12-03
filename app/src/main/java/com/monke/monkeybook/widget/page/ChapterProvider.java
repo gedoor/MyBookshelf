@@ -25,7 +25,7 @@ class ChapterProvider {
         // 判断章节是否存在
         if (!isPrepare || pageLoader.noChapterData(chapter)) {
             if (pageLoader instanceof PageLoaderNet && !NetworkUtil.isNetWorkAvailable()) {
-                txtChapter.setStatus(Enum.PageStatus.ERROR);
+                txtChapter.setStatus(TxtChapter.Status.ERROR);
                 txtChapter.setMsg("网络连接不可用");
             }
             return txtChapter;
@@ -34,12 +34,12 @@ class ChapterProvider {
         try {
             content = pageLoader.getChapterContent(chapter);
         } catch (Exception e) {
-            txtChapter.setStatus(Enum.PageStatus.ERROR);
+            txtChapter.setStatus(TxtChapter.Status.ERROR);
             txtChapter.setMsg("读取内容出错\n" + e.getLocalizedMessage());
             return txtChapter;
         }
         if (content == null) {
-            txtChapter.setStatus(Enum.PageStatus.ERROR);
+            txtChapter.setStatus(TxtChapter.Status.ERROR);
             txtChapter.setMsg("缓存文件不存在");
             return txtChapter;
         }
@@ -152,7 +152,7 @@ class ChapterProvider {
             //重置Lines
             lines.clear();
         }
-        txtChapter.setStatus(Enum.PageStatus.FINISH);
+        txtChapter.setStatus(TxtChapter.Status.FINISH);
         return txtChapter;
     }
 

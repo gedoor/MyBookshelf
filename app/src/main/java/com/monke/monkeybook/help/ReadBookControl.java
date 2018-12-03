@@ -9,10 +9,9 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.widget.page.Enum;
+import com.monke.monkeybook.widget.page.animation.PageAnimation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -641,20 +640,20 @@ public class ReadBookControl {
         return pageMode;
     }
 
-    public Enum.PageMode getPageMode(int pageMode) {
+    public PageAnimation.PageMode getPageMode(int pageMode) {
         switch (pageMode) {
             case 0:
-                return Enum.PageMode.COVER;
+                return PageAnimation.PageMode.COVER;
             case 1:
-                return Enum.PageMode.SIMULATION;
+                return PageAnimation.PageMode.SIMULATION;
             case 2:
-                return Enum.PageMode.SLIDE;
+                return PageAnimation.PageMode.SLIDE;
             case 3:
-                return Enum.PageMode.SCROLL;
+                return PageAnimation.PageMode.SCROLL;
             case 4:
-                return Enum.PageMode.NONE;
+                return PageAnimation.PageMode.NONE;
             default:
-                return Enum.PageMode.COVER;
+                return PageAnimation.PageMode.COVER;
         }
     }
 

@@ -7,12 +7,12 @@ import java.util.List;
  * 章节
  */
 
-class TxtChapter {
+public class TxtChapter {
     private int position;
     private List<TxtPage> txtPageList = new ArrayList<>();
     private List<Integer> txtPageLengthList = new ArrayList<>();
     private List<Integer> paragraphLengthList = new ArrayList<>();
-    private Enum.PageStatus status = Enum.PageStatus.LOADING;
+    private Status status = Status.LOADING;
     private String msg;
 
     TxtChapter(int position) {
@@ -42,11 +42,11 @@ class TxtChapter {
         return null;
     }
 
-    Enum.PageStatus getStatus() {
+    Status getStatus() {
         return status;
     }
 
-    void setStatus(Enum.PageStatus mStatus) {
+    void setStatus(Status mStatus) {
         this.status = mStatus;
     }
 
@@ -88,5 +88,9 @@ class TxtChapter {
             }
         }
         return -1;
+    }
+
+    public enum Status {
+        LOADING, FINISH, ERROR, EMPTY, CATEGORY_EMPTY, CHANGE_SOURCE,
     }
 }
