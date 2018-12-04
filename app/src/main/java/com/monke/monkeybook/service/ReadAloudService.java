@@ -516,7 +516,7 @@ public class ReadAloudService extends Service {
         public void onStart(String s) {
             updateMediaSessionPlaybackState();
             RxBus.get().post(RxBusTag.READ_ALOUD_START, readAloudNumber + 1);
-            RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber);
+            RxBus.get().post(RxBusTag.READ_ALOUD_NUMBER, readAloudNumber + 1);
         }
 
         @Override
