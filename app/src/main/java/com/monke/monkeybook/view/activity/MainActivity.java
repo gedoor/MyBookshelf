@@ -481,8 +481,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("versionCode", MApplication.getVersionCode());
             editor.apply();
-            //书源为空时加载默认书源
-            BookSourceManager.initDefaultBookSource(this);
             //更新日志
             moDialogHUD.showAssetMarkdown("updateLog.md");
         }

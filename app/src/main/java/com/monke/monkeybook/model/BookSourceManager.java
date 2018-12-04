@@ -189,34 +189,4 @@ public class BookSourceManager extends BaseModelImpl {
         });
     }
 
-    public static void initDefaultBookSource(MBaseActivity activity) {
-        if (getAllBookSource() == null || getAllBookSource().size() == 0) {
-            new AlertDialog.Builder(activity)
-                    .setTitle("加载默认书源")
-                    .setMessage("当前书源为空,是否加载默认书源?")
-                    .setPositiveButton(R.string.ok, (dialog, which) -> {
-                        try {
-                            URL url = new URL(activity.getString(R.string.default_source_url));
-                            BookSourceManager.importSourceFromWww(url)
-                                    .subscribe(new SimpleObserver<Boolean>() {
-                                        @Override
-                                        public void onNext(Boolean aBoolean) {
-                                            activity.toast("默认书源加载成功.");
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            activity.toast("默认书源加载失败.");
-                                        }
-                                    });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> { })
-                    .show();
-        }
-    }
-
-
 }
