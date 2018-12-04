@@ -1,5 +1,7 @@
 package com.monke.monkeybook.model.content;
 
+import android.text.TextUtils;
+
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.FormatWebText;
@@ -56,7 +58,9 @@ class BookList {
                 item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
                 item.setKind(FormatWebText.getContent(analyzeElement.getResult(bookSourceBean.getRuleBookKind())));
                 item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleBookLastChapter()));
-                books.add(item);
+                if (!TextUtils.isEmpty(item.getName())) {
+                    books.add(item);
+                }
             } else {
                 Elements booksE = AnalyzeElement.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
@@ -72,7 +76,9 @@ class BookList {
                         String resultUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleSearchNoteUrl());
                         item.setNoteUrl(isEmpty(resultUrl) ? baseURI : resultUrl);
                         item.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleSearchCoverUrl()));
-                        books.add(item);
+                        if (!TextUtils.isEmpty(item.getName())) {
+                            books.add(item);
+                        }
                     }
                 }
             }
