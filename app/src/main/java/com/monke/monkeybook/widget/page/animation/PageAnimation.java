@@ -164,7 +164,10 @@ public abstract class PageAnimation {
      */
     public abstract Bitmap getContentBitmap(int pageOnCur);
 
-    public enum PageMode {
+    /**
+     * 翻页模式
+     */
+    public enum Mode {
         COVER(MApplication.getAppResources().getString(R.string.page_mode_COVER)),
         SIMULATION(MApplication.getAppResources().getString(R.string.page_mode_SIMULATION)),
         SLIDE(MApplication.getAppResources().getString(R.string.page_mode_SLIDE)),
@@ -173,11 +176,11 @@ public abstract class PageAnimation {
 
         private String name;
 
-        PageMode(String name) {
+        Mode(String name) {
             this.name = name;
         }
 
-        public static PageAnimation.PageMode getPageMode(int pageMode) {
+        public static Mode getPageMode(int pageMode) {
             switch (pageMode) {
                 case 0:
                     return COVER;
@@ -205,6 +208,9 @@ public abstract class PageAnimation {
         }
     }
 
+    /**
+     * 翻页方向
+     */
     public enum Direction {
         NONE(true), NEXT(true), PRE(true), UP(false), DOWN(false);
 

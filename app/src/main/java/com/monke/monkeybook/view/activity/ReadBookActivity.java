@@ -519,7 +519,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void upPageMode() {
                 if (mPageLoader != null) {
-                    mPageLoader.setPageMode(PageAnimation.PageMode.getPageMode(readBookControl.getPageMode()));
+                    mPageLoader.setPageMode(PageAnimation.Mode.getPageMode(readBookControl.getPageMode()));
                 }
             }
 

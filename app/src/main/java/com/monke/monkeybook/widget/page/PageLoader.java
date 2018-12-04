@@ -84,7 +84,7 @@ public abstract class PageLoader {
     boolean isChapterListPrepare;
     private boolean isClose;
     // 页面的翻页效果模式
-    private PageAnimation.PageMode mPageMode;
+    private PageAnimation.Mode mPageMode;
     //书籍绘制区域的宽高
     int mVisibleWidth;
     int mVisibleHeight;
@@ -167,7 +167,7 @@ public abstract class PageLoader {
         // 获取配置参数
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
-        mPageMode = PageAnimation.PageMode.getPageMode(readBookControl.getPageMode());
+        mPageMode = PageAnimation.Mode.getPageMode(readBookControl.getPageMode());
         // 初始化参数
         mMarginTop = hideStatusBar ?
                 ScreenUtils.dpToPx(readBookControl.getPaddingTop() + DEFAULT_MARGIN_HEIGHT)
@@ -315,7 +315,7 @@ public abstract class PageLoader {
     /**
      * 设置翻页动画
      */
-    public void setPageMode(PageAnimation.PageMode pageMode) {
+    public void setPageMode(PageAnimation.Mode pageMode) {
         mPageMode = pageMode;
         mPageView.setPageMode(mPageMode, mMarginTop, mMarginBottom);
         skipToChapter(mCurChapterPos, mCurPagePos);
@@ -483,7 +483,7 @@ public abstract class PageLoader {
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         if (!mPageView.isRunning() && showTimeBattery) {
-            if (mPageMode == PageAnimation.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else {
                 upPage();
@@ -503,7 +503,7 @@ public abstract class PageLoader {
         hideStatusBar = readBookControl.getHideStatusBar();
         showTimeBattery = hideStatusBar && readBookControl.getShowTimeBattery();
         if (!mPageView.isRunning() && showTimeBattery) {
-            if (mPageMode == PageAnimation.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawBackground(0);
             } else if (mCurChapter != null) {
                 upPage();
@@ -546,7 +546,7 @@ public abstract class PageLoader {
         }
         mCurChapter.setStatus(TxtChapter.Status.ERROR);
         mCurChapter.setMsg(msg);
-        if (mPageMode != PageAnimation.PageMode.SCROLL) {
+        if (mPageMode != PageAnimation.Mode.SCROLL) {
             upPage();
         } else {
             mPageView.drawPage(0);
@@ -563,7 +563,7 @@ public abstract class PageLoader {
         TxtPage txtPage = mCurChapter.getPage(mCurPagePos);
         StringBuilder s = new StringBuilder();
         int size = txtPage.lines.size();
-        int start = mPageMode == PageAnimation.PageMode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
+        int start = mPageMode == PageAnimation.Mode.SCROLL ? Math.min(Math.max(0, linePos), size - 1) : 0;
         for (int i = start; i < size; i++) {
             s.append(txtPage.lines.get(i));
         }
@@ -584,7 +584,7 @@ public abstract class PageLoader {
             }
         }
         readTextLength = mCurPagePos > 0 ? mCurChapter.getPageLength(mCurPagePos - 1) : 0;
-        if (mPageMode == PageAnimation.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.Mode.SCROLL) {
             for (int i = 0; i < Math.min(Math.max(0, linePos), mCurChapter.getPage(mCurPagePos).lines.size() - 1); i++) {
                 readTextLength += mCurChapter.getPage(mCurPagePos).lines.get(i).length();
             }
@@ -672,7 +672,7 @@ public abstract class PageLoader {
     }
 
     private void reSetPage() {
-        if (mPageMode == PageAnimation.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.Mode.SCROLL) {
             resetPageOffset();
             mPageView.invalidate();
         } else {
@@ -681,7 +681,7 @@ public abstract class PageLoader {
     }
 
     private void upPage() {
-        if (mPageMode != PageAnimation.PageMode.SCROLL) {
+        if (mPageMode != PageAnimation.Mode.SCROLL) {
             mPageView.drawPage(0);
             mPageView.invalidate();
             if (mCurPagePos > 0 || mCurChapter.getPosition() > 0) {
@@ -715,7 +715,7 @@ public abstract class PageLoader {
                     parseNextChapter();
                     chapterChangeCallback();
                 }
-                if (mPageMode != PageAnimation.PageMode.SCROLL) {
+                if (mPageMode != PageAnimation.Mode.SCROLL) {
                     mPageView.drawPage(1);
                 }
                 break;
@@ -731,7 +731,7 @@ public abstract class PageLoader {
                     parsePrevChapter();
                     chapterChangeCallback();
                 }
-                if (mPageMode != PageAnimation.PageMode.SCROLL) {
+                if (mPageMode != PageAnimation.Mode.SCROLL) {
                     mPageView.drawPage(-1);
                 }
                 break;
@@ -793,7 +793,7 @@ public abstract class PageLoader {
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == PageAnimation.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.Mode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
         } else if (!readBookControl.bgIsColor() && !readBookControl.bgBitmapIsNull()) {
             Rect mDestRect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -1233,7 +1233,7 @@ public abstract class PageLoader {
     private synchronized void drawContent(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
-        if (mPageMode == PageAnimation.PageMode.SCROLL) {
+        if (mPageMode == PageAnimation.Mode.SCROLL) {
             bitmap.eraseColor(Color.TRANSPARENT);
         }
 
@@ -1245,7 +1245,7 @@ public abstract class PageLoader {
             drawErrorMsg(canvas, tip, 0);
         } else {
             float top = contentMarginHeight - fontMetrics.ascent;
-            if (mPageMode != PageAnimation.PageMode.SCROLL) {
+            if (mPageMode != PageAnimation.Mode.SCROLL) {
                 top += readBookControl.getHideStatusBar() ? mMarginTop : mPageView.getStatusBarHeight() + mMarginTop;
             }
 
@@ -1476,7 +1476,7 @@ public abstract class PageLoader {
     private void upTextChapter(TxtChapter txtChapter) {
         if (txtChapter.getPosition() == mCurChapterPos - 1) {
             mPreChapter = txtChapter;
-            if (mPageMode == PageAnimation.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(-1);
             } else {
                 mPageView.drawPage(-1);
@@ -1488,7 +1488,7 @@ public abstract class PageLoader {
             pagingEnd(PageAnimation.Direction.NONE);
         } else if (txtChapter.getPosition() == mCurChapterPos + 1) {
             mNextChapter = txtChapter;
-            if (mPageMode == PageAnimation.PageMode.SCROLL) {
+            if (mPageMode == PageAnimation.Mode.SCROLL) {
                 mPageView.drawContent(1);
             } else {
                 mPageView.drawPage(1);

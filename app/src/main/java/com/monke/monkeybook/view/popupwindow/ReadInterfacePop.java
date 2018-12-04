@@ -187,7 +187,7 @@ public class ReadInterfacePop extends FrameLayout {
         tvPageMode.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(activity, R.style.alertDialogTheme)
                     .setTitle(activity.getString(R.string.page_mode))
-                    .setSingleChoiceItems(PageAnimation.PageMode.getAllPageMode(), readBookControl.getPageMode(), (dialogInterface, i) -> {
+                    .setSingleChoiceItems(PageAnimation.Mode.getAllPageMode(), readBookControl.getPageMode(), (dialogInterface, i) -> {
                         readBookControl.setPageMode(i);
                         updatePageMode(i);
                         changeProListener.upPageMode();
@@ -282,7 +282,7 @@ public class ReadInterfacePop extends FrameLayout {
     }
 
     private void updatePageMode(int pageMode) {
-        tvPageMode.setText(String.format(activity.getString(R.string.page_mode) + ":%s", PageAnimation.PageMode.getPageMode(pageMode)));
+        tvPageMode.setText(String.format(activity.getString(R.string.page_mode) + ":%s", PageAnimation.Mode.getPageMode(pageMode)));
     }
 
     private void updateBoldText(Boolean isBold) {
