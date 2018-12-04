@@ -279,9 +279,6 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_del_select:
                 mPresenter.delData(adapter.getSelectDataList());
                 break;
-            case R.id.action_reset_book_source:
-                mPresenter.importBookSource(getString(R.string.default_source_url));
-                break;
             case R.id.action_check_book_source:
                 mPresenter.checkBookSource();
                 break;
@@ -361,8 +358,8 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     private void importBookSourceOnLine() {
         String cacheUrl = ACache.get(this).getAsString("sourceUrl");
         moDialogHUD.showInputBox("输入书源网址",
-                TextUtils.isEmpty(cacheUrl) ? getString(R.string.default_source_url) : cacheUrl,
-                new String[]{getString(R.string.default_source_url)},
+                cacheUrl,
+                new String[]{cacheUrl},
                 inputText -> {
                     ACache.get(this).put("sourceUrl", inputText);
                     mPresenter.importBookSource(inputText);
