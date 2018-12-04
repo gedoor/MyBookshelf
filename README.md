@@ -1,4 +1,5 @@
 # 本软件为开源软件,没有上架Google Play,没有在任何地方售卖,如果想支持我请通过软件里的捐赠,不要在任何地方购买!
+# 关注公众号请搜索:开源阅读软件,有福利噢
 # blog http://www.hostfans.cn
 # 开发
 - 本项目Fork于 https://github.com/ZhangQinhao/MONKOVEL
