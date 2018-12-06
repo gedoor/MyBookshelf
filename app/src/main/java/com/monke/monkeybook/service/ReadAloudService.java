@@ -272,13 +272,16 @@ public class ReadAloudService extends Service {
             }
         }
     }
-    
-    public void toTTSSetting(){
+
+    public void toTTSSetting() {
         //跳转到文字转语音设置界面
-        Intent intent = new Intent();
-        intent.setAction("com.android.settings.TTS_SETTINGS");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent();
+            intent.setAction("com.android.settings.TTS_SETTINGS");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception ignored) {
+        }
     }
 
     private void initSpeechRate() {
