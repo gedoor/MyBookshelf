@@ -267,7 +267,7 @@ public class DownloadService extends Service {
     }
 
     private void toast(String msg) {
-        Toast.makeText(DownloadService.this, msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(DownloadService.this, msg, Toast.LENGTH_SHORT).show();
     }
 
     private PendingIntent getChancelPendingIntent() {
