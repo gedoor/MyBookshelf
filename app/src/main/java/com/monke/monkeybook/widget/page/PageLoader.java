@@ -814,7 +814,7 @@ public abstract class PageLoader {
         if (!bookShelfBean.getChapterList().isEmpty()) {
             String title = isChapterListPrepare ? bookShelfBean.getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
-            String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
+            String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
                     : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
             String progress = (txtChapter.getStatus() != TxtChapter.Status.FINISH) ? ""
                     : BookshelfHelp.getReadProgress(mCurChapterPos, bookShelfBean.getChapterListSize(), mCurPagePos, mCurChapter.getPageSize());
