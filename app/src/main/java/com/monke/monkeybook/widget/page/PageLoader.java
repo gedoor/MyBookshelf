@@ -607,9 +607,9 @@ public abstract class PageLoader {
 
     public void readAloudLength(int readAloudLength) {
         if (mCurChapter == null) return;
+        if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) return;
         if (mCurChapter.getPageLength(mCurPagePos) < 0) return;
         if (mPageView.isRunning()) return;
-        if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) return;
         readAloudLength = readTextLength + readAloudLength;
         if (readAloudLength >= mCurChapter.getPageLength(mCurPagePos)) {
             resetReadAloud = false;
