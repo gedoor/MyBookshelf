@@ -6,7 +6,7 @@ import com.monke.monkeybook.bean.BookInfoBean;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,7 +41,7 @@ class BookInfo {
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(tag);
             Document doc = Jsoup.parse(s);
-            AnalyzeElement analyzeElement = new AnalyzeElement(doc, bookShelfBean.getNoteUrl());
+            AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(doc, bookShelfBean.getNoteUrl());
             if (isEmpty(bookInfoBean.getCoverUrl())) {
                 bookInfoBean.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleCoverUrl()));
             }

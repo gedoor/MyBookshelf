@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
-import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 
@@ -96,18 +96,18 @@ class BookChapter {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
         Document doc = Jsoup.parse(s);
-        AnalyzeElement analyzeElement;
+        AnalyzeByJSoup analyzeElement;
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            analyzeElement = new AnalyzeElement(doc, chapterUrl);
+            analyzeElement = new AnalyzeByJSoup(doc, chapterUrl);
             nextUrlList = analyzeElement.getAllResultList(bookSourceBean.getRuleChapterUrlNext());
         }
         int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
         if (thisUrlIndex != -1) {
             nextUrlList.remove(thisUrlIndex);
         }
-        Elements elements = AnalyzeElement.getElements(doc, ruleChapterList);
+        Elements elements = AnalyzeByJSoup.getElements(doc, ruleChapterList);
         for (Element element : elements) {
-            analyzeElement = new AnalyzeElement(element, chapterUrl);
+            analyzeElement = new AnalyzeByJSoup(element, chapterUrl);
             ChapterListBean temp = new ChapterListBean();
             temp.setDurChapterUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleContentUrl()));   //id
             temp.setDurChapterName(analyzeElement.getResult(bookSourceBean.getRuleChapterName()));

@@ -20,11 +20,11 @@ import static android.text.TextUtils.isEmpty;
  * 书源规则解析
  */
 
-public class AnalyzeElement {
+public class AnalyzeByJSoup {
     private String baseURL;
     private Element element;
 
-    public AnalyzeElement(Element element, String baseURL) {
+    public AnalyzeByJSoup(Element element, String baseURL) {
         this.element = element;
         this.baseURL = baseURL;
     }

@@ -9,7 +9,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.utils.StringUtils;
@@ -134,7 +134,7 @@ class BookContent {
             webContentBean.content = getLib99Content(doc);
             webContentBean.nextUrl = "";
         } else {
-            AnalyzeElement analyzeElement = new AnalyzeElement(doc, chapterUrl);
+            AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(doc, chapterUrl);
             webContentBean.content = analyzeElement.getResult(ruleBookContent);
             if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
                 webContentBean.nextUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleContentUrlNext());

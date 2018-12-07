@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.FormatWebText;
-import com.monke.monkeybook.model.analyzeRule.AnalyzeElement;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,7 +48,7 @@ class BookList {
             }
             if (!isEmpty(bookUrlPattern) && baseURI.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
-                AnalyzeElement analyzeElement = new AnalyzeElement(doc, baseURI);
+                AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(doc, baseURI);
                 SearchBookBean item = new SearchBookBean();
                 item.setNoteUrl(baseURI);
                 item.setTag(tag);
@@ -62,13 +62,13 @@ class BookList {
                     books.add(item);
                 }
             } else {
-                Elements booksE = AnalyzeElement.getElements(doc, bookSourceBean.getRuleSearchList());
+                Elements booksE = AnalyzeByJSoup.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     for (int i = 0; i < booksE.size(); i++) {
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(tag);
                         item.setOrigin(name);
-                        AnalyzeElement analyzeElement = new AnalyzeElement(booksE.get(i), baseURI);
+                        AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(booksE.get(i), baseURI);
                         item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter()));

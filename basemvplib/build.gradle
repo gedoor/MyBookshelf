@@ -49,5 +49,6 @@ dependencies {
 
     //J_SOUP
     api 'org.jsoup:jsoup:1.11.3'
+    api 'cn.wanghaomiao:JsoupXpath:2.2'
 
 }
