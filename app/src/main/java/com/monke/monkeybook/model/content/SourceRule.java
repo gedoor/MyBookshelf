@@ -1,7 +1,5 @@
 package com.monke.monkeybook.model.content;
 
-import org.jsoup.select.Elements;
-
 public class SourceRule {
     Mode mode;
     String rule;

@@ -394,9 +394,14 @@ public class AnalyzeByJSoup {
 
     private SourceRule splitSourceRule(String ruleStr) {
         SourceRule sourceRule = new SourceRule();
-
+        String[] ruleStrS;
+        //分离JS
+        ruleStrS = ruleStr.trim().split("(?i)@js:");
+        if (ruleStrS.length > 1) {
+            sourceRule.jsStr = ruleStrS[1];
+        }
         //分离正则表达式
-        String[] ruleStrS = ruleStr.trim().split("#");
+        ruleStrS = ruleStrS[0].trim().split("#");
         sourceRule.elementsRule = ruleStrS[0];
         if (ruleStrS.length > 1) {
             sourceRule.replaceRegex = ruleStrS[1];
@@ -412,6 +417,7 @@ public class AnalyzeByJSoup {
         String elementsRule = "";
         String replaceRegex = "";
         String replacement = "";
+        String jsStr;
     }
 
 }
