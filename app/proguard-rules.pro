@@ -189,8 +189,10 @@ public static java.lang.String TABLENAME;
 -keep class freemarker.**{*;}
 -keep class com.gyf.barlibrary.* {*;}
 ##JSOUP
--keep class org.jsoup.**{ *;}
+-keep class org.jsoup.**{*;}
 -keep class com.monke.mprogressbar.**{ *;}
+-keep class org.slf4j.impl.**{*;}
+-dontwarn org.slf4j.**
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
