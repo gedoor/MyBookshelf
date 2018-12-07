@@ -88,7 +88,7 @@ dependencies {
     //fireBase
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 
     //support
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

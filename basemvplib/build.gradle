@@ -51,4 +51,5 @@ dependencies {
     api 'org.jsoup:jsoup:1.11.3'
     api 'cn.wanghaomiao:JsoupXpath:2.2'
     api 'com.jayway.jsonpath:json-path:2.4.0'
+    api 'io.apisense:rhino-android:1.0'
 }

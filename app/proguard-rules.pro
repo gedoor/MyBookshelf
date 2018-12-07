@@ -191,8 +191,23 @@ public static java.lang.String TABLENAME;
 ##JSOUP
 -keep class org.jsoup.**{*;}
 -keep class com.monke.mprogressbar.**{ *;}
+
 -keep class org.slf4j.impl.**{*;}
 -dontwarn org.slf4j.**
+
+-keep class org.codehaus.jettison.json.**{*;}
+-keep class com.jayway.jsonpath.spi.json.**{*;}
+-keep class com.fasterxml.**{*;}
+-dontwarn org.codehaus.**
+-dontwarn com.jayway.**
+
+-keep class org.mozilla.javascript.**{*;}
+-keep class javax.swing.**
+-dontwarn org.mozilla.javascript.**
+-keep class sun.misc.**{*;}
+-dontwarn sun.misc.**
+-keep class sun.reflect.**{*;}
+-dontwarn sun.reflect.**
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
