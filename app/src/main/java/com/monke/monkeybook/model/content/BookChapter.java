@@ -152,7 +152,11 @@ class BookChapter {
                 result = analyzeByXPath.getString(sourceRule.rule, baseUrl);
                 break;
             default:
-                result = analyzeByJSoup.getResultUrl(sourceRule.rule);
+                if (TextUtils.isEmpty(baseUrl)) {
+                    result = analyzeByJSoup.getResult(sourceRule.rule);
+                } else {
+                    result = analyzeByJSoup.getResultUrl(sourceRule.rule);
+                }
         }
         return result;
     }
