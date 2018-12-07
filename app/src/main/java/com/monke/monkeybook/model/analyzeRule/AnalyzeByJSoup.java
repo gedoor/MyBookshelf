@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import static android.text.TextUtils.isEmpty;
 
 /**
@@ -21,6 +25,7 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeByJSoup {
+    private ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
     private String baseURL;
     private Element element;
 
@@ -246,11 +251,24 @@ public class AnalyzeByJSoup {
     }
 
     public String getResultUrl(String ruleStr) {
-        List<String> urlList = getAllResultList(ruleStr);
+        String result = "";
+        SourceRule sourceRule = splitSourceRule(ruleStr);
+        List<String> urlList = getAllResultList(sourceRule.elementsRule);
         if (urlList.size() > 0) {
-            return urlList.get(0);
+            result = urlList.get(0);
         }
-        return null;
+        if (!TextUtils.isEmpty(sourceRule.replaceRegex)) {
+            result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
+        }
+        if (!TextUtils.isEmpty(sourceRule.jsStr)) {
+            try {
+                String x = "var result = '" + result + "';" + sourceRule.jsStr;
+                result = (String) engine.eval(x);
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     /**
