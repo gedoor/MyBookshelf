@@ -66,7 +66,7 @@ class BookList {
                     books.add(item);
                 }
             } else {
-                Elements booksE = AnalyzeByJSoup.getElements(doc, bookSourceBean.getRuleSearchList());
+                Elements booksE = analyzeToElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     for (int i = 0; i < booksE.size(); i++) {
                         analyzeByJSoup = new AnalyzeByJSoup(booksE.get(i), baseUrl);
@@ -90,6 +90,19 @@ class BookList {
             e.onNext(books);
             e.onComplete();
         });
+    }
+
+    private Elements analyzeToElements(Document doc, String rule) {
+        SourceRule sourceRule = new SourceRule(rule);
+        Elements elements;
+        switch (sourceRule.mode) {
+            case XPath:
+                elements = analyzeByXPath.getElements(sourceRule.rule);
+                break;
+            default:
+                elements = AnalyzeByJSoup.getElements(doc, sourceRule.rule);
+        }
+        return elements;
     }
 
     private String analyzeToString(String rule) {
