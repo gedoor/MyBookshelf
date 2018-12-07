@@ -10,6 +10,7 @@ import com.monke.monkeybook.bean.ChapterListBean;
 import com.monke.monkeybook.dao.ChapterListBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByXPath;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeHeaders;
 import com.monke.monkeybook.model.impl.IHttpGetApi;
 import com.monke.monkeybook.utils.StringUtils;
@@ -30,6 +31,8 @@ class BookContent {
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
     private boolean isAJAX;
+    private AnalyzeByXPath analyzeByXPath;
+    private AnalyzeByJSoup analyzeByJSoup;
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -134,13 +137,31 @@ class BookContent {
             webContentBean.content = getLib99Content(doc);
             webContentBean.nextUrl = "";
         } else {
-            AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(doc, chapterUrl);
-            webContentBean.content = analyzeElement.getResult(ruleBookContent);
+            analyzeByJSoup = new AnalyzeByJSoup(doc, chapterUrl);
+            analyzeByXPath = new AnalyzeByXPath(doc);
+            webContentBean.content = analyzeToString(ruleBookContent);
             if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
-                webContentBean.nextUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleContentUrlNext());
+                webContentBean.nextUrl = analyzeToString(bookSourceBean.getRuleContentUrlNext(), chapterUrl);
             }
         }
         return webContentBean;
+    }
+
+    private String analyzeToString(String rule) {
+        return analyzeToString(rule, null);
+    }
+
+    private String analyzeToString(String rule, String baseUrl) {
+        SourceRule sourceRule = new SourceRule(rule);
+        String result;
+        switch (sourceRule.mode) {
+            case XPath:
+                result = analyzeByXPath.getString(sourceRule.rule, baseUrl);
+                break;
+            default:
+                result = analyzeByJSoup.getResultUrl(sourceRule.rule);
+        }
+        return result;
     }
 
     private class WebContentBean {

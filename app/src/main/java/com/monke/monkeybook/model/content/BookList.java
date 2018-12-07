@@ -6,6 +6,7 @@ import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
+import com.monke.monkeybook.model.analyzeRule.AnalyzeByXPath;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,6 +24,8 @@ class BookList {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
+    private AnalyzeByXPath analyzeByXPath;
+    private AnalyzeByJSoup analyzeByJSoup;
 
     BookList(String tag, String name, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -33,31 +36,32 @@ class BookList {
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             List<SearchBookBean> books = new ArrayList<>();
-            String baseURI;
+            String baseUrl;
             okhttp3.Response networkResponse = response.raw().networkResponse();
             if (networkResponse != null) {
-                baseURI = networkResponse.request().url().toString();
+                baseUrl = networkResponse.request().url().toString();
             } else {
-                baseURI = response.raw().request().url().toString();
+                baseUrl = response.raw().request().url().toString();
             }
             assert response.body() != null;
             Document doc = Jsoup.parse(response.body());
+            analyzeByXPath = new AnalyzeByXPath(doc);
             String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
                 bookUrlPattern += ".*";
             }
-            if (!isEmpty(bookUrlPattern) && baseURI.matches(bookUrlPattern)
+            if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                     && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
-                AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(doc, baseURI);
+                analyzeByJSoup = new AnalyzeByJSoup(doc, baseUrl);
                 SearchBookBean item = new SearchBookBean();
-                item.setNoteUrl(baseURI);
+                item.setNoteUrl(baseUrl);
                 item.setTag(tag);
                 item.setOrigin(name);
-                item.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleCoverUrl()));
-                item.setName(analyzeElement.getResult(bookSourceBean.getRuleBookName()));
-                item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleBookAuthor())));
-                item.setKind(FormatWebText.getContent(analyzeElement.getResult(bookSourceBean.getRuleBookKind())));
-                item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleBookLastChapter()));
+                item.setName(analyzeToString(bookSourceBean.getRuleBookName()));
+                item.setCoverUrl(analyzeToString(bookSourceBean.getRuleCoverUrl(), baseUrl));
+                item.setAuthor(analyzeToString(bookSourceBean.getRuleBookAuthor()));
+                item.setKind(analyzeToString(bookSourceBean.getRuleBookKind()));
+                item.setLastChapter(analyzeToString(bookSourceBean.getRuleBookLastChapter()));
                 if (!TextUtils.isEmpty(item.getName())) {
                     books.add(item);
                 }
@@ -65,17 +69,18 @@ class BookList {
                 Elements booksE = AnalyzeByJSoup.getElements(doc, bookSourceBean.getRuleSearchList());
                 if (null != booksE && booksE.size() > 0) {
                     for (int i = 0; i < booksE.size(); i++) {
+                        analyzeByJSoup = new AnalyzeByJSoup(booksE.get(i), baseUrl);
+                        analyzeByXPath = new AnalyzeByXPath(booksE.get(i).children());
                         SearchBookBean item = new SearchBookBean();
                         item.setTag(tag);
                         item.setOrigin(name);
-                        AnalyzeByJSoup analyzeElement = new AnalyzeByJSoup(booksE.get(i), baseURI);
-                        item.setAuthor(FormatWebText.getAuthor(analyzeElement.getResult(bookSourceBean.getRuleSearchAuthor())));
-                        item.setKind(analyzeElement.getResult(bookSourceBean.getRuleSearchKind()));
-                        item.setLastChapter(analyzeElement.getResult(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setName(analyzeElement.getResult(bookSourceBean.getRuleSearchName()));
-                        String resultUrl = analyzeElement.getResultUrl(bookSourceBean.getRuleSearchNoteUrl());
-                        item.setNoteUrl(isEmpty(resultUrl) ? baseURI : resultUrl);
-                        item.setCoverUrl(analyzeElement.getResultUrl(bookSourceBean.getRuleSearchCoverUrl()));
+                        item.setAuthor(FormatWebText.getAuthor(analyzeToString(bookSourceBean.getRuleSearchAuthor())));
+                        item.setKind(analyzeToString(bookSourceBean.getRuleSearchKind()));
+                        item.setLastChapter(analyzeToString(bookSourceBean.getRuleSearchLastChapter()));
+                        item.setName(analyzeToString(bookSourceBean.getRuleSearchName()));
+                        String resultUrl = analyzeToString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
+                        item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
+                        item.setCoverUrl(analyzeToString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
                         if (!TextUtils.isEmpty(item.getName())) {
                             books.add(item);
                         }
@@ -86,4 +91,22 @@ class BookList {
             e.onComplete();
         });
     }
+
+    private String analyzeToString(String rule) {
+        return analyzeToString(rule, null);
+    }
+
+    private String analyzeToString(String rule, String baseUrl) {
+        SourceRule sourceRule = new SourceRule(rule);
+        String result;
+        switch (sourceRule.mode) {
+            case XPath:
+                result = analyzeByXPath.getString(sourceRule.rule, baseUrl);
+                break;
+            default:
+                result = analyzeByJSoup.getResultUrl(sourceRule.rule);
+        }
+        return result;
+    }
+
 }
