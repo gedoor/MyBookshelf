@@ -127,6 +127,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private Boolean showCheckPermission = false;
     private boolean autoPage = false;
+    private boolean aloudNextPage;
 
     @Override
     protected ReadBookContract.Presenter initInjector() {
@@ -973,6 +974,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     }
 
     private void readAloud() {
+        aloudNextPage = false;
         if (mPresenter.getBookShelf() != null && mPageLoader != null) {
             ReadAloudService.play(ReadBookActivity.this,
                     false,
@@ -1054,6 +1056,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void readAloudStart(int start) {
+        aloudNextPage = true;
         if (mPageLoader != null) {
             mPageLoader.readAloudStart(start);
         }
@@ -1061,7 +1064,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void readAloudLength(int readAloudLength) {
-        if (mPageLoader != null) {
+        if (mPageLoader != null && aloudNextPage) {
             mPageLoader.readAloudLength(readAloudLength);
         }
     }
