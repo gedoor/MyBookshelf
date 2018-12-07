@@ -396,7 +396,7 @@ public class AnalyzeByJSoup {
         SourceRule sourceRule = new SourceRule();
         String[] ruleStrS;
         //分离JS
-        ruleStrS = ruleStr.trim().split("(?i)@js:");
+        ruleStrS = ruleStr.trim().split("@js:");
         if (ruleStrS.length > 1) {
             sourceRule.jsStr = ruleStrS[1];
         }
