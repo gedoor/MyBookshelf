@@ -2,6 +2,8 @@ package com.monke.monkeybook.model.content;
 
 import android.text.TextUtils;
 
+import com.monke.monkeybook.MApplication;
+import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BaseChapterBean;
 import com.monke.monkeybook.bean.BookContentBean;
 import com.monke.monkeybook.bean.BookSourceBean;
@@ -49,6 +51,11 @@ class BookContent {
                 e.onComplete();
                 return;
             }
+            if (ruleBookContent.startsWith("@") && !MApplication.getInstance().getDonateHb()) {
+                e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
+                e.onComplete();
+                return;
+            }
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
@@ -87,7 +94,6 @@ class BookContent {
                     }
                 }
             }
-
             e.onNext(bookContentBean);
             e.onComplete();
         });

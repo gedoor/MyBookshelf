@@ -28,7 +28,6 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.bean.SearchHistoryBean;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.presenter.BookDetailPresenter;
 import com.monke.monkeybook.presenter.SearchBookPresenter;
@@ -40,7 +39,6 @@ import com.monke.monkeybook.widget.refreshview.OnLoadMoreListener;
 import com.monke.monkeybook.widget.refreshview.RefreshRecyclerView;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,7 +64,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
-    private boolean useMy716;
     private String searchKey;
 
     private final View.OnClickListener historyItemClick = new View.OnClickListener() {
@@ -107,8 +104,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected SearchBookContract.Presenter initInjector() {
-        useMy716 = !Objects.equals(ACache.get(this).getAsString("useMy716"), "False");
-        return new SearchBookPresenter(this, useMy716);
+        return new SearchBookPresenter(this);
     }
 
     @Override
@@ -171,13 +167,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        this.menu = menu;
-        upMenu();
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     //菜单
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -185,12 +174,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         switch (id) {
             case R.id.action_book_source_manage:
                 BookSourceActivity.startThis(this);
-                break;
-            case R.id.action_my716:
-                useMy716 = !useMy716;
-                upMenu();
-                mPresenter.setUseMy716(useMy716);
-                ACache.get(this).put("useMy716", useMy716 ? "True" : "False");
                 break;
             case R.id.action_donate:
                 DonateActivity.startThis(this);
@@ -204,26 +187,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * 更新菜单
-     */
-    @Override
-    public void upMenu() {
-        if (menu == null) return;
-        boolean getHb = Objects.equals(ACache.get(this).getAsString("getZfbHb"), "True");
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            if (item.getItemId() == R.id.action_my716) {
-                item.setChecked(useMy716);
-            }
-            if (item.getGroupId() == R.id.menu_jz) {
-                item.setVisible(!getHb);
-            } else if (item.getGroupId() == R.id.menu_yc_source) {
-                item.setVisible(getHb);
-            }
-        }
     }
 
     private void initSearchView() {

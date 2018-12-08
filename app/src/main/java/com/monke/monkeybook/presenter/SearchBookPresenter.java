@@ -9,7 +9,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.monke.basemvplib.BasePresenterImpl;
 import com.monke.basemvplib.impl.IView;
-import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -20,12 +19,10 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.SearchBookModel;
-import com.monke.monkeybook.model.WebBookModel;
 import com.monke.monkeybook.presenter.contract.SearchBookContract;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -42,7 +39,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
 
     private SearchBookModel searchBookModel;
 
-    public SearchBookPresenter(Context context, boolean useMy716) {
+    public SearchBookPresenter(Context context) {
         Observable.create((ObservableOnSubscribe<List<BookShelfBean>>) e -> {
             List<BookShelfBean> booAll = BookshelfHelp.getAllBook();
             e.onNext(booAll == null ? new ArrayList<>() : booAll);
@@ -99,7 +96,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             }
         };
         //搜索引擎初始化
-        searchBookModel = new SearchBookModel(context, onSearchListener, useMy716);
+        searchBookModel = new SearchBookModel(context, onSearchListener);
     }
 
     public void insertSearchHistory() {
@@ -221,11 +218,6 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
     }
 
     @Override
-    public void setUseMy716(boolean useMy716) {
-        searchBookModel.setUseMy716(useMy716);
-    }
-
-    @Override
     public void toSearchBooks(String key, Boolean fromError) {
         if (key != null) {
             durSearchKey = key;
@@ -268,9 +260,4 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
         searchBookModel.initSearchEngineS(BookSourceManager.getSelectedBookSource());
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.GET_ZFB_Hb)})
-    public void getZfbHB(Boolean getZfbHB) {
-        searchBookModel.setUseMy716(getZfbHB);
-        mView.upMenu();
-    }
 }

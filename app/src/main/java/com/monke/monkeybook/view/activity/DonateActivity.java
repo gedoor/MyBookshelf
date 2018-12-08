@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,13 +15,11 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.impl.IPresenter;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.Donate;
-import com.monke.monkeybook.help.RxBusTag;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,7 +95,7 @@ public class DonateActivity extends MBaseActivity {
         ClipData clipData = ClipData.newPlainText(null, "537954522");
         if (clipboard != null) {
             clipboard.setPrimaryClip(clipData);
-            Toast.makeText(context, "隐藏书源已开启\n红包码已复制\n支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "高级功能已开启\n红包码已复制\n支付宝首页搜索“537954522” 立即领红包", Toast.LENGTH_LONG).show();
         }
         try {
             PackageManager packageManager = context.getApplicationContext().getPackageManager();
@@ -107,8 +106,9 @@ public class DonateActivity extends MBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            ACache.get(context).put("getZfbHb", "True", 3 * ACache.TIME_DAY);
-            RxBus.get().post(RxBusTag.GET_ZFB_Hb, true);
+            SharedPreferences.Editor editor = MApplication.getInstance().getConfigPreferences().edit();
+            editor.putLong("DonateHb", System.currentTimeMillis());
+            editor.apply();
         }
     }
 

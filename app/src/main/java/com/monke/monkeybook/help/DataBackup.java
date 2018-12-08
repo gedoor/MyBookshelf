@@ -22,6 +22,7 @@ import com.monke.monkeybook.utils.XmlUtils;
 
 import java.io.FileOutputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -41,12 +42,11 @@ public class DataBackup {
         return new DataBackup();
     }
 
-
     public void autoSave() {
         long currentTime = System.currentTimeMillis();
         if (EasyPermissions.hasPermissions(MApplication.getInstance(), MApplication.PerList)) {
             long lastBackupTime = (long) SharedPreferencesUtil.getData("backupTime", 0L);
-            if (currentTime - lastBackupTime > 24 * 3600 * 1000) {
+            if (currentTime - lastBackupTime > TimeUnit.DAYS.toMillis(1)) {
                 DocumentHelper.createDirIfNotExist(FileUtil.getSdCardPath(), "YueDu");
                 String dirPath = FileUtil.getSdCardPath() + "/YueDu";
                 DocumentHelper.createDirIfNotExist(dirPath, "autoSave");

@@ -25,8 +25,6 @@ public interface SearchBookContract {
 
         void initPage();
 
-        void setUseMy716(boolean useMy716);
-
         void toSearchBooks(String key, Boolean fromError);
 
         void stopSearch();
@@ -81,7 +79,6 @@ public interface SearchBookContract {
          */
         SearchBookAdapter getSearchBookAdapter();
 
-        void upMenu();
     }
 
 }

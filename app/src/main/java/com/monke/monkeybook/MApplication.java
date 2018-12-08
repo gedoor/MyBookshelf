@@ -20,6 +20,7 @@ import com.monke.monkeybook.help.FileHelp;
 import com.monke.monkeybook.model.UpLastChapterModel;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;
@@ -32,6 +33,7 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     private SharedPreferences configPreferences;
+    private boolean donateHb;
 
     public static MApplication getInstance() {
         return instance;
@@ -75,7 +77,7 @@ public class MApplication extends Application {
         frontBackHelper.register(this, new AppFrontBackHelper.OnAppStatusListener() {
             @Override
             public void onFront() {
-
+                donateHb = System.currentTimeMillis() - configPreferences.getLong("DonateHb", 0) <= TimeUnit.DAYS.toMillis(3);
             }
 
             @Override
@@ -97,6 +99,10 @@ public class MApplication extends Application {
 
     public SharedPreferences getConfigPreferences() {
         return configPreferences;
+    }
+
+    public boolean getDonateHb() {
+        return donateHb;
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
