@@ -152,7 +152,12 @@ class ChapterProvider {
             //重置Lines
             lines.clear();
         }
-        txtChapter.setStatus(TxtChapter.Status.FINISH);
+        if (txtChapter.getPageSize() > 0) {
+            txtChapter.setStatus(TxtChapter.Status.FINISH);
+        } else {
+            txtChapter.setStatus(TxtChapter.Status.ERROR);
+            txtChapter.setMsg("未加载到内容");
+        }
         return txtChapter;
     }
 

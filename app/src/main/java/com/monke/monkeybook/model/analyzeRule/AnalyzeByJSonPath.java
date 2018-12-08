@@ -29,20 +29,24 @@ public class AnalyzeByJSonPath {
 
     public String read(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
-        String result;
+        String result = "";
         SourceRule sourceRule = splitSourceRule(rule);
         Object object = ctx.read(sourceRule.rule);
-        if (object instanceof String) {
-            result = (String) object;
-        } else {
-            result = ((List<String>) object).get(0);
+        if (object instanceof List) {
+            object = ((List<String>) object).get(0);
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
             try {
-                engine.put("result", result);
+                engine.put("result", object);
                 result = (String) engine.eval(sourceRule.jsStr);
             } catch (ScriptException e) {
                 e.printStackTrace();
+            }
+        } else {
+            if (object instanceof Integer) {
+                result = Integer.toString((Integer) object);
+            } else {
+                result = (String) object;
             }
         }
         return result;
