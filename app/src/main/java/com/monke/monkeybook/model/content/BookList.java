@@ -110,6 +110,8 @@ class BookList {
                     item.setKind(analyzeByJSonPath.read(object, sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchLastChapter());
                     item.setLastChapter(analyzeByJSonPath.read(object, sourceRule.rule));
+                    sourceRule = new SourceRule(bookSourceBean.getRuleIntroduce());
+                    item.setIntroduce(analyzeByJSonPath.read(object, sourceRule.rule));
                     if (!TextUtils.isEmpty(item.getName())) {
                         books.add(item);
                     }
