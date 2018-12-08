@@ -19,10 +19,6 @@ public class AnalyzeByJSonPath {
         ctx = JsonPath.parse(json);
     }
 
-    public AnalyzeByJSonPath(Object json) {
-        ctx = JsonPath.parse(json);
-    }
-
     public void parse(String json) {
         ctx = JsonPath.parse(json);
     }

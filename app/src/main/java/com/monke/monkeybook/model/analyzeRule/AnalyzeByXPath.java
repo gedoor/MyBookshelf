@@ -12,7 +12,12 @@ import org.seimicrawler.xpath.JXDocument;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 public class AnalyzeByXPath {
+    private ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
     private JXDocument jxDocument;
 
     public AnalyzeByXPath(Document doc) {
@@ -52,12 +57,35 @@ public class AnalyzeByXPath {
         return stringList;
     }
 
-    public String getString(String xPath, String baseUrl) {
-        String str = (String) jxDocument.selOne(xPath);
+    public String getString(String rule, String baseUrl) {
+        SourceRule sourceRule = splitSourceRule(rule);
+        String result = (String) jxDocument.selOne(sourceRule.rule);
         if (!TextUtils.isEmpty(baseUrl)) {
-            str = NetworkUtil.getAbsoluteURL(baseUrl, str);
+            result = NetworkUtil.getAbsoluteURL(baseUrl, result);
         }
-        return str;
+        if (!TextUtils.isEmpty(sourceRule.jsStr)) {
+            try {
+                engine.put("result", result);
+                result = (String) engine.eval(sourceRule.jsStr);
+            } catch (ScriptException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
+    private SourceRule splitSourceRule(String rule) {
+        SourceRule sourceRule = new SourceRule();
+        String str[] = rule.split("@js:");
+        sourceRule.rule = str[0];
+        if (str.length > 1) {
+            sourceRule.jsStr = str[1];
+        }
+        return sourceRule;
+    }
+
+    class SourceRule {
+        String rule;
+        String jsStr;
+    }
 }
