@@ -30,13 +30,11 @@ import com.monke.monkeybook.bean.LocBookShelfBean;
 import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
-import com.monke.monkeybook.help.ACache;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.BookSourceManager;
 import com.monke.monkeybook.model.ImportBookModel;
 import com.monke.monkeybook.model.WebBookModel;
-import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.ReadBookContract;
 import com.monke.monkeybook.service.DownloadService;
 import com.monke.monkeybook.view.activity.ChapterListActivity;
@@ -44,7 +42,6 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -124,10 +121,6 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         try {
             switch (bookShelf.getTag()) {
                 case BookShelfBean.LOCAL_TAG:
-                    break;
-                case My716.TAG:
-                    ACache.get(mView.getContext()).put("useMy716", "False");
-                    mView.toast("已禁用My716书源");
                     break;
                 default:
                     BookSourceBean bookSource = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
@@ -305,22 +298,20 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                         bookShelf = value;
                         mView.changeSourceFinish(bookShelf);
                         String tag = bookShelf.getTag();
-                        if (!Objects.equals(tag, My716.TAG)) {
-                            try {
-                                long currentTime = System.currentTimeMillis();
-                                String bookName = bookShelf.getBookInfoBean().getName();
-                                BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                                if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
-                                    savedSource.getBookSource().increaseWeight(-450);
-                                BookshelfHelp.saveBookSource(savedSource.getBookSource());
-                                savedSource.setBookName(bookName);
-                                savedSource.setSaveTime(currentTime);
-                                savedSource.setBookSource(bookSourceBean);
-                                bookSourceBean.increaseWeightBySelection();
-                                BookshelfHelp.saveBookSource(bookSourceBean);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        try {
+                            long currentTime = System.currentTimeMillis();
+                            String bookName = bookShelf.getBookInfoBean().getName();
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
+                            if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
+                                savedSource.getBookSource().increaseWeight(-450);
+                            BookshelfHelp.saveBookSource(savedSource.getBookSource());
+                            savedSource.setBookName(bookName);
+                            savedSource.setSaveTime(currentTime);
+                            savedSource.setBookSource(bookSourceBean);
+                            bookSourceBean.increaseWeightBySelection();
+                            BookshelfHelp.saveBookSource(bookSourceBean);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 

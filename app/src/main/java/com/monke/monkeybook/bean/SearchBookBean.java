@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.monke.monkeybook.help.BookshelfHelp;
-import com.monke.monkeybook.model.source.My716;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -284,17 +283,11 @@ public class SearchBookBean implements Parcelable{
     }
 
     public int getWeight() {
-        if (weight < 0) {
-            if (tag.equals(My716.TAG))
-                this.weight = Integer.MAX_VALUE;
-            else {
-                BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
-                if (source != null)
-                    this.weight = source.getWeight();
-                else
-                    this.weight = 0;
-            }
-        }
+        BookSourceBean source = BookshelfHelp.getBookSourceByTag(this.tag);
+        if (source != null)
+            this.weight = source.getWeight();
+        else
+            this.weight = 0;
         return weight;
     }
 

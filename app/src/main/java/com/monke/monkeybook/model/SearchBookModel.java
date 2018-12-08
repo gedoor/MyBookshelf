@@ -12,12 +12,9 @@ import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
-import com.monke.monkeybook.help.ACache;
-import com.monke.monkeybook.model.source.My716;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,12 +62,6 @@ public class SearchBookModel {
      */
     public void initSearchEngineS(@NonNull List<BookSourceBean> sourceBeanList) {
         searchEngineS.clear();
-        if (Objects.equals(ACache.get(context).getAsString("getZfbHb"), "True") && useMy716) {
-            SearchEngine my716 = new SearchEngine();
-            my716.setTag(My716.TAG);
-            my716.setHasMore(true);
-            searchEngineS.add(my716);
-        }
         for (BookSourceBean bookSourceBean : sourceBeanList) {
             if (bookSourceBean.getEnable()) {
                 SearchEngine se = new SearchEngine();

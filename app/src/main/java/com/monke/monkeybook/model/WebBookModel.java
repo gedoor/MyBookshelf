@@ -13,7 +13,6 @@ import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.content.DefaultModel;
 import com.monke.monkeybook.model.impl.IStationBookModel;
-import com.monke.monkeybook.model.source.My716;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,8 +110,6 @@ public class WebBookModel {
         switch (tag) {
             case BookShelfBean.LOCAL_TAG:
                 return null;
-            case My716.TAG:
-                return My716.getInstance();
             default:
                 return DefaultModel.getInstance(tag);
         }

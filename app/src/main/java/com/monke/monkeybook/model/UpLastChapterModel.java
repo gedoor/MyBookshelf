@@ -12,7 +12,6 @@ import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.dao.SearchBookBeanDao;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
-import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.utils.RxUtils;
 
 import java.util.ArrayList;
@@ -163,7 +162,7 @@ public class UpLastChapterModel {
                     .where(SearchBookBeanDao.Properties.Name.eq(bookShelf.getBookInfoBean().getName())).list();
             for (SearchBookBean searchBookBean : searchBookBeans) {
                 BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(searchBookBean.getTag());
-                if (sourceBean == null && !Objects.equals(searchBookBean.getTag(), My716.TAG)) {
+                if (sourceBean == null) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
                 } else if (System.currentTimeMillis() - searchBookBean.getUpTime() > 1000 * 60 * 60
                         && BookSourceManager.getBookSourceByUrl(searchBookBean.getTag()).getEnable()) {

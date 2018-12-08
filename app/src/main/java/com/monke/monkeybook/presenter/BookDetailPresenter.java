@@ -18,7 +18,6 @@ import com.monke.monkeybook.bean.SearchBookBean;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.RxBusTag;
 import com.monke.monkeybook.model.WebBookModel;
-import com.monke.monkeybook.model.source.My716;
 import com.monke.monkeybook.presenter.contract.BookDetailContract;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -240,22 +239,20 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         bookShelf = value;
                         mView.updateView();
                         String tag = bookShelf.getTag();
-                        if (!tag.equals(My716.TAG)) {
-                            try {
-                                long currentTime = System.currentTimeMillis();
-                                String bookName = bookShelf.getBookInfoBean().getName();
-                                BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
-                                if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
-                                    savedSource.getBookSource().increaseWeight(-450);
-                                BookshelfHelp.saveBookSource(savedSource.getBookSource());
-                                savedSource.setBookName(bookName);
-                                savedSource.setSaveTime(currentTime);
-                                savedSource.setBookSource(bookSourceBean);
-                                bookSourceBean.increaseWeightBySelection();
-                                BookshelfHelp.saveBookSource(bookSourceBean);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        try {
+                            long currentTime = System.currentTimeMillis();
+                            String bookName = bookShelf.getBookInfoBean().getName();
+                            BookSourceBean bookSourceBean = BookshelfHelp.getBookSourceByTag(tag);
+                            if (savedSource.getBookSource() != null && currentTime - savedSource.getSaveTime() < 60000 && savedSource.getBookName().equals(bookName))
+                                savedSource.getBookSource().increaseWeight(-450);
+                            BookshelfHelp.saveBookSource(savedSource.getBookSource());
+                            savedSource.setBookName(bookName);
+                            savedSource.setSaveTime(currentTime);
+                            savedSource.setBookSource(bookSourceBean);
+                            bookSourceBean.increaseWeightBySelection();
+                            BookshelfHelp.saveBookSource(bookSourceBean);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
 
