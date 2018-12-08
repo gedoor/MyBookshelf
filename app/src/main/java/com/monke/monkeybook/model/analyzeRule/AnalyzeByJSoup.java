@@ -251,8 +251,8 @@ public class AnalyzeByJSoup {
     }
 
     /**
-     * 获取一个字符
-     */
+     * 获取一个字符串
+     **/
     public String getResultUrl(String ruleStr) {
         String result = "";
         SourceRule sourceRule = splitSourceRule(ruleStr);
