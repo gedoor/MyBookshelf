@@ -104,9 +104,9 @@ class BookContent {
                 webContentBean.nextUrl = analyzeToString(bookSourceBean.getRuleContentUrlNext(), chapterUrl);
             }
         } else {
-            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
+            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
             SourceRule sourceRule = new SourceRule(ruleBookContent);
-            webContentBean.content = analyzeByJSonPath.read(s, sourceRule.rule);
+            webContentBean.content = analyzeByJSonPath.read(sourceRule.rule);
         }
         return webContentBean;
     }

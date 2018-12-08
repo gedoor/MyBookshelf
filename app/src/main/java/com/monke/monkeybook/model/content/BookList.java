@@ -92,27 +92,28 @@ class BookList {
                     }
                 }
             } else {
-                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
+                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(response.body());
                 SourceRule sourceRule = new SourceRule(bookSourceBean.getRuleSearchList());
                 List<Object> objects = JsonPath.read(response.body(), sourceRule.rule);
                 for (Object object : objects) {
+                    analyzeByJSonPath.parse(object);
                     SearchBookBean item = new SearchBookBean();
                     item.setTag(tag);
                     item.setOrigin(name);
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchNoteUrl());
-                    item.setNoteUrl(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setNoteUrl(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchName());
-                    item.setName(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setName(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchCoverUrl());
-                    item.setCoverUrl(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchAuthor());
-                    item.setAuthor(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setAuthor(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchKind());
-                    item.setKind(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setKind(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleSearchLastChapter());
-                    item.setLastChapter(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setLastChapter(analyzeByJSonPath.read(sourceRule.rule));
                     sourceRule = new SourceRule(bookSourceBean.getRuleIntroduce());
-                    item.setIntroduce(analyzeByJSonPath.read(object, sourceRule.rule));
+                    item.setIntroduce(analyzeByJSonPath.read(sourceRule.rule));
                     if (!TextUtils.isEmpty(item.getName())) {
                         books.add(item);
                     }

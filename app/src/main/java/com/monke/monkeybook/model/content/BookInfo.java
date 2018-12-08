@@ -64,26 +64,26 @@ class BookInfo {
                     bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
                 }
             } else {
-                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
+                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
                 SourceRule sourceRule;
                 if (isEmpty(bookInfoBean.getCoverUrl())) {
                     sourceRule = new SourceRule(bookSourceBean.getRuleCoverUrl());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(s, sourceRule.rule));
+                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
                 }
                 if (isEmpty(bookInfoBean.getName())) {
                     sourceRule = new SourceRule(bookSourceBean.getRuleBookName());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(s, sourceRule.rule));
+                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
                 }
                 if (isEmpty(bookInfoBean.getAuthor())) {
                     sourceRule = new SourceRule(bookSourceBean.getRuleBookAuthor());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(s, sourceRule.rule));
+                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
                 }
                 if (isEmpty(bookInfoBean.getIntroduce())) {
                     sourceRule = new SourceRule(bookSourceBean.getRuleIntroduce());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(s, sourceRule.rule));
+                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
                 }
                 sourceRule = new SourceRule(bookSourceBean.getRuleChapterUrl());
-                bookInfoBean.setChapterUrl(analyzeByJSonPath.read(s, sourceRule.rule));
+                bookInfoBean.setChapterUrl(analyzeByJSonPath.read(sourceRule.rule));
                 if (isEmpty(bookInfoBean.getChapterUrl())) {
                     bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
                 }

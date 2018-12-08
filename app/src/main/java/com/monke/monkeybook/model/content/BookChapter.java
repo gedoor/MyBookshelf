@@ -141,16 +141,17 @@ class BookChapter {
                 }
             }
         } else {
-            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
+            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
             sourceRule = new SourceRule(ruleChapterList);
             List<Object> objects = JsonPath.read(s, sourceRule.rule);
             for (Object object : objects) {
+                analyzeByJSonPath.parse(object);
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);
                 sourceRule = new SourceRule(bookSourceBean.getRuleChapterName());
-                temp.setDurChapterName(analyzeByJSonPath.read(object, sourceRule.rule));
+                temp.setDurChapterName(analyzeByJSonPath.read(sourceRule.rule));
                 sourceRule = new SourceRule(bookSourceBean.getRuleContentUrl());
-                temp.setDurChapterUrl(analyzeByJSonPath.read(object, sourceRule.rule));
+                temp.setDurChapterUrl(analyzeByJSonPath.read(sourceRule.rule));
                 chapterBeans.add(temp);
             }
         }
