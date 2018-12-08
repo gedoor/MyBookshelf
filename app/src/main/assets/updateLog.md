@@ -7,7 +7,7 @@
 * 支持XPath语法,以@XPath:开头,语法见 http://www.w3school.com.cn/xpath/index.asp
 * 支持JSonPath语法,以@JSon:开头,语法见 https://blog.csdn.net/koflance/article/details/63262484
 * 支持用js处理结果,以@js:开头,结果变量为result 如 "@JSon:$.link@js:"http://chapterup.zhuishushenqi.com/chapter/" + encodeURIComponent(result)"
-* **注意** #替换规则在新语法下无法使用,新的语法用js处理结果,原有的规则不变,见下方
+* **注意** #替换规则在新语法下无法使用,新的语法用js处理结果,原有的规则不变
 * 去掉了隐藏书源,隐藏书源已经可以用JSonPath语法写出来
 * 新增的语法作为高级功能需要领红包才能开启
 
