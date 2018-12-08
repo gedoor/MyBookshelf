@@ -57,7 +57,7 @@ android {
     buildTypes {
         release {
             buildConfigField "boolean", "IS_RELEASE", "true"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
