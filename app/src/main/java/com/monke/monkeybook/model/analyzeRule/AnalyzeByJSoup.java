@@ -250,6 +250,9 @@ public class AnalyzeByJSoup {
         return result.trim();
     }
 
+    /**
+     * 获取一个字符
+     */
     public String getResultUrl(String ruleStr) {
         String result = "";
         SourceRule sourceRule = splitSourceRule(ruleStr);
@@ -262,8 +265,8 @@ public class AnalyzeByJSoup {
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
             try {
-                String x = "var result = '" + result + "';" + sourceRule.jsStr;
-                result = (String) engine.eval(x);
+                engine.put("result", result);
+                result = (String) engine.eval(sourceRule.jsStr);
             } catch (ScriptException e) {
                 e.printStackTrace();
             }

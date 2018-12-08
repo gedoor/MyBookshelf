@@ -18,8 +18,8 @@ public class AnalyzeByJSonPath {
         result = JsonPath.read(object, sourceRule.rule);
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
             try {
-                String x = "var result = '" + result + "';" + sourceRule.jsStr;
-                result = (String) engine.eval(x);
+                engine.put("result", result);
+                result = (String) engine.eval(sourceRule.jsStr);
             } catch (ScriptException e) {
                 e.printStackTrace();
             }
