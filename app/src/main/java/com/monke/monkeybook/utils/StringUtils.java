@@ -1,6 +1,7 @@
 package com.monke.monkeybook.utils;
 
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.util.Base64;
 
 import com.monke.monkeybook.MApplication;
@@ -92,9 +93,6 @@ public class StringUtils {
 
     /**
      * 将文本中的半角字符，转换成全角字符
-     *
-     * @param input
-     * @return
      */
     public static String halfToFull(String input) {
         char[] c = input.toCharArray();
@@ -236,6 +234,19 @@ public class StringUtils {
             }
         }
         return tmp.toString();
+    }
+
+    public static boolean isJSONType(String str) {
+        boolean result = false;
+        if (!TextUtils.isEmpty(str)) {
+            str = str.trim();
+            if (str.startsWith("{") && str.endsWith("}")) {
+                result = true;
+            } else if (str.startsWith("[") && str.endsWith("]")) {
+                result = true;
+            }
+        }
+        return result;
     }
 
 }

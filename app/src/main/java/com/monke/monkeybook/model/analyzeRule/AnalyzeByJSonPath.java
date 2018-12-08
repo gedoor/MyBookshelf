@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.jayway.jsonpath.JsonPath;
 
+import java.util.List;
+
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -31,11 +33,16 @@ public class AnalyzeByJSonPath {
         if (TextUtils.isEmpty(rule)) return null;
         String result;
         SourceRule sourceRule = splitSourceRule(rule);
-        result = JsonPath.read(json, sourceRule.rule);
+        Object object = JsonPath.read(json, sourceRule.rule);
+        if (object instanceof String) {
+            result = (String) object;
+        } else {
+            result = ((List<String>) object).get(0);
+        }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
             try {
-                String x = "var result = " + result + ";";
-                result = (String) engine.eval(x + sourceRule.jsStr);
+                engine.put("result", result);
+                result = (String) engine.eval(sourceRule.jsStr);
             } catch (ScriptException e) {
                 e.printStackTrace();
             }

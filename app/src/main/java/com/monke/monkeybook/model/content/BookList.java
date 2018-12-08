@@ -9,6 +9,7 @@ import com.monke.monkeybook.help.FormatWebText;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSonPath;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeByJSoup;
 import com.monke.monkeybook.model.analyzeRule.AnalyzeByXPath;
+import com.monke.monkeybook.utils.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,8 +39,7 @@ class BookList {
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             List<SearchBookBean> books = new ArrayList<>();
-            SourceRule sourceRule = new SourceRule(bookSourceBean.getRuleSearchList());
-            if (sourceRule.mode != SourceRule.Mode.JSon) {
+            if (!StringUtils.isJSONType(response.body())) {
                 String baseUrl;
                 okhttp3.Response networkResponse = response.raw().networkResponse();
                 if (networkResponse != null) {
@@ -93,6 +93,7 @@ class BookList {
                 }
             } else {
                 AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
+                SourceRule sourceRule = new SourceRule(bookSourceBean.getRuleSearchList());
                 List<Object> objects = JsonPath.read(response.body(), sourceRule.rule);
                 for (Object object : objects) {
                     SearchBookBean item = new SearchBookBean();
