@@ -25,13 +25,19 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeByJSoup {
-    private ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
+    private ScriptEngine engine;
     private String baseURL;
     private Element element;
 
     public AnalyzeByJSoup(Element element, String baseURL) {
         this.element = element;
         this.baseURL = baseURL;
+    }
+
+    private void initScriptEngine() {
+        if (engine == null) {
+            engine = new ScriptEngineManager().getEngineByName("rhino");
+        }
     }
 
     /**
@@ -248,6 +254,7 @@ public class AnalyzeByJSoup {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
         if (!isEmpty(sourceRule.jsStr)) {
+            initScriptEngine();
             try {
                 engine.put("result", result);
                 result = (String) engine.eval(sourceRule.jsStr);
@@ -271,6 +278,7 @@ public class AnalyzeByJSoup {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
+            initScriptEngine();
             try {
                 engine.put("result", result);
                 result = (String) engine.eval(sourceRule.jsStr);

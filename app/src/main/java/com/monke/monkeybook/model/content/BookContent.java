@@ -103,11 +103,15 @@ class BookContent {
         WebContentBean webContentBean = new WebContentBean();
         if (!StringUtils.isJSONType(s)) {
             Document doc = Jsoup.parse(s);
+            SourceRule sourceRuleBookContent = new SourceRule(ruleBookContent);
+            SourceRule sourceRuleContentUrlNext = new SourceRule(bookSourceBean.getRuleContentUrlNext());
+            if (sourceRuleBookContent.mode == SourceRule.Mode.XPath || sourceRuleContentUrlNext.mode == SourceRule.Mode.XPath) {
+                analyzeByXPath = new AnalyzeByXPath(doc);
+            }
             analyzeByJSoup = new AnalyzeByJSoup(doc, chapterUrl);
-            analyzeByXPath = new AnalyzeByXPath(doc);
-            webContentBean.content = analyzeToString(ruleBookContent);
-            if (!TextUtils.isEmpty(bookSourceBean.getRuleContentUrlNext())) {
-                webContentBean.nextUrl = analyzeToString(bookSourceBean.getRuleContentUrlNext(), chapterUrl);
+            webContentBean.content = analyzeToString(sourceRuleBookContent);
+            if (!TextUtils.isEmpty(sourceRuleContentUrlNext.rule)) {
+                webContentBean.nextUrl = analyzeToString(sourceRuleContentUrlNext, chapterUrl);
             }
         } else {
             AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
@@ -117,12 +121,11 @@ class BookContent {
         return webContentBean;
     }
 
-    private String analyzeToString(String rule) {
-        return analyzeToString(rule, null);
+    private String analyzeToString(SourceRule sourceRule) {
+        return analyzeToString(sourceRule, null);
     }
 
-    private String analyzeToString(String rule, String baseUrl) {
-        SourceRule sourceRule = new SourceRule(rule);
+    private String analyzeToString(SourceRule sourceRule, String baseUrl) {
         String result;
         switch (sourceRule.mode) {
             case XPath:

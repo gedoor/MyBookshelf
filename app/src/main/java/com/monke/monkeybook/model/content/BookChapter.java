@@ -129,9 +129,13 @@ class BookChapter {
                 default:
                     elements = AnalyzeByJSoup.getElements(doc, sourceRule.rule);
             }
+            SourceRule ruleChapterName = new SourceRule(bookSourceBean.getRuleChapterName());
+            SourceRule ruleContentUrl = new SourceRule(bookSourceBean.getRuleContentUrl());
             for (Element element : elements) {
+                if (ruleChapterName.mode == SourceRule.Mode.XPath || ruleContentUrl.mode == SourceRule.Mode.XPath) {
+                    analyzeByXPath = new AnalyzeByXPath(element.children());
+                }
                 analyzeByJSoup = new AnalyzeByJSoup(element, chapterUrl);
-                analyzeByXPath = new AnalyzeByXPath(element.children());
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);
                 temp.setDurChapterName(analyzeToString(bookSourceBean.getRuleChapterName()));

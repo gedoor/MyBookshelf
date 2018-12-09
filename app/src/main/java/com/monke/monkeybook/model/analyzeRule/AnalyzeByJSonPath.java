@@ -11,11 +11,17 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 public class AnalyzeByJSonPath {
-    private ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
+    private ScriptEngine engine;
     ReadContext ctx;
 
     public AnalyzeByJSonPath(String json) {
         ctx = JsonPath.parse(json);
+    }
+
+    private void initScriptEngine() {
+        if (engine == null) {
+            engine = new ScriptEngineManager().getEngineByName("rhino");
+        }
     }
 
     public void parse(String json) {
@@ -36,6 +42,7 @@ public class AnalyzeByJSonPath {
                 object = ((List<String>) object).get(0);
             }
             if (!TextUtils.isEmpty(sourceRule.jsStr)) {
+                initScriptEngine();
                 engine.put("result", object);
                 result = (String) engine.eval(sourceRule.jsStr);
             } else {
