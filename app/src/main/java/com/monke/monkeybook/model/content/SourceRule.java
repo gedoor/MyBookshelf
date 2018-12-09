@@ -3,8 +3,8 @@ package com.monke.monkeybook.model.content;
 import android.text.TextUtils;
 
 public class SourceRule {
-    Mode mode;
-    String rule;
+    Mode mode = Mode.Default;
+    String rule = "";
 
     SourceRule(String ruleStr) {
         if (TextUtils.isEmpty(ruleStr)) {
