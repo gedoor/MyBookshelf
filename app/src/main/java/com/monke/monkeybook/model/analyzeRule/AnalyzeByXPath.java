@@ -67,8 +67,7 @@ public class AnalyzeByXPath {
             try {
                 engine.put("result", result);
                 result = (String) engine.eval(sourceRule.jsStr);
-            } catch (ScriptException e) {
-                e.printStackTrace();
+            } catch (ScriptException ignored) {
             }
         }
         return result;

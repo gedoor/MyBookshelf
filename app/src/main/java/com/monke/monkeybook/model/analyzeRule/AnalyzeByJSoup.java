@@ -247,6 +247,13 @@ public class AnalyzeByJSoup {
         if (!isEmpty(sourceRule.replaceRegex)) {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
+        if (!isEmpty(sourceRule.jsStr)) {
+            try {
+                engine.put("result", result);
+                result = (String) engine.eval(sourceRule.jsStr);
+            } catch (ScriptException ignored) {
+            }
+        }
         return result.trim();
     }
 
@@ -267,8 +274,7 @@ public class AnalyzeByJSoup {
             try {
                 engine.put("result", result);
                 result = (String) engine.eval(sourceRule.jsStr);
-            } catch (ScriptException e) {
-                e.printStackTrace();
+            } catch (ScriptException ignored) {
             }
         }
         return result;
