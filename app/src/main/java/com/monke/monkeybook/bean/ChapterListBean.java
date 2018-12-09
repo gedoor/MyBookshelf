@@ -111,6 +111,11 @@ public class ChapterListBean implements Parcelable, Cloneable, BaseChapterBean {
     }
 
     @Override
+    public int hashCode() {
+        return durChapterUrl.hashCode();
+    }
+
+    @Override
     public String getTag() {
         return this.tag;
     }

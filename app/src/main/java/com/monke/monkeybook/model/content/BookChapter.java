@@ -92,10 +92,18 @@ class BookChapter {
                     chapterList.addAll(webChapterBean.data);
                 }
             }
-            if (dx) {
+            //去除重复,保留后面的,先倒序,从后面往前判断
+            if (!dx) {
                 Collections.reverse(chapterList);
             }
-            e.onNext(chapterList);
+            List<ChapterListBean> chapterListQc = new ArrayList<>();
+            for (ChapterListBean chapterListBean : chapterList) {
+                if (!chapterListQc.contains(chapterListBean)) {
+                    chapterListQc.add(chapterListBean);
+                }
+            }
+            Collections.reverse(chapterListQc);
+            e.onNext(chapterListQc);
             e.onComplete();
         });
     }
