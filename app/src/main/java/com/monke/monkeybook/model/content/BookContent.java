@@ -51,7 +51,7 @@ class BookContent {
                 e.onComplete();
                 return;
             }
-            if (ruleBookContent.startsWith("@") && !MApplication.getInstance().getDonateHb()) {
+            if ((ruleBookContent.startsWith("@") || StringUtils.isJSONType(s)) && !MApplication.getInstance().getDonateHb()) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
                 e.onComplete();
                 return;
