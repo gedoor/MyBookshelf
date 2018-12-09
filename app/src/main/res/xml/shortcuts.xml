@@ -16,4 +16,20 @@
             android:targetClass="com.monke.monkeybook.view.activity.WelcomeToReadActivity" />
         <categories android:name="android.shortcut.conversation"/>
     </shortcut>
+
+    <shortcut
+        android:shortcutId="bookshelf"
+        android:enabled="true"
+        android:icon="@drawable/icon_read_book"
+        android:shortcutShortLabel="@string/bookshelf"
+        android:shortcutLongLabel="@string/bookshelf"
+        android:shortcutDisabledMessage="@string/bookshelf"
+        tools:ignore="UnusedAttribute">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.gedoor.monkeybook"
+            android:targetClass="com.monke.monkeybook.view.activity.MainActivity" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
 </shortcuts>

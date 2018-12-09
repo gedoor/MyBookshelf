@@ -1,7 +1,6 @@
 package com.monke.monkeybook.model;
 
 import android.database.Cursor;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -9,9 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.monke.basemvplib.BaseModelImpl;
 import com.monke.monkeybook.MApplication;
-import com.monke.monkeybook.R;
-import com.monke.monkeybook.base.MBaseActivity;
-import com.monke.monkeybook.base.observer.SimpleObserver;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.dao.BookSourceBeanDao;
 import com.monke.monkeybook.dao.DbHelper;
@@ -125,7 +121,7 @@ public class BookSourceManager extends BaseModelImpl {
         } else {
             bookSourceBean.setEnable(true);
         }
-        if (bookSourceBean.getSerialNumber() == 0) {
+        if (bookSourceBean.getSerialNumber() < 0) {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
