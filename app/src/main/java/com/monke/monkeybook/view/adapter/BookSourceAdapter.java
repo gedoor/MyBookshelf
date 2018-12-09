@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.monke.monkeybook.R;
 import com.monke.monkeybook.bean.BookSourceBean;
-import com.monke.monkeybook.dao.DbHelper;
 import com.monke.monkeybook.help.BookshelfHelp;
 import com.monke.monkeybook.help.MyItemTouchHelpCallback;
 import com.monke.monkeybook.model.BookSourceManager;
@@ -130,8 +129,7 @@ public class BookSourceAdapter extends RecyclerView.Adapter<BookSourceAdapter.My
             if (sort == 0) {
                 moveData.setSerialNumber(0);
             } else if (sort == 1) {
-                int maxWeight = DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                        .orderRaw("-WEIGHT ASC").limit(1).unique().getWeight();
+                int maxWeight = allDataList.get(0).getWeight();
                 moveData.setWeight(maxWeight + 1);
                 BookshelfHelp.saveBookSource(moveData);
             }
