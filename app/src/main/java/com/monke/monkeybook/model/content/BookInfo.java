@@ -44,22 +44,29 @@ class BookInfo {
             if (bookInfoBean == null) {
                 bookInfoBean = new BookInfoBean();
             }
+            String result;
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(tag);
             if (!StringUtils.isJSONType(s)) {
                 Document doc = Jsoup.parse(s);
                 analyzeByXPath.parse(doc);
                 analyzeByJSoup.parse(doc, bookShelfBean.getNoteUrl());
-                if (isEmpty(bookInfoBean.getCoverUrl())) {
-                    bookInfoBean.setCoverUrl(analyzeToString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl()));
+                result = analyzeToString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
+                if (!isEmpty(result)) {
+                    bookInfoBean.setCoverUrl(result);
                 }
-                if (isEmpty(bookInfoBean.getName())) {
-                    bookInfoBean.setName(analyzeToString(bookSourceBean.getRuleBookName()));
+                result = analyzeToString(bookSourceBean.getRuleBookName());
+                if (!isEmpty(result)) {
+                    bookInfoBean.setName(result);
                 }
-                if (isEmpty(bookInfoBean.getAuthor())) {
-                    bookInfoBean.setAuthor(FormatWebText.getAuthor(analyzeToString(bookSourceBean.getRuleBookAuthor())));
+                result = FormatWebText.getAuthor(analyzeToString(bookSourceBean.getRuleBookAuthor()));
+                if (!isEmpty(result)) {
+                    bookInfoBean.setAuthor(result);
                 }
-                bookInfoBean.setIntroduce(analyzeToString(bookSourceBean.getRuleIntroduce()));
+                result = analyzeToString(bookSourceBean.getRuleIntroduce());
+                if (!isEmpty(result)) {
+                    bookInfoBean.setIntroduce(result);
+                }
                 bookInfoBean.setChapterUrl(analyzeToString(bookSourceBean.getRuleChapterUrl(), bookShelfBean.getNoteUrl()));
                 if (isEmpty(bookInfoBean.getChapterUrl())) {
                     bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
@@ -67,21 +74,25 @@ class BookInfo {
             } else {
                 analyzeByJSonPath.parse(s);
                 SourceRule sourceRule;
-                if (isEmpty(bookInfoBean.getCoverUrl())) {
-                    sourceRule = new SourceRule(bookSourceBean.getRuleCoverUrl());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
+                sourceRule = new SourceRule(bookSourceBean.getRuleCoverUrl());
+                result = analyzeByJSonPath.read(sourceRule.rule);
+                if (!isEmpty(result)) {
+                    bookInfoBean.setCoverUrl(result);
                 }
-                if (isEmpty(bookInfoBean.getName())) {
-                    sourceRule = new SourceRule(bookSourceBean.getRuleBookName());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
+                sourceRule = new SourceRule(bookSourceBean.getRuleBookName());
+                result = analyzeByJSonPath.read(sourceRule.rule);
+                if (!isEmpty(result)) {
+                    bookInfoBean.setName(result);
                 }
-                if (isEmpty(bookInfoBean.getAuthor())) {
-                    sourceRule = new SourceRule(bookSourceBean.getRuleBookAuthor());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
+                sourceRule = new SourceRule(bookSourceBean.getRuleBookAuthor());
+                result = analyzeByJSonPath.read(sourceRule.rule);
+                if (!isEmpty(result)) {
+                    bookInfoBean.setAuthor(result);
                 }
-                if (isEmpty(bookInfoBean.getIntroduce())) {
-                    sourceRule = new SourceRule(bookSourceBean.getRuleIntroduce());
-                    bookInfoBean.setCoverUrl(analyzeByJSonPath.read(sourceRule.rule));
+                sourceRule = new SourceRule(bookSourceBean.getRuleIntroduce());
+                result = analyzeByJSonPath.read(sourceRule.rule);
+                if (!isEmpty(result)) {
+                    bookInfoBean.setIntroduce(result);
                 }
                 sourceRule = new SourceRule(bookSourceBean.getRuleChapterUrl());
                 bookInfoBean.setChapterUrl(analyzeByJSonPath.read(sourceRule.rule));
