@@ -105,6 +105,13 @@ public class MApplication extends Application {
         return donateHb;
     }
 
+    public void upDonateHb() {
+        SharedPreferences.Editor editor = configPreferences.edit();
+        editor.putLong("DonateHb", System.currentTimeMillis());
+        editor.apply();
+        donateHb = true;
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private void createChannelIdDownload() {
         //用唯一的ID创建渠道对象

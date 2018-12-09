@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -106,9 +105,7 @@ public class DonateActivity extends MBaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            SharedPreferences.Editor editor = MApplication.getInstance().getConfigPreferences().edit();
-            editor.putLong("DonateHb", System.currentTimeMillis());
-            editor.apply();
+            MApplication.getInstance().upDonateHb();
         }
     }
 
