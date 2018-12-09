@@ -5,7 +5,7 @@
 
 **2018/12/09**
 * 修复一些BUG
-* 需要js处理时再加载js引擎,提升速度
+* 需要js处理时再加载js引擎,解决了刷新速度变慢的问题
 
 **2018/12/08**
 * 支持XPath语法,以@XPath:开头,语法见 http://www.w3school.com.cn/xpath/index.asp
