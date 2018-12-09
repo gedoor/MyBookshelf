@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
+import com.monke.monkeybook.MApplication;
 import com.monke.monkeybook.bean.BookShelfBean;
 import com.monke.monkeybook.bean.BookSourceBean;
 import com.monke.monkeybook.bean.SearchBookBean;
@@ -56,6 +57,8 @@ public class UpLastChapterModel {
     }
 
     public void startUpdate() {
+        if (!MApplication.getInstance().getConfigPreferences().getBoolean("upChangeSourceLastChapter", false))
+            return;
         if (compositeDisposable.size() > 0) return;
         List<SearchBookBean> beanList = new ArrayList<>();
         Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {

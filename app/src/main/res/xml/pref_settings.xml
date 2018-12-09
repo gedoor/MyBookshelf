@@ -63,4 +63,9 @@
         android:key="@string/pk_download_path"
         android:title="@string/download_path" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="upChangeSourceLastChapter"
+        android:summary="后台更新换源最新章节"
+        android:title="开启则会在软件打开1分钟后开始更新" />
 </PreferenceScreen>
