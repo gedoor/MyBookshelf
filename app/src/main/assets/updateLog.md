@@ -3,6 +3,10 @@
 * 关注公众号请搜索:开源阅读软件,有福利噢
 * 彩蛋,领支付宝红包可开启高级功能,支付宝禁用了口令红包,用搜索码领红包吧,麻烦一点
 
+**2018/12/09**
+* 修复一些BUG
+* 需要js处理时再加载js引擎,提升速度
+
 **2018/12/08**
 * 支持XPath语法,以@XPath:开头,语法见 http://www.w3school.com.cn/xpath/index.asp
 * 支持JSonPath语法,以@JSon:开头,语法见 https://blog.csdn.net/koflance/article/details/63262484
