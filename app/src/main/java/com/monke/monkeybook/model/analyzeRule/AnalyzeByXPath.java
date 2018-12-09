@@ -20,11 +20,11 @@ public class AnalyzeByXPath {
     private ScriptEngine engine;
     private JXDocument jxDocument;
 
-    public AnalyzeByXPath(Document doc) {
+    public void parse(Document doc) {
         jxDocument = JXDocument.create(doc);
     }
 
-    public AnalyzeByXPath(Elements doc) {
+    public void parse(Elements doc) {
         jxDocument = new JXDocument(doc);
     }
 

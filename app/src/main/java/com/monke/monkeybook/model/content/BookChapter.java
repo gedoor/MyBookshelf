@@ -30,8 +30,9 @@ import static android.text.TextUtils.isEmpty;
 class BookChapter {
     private String tag;
     private BookSourceBean bookSourceBean;
-    private AnalyzeByXPath analyzeByXPath;
-    private AnalyzeByJSoup analyzeByJSoup;
+    private AnalyzeByXPath analyzeByXPath = new AnalyzeByXPath();
+    private AnalyzeByJSoup analyzeByJSoup = new AnalyzeByJSoup();
+    private AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
 
     BookChapter(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -45,6 +46,7 @@ class BookChapter {
                 e.onComplete();
                 return;
             }
+            analyzeByJSoup = new AnalyzeByJSoup();
             bookShelfBean.setTag(tag);
             boolean dx = false;
             String ruleChapterList = bookSourceBean.getRuleChapterList();
@@ -98,13 +100,14 @@ class BookChapter {
         });
     }
 
-    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) throws Exception {
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
         SourceRule sourceRule;
         if (!StringUtils.isJSONType(s)) {
             Document doc = Jsoup.parse(s);
-            analyzeByXPath = new AnalyzeByXPath(doc);
+            analyzeByXPath.parse(doc);
+            analyzeByJSoup.parse(doc, chapterUrl);
             if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
                 sourceRule = new SourceRule(bookSourceBean.getRuleChapterUrlNext());
                 switch (sourceRule.mode) {
@@ -112,7 +115,6 @@ class BookChapter {
                         nextUrlList = analyzeByXPath.getStringList(sourceRule.rule, chapterUrl);
                         break;
                     default:
-                        analyzeByJSoup = new AnalyzeByJSoup(doc, chapterUrl);
                         nextUrlList = analyzeByJSoup.getAllResultList(sourceRule.rule);
                 }
             }
@@ -127,15 +129,15 @@ class BookChapter {
                     elements = analyzeByXPath.getElements(sourceRule.rule);
                     break;
                 default:
-                    elements = AnalyzeByJSoup.getElements(doc, sourceRule.rule);
+                    elements = analyzeByJSoup.getElements(doc, sourceRule.rule);
             }
             SourceRule ruleChapterName = new SourceRule(bookSourceBean.getRuleChapterName());
             SourceRule ruleContentUrl = new SourceRule(bookSourceBean.getRuleContentUrl());
             for (Element element : elements) {
                 if (ruleChapterName.mode == SourceRule.Mode.XPath || ruleContentUrl.mode == SourceRule.Mode.XPath) {
-                    analyzeByXPath = new AnalyzeByXPath(element.children());
+                    analyzeByXPath.parse(element.children());
                 }
-                analyzeByJSoup = new AnalyzeByJSoup(element, chapterUrl);
+                analyzeByJSoup.parse(element, chapterUrl);
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);
                 temp.setDurChapterName(analyzeToString(bookSourceBean.getRuleChapterName()));
@@ -145,7 +147,7 @@ class BookChapter {
                 }
             }
         } else {
-            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
+            analyzeByJSonPath.parse(s);
             sourceRule = new SourceRule(ruleChapterList);
             List<Object> objects = JsonPath.read(s, sourceRule.rule);
             for (Object object : objects) {

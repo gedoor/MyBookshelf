@@ -27,8 +27,9 @@ class BookList {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private AnalyzeByXPath analyzeByXPath;
-    private AnalyzeByJSoup analyzeByJSoup;
+    private AnalyzeByXPath analyzeByXPath = new AnalyzeByXPath();
+    private AnalyzeByJSoup analyzeByJSoup = new AnalyzeByJSoup();
+    private AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
 
     BookList(String tag, String name, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -49,14 +50,14 @@ class BookList {
                 }
                 assert response.body() != null;
                 Document doc = Jsoup.parse(response.body());
-                analyzeByXPath = new AnalyzeByXPath(doc);
+                analyzeByXPath.parse(doc);
+                analyzeByJSoup.parse(doc, baseUrl);
                 String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
                 if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
                     bookUrlPattern += ".*";
                 }
                 if (!isEmpty(bookUrlPattern) && baseUrl.matches(bookUrlPattern)
                         && !isEmpty(bookSourceBean.getRuleBookName()) && !isEmpty(bookSourceBean.getRuleBookLastChapter())) {
-                    analyzeByJSoup = new AnalyzeByJSoup(doc, baseUrl);
                     SearchBookBean item = new SearchBookBean();
                     item.setNoteUrl(baseUrl);
                     item.setTag(tag);
@@ -73,8 +74,8 @@ class BookList {
                     Elements booksE = analyzeToElements(doc, bookSourceBean.getRuleSearchList());
                     if (null != booksE && booksE.size() > 0) {
                         for (int i = 0; i < booksE.size(); i++) {
-                            analyzeByJSoup = new AnalyzeByJSoup(booksE.get(i), baseUrl);
-                            analyzeByXPath = new AnalyzeByXPath(booksE.get(i).children());
+                            analyzeByJSoup.parse(booksE.get(i), baseUrl);
+                            analyzeByXPath.parse(booksE.get(i).children());
                             SearchBookBean item = new SearchBookBean();
                             item.setTag(tag);
                             item.setOrigin(name);
@@ -92,7 +93,7 @@ class BookList {
                     }
                 }
             } else {
-                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(response.body());
+                analyzeByJSonPath.parse(response.body());
                 SourceRule sourceRule = new SourceRule(bookSourceBean.getRuleSearchList());
                 List<Object> objects = JsonPath.read(response.body(), sourceRule.rule);
                 for (Object object : objects) {
@@ -132,7 +133,7 @@ class BookList {
                 elements = analyzeByXPath.getElements(sourceRule.rule);
                 break;
             default:
-                elements = AnalyzeByJSoup.getElements(doc, sourceRule.rule);
+                elements = analyzeByJSoup.getElements(doc, sourceRule.rule);
         }
         return elements;
     }

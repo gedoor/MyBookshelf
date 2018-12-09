@@ -31,8 +31,9 @@ class BookContent {
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
     private boolean isAJAX;
-    private AnalyzeByXPath analyzeByXPath;
-    private AnalyzeByJSoup analyzeByJSoup;
+    private AnalyzeByXPath analyzeByXPath = new AnalyzeByXPath();
+    private AnalyzeByJSoup analyzeByJSoup = new AnalyzeByJSoup();
+    private AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -106,15 +107,15 @@ class BookContent {
             SourceRule sourceRuleBookContent = new SourceRule(ruleBookContent);
             SourceRule sourceRuleContentUrlNext = new SourceRule(bookSourceBean.getRuleContentUrlNext());
             if (sourceRuleBookContent.mode == SourceRule.Mode.XPath || sourceRuleContentUrlNext.mode == SourceRule.Mode.XPath) {
-                analyzeByXPath = new AnalyzeByXPath(doc);
+                analyzeByXPath.parse(doc);
             }
-            analyzeByJSoup = new AnalyzeByJSoup(doc, chapterUrl);
+            analyzeByJSoup.parse(doc, chapterUrl);
             webContentBean.content = analyzeToString(sourceRuleBookContent);
             if (!TextUtils.isEmpty(sourceRuleContentUrlNext.rule)) {
                 webContentBean.nextUrl = analyzeToString(sourceRuleContentUrlNext, chapterUrl);
             }
         } else {
-            AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
+            analyzeByJSonPath.parse(s);
             SourceRule sourceRule = new SourceRule(ruleBookContent);
             webContentBean.content = analyzeByJSonPath.read(sourceRule.rule);
         }

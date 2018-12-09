@@ -14,10 +14,6 @@ public class AnalyzeByJSonPath {
     private ScriptEngine engine;
     ReadContext ctx;
 
-    public AnalyzeByJSonPath(String json) {
-        ctx = JsonPath.parse(json);
-    }
-
     private void initScriptEngine() {
         if (engine == null) {
             engine = new ScriptEngineManager().getEngineByName("rhino");

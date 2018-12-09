@@ -29,21 +29,25 @@ public class AnalyzeByJSoup {
     private String baseURL;
     private Element element;
 
-    public AnalyzeByJSoup(Element element, String baseURL) {
-        this.element = element;
-        this.baseURL = baseURL;
-    }
-
     private void initScriptEngine() {
         if (engine == null) {
             engine = new ScriptEngineManager().getEngineByName("rhino");
         }
     }
 
+    public void parse(Element element, String baseURL) {
+        this.element = element;
+        this.baseURL = baseURL;
+    }
+
+    public Elements getElements(String rule) {
+        return getElements(element, rule);
+    }
+
     /**
      * 获取Elements
      */
-    public static Elements getElements(Element temp, String rule) {
+    public Elements getElements(Element temp, String rule) {
         Elements elements = new Elements();
         if (temp == null || isEmpty(rule)) {
             return elements;
@@ -88,7 +92,7 @@ public class AnalyzeByJSoup {
         return elements;
     }
 
-    private static Elements filterElements(Elements elements, String[] rules) {
+    private Elements filterElements(Elements elements, String[] rules) {
         if (rules == null || rules.length < 2) return elements;
         Elements selectedEls = new Elements();
         for (Element ele : elements) {
@@ -117,7 +121,7 @@ public class AnalyzeByJSoup {
     /**
      * 获取Elements按照一个规则
      */
-    private static Elements getElementsSingle(Element temp, String rule) {
+    private Elements getElementsSingle(Element temp, String rule) {
         Elements elements = new Elements();
         try {
             String[] rs = rule.trim().split("@");

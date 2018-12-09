@@ -22,8 +22,9 @@ class BookInfo {
     private String tag;
     private String name;
     private BookSourceBean bookSourceBean;
-    private AnalyzeByXPath analyzeByXPath;
-    private AnalyzeByJSoup analyzeByJSoup;
+    private AnalyzeByXPath analyzeByXPath = new AnalyzeByXPath();
+    private AnalyzeByJSoup analyzeByJSoup = new AnalyzeByJSoup();
+    private AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
 
     BookInfo(String tag, String name, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -47,8 +48,8 @@ class BookInfo {
             bookInfoBean.setTag(tag);
             if (!StringUtils.isJSONType(s)) {
                 Document doc = Jsoup.parse(s);
-                analyzeByXPath = new AnalyzeByXPath(doc);
-                analyzeByJSoup = new AnalyzeByJSoup(doc, bookShelfBean.getNoteUrl());
+                analyzeByXPath.parse(doc);
+                analyzeByJSoup.parse(doc, bookShelfBean.getNoteUrl());
                 if (isEmpty(bookInfoBean.getCoverUrl())) {
                     bookInfoBean.setCoverUrl(analyzeToString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl()));
                 }
@@ -64,7 +65,7 @@ class BookInfo {
                     bookInfoBean.setChapterUrl(bookShelfBean.getNoteUrl());
                 }
             } else {
-                AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath(s);
+                analyzeByJSonPath.parse(s);
                 SourceRule sourceRule;
                 if (isEmpty(bookInfoBean.getCoverUrl())) {
                     sourceRule = new SourceRule(bookSourceBean.getRuleCoverUrl());
