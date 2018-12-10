@@ -51,13 +51,12 @@ class BookInfo {
                 Document doc = Jsoup.parse(s);
                 analyzeByXPath.parse(doc);
                 analyzeByJSoup.parse(doc, bookShelfBean.getNoteUrl());
+                if (isEmpty(bookInfoBean.getName())) {
+                    bookInfoBean.setName(analyzeToString(bookSourceBean.getRuleBookName()));
+                }
                 result = analyzeToString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
                 if (!isEmpty(result)) {
                     bookInfoBean.setCoverUrl(result);
-                }
-                result = analyzeToString(bookSourceBean.getRuleBookName());
-                if (!isEmpty(result)) {
-                    bookInfoBean.setName(result);
                 }
                 result = FormatWebText.getAuthor(analyzeToString(bookSourceBean.getRuleBookAuthor()));
                 if (!isEmpty(result)) {
@@ -74,15 +73,15 @@ class BookInfo {
             } else {
                 analyzeByJSonPath.parse(s);
                 SourceRule sourceRule;
+                if (isEmpty(bookInfoBean.getName())) {
+                    sourceRule = new SourceRule(bookSourceBean.getRuleBookName());
+                    result = analyzeByJSonPath.read(sourceRule.rule);
+                    bookInfoBean.setName(result);
+                }
                 sourceRule = new SourceRule(bookSourceBean.getRuleCoverUrl());
                 result = analyzeByJSonPath.read(sourceRule.rule);
                 if (!isEmpty(result)) {
                     bookInfoBean.setCoverUrl(result);
-                }
-                sourceRule = new SourceRule(bookSourceBean.getRuleBookName());
-                result = analyzeByJSonPath.read(sourceRule.rule);
-                if (!isEmpty(result)) {
-                    bookInfoBean.setName(result);
                 }
                 sourceRule = new SourceRule(bookSourceBean.getRuleBookAuthor());
                 result = analyzeByJSonPath.read(sourceRule.rule);
