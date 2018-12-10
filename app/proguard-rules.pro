@@ -205,12 +205,17 @@ public static java.lang.String TABLENAME;
 -dontwarn javax.swing.**
 -keep class java.awt.**{*;}
 -dontwarn java.awt.**
--keep class org.mozilla.javascript.**{*;}
--dontwarn org.mozilla.javascript.**
 -keep class sun.misc.**{*;}
 -dontwarn sun.misc.**
 -keep class sun.reflect.**{*;}
 -dontwarn sun.reflect.**
+
+## Rhino
+-keep class javax.script.** { *; }
+-keep class com.sun.script.javascript.** { *; }
+-keep class org.mozilla.javascript.** { *; }
+-dontwarn org.mozilla.javascript.**
+-dontwarn sun.**
 
 ###EPUB
 -dontwarn nl.siegmann.epublib.**
