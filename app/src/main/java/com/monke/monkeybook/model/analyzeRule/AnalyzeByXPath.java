@@ -64,10 +64,17 @@ public class AnalyzeByXPath {
     }
 
     public String getString(String rule, String baseUrl) {
+        String result;
         SourceRule sourceRule = splitSourceRule(rule);
-        String result = (String) jxDocument.selOne(sourceRule.rule);
+        Object object = jxDocument.selOne(sourceRule.rule);
         if (!TextUtils.isEmpty(baseUrl)) {
-            result = NetworkUtil.getAbsoluteURL(baseUrl, result);
+            result = NetworkUtil.getAbsoluteURL(baseUrl, (String) object);
+        } else if (object instanceof Element) {
+            result = ((Element) object).html()
+                    .replaceAll("(?i)<(br[\\s/]*|p.*?|div.*?|/p|/div)>", "\n")
+                    .replaceAll("<.*?>", "");
+        } else {
+            result = (String) object;
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
             initScriptEngine();
