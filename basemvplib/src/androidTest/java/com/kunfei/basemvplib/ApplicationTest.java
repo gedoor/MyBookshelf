@@ -1,4 +1,4 @@
-package com.monke.kunfei;
+package com.kunfei.basemvplib;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
