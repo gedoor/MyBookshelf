@@ -29,7 +29,7 @@ import java.util.ArrayList;
 @SuppressLint("NewApi")
 public final class FileUtil {
 
-    static String TAG = "TAG";
+    private final static String TAG = "FileUtil";
 
     @NonNull
     public static String getSdCardPath() {
@@ -48,7 +48,6 @@ public final class FileUtil {
         final StorageManager storageManager = (StorageManager) pContext.getSystemService(Context.STORAGE_SERVICE);
 
         try {
-
             final Method getVolumeList = storageManager.getClass().getMethod("getVolumeList");
 
             final Class<?> storageValumeClazz = Class.forName("android.os.storage.StorageVolume");
@@ -64,17 +63,7 @@ public final class FileUtil {
 
                 list.add(path);
             }
-
             return list;
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -179,24 +168,19 @@ public final class FileUtil {
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
-        Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
                 column
         };
 
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-                    null);
+        try (Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (cursor != null)
-                cursor.close();
         }
         return null;
     }
