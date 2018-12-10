@@ -10,33 +10,15 @@ def name = "MONKOVEL"
 def version = "2." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
-def keystorePSW = ''
-def keystoreAlias = ''
-def keystoreAliasPSW = ''
-// default keystore file, PLZ config file path in local.properties
-def keyFile = file('s.keystore.temp')
-
-Properties properties = new Properties()
-// local.properties file in the root director
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def keystoreFilepath = properties.getProperty("keystore.path")
-
-if (keystoreFilepath) {
-    keystorePSW = properties.getProperty("keystore.password")
-    keystoreAlias = properties.getProperty("keystore.alias")
-    keystoreAliasPSW = properties.getProperty("keystore.alias_password")
-    keyFile = file(keystoreFilepath)
-}
-
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     signingConfigs {
         myConfig {
-            storeFile keyFile
-            storePassword keystorePSW
-            keyAlias keystoreAlias
-            keyPassword keystoreAliasPSW
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_KEY_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_STORE_PASSWORD
         }
     }
 
