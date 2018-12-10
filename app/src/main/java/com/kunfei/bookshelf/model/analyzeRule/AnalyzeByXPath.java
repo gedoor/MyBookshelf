@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.model.analyzeRule;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.utils.NetworkUtil;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,12 +12,7 @@ import org.seimicrawler.xpath.JXDocument;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 public class AnalyzeByXPath {
-    private ScriptEngine engine;
     private JXDocument jxDocument;
 
     public void parse(Document doc) {
@@ -27,12 +21,6 @@ public class AnalyzeByXPath {
 
     public void parse(Elements doc) {
         jxDocument = new JXDocument(doc);
-    }
-
-    private void initScriptEngine() {
-        if (engine == null) {
-            engine = new ScriptEngineManager().getEngineByName("rhino");
-        }
     }
 
     public Elements getElements(String xPath) {
@@ -78,12 +66,7 @@ public class AnalyzeByXPath {
             result = (String) object;
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-            initScriptEngine();
-            try {
-                engine.put("result", result);
-                result = (String) engine.eval(sourceRule.jsStr);
-            } catch (ScriptException ignored) {
-            }
+            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, object);
         }
         return result;
     }

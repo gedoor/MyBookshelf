@@ -8,18 +8,8 @@ import com.jayway.jsonpath.ReadContext;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-
 public class AnalyzeByJSonPath {
-    private ScriptEngine engine;
     private ReadContext ctx;
-
-    private void initScriptEngine() {
-        if (engine == null) {
-            engine = new ScriptEngineManager().getEngineByName("rhino");
-        }
-    }
 
     public void parse(String json) {
         ctx = JsonPath.parse(json);
@@ -39,9 +29,7 @@ public class AnalyzeByJSonPath {
                 object = ((List<String>) object).get(0);
             }
             if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-                initScriptEngine();
-                engine.put("result", object);
-                result = (String) engine.eval(sourceRule.jsStr);
+                result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
             } else {
                 if (object instanceof Integer) {
                     result = Integer.toString((Integer) object);
