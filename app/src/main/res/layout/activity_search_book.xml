@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.monke.monkeybook.widget.refreshview.RefreshRecyclerView
+        <com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView
             android:id="@+id/rfRv_search_books"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

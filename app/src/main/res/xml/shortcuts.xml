@@ -13,7 +13,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.gedoor.monkeybook"
-            android:targetClass="com.monke.monkeybook.view.activity.WelcomeToReadActivity" />
+            android:targetClass="com.kunfei.bookshelf.view.activity.WelcomeToReadActivity" />
         <categories android:name="android.shortcut.conversation"/>
     </shortcut>
 
@@ -29,7 +29,7 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.gedoor.monkeybook"
-            android:targetClass="com.monke.monkeybook.view.activity.MainActivity" />
+            android:targetClass="com.kunfei.bookshelf.view.activity.MainActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

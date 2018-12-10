@@ -162,7 +162,7 @@ dependencies {
 
 greendao {
     schemaVersion 49
-    daoPackage 'com.monke.monkeybook.dao'
+    daoPackage 'com.kunfei.bookshelf.dao'
     targetGenDir 'src/main/java'
 }
 

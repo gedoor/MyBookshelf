@@ -179,8 +179,8 @@ public static java.lang.String TABLENAME;
 -keep class okio.**{*;}
 -keep class com.hwangjr.rxbus.**{*;}
 -keep class org.conscrypt.**{*;}
--keep class com.monke.monkeybook.widget.**{*;}
--keep class com.monke.monkeybook.bean.**{*;}
+-keep class com.kunfei.bookshelf.widget.**{*;}
+-keep class com.kunfei.bookshelf.bean.**{*;}
 -keep class android.support.**{*;}
 -keep class me.grantland.widget.**{*;}
 -keep class de.hdodenhof.circleimageview.**{*;}
@@ -227,7 +227,7 @@ public static java.lang.String TABLENAME;
 -keepclassmembers class * {
     public <init> (org.json.JSONObject);
 }
--keep public class com.monke.monkeybook.R$*{
+-keep public class com.kunfei.bookshelf.R$*{
     public static final int *;
 }
 -keepclassmembers enum * {
