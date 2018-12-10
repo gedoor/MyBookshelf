@@ -95,7 +95,7 @@ class BookList {
             } else {
                 analyzeByJSonPath.parse(response.body());
                 SourceRule sourceRule = new SourceRule(bookSourceBean.getRuleSearchList());
-                List<Object> objects = JsonPath.read(response.body(), sourceRule.rule);
+                List<Object> objects = analyzeByJSonPath.readList(sourceRule.rule);
                 for (Object object : objects) {
                     analyzeByJSonPath.parse(object);
                     SearchBookBean item = new SearchBookBean();

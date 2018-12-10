@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ReadContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptEngine;
@@ -12,7 +13,7 @@ import javax.script.ScriptEngineManager;
 
 public class AnalyzeByJSonPath {
     private ScriptEngine engine;
-    ReadContext ctx;
+    private ReadContext ctx;
 
     private void initScriptEngine() {
         if (engine == null) {
@@ -51,6 +52,15 @@ public class AnalyzeByJSonPath {
         } catch (Exception ignored) {
         }
         return result;
+    }
+
+    public List<Object> readList(String rule) {
+        SourceRule sourceRule = splitSourceRule(rule);
+        try {
+            return ctx.read(sourceRule.rule);
+        } catch (Exception ignored) {
+        }
+        return new ArrayList<>();
     }
 
     private SourceRule splitSourceRule(String rule) {

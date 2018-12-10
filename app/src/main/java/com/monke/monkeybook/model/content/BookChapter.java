@@ -157,7 +157,7 @@ class BookChapter {
         } else {
             analyzeByJSonPath.parse(s);
             sourceRule = new SourceRule(ruleChapterList);
-            List<Object> objects = JsonPath.read(s, sourceRule.rule);
+            List<Object> objects = analyzeByJSonPath.readList(sourceRule.rule);
             for (Object object : objects) {
                 analyzeByJSonPath.parse(object);
                 ChapterListBean temp = new ChapterListBean();
