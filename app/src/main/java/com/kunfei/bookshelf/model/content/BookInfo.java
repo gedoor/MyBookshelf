@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 
 import io.reactivex.Observable;
@@ -46,15 +47,16 @@ class BookInfo {
                 bookInfoBean.setName(result);
             }
 
+            if (isEmpty(bookInfoBean.getAuthor())) {
+                result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
+                bookInfoBean.setAuthor(FormatWebText.getAuthor(result));
+            }
+
             result = analyzer.getString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
             if (!isEmpty(result)) {
                 bookInfoBean.setCoverUrl(result);
             }
 
-            result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
-            if (!isEmpty(result)) {
-                bookInfoBean.setAuthor(result);
-            }
             result = analyzer.getString(bookSourceBean.getRuleIntroduce());
             if (!isEmpty(result)) {
                 bookInfoBean.setIntroduce(result);
