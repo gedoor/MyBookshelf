@@ -23,15 +23,16 @@ public class AnalyzeHeaders {
 
     public static Map<String, String> getMap(BookSourceBean bookSourceBean) {
         Map<String, String> headerMap = new HashMap<>();
-        if (isEmpty(bookSourceBean.getHttpUserAgent())) {
-            headerMap.put("User-Agent", getDefaultUserAgent());
-            return headerMap;
-        } else {
+        if (bookSourceBean != null && !isEmpty(bookSourceBean.getHttpUserAgent())) {
             headerMap.put("User-Agent", bookSourceBean.getHttpUserAgent());
+        } else {
+            headerMap.put("User-Agent", getDefaultUserAgent());
         }
-        String cookie = ACache.get(MApplication.getInstance()).getAsString(bookSourceBean.getBookSourceUrl());
-        if (!TextUtils.isEmpty(cookie)) {
-            headerMap.put("Cookie", cookie);
+        if (bookSourceBean != null) {
+            String cookie = ACache.get(MApplication.getInstance()).getAsString(bookSourceBean.getBookSourceUrl());
+            if (!TextUtils.isEmpty(cookie)) {
+                headerMap.put("Cookie", cookie);
+            }
         }
         return headerMap;
     }
