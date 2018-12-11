@@ -41,7 +41,6 @@ class BookInfo {
             AnalyzeRule analyzer = new AnalyzeRule();
             analyzer.setContent(s);
 
-
             if (isEmpty(bookInfoBean.getName())) {
                 result = analyzer.getString(bookSourceBean.getRuleBookName());
                 bookInfoBean.setName(result);
