@@ -34,19 +34,12 @@ public class AnalyzeByXPath {
         return elements;
     }
 
-    public List<String> getStringList(String xPath, String baseUrl) {
+    public List<String> getStringList(String xPath) {
         List<String> stringList = new ArrayList<>();
         List<Object> objects = jxDocument.sel(xPath);
         for (Object object : objects) {
             if (object instanceof String) {
-                if (!TextUtils.isEmpty(baseUrl)) {
-                    String url = NetworkUtil.getAbsoluteURL(baseUrl, (String) object);
-                    if (!stringList.contains(url)) {
-                        stringList.add(url);
-                    }
-                } else {
-                    stringList.add((String) object);
-                }
+                stringList.add((String) object);
             }
         }
         return stringList;

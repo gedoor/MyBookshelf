@@ -41,7 +41,6 @@ class BookList {
             } else {
                 baseUrl = response.raw().request().url().toString();
             }
-            analyzer.setBaseUrl(baseUrl);
 
             String bookUrlPattern = bookSourceBean.getRuleBookUrlPattern();
             if (!isEmpty(bookUrlPattern) && !bookUrlPattern.endsWith(".*")) {
@@ -57,7 +56,7 @@ class BookList {
                     item.setTag(tag);
                     item.setOrigin(name);
                     item.setName(bookName);
-                    item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl()));
+                    item.setCoverUrl(analyzer.getString(bookSourceBean.getRuleCoverUrl(), baseUrl));
                     item.setAuthor(FormatWebText.getAuthor(analyzer.getString(bookSourceBean.getRuleBookAuthor())));
                     item.setKind(analyzer.getString(bookSourceBean.getRuleBookKind()));
                     item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
@@ -76,9 +75,9 @@ class BookList {
                         item.setAuthor(FormatWebText.getAuthor(anaer.getString(bookSourceBean.getRuleSearchAuthor())));
                         item.setKind(anaer.getString(bookSourceBean.getRuleSearchKind()));
                         item.setLastChapter(anaer.getString(bookSourceBean.getRuleSearchLastChapter()));
-                        item.setCoverUrl(anaer.getString(bookSourceBean.getRuleSearchCoverUrl()));
+                        item.setCoverUrl(anaer.getString(bookSourceBean.getRuleSearchCoverUrl(), baseUrl));
                         item.setIntroduce(anaer.getString(bookSourceBean.getRuleIntroduce()));
-                        String resultUrl = anaer.getString(bookSourceBean.getRuleSearchNoteUrl());
+                        String resultUrl = anaer.getString(bookSourceBean.getRuleSearchNoteUrl(), baseUrl);
                         item.setNoteUrl(isEmpty(resultUrl) ? baseUrl : resultUrl);
                         books.add(item);
                     }

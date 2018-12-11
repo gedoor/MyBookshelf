@@ -40,9 +40,8 @@ class BookInfo {
 
             AnalyzeRule analyzer = new AnalyzeRule();
             analyzer.setContent(s);
-            analyzer.setBaseUrl(bookShelfBean.getNoteUrl());
 
-            result = analyzer.getString(bookSourceBean.getRuleCoverUrl());
+            result = analyzer.getString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
             if (!isEmpty(result)) {
                 bookInfoBean.setCoverUrl(result);
             }
@@ -60,7 +59,7 @@ class BookInfo {
                 bookInfoBean.setIntroduce(result);
             }
 
-            result = analyzer.getString(bookSourceBean.getRuleChapterUrl());
+            result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), bookShelfBean.getNoteUrl());
             if (!isEmpty(result)) {
                 bookInfoBean.setChapterUrl(result);
             }else{

@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.Jsoup;
@@ -22,7 +23,6 @@ import javax.script.SimpleBindings;
  */
 public class AnalyzeRule {
 
-    private String _baseUrl;
     private Object _object;
     private Boolean _isJSON;
 
@@ -51,7 +51,7 @@ public class AnalyzeRule {
     private AnalyzeByJSoup getAnalyzeByJSoup(){
         if(analyzeByJSoup==null) {
             analyzeByJSoup = new AnalyzeByJSoup();
-            analyzeByJSoup.parse(((Element) _object), _baseUrl);
+            analyzeByJSoup.parse((Element) _object);
         }
         return analyzeByJSoup;
     }
@@ -78,36 +78,59 @@ public class AnalyzeRule {
         }
     }
 
-    public void setBaseUrl(String url){
-        _baseUrl = url;
-    }
-
-    public List<String> getStringList(String rule){
+    public List<String> getStringList(String rule, String baseUrl){
+        List<String> stringList;
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
-                return new ArrayList<>();
+                stringList =  new ArrayList<>();
+                break;
             case XPath:
-                return getAnalyzeByXPath().getStringList(source.rule, _baseUrl);
+                stringList =  getAnalyzeByXPath().getStringList(source.rule);
+                break;
+            default:
+                stringList =   getAnalyzeByJSoup().getAllResultList(source.rule);
         }
-        return getAnalyzeByJSoup().getAllResultList(source.rule);
+        if (!TextUtils.isEmpty(baseUrl)) {
+            List<String> urlList = new ArrayList<>();
+            for (String url : stringList) {
+                url = NetworkUtil.getAbsoluteURL(baseUrl, url);
+                if (!urlList.contains(url)) {
+                    urlList.add(url);
+                }
+            }
+            return urlList;
+        }
+        return stringList;
     }
 
-    public String getString(String rule){
+    public String getString(String rule) {
+        return getString(rule, null);
+    }
+
+    public String getString(String rule, String _baseUrl){
         if (TextUtils.isEmpty(rule)) {
             return "";
         }
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
-                return getAnalyzeByJSonPath().read(source.rule);
+                if (TextUtils.isEmpty(_baseUrl)) {
+                    return getAnalyzeByJSonPath().read(source.rule);
+                } else {
+                    return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByJSonPath().read(source.rule));
+                }
             case XPath:
-                return getAnalyzeByXPath().getString(source.rule, _baseUrl);
+                if (TextUtils.isEmpty(_baseUrl)) {
+                    return getAnalyzeByXPath().getString(source.rule, _baseUrl);
+                } else {
+                    return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByXPath().getString(source.rule, _baseUrl));
+                }
         }
         if (TextUtils.isEmpty(_baseUrl)) {
             return getAnalyzeByJSoup().getResult(source.rule);
         } else {
-            return getAnalyzeByJSoup().getResultUrl(source.rule);
+            return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByJSoup().getResultUrl(source.rule));
         }
     }
 

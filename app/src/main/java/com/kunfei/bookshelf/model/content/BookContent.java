@@ -99,13 +99,12 @@ class BookContent {
 
         AnalyzeRule analyzer = new AnalyzeRule();
         analyzer.setContent(s);
-        analyzer.setBaseUrl(chapterUrl);
 
         webContentBean.content = analyzer.getString(ruleBookContent);
 
         String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
         if (!TextUtils.isEmpty(nextUrlRule)) {
-            webContentBean.nextUrl = analyzer.getString(nextUrlRule);
+            webContentBean.nextUrl = analyzer.getString(nextUrlRule, chapterUrl);
         }
 
         return webContentBean;

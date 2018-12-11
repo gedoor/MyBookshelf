@@ -100,10 +100,9 @@ class BookChapter {
 
         AnalyzeRule analyzer = new AnalyzeRule();
         analyzer.setContent(s);
-        analyzer.setBaseUrl(chapterUrl);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {
-            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext());
+            nextUrlList = analyzer.getStringList(bookSourceBean.getRuleChapterUrlNext(), chapterUrl);
 
             int thisUrlIndex = nextUrlList.indexOf(chapterUrl);
             if (thisUrlIndex != -1) {
@@ -115,7 +114,7 @@ class BookChapter {
         while (collections.hasNext()) {
             AnalyzeRule anaer = collections.next();
             String name = anaer.getString(bookSourceBean.getRuleChapterName());
-            String url = anaer.getString(bookSourceBean.getRuleContentUrl());
+            String url = anaer.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
             if (!isEmpty(name) && !isEmpty(url)) {
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);

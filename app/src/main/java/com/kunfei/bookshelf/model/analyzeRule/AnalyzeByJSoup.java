@@ -21,12 +21,10 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeByJSoup {
-    private String baseURL;
     private Element element;
 
-    public void parse(Element element, String baseURL) {
+    public void parse(Element element) {
         this.element = element;
-        this.baseURL = baseURL;
     }
 
     public Elements getElements(String rule) {
@@ -399,7 +397,7 @@ public class AnalyzeByJSoup {
                     break;
                 default:
                     for (Element element : elements) {
-                        String url = NetworkUtil.getAbsoluteURL(baseURL, element.attr(lastRule));
+                        String url = element.attr(lastRule);
                         if (!TextUtils.isEmpty(url) && !textS.contains(url)) {
                             textS.add(url);
                         }
