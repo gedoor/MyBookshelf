@@ -59,7 +59,7 @@ public class AnalyzeByXPath {
             result = (String) object;
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, object);
+            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
         }
         return result;
     }
