@@ -29,7 +29,7 @@ public class AnalyzeByJSonPath {
                 object = ((List<String>) object).get(0);
             }
             if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-                result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
+                result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, object);
             } else {
                 if (object instanceof Integer) {
                     result = Integer.toString((Integer) object);
