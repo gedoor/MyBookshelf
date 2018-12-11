@@ -142,10 +142,13 @@ public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActi
 
     public void toast(String msg, int length, int state) {
         Toast toast = Toast.makeText(this, msg, length);
-        if (state == SUCCESS) {
-            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.success), PorterDuff.Mode.SRC_IN);
-        } else if (state == ERROR) {
-            toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.error), PorterDuff.Mode.SRC_IN);
+        try {
+            if (state == SUCCESS) {
+                toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.success), PorterDuff.Mode.SRC_IN);
+            } else if (state == ERROR) {
+                toast.getView().getBackground().setColorFilter(getResources().getColor(R.color.error), PorterDuff.Mode.SRC_IN);
+            }
+        } catch (Exception ignored) {
         }
         toast.show();
     }
