@@ -25,14 +25,12 @@ class BookContent {
     private String tag;
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
-    private boolean isAJAX;
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
         this.bookSourceBean = bookSourceBean;
         ruleBookContent = bookSourceBean.getRuleBookContent();
         if (ruleBookContent.startsWith("$")) {
-            isAJAX = true;
             ruleBookContent = ruleBookContent.substring(1);
         }
     }
