@@ -51,7 +51,7 @@ class BookChapter {
                 List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
                 for (int i = 0; i < chapterUrlS.size(); i++) {
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class).getWebContentCall(chapterUrlS.get(i), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                            .create(IHttpGetApi.class).getWebContentCall(chapterUrlS.get(i), AnalyzeHeaders.getMap(bookSourceBean));
                     String response = "";
                     try {
                         response = call.execute().body();
@@ -69,7 +69,7 @@ class BookChapter {
                 while (webChapterBean.nextUrlList.size() > 0 && !usedUrl.contains(webChapterBean.nextUrlList.get(0))) {
                     usedUrl.add(webChapterBean.nextUrlList.get(0));
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class).getWebContentCall(webChapterBean.nextUrlList.get(0), AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                            .create(IHttpGetApi.class).getWebContentCall(webChapterBean.nextUrlList.get(0), AnalyzeHeaders.getMap(bookSourceBean));
                     String response = "";
                     try {
                         response = call.execute().body();

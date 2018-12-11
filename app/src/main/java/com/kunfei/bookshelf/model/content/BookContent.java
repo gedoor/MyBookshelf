@@ -72,7 +72,7 @@ class BookContent {
                         break;
                     }
                     Call<String> call = DefaultModel.getRetrofitString(bookSourceBean.getBookSourceUrl())
-                            .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent()));
+                            .create(IHttpGetApi.class).getWebContentCall(webContentBean.nextUrl, AnalyzeHeaders.getMap(bookSourceBean));
                     String response = "";
                     try {
                         response = call.execute().body();

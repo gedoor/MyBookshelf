@@ -1,9 +1,12 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.help.ACache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +21,17 @@ import static android.text.TextUtils.isEmpty;
 public class AnalyzeHeaders {
     private static SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
 
-    public static Map<String, String> getMap(String userAgent) {
+    public static Map<String, String> getMap(BookSourceBean bookSourceBean) {
         Map<String, String> headerMap = new HashMap<>();
-        if (isEmpty(userAgent)) {
+        if (isEmpty(bookSourceBean.getHttpUserAgent())) {
             headerMap.put("User-Agent", getDefaultUserAgent());
             return headerMap;
         } else {
-            headerMap.put("User-Agent", userAgent);
+            headerMap.put("User-Agent", bookSourceBean.getHttpUserAgent());
+        }
+        String cookie = ACache.get(MApplication.getInstance()).getAsString(bookSourceBean.getBookSourceUrl());
+        if (!TextUtils.isEmpty(cookie)) {
+            headerMap.put("Cookie", cookie);
         }
         return headerMap;
     }

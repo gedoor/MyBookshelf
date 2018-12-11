@@ -62,7 +62,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             if (sourceBean != null) {
                 bookSourceBean = sourceBean;
                 name = bookSourceBean.getBookSourceName();
-                headerMap = AnalyzeHeaders.getMap(bookSourceBean.getHttpUserAgent());
+                headerMap = AnalyzeHeaders.getMap(bookSourceBean);
                 return true;
             } else {
                 return false;

@@ -209,7 +209,7 @@ public class CheckSourceService extends Service {
                     new URL(sourceBean.getBookSourceUrl());
                     BaseModelImpl.getRetrofitString(sourceBean.getBookSourceUrl())
                             .create(IHttpGetApi.class)
-                            .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(null))
+                            .getWebContent(sourceBean.getBookSourceUrl(), AnalyzeHeaders.getMap(sourceBean))
                             .subscribeOn(scheduler)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(getObserver());

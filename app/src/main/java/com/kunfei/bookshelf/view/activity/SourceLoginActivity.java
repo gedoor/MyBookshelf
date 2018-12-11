@@ -101,16 +101,16 @@ public class SourceLoginActivity extends MBaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 CookieManager cookieManager = CookieManager.getInstance();
-                String cookies = cookieManager.getCookie(url);
-                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getLoginUrl(), cookies);
+                String cookie = cookieManager.getCookie(url);
+                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getLoginUrl(), cookie);
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 CookieManager cookieManager = CookieManager.getInstance();
-                String cookies = cookieManager.getCookie(url);
-                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getLoginUrl(), cookies);
+                String cookie = cookieManager.getCookie(url);
+                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getLoginUrl(), cookie);
                 if (checking)
                     finish();
                 else
