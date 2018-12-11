@@ -19,6 +19,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.kunfei.basemvplib.impl.IPresenter;
+import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -46,8 +47,15 @@ public class SourceLoginActivity extends MBaseActivity {
             return;
         }
         Intent intent = new Intent(context, SourceLoginActivity.class);
-        intent.putExtra("data", bookSourceBean);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String key = String.valueOf(System.currentTimeMillis());
+        intent.putExtra("data_key", key);
+        try {
+            BitIntentDataManager.getInstance().putData(key, bookSourceBean.clone());
+        } catch (CloneNotSupportedException e) {
+            BitIntentDataManager.getInstance().putData(key, bookSourceBean);
+            e.printStackTrace();
+        }
         context.startActivity(intent);
     }
 
@@ -62,7 +70,6 @@ public class SourceLoginActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bookSourceBean = getIntent().getParcelableExtra("data");
     }
 
     /**
@@ -82,6 +89,8 @@ public class SourceLoginActivity extends MBaseActivity {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void initData() {
+        String key = this.getIntent().getStringExtra("data_key");
+        bookSourceBean = (BookSourceBean) BitIntentDataManager.getInstance().getData(key);
         WebSettings settings = webView.getSettings();
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
@@ -117,7 +126,7 @@ public class SourceLoginActivity extends MBaseActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(R.string.login_source, bookSourceBean.getBookSourceName()));
+            actionBar.setTitle(getString(R.string.login));
         }
     }
 
