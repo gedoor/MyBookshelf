@@ -86,14 +86,10 @@ class BookChapter {
             if (!dx) {
                 Collections.reverse(chapterList);
             }
-            List<ChapterListBean> chapterListQc = new ArrayList<>();
-            for (ChapterListBean chapterListBean : chapterList) {
-                if (!chapterListQc.contains(chapterListBean)) {
-                    chapterListQc.add(chapterListBean);
-                }
-            }
-            Collections.reverse(chapterListQc);
-            e.onNext(chapterListQc);
+            LinkedHashSet<ChapterListBean> lh = new LinkedHashSet<>(chapterList);
+            chapterList = new ArrayList<>(lh);
+            Collections.reverse(chapterList);
+            e.onNext(chapterList);
             e.onComplete();
         });
     }
