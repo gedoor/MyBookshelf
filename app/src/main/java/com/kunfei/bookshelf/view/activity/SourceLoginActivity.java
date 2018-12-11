@@ -133,7 +133,7 @@ public class SourceLoginActivity extends MBaseActivity {
     // 添加菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_update_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_source_login, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

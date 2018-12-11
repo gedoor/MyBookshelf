@@ -297,5 +297,6 @@
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
     <string name="login">登陆</string>
     <string name="login_source">登陆%s</string>
+    <string name="success">成功</string>
 
 </resources>
