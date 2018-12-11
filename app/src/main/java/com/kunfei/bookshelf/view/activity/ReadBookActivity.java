@@ -772,6 +772,9 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_set_regex:
                 setTextChapterRegex();
                 break;
+            case R.id.action_login:
+                SourceLoginActivity.startThis(this, mPresenter.getBookSource());
+                break;
             case android.R.id.home:
                 finish();
                 break;

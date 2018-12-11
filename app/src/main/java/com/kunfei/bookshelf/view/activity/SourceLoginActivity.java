@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -40,13 +41,14 @@ public class SourceLoginActivity extends MBaseActivity {
     private BookSourceBean bookSourceBean;
     private boolean checking = false;
 
-    public static void startThis(Activity activity, BookSourceBean bookSourceBean) {
+    public static void startThis(Context context, BookSourceBean bookSourceBean) {
         if (TextUtils.isEmpty(bookSourceBean.getLoginUrl())) {
             return;
         }
-        Intent intent = new Intent(activity, SourceLoginActivity.class);
+        Intent intent = new Intent(context, SourceLoginActivity.class);
         intent.putExtra("data", bookSourceBean);
-        activity.startActivity(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     /**
