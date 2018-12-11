@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.help.FormatWebText;
-import com.kunfei.bookshelf.utils.NetworkUtil;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -14,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import static android.text.TextUtils.isEmpty;
 
 /**
@@ -26,15 +21,8 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeByJSoup {
-    private ScriptEngine engine;
     private String baseURL;
     private Element element;
-
-    private void initScriptEngine() {
-        if (engine == null) {
-            engine = new ScriptEngineManager().getEngineByName("rhino");
-        }
-    }
 
     public void parse(Element element, String baseURL) {
         this.element = element;
@@ -259,12 +247,7 @@ public class AnalyzeByJSoup {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
         if (!isEmpty(sourceRule.jsStr)) {
-            initScriptEngine();
-            try {
-                engine.put("result", result);
-                result = (String) engine.eval(sourceRule.jsStr);
-            } catch (ScriptException ignored) {
-            }
+            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
         }
         return result.trim();
     }
@@ -283,12 +266,7 @@ public class AnalyzeByJSoup {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
         if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-            initScriptEngine();
-            try {
-                engine.put("result", result);
-                result = (String) engine.eval(sourceRule.jsStr);
-            } catch (ScriptException ignored) {
-            }
+            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
         }
         return result;
     }

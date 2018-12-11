@@ -2,8 +2,7 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByJSoup;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByXPath;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -13,15 +12,8 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByJSonPath;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByJSoup;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeByXPath;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.StringUtils;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +26,6 @@ class BookContent {
     private BookSourceBean bookSourceBean;
     private String ruleBookContent;
     private boolean isAJAX;
-    private AnalyzeByXPath analyzeByXPath = new AnalyzeByXPath();
-    private AnalyzeByJSoup analyzeByJSoup = new AnalyzeByJSoup();
-    private AnalyzeByJSonPath analyzeByJSonPath = new AnalyzeByJSonPath();
 
     BookContent(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -55,11 +44,13 @@ class BookContent {
                 e.onComplete();
                 return;
             }
+
             if (StringUtils.isJSONType(s) && !MApplication.getInstance().getDonateHb()) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
                 e.onComplete();
                 return;
             }
+
             BookContentBean bookContentBean = new BookContentBean();
             bookContentBean.setDurChapterIndex(chapterBean.getDurChapterIndex());
             bookContentBean.setDurChapterUrl(chapterBean.getDurChapterUrl());
@@ -105,44 +96,19 @@ class BookContent {
 
     private WebContentBean analyzeBookContent(final String s, final String chapterUrl) {
         WebContentBean webContentBean = new WebContentBean();
-        if (!StringUtils.isJSONType(s)) {
-            Document doc = Jsoup.parse(s);
-            SourceRule sourceRuleBookContent = new SourceRule(ruleBookContent);
-            SourceRule sourceRuleContentUrlNext = new SourceRule(bookSourceBean.getRuleContentUrlNext());
-            if (sourceRuleBookContent.mode == SourceRule.Mode.XPath || sourceRuleContentUrlNext.mode == SourceRule.Mode.XPath) {
-                analyzeByXPath.parse(doc);
-            }
-            analyzeByJSoup.parse(doc, chapterUrl);
-            webContentBean.content = analyzeToString(sourceRuleBookContent);
-            if (!TextUtils.isEmpty(sourceRuleContentUrlNext.rule)) {
-                webContentBean.nextUrl = analyzeToString(sourceRuleContentUrlNext, chapterUrl);
-            }
-        } else {
-            analyzeByJSonPath.parse(s);
-            SourceRule sourceRule = new SourceRule(ruleBookContent);
-            webContentBean.content = analyzeByJSonPath.read(sourceRule.rule);
+
+        AnalyzeRule analyzer = new AnalyzeRule();
+        analyzer.setContent(s);
+        analyzer.setBaseUrl(chapterUrl);
+
+        webContentBean.content = analyzer.getString(ruleBookContent);
+
+        String nextUrlRule = bookSourceBean.getRuleContentUrlNext();
+        if (!TextUtils.isEmpty(nextUrlRule)) {
+            webContentBean.nextUrl = analyzer.getString(nextUrlRule);
         }
+
         return webContentBean;
-    }
-
-    private String analyzeToString(SourceRule sourceRule) {
-        return analyzeToString(sourceRule, null);
-    }
-
-    private String analyzeToString(SourceRule sourceRule, String baseUrl) {
-        String result;
-        switch (sourceRule.mode) {
-            case XPath:
-                result = analyzeByXPath.getString(sourceRule.rule, baseUrl);
-                break;
-            default:
-                if (TextUtils.isEmpty(baseUrl)) {
-                    result = analyzeByJSoup.getResult(sourceRule.rule);
-                } else {
-                    result = analyzeByJSoup.getResultUrl(sourceRule.rule);
-                }
-        }
-        return result;
     }
 
     private class WebContentBean {
