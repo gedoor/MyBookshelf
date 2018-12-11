@@ -25,8 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.R;
@@ -171,6 +169,10 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     AppCompatEditText tieRuleBookLastChapter;
     @BindView(R.id.til_ruleBookLastChapter)
     TextInputLayout tilRuleBookLastChapter;
+    @BindView(R.id.tie_loginUrl)
+    AppCompatEditText tieLoginUrl;
+    @BindView(R.id.til_loginUrl)
+    TextInputLayout tilLoginUrl;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
@@ -216,7 +218,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_source_edit);
-
     }
 
     @Override
@@ -295,6 +296,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         BookSourceBean bookSourceBeanN = new BookSourceBean();
         bookSourceBeanN.setBookSourceName(trim(tieBookSourceName.getText()));
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
+        bookSourceBeanN.setLoginUrl(trim(tieLoginUrl.getText()));
         bookSourceBeanN.setBookSourceGroup(trim(tieBookSourceGroup.getText()));
         bookSourceBeanN.setCheckUrl(trim(tieCheckUrl.getText()));
         bookSourceBeanN.setRuleBookAuthor(trim(tieRuleBookAuthor.getText()));
@@ -334,6 +336,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieBookSourceName.setText(trim(bookSourceBean.getBookSourceName()));
         tieBookSourceUrl.setText(trim(bookSourceBean.getBookSourceUrl()));
         tieBookSourceGroup.setText(trim(bookSourceBean.getBookSourceGroup()));
+        tieLoginUrl.setText(trim(bookSourceBean.getLoginUrl()));
         tieCheckUrl.setText(trim(bookSourceBean.getCheckUrl()));
         tieRuleBookAuthor.setText(trim(bookSourceBean.getRuleBookAuthor()));
         tieRuleBookContent.setText(trim(bookSourceBean.getRuleBookContent()));
@@ -365,6 +368,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tilBookSourceName.setHint("BookSourceName");
         tilBookSourceUrl.setHint("BookSourceUrl");
         tilBookSourceGroup.setHint("BookSourceGroup");
+        tilLoginUrl.setHint("LoginUrl");
         tilCheckUrl.setHint("CheckUrl");
         tilRuleBookAuthor.setHint("RuleBookAuthor");
         tilRuleBookContent.setHint("RuleBookContent");

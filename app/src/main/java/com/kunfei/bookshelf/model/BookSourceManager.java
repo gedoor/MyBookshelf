@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.model;
 
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -62,10 +63,15 @@ public class BookSourceManager extends BaseModelImpl {
         return allBookSource;
     }
 
+    @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
-        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url))
-                .unique();
+        try {
+            return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                    .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url))
+                    .unique();
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     public static void removeBookSource(BookSourceBean sourceBean) {
