@@ -65,6 +65,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
 
     private int open_from;
     private BookShelfBean bookShelf;
+    private BookSourceBean bookSourceBean;
 
     @Override
     public void initData(Activity activity) {
@@ -99,6 +100,9 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
                 bookShelf.getBookInfoBean().setChapterList(BookshelfHelp.getChapterList(bookShelf.getNoteUrl()));
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
                 mView.setAdd(BookshelfHelp.isInBookShelf(bookShelf.getNoteUrl()));
+                if (!bookShelf.getTag().equals(BookShelfBean.LOCAL_TAG)) {
+                    bookSourceBean = BookSourceManager.getBookSourceByUrl(bookShelf.getTag());
+                }
             }
             e.onNext(bookShelf);
             e.onComplete();
@@ -144,6 +148,11 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
         } catch (Exception e) {
             Log.e("MonkBook", e.getLocalizedMessage() + "\n" + e.getMessage());
         }
+    }
+
+    @Override
+    public BookSourceBean getBookSource() {
+        return bookSourceBean;
     }
 
     @Override

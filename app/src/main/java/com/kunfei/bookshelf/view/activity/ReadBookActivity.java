@@ -1183,7 +1183,15 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                     menu.getItem(i).setVisible(isTxt);
                     menu.getItem(i).setEnabled(isTxt);
                     break;
+                case R.id.menu_login:
+                    if (mPresenter.getBookSource() != null && !TextUtils.isEmpty(mPresenter.getBookSource().getLoginUrl())) {
+                        menu.getItem(i).setVisible(true);
+                    } else {
+                        menu.getItem(i).setVisible(false);
+                    }
+                    break;
             }
+
         }
 
     }

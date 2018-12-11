@@ -63,14 +63,9 @@ public class BookSourceManager extends BaseModelImpl {
     }
 
     public static BookSourceBean getBookSourceByUrl(String url) {
-        BookSourceBean sourceBean = null;
-        for (BookSourceBean bookSourceBean : getAllBookSource()) {
-            if (bookSourceBean.getBookSourceUrl().equals(url)) {
-                sourceBean = bookSourceBean;
-                break;
-            }
-        }
-        return sourceBean;
+        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(url))
+                .unique();
     }
 
     public static void removeBookSource(BookSourceBean sourceBean) {

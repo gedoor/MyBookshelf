@@ -27,6 +27,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String bookSourceName;
     private String bookSourceGroup;
     private String checkUrl;
+    private String loginUrl;
     private Long lastUpdateTime;
     @OrderBy
     private int serialNumber;
@@ -54,10 +55,10 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String ruleContentUrl;
     private String ruleContentUrlNext;
     private String ruleBookContent;
-    private String httpUserAgent;
     private String ruleBookKind;
     private String ruleBookLastChapter;
     private String ruleBookUrlPattern;
+    private String httpUserAgent;
 
     @Transient
     private transient ArrayList<String> groupList;
@@ -81,6 +82,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         bookSourceName = in.readString();
         bookSourceGroup = in.readString();
         checkUrl = in.readString();
+        loginUrl = in.readString();
         serialNumber = in.readInt();
         weight = in.readInt();
         enable = in.readByte() != 0;
@@ -111,17 +113,18 @@ public class BookSourceBean implements Parcelable, Cloneable {
         ruleBookUrlPattern = in.readString();
     }
 
-    @Generated(hash = 95806387)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String checkUrl, Long lastUpdateTime, int serialNumber,
-            int weight, boolean enable, String ruleFindUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName, String ruleSearchAuthor,
-            String ruleSearchKind, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookName,
-            String ruleBookAuthor, String ruleChapterUrl, String ruleChapterUrlNext, String ruleCoverUrl, String ruleIntroduce, String ruleChapterList,
-            String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String httpUserAgent, String ruleBookKind,
-            String ruleBookLastChapter, String ruleBookUrlPattern) {
+    @Generated(hash = 1473355032)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String checkUrl, String loginUrl, Long lastUpdateTime,
+            int serialNumber, int weight, boolean enable, String ruleFindUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
+            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl,
+            String ruleBookName, String ruleBookAuthor, String ruleChapterUrl, String ruleChapterUrlNext, String ruleCoverUrl, String ruleIntroduce,
+            String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookKind,
+            String ruleBookLastChapter, String ruleBookUrlPattern, String httpUserAgent) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.bookSourceGroup = bookSourceGroup;
         this.checkUrl = checkUrl;
+        this.loginUrl = loginUrl;
         this.lastUpdateTime = lastUpdateTime;
         this.serialNumber = serialNumber;
         this.weight = weight;
@@ -146,10 +149,10 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.ruleContentUrl = ruleContentUrl;
         this.ruleContentUrlNext = ruleContentUrlNext;
         this.ruleBookContent = ruleBookContent;
-        this.httpUserAgent = httpUserAgent;
         this.ruleBookKind = ruleBookKind;
         this.ruleBookLastChapter = ruleBookLastChapter;
         this.ruleBookUrlPattern = ruleBookUrlPattern;
+        this.httpUserAgent = httpUserAgent;
     }
 
     public BookSourceBean() {
@@ -166,6 +169,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(bookSourceName);
         parcel.writeString(bookSourceGroup);
         parcel.writeString(checkUrl);
+        parcel.writeString(loginUrl);
         parcel.writeInt(serialNumber);
         parcel.writeInt(weight);
         parcel.writeByte((byte) (enable ? 1 : 0));
@@ -202,6 +206,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
             BookSourceBean bs = (BookSourceBean) obj;
             return stringEquals(bookSourceUrl, bs.bookSourceUrl)
                     && stringEquals(bookSourceName, bs.bookSourceName)
+                    && stringEquals(loginUrl, bs.loginUrl)
                     && stringEquals(bookSourceGroup, bs.bookSourceGroup)
                     && stringEquals(ruleBookName, bs.ruleBookName)
                     && stringEquals(ruleBookAuthor, bs.ruleBookAuthor)
@@ -550,6 +555,14 @@ public class BookSourceBean implements Parcelable, Cloneable {
 
     public void updateModTime() {
         this.lastUpdateTime = System.currentTimeMillis();
+    }
+
+    public String getLoginUrl() {
+        return this.loginUrl;
+    }
+
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
     }
 
 }

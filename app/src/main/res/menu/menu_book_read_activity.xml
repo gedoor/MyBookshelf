@@ -74,4 +74,11 @@
             app:showAsAction="never" />
     </group>
 
+    <group android:id="@+id/menu_login">
+        <item
+            android:id="@+id/action_login"
+            android:icon="@drawable/ic_toc"
+            android:title="@string/login"
+            app:showAsAction="never" />
+    </group>
 </menu>

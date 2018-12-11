@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
@@ -76,5 +77,7 @@ public interface ReadBookContract {
         void delBookmark(BookmarkBean bookmarkBean);
 
         void disableDurBookSource();
+
+        BookSourceBean getBookSource();
     }
 }
