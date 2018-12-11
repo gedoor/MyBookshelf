@@ -15,7 +15,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -78,24 +77,23 @@ public class ChangeSourceView {
             onClickSource.changeSource(adapter.getSearchBookBeans().get(index));
         });
         adapter.setOnItemLongClickListener((view, pos) -> {
+            final String url = adapter.getSearchBookBeans().get(pos).getTag();
+            final BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
             PopupMenu popupMenu = new PopupMenu(context, view);
             popupMenu.getMenu().add(0, 0, 1, "禁用书源");
             popupMenu.getMenu().add(0, 0, 2, "删除书源");
             popupMenu.setOnMenuItemClickListener(menuItem -> {
-                final String url = adapter.getSearchBookBeans().get(pos).getTag();
-                BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(url);
-                DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(adapter.getSearchBookBeans().get(pos));
-                adapter.getSearchBookBeans().remove(pos);
-                adapter.notifyItemRemoved(pos);
                 if (sourceBean != null) {
                     switch (menuItem.getOrder()) {
                         case 1:
                             sourceBean.setEnable(false);
                             BookSourceManager.addBookSource(sourceBean);
                             BookSourceManager.refreshBookSource();
+                            adapter.removeData(pos);
                             break;
                         case 2:
                             BookSourceManager.removeBookSource(sourceBean);
+                            adapter.removeData(pos);
                             break;
                     }
                 }

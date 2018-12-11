@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerViewAdapter;
 
@@ -50,6 +50,12 @@ public class ChangeSourceAdapter extends RefreshRecyclerViewAdapter {
     public void reSetSourceAdapter() {
         searchBookBeans.clear();
             notifyDataSetChanged();
+    }
+
+    public void removeData(int pos) {
+        DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBeans.get(pos));
+        getSearchBookBeans().remove(pos);
+        notifyItemRemoved(pos);
     }
 
     public void setOnItemClickListener(BaseListAdapter.OnItemClickListener listener) {
