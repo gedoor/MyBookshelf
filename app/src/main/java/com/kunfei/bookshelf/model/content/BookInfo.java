@@ -41,15 +41,17 @@ class BookInfo {
             AnalyzeRule analyzer = new AnalyzeRule();
             analyzer.setContent(s);
 
+
+            if (isEmpty(bookInfoBean.getName())) {
+                result = analyzer.getString(bookSourceBean.getRuleBookName());
+                bookInfoBean.setName(result);
+            }
+
             result = analyzer.getString(bookSourceBean.getRuleCoverUrl(), bookShelfBean.getNoteUrl());
             if (!isEmpty(result)) {
                 bookInfoBean.setCoverUrl(result);
             }
 
-            result = analyzer.getString(bookSourceBean.getRuleBookName());
-            if (!isEmpty(result)) {
-                bookInfoBean.setName(result);
-            }
             result = analyzer.getString(bookSourceBean.getRuleBookAuthor());
             if (!isEmpty(result)) {
                 bookInfoBean.setAuthor(result);
