@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -459,6 +460,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         switch (id) {
             case R.id.action_save:
                 saveBookSource();
+                break;
+            case R.id.action_login:
+                if (!TextUtils.isEmpty(getBookSource().getLoginUrl())) {
+                    SourceLoginActivity.startThis(this, getBookSource());
+                } else {
+                    toast(R.string.source_no_login);
+                }
                 break;
             case R.id.action_copy_source:
                 mPresenter.copySource(getBookSource());

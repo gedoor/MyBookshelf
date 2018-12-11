@@ -298,5 +298,6 @@
     <string name="login">登陆</string>
     <string name="login_source">登陆%s</string>
     <string name="success">成功</string>
+    <string name="source_no_login">当前源没有配置登陆地址</string>
 
 </resources>
