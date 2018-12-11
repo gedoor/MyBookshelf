@@ -543,7 +543,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     public void exit() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
             if (getCurrentFocus() != null) {
-                showSnackBar("再按一次退出程序");
+                showSnackBar(toolbar, "再按一次退出程序");
             }
             exitTime = System.currentTimeMillis();
         } else {

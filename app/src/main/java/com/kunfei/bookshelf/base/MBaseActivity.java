@@ -184,15 +184,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         }
     }
 
-
-    public void showSnackBar(String msg) {
-        showSnackBar(getCurrentFocus(), msg);
-    }
-
-    public void showSnackBar(String msg, int length) {
-        showSnackBar(getCurrentFocus(), msg, length);
-    }
-
     public void showSnackBar(View view, String msg) {
         showSnackBar(view, msg, Snackbar.LENGTH_SHORT);
     }
