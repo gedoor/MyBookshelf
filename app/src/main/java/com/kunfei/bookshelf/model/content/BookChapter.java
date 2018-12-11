@@ -44,8 +44,8 @@ class BookChapter {
                 dx = true;
                 ruleChapterList = ruleChapterList.substring(1);
             }
-            WebChapterBean<LinkedHashSet<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList);
-            LinkedHashSet<ChapterListBean> chapterList = webChapterBean.data;
+            WebChapterBean<List<ChapterListBean>> webChapterBean = analyzeChapterList(s, bookShelfBean.getBookInfoBean().getChapterUrl(), ruleChapterList);
+            List<ChapterListBean> chapterList = webChapterBean.data;
 
             if (webChapterBean.nextUrlList.size() > 1) {
                 List<String> chapterUrlS = new ArrayList<>(webChapterBean.nextUrlList);
@@ -82,17 +82,24 @@ class BookChapter {
                     chapterList.addAll(webChapterBean.data);
                 }
             }
-            List<ChapterListBean> cList = new ArrayList<>(chapterList);
-            if (dx) {
-                Collections.reverse(cList);
+            //去除重复,保留后面的,先倒序,从后面往前判断
+            if (!dx) {
+                Collections.reverse(chapterList);
             }
-            e.onNext(cList);
+            List<ChapterListBean> chapterListQc = new ArrayList<>();
+            for (ChapterListBean chapterListBean : chapterList) {
+                if (!chapterListQc.contains(chapterListBean)) {
+                    chapterListQc.add(chapterListBean);
+                }
+            }
+            Collections.reverse(chapterListQc);
+            e.onNext(chapterListQc);
             e.onComplete();
         });
     }
 
-    private WebChapterBean<LinkedHashSet<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) {
-        LinkedHashSet<ChapterListBean> chapterBeans = new LinkedHashSet<>();
+    private WebChapterBean<List<ChapterListBean>> analyzeChapterList(String s, String chapterUrl, String ruleChapterList) {
+        List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 
         AnalyzeRule analyzer = new AnalyzeRule();
