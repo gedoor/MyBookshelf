@@ -3,12 +3,13 @@ package com.kunfei.bookshelf.help;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.utils.BitmapUtil;
@@ -175,7 +176,11 @@ public class ReadBookControl {
             if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
                 bgIsColor = false;
                 String bgPath = getBgPath(textDrawableIndex);
-                bgBitmap = BitmapFactory.decodeFile(bgPath);
+                Resources resources = MApplication.getInstance().getResources();
+                DisplayMetrics dm = resources.getDisplayMetrics();
+                int width = dm.widthPixels;
+                int height = dm.heightPixels;
+                bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
                 return;
             } else if (getBgCustom(textDrawableIndex) == 1) {
                 bgIsColor = true;
