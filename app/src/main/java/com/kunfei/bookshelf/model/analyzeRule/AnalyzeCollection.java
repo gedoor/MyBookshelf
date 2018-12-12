@@ -12,13 +12,13 @@ public class AnalyzeCollection {
     private List<Object> _Objects;
     private Elements _Elements;
 
-    public AnalyzeCollection(List<Object> Objects, boolean isJSON){
+    AnalyzeCollection(List<Object> Objects, boolean isJSON){
         _Objects = Objects;
         _size = Objects.size();
         _isJSON = isJSON;
     }
 
-    public AnalyzeCollection(Elements elements){
+    AnalyzeCollection(Elements elements){
         _Elements = elements;
         _size = elements.size();
         _isJSON = false;

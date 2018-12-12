@@ -22,47 +22,22 @@ public class AnalyzeByJSonPath {
     public String read(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
         String result = null;
-        SourceRule sourceRule = splitSourceRule(rule);
         try {
-            Object object = ctx.read(sourceRule.rule);
+            Object object = ctx.read(rule);
             if (object instanceof List) {
-                object = ((List<String>) object).get(0);
+                object = ((List) object).get(0);
             }
-            if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-                result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, object);
-            } else {
-                if (object instanceof Integer) {
-                    result = Integer.toString((Integer) object);
-                } else {
-                    result = (String) object;
-                }
-            }
+            result = String.valueOf(object);
         } catch (Exception ignored) {
         }
         return result;
     }
 
-    public List<Object> readList(String rule) {
-        SourceRule sourceRule = splitSourceRule(rule);
+    List<Object> readList(String rule) {
         try {
-            return ctx.read(sourceRule.rule);
+            return ctx.read(rule);
         } catch (Exception ignored) {
         }
         return new ArrayList<>();
-    }
-
-    private SourceRule splitSourceRule(String rule) {
-        SourceRule sourceRule = new SourceRule();
-        String str[] = rule.split("@js:");
-        sourceRule.rule = str[0];
-        if (str.length > 1) {
-            sourceRule.jsStr = str[1];
-        }
-        return sourceRule;
-    }
-
-    class SourceRule {
-        String rule;
-        String jsStr;
     }
 }

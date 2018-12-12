@@ -16,6 +16,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import static android.text.TextUtils.isEmpty;
+
 
 /**
  * Created by REFGD.
@@ -31,65 +33,65 @@ public class AnalyzeRule {
     private AnalyzeByJSoup analyzeByJSoup = null;
     private AnalyzeByJSonPath analyzeByJSonPath = null;
 
-    public AnalyzeRule(){
+    public AnalyzeRule() {
 
     }
 
-    public AnalyzeRule(Object object, boolean isJSON){
+    AnalyzeRule(Object object, boolean isJSON) {
         _object = object;
         _isJSON = isJSON;
     }
 
-    private AnalyzeByXPath getAnalyzeByXPath(){
-        if(analyzeByXPath==null) {
+    private AnalyzeByXPath getAnalyzeByXPath() {
+        if (analyzeByXPath == null) {
             analyzeByXPath = new AnalyzeByXPath();
             analyzeByXPath.parse(((Element) _object).children());
         }
         return analyzeByXPath;
     }
 
-    private AnalyzeByJSoup getAnalyzeByJSoup(){
-        if(analyzeByJSoup==null) {
+    private AnalyzeByJSoup getAnalyzeByJSoup() {
+        if (analyzeByJSoup == null) {
             analyzeByJSoup = new AnalyzeByJSoup();
             analyzeByJSoup.parse((Element) _object);
         }
         return analyzeByJSoup;
     }
 
-    private AnalyzeByJSonPath getAnalyzeByJSonPath(){
-        if(analyzeByJSonPath==null) {
+    private AnalyzeByJSonPath getAnalyzeByJSonPath() {
+        if (analyzeByJSonPath == null) {
             analyzeByJSonPath = new AnalyzeByJSonPath();
-            if(_object instanceof String){
+            if (_object instanceof String) {
                 analyzeByJSonPath.parse(String.valueOf(_object));
-            }else{
+            } else {
                 analyzeByJSonPath.parse(_object);
             }
         }
         return analyzeByJSonPath;
     }
 
-    public void setContent(String body){
-        if (body==null) throw new AssertionError("Content cannot be null");
+    public void setContent(String body) {
+        if (body == null) throw new AssertionError("Content cannot be null");
         _isJSON = StringUtils.isJSONType(body);
-        if(!_isJSON){
+        if (!_isJSON) {
             _object = Jsoup.parse(body);
-        }else{
+        } else {
             _object = body;
         }
     }
 
-    public List<String> getStringList(String rule, String baseUrl){
+    public List<String> getStringList(String rule, String baseUrl) {
         List<String> stringList;
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
-                stringList =  new ArrayList<>();
+                stringList = new ArrayList<>();
                 break;
             case XPath:
-                stringList =  getAnalyzeByXPath().getStringList(source.rule);
+                stringList = getAnalyzeByXPath().getStringList(source.rule);
                 break;
             default:
-                stringList =   getAnalyzeByJSoup().getAllResultList(source.rule);
+                stringList = getAnalyzeByJSoup().getAllResultList(source.rule);
         }
         if (!TextUtils.isEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
@@ -108,33 +110,33 @@ public class AnalyzeRule {
         return getString(rule, null);
     }
 
-    public String getString(String rule, String _baseUrl){
+    public String getString(String rule, String _baseUrl) {
         if (TextUtils.isEmpty(rule)) {
             return "";
         }
+        String result = "";
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
-                if (TextUtils.isEmpty(_baseUrl)) {
-                    return getAnalyzeByJSonPath().read(source.rule);
-                } else {
-                    return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByJSonPath().read(source.rule));
-                }
+                result = getAnalyzeByJSonPath().read(source.rule);
+                break;
             case XPath:
+                result = getAnalyzeByXPath().getString(source.rule, _baseUrl);
+                break;
+            case Default:
                 if (TextUtils.isEmpty(_baseUrl)) {
-                    return getAnalyzeByXPath().getString(source.rule, _baseUrl);
+                    result = getAnalyzeByJSoup().getResult(source.rule);
                 } else {
-                    return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByXPath().getString(source.rule, _baseUrl));
+                    result = getAnalyzeByJSoup().getResultUrl(source.rule);
                 }
         }
-        if (TextUtils.isEmpty(_baseUrl)) {
-            return getAnalyzeByJSoup().getResult(source.rule);
-        } else {
-            return NetworkUtil.getAbsoluteURL(_baseUrl, getAnalyzeByJSoup().getResultUrl(source.rule));
+        if (!isEmpty(source.js)) {
+            result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl);
         }
+        return result;
     }
 
-    public AnalyzeCollection getElements(String rule){
+    public AnalyzeCollection getElements(String rule) {
         SourceRule source = new SourceRule(rule);
         switch (source.mode) {
             case JSon:
@@ -148,19 +150,24 @@ public class AnalyzeRule {
     class SourceRule {
         Mode mode;
         String rule;
+        String js;
 
         SourceRule(String ruleStr) {
-            if (_isJSON && !ruleStr.startsWith("@JSon:")) throw new AssertionError("Content analyze");
-
-            if (ruleStr.startsWith("@XPath:")) {
+            if (_isJSON && !ruleStr.startsWith("@JSon:"))
+                throw new AssertionError("Content analyze");
+            String str[] = ruleStr.split("@js:");
+            if (str[0].startsWith("@XPath:")) {
                 mode = Mode.XPath;
-                rule = ruleStr.substring(7);
-            } else if (ruleStr.startsWith("@JSon:")) {
+                rule = str[0].substring(7);
+            } else if (str[0].startsWith("@JSon:")) {
                 mode = Mode.JSon;
-                rule = ruleStr.substring(6);
+                rule = str[0].substring(6);
             } else {
                 mode = Mode.Default;
-                rule = ruleStr;
+                rule = str[0];
+            }
+            if (str.length > 1) {
+                js = str[1];
             }
         }
 
@@ -170,13 +177,14 @@ public class AnalyzeRule {
         XPath, JSon, Default
     }
 
-    private static class EngineHelper{
+    private static class EngineHelper {
         private static final ScriptEngine INSTANCE = new ScriptEngineManager().getEngineByName("rhino");
     }
 
-    public static Object evalJS(String jsStr, Object result){
+    private static Object evalJS(String jsStr, Object result, String baseUrl) {
         SimpleBindings bindings = new SimpleBindings();
         bindings.put("result", result);
+        bindings.put("baseUrl", baseUrl);
         try {
             result = EngineHelper.INSTANCE.eval(jsStr, bindings);
         } catch (ScriptException ignored) {

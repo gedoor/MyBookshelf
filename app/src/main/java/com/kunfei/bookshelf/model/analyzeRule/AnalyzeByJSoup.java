@@ -27,14 +27,14 @@ public class AnalyzeByJSoup {
         this.element = element;
     }
 
-    public Elements getElements(String rule) {
+    Elements getElements(String rule) {
         return getElements(element, rule);
     }
 
     /**
      * 获取Elements
      */
-    public Elements getElements(Element temp, String rule) {
+    private Elements getElements(Element temp, String rule) {
         Elements elements = new Elements();
         if (temp == null || isEmpty(rule)) {
             return elements;
@@ -211,7 +211,7 @@ public class AnalyzeByJSoup {
     /**
      * 合并内容列表,得到内容
      */
-    public String getResult(String ruleStr) {
+    String getResult(String ruleStr) {
         if (isEmpty(ruleStr)) {
             return null;
         }
@@ -244,16 +244,13 @@ public class AnalyzeByJSoup {
         if (!isEmpty(sourceRule.replaceRegex)) {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
-        if (!isEmpty(sourceRule.jsStr)) {
-            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
-        }
         return result.trim();
     }
 
     /**
      * 获取一个字符串
      **/
-    public String getResultUrl(String ruleStr) {
+    String getResultUrl(String ruleStr) {
         String result = "";
         SourceRule sourceRule = splitSourceRule(ruleStr);
         List<String> urlList = getAllResultList(sourceRule.elementsRule);
@@ -263,16 +260,13 @@ public class AnalyzeByJSoup {
         if (!TextUtils.isEmpty(sourceRule.replaceRegex)) {
             result = result.replaceAll(sourceRule.replaceRegex, sourceRule.replacement);
         }
-        if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
-        }
         return result;
     }
 
     /**
      * 获取所有内容列表
      */
-    public List<String> getAllResultList(String ruleStr) {
+    List<String> getAllResultList(String ruleStr) {
         List<String> textS = new ArrayList<>();
         if (isEmpty(ruleStr)) {
             return textS;
@@ -411,13 +405,8 @@ public class AnalyzeByJSoup {
     private SourceRule splitSourceRule(String ruleStr) {
         SourceRule sourceRule = new SourceRule();
         String[] ruleStrS;
-        //分离JS
-        ruleStrS = ruleStr.trim().split("@js:");
-        if (ruleStrS.length > 1) {
-            sourceRule.jsStr = ruleStrS[1];
-        }
         //分离正则表达式
-        ruleStrS = ruleStrS[0].trim().split("#");
+        ruleStrS = ruleStr.trim().split("#");
         sourceRule.elementsRule = ruleStrS[0];
         if (ruleStrS.length > 1) {
             sourceRule.replaceRegex = ruleStrS[1];
@@ -433,7 +422,6 @@ public class AnalyzeByJSoup {
         String elementsRule = "";
         String replaceRegex = "";
         String replacement = "";
-        String jsStr;
     }
 
 }

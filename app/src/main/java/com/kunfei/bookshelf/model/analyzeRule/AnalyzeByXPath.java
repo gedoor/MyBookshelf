@@ -23,7 +23,7 @@ public class AnalyzeByXPath {
         jxDocument = new JXDocument(doc);
     }
 
-    public Elements getElements(String xPath) {
+    Elements getElements(String xPath) {
         Elements elements = new Elements();
         List<Object> objects = jxDocument.sel(xPath);
         for (Object object : objects) {
@@ -34,7 +34,7 @@ public class AnalyzeByXPath {
         return elements;
     }
 
-    public List<String> getStringList(String xPath) {
+    List<String> getStringList(String xPath) {
         List<String> stringList = new ArrayList<>();
         List<Object> objects = jxDocument.sel(xPath);
         for (Object object : objects) {
@@ -47,8 +47,7 @@ public class AnalyzeByXPath {
 
     public String getString(String rule, String baseUrl) {
         String result;
-        SourceRule sourceRule = splitSourceRule(rule);
-        Object object = jxDocument.selOne(sourceRule.rule);
+        Object object = jxDocument.selOne(rule);
         if (!TextUtils.isEmpty(baseUrl)) {
             result = NetworkUtil.getAbsoluteURL(baseUrl, (String) object);
         } else if (object instanceof Element) {
@@ -58,24 +57,6 @@ public class AnalyzeByXPath {
         } else {
             result = (String) object;
         }
-        if (!TextUtils.isEmpty(sourceRule.jsStr)) {
-            result = (String) AnalyzeRule.evalJS(sourceRule.jsStr, result);
-        }
         return result;
-    }
-
-    private SourceRule splitSourceRule(String rule) {
-        SourceRule sourceRule = new SourceRule();
-        String str[] = rule.split("@js:");
-        sourceRule.rule = str[0];
-        if (str.length > 1) {
-            sourceRule.jsStr = str[1];
-        }
-        return sourceRule;
-    }
-
-    class SourceRule {
-        String rule;
-        String jsStr;
     }
 }
