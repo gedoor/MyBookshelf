@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,7 +117,11 @@ public class ReadStyleActivity extends MBaseActivity {
         textDrawableIndex = intent.getIntExtra("index", 1);
         bgCustom = readBookControl.getBgCustom(textDrawableIndex);
         textColor = readBookControl.getTextColor(textDrawableIndex);
-        bgDrawable = readBookControl.getBgDrawable(textDrawableIndex, getContext());
+        Resources resources = this.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        bgDrawable = readBookControl.getBgDrawable(textDrawableIndex, getContext(), width, height);
         bgColor = readBookControl.getBgColor(textDrawableIndex);
         darkStatusIcon = readBookControl.getDarkStatusIcon(textDrawableIndex);
         bgPath = readBookControl.getBgPath(textDrawableIndex);

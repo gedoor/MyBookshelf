@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.kunfei.basemvplib.AppActivityManager;
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
@@ -54,8 +55,6 @@ import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageView;
 import com.kunfei.bookshelf.widget.page.TxtChapter;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
-
-import com.kunfei.bookshelf.R;
 import com.monke.mprogressbar.MHorProgressBar;
 
 import java.util.List;
@@ -392,7 +391,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         initReadInterfacePop();
         initReadAdjustPop();
         initMoreSettingPop();
-        pageView.setBackground(readBookControl.getTextBackground());
+        pageView.setBackground(readBookControl.getTextBackground(this));
     }
 
     /**
@@ -539,7 +538,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             @Override
             public void bgChange() {
                 readBookControl.initTextDrawableIndex();
-                pageView.setBackground(readBookControl.getTextBackground());
+                pageView.setBackground(readBookControl.getTextBackground(ReadBookActivity.this));
                 initImmersionBar();
                 if (mPageLoader != null) {
                     mPageLoader.setPageStyle();
@@ -1075,7 +1074,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (recreate) {
             recreate();
         } else {
-            flContent.setBackground(readBookControl.getTextBackground());
+            flContent.setBackground(readBookControl.getTextBackground(this));
             if (mPageLoader != null) {
                 mPageLoader.refreshUi();
             }

@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.view.activity.ReadStyleActivity;
-import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
@@ -297,11 +295,11 @@ public class ReadInterfacePop extends FrameLayout {
         tv2.setTextColor(readBookControl.getTextColor(2));
         tv3.setTextColor(readBookControl.getTextColor(3));
         tv4.setTextColor(readBookControl.getTextColor(4));
-        civBgWhite.setImageDrawable(readBookControl.getBgDrawable(0, activity));
-        civBgYellow.setImageDrawable(readBookControl.getBgDrawable(1, activity));
-        civBgGreen.setImageDrawable(readBookControl.getBgDrawable(2, activity));
-        civBgBlue.setImageDrawable(readBookControl.getBgDrawable(3, activity));
-        civBgBlack.setImageDrawable(readBookControl.getBgDrawable(4, activity));
+        civBgWhite.setImageDrawable(readBookControl.getBgDrawable(0, activity, 100, 180));
+        civBgYellow.setImageDrawable(readBookControl.getBgDrawable(1, activity, 100, 180));
+        civBgGreen.setImageDrawable(readBookControl.getBgDrawable(2, activity, 100, 180));
+        civBgBlue.setImageDrawable(readBookControl.getBgDrawable(3, activity, 100, 180));
+        civBgBlack.setImageDrawable(readBookControl.getBgDrawable(4, activity, 100, 180));
     }
 
     private void updateBg(int index) {

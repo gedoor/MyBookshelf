@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.kunfei.bookshelf.MApplication;
+import com.kunfei.bookshelf.utils.BitmapUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ public class ReadBookControl {
     private boolean speechRateFollowSys;
     private int textSize;
     private int textColor;
-    private Drawable textBackground;
     private boolean bgIsColor;
     private int bgColor;
     private float lineMultiplier;
@@ -194,7 +194,6 @@ public class ReadBookControl {
     private void setTextDrawable() {
         darkStatusIcon = getDarkStatusIcon(textDrawableIndex);
         textColor = getTextColor(textDrawableIndex);
-        textBackground = getBgDrawable(textDrawableIndex, MApplication.getInstance());
     }
 
     public int getTextColor(int textDrawableIndex) {
@@ -212,12 +211,12 @@ public class ReadBookControl {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public Drawable getBgDrawable(int textDrawableIndex, Context context) {
+    public Drawable getBgDrawable(int textDrawableIndex, Context context, int width, int height) {
         int color;
         try {
             switch (getBgCustom(textDrawableIndex)) {
                 case 2:
-                    Bitmap bitmap = BitmapFactory.decodeFile(getBgPath(textDrawableIndex));
+                    Bitmap bitmap = BitmapUtil.getFitSampleBitmap(getBgPath(textDrawableIndex), width, height);
                     if (bitmap != null) {
                         return new BitmapDrawable(context.getResources(), bitmap);
                     }
@@ -324,8 +323,8 @@ public class ReadBookControl {
         return bgIsColor;
     }
 
-    public Drawable getTextBackground() {
-        return textBackground;
+    public Drawable getTextBackground(Context context) {
+        return new BitmapDrawable(context.getResources(), bgBitmap);
     }
 
     public int getBgColor() {

@@ -18,6 +18,25 @@ import java.io.InputStream;
 public class BitmapUtil {
     private static final String TAG = "BitmapUtil";
 
+    public static Bitmap getFitSampleBitmap(String file_path, int width, int height) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file_path, options);
+        options.inSampleSize = getFitInSampleSize(width, height, options);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file_path, options);
+    }
+
+    public static int getFitInSampleSize(int reqWidth, int reqHeight, BitmapFactory.Options options) {
+        int inSampleSize = 1;
+        if (options.outWidth > reqWidth || options.outHeight > reqHeight) {
+            int widthRatio = Math.round((float) options.outWidth / (float) reqWidth);
+            int heightRatio = Math.round((float) options.outHeight / (float) reqHeight);
+            inSampleSize = Math.min(widthRatio, heightRatio);
+        }
+        return inSampleSize;
+    }
+
     /**
      * 通过资源id转化成Bitmap
      */
