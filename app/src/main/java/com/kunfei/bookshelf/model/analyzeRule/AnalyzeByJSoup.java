@@ -409,6 +409,11 @@ public class AnalyzeByJSoup {
         String replacement = "";
 
         SourceRule(String ruleStr) {
+            if (ruleStr.toUpperCase().startsWith("@CSS:")) {
+                isCss = true;
+                elementsRule = ruleStr.substring(5);
+                return;
+            }
             String[] ruleStrS;
             //分离正则表达式
             ruleStrS = ruleStr.trim().split("#");
