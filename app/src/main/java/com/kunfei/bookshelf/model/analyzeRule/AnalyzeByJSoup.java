@@ -217,7 +217,7 @@ public class AnalyzeByJSoup {
         }
         String result = "";
         //分离正则表达式
-        SourceRule sourceRule = splitSourceRule(ruleStr.trim());
+        SourceRule sourceRule = new SourceRule(ruleStr.trim());
         if (isEmpty(sourceRule.elementsRule)) {
             result = element.data();
         } else {
@@ -252,7 +252,7 @@ public class AnalyzeByJSoup {
      **/
     String getResultUrl(String ruleStr) {
         String result = "";
-        SourceRule sourceRule = splitSourceRule(ruleStr);
+        SourceRule sourceRule = new SourceRule(ruleStr);
         List<String> urlList = getAllResultList(sourceRule.elementsRule);
         if (urlList.size() > 0) {
             result = urlList.get(0);
@@ -272,7 +272,7 @@ public class AnalyzeByJSoup {
             return textS;
         }
         //分离正则表达式
-        SourceRule sourceRule = splitSourceRule(ruleStr);
+        SourceRule sourceRule = new SourceRule(ruleStr);
         if (isEmpty(sourceRule.elementsRule)) {
             textS.add(element.data());
         } else {
@@ -402,26 +402,24 @@ public class AnalyzeByJSoup {
         return textS;
     }
 
-    private SourceRule splitSourceRule(String ruleStr) {
-        SourceRule sourceRule = new SourceRule();
-        String[] ruleStrS;
-        //分离正则表达式
-        ruleStrS = ruleStr.trim().split("#");
-        sourceRule.elementsRule = ruleStrS[0];
-        if (ruleStrS.length > 1) {
-            sourceRule.replaceRegex = ruleStrS[1];
-        }
-        if (ruleStrS.length > 2) {
-            sourceRule.replacement = ruleStrS[2];
-        }
-
-        return sourceRule;
-    }
-
     class SourceRule {
-        String elementsRule = "";
+        boolean isCss = false;
+        String elementsRule;
         String replaceRegex = "";
         String replacement = "";
+
+        SourceRule(String ruleStr) {
+            String[] ruleStrS;
+            //分离正则表达式
+            ruleStrS = ruleStr.trim().split("#");
+            elementsRule = ruleStrS[0];
+            if (ruleStrS.length > 1) {
+                replaceRegex = ruleStrS[1];
+            }
+            if (ruleStrS.length > 2) {
+                replacement = ruleStrS[2];
+            }
+        }
     }
 
 }
