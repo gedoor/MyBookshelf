@@ -39,17 +39,22 @@ public class AnalyzeByJSoup {
         if (temp == null || isEmpty(rule)) {
             return elements;
         }
+        SourceRule sourceRule = new SourceRule(rule);
         String elementsType;
         String[] ruleStrS;
-        if (rule.contains("&")) {
+        if (sourceRule.elementsRule.contains("&")) {
             elementsType = "&";
-            ruleStrS = rule.split("&");
-        } else if (rule.contains("%")) {
+            ruleStrS = rule.split("&+");
+        } else if (sourceRule.elementsRule.contains("%")) {
             elementsType = "%";
-            ruleStrS = rule.split("%");
+            ruleStrS = rule.split("%+");
         } else {
             elementsType = "|";
-            ruleStrS = rule.split("\\|");
+            if (sourceRule.isCss) {
+                ruleStrS = rule.split("\\|\\|");
+            } else {
+                ruleStrS = rule.split("\\|+");
+            }
         }
         List<Elements> elementsList = new ArrayList<>();
         for (String ruleStr : ruleStrS) {
@@ -271,7 +276,7 @@ public class AnalyzeByJSoup {
         if (isEmpty(ruleStr)) {
             return textS;
         }
-        //分离正则表达式
+        //拆分规则
         SourceRule sourceRule = new SourceRule(ruleStr);
         if (isEmpty(sourceRule.elementsRule)) {
             textS.add(element.data());
@@ -280,10 +285,14 @@ public class AnalyzeByJSoup {
             String ruleStrS[];
             if (sourceRule.elementsRule.contains("&")) {
                 isAnd = true;
-                ruleStrS = sourceRule.elementsRule.split("&");
+                ruleStrS = sourceRule.elementsRule.split("&+");
             } else {
                 isAnd = false;
-                ruleStrS = sourceRule.elementsRule.split("\\|");
+                if (sourceRule.isCss) {
+                    ruleStrS = sourceRule.elementsRule.split("\\|\\|");
+                } else {
+                    ruleStrS = sourceRule.elementsRule.split("\\|+");
+                }
             }
             for (String ruleStrX : ruleStrS) {
                 List<String> temp = getResultList(ruleStrX);
