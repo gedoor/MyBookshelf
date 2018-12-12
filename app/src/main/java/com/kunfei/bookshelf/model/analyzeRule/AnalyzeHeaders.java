@@ -29,7 +29,7 @@ public class AnalyzeHeaders {
             headerMap.put("User-Agent", getDefaultUserAgent());
         }
         if (bookSourceBean != null) {
-            String cookie = ACache.get(MApplication.getInstance()).getAsString(bookSourceBean.getBookSourceUrl());
+            String cookie = MApplication.getCookiePreferences().getString(bookSourceBean.getBookSourceUrl(), "");
             if (!TextUtils.isEmpty(cookie)) {
                 headerMap.put("Cookie", cookie);
             }

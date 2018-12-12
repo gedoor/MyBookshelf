@@ -40,6 +40,7 @@ public class MApplication extends Application {
     private static String versionName;
     private static int versionCode;
     private SharedPreferences configPreferences;
+    private SharedPreferences cookiePreferences;
     private boolean donateHb;
 
     public static MApplication getInstance() {
@@ -76,6 +77,7 @@ public class MApplication extends Application {
             createChannelIdReadAloud();
         }
         configPreferences = getSharedPreferences("CONFIG", 0);
+        cookiePreferences = getSharedPreferences("COOKIE", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
@@ -106,6 +108,10 @@ public class MApplication extends Application {
 
     public SharedPreferences getConfigPreferences() {
         return configPreferences;
+    }
+
+    public static SharedPreferences getCookiePreferences() {
+        return getInstance().cookiePreferences;
     }
 
     public boolean getDonateHb() {

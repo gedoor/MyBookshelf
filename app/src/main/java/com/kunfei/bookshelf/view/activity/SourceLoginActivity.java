@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -102,7 +104,9 @@ public class SourceLoginActivity extends MBaseActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 CookieManager cookieManager = CookieManager.getInstance();
                 String cookie = cookieManager.getCookie(url);
-                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getBookSourceUrl(), cookie);
+                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
+                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
+                editor.apply();
                 super.onPageStarted(view, url, favicon);
             }
 
@@ -110,7 +114,9 @@ public class SourceLoginActivity extends MBaseActivity {
             public void onPageFinished(WebView view, String url) {
                 CookieManager cookieManager = CookieManager.getInstance();
                 String cookie = cookieManager.getCookie(url);
-                ACache.get(SourceLoginActivity.this).put(bookSourceBean.getBookSourceUrl(), cookie);
+                SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
+                editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
+                editor.apply();
                 if (checking)
                     finish();
                 else
