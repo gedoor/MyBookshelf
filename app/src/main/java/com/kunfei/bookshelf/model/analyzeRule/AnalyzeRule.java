@@ -156,13 +156,13 @@ public class AnalyzeRule {
         String js;
 
         SourceRule(String ruleStr) {
-            if (_isJSON && !ruleStr.startsWith("@JSon:"))
+            if (_isJSON && !StringUtils.startWithIgnoreCase(ruleStr, "@JSON:"))
                 throw new AssertionError("Content analyze");
             String str[] = ruleStr.split("@js:");
-            if (str[0].startsWith("@XPath:")) {
+            if (StringUtils.startWithIgnoreCase(str[0], "@XPath:")) {
                 mode = Mode.XPath;
                 rule = str[0].substring(7);
-            } else if (str[0].startsWith("@JSon:")) {
+            } else if (StringUtils.startWithIgnoreCase(str[0], "@JSon:")) {
                 mode = Mode.JSon;
                 rule = str[0].substring(6);
             } else {

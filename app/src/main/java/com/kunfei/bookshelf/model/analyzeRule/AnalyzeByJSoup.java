@@ -2,8 +2,8 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.help.FormatWebText;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
@@ -409,7 +409,7 @@ public class AnalyzeByJSoup {
         String replacement = "";
 
         SourceRule(String ruleStr) {
-            if (ruleStr.toUpperCase().startsWith("@CSS:")) {
+            if (StringUtils.startWithIgnoreCase(ruleStr, "@CSS:")) {
                 isCss = true;
                 elementsRule = ruleStr.substring(5);
                 return;

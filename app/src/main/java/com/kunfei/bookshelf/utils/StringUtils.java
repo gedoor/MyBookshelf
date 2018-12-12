@@ -249,4 +249,10 @@ public class StringUtils {
         return result;
     }
 
+    public static boolean startWithIgnoreCase(String src, String obj) {
+        if (obj.length() > src.length()) {
+            return false;
+        }
+        return src.substring(0, obj.length()).equalsIgnoreCase(obj);
+    }
 }
