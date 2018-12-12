@@ -62,6 +62,11 @@ class BookInfo {
                 bookInfoBean.setIntroduce(result);
             }
 
+            result = analyzer.getString(bookSourceBean.getRuleBookLastChapter());
+            if (!isEmpty(result)) {
+                bookShelfBean.setLastChapterName(result);
+            }
+
             result = analyzer.getString(bookSourceBean.getRuleChapterUrl(), bookShelfBean.getNoteUrl());
             if (!isEmpty(result)) {
                 bookInfoBean.setChapterUrl(result);
