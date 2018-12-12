@@ -133,6 +133,9 @@ public class AnalyzeRule {
         if (!isEmpty(source.js)) {
             result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl);
         }
+        if (!isEmpty(_baseUrl)) {
+            result = NetworkUtil.getAbsoluteURL(_baseUrl, result);
+        }
         return result;
     }
 
