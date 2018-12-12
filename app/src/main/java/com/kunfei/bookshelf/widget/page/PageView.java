@@ -342,11 +342,7 @@ public class PageView extends View {
                         return true;
                     }
 
-                    if (isRunning()) {
-                        return true;
-                    }
-
-                    if (!readBookControl.getCanClickTurn()) {
+                    if (!readBookControl.getCanClickTurn() || isRunning()) {
                         return true;
                     }
 
