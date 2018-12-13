@@ -366,35 +366,35 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     private void setHint() {
-        tilBookSourceName.setHint("BookSourceName");
-        tilBookSourceUrl.setHint("BookSourceUrl");
-        tilBookSourceGroup.setHint("BookSourceGroup");
-        tilLoginUrl.setHint("LoginUrl");
-        tilCheckUrl.setHint("CheckUrl");
-        tilRuleBookAuthor.setHint("RuleBookAuthor");
-        tilRuleBookContent.setHint("RuleBookContent");
-        tilRuleBookName.setHint("RuleBookName");
-        tilRuleChapterList.setHint("RuleChapterList");
-        tilRuleChapterName.setHint("RuleChapterName");
-        tilRuleChapterUrl.setHint("RuleChapterUrl");
-        tilRuleChapterUrlNext.setHint("RuleChapterUrlNext");
-        tilRuleContentUrl.setHint("RuleContentUrl");
-        tilRuleCoverUrl.setHint("RuleCoverUrl");
-        tilRuleIntroduce.setHint("RuleIntroduce");
-        tilRuleSearchAuthor.setHint("RuleSearchAuthor");
-        tilRuleSearchCoverUrl.setHint("RuleSearchCoverUrl");
-        tilRuleSearchKind.setHint("RuleSearchKind");
-        tilRuleSearchLastChapter.setHint("RuleSearchLastChapter");
-        tilRuleSearchList.setHint("RuleSearchList");
-        tilRuleSearchName.setHint("RuleSearchName");
-        tilRuleSearchNoteUrl.setHint("RuleSearchNoteUrl");
-        tilRuleSearchUrl.setHint("RuleSearchUrl");
+        tilBookSourceName.setHint("书源名称");
+        tilBookSourceUrl.setHint("书源URL");
+        tilBookSourceGroup.setHint("书源分组");
+        tilLoginUrl.setHint("登陆URL");
+        tilCheckUrl.setHint("检测URL");
+        tilRuleBookAuthor.setHint("作者规则");
+        tilRuleBookContent.setHint("正文规则");
+        tilRuleBookName.setHint("书名规则");
+        tilRuleChapterList.setHint("目录列表规则");
+        tilRuleChapterName.setHint("章节名称规则");
+        tilRuleChapterUrl.setHint("目录URL规则");
+        tilRuleChapterUrlNext.setHint("章节列表下一页规则");
+        tilRuleContentUrl.setHint("章节URL规则");
+        tilRuleCoverUrl.setHint("封面规则");
+        tilRuleIntroduce.setHint("简介规则");
+        tilRuleSearchAuthor.setHint("搜索结果作者规则");
+        tilRuleSearchCoverUrl.setHint("搜索结果封面规则");
+        tilRuleSearchKind.setHint("搜索结果分类规则");
+        tilRuleSearchLastChapter.setHint("搜索结果最新章节规则");
+        tilRuleSearchList.setHint("搜索结果列表规则");
+        tilRuleSearchName.setHint("搜索结果书名规则");
+        tilRuleSearchNoteUrl.setHint("搜索结果书籍URL规则");
+        tilRuleSearchUrl.setHint("搜索地址");
         tilHttpUserAgent.setHint("HttpUserAgent");
-        tilRuleFindUrl.setHint("RuleFindUrl");
-        tilRuleContentUrlNext.setHint("RuleContentUrlNext");
-        tilRuleBookUrlPattern.setHint("RuleBookUrlPattern");
-        tilRuleBookKind.setHint("RuleBookKind");
-        tilRuleBookLastChapter.setHint("RuleBookLastChapter");
+        tilRuleFindUrl.setHint("发现规则");
+        tilRuleContentUrlNext.setHint("正文下一页URL规则");
+        tilRuleBookUrlPattern.setHint("书籍详情URL正则");
+        tilRuleBookKind.setHint("分类规则");
+        tilRuleBookLastChapter.setHint("最新章节规则");
     }
 
     @SuppressLint("SetWorldReadable")
