@@ -59,10 +59,10 @@ public class TxtChapter {
     }
 
     int getPageLength(int position) {
-        if (txtPageLengthList == null || position >= txtPageLengthList.size()) {
-            return -1;
+        if (txtPageLengthList != null && position >= 0 && position < txtPageLengthList.size()) {
+            return txtPageLengthList.get(position);
         }
-        return txtPageLengthList.get(position);
+        return -1;
     }
 
     void addTxtPageLength(int length) {
