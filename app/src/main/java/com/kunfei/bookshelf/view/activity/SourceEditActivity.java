@@ -366,35 +366,35 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     private void setHint() {
-        tilBookSourceName.setHint("书源名称");
-        tilBookSourceUrl.setHint("书源URL");
-        tilBookSourceGroup.setHint("书源分组");
-        tilLoginUrl.setHint("登陆URL");
-        tilCheckUrl.setHint("检测URL");
-        tilRuleBookAuthor.setHint("作者规则");
-        tilRuleBookContent.setHint("正文规则");
-        tilRuleBookName.setHint("书名规则");
-        tilRuleChapterList.setHint("目录列表规则");
-        tilRuleChapterName.setHint("章节名称规则");
-        tilRuleChapterUrl.setHint("目录URL规则");
-        tilRuleChapterUrlNext.setHint("章节列表下一页规则");
-        tilRuleContentUrl.setHint("章节URL规则");
-        tilRuleCoverUrl.setHint("封面规则");
-        tilRuleIntroduce.setHint("简介规则");
-        tilRuleSearchAuthor.setHint("搜索结果作者规则");
-        tilRuleSearchCoverUrl.setHint("搜索结果封面规则");
-        tilRuleSearchKind.setHint("搜索结果分类规则");
-        tilRuleSearchLastChapter.setHint("搜索结果最新章节规则");
-        tilRuleSearchList.setHint("搜索结果列表规则");
-        tilRuleSearchName.setHint("搜索结果书名规则");
-        tilRuleSearchNoteUrl.setHint("搜索结果书籍URL规则");
-        tilRuleSearchUrl.setHint("搜索地址");
-        tilHttpUserAgent.setHint("HttpUserAgent");
-        tilRuleFindUrl.setHint("发现规则");
-        tilRuleContentUrlNext.setHint("正文下一页URL规则");
-        tilRuleBookUrlPattern.setHint("书籍详情URL正则");
-        tilRuleBookKind.setHint("分类规则");
-        tilRuleBookLastChapter.setHint("最新章节规则");
+        tilBookSourceName.setHint(getString(R.string.book_source_name));
+        tilBookSourceUrl.setHint(getString(R.string.book_source_url));
+        tilBookSourceGroup.setHint(getString(R.string.book_source_group));
+        tilLoginUrl.setHint(getString(R.string.book_source_login_url));
+        tilCheckUrl.setHint(getString(R.string.book_source_check_url));
+        tilRuleBookAuthor.setHint(getString(R.string.rule_book_author));
+        tilRuleBookContent.setHint(getString(R.string.rule_book_content));
+        tilRuleBookName.setHint(getString(R.string.rule_book_name));
+        tilRuleChapterList.setHint(getString(R.string.rule_chapter_list));
+        tilRuleChapterName.setHint(getString(R.string.rule_chapter_name));
+        tilRuleChapterUrl.setHint(getString(R.string.rule_chapter_page_url));
+        tilRuleChapterUrlNext.setHint(getString(R.string.urle_chapter_url_next));
+        tilRuleContentUrl.setHint(getString(R.string.rule_content_url));
+        tilRuleCoverUrl.setHint(getString(R.string.rule_cover_url));
+        tilRuleIntroduce.setHint(getString(R.string.rule_introduce));
+        tilRuleSearchAuthor.setHint(getString(R.string.rule_search_author));
+        tilRuleSearchCoverUrl.setHint(getString(R.string.rule_search_cover_url));
+        tilRuleSearchKind.setHint(getString(R.string.rule_search_kind));
+        tilRuleSearchLastChapter.setHint(getString(R.string.rule_search_last_chapter));
+        tilRuleSearchList.setHint(getString(R.string.rule_search_list));
+        tilRuleSearchName.setHint(getString(R.string.rule_search_name));
+        tilRuleSearchNoteUrl.setHint(getString(R.string.rule_search_note_url));
+        tilRuleSearchUrl.setHint(getString(R.string.rule_search_url));
+        tilHttpUserAgent.setHint(getString(R.string.source_user_agent));
+        tilRuleFindUrl.setHint(getString(R.string.rule_find_url));
+        tilRuleContentUrlNext.setHint(getString(R.string.rule_content_url_next));
+        tilRuleBookUrlPattern.setHint(getString(R.string.book_url_pattern));
+        tilRuleBookKind.setHint(getString(R.string.rule_book_kind));
+        tilRuleBookLastChapter.setHint(getString(R.string.rule_book_last_chapter));
     }
 
     @SuppressLint("SetWorldReadable")
