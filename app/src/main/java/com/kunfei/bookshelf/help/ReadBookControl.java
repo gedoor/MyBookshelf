@@ -171,29 +171,23 @@ public class ReadBookControl {
 
     @SuppressWarnings("ConstantConditions")
     private void initPageStyle() {
-        try {
-            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-            if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
-                bgIsColor = false;
-                String bgPath = getBgPath(textDrawableIndex);
-                Resources resources = MApplication.getInstance().getResources();
-                DisplayMetrics dm = resources.getDisplayMetrics();
-                int width = dm.widthPixels;
-                int height = dm.heightPixels;
-                bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
-                return;
-            } else if (getBgCustom(textDrawableIndex) == 1) {
-                bgIsColor = true;
-                bgColor = getBgColor(textDrawableIndex);
-                return;
-            }
+        bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
+        if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
+            bgIsColor = false;
+            String bgPath = getBgPath(textDrawableIndex);
+            Resources resources = MApplication.getInstance().getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            int width = dm.widthPixels;
+            int height = dm.heightPixels;
+            bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
+            return;
+        } else if (getBgCustom(textDrawableIndex) == 1) {
             bgIsColor = true;
-            bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
-        } catch (Exception e) {
-            setBgCustom(textDrawableIndex, 0);
-            initTextDrawableIndex();
+            bgColor = getBgColor(textDrawableIndex);
+            return;
         }
-
+        bgIsColor = true;
+        bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
     }
 
     private void setTextDrawable() {
