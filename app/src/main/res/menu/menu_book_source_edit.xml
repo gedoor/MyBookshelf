@@ -39,6 +39,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_debug_source"
+        android:title="@string/debug_source"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_rule_summary"
         android:title="@string/rule_summary"
         app:showAsAction="never" />

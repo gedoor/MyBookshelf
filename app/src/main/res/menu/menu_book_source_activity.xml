@@ -91,10 +91,4 @@
         android:title="@string/check_book_source"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_debug_source"
-        android:icon="@drawable/ic_debug"
-        android:title="@string/debug_source"
-        app:showAsAction="never" />
-
 </menu>
