@@ -63,11 +63,14 @@ class BookList {
                     books.add(item);
                 } else {
                     e.onError(new Throwable("未获取到书名"));
+                    e.onComplete();
+                    return;
                 }
             } else {
                 AnalyzeCollection collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
                 if (collections.size() == 0) {
                     e.onError(new Throwable("搜索列表为空"));
+                    e.onComplete();
                     return;
                 }
                 while (collections.hasNext()){
@@ -89,7 +92,11 @@ class BookList {
                     }
                 }
             }
-
+            if (books.isEmpty()) {
+                e.onError(new Throwable("未获取到书名"));
+                e.onComplete();
+                return;
+            }
             e.onNext(books);
             e.onComplete();
         });
