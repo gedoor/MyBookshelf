@@ -78,11 +78,11 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         cancelDownload();
         isRunning = false;
         executor.shutdown();
         managerCompat.cancelAll();
+        super.onDestroy();
     }
 
     @Override
