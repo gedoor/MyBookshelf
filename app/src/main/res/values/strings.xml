@@ -295,14 +295,14 @@
     <string name="donate_s">此书源使用了高级功能，请到捐赠里点击支付宝红包搜索码领取红包开启。</string>
     <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
     <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
-    <string name="login">登陆</string>
-    <string name="login_source">登陆%s</string>
+    <string name="login">登录</string>
+    <string name="login_source">登录%s</string>
     <string name="success">成功</string>
     <string name="source_no_login">当前源没有配置登陆地址</string>
     <string name="book_source_name">书源名称</string>
     <string name="book_source_url">书源URL</string>
     <string name="book_source_group">书源分组</string>
-    <string name="book_source_login_url">登陆URL</string>
+    <string name="book_source_login_url">登录URL</string>
     <string name="book_source_check_url">检测URL</string>
     <string name="rule_book_author">作者规则</string>
     <string name="rule_book_content">正文规则</string>

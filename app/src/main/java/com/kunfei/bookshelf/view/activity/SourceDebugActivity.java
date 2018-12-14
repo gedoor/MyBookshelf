@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
@@ -37,8 +38,8 @@ public class SourceDebugActivity extends MBaseActivity {
     Toolbar toolbar;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
-    @BindView(R.id.ll_content)
-    LinearLayout llContent;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
 
     private String sourceUrl;
     private CompositeDisposable compositeDisposable;
@@ -87,6 +88,7 @@ public class SourceDebugActivity extends MBaseActivity {
      */
     @Override
     protected void initData() {
+        sourceUrl = getIntent().getStringExtra("sourceUrl");
         initSearchView();
     }
 
@@ -128,8 +130,8 @@ public class SourceDebugActivity extends MBaseActivity {
         if (TextUtils.isEmpty(sourceUrl)) return;
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
-            compositeDisposable = new CompositeDisposable();
         }
+        compositeDisposable = new CompositeDisposable();
         WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -140,12 +142,22 @@ public class SourceDebugActivity extends MBaseActivity {
 
                     @Override
                     public void onNext(List<SearchBookBean> searchBookBeans) {
-
+                        tvContent.setText("搜索列表获取成功");
+                        SearchBookBean searchBookBean = searchBookBeans.get(0);
+                        tvContent.setText(String.format("%s\n书名:%s", tvContent.getText(), searchBookBean.getName()));
+                        tvContent.setText(String.format("%s\n作者:%s", tvContent.getText(), searchBookBean.getAuthor()));
+                        tvContent.setText(String.format("%s\n分类:%s", tvContent.getText(), searchBookBean.getKind()));
+                        tvContent.setText(String.format("%s\n简介:%s", tvContent.getText(), searchBookBean.getOrigin()));
+                        tvContent.setText(String.format("%s\n最新章节:%s", tvContent.getText(), searchBookBean.getLastChapter()));
+                        tvContent.setText(String.format("%s\n书籍地址:%s", tvContent.getText(), searchBookBean.getNoteUrl()));
+                        if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
+                            bookInfoDebug(searchBookBean.getNoteUrl());
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        tvContent.setText(e.getMessage());
                     }
 
                     @Override
@@ -156,4 +168,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     }
 
+    private void bookInfoDebug(String noteUrl) {
+
+    }
 }
