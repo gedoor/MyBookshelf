@@ -328,5 +328,6 @@
     <string name="rule_book_kind">分类规则</string>
     <string name="rule_book_last_chapter">最新章节规则</string>
     <string name="source_user_agent">HttpUserAgent</string>
+    <string name="debug_source">调试书源</string>
 
 </resources>
