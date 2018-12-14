@@ -20,15 +20,6 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.bean.DownloadBookBean;
-import com.kunfei.bookshelf.bean.LocBookShelfBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.ImportBookModel;
-import com.kunfei.bookshelf.service.ReadAloudService;
-import com.kunfei.bookshelf.view.activity.ChapterListActivity;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -37,7 +28,6 @@ import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
@@ -46,7 +36,9 @@ import com.kunfei.bookshelf.model.ImportBookModel;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.DownloadService;
+import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -56,8 +48,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.kunfei.bookshelf.widget.modialog.ChangeSourceView.savedSource;
 
 public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> implements ReadBookContract.Presenter {
     public final static int OPEN_FROM_OTHER = 0;
@@ -154,6 +144,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             Observable.create((ObservableOnSubscribe<BookShelfBean>) e -> {
                 bookShelf.setFinalDate(System.currentTimeMillis());
                 bookShelf.upDurChapterName();
+                bookShelf.setHasUpdate(false);
                 BookshelfHelp.saveBookToShelf(bookShelf);
                 e.onNext(bookShelf);
                 e.onComplete();

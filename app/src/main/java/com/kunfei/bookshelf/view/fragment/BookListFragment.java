@@ -15,26 +15,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kunfei.bookshelf.base.MBaseFragment;
-import com.kunfei.bookshelf.presenter.BookDetailPresenter;
-import com.kunfei.bookshelf.presenter.BookListPresenter;
-import com.kunfei.bookshelf.presenter.ReadBookPresenter;
-import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.view.activity.BookDetailActivity;
-import com.kunfei.bookshelf.view.activity.ReadBookActivity;
-import com.kunfei.bookshelf.view.adapter.BookShelfAdapter;
-import com.kunfei.bookshelf.view.adapter.BookShelfGridAdapter;
-import com.kunfei.bookshelf.view.adapter.BookShelfListAdapter;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.BookListPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.view.activity.BookDetailActivity;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.adapter.BookShelfAdapter;
@@ -47,8 +37,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.kunfei.bookshelf.utils.NetworkUtil.isNetWorkAvailable;
 
 public class BookListFragment extends MBaseFragment<BookListContract.Presenter> implements BookListContract.View {
 
@@ -156,8 +144,6 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             @Override
             public void onClick(View view, int index) {
                 BookShelfBean bookShelfBean = bookShelfAdapter.getBooks().get(index);
-                bookShelfBean.setHasUpdate(false);
-                DbHelper.getInstance().getmDaoSession().getBookShelfBeanDao().insertOrReplace(bookShelfBean);
                 Intent intent = new Intent(getActivity(), ReadBookActivity.class);
                 intent.putExtra("openFrom", ReadBookPresenter.OPEN_FROM_APP);
                 String key = String.valueOf(System.currentTimeMillis());
