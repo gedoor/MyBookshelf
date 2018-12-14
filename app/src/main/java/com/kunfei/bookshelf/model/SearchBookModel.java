@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -16,6 +15,7 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -154,7 +154,7 @@ public class SearchBookModel {
                                             int searchTime = (int) (System.currentTimeMillis() - startTime) / 1000;
                                             temp.setSearchTime(searchTime);
                                             for (BookShelfBean bookShelfBean : bookShelfS) {
-                                                if (temp.getNoteUrl().equals(bookShelfBean.getNoteUrl())) {
+                                                if (Objects.equals(bookShelfBean.getNoteUrl(), temp.getNoteUrl())) {
                                                     temp.setIsCurrentSource(true);
                                                     break;
                                                 }
