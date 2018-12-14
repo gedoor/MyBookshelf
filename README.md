@@ -8,7 +8,9 @@
 **提交代码人员**
 - 大古队员 https://github.com/DaguDuiyuan
 - atbest https://github.com/atbest
-- ttydy https://github.com/ttydy
+
+**其它贡献人员**
+- 图标绘制 群管理员-新奥尔良烤鲟魚堡
 
 # 软件截图
 ![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook1.jpg)
