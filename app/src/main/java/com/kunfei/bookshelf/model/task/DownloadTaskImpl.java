@@ -4,12 +4,6 @@ import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.bean.DownloadBookBean;
-import com.kunfei.bookshelf.bean.DownloadChapterBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.impl.IDownloadTask;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
@@ -104,7 +98,7 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
     }
 
     @Override
-    public void startDownload(Scheduler scheduler, int threadsNum) {
+    public void startDownload(Scheduler scheduler) {
         if (isFinishing()) return;
 
         if (disposables.isDisposed()) {

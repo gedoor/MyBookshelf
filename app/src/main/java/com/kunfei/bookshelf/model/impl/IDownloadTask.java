@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.model.impl;
 
-import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.DownloadChapterBean;
 
@@ -10,7 +9,7 @@ public interface IDownloadTask {
 
     int getId();
 
-    void startDownload(Scheduler scheduler, int threadsNum);
+    void startDownload(Scheduler scheduler);
 
     void stopDownload();
 
