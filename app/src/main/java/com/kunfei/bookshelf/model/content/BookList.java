@@ -61,6 +61,8 @@ class BookList {
                     item.setKind(analyzer.getString(bookSourceBean.getRuleBookKind()));
                     item.setLastChapter(analyzer.getString(bookSourceBean.getRuleBookLastChapter()));
                     books.add(item);
+                } else {
+                    e.onError(new Throwable("未获取到书名"));
                 }
             } else {
                 AnalyzeCollection collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
