@@ -112,6 +112,10 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
 
     @Override
     public void stopDownload() {
+        if (!disposables.isDisposed()) {
+            disposables.dispose();
+        }
+
         if (isDownloading) {
             isDownloading = false;
             onDownloadComplete(downloadBook);
@@ -121,9 +125,6 @@ public abstract class DownloadTaskImpl implements IDownloadTask {
             downloadChapters.clear();
         }
 
-        if (!disposables.isDisposed()) {
-            disposables.dispose();
-        }
     }
 
     @Override

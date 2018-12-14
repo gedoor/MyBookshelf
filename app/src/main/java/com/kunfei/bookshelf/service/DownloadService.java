@@ -79,6 +79,7 @@ public class DownloadService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        cancelDownload();
         isRunning = false;
         executor.shutdown();
         managerCompat.cancelAll();
@@ -103,7 +104,7 @@ public class DownloadService extends Service {
                         removeDownload(noteUrl);
                         break;
                     case cancelAction:
-                        cancelDownload();
+                        finishSelf();
                         break;
                     case obtainDownloadListAction:
                         refreshDownloadList();
@@ -174,7 +175,6 @@ public class DownloadService extends Service {
             IDownloadTask downloadTask = downloadTasks.valueAt(i);
             downloadTask.stopDownload();
         }
-        finishSelf();
     }
 
     private void removeDownload(String noteUrl) {
