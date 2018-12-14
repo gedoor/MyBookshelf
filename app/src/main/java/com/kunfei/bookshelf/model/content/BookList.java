@@ -64,6 +64,10 @@ class BookList {
                 }
             } else {
                 AnalyzeCollection collections = analyzer.getElements(bookSourceBean.getRuleSearchList());
+                if (collections.size() == 0) {
+                    e.onError(new Throwable("搜索列表为空"));
+                    return;
+                }
                 while (collections.hasNext()){
                     AnalyzeRule anaer = collections.next();
                     String bookName = anaer.getString(bookSourceBean.getRuleSearchName());
