@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 /**
- * Created by newbiechen on 17-7-24.
  * 横向动画的模板
  */
 
 public abstract class HorizonPageAnim extends PageAnimation {
     private static final String TAG = "HorizonPageAnim";
-    protected Bitmap mPreBitmap;
-    protected Bitmap mCurBitmap;
-    protected Bitmap mNextBitmap;
+    Bitmap mPreBitmap;
+    Bitmap mCurBitmap;
+    Bitmap mNextBitmap;
     //是否取消翻页
-    protected boolean isCancel = false;
+    boolean isCancel = false;
 
     //可以使用 mLast代替
     private int mMoveX = 0;
