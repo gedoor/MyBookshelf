@@ -149,6 +149,10 @@
         <activity android:name=".view.activity.SourceLoginActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
+        <activity
+            android:name=".view.activity.SourceDebugActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />
