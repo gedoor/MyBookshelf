@@ -15,16 +15,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.help.Constant;
-import com.kunfei.bookshelf.help.ReadBookControl;
-import com.kunfei.bookshelf.service.ReadAloudService;
-import com.kunfei.bookshelf.utils.RxUtils;
-import com.kunfei.bookshelf.utils.ScreenUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
@@ -794,6 +784,9 @@ public abstract class PageLoader {
         }
     }
 
+    /**
+     * 滚动模式绘制背景
+     */
     void drawBackground(Canvas canvas) {
         if (mCurChapter == null) {
             mCurChapter = new TxtChapter(mCurChapterPos);
@@ -801,6 +794,9 @@ public abstract class PageLoader {
         drawBackground(canvas, mCurChapter, mCurChapter.getPage(mCurPagePos));
     }
 
+    /**
+     * 横翻模式绘制背景
+     */
     private synchronized void drawBackground(Bitmap bitmap, TxtChapter txtChapter, TxtPage txtPage) {
         if (bitmap == null) return;
         Canvas canvas = new Canvas(bitmap);
