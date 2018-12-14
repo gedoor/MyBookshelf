@@ -171,7 +171,6 @@ public class ReadBookControl {
 
     @SuppressWarnings("ConstantConditions")
     private void initPageStyle() {
-        bgColor = textDrawable.get(textDrawableIndex).get("textBackground");
         if (getBgCustom(textDrawableIndex) == 2 && getBgPath(textDrawableIndex) != null) {
             bgIsColor = false;
             String bgPath = getBgPath(textDrawableIndex);
