@@ -6,13 +6,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.ReplaceRuleManager;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-import com.kunfei.bookshelf.utils.XmlUtils;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
@@ -112,7 +105,9 @@ public class DataBackup {
                     .create();
             String bookshelf = gson.toJson(bookShelfList);
             DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookShelf.json", file);
-            DocumentHelper.writeString(bookshelf, docFile);
+            if (docFile != null) {
+                DocumentHelper.writeString(bookshelf, docFile);
+            }
         }
         BookshelfHelp.getAllBook();
     }
@@ -126,7 +121,9 @@ public class DataBackup {
                     .create();
             String str = gson.toJson(bookSourceList);
             DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookSource.json", file);
-            DocumentHelper.writeString(str, docFile);
+            if (docFile != null) {
+                DocumentHelper.writeString(str, docFile);
+            }
         }
     }
 
@@ -140,7 +137,9 @@ public class DataBackup {
                     .create();
             String str = gson.toJson(searchHistoryBeans);
             DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookSearchHistory.json", file);
-            DocumentHelper.writeString(str, docFile);
+            if (docFile != null) {
+                DocumentHelper.writeString(str, docFile);
+            }
         }
     }
 
@@ -153,21 +152,14 @@ public class DataBackup {
                     .create();
             String str = gson.toJson(replaceRuleBeans);
             DocumentFile docFile = DocumentHelper.createFileIfNotExist("myBookReplaceRule.json", file);
-            DocumentHelper.writeString(str, docFile);
+            if (docFile != null) {
+                DocumentHelper.writeString(str, docFile);
+            }
         }
     }
 
     private void backupConfig(String file) {
         SharedPreferences pref = MApplication.getInstance().getConfigPreferences();
-        /*
-        DocumentFile docFile = DocumentHelper.createFileIfNotExist("config.json", file);
-        Gson gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setPrettyPrinting()
-                .create();
-        String json = gson.toJson(pref.getAll());
-        DocumentHelper.writeString(json, docFile);
-        */
         try (FileOutputStream out = new FileOutputStream(file + "/config.xml")) {
             XmlUtils.writeMapXml(pref.getAll(), out);
         } catch (Exception e) {
