@@ -58,14 +58,16 @@ public class FileHelp {
     //获取Cache文件夹
     public static String getCachePath() {
         if (isSdCardExist()) {
-            return MApplication.getInstance()
-                    .getExternalCacheDir()
-                    .getAbsolutePath();
-        } else {
-            return MApplication.getInstance()
-                    .getCacheDir()
-                    .getAbsolutePath();
+            try {
+                return MApplication.getInstance()
+                        .getExternalCacheDir()
+                        .getAbsolutePath();
+            } catch (Exception ignored) {
+            }
         }
+        return MApplication.getInstance()
+                .getCacheDir()
+                .getAbsolutePath();
     }
 
     public static long getDirSize(File file) {
