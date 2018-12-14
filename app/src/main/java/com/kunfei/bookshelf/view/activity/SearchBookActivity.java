@@ -24,13 +24,6 @@ import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.presenter.SearchBookPresenter;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
-import com.kunfei.bookshelf.widget.refreshview.OnLoadMoreListener;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -67,7 +60,6 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
-    private Menu menu;
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;

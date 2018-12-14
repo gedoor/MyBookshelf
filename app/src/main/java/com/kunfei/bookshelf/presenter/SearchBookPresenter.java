@@ -9,10 +9,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
@@ -92,6 +88,7 @@ public class SearchBookPresenter extends BasePresenterImpl<SearchBookContract.Vi
             @Override
             public void searchBookError(Boolean value) {
                 mView.searchBookError(value);
+                searchBookModel.stopSearch();
             }
 
             @Override
