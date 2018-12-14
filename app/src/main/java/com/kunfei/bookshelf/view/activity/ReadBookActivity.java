@@ -106,7 +106,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     private Animation menuBottomOut;
     private ActionBar actionBar;
     private PageLoader mPageLoader;
-    private Handler mHandler;
+    private Handler mHandler  = new Handler();
     private Runnable autoPageRunnable;
     private Runnable keepScreenRunnable;
     private Runnable upHpbNextPage;
@@ -141,7 +141,6 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         readBookControl.initTextDrawableIndex();
         super.onCreate(savedInstanceState);
         screenTimeOut = getResources().getIntArray(R.array.screen_time_out_value)[readBookControl.getScreenTimeOut()];
-        mHandler = new Handler();
         keepScreenRunnable = this::unKeepScreenOn;
         autoPageRunnable = this::nextPage;
         upHpbNextPage = this::upHpbNextPage;
