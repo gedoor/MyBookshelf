@@ -93,7 +93,7 @@ public class SourceDebugActivity extends MBaseActivity {
             public boolean onQueryTextSubmit(String query) {
                 if (TextUtils.isEmpty(query))
                     return false;
-
+                startDebug(query);
                 return true;
             }
 
@@ -102,6 +102,10 @@ public class SourceDebugActivity extends MBaseActivity {
                 return false;
             }
         });
+    }
+
+    private void startDebug(String key) {
+
     }
 
 }
