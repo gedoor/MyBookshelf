@@ -180,7 +180,9 @@ public class ReadBookControl {
             int width = dm.widthPixels;
             int height = dm.heightPixels;
             bgBitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
-            return;
+            if (bgBitmap != null) {
+                return;
+            }
         } else if (getBgCustom(textDrawableIndex) == 1) {
             bgIsColor = true;
             bgColor = getBgColor(textDrawableIndex);
@@ -323,6 +325,9 @@ public class ReadBookControl {
     }
 
     public Drawable getTextBackground(Context context) {
+        if (bgIsColor) {
+            return new ColorDrawable(bgColor);
+        }
         return new BitmapDrawable(context.getResources(), bgBitmap);
     }
 
