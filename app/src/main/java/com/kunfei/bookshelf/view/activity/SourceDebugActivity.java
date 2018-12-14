@@ -15,9 +15,17 @@ import android.widget.LinearLayout;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.bean.SearchBookBean;
+import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.utils.RxUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class SourceDebugActivity extends MBaseActivity {
 
@@ -32,7 +40,11 @@ public class SourceDebugActivity extends MBaseActivity {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
 
+    private String sourceUrl;
+    private CompositeDisposable compositeDisposable;
+
     public static void startThis(Context context, String sourceUrl) {
+        if (TextUtils.isEmpty(sourceUrl)) return;
         Intent intent = new Intent(context, SourceDebugActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("sourceUrl", sourceUrl);
@@ -50,6 +62,14 @@ public class SourceDebugActivity extends MBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
     }
 
     /**
@@ -105,6 +125,34 @@ public class SourceDebugActivity extends MBaseActivity {
     }
 
     private void startDebug(String key) {
+        if (TextUtils.isEmpty(sourceUrl)) return;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = new CompositeDisposable();
+        }
+        WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Observer<List<SearchBookBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<SearchBookBean> searchBookBeans) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 
