@@ -34,9 +34,25 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tv_content"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp" />
+
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/loading"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="6dp"
+            android:layout_gravity="center_horizontal"
+            app:loading_color="@color/colorAccent"
+            app:loading_width="2dp"
+            tools:ignore="RtlHardcoded" />
+    </FrameLayout>
 
 </LinearLayout>

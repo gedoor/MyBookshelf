@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.util.List;
 
@@ -27,11 +28,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public class SourceDebugActivity extends MBaseActivity {
-
-    @BindView(R.id.searchView)
-    SearchView searchView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.searchView)
+    SearchView searchView;
+    @BindView(R.id.loading)
+    RotateLoading loading;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
     @BindView(R.id.tv_content)
@@ -135,6 +137,7 @@ public class SourceDebugActivity extends MBaseActivity {
             compositeDisposable.dispose();
         }
         compositeDisposable = new CompositeDisposable();
+        loading.start();
         WebBookModel.getInstance().searchOtherBook(key, 1, sourceUrl)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<List<SearchBookBean>>() {
@@ -155,12 +158,15 @@ public class SourceDebugActivity extends MBaseActivity {
                         tvContent.setText(String.format("%s\n书籍地址:%s", tvContent.getText(), searchBookBean.getNoteUrl()));
                         if (!TextUtils.isEmpty(searchBookBean.getNoteUrl())) {
                             bookInfoDebug(searchBookBean.getNoteUrl());
+                        } else {
+                            loading.stop();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         tvContent.setText(e.getMessage());
+                        loading.stop();
                     }
 
                     @Override
