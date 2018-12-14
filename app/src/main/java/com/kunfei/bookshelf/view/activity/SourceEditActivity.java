@@ -247,12 +247,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         setText(bookSourceBean);
     }
 
-    private void saveBookSource() {
+    private boolean saveBookSource() {
         if (isEmpty(trim(tieBookSourceName.getText())) || isEmpty(trim(tieBookSourceUrl.getText()))) {
             toast("书源名称和URL不能为空", ERROR);
-            return;
+            return false;
         }
         mPresenter.saveSource(getBookSource(), bookSourceBean);
+        return true;
     }
 
     @Override
@@ -485,6 +486,11 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 break;
             case R.id.action_rule_summary:
                 openRuleSummary();
+                break;
+            case R.id.action_debug_source:
+                if (saveBookSource()) {
+                    SourceDebugActivity.startThis(this, getBookSource().getBookSourceUrl());
+                }
                 break;
             case android.R.id.home:
                 SoftInputUtil.hideIMM(this, getCurrentFocus());

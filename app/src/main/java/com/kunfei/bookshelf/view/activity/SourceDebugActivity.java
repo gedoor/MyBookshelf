@@ -1,5 +1,7 @@
 package com.kunfei.bookshelf.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.CardView;
@@ -29,6 +31,13 @@ public class SourceDebugActivity extends MBaseActivity {
     AppBarLayout actionBar;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
+
+    public static void startThis(Context context, String sourceUrl) {
+        Intent intent = new Intent(context, SourceDebugActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("sourceUrl", sourceUrl);
+        context.startActivity(intent);
+    }
 
     /**
      * P层绑定   若无则返回null;
