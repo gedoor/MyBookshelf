@@ -283,7 +283,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
             bookShelfBean.setHasUpdate(false);
             bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
             bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
-            bookShelfBean.setDurChapterName(bookShelfBean.getChapterList(bookShelfBean.getDurChapter()).getDurChapterName());
+            bookShelfBean.setDurChapterName(bookShelfBean.getChapter(bookShelfBean.getDurChapter()).getDurChapterName());
             bookShelfBean.setGroup(bookShelf.getGroup());
             BookshelfHelp.removeFromBookShelf(bookShelf, true);
             BookshelfHelp.saveBookToShelf(bookShelfBean);

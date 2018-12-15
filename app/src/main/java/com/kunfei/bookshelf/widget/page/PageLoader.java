@@ -360,7 +360,7 @@ public abstract class PageLoader {
      */
     @SuppressLint("DefaultLocale")
     public void refreshDurChapter() {
-        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()), mCurChapterPos, bookShelfBean.getChapterList(mCurChapterPos).getDurChapterName());
+        BookshelfHelp.delChapter(BookshelfHelp.getCachePathName(bookShelfBean.getBookInfoBean()), mCurChapterPos, bookShelfBean.getChapter(mCurChapterPos).getDurChapterName());
         skipToChapter(mCurChapterPos, 0);
     }
 
@@ -819,7 +819,7 @@ public abstract class PageLoader {
         if (canvas == null) return;
 
         if (!bookShelfBean.getChapterList().isEmpty()) {
-            String title = isChapterListPrepare ? bookShelfBean.getChapterList(txtChapter.getPosition()).getDurChapterName() : "";
+            String title = isChapterListPrepare ? bookShelfBean.getChapter(txtChapter.getPosition()).getDurChapterName() : "";
             title = ChapterContentHelp.getInstance().replaceContent(bookShelfBean.getBookInfoBean().getName(), bookShelfBean.getTag(), title);
             String page = (txtChapter.getStatus() != TxtChapter.Status.FINISH || txtPage == null) ? ""
                     : String.format("%d/%d", txtPage.position + 1, txtChapter.getPageSize());
@@ -1369,7 +1369,7 @@ public abstract class PageLoader {
         if (mCurChapter.getStatus() != TxtChapter.Status.FINISH) {
             Single.create((SingleOnSubscribe<TxtChapter>) e -> {
                 ChapterProvider chapterProvider = new ChapterProvider(this);
-                TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(mCurChapterPos), mPageView.isPrepare());
+                TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(mCurChapterPos), mPageView.isPrepare());
                 e.onSuccess(txtChapter);
             })
                     .compose(RxUtils::toSimpleSingle)
@@ -1413,7 +1413,7 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(prevChapterPos), mPageView.isPrepare());
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(prevChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)
@@ -1454,7 +1454,7 @@ public abstract class PageLoader {
         }
         Single.create((SingleOnSubscribe<TxtChapter>) e -> {
             ChapterProvider chapterProvider = new ChapterProvider(this);
-            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapterList(nextChapterPos), mPageView.isPrepare());
+            TxtChapter txtChapter = chapterProvider.dealLoadPageList(bookShelfBean.getChapter(nextChapterPos), mPageView.isPrepare());
             e.onSuccess(txtChapter);
         })
                 .compose(RxUtils::toSimpleSingle)

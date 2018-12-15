@@ -13,11 +13,6 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.bean.DownloadBookBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -94,7 +89,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
                 if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && (!onlyNew || bookShelfBean.getHasUpdate())) {
                     int chapterNum = bookShelfBean.getChapterListSize();
                     for (int start = bookShelfBean.getDurChapter(); start < chapterNum; start++) {
-                        if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapterList(start))
+                        if (!BookshelfHelp.isChapterCached(bookShelfBean.getBookInfoBean(), bookShelfBean.getChapter(start))
                                 && start < chapterNum - 1) {
                             DownloadBookBean downloadBook = new DownloadBookBean();
                             downloadBook.setName(bookShelfBean.getBookInfoBean().getName());

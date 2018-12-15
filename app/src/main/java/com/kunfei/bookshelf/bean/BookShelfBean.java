@@ -173,21 +173,6 @@ public class BookShelfBean implements Parcelable, Cloneable {
         return durChapter < 0 ? 0 : durChapter;
     }
 
-    public ChapterListBean getChapterList(int index) {
-
-        if (getChapterList() == null || getChapterList().size() == 0 || index < 0) {
-            ChapterListBean chapterListBean = new ChapterListBean();
-            chapterListBean.setDurChapterName("暂无");
-            chapterListBean.setDurChapterUrl("暂无");
-            return chapterListBean;
-        } else if (index < getChapterList().size()) {
-            return getChapterList().get(index);
-        } else {
-            durChapter = getChapterList().size() - 1;
-            return getChapterList().get(getChapterList().size() - 1);
-        }
-    }
-
     public List<ChapterListBean> getChapterList() {
         return getBookInfoBean().getChapterList();
     }

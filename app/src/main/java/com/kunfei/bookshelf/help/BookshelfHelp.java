@@ -176,8 +176,8 @@ public class BookshelfHelp {
         if (oldChapterSize == 0)
             return 0;
         int oldChapterIndex = oldBook.getDurChapter();
-        int oldChapterNum = oldBook.getChapterList(oldBook.getDurChapter()).getChapterNum();
-        String oldName = oldBook.getChapterList(oldBook.getDurChapter()).getPureChapterName();
+        int oldChapterNum = oldBook.getChapter(oldBook.getDurChapter()).getChapterNum();
+        String oldName = oldBook.getChapter(oldBook.getDurChapter()).getPureChapterName();
         int newChapterSize = newBook.getChapterListSize();
         int min = Math.max(0, Math.min(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) - 10);
         int max = Math.min(newChapterSize - 1, Math.max(oldChapterIndex, oldChapterIndex - oldChapterSize + newChapterSize) + 10);
@@ -187,7 +187,7 @@ public class BookshelfHelp {
         if (!oldName.isEmpty()) {
             StringSimilarityService service = new StringSimilarityServiceImpl(new JaroWinklerStrategy());
             for (int i = min; i <= max; i++) {
-                String newName = newBook.getChapterList(i).getPureChapterName();
+                String newName = newBook.getChapter(i).getPureChapterName();
                 double temp = service.score(oldName, newName);
                 if (temp > nameSim) {
                     nameSim = temp;
@@ -197,7 +197,7 @@ public class BookshelfHelp {
         }
         if (nameSim < 0.96 && oldChapterNum > 0) {
             for (int i = min; i <= max; i++) {
-                int temp = newBook.getChapterList(i).getChapterNum();
+                int temp = newBook.getChapter(i).getChapterNum();
                 if (temp == oldChapterNum) {
                     newNum = temp;
                     newIndex = i;

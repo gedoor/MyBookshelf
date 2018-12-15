@@ -3,15 +3,13 @@ package com.kunfei.bookshelf.widget.page;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.WebBookModel;
+import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.io.File;
@@ -27,8 +25,6 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.kunfei.bookshelf.utils.NetworkUtil.isNetWorkAvailable;
 
 /**
  * 网络页面加载器
@@ -97,17 +93,17 @@ public class PageLoaderNet extends PageLoader {
     @SuppressLint("DefaultLocale")
     private synchronized void loadContent(final int chapterIndex) {
         if (downloadingChapterList.size() >= 20) return;
-        if (DownloadingList(listHandle.CHECK, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl()))
+        if (DownloadingList(listHandle.CHECK, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl()))
             return;
         if (null != bookShelfBean && bookShelfBean.getChapterList().size() > 0) {
             Observable.create((ObservableOnSubscribe<Integer>) e -> {
                 if (shouldRequestChapter(chapterIndex)) {
-                    DownloadingList(listHandle.ADD, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl());
+                    DownloadingList(listHandle.ADD, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl());
                     e.onNext(chapterIndex);
                 }
                 e.onComplete();
             })
-                    .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, bookShelfBean.getChapterList(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
+                    .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
@@ -115,7 +111,7 @@ public class PageLoaderNet extends PageLoader {
                             compositeDisposable.add(d);
                             handler.postDelayed(() -> {
                                 if (!d.isDisposed() && bookShelfBean != null) {
-                                    DownloadingList(listHandle.REMOVE, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl());
+                                    DownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl());
                                     d.dispose();
                                 }
                             }, 30 * 1000);
@@ -130,7 +126,7 @@ public class PageLoaderNet extends PageLoader {
 
                         @Override
                         public void onError(Throwable e) {
-                            DownloadingList(listHandle.REMOVE, bookShelfBean.getChapterList(chapterIndex).getDurChapterUrl());
+                            DownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl());
                             if (chapterIndex == mCurChapterPos) {
                                 chapterError(e.getMessage());
                             }
@@ -192,7 +188,7 @@ public class PageLoaderNet extends PageLoader {
     }
 
     private boolean shouldRequestChapter(Integer chapterIndex) {
-        return NetworkUtil.isNetWorkAvailable() && noChapterData(bookShelfBean.getChapterList(chapterIndex));
+        return NetworkUtil.isNetWorkAvailable() && noChapterData(bookShelfBean.getChapter(chapterIndex));
     }
 
     // 装载上一章节的内容

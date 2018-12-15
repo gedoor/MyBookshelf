@@ -615,7 +615,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().upLastChapterName();
                         actionBar.setTitle(mPresenter.getBookShelf().getBookInfoBean().getName());
                         if (mPresenter.getBookShelf().getChapterListSize() > 0) {
-                            atvUrl.setText(mPresenter.getBookShelf().getChapterList(pos).getDurChapterUrl());
+                            atvUrl.setText(mPresenter.getBookShelf().getChapter(pos).getDurChapterUrl());
                         } else {
                             atvUrl.setText("");
                         }

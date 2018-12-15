@@ -10,10 +10,6 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -23,14 +19,13 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
+import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.kunfei.bookshelf.widget.modialog.ChangeSourceView.savedSource;
 
 public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
     public final static int FROM_BOOKSHELF = 1;
@@ -226,7 +221,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
             }
             bookShelfBean.setCustomCoverPath(bookShelf.getCustomCoverPath());
             bookShelfBean.setDurChapter(BookshelfHelp.getDurChapter(bookShelf, bookShelfBean));
-            bookShelfBean.setDurChapterName(bookShelfBean.getChapterList(bookShelfBean.getDurChapter()).getDurChapterName());
+            bookShelfBean.setDurChapterName(bookShelfBean.getChapter(bookShelfBean.getDurChapter()).getDurChapterName());
             bookShelfBean.setGroup(bookShelf.getGroup());
             BookshelfHelp.removeFromBookShelf(bookShelf);
             BookshelfHelp.saveBookToShelf(bookShelfBean);
