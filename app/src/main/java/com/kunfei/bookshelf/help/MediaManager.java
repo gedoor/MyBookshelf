@@ -93,9 +93,12 @@ public class MediaManager {
     }
 
     public static void playSilentSound(Context mContext) {
-        // Stupid Android 8 "Oreo" hack to make media buttons work
-        final MediaPlayer mMediaPlayer = MediaPlayer.create(mContext, R.raw.silent_sound);
-        mMediaPlayer.setOnCompletionListener(mediaPlayer -> mMediaPlayer.release());
-        mMediaPlayer.start();
+        try {
+            // Stupid Android 8 "Oreo" hack to make media buttons work
+            final MediaPlayer mMediaPlayer = MediaPlayer.create(mContext, R.raw.silent_sound);
+            mMediaPlayer.setOnCompletionListener(mediaPlayer -> mMediaPlayer.release());
+            mMediaPlayer.start();
+        } catch (Exception ignored) {
+        }
     }
 }
