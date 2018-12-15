@@ -309,8 +309,8 @@
     <string name="rule_book_name">书名规则</string>
     <string name="rule_chapter_list">目录列表规则</string>
     <string name="rule_chapter_name">章节名称规则</string>
-    <string name="rule_chapter_page_url">目录URL规则</string>
-    <string name="urle_chapter_url_next">章节列表下一页规则</string>
+    <string name="rule_chapter_list_url">目录URL规则</string>
+    <string name="rule_chapter_list_url_next">目录下一页规则</string>
     <string name="rule_content_url">章节URL规则</string>
     <string name="rule_cover_url">封面规则</string>
     <string name="rule_introduce">简介规则</string>
