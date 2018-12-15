@@ -23,116 +23,128 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/iv_cover"
-            android:layout_width="90dp"
-            android:layout_height="126dp"
-            android:contentDescription="@string/img_cover"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_cover_default" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_book_name"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="bookName">
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <com.kunfei.bookshelf.widget.CoverImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="90dp"
+                    android:layout_height="126dp"
+                    android:contentDescription="@string/img_cover"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_cover_default" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_book_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/book_name">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/tie_book_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_book_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/author">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/tie_book_author"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_cover_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="@string/cover_path">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/tie_book_name"
+                    android:id="@+id/tie_cover_url"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true" />
+                    android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_book_author"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="bookAuthor">
+                android:orientation="horizontal"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp">
+
+                <TextView
+                    android:id="@+id/tv_select_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_pop_font_bg"
+                    android:padding="5dp"
+                    android:text="选择本地图片" />
+
+                <TextView
+                    android:id="@+id/tv_change_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/selector_pop_font_bg"
+                    android:padding="5dp"
+                    android:text="封面换源"
+                    tools:ignore="RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/tv_refresh_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/selector_pop_font_bg"
+                    android:padding="5dp"
+                    android:text="刷新封面"
+                    tools:ignore="RtlHardcoded" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_book_jj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="@string/book_intro">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/tie_book_author"
+                    android:id="@+id/tie_book_jj"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true" />
+                    android:layout_height="wrap_content" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
-    </LinearLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_cover_url"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="coverUrl">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/tie_cover_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingEnd="5dp"
-        android:paddingStart="5dp">
-
-        <TextView
-            android:id="@+id/tv_select_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_pop_font_bg"
-            android:padding="5dp"
-            android:text="选择本地图片" />
-
-        <TextView
-            android:id="@+id/tv_change_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/selector_pop_font_bg"
-            android:padding="5dp"
-            android:text="封面换源"
-            tools:ignore="RtlHardcoded" />
-
-        <TextView
-            android:id="@+id/tv_refresh_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/selector_pop_font_bg"
-            android:padding="5dp"
-            android:text="刷新封面"
-            tools:ignore="RtlHardcoded" />
-
-    </LinearLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_book_jj"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="简介">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/tie_book_jj"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
-
+    </ScrollView>
 </LinearLayout>

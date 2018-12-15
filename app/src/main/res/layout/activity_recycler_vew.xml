@@ -31,7 +31,7 @@
         android:layout_height="match_parent"
         android:background="@color/background">
 
-        <com.monke.monkeybook.widget.refreshview.scroller.FastScrollRecyclerView
+        <com.kunfei.bookshelf.widget.refreshview.scroller.FastScrollRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

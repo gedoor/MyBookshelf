@@ -5,14 +5,14 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_ImmersionStatusBar"
-        android:title="@string/immersion_status_bar"
-        android:summary="@string/status_bar_immersion"/>
+        android:summary="@string/status_bar_immersion"
+        android:title="@string/immersion_status_bar" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pk_navigationBarColorChange"
-        android:title="@string/navigation_bar_color_change"
-        android:summary="@string/navigation_bar_color_change_s"/>
+        android:summary="@string/navigation_bar_color_change_s"
+        android:title="@string/navigation_bar_color_change" />
 
     <ListPreference
         android:defaultValue="0"
@@ -37,9 +37,9 @@
         android:defaultValue="false"
         android:key="@string/pk_default_read"
         android:summary="@string/ps_default_read"
-        android:title="@string/pt_default_read"/>
+        android:title="@string/pt_default_read" />
 
-    <com.monke.monkeybook.widget.number.NumberPickerPreference
+    <com.kunfei.bookshelf.widget.number.NumberPickerPreference
         android:defaultValue="6"
         android:key="@string/pk_threads_num"
         android:summary="@string/threads_num"
@@ -57,10 +57,15 @@
         android:defaultValue="true"
         android:key="showAllFind"
         android:summary="@string/ps_show_all_find"
-        android:title="@string/pt_show_all_find"/>
+        android:title="@string/pt_show_all_find" />
 
     <Preference
         android:key="@string/pk_download_path"
         android:title="@string/download_path" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="upChangeSourceLastChapter"
+        android:summary="@string/up_change_source_last_chapter_s"
+        android:title="@string/up_change_source_last_chapter_t" />
 </PreferenceScreen>

@@ -9,6 +9,11 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_login"
+        android:title="@string/login"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_share_it"
         android:title="@string/share"
         app:showAsAction="never" />
@@ -31,6 +36,11 @@
     <item
         android:id="@+id/action_qr_code_image"
         android:title="@string/scan_image"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_debug_source"
+        android:title="@string/debug_source"
         app:showAsAction="never" />
 
     <item

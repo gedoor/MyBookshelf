@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">阅读</string>
+    <string name="bookshelf">书架</string>
     <string name="last_read">最后阅读</string>
     <string name="read_summary">让阅读成为一种习惯。</string>
     <string name="update_log">更新日志</string>
@@ -30,7 +31,7 @@
     <string name="net_error_10003">数据解析失败</string>
     <string name="origin_format">来源: %s</string>
     <string name="read_dur_progress">最近: %s</string>
-    <string name="tv_book_name">《%s》</string>
+    <string name="book_name">书名</string>
     <string name="book_search_last">最新: %s</string>
     <string name="check_add_bookshelf">是否将《%s》放入书架？</string>
     <string name="import_books_count">共%s个Text文件</string>
@@ -285,5 +286,48 @@
     <string name="navigation_bar_color_change_s">导航栏根据夜间模式变化</string>
     <string name="add_to_shelf">放入书架</string>
     <string name="continue_read">继续阅读</string>
+    <string name="cover_path">封面地址</string>
+    <string name="page_mode_COVER">覆盖</string>
+    <string name="page_mode_SIMULATION">仿真</string>
+    <string name="page_mode_SLIDE">滑动</string>
+    <string name="page_mode_SCROLL">滚动</string>
+    <string name="page_mode_NONE">无动画</string>
+    <string name="donate_s">此书源使用了高级功能，请到捐赠里点击支付宝红包搜索码领取红包开启。</string>
+    <string name="up_change_source_last_chapter_t">后台更新换源最新章节</string>
+    <string name="up_change_source_last_chapter_s">开启则会在软件打开1分钟后开始更新</string>
+    <string name="login">登录</string>
+    <string name="login_source">登录%s</string>
+    <string name="success">成功</string>
+    <string name="source_no_login">当前源没有配置登陆地址</string>
+    <string name="book_source_name">书源名称</string>
+    <string name="book_source_url">书源URL</string>
+    <string name="book_source_group">书源分组</string>
+    <string name="book_source_login_url">登录URL</string>
+    <string name="book_source_check_url">检测URL</string>
+    <string name="rule_book_author">作者规则</string>
+    <string name="rule_book_content">正文规则</string>
+    <string name="rule_book_name">书名规则</string>
+    <string name="rule_chapter_list">目录列表规则</string>
+    <string name="rule_chapter_name">章节名称规则</string>
+    <string name="rule_chapter_page_url">目录URL规则</string>
+    <string name="urle_chapter_url_next">章节列表下一页规则</string>
+    <string name="rule_content_url">章节URL规则</string>
+    <string name="rule_cover_url">封面规则</string>
+    <string name="rule_introduce">简介规则</string>
+    <string name="rule_search_author">搜索结果作者规则</string>
+    <string name="rule_search_cover_url">搜索结果封面规则</string>
+    <string name="rule_search_kind">搜索结果分类规则</string>
+    <string name="rule_search_last_chapter">搜索结果最新章节规则</string>
+    <string name="rule_search_list">搜索结果列表规则</string>
+    <string name="rule_search_name">搜索结果书名规则</string>
+    <string name="rule_search_note_url">搜索结果书籍URL规则</string>
+    <string name="rule_search_url">搜索地址</string>
+    <string name="rule_find_url">发现规则</string>
+    <string name="rule_content_url_next">正文下一页URL规则</string>
+    <string name="book_url_pattern">书籍详情URL正则</string>
+    <string name="rule_book_kind">分类规则</string>
+    <string name="rule_book_last_chapter">最新章节规则</string>
+    <string name="source_user_agent">HttpUserAgent</string>
+    <string name="debug_source">调试书源</string>
 
 </resources>

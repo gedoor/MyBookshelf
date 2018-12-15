@@ -1,4 +1,5 @@
 # 本软件为开源软件,没有上架Google Play,没有在任何地方售卖,如果想支持我请通过软件里的捐赠,不要在任何地方购买!
+# 关注公众号请搜索:开源阅读软件,有福利噢
 # blog http://www.hostfans.cn
 # 开发
 - 本项目Fork于 https://github.com/ZhangQinhao/MONKOVEL
@@ -7,10 +8,17 @@
 **提交代码人员**
 - 大古队员 https://github.com/DaguDuiyuan
 - atbest https://github.com/atbest
-- ttydy https://github.com/ttydy
+
+**其它贡献人员**
+- 图标绘制 群管理员-新奥尔良烤鲟魚堡
 
 # 软件截图
-![image](https://github.com/gedoor/MyBookshelf/blob/master/docs/image/mybookshelf.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook1.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook2.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook3.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook4.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook5.jpg)
+![image](https://github.com/gedoor/gedoor.github.io/blob/master/MyBookshelf/image/mybook6.jpg)
 
 # 免责声明（Disclaimer）
 阅读是一款提供网络文学搜索的工具，为广大网络文学爱好者提供一种方便、快捷舒适的试读体验。

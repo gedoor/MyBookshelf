@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.monke.monkeybook.widget.refreshview.RefreshLayout
+<com.kunfei.bookshelf.widget.refreshview.RefreshLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/refresh_layout"
 	android:layout_width="match_parent"
@@ -9,4 +9,4 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 	</android.support.v7.widget.RecyclerView>
-</com.monke.monkeybook.widget.refreshview.RefreshLayout>
+</com.kunfei.bookshelf.widget.refreshview.RefreshLayout>

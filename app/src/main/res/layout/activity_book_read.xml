@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <!--阅读页面-->
-    <com.monke.monkeybook.widget.page.PageView
+    <com.kunfei.bookshelf.widget.page.PageView
         android:id="@+id/pageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -89,28 +89,28 @@
             <View style="@style/Style.Shadow.Top" />
         </LinearLayout>
 
-        <com.monke.monkeybook.view.popupwindow.ReadBottomMenu
+        <com.kunfei.bookshelf.view.popupwindow.ReadBottomMenu
             android:id="@+id/ll_menu_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.monke.monkeybook.view.popupwindow.ReadAdjustPop
+        <com.kunfei.bookshelf.view.popupwindow.ReadAdjustPop
             android:id="@+id/readAdjustPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.monke.monkeybook.view.popupwindow.ReadInterfacePop
+        <com.kunfei.bookshelf.view.popupwindow.ReadInterfacePop
             android:id="@+id/readInterfacePop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:visibility="invisible" />
 
-        <com.monke.monkeybook.view.popupwindow.MoreSettingPop
+        <com.kunfei.bookshelf.view.popupwindow.MoreSettingPop
             android:id="@+id/moreSettingPop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +127,6 @@
         android:visibility="invisible"
         app:bgdrawable="@color/btn_bg_press"
         app:cantouch="false"
-        app:fontdrawable="@color/d_blue" />
+        app:fontdrawable="?attr/colorAccent" />
 
 </FrameLayout>

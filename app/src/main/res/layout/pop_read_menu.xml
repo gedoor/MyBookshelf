@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_read_aloud_timer"
@@ -47,6 +47,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_floating_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
@@ -66,7 +67,7 @@
             app:fabSize="mini"
             app:pressedTranslationZ="2dp" />
 
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -84,7 +85,7 @@
             app:fabSize="mini"
             app:pressedTranslationZ="2dp" />
 
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -102,7 +103,7 @@
             app:fabSize="mini"
             app:pressedTranslationZ="2dp" />
 
-        <View
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />

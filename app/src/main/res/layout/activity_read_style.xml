@@ -5,7 +5,7 @@
     android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.monke.monkeybook.view.activity.ReadStyleActivity">
+    tools:context="com.kunfei.bookshelf.view.activity.ReadStyleActivity">
 
     <LinearLayout
         android:id="@+id/ll_content"

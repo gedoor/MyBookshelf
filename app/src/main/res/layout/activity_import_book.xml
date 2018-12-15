@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-    <!--指示器-->
-    <include layout="@layout/scroll_title_indicator" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background"
+            android:theme="@style/AppTheme.PopupOverlay" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_tl_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:background="@color/background"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabTextColor="@color/tv_text_default" />
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tab_vp"
@@ -19,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:gravity="center_vertical"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
 
         <CheckBox
             android:id="@+id/file_system_cb_selected_all"
@@ -52,4 +74,5 @@
             android:text="删除"
             android:textColor="@color/selector_btn_file_delete" />
     </RelativeLayout>
+
 </LinearLayout>

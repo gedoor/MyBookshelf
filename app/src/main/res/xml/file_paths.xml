@@ -2,7 +2,7 @@
 <paths>
     <external-path
         name="files_cache"
-        path="Android/data/com.monke.monkeybook/cache" />
+        path="Android/data/com.kunfei.bookshelf/cache" />
     <external-path
         name="external_storage_root"
         path="." />
