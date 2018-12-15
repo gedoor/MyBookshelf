@@ -149,8 +149,6 @@ public class ACache {
 
     /**
      * 读取 String数据
-     *
-     * @param key
      * @return String 数据
      */
     public String getAsString(String key) {
@@ -161,13 +159,13 @@ public class ACache {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(file));
-            String readString = "";
+            StringBuilder readString = new StringBuilder();
             String currentLine;
             while ((currentLine = in.readLine()) != null) {
-                readString += currentLine;
+                readString.append(currentLine);
             }
-            if (!Utils.isDue(readString)) {
-                return Utils.clearDateInfo(readString);
+            if (!Utils.isDue(readString.toString())) {
+                return Utils.clearDateInfo(readString.toString());
             } else {
                 removeFile = true;
                 return null;
@@ -215,15 +213,12 @@ public class ACache {
 
     /**
      * 读取JSONObject数据
-     *
-     * @param key
      * @return JSONObject数据
      */
     public JSONObject getAsJSONObject(String key) {
         String JSONString = getAsString(key);
         try {
-            JSONObject obj = new JSONObject(JSONString);
-            return obj;
+            return new JSONObject(JSONString);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -257,15 +252,12 @@ public class ACache {
 
     /**
      * 读取JSONArray数据
-     *
-     * @param key
      * @return JSONArray数据
      */
     public JSONArray getAsJSONArray(String key) {
         String JSONString = getAsString(key);
         try {
-            JSONArray obj = new JSONArray(JSONString);
-            return obj;
+            return new JSONArray(JSONString);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -316,8 +308,6 @@ public class ACache {
 
     /**
      * 获取 byte 数据
-     *
-     * @param key
      * @return byte 数据
      */
     public byte[] getAsBinary(String key) {
@@ -375,10 +365,8 @@ public class ACache {
      */
     public void put(String key, Serializable value, int saveTime) {
         ByteArrayOutputStream baos = null;
-        ObjectOutputStream oos = null;
-        try {
-            baos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(baos);
+        baos = new ByteArrayOutputStream();
+        try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
             oos.writeObject(value);
             byte[] data = baos.toByteArray();
             if (saveTime != -1) {
@@ -388,18 +376,11 @@ public class ACache {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException e) {
-            }
         }
     }
 
     /**
      * 读取 Serializable数据
-     *
-     * @param key
      * @return Serializable 数据
      */
     public Object getAsObject(String key) {
@@ -410,8 +391,7 @@ public class ACache {
             try {
                 bais = new ByteArrayInputStream(data);
                 ois = new ObjectInputStream(bais);
-                Object reObject = ois.readObject();
-                return reObject;
+                return ois.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -461,8 +441,6 @@ public class ACache {
 
     /**
      * 读取 bitmap 数据
-     *
-     * @param key
      * @return bitmap 数据
      */
     public Bitmap getAsBitmap(String key) {
@@ -499,8 +477,6 @@ public class ACache {
 
     /**
      * 读取 Drawable 数据
-     *
-     * @param key
      * @return Drawable 数据
      */
     public Drawable getAsDrawable(String key) {
@@ -512,8 +488,6 @@ public class ACache {
 
     /**
      * 获取缓存文件
-     *
-     * @param key
      * @return value 缓存的文件
      */
     public File file(String key) {
@@ -531,8 +505,6 @@ public class ACache {
 
     /**
      * 移除某个key
-     *
-     * @param key
      * @return 是否移除成功
      */
     public boolean remove(String key) {
@@ -557,8 +529,6 @@ public class ACache {
 
         /**
          * 判断缓存的String数据是否到期
-         *
-         * @param str
          * @return true：到期了 false：还没有到期
          */
         private static boolean isDue(String str) {
@@ -567,8 +537,6 @@ public class ACache {
 
         /**
          * 判断缓存的byte数据是否到期
-         *
-         * @param data
          * @return true：到期了 false：还没有到期
          */
         private static boolean isDue(byte[] data) {
@@ -656,9 +624,9 @@ public class ACache {
         }
 
         private static String createDateInfo(int second) {
-            String currentTime = System.currentTimeMillis() + "";
+            StringBuilder currentTime = new StringBuilder(System.currentTimeMillis() + "");
             while (currentTime.length() < 13) {
-                currentTime = "0" + currentTime;
+                currentTime.insert(0, "0");
             }
             return currentTime + "-" + second + mSeparator;
         }
@@ -835,8 +803,6 @@ public class ACache {
 
         /**
          * 移除旧的文件
-         *
-         * @return
          */
         private long removeNext() {
             try {
