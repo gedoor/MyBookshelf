@@ -26,7 +26,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
     private String bookSourceUrl;
     private String bookSourceName;
     private String bookSourceGroup;
-    private String checkUrl;
     private String loginUrl;
     private Long lastUpdateTime;
     @OrderBy
@@ -81,7 +80,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
         bookSourceUrl = in.readString();
         bookSourceName = in.readString();
         bookSourceGroup = in.readString();
-        checkUrl = in.readString();
         loginUrl = in.readString();
         serialNumber = in.readInt();
         weight = in.readInt();
@@ -113,17 +111,16 @@ public class BookSourceBean implements Parcelable, Cloneable {
         ruleBookUrlPattern = in.readString();
     }
 
-    @Generated(hash = 1473355032)
-    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String checkUrl, String loginUrl, Long lastUpdateTime,
-            int serialNumber, int weight, boolean enable, String ruleFindUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName,
-            String ruleSearchAuthor, String ruleSearchKind, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl,
-            String ruleBookName, String ruleBookAuthor, String ruleChapterUrl, String ruleChapterUrlNext, String ruleCoverUrl, String ruleIntroduce,
-            String ruleChapterList, String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookKind,
+    @Generated(hash = 118435780)
+    public BookSourceBean(String bookSourceUrl, String bookSourceName, String bookSourceGroup, String loginUrl, Long lastUpdateTime, int serialNumber,
+                          int weight, boolean enable, String ruleFindUrl, String ruleSearchUrl, String ruleSearchList, String ruleSearchName, String ruleSearchAuthor,
+                          String ruleSearchKind, String ruleSearchLastChapter, String ruleSearchCoverUrl, String ruleSearchNoteUrl, String ruleBookName,
+                          String ruleBookAuthor, String ruleChapterUrl, String ruleChapterUrlNext, String ruleCoverUrl, String ruleIntroduce, String ruleChapterList,
+                          String ruleChapterName, String ruleContentUrl, String ruleContentUrlNext, String ruleBookContent, String ruleBookKind,
             String ruleBookLastChapter, String ruleBookUrlPattern, String httpUserAgent) {
         this.bookSourceUrl = bookSourceUrl;
         this.bookSourceName = bookSourceName;
         this.bookSourceGroup = bookSourceGroup;
-        this.checkUrl = checkUrl;
         this.loginUrl = loginUrl;
         this.lastUpdateTime = lastUpdateTime;
         this.serialNumber = serialNumber;
@@ -168,7 +165,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
         parcel.writeString(bookSourceUrl);
         parcel.writeString(bookSourceName);
         parcel.writeString(bookSourceGroup);
-        parcel.writeString(checkUrl);
         parcel.writeString(loginUrl);
         parcel.writeInt(serialNumber);
         parcel.writeInt(weight);
@@ -230,8 +226,7 @@ public class BookSourceBean implements Parcelable, Cloneable {
                     && stringEquals(httpUserAgent, bs.httpUserAgent)
                     && stringEquals(ruleBookKind, bs.ruleBookKind)
                     && stringEquals(ruleBookLastChapter, bs.ruleBookLastChapter)
-                    && stringEquals(ruleBookUrlPattern, bs.ruleBookUrlPattern)
-                    && stringEquals(checkUrl, bs.checkUrl);
+                    && stringEquals(ruleBookUrlPattern, bs.ruleBookUrlPattern);
         }
         return false;
     }
@@ -454,14 +449,6 @@ public class BookSourceBean implements Parcelable, Cloneable {
         this.bookSourceGroup = bookSourceGroup;
         upGroupList();
         this.bookSourceGroup = TextUtils.join("; ", groupList);
-    }
-
-    public String getCheckUrl() {
-        return this.checkUrl;
-    }
-
-    public void setCheckUrl(String checkUrl) {
-        this.checkUrl = checkUrl;
     }
 
     public String getRuleChapterUrlNext() {

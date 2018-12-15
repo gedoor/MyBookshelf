@@ -146,10 +146,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     AppCompatEditText tieBookSourceGroup;
     @BindView(R.id.til_bookSourceGroup)
     TextInputLayout tilBookSourceGroup;
-    @BindView(R.id.tie_checkUrl)
-    AppCompatEditText tieCheckUrl;
-    @BindView(R.id.til_checkUrl)
-    TextInputLayout tilCheckUrl;
     @BindView(R.id.tie_ruleChapterListUrlNext)
     AppCompatEditText tieRuleChapterListUrlNext;
     @BindView(R.id.til_ruleChapterListUrlNext)
@@ -300,7 +296,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         bookSourceBeanN.setBookSourceUrl(trim(tieBookSourceUrl.getText()));
         bookSourceBeanN.setLoginUrl(trim(tieLoginUrl.getText()));
         bookSourceBeanN.setBookSourceGroup(trim(tieBookSourceGroup.getText()));
-        bookSourceBeanN.setCheckUrl(trim(tieCheckUrl.getText()));
         bookSourceBeanN.setRuleBookAuthor(trim(tieRuleBookAuthor.getText()));
         bookSourceBeanN.setRuleBookContent(trim(tieRuleBookContent.getText()));
         bookSourceBeanN.setRuleBookName(trim(tieRuleBookName.getText()));
@@ -339,7 +334,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tieBookSourceUrl.setText(trim(bookSourceBean.getBookSourceUrl()));
         tieBookSourceGroup.setText(trim(bookSourceBean.getBookSourceGroup()));
         tieLoginUrl.setText(trim(bookSourceBean.getLoginUrl()));
-        tieCheckUrl.setText(trim(bookSourceBean.getCheckUrl()));
         tieRuleBookAuthor.setText(trim(bookSourceBean.getRuleBookAuthor()));
         tieRuleBookContent.setText(trim(bookSourceBean.getRuleBookContent()));
         tieRuleBookName.setText(trim(bookSourceBean.getRuleBookName()));
@@ -371,7 +365,6 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         tilBookSourceUrl.setHint(getString(R.string.book_source_url));
         tilBookSourceGroup.setHint(getString(R.string.book_source_group));
         tilLoginUrl.setHint(getString(R.string.book_source_login_url));
-        tilCheckUrl.setHint(getString(R.string.book_source_check_url));
         tilRuleBookAuthor.setHint(getString(R.string.rule_book_author));
         tilRuleBookContent.setHint(getString(R.string.rule_book_content));
         tilRuleBookName.setHint(getString(R.string.rule_book_name));
