@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -23,6 +24,11 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.BuildConfig;
 import com.kunfei.bookshelf.R;
@@ -40,11 +46,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Hashtable;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
@@ -401,8 +407,29 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     @SuppressLint("SetWorldReadable")
     private void shareBookSource() {
         Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
-            Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(getBookSourceStr(), 600);
-            emitter.onSuccess(bitmap);
+            BitMatrix result;
+            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+            try {
+                Hashtable<EncodeHintType, Object> hst = new Hashtable();
+                hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+                hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+                result = multiFormatWriter.encode(getBookSourceStr(), BarcodeFormat.QR_CODE, 600, 600, hst);
+                int[] pixels = new int[600 * 600];
+                for (int y = 0; y < 600; y++) {
+                    for (int x = 0; x < 600; x++) {
+                        if (result.get(x, y)) {
+                            pixels[y * 600 + x] = Color.BLACK;
+                        } else {
+                            pixels[y * 600 + x] = Color.WHITE;
+                        }
+                    }
+                }
+                Bitmap bitmap = Bitmap.createBitmap(600, 600, Bitmap.Config.ARGB_8888);
+                bitmap.setPixels(pixels, 0, 600, 0, 0, 600, 600);
+                emitter.onSuccess(bitmap);
+            } catch (Exception e) {
+                emitter.onError(e);
+            }
         }).compose(RxUtils::toSimpleSingle)
                 .subscribe(new SingleObserver<Bitmap>() {
                     @Override
@@ -412,24 +439,22 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {
-                        if (bitmap != null) {
-                            try {
-                                File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
-                                FileOutputStream fOut = new FileOutputStream(file);
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                                fOut.flush();
-                                fOut.close();
-                                //noinspection ResultOfMethodCallIgnored
-                                file.setReadable(true, false);
-                                Uri contentUri = FileProvider.getUriForFile(SourceEditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
-                                final Intent intent = new Intent(Intent.ACTION_SEND);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                                intent.setType("image/png");
-                                startActivity(Intent.createChooser(intent, "分享书源"));
-                            } catch (Exception e) {
-                                toast(e.getLocalizedMessage());
-                            }
+                        try {
+                            File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
+                            FileOutputStream fOut = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                            fOut.flush();
+                            fOut.close();
+                            //noinspection ResultOfMethodCallIgnored
+                            file.setReadable(true, false);
+                            Uri contentUri = FileProvider.getUriForFile(SourceEditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+                            final Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                            intent.setType("image/png");
+                            startActivity(Intent.createChooser(intent, "分享书源"));
+                        } catch (Exception e) {
+                            toast(e.getLocalizedMessage());
                         }
                     }
 
