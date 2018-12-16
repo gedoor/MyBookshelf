@@ -15,24 +15,21 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.UpdateManager;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
-
-import java.util.Hashtable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bingoogolapple.qrcode.zxing.QRCodeEncoder;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -153,10 +150,28 @@ public class AboutActivity extends MBaseActivity {
         vwFaq.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("faq.md"));
         vwShare.setOnClickListener(view -> {
             String url = "https://www.coolapk.com/apk/com.gedoor.monkeybook";
-            Bitmap bitmap = encodeAsBitmap(url);
-            if (bitmap != null) {
-                moDialogHUD.showImageText(bitmap, url);
-            }
+            Single.create((SingleOnSubscribe<Bitmap>) emitter -> {
+                Bitmap bitmap = QRCodeEncoder.syncEncodeQRCode(url, 600);
+                emitter.onSuccess(bitmap);
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new SingleObserver<Bitmap>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(Bitmap bitmap) {
+                            if (bitmap != null) {
+                                moDialogHUD.showImageText(bitmap, url);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+                    });
         });
     }
 
@@ -203,22 +218,4 @@ public class AboutActivity extends MBaseActivity {
         return mo || super.onKeyDown(keyCode, event);
     }
 
-    public Bitmap encodeAsBitmap(String str) {
-        Bitmap bitmap = null;
-        BitMatrix result;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            Hashtable<EncodeHintType, Object> hst = new Hashtable();
-            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600, hst);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.createBitmap(result);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException iae) { // ?
-            return null;
-        }
-        return bitmap;
-    }
 }

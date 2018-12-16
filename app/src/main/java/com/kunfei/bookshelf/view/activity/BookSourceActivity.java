@@ -20,14 +20,10 @@ import android.view.SubMenu;
 import android.widget.LinearLayout;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
+import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
@@ -38,6 +34,8 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -50,8 +48,6 @@ import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.kunfei.bookshelf.view.activity.SourceEditActivity.EDIT_SOURCE;
-
 /**
  * Created by GKF on 2017/12/16.
  * 书源管理
@@ -59,6 +55,7 @@ import static com.kunfei.bookshelf.view.activity.SourceEditActivity.EDIT_SOURCE;
 
 public class BookSourceActivity extends MBaseActivity<BookSourceContract.Presenter> implements BookSourceContract.View {
     private final int IMPORT_SOURCE = 102;
+    private final int REQUEST_QR = 202;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -278,6 +275,9 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
             case R.id.action_import_book_source_onLine:
                 importBookSourceOnLine();
                 break;
+            case R.id.action_import_book_source_rwm:
+                scanBookSource();
+                break;
             case R.id.action_revert_selection:
                 revertSelection();
                 break;
@@ -334,6 +334,11 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         setDragEnable(sort);
         BookSourceManager.refreshBookSource();
         refreshBookSource();
+    }
+
+    private void scanBookSource() {
+        Intent intent = new Intent(this, QRCodeScanActivity.class);
+        startActivityForResult(intent, REQUEST_QR);
     }
 
     private void addBookSource() {
@@ -402,6 +407,28 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 case IMPORT_SOURCE:
                     if (data != null) {
                         mPresenter.importBookSourceLocal(FileUtil.getPath(this, data.getData()));
+                    }
+                    break;
+                case REQUEST_QR:
+                    if (data != null) {
+                        String result = data.getStringExtra("result");
+                        if (StringUtils.isJSONType(result)) {
+                            BookSourceManager.importBookSourceO(result)
+                                    .compose(RxUtils::toSimpleSingle)
+                                    .subscribe(new SimpleObserver<Boolean>() {
+                                        @Override
+                                        public void onNext(Boolean aBoolean) {
+                                            toast("导入成功");
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            toast(e.getLocalizedMessage());
+                                        }
+                                    });
+                        } else {
+                            mPresenter.importBookSource(result);
+                        }
                     }
                     break;
             }

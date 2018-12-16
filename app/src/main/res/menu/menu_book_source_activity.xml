@@ -74,6 +74,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_import_book_source_rwm"
+        android:icon="@drawable/ic_import"
+        android:title="@string/import_by_qr_code"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_revert_selection"
         android:icon="@drawable/ic_swap_outline_24dp"
         android:title="@string/revert_selection"

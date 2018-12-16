@@ -8,8 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BaseModelImpl;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
@@ -17,6 +15,7 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
+import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,8 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -147,19 +144,19 @@ public class BookSourceManager extends BaseModelImpl {
         RxBus.get().post(RxBusTag.UPDATE_BOOK_SOURCE, new Object());
     }
 
-    public static Observable<Boolean> importSourceFromWww(URL url) {
+    public static Observable<List<BookSourceBean>> importSourceFromWww(URL url) {
         return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
                 .create(IHttpGetApi.class)
                 .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
                 .flatMap(rsp -> importBookSourceO(rsp.body()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .compose(RxUtils::toSimpleSingle);
     }
 
-    public static Observable<Boolean> importBookSourceO(String json) {
+    public static Observable<List<BookSourceBean>> importBookSourceO(String json) {
         return Observable.create(e -> {
+            List<BookSourceBean> bookSourceBeans = new ArrayList<>();
             try {
-                List<BookSourceBean> bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+                bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
                 }.getType());
                 for (BookSourceBean bookSourceBean : bookSourceBeans) {
                     if (bookSourceBean.containsGroup("删除")) {
@@ -179,12 +176,22 @@ public class BookSourceManager extends BaseModelImpl {
                     }
                 }
                 refreshBookSource();
-                e.onNext(true);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                e.onNext(false);
+                e.onNext(bookSourceBeans);
+                e.onComplete();
+                return;
+            } catch (Exception ignored) {
             }
-            e.onComplete();
+            try {
+                BookSourceBean bookSourceBean = new Gson().fromJson(json, new TypeToken<BookSourceBean>() {
+                }.getType());
+                addBookSource(bookSourceBean);
+                bookSourceBeans.add(bookSourceBean);
+                e.onNext(bookSourceBeans);
+                e.onComplete();
+                return;
+            } catch (Exception ignored) {
+            }
+            e.onError(new Throwable("格式不对"));
         });
     }
 

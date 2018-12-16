@@ -2,43 +2,18 @@ package com.kunfei.bookshelf.presenter;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.ChecksumException;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.FormatException;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
-import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
-import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
-import com.kunfei.bookshelf.utils.BitmapUtil;
 
-import java.util.Hashtable;
 import java.util.Objects;
 
 import io.reactivex.Observable;
@@ -104,58 +79,6 @@ public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.Vi
         } catch (Exception e) {
             mView.toast("数据格式不对");
         }
-    }
-
-    @Override
-    public Bitmap encodeAsBitmap(String str) {
-        Bitmap bitmap = null;
-        BitMatrix result;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            Hashtable<EncodeHintType, Object> hst = new Hashtable();
-            hst.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            hst.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 600, 600, hst);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.createBitmap(result);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException iae) { // ?
-            return null;
-        }
-        return bitmap;
-    }
-
-    @Override
-    public void analyzeBitmap(Uri uri) {
-        ContentResolver cr = mView.getContext().getContentResolver();
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(cr, uri);//显得到bitmap图片
-            bitmap = BitmapUtil.getImage(bitmap);
-
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-            int[] pixels = new int[width * height];
-            bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-
-            RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            Reader reader = new MultiFormatReader();
-            Result result;
-
-            try {
-                result = reader.decode(binaryBitmap);
-                setText(result.getText());
-            } catch (NotFoundException | ChecksumException | FormatException e) {
-                e.printStackTrace();
-                mView.toast("解析图片错误");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            mView.toast("图片获取错误");
-        }
-
     }
 
     @Override

@@ -30,12 +30,7 @@
 
     <item
         android:id="@+id/action_qr_code_camera"
-        android:title="@string/camera_scan"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_qr_code_image"
-        android:title="@string/scan_image"
+        android:title="@string/import_by_qr_code"
         app:showAsAction="never" />
 
     <item

@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.presenter;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -11,11 +12,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.help.DocumentHelper;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.service.CheckSourceService;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
@@ -26,6 +22,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.CheckSourceService;
+import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -166,21 +163,21 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         if (!isEmpty(json)) {
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
             BookSourceManager.importBookSourceO(json)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(RxUtils::toSimpleSingle)
                     .subscribe(getImportObserver());
         } else {
             mView.toast("文件读取失败");
         }
     }
 
-    private SimpleObserver<Boolean> getImportObserver() {
-        return new SimpleObserver<Boolean>() {
+    private SimpleObserver<List<BookSourceBean>> getImportObserver() {
+        return new SimpleObserver<List<BookSourceBean>>() {
+            @SuppressLint("DefaultLocale")
             @Override
-            public void onNext(Boolean aBoolean) {
-                if (aBoolean) {
+            public void onNext(List<BookSourceBean> bookSourceBeans) {
+                if (bookSourceBeans.size() > 0) {
                     mView.refreshBookSource();
-                    mView.showSnackBar("导入成功", Snackbar.LENGTH_SHORT);
+                    mView.showSnackBar(String.format("导入成功%d个书源", bookSourceBeans.size()), Snackbar.LENGTH_SHORT);
                 } else {
                     mView.showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
                 }
