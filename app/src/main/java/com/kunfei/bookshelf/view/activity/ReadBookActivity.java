@@ -773,6 +773,10 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
             case R.id.action_login:
                 SourceLoginActivity.startThis(this, mPresenter.getBookSource());
                 break;
+            case R.id.action_get_hb:
+                DonateActivity.getZfbHb(this);
+                upMenu();
+                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -1189,6 +1193,13 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         menu.getItem(i).setVisible(true);
                     } else {
                         menu.getItem(i).setVisible(false);
+                    }
+                    break;
+                case R.id.menu_get_zfb_hb:
+                    if (MApplication.getInstance().getDonateHb()) {
+                        menu.getItem(i).setVisible(false);
+                    } else {
+                        menu.getItem(i).setVisible(true);
                     }
                     break;
             }
