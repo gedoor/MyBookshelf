@@ -44,6 +44,7 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_capture);
         ButterKnife.bind(this);
+        zxingview.setDelegate(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvChooseFromGallery.setOnClickListener(v -> {
