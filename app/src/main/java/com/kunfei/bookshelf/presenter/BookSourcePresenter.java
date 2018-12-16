@@ -170,6 +170,12 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         }
     }
 
+    public void importBookSourceJson(String json) {
+        BookSourceManager.importBookSourceO(json)
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(getImportObserver());
+    }
+
     private SimpleObserver<List<BookSourceBean>> getImportObserver() {
         return new SimpleObserver<List<BookSourceBean>>() {
             @SuppressLint("DefaultLocale")

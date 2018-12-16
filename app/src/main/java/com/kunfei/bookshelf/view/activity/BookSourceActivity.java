@@ -23,7 +23,6 @@ import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.BookSourceBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
@@ -34,7 +33,6 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtil;
-import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -413,19 +411,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                     if (data != null) {
                         String result = data.getStringExtra("result");
                         if (StringUtils.isJSONType(result)) {
-                            BookSourceManager.importBookSourceO(result)
-                                    .compose(RxUtils::toSimpleSingle)
-                                    .subscribe(new SimpleObserver<Boolean>() {
-                                        @Override
-                                        public void onNext(Boolean aBoolean) {
-                                            toast("导入成功");
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            toast(e.getLocalizedMessage());
-                                        }
-                                    });
+                            mPresenter.importBookSourceJson(result);
                         } else {
                             mPresenter.importBookSource(result);
                         }
