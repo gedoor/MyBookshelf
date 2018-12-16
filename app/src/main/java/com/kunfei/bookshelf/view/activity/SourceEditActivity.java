@@ -412,22 +412,24 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
                     @Override
                     public void onSuccess(Bitmap bitmap) {
-                        try {
-                            File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
-                            FileOutputStream fOut = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                            fOut.flush();
-                            fOut.close();
-                            //noinspection ResultOfMethodCallIgnored
-                            file.setReadable(true, false);
-                            Uri contentUri = FileProvider.getUriForFile(SourceEditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
-                            final Intent intent = new Intent(Intent.ACTION_SEND);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-                            intent.setType("image/png");
-                            startActivity(Intent.createChooser(intent, "分享书源"));
-                        } catch (Exception e) {
-                            toast(e.getLocalizedMessage());
+                        if (bitmap != null) {
+                            try {
+                                File file = new File(SourceEditActivity.this.getExternalCacheDir(), "bookSource.png");
+                                FileOutputStream fOut = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                                fOut.flush();
+                                fOut.close();
+                                //noinspection ResultOfMethodCallIgnored
+                                file.setReadable(true, false);
+                                Uri contentUri = FileProvider.getUriForFile(SourceEditActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+                                final Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                                intent.setType("image/png");
+                                startActivity(Intent.createChooser(intent, "分享书源"));
+                            } catch (Exception e) {
+                                toast(e.getLocalizedMessage());
+                            }
                         }
                     }
 
