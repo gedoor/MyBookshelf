@@ -94,7 +94,6 @@ class BookList {
             }
             if (books.isEmpty()) {
                 e.onError(new Throwable("未获取到书名"));
-                e.onComplete();
                 return;
             }
             e.onNext(books);
