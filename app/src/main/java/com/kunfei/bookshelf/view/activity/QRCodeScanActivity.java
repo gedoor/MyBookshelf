@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -33,10 +34,13 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     Toolbar toolbar;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
+    @BindView(R.id.fab_flashlight)
+    FloatingActionButton fabFlashlight;
 
     private final int REQUEST_QR_IMAGE = 202;
     private final int REQUEST_CAMERA_PER = 303;
     private final String[] cameraPer = new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private boolean flashlightIsOpen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,15 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
         zxingview.setDelegate(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
+        fabFlashlight.setOnClickListener(view -> {
+            if (flashlightIsOpen) {
+                flashlightIsOpen = false;
+                zxingview.closeFlashlight();
+            } else {
+                flashlightIsOpen = true;
+                zxingview.openFlashlight();
+            }
+        });
     }
 
     @Override
