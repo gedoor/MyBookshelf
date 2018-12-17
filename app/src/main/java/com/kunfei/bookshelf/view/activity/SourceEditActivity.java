@@ -27,6 +27,7 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +46,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.SourceEditPresenter;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
@@ -192,12 +194,14 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     AppCompatEditText tieLoginUrl;
     @BindView(R.id.til_loginUrl)
     TextInputLayout tilLoginUrl;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
     private BookSourceBean bookSourceBean;
     private int serialNumber;
     private boolean enable;
     private String title;
-    private PopupWindow mSoftKeyboardTopPopupWindow;
+    private PopupWindow mSoftKeyboardTool;
     private boolean mIsSoftKeyBoardShowing = false;
 
     public static void startThis(Activity activity, BookSourceBean sourceBean) {
@@ -265,12 +269,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
         setHint();
         setText(bookSourceBean);
-        mSoftKeyboardTopPopupWindow = new KeyboardToolPop(this, new KeyboardToolPop.OnClickListener() {
-            @Override
-            public void click(String text) {
-                insertTextToEditText(text);
-            }
-        });
+        mSoftKeyboardTool = new KeyboardToolPop(this, this::insertTextToEditText);
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
     }
 
@@ -626,24 +625,24 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     }
 
     private void showKeyboardTopPopupWindow(int x, int y) {
-        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
+        if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
             updateKeyboardTopPopupWindow(x, y); //可能是输入法切换了输入模式，高度会变化（比如切换为语音输入）
             return;
         }
-        if (mSoftKeyboardTopPopupWindow != null) {
-            mSoftKeyboardTopPopupWindow.showAtLocation(llContent, Gravity.BOTTOM, x, y);
+        if (mSoftKeyboardTool != null) {
+            mSoftKeyboardTool.showAtLocation(llContent, Gravity.BOTTOM, x, y);
         }
     }
 
     private void updateKeyboardTopPopupWindow(int x, int y) {
-        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
-            mSoftKeyboardTopPopupWindow.update(x, y, mSoftKeyboardTopPopupWindow.getWidth(), mSoftKeyboardTopPopupWindow.getHeight());
+        if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
+            mSoftKeyboardTool.update(x, y, mSoftKeyboardTool.getWidth(), mSoftKeyboardTool.getHeight());
         }
     }
 
     private void closePopupWindow() {
-        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
-            mSoftKeyboardTopPopupWindow.dismiss();
+        if (mSoftKeyboardTool != null && mSoftKeyboardTool.isShowing()) {
+            mSoftKeyboardTool.dismiss();
         }
     }
 
@@ -659,11 +658,13 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             if (Math.abs(keyboardHeight) > screenHeight / 5) {
                 mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
                 showKeyboardTopPopupWindow(SoftInputUtil.getScreenWidth(SourceEditActivity.this) / 2, keyboardHeight);
+                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, keyboardHeight + 100);
             } else {
                 if (preShowing) {
                     closePopupWindow();
                 }
                 mIsSoftKeyBoardShowing = false;
+                llContent.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
             }
         }
     }
