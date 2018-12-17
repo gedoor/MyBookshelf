@@ -42,6 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
 
@@ -60,35 +61,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.fabSearchStop)
     FloatingActionButton fabSearchStop;
 
+    private ExplosionField mExplosionField;
     private SearchBookAdapter searchBookAdapter;
     private SearchView.SearchAutoComplete mSearchAutoComplete;
     private boolean showHistory;
     private String searchKey;
-
-    private final View.OnClickListener historyItemClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            SearchHistoryBean searchHistoryBean = (SearchHistoryBean) v.getTag();
-            searchView.setQuery(searchHistoryBean.getContent(), true);
-        }
-    };
-
-    private final View.OnLongClickListener historyItemLongClick = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            SearchHistoryBean searchHistoryBean = (SearchHistoryBean) view.getTag();
-            mPresenter.cleanSearchHistory(searchHistoryBean);
-            return true;
-        }
-    };
-
-    private final View.OnClickListener hideSettingItemClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            String text = "set:" + view.getTag();
-            searchView.setQuery(text, false);
-        }
-    };
 
     public static void startByKey(Context context, String searchKey) {
         Intent intent = new Intent(context, SearchBookActivity.class);
@@ -113,6 +90,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected void initData() {
+        mExplosionField = ExplosionField.attach2Window(this);
         searchBookAdapter = new SearchBookAdapter(this);
     }
 
@@ -307,7 +285,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, tflSearchHistory, false);
             tagView.setTag(text);
             tagView.setText(text);
-            tagView.setOnClickListener(hideSettingItemClick);
+            tagView.setOnClickListener(view -> {
+                String key = "set:" + view.getTag();
+                searchView.setQuery(key, false);
+            });
             tflSearchHistory.addView(tagView);
         }
     }
@@ -387,8 +368,16 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                 tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, tflSearchHistory, false);
                 tagView.setTag(searchHistoryBean);
                 tagView.setText(searchHistoryBean.getContent());
-                tagView.setOnClickListener(historyItemClick);
-                tagView.setOnLongClickListener(historyItemLongClick);
+                tagView.setOnClickListener(view -> {
+                    SearchHistoryBean historyBean = (SearchHistoryBean) view.getTag();
+                    searchView.setQuery(historyBean.getContent(), true);
+                });
+                tagView.setOnLongClickListener(view -> {
+                    mExplosionField.explode(view);
+                    SearchHistoryBean historyBean = (SearchHistoryBean) view.getTag();
+                    mPresenter.cleanSearchHistory(historyBean);
+                    return true;
+                });
                 tflSearchHistory.addView(tagView);
             }
         }
@@ -444,6 +433,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onDestroy() {
         mPresenter.stopSearch();
+        mExplosionField.clear();
         super.onDestroy();
     }
 
