@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -99,9 +100,14 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
 
     @Override
     public void onScanQRCodeOpenCameraError() {
-        if (!EasyPermissions.hasPermissions(this, cameraPer)) {
-            EasyPermissions.requestPermissions(this, "扫描二维码需相机权限", REQUEST_CAMERA_PER, cameraPer);
-        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @AfterPermissionGranted(REQUEST_CAMERA_PER)
