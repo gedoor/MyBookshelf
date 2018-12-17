@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -29,6 +28,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.RxBusTag;
+import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
@@ -297,7 +297,11 @@ public class ReadStyleActivity extends MBaseActivity {
     public void setCustomBg(Uri uri) {
         try {
             bgPath = FileUtil.getPath(this, uri);
-            Bitmap bitmap = BitmapFactory.decodeFile(bgPath);
+            Resources resources = this.getResources();
+            DisplayMetrics dm = resources.getDisplayMetrics();
+            int width = dm.widthPixels;
+            int height = dm.heightPixels;
+            Bitmap bitmap = BitmapUtil.getFitSampleBitmap(bgPath, width, height);
             bgCustom = 2;
             bgDrawable = new BitmapDrawable(getResources(), bitmap);
             upBg();
