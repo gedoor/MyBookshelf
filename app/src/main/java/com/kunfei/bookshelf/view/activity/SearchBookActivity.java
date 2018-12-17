@@ -55,7 +55,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @BindView(R.id.tv_search_history_clean)
     TextView tvSearchHistoryClean;
     @BindView(R.id.tfl_search_history)
-    FlexboxLayout tflSearchHistory;
+    FlexboxLayout flSearchHistory;
     @BindView(R.id.rfRv_search_books)
     RefreshRecyclerView rfRvSearchBooks;
     @BindView(R.id.fabSearchStop)
@@ -226,7 +226,10 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected void bindEvent() {
-        tvSearchHistoryClean.setOnClickListener(v -> mPresenter.cleanSearchHistory());
+        tvSearchHistoryClean.setOnClickListener(v -> {
+            mExplosionField.explode(flSearchHistory);
+            mPresenter.cleanSearchHistory();
+        });
 
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -275,19 +278,19 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     private void showHideSetting() {
-        tflSearchHistory.removeAllViews();
+        flSearchHistory.removeAllViews();
         TextView tagView;
         String hideSettings[] = {"show_nav_shelves", "fade_tts", "use_regex_in_new_rule", "blur_sim_back", "async_draw", "disable_scroll_click_turn"};
 
         for (String text : hideSettings) {
-            tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, tflSearchHistory, false);
+            tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, flSearchHistory, false);
             tagView.setTag(text);
             tagView.setText(text);
             tagView.setOnClickListener(view -> {
                 String key = "set:" + view.getTag();
                 searchView.setQuery(key, false);
             });
-            tflSearchHistory.addView(tagView);
+            flSearchHistory.addView(tagView);
         }
     }
 
@@ -359,11 +362,11 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     }
 
     private void addNewHistories(List<SearchHistoryBean> historyBeans) {
-        tflSearchHistory.removeAllViews();
+        flSearchHistory.removeAllViews();
         if (historyBeans != null) {
             TextView tagView;
             for (SearchHistoryBean searchHistoryBean : historyBeans) {
-                tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, tflSearchHistory, false);
+                tagView = (TextView) getLayoutInflater().inflate(R.layout.item_search_history, flSearchHistory, false);
                 tagView.setTag(searchHistoryBean);
                 tagView.setText(searchHistoryBean.getContent());
                 tagView.setOnClickListener(view -> {
@@ -377,7 +380,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                     mPresenter.cleanSearchHistory(historyBean);
                     return true;
                 });
-                tflSearchHistory.addView(tagView);
+                flSearchHistory.addView(tagView);
             }
         }
     }
@@ -391,7 +394,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     public void querySearchHistorySuccess(List<SearchHistoryBean> datas) {
         addNewHistories(datas);
-        if (tflSearchHistory.getChildCount() > 0) {
+        if (flSearchHistory.getChildCount() > 0) {
             tvSearchHistoryClean.setVisibility(View.VISIBLE);
         } else {
             tvSearchHistoryClean.setVisibility(View.INVISIBLE);
