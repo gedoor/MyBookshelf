@@ -39,10 +39,17 @@ public class SoftInputUtil {
         });
     }
 
-    private static int getScreenHeight(Activity activity) {
+    public static int getScreenHeight(Activity activity) {
         WindowManager manager = (activity).getWindowManager();
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         return outMetrics.heightPixels;
+    }
+
+    public static int getScreenWidth(Activity activity) {
+        WindowManager manager = (activity).getWindowManager();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
     }
 }
