@@ -226,9 +226,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
 
     @Override
     protected void bindEvent() {
-        tvSearchHistoryClean.setOnClickListener(v -> {
-            mPresenter.cleanSearchHistory();
-        });
+        tvSearchHistoryClean.setOnClickListener(v -> mPresenter.cleanSearchHistory());
 
         rfRvSearchBooks.setLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -373,8 +371,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
                     searchView.setQuery(historyBean.getContent(), true);
                 });
                 tagView.setOnLongClickListener(view -> {
-                    mExplosionField.explode(view);
                     SearchHistoryBean historyBean = (SearchHistoryBean) view.getTag();
+                    mExplosionField.explode(view);
+                    view.setOnLongClickListener(null);
                     mPresenter.cleanSearchHistory(historyBean);
                     return true;
                 });
