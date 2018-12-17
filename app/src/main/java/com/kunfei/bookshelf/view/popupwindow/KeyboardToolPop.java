@@ -13,7 +13,6 @@ import com.kunfei.bookshelf.R;
 
 public class KeyboardToolPop extends PopupWindow {
 
-
     public KeyboardToolPop(Context context, OnClickListener onClickListener) {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -41,7 +40,5 @@ public class KeyboardToolPop extends PopupWindow {
     public interface OnClickListener {
         void click(String text);
     }
-
-
 
 }
