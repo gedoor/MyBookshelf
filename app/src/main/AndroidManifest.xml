@@ -75,7 +75,8 @@
         <activity
             android:name=".view.activity.QRCodeScanActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".view.activity.MainActivity"
