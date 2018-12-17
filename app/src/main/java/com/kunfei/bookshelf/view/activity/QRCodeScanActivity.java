@@ -8,7 +8,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.FileUtil;
@@ -32,8 +33,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     Toolbar toolbar;
     @BindView(R.id.action_bar)
     AppBarLayout actionBar;
-    @BindView(R.id.tv_choose_from_gallery)
-    TextView tvChooseFromGallery;
 
     private final int REQUEST_QR_IMAGE = 202;
     private final int REQUEST_CAMERA_PER = 303;
@@ -47,12 +46,6 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
         zxingview.setDelegate(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
-        tvChooseFromGallery.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("image/*");
-            startActivityForResult(intent, REQUEST_QR_IMAGE);
-        });
     }
 
     @Override
@@ -115,6 +108,28 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
         }
     }
 
+    // 添加菜单
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_qr_code_scan, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //菜单
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_choose_from_gallery:
+                chooseFromGallery();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -126,5 +141,12 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
             // 本来就用到 QRCodeView 时可直接调 QRCodeView 的方法，走通用的回调
             zxingview.decodeQRCode(picturePath);
         }
+    }
+
+    private void chooseFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_QR_IMAGE);
     }
 }

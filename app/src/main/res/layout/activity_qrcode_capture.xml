@@ -59,24 +59,4 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/tv_choose_from_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="6dp"
-            android:background="@drawable/selector_pop_font_bg"
-            android:gravity="center"
-            android:text="相册"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-
-    </LinearLayout>
 </RelativeLayout>
