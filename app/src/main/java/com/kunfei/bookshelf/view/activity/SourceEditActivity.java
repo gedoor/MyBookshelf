@@ -2,10 +2,12 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -17,10 +19,18 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -190,6 +200,8 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
     private int serialNumber;
     private boolean enable;
     private String title;
+    private PopupWindow mSoftKeyboardTopPopupWindow;
+    private boolean mIsSoftKeyBoardShowing = false;
 
     public static void startThis(Activity activity, BookSourceBean sourceBean) {
         Intent intent = new Intent(activity, SourceEditActivity.class);
@@ -256,6 +268,7 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
 
         setHint();
         setText(bookSourceBean);
+        getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
     }
 
     private boolean saveBookSource() {
@@ -592,4 +605,89 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         }
         return super.onKeyDown(keyCode, keyEvent);
     }
+
+    private void insertTextToEditText(String txt) {
+        if (TextUtils.isEmpty(txt)) return;
+        View view = getWindow().getDecorView().findFocus();
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
+            int start = editText.getSelectionStart();
+            int end = editText.getSelectionEnd();
+            Editable edit = editText.getEditableText();//获取EditText的文字
+            if (start < 0 || start >= edit.length()) {
+                edit.append(txt);
+            } else {
+                edit.replace(start, end, txt);//光标所在位置插入文字
+            }
+        }
+    }
+
+    private void showKeyboardTopPopupWindow(int x, int y) {
+        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
+            updateKeyboardTopPopupWindow(x, y); //可能是输入法切换了输入模式，高度会变化（比如切换为语音输入）
+            return;
+        }
+
+        View popupView = getLayoutInflater().inflate(R.layout.view_soft_keyboard_top_tool, null);
+        LinearLayout linearLayout = popupView.findViewById(R.id.ll_content);
+
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+            TextView tv = (TextView) linearLayout.getChildAt(i);
+            tv.setOnClickListener(v -> insertTextToEditText(((TextView) v).getText().toString()));
+        }
+
+        mSoftKeyboardTopPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        mSoftKeyboardTopPopupWindow.setTouchable(true);
+        mSoftKeyboardTopPopupWindow.setOutsideTouchable(false);
+        mSoftKeyboardTopPopupWindow.setFocusable(false);
+        mSoftKeyboardTopPopupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED); //解决遮盖输入法
+        mSoftKeyboardTopPopupWindow.showAtLocation(llContent, Gravity.BOTTOM, x, y);
+    }
+
+    private void updateKeyboardTopPopupWindow(int x, int y) {
+        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
+            mSoftKeyboardTopPopupWindow.update(x, y, mSoftKeyboardTopPopupWindow.getWidth(), mSoftKeyboardTopPopupWindow.getHeight());
+        }
+    }
+
+    private void closePopupWindow() {
+        if (mSoftKeyboardTopPopupWindow != null && mSoftKeyboardTopPopupWindow.isShowing()) {
+            mSoftKeyboardTopPopupWindow.dismiss();
+            mSoftKeyboardTopPopupWindow = null;
+
+        }
+    }
+
+    private class KeyboardOnGlobalChangeListener implements ViewTreeObserver.OnGlobalLayoutListener {
+
+        private int getScreenHeight() {
+            return ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay().getHeight();
+        }
+
+        private int getScreenWidth() {
+            return ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+                    .getDefaultDisplay().getWidth();
+        }
+
+        @Override
+        public void onGlobalLayout() {
+            Rect rect = new Rect();
+            // 获取当前页面窗口的显示范围
+            getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+            int screenHeight = getScreenHeight();
+            int keyboardHeight = screenHeight - rect.bottom; // 输入法的高度
+            boolean preShowing = mIsSoftKeyBoardShowing;
+            if (Math.abs(keyboardHeight) > screenHeight / 5) {
+                mIsSoftKeyBoardShowing = true; // 超过屏幕五分之一则表示弹出了输入法
+                showKeyboardTopPopupWindow(getScreenWidth() / 2, keyboardHeight);
+            } else {
+                if (preShowing) {
+                    closePopupWindow();
+                }
+                mIsSoftKeyBoardShowing = false;
+            }
+        }
+    }
+
 }

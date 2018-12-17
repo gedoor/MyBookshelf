@@ -331,5 +331,6 @@
     <string name="debug_source">调试书源</string>
     <string name="import_by_qr_code">二维码导入</string>
     <string name="scan_qr_code">扫描二维码</string>
+    <string name="at_char">\@</string>
 
 </resources>
