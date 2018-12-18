@@ -110,6 +110,8 @@ public class BookSourceManager extends BaseModelImpl {
     }
 
     public static void addBookSource(BookSourceBean bookSourceBean) {
+        if (TextUtils.isEmpty(bookSourceBean.getBookSourceName()) || TextUtils.isEmpty(bookSourceBean.getBookSourceUrl()))
+            return;
         if (bookSourceBean.getBookSourceUrl().endsWith("/")) {
             bookSourceBean.setBookSourceUrl(bookSourceBean.getBookSourceUrl().substring(0, bookSourceBean.getBookSourceUrl().lastIndexOf("/")));
         }
