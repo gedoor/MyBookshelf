@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
@@ -100,22 +101,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (ex == null) {
             return false;
         }
-        //收集设备参数信息
-        collectDeviceInfo(mContext);
-        //添加自定义信息
-        addCustomInfo();
-        //使用Toast来显示异常信息
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                //在此处处理出现异常的情况
-                Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
-        }.start();
-        //保存日志文件
-        saveCrashInfo2File(ex);
+        try {
+            //收集设备参数信息
+            collectDeviceInfo(mContext);
+            //添加自定义信息
+            addCustomInfo();
+            //使用Toast来显示异常信息
+            new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show());
+            //保存日志文件
+            saveCrashInfo2File(ex);
+        } catch (Exception ignored) {
+        }
         return false;
     }
 
