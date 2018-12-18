@@ -17,7 +17,7 @@ public class KeyboardToolPop extends PopupWindow {
         super(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.view_soft_keyboard_top_tool, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_soft_keyboard_top_tool, null);
         this.setContentView(view);
 
         setTouchable(true);

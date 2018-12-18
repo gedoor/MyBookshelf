@@ -20,7 +20,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/k1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -28,23 +27,27 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
-                android:text="\\"
+                android:text="@string/and_char"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/keyboard_top_view_third_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="|"
+                android:textSize="14sp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text=""
+                android:text="%"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -52,7 +55,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -60,7 +62,20 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="["
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="]"
+                android:textSize="14sp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -68,7 +83,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -76,7 +90,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -84,7 +97,13 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="."
+                android:textSize="14sp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -92,7 +111,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -100,7 +118,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -108,7 +125,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -116,7 +132,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -124,7 +139,6 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -132,11 +146,31 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/k14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
                 android:text="children"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="href"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="src"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="textNodes"
                 android:textSize="14sp" />
 
         </LinearLayout>

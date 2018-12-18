@@ -332,5 +332,6 @@
     <string name="import_by_qr_code">二维码导入</string>
     <string name="scan_qr_code">扫描二维码</string>
     <string name="at_char">\@</string>
+    <string name="and_char"><![CDATA[&]]></string>
 
 </resources>
