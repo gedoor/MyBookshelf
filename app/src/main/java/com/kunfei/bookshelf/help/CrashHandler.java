@@ -101,17 +101,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         if (ex == null) {
             return false;
         }
+        //收集设备参数信息
+        collectDeviceInfo(mContext);
+        //添加自定义信息
+        addCustomInfo();
         try {
-            //收集设备参数信息
-            collectDeviceInfo(mContext);
-            //添加自定义信息
-            addCustomInfo();
             //使用Toast来显示异常信息
             new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_LONG).show());
-            //保存日志文件
-            saveCrashInfo2File(ex);
         } catch (Exception ignored) {
         }
+        //保存日志文件
+        saveCrashInfo2File(ex);
         return false;
     }
 
