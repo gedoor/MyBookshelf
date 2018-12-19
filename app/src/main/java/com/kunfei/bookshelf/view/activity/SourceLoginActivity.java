@@ -95,10 +95,10 @@ public class SourceLoginActivity extends MBaseActivity {
         settings.setBuiltInZoomControls(true);
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setJavaScriptEnabled(true);
+        CookieManager cookieManager = CookieManager.getInstance();
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                CookieManager cookieManager = CookieManager.getInstance();
                 String cookie = cookieManager.getCookie(url);
                 SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
                 editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
@@ -108,7 +108,6 @@ public class SourceLoginActivity extends MBaseActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                CookieManager cookieManager = CookieManager.getInstance();
                 String cookie = cookieManager.getCookie(url);
                 SharedPreferences.Editor editor = MApplication.getCookiePreferences().edit();
                 editor.putString(bookSourceBean.getBookSourceUrl(), cookie);
