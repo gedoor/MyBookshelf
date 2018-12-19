@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,8 +24,6 @@ import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.help.ACache;
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,7 +93,6 @@ public class SourceLoginActivity extends MBaseActivity {
         WebSettings settings = webView.getSettings();
         settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
-        settings.setUserAgentString(AnalyzeHeaders.getUserAgent(bookSourceBean.getHttpUserAgent()));
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
