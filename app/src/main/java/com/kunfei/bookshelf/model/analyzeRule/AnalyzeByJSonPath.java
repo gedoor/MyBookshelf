@@ -7,6 +7,8 @@ import com.jayway.jsonpath.ReadContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AnalyzeByJSonPath {
     private ReadContext ctx;
@@ -22,15 +24,25 @@ public class AnalyzeByJSonPath {
     public String read(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
         String result = null;
-        try {
-            Object object = ctx.read(rule);
-            if (object instanceof List) {
-                object = ((List) object).get(0);
+        if (!rule.contains("{")) {
+            try {
+                Object object = ctx.read(rule);
+                if (object instanceof List) {
+                    object = ((List) object).get(0);
+                }
+                result = String.valueOf(object);
+            } catch (Exception ignored) {
             }
-            result = String.valueOf(object);
-        } catch (Exception ignored) {
+            return result;
+        } else {
+            result = rule;
+            Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
+            Matcher matcher = pattern.matcher(rule);
+            while (matcher.find()) {
+                result = result.replace(matcher.group(), read(matcher.group()));
+            }
+            return result;
         }
-        return result;
     }
 
     List<Object> readList(String rule) {
