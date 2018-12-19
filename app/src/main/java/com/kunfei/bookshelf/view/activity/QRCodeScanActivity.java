@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
+import cn.qqtheme.framework.picker.FilePicker;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -163,9 +164,18 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     }
 
     private void chooseFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_QR_IMAGE);
+        try {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_QR_IMAGE);
+        } catch (Exception ignored) {
+            FilePicker picker = new FilePicker(this, FilePicker.FILE);
+            picker.setBackgroundColor(getResources().getColor(R.color.background));
+            picker.setTopBackgroundColor(getResources().getColor(R.color.background));
+            picker.setItemHeight(30);
+            picker.setOnFilePickListener(currentPath -> zxingview.decodeQRCode(currentPath));
+            picker.show();
+        }
     }
 }
