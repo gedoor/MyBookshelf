@@ -41,7 +41,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     RecyclerView rvFindRight;
 
     private Unbinder unbinder;
-    private int lastExpandedPosition = 0;
     private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
 
@@ -69,12 +68,23 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             mPresenter.initData();
             refreshLayout.setRefreshing(false);
         });
-        findLeftAdapter = new FindLeftAdapter();
+        findLeftAdapter = new FindLeftAdapter(pos -> rvFindRight.scrollToPosition(pos));
         rvFindLeft.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFindLeft.setAdapter(findLeftAdapter);
         findRightAdapter = new FindRightAdapter();
-        rvFindRight.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvFindRight.setLayoutManager(layoutManager);
         rvFindRight.setAdapter(findRightAdapter);
+        rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int index = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                findLeftAdapter.upShowIndex(index);
+                rvFindLeft.scrollToPosition(index);
+            }
+        });
     }
 
     /**
@@ -90,14 +100,6 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     public synchronized void updateUI(List<FindKindGroupBean> group) {
         findLeftAdapter.setDatas(group);
         findRightAdapter.setDatas(group);
-    }
-
-    private boolean autoExpandGroup() {
-        if (isAdded()) {
-            return preferences.getBoolean(getString(R.string.pk_find_expand_group), false);
-        } else {
-            return false;
-        }
     }
 
     @Override

@@ -48,12 +48,6 @@
         app:MinValue="1" />
 
     <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_find_expand_group"
-        android:summary="@string/default_expand_first"
-        android:title="@string/auto_expand_find" />
-
-    <SwitchPreference
         android:defaultValue="true"
         android:key="showAllFind"
         android:summary="@string/ps_show_all_find"
@@ -68,4 +62,5 @@
         android:key="upChangeSourceLastChapter"
         android:summary="@string/up_change_source_last_chapter_s"
         android:title="@string/up_change_source_last_chapter_t" />
+
 </PreferenceScreen>
