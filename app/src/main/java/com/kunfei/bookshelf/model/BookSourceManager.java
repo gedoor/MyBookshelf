@@ -60,6 +60,19 @@ public class BookSourceManager extends BaseModelImpl {
         return allBookSource;
     }
 
+    public static List<BookSourceBean> getSelectedBookSourceBySerialNumber() {
+        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .where(BookSourceBeanDao.Properties.Enable.eq(true))
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
+    }
+
+    public static List<BookSourceBean> getAllBookSourceBySerialNumber() {
+        return DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                .orderAsc(BookSourceBeanDao.Properties.SerialNumber)
+                .list();
+    }
+
     @Nullable
     public static BookSourceBean getBookSourceByUrl(String url) {
         try {

@@ -9,12 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.base.MBaseFragment;
-import com.kunfei.bookshelf.bean.FindKindBean;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.presenter.FindBookPresenter;
-import com.kunfei.bookshelf.view.activity.SourceEditActivity;
-import com.kunfei.bookshelf.view.adapter.FindKindAdapter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookSourceBean;

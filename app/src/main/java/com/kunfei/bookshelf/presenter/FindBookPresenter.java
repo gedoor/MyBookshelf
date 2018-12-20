@@ -11,8 +11,6 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.bean.FindKindGroupBean;
-import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
@@ -40,7 +38,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
         Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
             List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
-            List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSource() : BookSourceManager.getSelectedBookSource());
+            List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
                 try {
                     if (!TextUtils.isEmpty(sourceBean.getRuleFindUrl())) {
