@@ -11,9 +11,12 @@ import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
+import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +56,13 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
             });
             myViewHolder.flexboxLayout.addView(tagView);
         }
+        myViewHolder.sourceName.setOnLongClickListener(v -> {
+            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(datas.get(i).getGroupTag());
+            if (sourceBean != null) {
+                SourceEditActivity.startThis(context, sourceBean);
+            }
+            return true;
+        });
     }
 
     @Override
