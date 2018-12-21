@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.MApplication;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -26,8 +23,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.kunfei.bookshelf.MApplication.getAppResources;
 
 public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.ThisViewHolder> {
 

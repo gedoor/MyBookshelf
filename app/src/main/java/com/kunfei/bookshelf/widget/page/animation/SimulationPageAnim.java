@@ -16,9 +16,6 @@ import android.view.View;
 
 import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-
-import static com.kunfei.bookshelf.utils.BitmapUtil.stackBlur;
 
 /**
  * 仿真翻页

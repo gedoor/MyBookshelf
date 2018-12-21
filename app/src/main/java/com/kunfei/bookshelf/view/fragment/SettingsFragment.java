@@ -11,8 +11,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.FileHelp;

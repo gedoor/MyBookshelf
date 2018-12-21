@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
 
-import com.kunfei.bookshelf.utils.DensityUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.DensityUtil;
 

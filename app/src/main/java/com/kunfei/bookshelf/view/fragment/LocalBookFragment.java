@@ -4,8 +4,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.media.MediaStoreHelper;

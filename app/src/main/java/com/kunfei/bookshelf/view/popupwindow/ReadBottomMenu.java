@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.service.ReadAloudService;
 import com.monke.mprogressbar.MHorProgressBar;

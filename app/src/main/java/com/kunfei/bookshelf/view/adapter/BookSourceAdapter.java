@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.view.activity.SourceEditActivity;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;

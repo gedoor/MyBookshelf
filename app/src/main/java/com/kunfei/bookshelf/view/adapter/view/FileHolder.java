@@ -6,11 +6,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.Constant;
-import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.view.adapter.base.ViewHolderImpl;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.Constant;

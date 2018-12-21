@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 
-import com.kunfei.bookshelf.presenter.ImportBookPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.presenter.ImportBookPresenter;

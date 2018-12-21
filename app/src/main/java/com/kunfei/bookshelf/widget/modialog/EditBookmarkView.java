@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.utils.SoftInputUtil;

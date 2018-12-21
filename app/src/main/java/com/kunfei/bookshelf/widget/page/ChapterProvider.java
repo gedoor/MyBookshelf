@@ -4,9 +4,6 @@ import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 
-import com.kunfei.bookshelf.help.ChapterContentHelp;
-import com.kunfei.bookshelf.utils.NetworkUtil;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.ChapterContentHelp;
 import com.kunfei.bookshelf.utils.NetworkUtil;

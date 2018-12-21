@@ -12,8 +12,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;

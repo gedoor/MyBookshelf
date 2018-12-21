@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.view.fragment.SettingsFragment;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.view.fragment.SettingsFragment;

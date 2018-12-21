@@ -11,11 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.presenter.ChoiceBookPresenter;
-import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
-import com.kunfei.bookshelf.widget.refreshview.OnLoadMoreListener;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.SearchBookBean;

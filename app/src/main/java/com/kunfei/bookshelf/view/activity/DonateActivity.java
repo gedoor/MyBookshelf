@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.help.Donate;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;

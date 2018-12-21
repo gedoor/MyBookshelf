@@ -42,7 +42,6 @@ import com.kunfei.bookshelf.help.DataBackup;
 import com.kunfei.bookshelf.help.LauncherIcon;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;

@@ -8,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
-import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;

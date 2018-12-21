@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.bean.BaseItem;
-import com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.bean.BaseItem;
 import com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.bean.GroupItem;
 import com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.bean.RecyclerViewData;
 import com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.holder.BaseExpandAbleViewHolder;

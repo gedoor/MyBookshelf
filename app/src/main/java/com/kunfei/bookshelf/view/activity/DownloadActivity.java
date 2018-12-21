@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.base.MBaseActivity;
-import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.DownloadBookBean;

@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.text.TextUtils;
 
 import com.kunfei.basemvplib.CharsetDetector;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;

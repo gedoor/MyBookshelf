@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
 

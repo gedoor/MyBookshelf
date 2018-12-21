@@ -18,7 +18,6 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.widget.refreshview.scroller.FastScrollRecyclerView;
 import com.kunfei.bookshelf.BitIntentDataManager;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;

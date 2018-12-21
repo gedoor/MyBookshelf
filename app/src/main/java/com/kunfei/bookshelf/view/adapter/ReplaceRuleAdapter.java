@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.view.activity.ReplaceRuleActivity;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;

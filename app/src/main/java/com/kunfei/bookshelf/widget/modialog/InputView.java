@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
-import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 

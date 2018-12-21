@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.view.fragment;
 
 import com.kunfei.bookshelf.base.MBaseFragment;
-import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 
 import java.io.File;
