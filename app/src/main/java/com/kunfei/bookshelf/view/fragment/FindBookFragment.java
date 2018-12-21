@@ -43,6 +43,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     private Unbinder unbinder;
     private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
+    private LinearLayoutManager leftLayoutManager;
+    private LinearLayoutManager rightLayoutManager;
 
     @Override
     public int createLayoutId() {
@@ -68,21 +70,22 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             mPresenter.initData();
             refreshLayout.setRefreshing(false);
         });
-        findLeftAdapter = new FindLeftAdapter(pos -> rvFindRight.scrollToPosition(pos));
-        rvFindLeft.setLayoutManager(new LinearLayoutManager(getContext()));
+        leftLayoutManager = new LinearLayoutManager(getContext());
+        rightLayoutManager = new LinearLayoutManager(getContext());
+        findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
+        rvFindLeft.setLayoutManager(leftLayoutManager);
         rvFindLeft.setAdapter(findLeftAdapter);
         findRightAdapter = new FindRightAdapter();
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        rvFindRight.setLayoutManager(layoutManager);
+        rvFindRight.setLayoutManager(rightLayoutManager);
         rvFindRight.setAdapter(findRightAdapter);
         rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int index = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
+                int index = rightLayoutManager.findFirstVisibleItemPosition();
                 findLeftAdapter.upShowIndex(index);
-                rvFindLeft.scrollToPosition(index);
+                leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
             }
         });
     }
