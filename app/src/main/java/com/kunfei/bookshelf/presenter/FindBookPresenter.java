@@ -55,6 +55,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                         }
                         FindKindGroupBean groupBean = new FindKindGroupBean();
                         groupBean.setGroupName(sourceBean.getBookSourceName());
+                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
                         groupBean.setChildrenList(children);
                         groupBean.setChildrenCount(kindA.length);
                         group.add(groupBean);

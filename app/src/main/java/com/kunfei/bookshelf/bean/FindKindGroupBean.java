@@ -4,6 +4,7 @@ import java.util.List;
 
 public class FindKindGroupBean {
     private String groupName;
+    private String groupTag;
     private int childrenCount;
     private List<FindKindBean> childrenList;
 
@@ -13,6 +14,14 @@ public class FindKindGroupBean {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getGroupTag() {
+        return groupTag;
+    }
+
+    public void setGroupTag(String groupTag) {
+        this.groupTag = groupTag;
     }
 
     public int getChildrenCount() {

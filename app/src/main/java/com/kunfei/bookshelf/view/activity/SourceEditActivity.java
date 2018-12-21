@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.view.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -215,6 +216,20 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
             e.printStackTrace();
         }
         activity.startActivityForResult(intent, EDIT_SOURCE);
+    }
+
+    public static void startThis(Context context, BookSourceBean sourceBean) {
+        Intent intent = new Intent(context, SourceEditActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String key = String.valueOf(System.currentTimeMillis());
+        intent.putExtra("data_key", key);
+        try {
+            BitIntentDataManager.getInstance().putData(key, sourceBean.clone());
+        } catch (CloneNotSupportedException e) {
+            BitIntentDataManager.getInstance().putData(key, sourceBean);
+            e.printStackTrace();
+        }
+        context.startActivity(intent);
     }
 
     @Override
