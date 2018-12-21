@@ -1,11 +1,6 @@
 package com.kunfei.bookshelf.model.content;
 
 import com.kunfei.basemvplib.BaseModelImpl;
-import com.kunfei.bookshelf.bean.BaseChapterBean;
-import com.kunfei.bookshelf.model.BookSourceManager;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
-import com.kunfei.bookshelf.model.impl.IHttpPostApi;
-import com.kunfei.bookshelf.model.impl.IStationBookModel;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
 import com.kunfei.bookshelf.bean.BookContentBean;
