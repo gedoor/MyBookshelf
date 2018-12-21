@@ -4,8 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kunfei.basemvplib.BaseModelImpl;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.dao.ReplaceRuleBeanDao;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;

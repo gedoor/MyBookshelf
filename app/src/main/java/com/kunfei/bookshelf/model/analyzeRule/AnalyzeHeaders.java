@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookSourceBean;
-import com.kunfei.bookshelf.help.ACache;
 
 import java.util.HashMap;
 import java.util.Map;

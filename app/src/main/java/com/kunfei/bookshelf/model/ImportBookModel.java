@@ -2,8 +2,6 @@
 package com.kunfei.bookshelf.model;
 
 import com.kunfei.basemvplib.BaseModelImpl;
-import com.kunfei.bookshelf.bean.LocBookShelfBean;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookInfoBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;

@@ -2,8 +2,6 @@ package com.kunfei.bookshelf.model.content;
 
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
-import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BaseChapterBean;
@@ -13,6 +11,8 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.dao.ChapterListBeanDao;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
+import com.kunfei.bookshelf.model.analyzeRule.AnalyzeRule;
+import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;

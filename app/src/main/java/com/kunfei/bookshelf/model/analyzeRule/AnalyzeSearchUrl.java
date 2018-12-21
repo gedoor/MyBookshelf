@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.model.analyzeRule;
 
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.net.URL;
 import java.net.URLEncoder;
