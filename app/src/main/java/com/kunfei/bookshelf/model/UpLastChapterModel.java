@@ -5,9 +5,6 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookSourceBean;
@@ -171,7 +168,7 @@ public class UpLastChapterModel {
                 if (sourceBean == null) {
                     DbHelper.getInstance().getmDaoSession().getSearchBookBeanDao().delete(searchBookBean);
                 } else if (System.currentTimeMillis() - searchBookBean.getUpTime() > 1000 * 60 * 60
-                        && BookSourceManager.getBookSourceByUrl(searchBookBean.getTag()).getEnable()) {
+                        && sourceBean.getEnable()) {
                     e.onNext(searchBookBean);
                 }
             }
