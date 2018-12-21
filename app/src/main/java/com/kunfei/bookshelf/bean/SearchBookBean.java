@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.help.BookshelfHelp;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;

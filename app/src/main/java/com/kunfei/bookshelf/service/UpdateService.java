@@ -13,10 +13,6 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.bookshelf.bean.UpdateInfoBean;
-import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.help.UpdateManager;
-import com.kunfei.bookshelf.view.activity.UpdateActivity;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.UpdateInfoBean;

@@ -17,7 +17,6 @@ import android.view.View;
 
 import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.impl.IPresenter;
-import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;

@@ -9,10 +9,6 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
-import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookmarkBean;
-import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.service.ReadAloudService;
 
 public interface ReadBookContract {

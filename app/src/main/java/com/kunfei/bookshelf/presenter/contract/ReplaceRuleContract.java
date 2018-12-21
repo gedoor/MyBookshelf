@@ -5,7 +5,6 @@ import android.support.design.widget.Snackbar;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
-import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 
 import java.util.List;
 

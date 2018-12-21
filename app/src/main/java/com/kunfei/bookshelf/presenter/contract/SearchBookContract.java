@@ -7,9 +7,6 @@ import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.bean.SearchHistoryBean;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
-import com.kunfei.bookshelf.bean.SearchBookBean;
-import com.kunfei.bookshelf.bean.SearchHistoryBean;
-import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 
 import java.util.List;
 

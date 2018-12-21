@@ -8,14 +8,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.utils.MD5Utils;
-import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.widget.page.PageLoaderEpub;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.utils.MD5Utils;
+import com.kunfei.bookshelf.utils.StringUtils;
+import com.kunfei.bookshelf.widget.page.PageLoaderEpub;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -27,10 +25,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.kunfei.bookshelf.bean.BookShelfBean.LOCAL_TAG;
-import static com.kunfei.bookshelf.utils.StringUtils.getString;
-import static com.kunfei.bookshelf.widget.page.PageLoaderEpub.readBook;
 
 /**
  * 书本信息

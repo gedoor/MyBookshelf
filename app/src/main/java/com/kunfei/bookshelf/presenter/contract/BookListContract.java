@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookShelfBean;
 
 import java.util.List;
 

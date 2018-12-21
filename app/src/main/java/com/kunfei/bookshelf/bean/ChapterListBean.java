@@ -6,8 +6,6 @@ import android.os.Parcelable;
 
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.utils.StringUtils;
-import com.kunfei.bookshelf.help.BookshelfHelp;
-import com.kunfei.bookshelf.utils.StringUtils;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -16,8 +14,6 @@ import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
-
-import static com.kunfei.bookshelf.help.BookshelfHelp.chapterNamePattern;
 
 /**
  * 章节列表
