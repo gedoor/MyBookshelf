@@ -37,7 +37,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.WelcomeActivity">
+        <activity
+            android:name=".view.activity.WelcomeActivity"
+            android:theme="@style/AppTransparentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
