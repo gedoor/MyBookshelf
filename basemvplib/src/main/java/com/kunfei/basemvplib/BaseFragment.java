@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.basemvplib.impl.IPresenter;
+import com.kunfei.basemvplib.impl.IView;
 
 public abstract class BaseFragment<T extends IPresenter> extends com.trello.rxlifecycle2.components.support.RxFragment implements IView {
     protected View view;

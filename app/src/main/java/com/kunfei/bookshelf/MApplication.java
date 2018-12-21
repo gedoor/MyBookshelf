@@ -18,13 +18,6 @@ import com.kunfei.bookshelf.help.Constant;
 import com.kunfei.bookshelf.help.CrashHandler;
 import com.kunfei.bookshelf.help.FileHelp;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
-import com.kunfei.bookshelf.BuildConfig;
-import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.help.AppFrontBackHelper;
-import com.kunfei.bookshelf.help.Constant;
-import com.kunfei.bookshelf.help.CrashHandler;
-import com.kunfei.bookshelf.help.FileHelp;
-import com.kunfei.bookshelf.model.UpLastChapterModel;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

@@ -10,9 +10,9 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Toast;
 
+import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.monke.basemvplib.R;
-import com.kunfei.basemvplib.impl.IPresenter;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActivity implements IView {
