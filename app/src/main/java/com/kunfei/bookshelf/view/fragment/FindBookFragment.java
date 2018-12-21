@@ -101,8 +101,17 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
 
     @Override
     public synchronized void updateUI(List<FindKindGroupBean> group) {
+        if (rlEmptyView == null) return;
         findLeftAdapter.setDatas(group);
         findRightAdapter.setDatas(group);
+        rlEmptyView.setVisibility(View.GONE);
+        rvFindLeft.setVisibility(View.VISIBLE);
+        if (group.size() == 0) {
+            tvEmpty.setText("没有发现，可以在书源里添加。");
+            rlEmptyView.setVisibility(View.VISIBLE);
+        } else if (group.size() == 1) {
+            rvFindLeft.setVisibility(View.GONE);
+        }
     }
 
     @Override
