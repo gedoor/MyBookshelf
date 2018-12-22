@@ -8,18 +8,16 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
+import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by GKF on 2018/1/28.
@@ -29,27 +27,15 @@ import io.reactivex.schedulers.Schedulers;
 public class SourceEditPresenter extends BasePresenterImpl<SourceEditContract.View> implements SourceEditContract.Presenter {
 
     @Override
-    public void saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
-        Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+    public Observable<Boolean> saveSource(BookSourceBean bookSource, BookSourceBean bookSourceOld) {
+        return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             if (bookSourceOld != null && !Objects.equals(bookSource.getBookSourceUrl(), bookSourceOld.getBookSourceUrl())) {
                 DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().delete(bookSourceOld);
             }
             BookSourceManager.addBookSource(bookSource);
             BookSourceManager.refreshBookSource();
             e.onNext(true);
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        mView.saveSuccess();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast(e.getLocalizedMessage());
-                    }
-                });
+        }).compose(RxUtils::toSimpleSingle);
     }
 
     @Override

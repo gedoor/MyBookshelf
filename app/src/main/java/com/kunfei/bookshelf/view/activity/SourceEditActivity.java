@@ -288,21 +288,12 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new KeyboardOnGlobalChangeListener());
     }
 
-    private boolean saveBookSource() {
+    private boolean canSaveBookSource() {
         if (isEmpty(trim(tieBookSourceName.getText())) || isEmpty(trim(tieBookSourceUrl.getText()))) {
             toast("书源名称和URL不能为空", ERROR);
             return false;
         }
-        mPresenter.saveSource(getBookSource(), bookSourceBean);
         return true;
-    }
-
-    @Override
-    public void saveSuccess() {
-        bookSourceBean = getBookSource();
-        toast("保存成功");
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override
@@ -529,7 +520,23 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         int id = item.getItemId();
         switch (id) {
             case R.id.action_save:
-                saveBookSource();
+                if (canSaveBookSource()) {
+                    mPresenter.saveSource(getBookSource(), bookSourceBean)
+                            .subscribe(new SimpleObserver<Boolean>() {
+                                @Override
+                                public void onNext(Boolean aBoolean) {
+                                    bookSourceBean = getBookSource();
+                                    toast("保存成功");
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    toast(e.getLocalizedMessage());
+                                }
+                            });
+                }
                 break;
             case R.id.action_login:
                 if (!TextUtils.isEmpty(getBookSource().getLoginUrl())) {
@@ -554,8 +561,19 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
                 openRuleSummary();
                 break;
             case R.id.action_debug_source:
-                if (saveBookSource()) {
-                    SourceDebugActivity.startThis(this, getBookSource().getBookSourceUrl());
+                if (canSaveBookSource()) {
+                    mPresenter.saveSource(getBookSource(), bookSourceBean)
+                            .subscribe(new SimpleObserver<Boolean>() {
+                                @Override
+                                public void onNext(Boolean aBoolean) {
+                                    SourceDebugActivity.startThis(SourceEditActivity.this, getBookSource().getBookSourceUrl());
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    toast(e.getLocalizedMessage());
+                                }
+                            });
                 }
                 break;
             case android.R.id.home:
