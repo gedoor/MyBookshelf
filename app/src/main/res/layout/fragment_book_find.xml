@@ -27,6 +27,7 @@
                     android:layout_height="match_parent" />
 
                 <View
+                    android:id="@+id/vw_divider"
                     android:layout_width="0.8dp"
                     android:layout_height="match_parent"
                     android:background="@color/btn_bg_press" />

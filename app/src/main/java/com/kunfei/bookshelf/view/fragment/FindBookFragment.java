@@ -39,8 +39,10 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     RecyclerView rvFindLeft;
     @BindView(R.id.rv_find_right)
     RecyclerView rvFindRight;
+    @BindView(R.id.vw_divider)
+    View vwDivider;
 
-    private Unbinder unbinder;
+    Unbinder unbinder;
     private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
     private LinearLayoutManager leftLayoutManager;
@@ -106,11 +108,13 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         findRightAdapter.setDatas(group);
         rlEmptyView.setVisibility(View.GONE);
         rvFindLeft.setVisibility(View.VISIBLE);
+        vwDivider.setVisibility(View.VISIBLE);
         if (group.size() == 0) {
             tvEmpty.setText("没有发现，可以在书源里添加。");
             rlEmptyView.setVisibility(View.VISIBLE);
         } else if (group.size() == 1) {
             rvFindLeft.setVisibility(View.GONE);
+            vwDivider.setVisibility(View.GONE);
         }
     }
 
