@@ -775,10 +775,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 break;
             case R.id.action_get_hb:
                 DonateActivity.getZfbHb(this);
-                mHandler.postDelayed(() -> {
-                    upMenu();
-                    refreshDurChapter();
-                }, 2000);
+                upMenu();
+                mHandler.postDelayed(this::refreshDurChapter, 2000);
                 break;
             case android.R.id.home:
                 finish();
