@@ -27,7 +27,7 @@
             android:scrollbars="vertical"
             android:scrollbarStyle="outsideOverlay"/>
 
-        <com.kunfei.bookshelf.widget.refreshview.RefreshProgressBar
+        <com.kunfei.bookshelf.widget.recycler.refresh.RefreshProgressBar
             android:id="@+id/rpb"
             android:layout_width="match_parent"
             android:layout_height="3dp"

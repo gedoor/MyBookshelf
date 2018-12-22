@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.refreshview;
+package com.kunfei.bookshelf.widget.recycler.refresh;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

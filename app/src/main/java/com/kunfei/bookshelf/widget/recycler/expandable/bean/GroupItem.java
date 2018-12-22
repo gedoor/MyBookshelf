@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.refreshview.expandablerecyclerview.bean;
+package com.kunfei.bookshelf.widget.recycler.expandable.bean;
 
 import java.util.List;
 

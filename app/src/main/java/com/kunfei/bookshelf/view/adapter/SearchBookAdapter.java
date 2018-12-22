@@ -20,7 +20,7 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.view.adapter.base.BaseListAdapter;
 import com.kunfei.bookshelf.widget.CoverImageView;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;

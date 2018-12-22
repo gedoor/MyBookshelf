@@ -48,7 +48,7 @@
             android:layout_height="0.5dp"
             android:background="@color/btn_bg_press"/>
 
-        <com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView
+        <com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView
             android:id="@+id/rf_rv_change_source"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

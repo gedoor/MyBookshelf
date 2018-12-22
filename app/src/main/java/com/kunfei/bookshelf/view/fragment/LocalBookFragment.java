@@ -9,7 +9,7 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.media.MediaStoreHelper;
 import com.kunfei.bookshelf.view.adapter.FileSystemAdapter;
 import com.kunfei.bookshelf.widget.itemdecoration.DividerItemDecoration;
-import com.kunfei.bookshelf.widget.refreshview.RefreshLayout;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

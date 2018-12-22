@@ -27,7 +27,7 @@ import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.adapter.ChapterListAdapter;
 import com.kunfei.bookshelf.widget.AppCompat;
-import com.kunfei.bookshelf.widget.refreshview.scroller.FastScrollRecyclerView;
+import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
 
 import java.util.Locale;
 

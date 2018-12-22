@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.widget.CoverImageView;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerViewAdapter;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerViewAdapter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.refreshview.scroller;
+package com.kunfei.bookshelf.widget.recycler.scroller;
 
 public interface FastScrollStateChangeListener {
 

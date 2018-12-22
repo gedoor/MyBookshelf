@@ -35,8 +35,8 @@ import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
-import com.kunfei.bookshelf.widget.refreshview.OnLoadMoreListener;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView;
+import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 

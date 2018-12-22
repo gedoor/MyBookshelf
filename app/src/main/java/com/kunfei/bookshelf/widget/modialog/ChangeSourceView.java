@@ -27,7 +27,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.SearchBookModel;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.view.adapter.ChangeSourceAdapter;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;

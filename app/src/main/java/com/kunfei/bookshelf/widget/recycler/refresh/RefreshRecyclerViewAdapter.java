@@ -1,4 +1,4 @@
-package com.kunfei.bookshelf.widget.refreshview;
+package com.kunfei.bookshelf.widget.recycler.refresh;
 
 import android.os.Handler;
 import android.os.Looper;

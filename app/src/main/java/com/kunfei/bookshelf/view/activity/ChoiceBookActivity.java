@@ -18,8 +18,8 @@ import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ChoiceBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
 import com.kunfei.bookshelf.view.adapter.ChoiceBookAdapter;
-import com.kunfei.bookshelf.widget.refreshview.OnLoadMoreListener;
-import com.kunfei.bookshelf.widget.refreshview.RefreshRecyclerView;
+import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
+import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 import java.util.Objects;
