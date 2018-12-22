@@ -37,12 +37,12 @@ import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
+import com.library.explosionfield.ExplosionField;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import tyrantgit.explosionfield.ExplosionField;
 
 public class SearchBookActivity extends MBaseActivity<SearchBookContract.Presenter> implements SearchBookContract.View {
 
@@ -227,7 +227,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void bindEvent() {
         tvSearchHistoryClean.setOnClickListener(v -> {
-            mExplosionField.explode(flSearchHistory);
+            mExplosionField.explode(flSearchHistory, true);
             mPresenter.cleanSearchHistory();
         });
 
