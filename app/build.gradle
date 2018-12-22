@@ -108,7 +108,6 @@ dependencies {
 
     //动画
     implementation 'com.victor:lib:1.0.4'
-    implementation 'com.github.gtmora200:ZExplosionField:1.0.3'
 
     //简易权限获取
     implementation 'pub.devrel:easypermissions:2.0.0'
