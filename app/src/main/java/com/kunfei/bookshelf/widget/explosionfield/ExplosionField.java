@@ -30,8 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
-import com.library.explosionfield.ZAnimatorListener;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,7 +40,7 @@ public class ExplosionField extends View {
 
     private long customDuration = ExplosionAnimator.DEFAULT_DURATION;
     private int idPlayAnimationEffect = 0;
-    private ZAnimatorListener mZAnimatorListener;
+    private OnAnimatorListener mZAnimatorListener;
     private OnClickListener mOnClickListener;
 
     private List<ExplosionAnimator> mExplosions = new ArrayList<>();
@@ -84,7 +82,7 @@ public class ExplosionField extends View {
         this.customDuration = customDuration;
     }
 
-    public void addActionEvent(ZAnimatorListener ievents) {
+    public void addActionEvent(OnAnimatorListener ievents) {
         this.mZAnimatorListener = ievents;
     }
 
@@ -180,31 +178,6 @@ public class ExplosionField extends View {
             explode(Utils.createBitmapFromView(view), r, startDelay);
 
     }
-
-    /*public void explode(final View view) {
-        Rect r = new Rect();
-        view.getGlobalVisibleRect(r);
-        int[] location = new int[2];
-        getLocationOnScreen(location);
-        r.offset(-location[0], -location[1]);
-        r.inset(-mExpandInset[0], -mExpandInset[1]);
-        int startDelay = 100;
-        ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f).setDuration(150);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            Random random = new Random();
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                view.setTranslationX((random.nextFloat() - 0.5f) * view.getWidth() * 0.05f);
-                view.setTranslationY((random.nextFloat() - 0.5f) * view.getHeight() * 0.05f);
-
-            }
-        });
-        animator.start();
-        view.animate().setDuration(150).setStartDelay(startDelay).scaleX(0f).scaleY(0f).alpha(0f).start();
-        explode(com.explosionfield.Utils.createBitmapFromView(view), r, startDelay, com.explosionfield.ExplosionAnimator.DEFAULT_DURATION);
-    }*/
 
     public void clear() {
         mExplosions.clear();
