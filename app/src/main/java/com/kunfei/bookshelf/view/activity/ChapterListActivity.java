@@ -126,7 +126,28 @@ public class ChapterListActivity extends MBaseActivity {
         AppCompat.setToolbarNavIconTint(toolbar, getResources().getColor(R.color.menu_color_default));
         rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, isChapterReverse));
         rvList.setItemAnimator(null);
-        setData(bookShelf);
+        chapterListAdapter = new ChapterListAdapter(bookShelf, new ChapterListAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(int index, int page, int tabPosition) {
+                searchViewCollapsed();
+                if (index != bookShelf.getDurChapter()) {
+                    RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
+                }
+                finish();
+            }
+
+            @Override
+            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
+                searchViewCollapsed();
+                RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
+                finish();
+            }
+        });
+        if (bookShelf != null) {
+            rvList.setAdapter(chapterListAdapter);
+            updateIndex(bookShelf.getDurChapter());
+            updateChapterInfo();
+        }
     }
 
     @Override
@@ -214,30 +235,6 @@ public class ChapterListActivity extends MBaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void setData(BookShelfBean bookShelfBean) {
-        this.bookShelf = bookShelfBean;
-        chapterListAdapter = new ChapterListAdapter(bookShelfBean, new ChapterListAdapter.OnItemClickListener() {
-            @Override
-            public void itemClick(int index, int page, int tabPosition) {
-                searchViewCollapsed();
-                if (index != bookShelf.getDurChapter()) {
-                    RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
-                }
-                finish();
-            }
-
-            @Override
-            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
-                searchViewCollapsed();
-                RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
-                finish();
-            }
-        });
-        rvList.setAdapter(chapterListAdapter);
-        updateIndex(bookShelf.getDurChapter());
-        updateChapterInfo();
     }
 
     private void updateIndex(int durChapter) {
