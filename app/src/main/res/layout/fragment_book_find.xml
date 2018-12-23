@@ -23,7 +23,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_find_left"
-                    android:layout_width="80dp"
+                    android:layout_width="90dp"
                     android:layout_height="match_parent" />
 
                 <View
