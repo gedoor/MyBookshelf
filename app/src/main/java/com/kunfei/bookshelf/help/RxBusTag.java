@@ -26,4 +26,5 @@ public class RxBusTag {
     public final static String OPEN_BOOK_MARK = "openBookMark";
     public final static String READ_ALOUD_NUMBER = "readAloudNumber";
     public final static String READ_ALOUD_START = "readAloudStart";
+    public final static String UP_FIND_STYLE = "upFindStyle";
 }

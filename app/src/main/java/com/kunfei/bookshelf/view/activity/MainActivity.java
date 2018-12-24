@@ -184,9 +184,14 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                     }
                 });
             } else {
-                tab.setCustomView(tab_icon(mTitles[i], null));
+                tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
                 View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
                 tabView.setTag(i);
+                tabView.setOnClickListener(view -> {
+                    if (tabView.isSelected()) {
+                        showFindMenu(view);
+                    }
+                });
             }
         }
     }
@@ -203,13 +208,28 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             upGroup(menuItem.getOrder());
             return true;
         });
-        popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(false));
+        popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(0, false));
         popupMenu.show();
-        updateTabItemIcon(true);
+        updateTabItemIcon(0, true);
     }
 
-    private void updateTabItemIcon(boolean showMenu) {
-        TabLayout.Tab tab = mTlIndicator.getTabAt(0);
+    private void showFindMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenu().add(0, 0, 0, "切换显示样式");
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("findTypeIsFlexBox", !preferences.getBoolean("findTypeIsFlexBox", true));
+            editor.apply();
+            RxBus.get().post(RxBusTag.UP_FIND_STYLE, new Object());
+            return true;
+        });
+        popupMenu.setOnDismissListener(popupMenu1 -> updateTabItemIcon(1, false));
+        popupMenu.show();
+        updateTabItemIcon(1, true);
+    }
+
+    private void updateTabItemIcon(int index, boolean showMenu) {
+        TabLayout.Tab tab = mTlIndicator.getTabAt(index);
         if (tab == null) return;
         View customView = tab.getCustomView();
         if (customView == null) return;

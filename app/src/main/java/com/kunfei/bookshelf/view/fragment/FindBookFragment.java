@@ -97,6 +97,11 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
+    public void upStyle() {
+        initRecyclerView();
+    }
+
+    @Override
     public synchronized void updateUI(List<RecyclerViewData> group) {
         if (rlEmptyView == null) return;
         if (group.size() == 0) {
@@ -105,7 +110,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         } else {
             rlEmptyView.setVisibility(View.GONE);
         }
-        if (getFindType() == 1) {
+        if (isFlexBox()) {
             findLeftAdapter.setDatas(group);
             findRightAdapter.setDatas(group);
             rlEmptyView.setVisibility(View.GONE);
@@ -120,12 +125,12 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         }
     }
 
-    private int getFindType() {
-        return preferences.getInt("findType", 1);
+    private boolean isFlexBox() {
+        return preferences.getBoolean("findTypeIsFlexBox", true);
     }
 
     private void initRecyclerView() {
-        if (getFindType() == 1) {
+        if (isFlexBox()) {
             findKindAdapter = null;
             findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
             rvFindLeft.setLayoutManager(leftLayoutManager);
