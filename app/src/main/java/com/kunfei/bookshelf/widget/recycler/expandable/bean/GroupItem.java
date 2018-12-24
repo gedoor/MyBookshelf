@@ -63,7 +63,10 @@ public class GroupItem<T, S> extends BaseItem {
     }
 
     public void removeChild(int childPosition) {
-
+        if (childDatas == null || childDatas.size() == 0) {
+            return;
+        }
+        childDatas.remove(childPosition);
     }
 
     public T getGroupData() {
