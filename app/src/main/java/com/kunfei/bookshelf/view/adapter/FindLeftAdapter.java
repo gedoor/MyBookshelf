@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.FindKindGroupBean;
+import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.List;
 public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyViewHolder> {
     private Context context;
     private int showIndex = 0;
-    private List<FindKindGroupBean> datas = new ArrayList<>();
+    private List<RecyclerViewData> datas = new ArrayList<>();
     private OnClickListener onClickListener;
 
     public FindLeftAdapter(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public void setDatas(List<FindKindGroupBean> datas) {
+    public void setDatas(List<RecyclerViewData> datas) {
         this.datas.clear();
         this.datas.addAll(datas);
         notifyDataSetChanged();
@@ -49,7 +50,8 @@ public class FindLeftAdapter extends RecyclerView.Adapter<FindLeftAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, @SuppressLint("RecyclerView") int i) {
-        myViewHolder.tvSourceName.setText(datas.get(i).getGroupName());
+        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(i).getGroupData();
+        myViewHolder.tvSourceName.setText(groupBean.getGroupName());
         if (i == showIndex) {
             myViewHolder.findLeft.setBackgroundColor(context.getResources().getColor(R.color.btn_bg_press));
         } else {

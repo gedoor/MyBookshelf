@@ -1,12 +1,9 @@
 package com.kunfei.bookshelf.bean;
 
-import java.util.List;
-
 public class FindKindGroupBean {
     private String groupName;
     private String groupTag;
     private int childrenCount;
-    private List<FindKindBean> childrenList;
 
     public String getGroupName() {
         return groupName;
@@ -32,11 +29,4 @@ public class FindKindGroupBean {
         this.childrenCount = childrenCount;
     }
 
-    public List<FindKindBean> getChildrenList() {
-        return childrenList;
-    }
-
-    public void setChildrenList(List<FindKindBean> childrenList) {
-        this.childrenList = childrenList;
-    }
 }

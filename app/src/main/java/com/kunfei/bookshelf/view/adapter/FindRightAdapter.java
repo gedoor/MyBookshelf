@@ -17,15 +17,16 @@ import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
 import com.kunfei.bookshelf.view.activity.SourceEditActivity;
+import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyViewHolder> {
-    private List<FindKindGroupBean> datas = new ArrayList<>();
+    private List<RecyclerViewData> datas = new ArrayList<>();
     private Context context;
 
-    public void setDatas(List<FindKindGroupBean> datas) {
+    public void setDatas(List<RecyclerViewData> datas) {
         this.datas.clear();
         this.datas.addAll(datas);
         notifyDataSetChanged();
@@ -39,25 +40,27 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.sourceName.setText(datas.get(i).getGroupName());
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int pos) {
+        FindKindGroupBean groupBean = (FindKindGroupBean) datas.get(pos).getGroupData();
+        myViewHolder.sourceName.setText(groupBean.getGroupName());
         myViewHolder.flexboxLayout.removeAllViews();
         TextView tagView;
-        for (FindKindBean findKindBean : datas.get(i).getChildrenList()) {
+        for (int i = 0; i < groupBean.getChildrenCount(); i++) {
+            FindKindBean kindBean = (FindKindBean) datas.get(pos).getChild(i);
             tagView = (TextView) LayoutInflater.from(context).inflate(R.layout.item_search_history, myViewHolder.flexboxLayout, false);
-            tagView.setText(findKindBean.getKindName());
+            tagView.setText(kindBean.getKindName());
             tagView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ChoiceBookActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("url", findKindBean.getKindUrl());
-                intent.putExtra("title", findKindBean.getKindName());
-                intent.putExtra("tag", findKindBean.getTag());
+                intent.putExtra("url", kindBean.getKindUrl());
+                intent.putExtra("title", kindBean.getKindName());
+                intent.putExtra("tag", kindBean.getTag());
                 context.startActivity(intent);
             });
             myViewHolder.flexboxLayout.addView(tagView);
         }
         myViewHolder.sourceName.setOnLongClickListener(v -> {
-            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(datas.get(i).getGroupTag());
+            BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
             if (sourceBean != null) {
                 SourceEditActivity.startThis(context, sourceBean);
             }

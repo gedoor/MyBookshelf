@@ -19,6 +19,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,8 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
     @Override
     public void initData() {
         if (disposable != null) return;
-        Single.create((SingleOnSubscribe<List<FindKindGroupBean>>) e -> {
-            List<FindKindGroupBean> group = new ArrayList<>();
+        Single.create((SingleOnSubscribe<List<RecyclerViewData>>) e -> {
+            List<RecyclerViewData> group = new ArrayList<>();
             boolean showAllFind = MApplication.getInstance().getConfigPreferences().getBoolean("showAllFind", true);
             List<BookSourceBean> sourceBeans = new ArrayList<>(showAllFind ? BookSourceManager.getAllBookSourceBySerialNumber() : BookSourceManager.getSelectedBookSourceBySerialNumber());
             for (BookSourceBean sourceBean : sourceBeans) {
@@ -55,10 +56,8 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                         }
                         FindKindGroupBean groupBean = new FindKindGroupBean();
                         groupBean.setGroupName(sourceBean.getBookSourceName());
-                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
-                        groupBean.setChildrenList(children);
                         groupBean.setChildrenCount(kindA.length);
-                        group.add(groupBean);
+                        group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {
                     sourceBean.addGroup("发现规则语法错误");
@@ -68,14 +67,14 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
             e.onSuccess(group);
         })
                 .compose(RxUtils::toSimpleSingle)
-                .subscribe(new SingleObserver<List<FindKindGroupBean>>() {
+                .subscribe(new SingleObserver<List<RecyclerViewData>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable = d;
                     }
 
                     @Override
-                    public void onSuccess(List<FindKindGroupBean> recyclerViewData) {
+                    public void onSuccess(List<RecyclerViewData> recyclerViewData) {
                         mView.updateUI(recyclerViewData);
                         disposable.dispose();
                         disposable = null;

@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
-import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
 import com.kunfei.bookshelf.view.adapter.FindLeftAdapter;
 import com.kunfei.bookshelf.view.adapter.FindRightAdapter;
+import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.List;
 
@@ -102,7 +102,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     }
 
     @Override
-    public synchronized void updateUI(List<FindKindGroupBean> group) {
+    public synchronized void updateUI(List<RecyclerViewData> group) {
         if (rlEmptyView == null) return;
         findLeftAdapter.setDatas(group);
         findRightAdapter.setDatas(group);
