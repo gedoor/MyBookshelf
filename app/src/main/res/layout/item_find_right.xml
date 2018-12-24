@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tv_source_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="9dp"
         android:textSize="16sp"
