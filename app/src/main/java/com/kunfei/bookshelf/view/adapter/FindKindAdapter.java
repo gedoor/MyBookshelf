@@ -23,33 +23,25 @@ import java.util.List;
  */
 
 public class FindKindAdapter extends BaseExpandableRecyclerAdapter<FindKindGroupBean, FindKindBean, FindKindAdapter.MyViewHolder> {
-    private Context context;
-    private LayoutInflater mInflater;
 
-    public FindKindAdapter(Context context, List<RecyclerViewData> datas) {
-        super(context, datas);
-        this.context = context;
-        mInflater = LayoutInflater.from(context);
+    public FindKindAdapter(Context ctx, List<RecyclerViewData> datas) {
+        super(ctx, datas);
     }
 
     /**
      * return groupView
-     *
-     * @param parent
      */
     @Override
     public View getGroupView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_group, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_group, parent, false);
     }
 
     /**
      * return childView
-     *
-     * @param parent
      */
     @Override
     public View getChildView(ViewGroup parent) {
-        return mInflater.inflate(R.layout.item_find_kind, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_find_kind, parent, false);
     }
 
     /**

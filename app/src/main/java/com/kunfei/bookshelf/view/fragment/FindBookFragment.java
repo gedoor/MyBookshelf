@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,19 +15,27 @@ import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
+import com.kunfei.bookshelf.bean.BookSourceBean;
+import com.kunfei.bookshelf.bean.FindKindBean;
+import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
+import com.kunfei.bookshelf.view.activity.ChoiceBookActivity;
+import com.kunfei.bookshelf.view.activity.SourceEditActivity;
+import com.kunfei.bookshelf.view.adapter.FindKindAdapter;
 import com.kunfei.bookshelf.view.adapter.FindLeftAdapter;
 import com.kunfei.bookshelf.view.adapter.FindRightAdapter;
+import com.kunfei.bookshelf.widget.recycler.expandable.OnRecyclerViewListener;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View {
+public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> implements FindBookContract.View, OnRecyclerViewListener.OnItemClickListener, OnRecyclerViewListener.OnItemLongClickListener {
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.refresh_layout)
@@ -45,6 +54,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     Unbinder unbinder;
     private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
+    private FindKindAdapter findKindAdapter;
     private LinearLayoutManager leftLayoutManager;
     private LinearLayoutManager rightLayoutManager;
 
@@ -74,22 +84,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
         });
         leftLayoutManager = new LinearLayoutManager(getContext());
         rightLayoutManager = new LinearLayoutManager(getContext());
-        findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
-        rvFindLeft.setLayoutManager(leftLayoutManager);
-        rvFindLeft.setAdapter(findLeftAdapter);
-        findRightAdapter = new FindRightAdapter();
-        rvFindRight.setLayoutManager(rightLayoutManager);
-        rvFindRight.setAdapter(findRightAdapter);
-        rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int index = rightLayoutManager.findFirstVisibleItemPosition();
-                findLeftAdapter.upShowIndex(index);
-                leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
-            }
-        });
+        initRecyclerView();
     }
 
     /**
@@ -104,18 +99,95 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public synchronized void updateUI(List<RecyclerViewData> group) {
         if (rlEmptyView == null) return;
-        findLeftAdapter.setDatas(group);
-        findRightAdapter.setDatas(group);
-        rlEmptyView.setVisibility(View.GONE);
-        rvFindLeft.setVisibility(View.VISIBLE);
-        vwDivider.setVisibility(View.VISIBLE);
         if (group.size() == 0) {
             tvEmpty.setText("没有发现，可以在书源里添加。");
             rlEmptyView.setVisibility(View.VISIBLE);
-        } else if (group.size() == 1) {
+        } else {
+            rlEmptyView.setVisibility(View.GONE);
+        }
+        if (getFindType() == 1) {
+            findLeftAdapter.setDatas(group);
+            findRightAdapter.setDatas(group);
+            rlEmptyView.setVisibility(View.GONE);
+            rvFindLeft.setVisibility(View.VISIBLE);
+            vwDivider.setVisibility(View.VISIBLE);
+            if (group.size() == 1) {
+                rvFindLeft.setVisibility(View.GONE);
+                vwDivider.setVisibility(View.GONE);
+            }
+        } else {
+            findKindAdapter.setAllDatas(group);
+        }
+    }
+
+    private int getFindType() {
+        return preferences.getInt("findType", 1);
+    }
+
+    private void initRecyclerView() {
+        if (getFindType() == 1) {
+            findKindAdapter = null;
+            findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
+            rvFindLeft.setLayoutManager(leftLayoutManager);
+            rvFindLeft.setAdapter(findLeftAdapter);
+            findRightAdapter = new FindRightAdapter();
+            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setAdapter(findRightAdapter);
+            rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int index = rightLayoutManager.findFirstVisibleItemPosition();
+                    if (findLeftAdapter != null) {
+                        findLeftAdapter.upShowIndex(index);
+                        leftLayoutManager.scrollToPositionWithOffset(index, rvFindLeft.getHeight() / 2);
+                    }
+                }
+            });
+        } else {
             rvFindLeft.setVisibility(View.GONE);
             vwDivider.setVisibility(View.GONE);
+            findLeftAdapter = null;
+            findRightAdapter = null;
+            findKindAdapter = new FindKindAdapter(getContext(), new ArrayList<>());
+            findKindAdapter.setOnItemClickListener(this);
+            findKindAdapter.setOnItemLongClickListener(this);
+            findKindAdapter.setCanExpandAll(false);
+            rvFindRight.setLayoutManager(rightLayoutManager);
+            rvFindRight.setAdapter(findKindAdapter);
         }
+    }
+
+    @Override
+    public void onGroupItemClick(int position, int groupPosition, View view) {
+
+    }
+
+    @Override
+    public void onChildItemClick(int position, int groupPosition, int childPosition, View view) {
+        FindKindBean kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(childPosition);
+
+        Intent intent = new Intent(getContext(), ChoiceBookActivity.class);
+        intent.putExtra("url", kindBean.getKindUrl());
+        intent.putExtra("title", kindBean.getKindName());
+        intent.putExtra("tag", kindBean.getTag());
+        startActivityByAnim(intent, view, "sharedView", android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void onGroupItemLongClick(int position, int groupPosition, View view) {
+        if (getActivity() == null) return;
+        FindKindBean kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(0);
+        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(kindBean.getTag());
+        if (sourceBean != null) {
+            SourceEditActivity.startThis(getActivity(), sourceBean);
+        }
+    }
+
+    @Override
+    public void onChildItemLongClick(int position, int groupPosition, int childPosition, View view) {
+
     }
 
     @Override
