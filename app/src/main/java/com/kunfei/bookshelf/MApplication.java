@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.help.AppFrontBackHelper;
@@ -151,5 +152,12 @@ public class MApplication extends Application {
             notificationManager.createNotificationChannel(firstChannel);
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
+
 
 }
