@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.FindKindBean;
+import com.kunfei.bookshelf.bean.FindKindGroupBean;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.FindBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.FindBookContract;
@@ -183,8 +184,8 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public void onGroupItemLongClick(int position, int groupPosition, View view) {
         if (getActivity() == null) return;
-        FindKindBean kindBean = (FindKindBean) findKindAdapter.getAllDatas().get(groupPosition).getChild(0);
-        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(kindBean.getTag());
+        FindKindGroupBean groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
+        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
         if (sourceBean != null) {
             SourceEditActivity.startThis(getActivity(), sourceBean);
         }
