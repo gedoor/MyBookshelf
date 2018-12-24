@@ -56,7 +56,7 @@ public class FindBookPresenter extends BasePresenterImpl<FindBookContract.View> 
                         }
                         FindKindGroupBean groupBean = new FindKindGroupBean();
                         groupBean.setGroupName(sourceBean.getBookSourceName());
-                        groupBean.setChildrenCount(kindA.length);
+                        groupBean.setGroupTag(sourceBean.getBookSourceUrl());
                         group.add(new RecyclerViewData(groupBean, children, false));
                     }
                 } catch (Exception exception) {

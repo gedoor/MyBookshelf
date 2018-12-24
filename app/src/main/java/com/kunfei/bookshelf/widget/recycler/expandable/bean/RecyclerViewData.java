@@ -39,6 +39,10 @@ public class RecyclerViewData<T, S> {
         return (T) groupItem.getGroupData();
     }
 
+    public List<S> getChildList() {
+        return groupItem.getChildDatas();
+    }
+
     public void removeChild(int position) {
         if (null == groupItem || !groupItem.hasChilds()) {
             return;

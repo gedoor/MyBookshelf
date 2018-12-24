@@ -45,8 +45,8 @@ public class FindRightAdapter extends RecyclerView.Adapter<FindRightAdapter.MyVi
         myViewHolder.sourceName.setText(groupBean.getGroupName());
         myViewHolder.flexboxLayout.removeAllViews();
         TextView tagView;
-        for (int i = 0; i < groupBean.getChildrenCount(); i++) {
-            FindKindBean kindBean = (FindKindBean) datas.get(pos).getChild(i);
+        for (Object object : datas.get(pos).getChildList()) {
+            FindKindBean kindBean = (FindKindBean) object;
             tagView = (TextView) LayoutInflater.from(context).inflate(R.layout.item_search_history, myViewHolder.flexboxLayout, false);
             tagView.setText(kindBean.getKindName());
             tagView.setOnClickListener(view -> {
