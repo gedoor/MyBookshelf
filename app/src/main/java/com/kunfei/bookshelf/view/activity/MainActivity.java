@@ -176,24 +176,45 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             if (tab == null) return;
             if (i == 0) { //设置第一个Item的点击事件(当下标为0时触发)
                 tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-                View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
-                tabView.setTag(i);
-                tabView.setOnClickListener(view -> {
-                    if (tabView.isSelected()) {
-                        showBookGroupMenu(view);
-                    }
-                });
             } else {
                 tab.setCustomView(tab_icon(mTitles[i], R.drawable.ic_arrow_drop_down_black_24dp));
-                View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
-                tabView.setTag(i);
-                tabView.setOnClickListener(view -> {
-                    if (tabView.isSelected()) {
-                        showFindMenu(view);
-                    }
-                });
+            }
+            View customView = tab.getCustomView();
+            if (customView == null) return;
+            ImageView im = customView.findViewById(R.id.tabicon);
+            if (tab.isSelected()) {
+                im.setVisibility(View.VISIBLE);
+            } else {
+                im.setVisibility(View.GONE);
             }
         }
+        mTlIndicator.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                if (customView == null) return;
+                ImageView im = customView.findViewById(R.id.tabicon);
+                im.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                View customView = tab.getCustomView();
+                if (customView == null) return;
+                ImageView im = customView.findViewById(R.id.tabicon);
+                im.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                View tabView = (View) Objects.requireNonNull(tab.getCustomView()).getParent();
+                if (tab.getPosition() == 0) {
+                    showBookGroupMenu(tabView);
+                } else {
+                    showFindMenu(tabView);
+                }
+            }
+        });
     }
 
     /**
