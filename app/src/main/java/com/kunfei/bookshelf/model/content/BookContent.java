@@ -39,7 +39,6 @@ class BookContent {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("内容获取失败"));
-                e.onComplete();
                 return;
             }
 

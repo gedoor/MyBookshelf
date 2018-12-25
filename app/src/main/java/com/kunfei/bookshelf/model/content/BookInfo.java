@@ -27,7 +27,6 @@ class BookInfo {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("书籍信息获取失败"));
-                e.onComplete();
                 return;
             }
             bookShelfBean.setTag(tag);

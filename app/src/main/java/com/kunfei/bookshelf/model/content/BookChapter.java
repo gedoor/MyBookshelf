@@ -33,7 +33,6 @@ class BookChapter {
         return Observable.create(e -> {
             if (TextUtils.isEmpty(s)) {
                 e.onError(new Throwable("目录获取失败"));
-                e.onComplete();
                 return;
             }
 
