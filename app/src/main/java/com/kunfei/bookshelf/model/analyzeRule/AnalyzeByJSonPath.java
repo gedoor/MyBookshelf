@@ -23,25 +23,48 @@ public class AnalyzeByJSonPath {
 
     public String read(String rule) {
         if (TextUtils.isEmpty(rule)) return null;
-        String result = null;
-        if (!rule.contains("{")) {
-            try {
-                Object object = ctx.read(rule);
-                if (object instanceof List) {
-                    object = ((List) object).get(0);
-                }
-                result = String.valueOf(object);
-            } catch (Exception ignored) {
-            }
-            return result;
+        String result = "";
+        String rules[];
+        String elementsType;
+        if (rule.contains("&&")) {
+            rules = rule.split("&&");
+            elementsType = "&";
         } else {
-            result = rule;
-            Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
-            Matcher matcher = pattern.matcher(rule);
-            while (matcher.find()) {
-                result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
+            rules = rule.split("\\|\\|");
+            elementsType = "|";
+        }
+        if (rules.length == 1) {
+            if (!rule.contains("{")) {
+                try {
+                    Object object = ctx.read(rule);
+                    if (object instanceof List) {
+                        object = ((List) object).get(0);
+                    }
+                    result = String.valueOf(object);
+                } catch (Exception ignored) {
+                }
+                return result;
+            } else {
+                result = rule;
+                Pattern pattern = Pattern.compile("(?<=\\{).+?(?=})");
+                Matcher matcher = pattern.matcher(rule);
+                while (matcher.find()) {
+                    result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));
+                }
+                return result;
             }
-            return result;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (String rl : rules) {
+                String temp = read(rl);
+                if (!TextUtils.isEmpty(temp)) {
+                    sb.append(temp);
+                    if (elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            return sb.toString();
         }
     }
 
