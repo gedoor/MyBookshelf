@@ -46,7 +46,7 @@ public class AnalyzeByJSonPath {
                 return result;
             } else {
                 result = rule;
-                Pattern pattern = Pattern.compile("(?<=\\{).+?(?=})");
+                Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
                 Matcher matcher = pattern.matcher(rule);
                 while (matcher.find()) {
                     result = result.replace(String.format("{%s}", matcher.group()), read(matcher.group()));

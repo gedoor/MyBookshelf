@@ -57,14 +57,14 @@ public class AnalyzeSearchUrl {
      * 解析页数
      */
     private void setPage(String[] ruleUrlS) {
-        Pattern pattern = Pattern.compile("(?<=\\{).+?(?=})");
+        Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
         Matcher matcher = pattern.matcher(ruleUrlS[0]);
         if (matcher.find()) {
             String[] pages = matcher.group(0).split(",");
             if (searchPage <= pages.length) {
-                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?}", pages[searchPage - 1].trim());
+                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[searchPage - 1].trim());
             } else {
-                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?}", pages[pages.length - 1].trim());
+                ruleUrlS[0] = ruleUrlS[0].replaceAll("\\{.*?\\}", pages[pages.length - 1].trim());
             }
             ruleUrlS[0] = ruleUrlS[0].replace("searchPage-1", String.valueOf(searchPage - 1))
                     .replace("searchPage+1", String.valueOf(searchPage + 1))
