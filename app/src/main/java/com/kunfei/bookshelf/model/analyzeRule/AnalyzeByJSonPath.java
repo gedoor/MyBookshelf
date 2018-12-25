@@ -46,10 +46,52 @@ public class AnalyzeByJSonPath {
     }
 
     List<Object> readList(String rule) {
-        try {
-            return ctx.read(rule);
-        } catch (Exception ignored) {
+        if (TextUtils.isEmpty(rule)) {
+            return null;
         }
-        return new ArrayList<>();
+        List<Object> result = new ArrayList<>();
+        String elementsType;
+        String rules[];
+        if (rule.contains("&&")) {
+            rules = rule.split("&&");
+            elementsType = "&";
+        } else if (rule.contains("%%")) {
+            rules = rule.split("%%");
+            elementsType = "%";
+        } else {
+            rules = rule.split("\\|\\|");
+            elementsType = "|";
+        }
+        if (rules.length == 1) {
+            try {
+                return ctx.read(rules[0]);
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            List<List> results = new ArrayList<>();
+            for (String rl : rules) {
+                List temp = readList(rl);
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (temp.size() > 0 && elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            if (results.size() > 0) {
+                switch (elementsType) {
+                    case "%":
+                        for (int i = 0; i < results.get(0).size(); i++) {
+                            for (List temp : results) {
+                                if (i < temp.size()) {
+                                    result.add(temp.get(i));
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        return result;
     }
 }
