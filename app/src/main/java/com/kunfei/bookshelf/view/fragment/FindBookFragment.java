@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -136,7 +137,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             findLeftAdapter = new FindLeftAdapter(pos -> rightLayoutManager.scrollToPositionWithOffset(pos, 0));
             rvFindLeft.setLayoutManager(leftLayoutManager);
             rvFindLeft.setAdapter(findLeftAdapter);
-            findRightAdapter = new FindRightAdapter();
+            findRightAdapter = new FindRightAdapter(this);
             rvFindRight.setLayoutManager(rightLayoutManager);
             rvFindRight.setAdapter(findRightAdapter);
             rvFindRight.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -184,11 +185,32 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @Override
     public void onGroupItemLongClick(int position, int groupPosition, View view) {
         if (getActivity() == null) return;
-        FindKindGroupBean groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
-        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
-        if (sourceBean != null) {
-            SourceEditActivity.startThis(getActivity(), sourceBean);
+        FindKindGroupBean groupBean;
+        if (isFlexBox()) {
+            groupBean = (FindKindGroupBean) findRightAdapter.getDatas().get(groupPosition).getGroupData();
+        } else {
+            groupBean = (FindKindGroupBean) findKindAdapter.getAllDatas().get(groupPosition).getGroupData();
         }
+        BookSourceBean sourceBean = BookSourceManager.getBookSourceByUrl(groupBean.getGroupTag());
+        if (sourceBean == null) {
+            return;
+        }
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.getMenu().add(R.string.edit);
+        popupMenu.getMenu().add(R.string.to_top);
+        popupMenu.getMenu().add(R.string.delete);
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getTitle().equals(getString(R.string.edit))) {
+                SourceEditActivity.startThis(getActivity(), sourceBean);
+            } else if (item.getTitle().equals(getString(R.string.to_top))) {
+                BookSourceManager.toTop(sourceBean);
+            } else if (item.getTitle().equals(getString(R.string.delete))) {
+                BookSourceManager.removeBookSource(sourceBean);
+            }
+            return true;
+        });
+        popupMenu.show();
+
     }
 
     @Override

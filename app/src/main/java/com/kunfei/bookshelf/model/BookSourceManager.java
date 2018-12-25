@@ -25,6 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by GKF on 2017/12/15.
@@ -142,6 +146,35 @@ public class BookSourceManager extends BaseModelImpl {
             bookSourceBean.setSerialNumber(allBookSource.size() + 1);
         }
         DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(bookSourceBean);
+    }
+
+    public static void toTop(BookSourceBean sourceBean) {
+        Single.create((SingleOnSubscribe<Boolean>) e -> {
+            List<BookSourceBean> beanList = getAllBookSourceBySerialNumber();
+            for (int i = 0; i < beanList.size(); i++) {
+                beanList.get(i).setSerialNumber(i + 1);
+            }
+            sourceBean.setSerialNumber(0);
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplaceInTx(beanList);
+            DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().insertOrReplace(sourceBean);
+            e.onSuccess(true);
+        }).compose(RxUtils::toSimpleSingle)
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Boolean aBoolean) {
+                        refreshBookSource();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                });
     }
 
     private synchronized static void upGroupList() {
