@@ -49,18 +49,16 @@ import com.kunfei.bookshelf.presenter.contract.SourceEditContract;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.popupwindow.KeyboardToolPop;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Hashtable;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
@@ -589,34 +587,29 @@ public class SourceEditActivity extends MBaseActivity<SourceEditContract.Present
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_QR && resultCode == RESULT_OK && null != data) {
             String result = data.getStringExtra("result");
-            if (StringUtils.isJSONType(result)) {
-                mPresenter.setText(result);
-            } else {
-                try {
-                    URL url = new URL(result);
-                    BookSourceManager.importSourceFromWww(url)
-                            .subscribe(new SimpleObserver<List<BookSourceBean>>() {
-                                @SuppressLint("DefaultLocale")
-                                @Override
-                                public void onNext(List<BookSourceBean> bookSourceBeans) {
-                                    if (bookSourceBeans.size() > 1) {
-                                        toast(String.format("导入成功%d个书源, 显示第一个", bookSourceBeans.size()));
-                                        setText(bookSourceBeans.get(0));
-                                    } else if (bookSourceBeans.size() == 1) {
-                                        setText(bookSourceBeans.get(0));
-                                    } else {
-                                        toast("未导入");
-                                    }
-                                }
+            Observable<List<BookSourceBean>> observable = BookSourceManager.importSource(result);
+            if (observable != null) {
+                observable.subscribe(new SimpleObserver<List<BookSourceBean>>() {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public void onNext(List<BookSourceBean> bookSourceBeans) {
+                        if (bookSourceBeans.size() > 1) {
+                            toast(String.format("导入成功%d个书源, 显示第一个", bookSourceBeans.size()));
+                            setText(bookSourceBeans.get(0));
+                        } else if (bookSourceBeans.size() == 1) {
+                            setText(bookSourceBeans.get(0));
+                        } else {
+                            toast("未导入");
+                        }
+                    }
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    toast(e.getLocalizedMessage());
-                                }
-                            });
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        toast(e.getLocalizedMessage());
+                    }
+                });
+            } else {
+                toast("导入失败");
             }
         }
     }

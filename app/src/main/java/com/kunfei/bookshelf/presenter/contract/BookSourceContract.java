@@ -24,8 +24,6 @@ public interface BookSourceContract {
 
         void importBookSourceLocal(String path);
 
-        void importBookSourceJson(String json);
-
         void checkBookSource();
 
     }

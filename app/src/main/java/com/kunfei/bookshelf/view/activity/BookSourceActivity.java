@@ -33,7 +33,6 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtil;
-import com.kunfei.bookshelf.utils.StringUtils;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -410,11 +409,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
                 case REQUEST_QR:
                     if (data != null) {
                         String result = data.getStringExtra("result");
-                        if (StringUtils.isJSONType(result)) {
-                            mPresenter.importBookSourceJson(result);
-                        } else {
-                            mPresenter.importBookSource(result);
-                        }
+                        mPresenter.importBookSource(result);
                     }
                     break;
             }

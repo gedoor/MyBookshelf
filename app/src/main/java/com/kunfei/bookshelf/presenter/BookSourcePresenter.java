@@ -22,10 +22,8 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.service.CheckSourceService;
-import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -135,18 +133,14 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
     }
 
     @Override
-    public void importBookSource(String sourceUrl) {
-        URL url;
-        try {
-            url = new URL(sourceUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mView.toast("URL格式不对");
-            return;
-        }
+    public void importBookSource(String text) {
         mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
-        BookSourceManager.importSourceFromWww(url)
-                .subscribe(getImportObserver());
+        Observable<List<BookSourceBean>> observable = BookSourceManager.importSource(text);
+        if (observable != null) {
+            observable.subscribe(getImportObserver());
+        } else {
+            mView.showSnackBar("格式不对", Snackbar.LENGTH_SHORT);
+        }
     }
 
     @Override
@@ -162,18 +156,10 @@ public class BookSourcePresenter extends BasePresenterImpl<BookSourceContract.Vi
         json = DocumentHelper.readString(file);
         if (!isEmpty(json)) {
             mView.showSnackBar("正在导入书源", Snackbar.LENGTH_INDEFINITE);
-            BookSourceManager.importBookSourceO(json)
-                    .compose(RxUtils::toSimpleSingle)
-                    .subscribe(getImportObserver());
+            importBookSource(json);
         } else {
             mView.toast("文件读取失败");
         }
-    }
-
-    public void importBookSourceJson(String json) {
-        BookSourceManager.importBookSourceO(json)
-                .compose(RxUtils::toSimpleSingle)
-                .subscribe(getImportObserver());
     }
 
     private SimpleObserver<List<BookSourceBean>> getImportObserver() {

@@ -16,7 +16,9 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.analyzeRule.AnalyzeHeaders;
 import com.kunfei.bookshelf.model.impl.IHttpGetApi;
 import com.kunfei.bookshelf.utils.RxUtils;
+import com.kunfei.bookshelf.utils.StringUtils;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -159,15 +161,26 @@ public class BookSourceManager extends BaseModelImpl {
         RxBus.get().post(RxBusTag.UPDATE_BOOK_SOURCE, new Object());
     }
 
-    public static Observable<List<BookSourceBean>> importSourceFromWww(URL url) {
-        return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
-                .create(IHttpGetApi.class)
-                .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
-                .flatMap(rsp -> importBookSourceO(rsp.body()))
-                .compose(RxUtils::toSimpleSingle);
+    public static Observable<List<BookSourceBean>> importSource(String string) {
+        if (TextUtils.isEmpty(string) || string.trim().length() == 0) return null;
+        if (StringUtils.isJSONType(string)) {
+            return importBookSourceFromJson(string.trim())
+                    .compose(RxUtils::toSimpleSingle);
+        }
+        try {
+            URL url = new URL(string.trim());
+            return getRetrofitString(String.format("%s://%s", url.getProtocol(), url.getHost()), "utf-8")
+                    .create(IHttpGetApi.class)
+                    .getWebContent(url.getPath(), AnalyzeHeaders.getMap(null))
+                    .flatMap(rsp -> importBookSourceFromJson(rsp.body()))
+                    .compose(RxUtils::toSimpleSingle);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static Observable<List<BookSourceBean>> importBookSourceO(String json) {
+    private static Observable<List<BookSourceBean>> importBookSourceFromJson(String json) {
         return Observable.create(e -> {
             List<BookSourceBean> bookSourceBeans = new ArrayList<>();
             try {
