@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.utils;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -28,13 +29,13 @@ public class StringUtils {
     //将时间转换成日期
     public static String dateConvert(long time, String pattern) {
         Date date = new Date(time);
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
     }
 
     //将日期转换成昨天、今天、明天
     public static String dateConvert(String source, String pattern) {
-        DateFormat format = new SimpleDateFormat(pattern);
+        @SuppressLint("SimpleDateFormat") DateFormat format = new SimpleDateFormat(pattern);
         Calendar calendar = Calendar.getInstance();
         try {
             Date date = format.parse(source);
@@ -54,9 +55,8 @@ public class StringUtils {
                 } else if (difDate < DAY_OF_YESTERDAY) {
                     return "昨天";
                 } else {
-                    DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    String value = convertFormat.format(date);
-                    return value;
+                    @SuppressLint("SimpleDateFormat") DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    return convertFormat.format(date);
                 }
             }
 
@@ -69,9 +69,8 @@ public class StringUtils {
             } else if (difDate < DAY_OF_YESTERDAY) {
                 return "昨天";
             } else {
-                DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String value = convertFormat.format(date);
-                return value;
+                @SuppressLint("SimpleDateFormat") DateFormat convertFormat = new SimpleDateFormat("yyyy-MM-dd");
+                return convertFormat.format(date);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -236,13 +235,35 @@ public class StringUtils {
         return tmp.toString();
     }
 
-    public static boolean isJSONType(String str) {
+    public static boolean isJsonType(String str) {
         boolean result = false;
         if (!TextUtils.isEmpty(str)) {
             str = str.trim();
             if (str.startsWith("{") && str.endsWith("}")) {
                 result = true;
             } else if (str.startsWith("[") && str.endsWith("]")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isJsonObject(String text) {
+        boolean result = false;
+        if (!TextUtils.isEmpty(text)) {
+            text = text.trim();
+            if (text.startsWith("{") && text.endsWith("}")) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public static boolean isJsonArray(String text) {
+        boolean result = false;
+        if (!TextUtils.isEmpty(text)) {
+            text = text.trim();
+            if (text.startsWith("[") && text.endsWith("]")) {
                 result = true;
             }
         }

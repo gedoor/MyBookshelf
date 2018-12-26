@@ -42,7 +42,7 @@ class BookContent {
                 return;
             }
 
-            if (StringUtils.isJSONType(s) && !MApplication.getInstance().getDonateHb()) {
+            if (StringUtils.isJsonType(s) && !MApplication.getInstance().getDonateHb()) {
                 e.onError(new Throwable(MApplication.getInstance().getString(R.string.donate_s)));
                 e.onComplete();
                 return;

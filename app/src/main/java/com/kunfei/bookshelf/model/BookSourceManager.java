@@ -196,7 +196,7 @@ public class BookSourceManager extends BaseModelImpl {
 
     public static Observable<List<BookSourceBean>> importSource(String string) {
         if (TextUtils.isEmpty(string) || string.trim().length() == 0) return null;
-        if (StringUtils.isJSONType(string)) {
+        if (StringUtils.isJsonType(string)) {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);
         }
@@ -216,41 +216,45 @@ public class BookSourceManager extends BaseModelImpl {
     private static Observable<List<BookSourceBean>> importBookSourceFromJson(String json) {
         return Observable.create(e -> {
             List<BookSourceBean> bookSourceBeans = new ArrayList<>();
-            try {
-                bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
-                }.getType());
-                for (BookSourceBean bookSourceBean : bookSourceBeans) {
-                    if (bookSourceBean.containsGroup("删除")) {
-                        DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
-                                .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
-                                .buildDelete().executeDeleteWithoutDetachingEntities();
-                    } else {
-                        try {
-                            new URL(bookSourceBean.getBookSourceUrl());
-                            bookSourceBean.setSerialNumber(0);
-                            addBookSource(bookSourceBean);
-                        } catch (Exception exception) {
+            if (StringUtils.isJsonArray(json)) {
+                try {
+                    bookSourceBeans = new Gson().fromJson(json, new TypeToken<List<BookSourceBean>>() {
+                    }.getType());
+                    for (BookSourceBean bookSourceBean : bookSourceBeans) {
+                        if (bookSourceBean.containsGroup("删除")) {
                             DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
                                     .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
                                     .buildDelete().executeDeleteWithoutDetachingEntities();
+                        } else {
+                            try {
+                                new URL(bookSourceBean.getBookSourceUrl());
+                                bookSourceBean.setSerialNumber(0);
+                                addBookSource(bookSourceBean);
+                            } catch (Exception exception) {
+                                DbHelper.getInstance().getmDaoSession().getBookSourceBeanDao().queryBuilder()
+                                        .where(BookSourceBeanDao.Properties.BookSourceUrl.eq(bookSourceBean.getBookSourceUrl()))
+                                        .buildDelete().executeDeleteWithoutDetachingEntities();
+                            }
                         }
                     }
+                    refreshBookSource();
+                    e.onNext(bookSourceBeans);
+                    e.onComplete();
+                    return;
+                } catch (Exception ignored) {
                 }
-                refreshBookSource();
-                e.onNext(bookSourceBeans);
-                e.onComplete();
-                return;
-            } catch (Exception ignored) {
             }
-            try {
-                BookSourceBean bookSourceBean = new Gson().fromJson(json, new TypeToken<BookSourceBean>() {
-                }.getType());
-                addBookSource(bookSourceBean);
-                bookSourceBeans.add(bookSourceBean);
-                e.onNext(bookSourceBeans);
-                e.onComplete();
-                return;
-            } catch (Exception ignored) {
+            if (StringUtils.isJsonObject(json)) {
+                try {
+                    BookSourceBean bookSourceBean = new Gson().fromJson(json, new TypeToken<BookSourceBean>() {
+                    }.getType());
+                    addBookSource(bookSourceBean);
+                    bookSourceBeans.add(bookSourceBean);
+                    e.onNext(bookSourceBeans);
+                    e.onComplete();
+                    return;
+                } catch (Exception ignored) {
+                }
             }
             e.onError(new Throwable("格式不对"));
         });

@@ -72,7 +72,7 @@ public class AnalyzeRule {
 
     public void setContent(String body) {
         if (body == null) throw new AssertionError("Content cannot be null");
-        _isJSON = StringUtils.isJSONType(body);
+        _isJSON = StringUtils.isJsonType(body);
         if (!_isJSON) {
             _object = Jsoup.parse(body);
         } else {
