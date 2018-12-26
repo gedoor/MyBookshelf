@@ -12,17 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
 import cn.qqtheme.framework.picker.FilePicker;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by GKF on 2018/1/29.
@@ -66,12 +66,27 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     @Override
     protected void onStart() {
         super.onStart();
-        if (!EasyPermissions.hasPermissions(this, cameraPer)) {
-            EasyPermissions.requestPermissions(this, "扫描二维码需相机权限", REQUEST_CAMERA_PER, cameraPer);
-        } else {
-            zxingview.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
-            zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
-        }
+        startCamera();
+    }
+
+    private void startCamera() {
+        PermissionUtils.checkMorePermissions(this, cameraPer, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                zxingview.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
+                zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                Toast.makeText(QRCodeScanActivity.this, "扫描二维码需相机权限", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(QRCodeScanActivity.this, cameraPer, REQUEST_CAMERA_PER);
+            }
+        });
     }
 
     @Override
@@ -107,16 +122,22 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
+        PermissionUtils.checkMorePermissions(QRCodeScanActivity.this, cameraPer, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                startCamera();
+            }
 
-    @AfterPermissionGranted(REQUEST_CAMERA_PER)
-    public void requestCameraPer() {
-        if (EasyPermissions.hasPermissions(this, cameraPer)) {
-            zxingview.startCamera(); // 打开后置摄像头开始预览，但是并未开始识别
-            zxingview.startSpotAndShowRect(); // 显示扫描框，并开始识别
-        }
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                Toast.makeText(QRCodeScanActivity.this, "扫描二维码需相机权限", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.toAppSetting(QRCodeScanActivity.this);
+            }
+        });
     }
 
     //设置ToolBar

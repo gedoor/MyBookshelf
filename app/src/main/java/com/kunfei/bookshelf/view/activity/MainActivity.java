@@ -45,6 +45,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -55,8 +56,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.kunfei.bookshelf.utils.NetworkUtil.isNetWorkAvailable;
 
@@ -326,12 +325,22 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add_local:
-                if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-                    startActivity(new Intent(this, ImportBookActivity.class));
-                } else {
-                    EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                            FILE_SELECT_RESULT, MApplication.PerList);
-                }
+                PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+                    @Override
+                    public void onHasPermission() {
+                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
+                    }
+
+                    @Override
+                    public void onUserHasAlreadyTurnedDown(String... permission) {
+                        MainActivity.this.toast("导入本地书籍需存储权限");
+                    }
+
+                    @Override
+                    public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                        PermissionUtils.requestMorePermissions(MainActivity.this, permission, FILE_SELECT_RESULT);
+                    }
+                });
                 break;
             case R.id.action_add_url:
                 moDialogHUD.showInputBox("添加书籍网址",
@@ -473,49 +482,54 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     //备份
     private void backup() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.backup_confirmation)
-                    .setMessage(R.string.backup_message)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
-                    .show();
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.backup_permission),
-                    BACKUP_RESULT, MApplication.PerList);
-        }
-    }
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.backup_confirmation)
+                        .setMessage(R.string.backup_message)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.backupData())
+                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                        })
+                        .show();
+            }
 
-    @AfterPermissionGranted(BACKUP_RESULT)
-    private void backupResult() {
-        backup();
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                MainActivity.this.toast(R.string.backup_permission);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(MainActivity.this, permission, BACKUP_RESULT);
+            }
+        });
     }
 
     //恢复
     private void restore() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.restore_confirmation)
-                    .setMessage(R.string.restore_message)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    })
-                    .show();
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.restore_permission),
-                    RESTORE_RESULT, MApplication.PerList);
-        }
-    }
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(R.string.restore_confirmation)
+                        .setMessage(R.string.restore_message)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> mPresenter.restoreData())
+                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                        })
+                        .show();
+            }
 
-    @AfterPermissionGranted(RESTORE_RESULT)
-    private void restoreResult() {
-        restore();
-    }
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                MainActivity.this.toast(R.string.restore_permission);
+            }
 
-    @AfterPermissionGranted(FILE_SELECT_RESULT)
-    private void fileSelectResult() {
-        startActivityByAnim(new Intent(MainActivity.this, ImportBookActivity.class), 0, 0);
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(MainActivity.this, permission, RESTORE_RESULT);
+            }
+        });
     }
 
     private void versionUpRun() {
@@ -530,9 +544,10 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     }
 
     private void requestPermission() {
-        if (!EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            EasyPermissions.requestPermissions(this, "本软件需要存储权限来缓存书籍信息",
-                    MApplication.RESULT__PERMS, MApplication.PerList);
+        List<String> per = PermissionUtils.checkMorePermissions(this, MApplication.PerList);
+        if (per.size() > 0) {
+            toast("本软件需要存储权限来存储备份书籍信息");
+            PermissionUtils.requestMorePermissions(this, per, MApplication.RESULT__PERMS);
         }
     }
 
@@ -558,8 +573,53 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                switch (requestCode) {
+                    case FILE_SELECT_RESULT:
+                        startActivity(new Intent(MainActivity.this, ImportBookActivity.class));
+                        break;
+                    case BACKUP_RESULT:
+                        backup();
+                        break;
+                    case RESTORE_RESULT:
+                        restore();
+                        break;
+                }
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                switch (requestCode) {
+                    case FILE_SELECT_RESULT:
+                        MainActivity.this.toast("导入本地书籍需存储权限");
+                        break;
+                    case BACKUP_RESULT:
+                        MainActivity.this.toast(R.string.backup_permission);
+                        break;
+                    case RESTORE_RESULT:
+                        MainActivity.this.toast(R.string.restore_permission);
+                        break;
+                }
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                switch (requestCode) {
+                    case FILE_SELECT_RESULT:
+                        MainActivity.this.toast("导入本地书籍需存储权限");
+                        break;
+                    case BACKUP_RESULT:
+                        MainActivity.this.toast(R.string.backup_permission);
+                        break;
+                    case RESTORE_RESULT:
+                        MainActivity.this.toast(R.string.restore_permission);
+                        break;
+                }
+                PermissionUtils.toAppSetting(MainActivity.this);
+            }
+        });
     }
 
     @Override

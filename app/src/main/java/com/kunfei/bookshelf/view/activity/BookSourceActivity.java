@@ -33,6 +33,7 @@ import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -42,8 +43,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.qqtheme.framework.picker.FilePicker;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -344,22 +343,32 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
     }
 
     private void selectBookSourceFile() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
-            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-            filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
-            filePicker.show();
-            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-            filePicker.getSubmitButton().setOnClickListener(view -> {
-                filePicker.dismiss();
-                selectFileSys();
-            });
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    MApplication.RESULT__PERMS, MApplication.PerList);
-        }
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                FilePicker filePicker = new FilePicker(BookSourceActivity.this, FilePicker.FILE);
+                filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                filePicker.setOnFilePickListener(s -> mPresenter.importBookSourceLocal(s));
+                filePicker.show();
+                filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                filePicker.getSubmitButton().setOnClickListener(view -> {
+                    filePicker.dismiss();
+                    selectFileSys();
+                });
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                BookSourceActivity.this.toast(R.string.import_book_source);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(BookSourceActivity.this, permission, MApplication.RESULT__PERMS);
+            }
+        });
     }
 
     private void importBookSourceOnLine() {
@@ -380,17 +389,26 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
         startActivityForResult(intent, IMPORT_SOURCE);
     }
 
-    @AfterPermissionGranted(MApplication.RESULT__PERMS)
-    private void resultImportPerms() {
-        selectBookSourceFile();
-    }
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                selectBookSourceFile();
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                BookSourceActivity.this.toast(R.string.import_book_source);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                BookSourceActivity.this.toast(R.string.import_book_source);
+                PermissionUtils.toAppSetting(BookSourceActivity.this);
+            }
+        });
     }
 
     @Override

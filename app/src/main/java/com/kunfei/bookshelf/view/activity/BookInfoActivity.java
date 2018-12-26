@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
@@ -26,6 +27,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -33,7 +35,6 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class BookInfoActivity extends MBaseActivity {
     private final int ResultSelectCover = 103;
@@ -144,16 +145,7 @@ public class BookInfoActivity extends MBaseActivity {
     @Override
     protected void bindEvent() {
         super.bindEvent();
-        tvSelectCover.setOnClickListener(view -> {
-            if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, ResultSelectCover);
-            } else {
-                EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
-            }
-        });
+        tvSelectCover.setOnClickListener(view -> selectCover());
         tvChangeCover.setOnClickListener(view ->
                 moDialogHUD.showChangeSource(book, searchBookBean -> {
                     tieCoverUrl.setText(searchBookBean.getCoverUrl());
@@ -163,6 +155,28 @@ public class BookInfoActivity extends MBaseActivity {
         tvRefreshCover.setOnClickListener(view -> {
             book.setCustomCoverPath(tieCoverUrl.getText().toString());
             initCover();
+        });
+    }
+
+    private void selectCover() {
+        PermissionUtils.checkMorePermissions(BookInfoActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, ResultSelectCover);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                BookInfoActivity.this.toast("获取背景图片需存储权限");
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(BookInfoActivity.this, permission, MApplication.RESULT__PERMS);
+            }
         });
     }
 
@@ -239,6 +253,28 @@ public class BookInfoActivity extends MBaseActivity {
     public void onDestroy() {
         moDialogHUD.dismiss();
         super.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionUtils.checkMorePermissions(BookInfoActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                selectCover();
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                BookInfoActivity.this.toast("获取背景图片需存储权限");
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                BookInfoActivity.this.toast("获取背景图片需存储权限");
+                PermissionUtils.toAppSetting(BookInfoActivity.this);
+            }
+        });
     }
 
     @Override

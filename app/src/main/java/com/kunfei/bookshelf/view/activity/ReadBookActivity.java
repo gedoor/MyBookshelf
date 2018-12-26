@@ -42,6 +42,7 @@ import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.BatteryUtil;
 import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.barUtil.BarHide;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
@@ -62,11 +63,11 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 
-
+/**
+ * 阅读界面
+ */
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
 
     @BindView(R.id.fl_content)
@@ -1226,12 +1227,22 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     @Override
     public void openBookFromOther() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            mPresenter.openBookFromOther(this);
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.open_from_other),
-                    MApplication.RESULT__PERMS, MApplication.PerList);
-        }
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                mPresenter.openBookFromOther(ReadBookActivity.this);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                ReadBookActivity.this.toast(R.string.open_from_other);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(ReadBookActivity.this, permission, MApplication.RESULT__PERMS);
+            }
+        });
     }
 
     /**
@@ -1258,20 +1269,26 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         }
     }
 
-    @AfterPermissionGranted(MApplication.RESULT__PERMS)
-    private void onResultOpenOtherPerms() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            toast("获取权限成功");
-        } else {
-            toast("未获取到权限");
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                mPresenter.openBookFromOther(ReadBookActivity.this);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                ReadBookActivity.this.toast("打开外部书籍需获取存储权限");
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                ReadBookActivity.this.toast("打开外部书籍需获取存储权限");
+                PermissionUtils.toAppSetting(ReadBookActivity.this);
+            }
+        });
     }
 
     @Override
@@ -1292,7 +1309,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                 pageView.invalidate();
             }
         }
-        if (showCheckPermission && mPresenter.getOpen_from() == ReadBookPresenter.OPEN_FROM_OTHER && EasyPermissions.hasPermissions(this, MApplication.PerList)) {
+        if (showCheckPermission && mPresenter.getOpen_from() == ReadBookPresenter.OPEN_FROM_OTHER && PermissionUtils.checkMorePermissions(this, MApplication.PerList).isEmpty()) {
             showCheckPermission = true;
             mPresenter.openBookFromOther(this);
         }

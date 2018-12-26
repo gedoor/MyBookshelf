@@ -11,20 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.activity.ReadStyleActivity;
 import com.kunfei.bookshelf.widget.font.FontSelector;
 import com.kunfei.bookshelf.widget.number.NumberButton;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadInterfacePop extends FrameLayout {
 
@@ -232,7 +235,8 @@ public class ReadInterfacePop extends FrameLayout {
 
         //选择字体
         fl_text_font.setOnClickListener(view -> {
-            if (EasyPermissions.hasPermissions(activity, MApplication.PerList)) {
+            List<String> per = PermissionUtils.checkMorePermissions(activity, MApplication.PerList);
+            if (per.isEmpty()) {
                 new FontSelector(activity, readBookControl.getFontPath())
                         .setListener(new FontSelector.OnThisListener() {
                             @Override
@@ -248,7 +252,8 @@ public class ReadInterfacePop extends FrameLayout {
                         .create()
                         .show();
             } else {
-                EasyPermissions.requestPermissions(activity, "读取字体需要存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
+                Toast.makeText(activity, "本软件需要存储权限来存储备份书籍信息", Toast.LENGTH_SHORT).show();
+                PermissionUtils.requestMorePermissions(activity, per, MApplication.RESULT__PERMS);
             }
         });
 

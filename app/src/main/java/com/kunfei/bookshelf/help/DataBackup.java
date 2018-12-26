@@ -17,6 +17,7 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.model.BookSourceManager;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.XmlUtils;
 
 import java.io.File;
@@ -28,7 +29,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
@@ -44,7 +44,8 @@ public class DataBackup {
 
     public void autoSave() {
         long currentTime = System.currentTimeMillis();
-        if (EasyPermissions.hasPermissions(MApplication.getInstance(), MApplication.PerList)) {
+        List<String> per = PermissionUtils.checkMorePermissions(MApplication.getInstance(), MApplication.PerList);
+        if (per.isEmpty()) {
             File file = new File(FileUtil.getSdCardPath() + File.separator + "YueDu" + File.separator + "autoSave" + File.separator + "myBookShelf.json");
             if (file.exists()) {
                 if (currentTime - file.lastModified() < TimeUnit.DAYS.toMillis(1)) {

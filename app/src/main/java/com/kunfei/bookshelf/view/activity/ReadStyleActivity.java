@@ -31,12 +31,12 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.BitmapUtil;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pub.devrel.easypermissions.EasyPermissions;
 
 public class ReadStyleActivity extends MBaseActivity {
     private final int ResultSelectBg = 103;
@@ -213,14 +213,25 @@ public class ReadStyleActivity extends MBaseActivity {
         });
         //选择背景图片
         tvSelectBgImage.setOnClickListener(view -> {
-            if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
-                startActivityForResult(intent, ResultSelectBg);
-            } else {
-                EasyPermissions.requestPermissions(this, "获取背景图片需存储权限", MApplication.RESULT__PERMS, MApplication.PerList);
-            }
+            PermissionUtils.checkMorePermissions(ReadStyleActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+                @Override
+                public void onHasPermission() {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, ResultSelectBg);
+                }
+
+                @Override
+                public void onUserHasAlreadyTurnedDown(String... permission) {
+                    ReadStyleActivity.this.toast("选择背景图片需存储权限");
+                }
+
+                @Override
+                public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                    PermissionUtils.requestMorePermissions(ReadStyleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
+                }
+            });
         });
         //恢复默认
         tvDefault.setOnClickListener(view -> {

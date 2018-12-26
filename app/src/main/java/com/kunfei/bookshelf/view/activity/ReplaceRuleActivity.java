@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import com.kunfei.bookshelf.utils.FileUtil;
+import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -40,8 +42,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by GKF on 2017/12/16.
@@ -209,25 +209,35 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     }
 
     private void selectReplaceRuleFile() {
-        if (EasyPermissions.hasPermissions(this, MApplication.PerList)) {
-            FilePicker filePicker = new FilePicker(this, FilePicker.FILE);
-            filePicker.setBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
-            filePicker.setItemHeight(30);
-            filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
-            filePicker.setOnFilePickListener(s -> {
-                mPresenter.importDataSLocal(s);
-            });
-            filePicker.show();
-            filePicker.getSubmitButton().setText(R.string.sys_file_picker);
-            filePicker.getSubmitButton().setOnClickListener(view -> {
-                filePicker.dismiss();
-                selectFileSys();
-            });
-        } else {
-            EasyPermissions.requestPermissions(this, getString(R.string.import_book_source),
-                    MApplication.RESULT__PERMS, MApplication.PerList);
-        }
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                FilePicker filePicker = new FilePicker(ReplaceRuleActivity.this, FilePicker.FILE);
+                filePicker.setBackgroundColor(getResources().getColor(R.color.background));
+                filePicker.setTopBackgroundColor(getResources().getColor(R.color.background));
+                filePicker.setItemHeight(30);
+                filePicker.setAllowExtensions(getResources().getStringArray(R.array.text_suffix));
+                filePicker.setOnFilePickListener(s -> {
+                    mPresenter.importDataSLocal(s);
+                });
+                filePicker.show();
+                filePicker.getSubmitButton().setText(R.string.sys_file_picker);
+                filePicker.getSubmitButton().setOnClickListener(view -> {
+                    filePicker.dismiss();
+                    selectFileSys();
+                });
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                ReplaceRuleActivity.this.toast(R.string.import_book_source);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                PermissionUtils.requestMorePermissions(ReplaceRuleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
+            }
+        });
     }
 
     private void selectFileSys() {
@@ -236,12 +246,6 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
         intent.setType("text/*");//设置类型
         startActivityForResult(intent, IMPORT_SOURCE);
     }
-
-    @AfterPermissionGranted(MApplication.RESULT__PERMS)
-    private void resultImportPerms() {
-        selectReplaceRuleFile();
-    }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -255,6 +259,28 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
             }
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionUtils.checkMorePermissions(this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
+            @Override
+            public void onHasPermission() {
+                selectReplaceRuleFile();
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDown(String... permission) {
+                ReplaceRuleActivity.this.toast(R.string.import_book_source);
+            }
+
+            @Override
+            public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                ReplaceRuleActivity.this.toast(R.string.import_book_source);
+                PermissionUtils.toAppSetting(ReplaceRuleActivity.this);
+            }
+        });
     }
 
     @Override
