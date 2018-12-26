@@ -158,19 +158,12 @@
                 android:textColor="@color/tv_text_default"
                 android:textSize="14sp" />
 
-            <com.monke.mprogressbar.MHorProgressBar
+            <SeekBar
                 android:id="@+id/hpb_read_progress"
                 android:layout_width="0dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                app:bgdrawable="@color/btn_bg_press"
-                app:cantouch="true"
-                app:cursordrawable="@drawable/shape_progress_cursor_read"
-                app:cursordrawable_height="13dp"
-                app:cursordrawable_width="13dp"
-                app:fontdrawable="@color/btn_bg_press_2"
-                app:progresswidth="2dp" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/tv_next"

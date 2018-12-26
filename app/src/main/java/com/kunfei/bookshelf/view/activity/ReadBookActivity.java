@@ -648,8 +648,8 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
                     @Override
                     public void onPageCountChange(int count) {
-                        llMenuBottom.getReadProgress().setMaxProgress(Math.max(0, count - 1));
-                        llMenuBottom.getReadProgress().setDurProgress(0);
+                        llMenuBottom.getReadProgress().setMax(Math.max(0, count - 1));
+                        llMenuBottom.getReadProgress().setProgress(0);
                         // 如果处于错误状态，那么就冻结使用
                         if (mPageLoader.getPageStatus() == TxtChapter.Status.LOADING
                                 || mPageLoader.getPageStatus() == TxtChapter.Status.ERROR) {
@@ -665,7 +665,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
                         mPresenter.getBookShelf().setDurChapterPage(pageIndex);
                         mPresenter.saveProgress();
                         llMenuBottom.getReadProgress().post(
-                                () -> llMenuBottom.getReadProgress().setDurProgress(pageIndex)
+                                () -> llMenuBottom.getReadProgress().setProgress(pageIndex)
                         );
                         if ((ReadAloudService.running)) {
                             if (resetReadAloud && !TextUtils.isEmpty(mPageLoader.getUnReadContent())) {

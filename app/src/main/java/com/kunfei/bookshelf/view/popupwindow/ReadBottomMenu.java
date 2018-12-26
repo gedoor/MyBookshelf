@@ -8,12 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.service.ReadAloudService;
-import com.monke.mprogressbar.MHorProgressBar;
-import com.monke.mprogressbar.OnProgressListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +37,7 @@ public class ReadBottomMenu extends FrameLayout {
     @BindView(R.id.tv_pre)
     TextView tvPre;
     @BindView(R.id.hpb_read_progress)
-    MHorProgressBar hpbReadProgress;
+    SeekBar hpbReadProgress;
     @BindView(R.id.tv_next)
     TextView tvNext;
     @BindView(R.id.ll_catalog)
@@ -91,29 +90,22 @@ public class ReadBottomMenu extends FrameLayout {
         llFloatingButton.setOnClickListener(view -> {
             menuListener.dismiss();
         });
+
         //阅读进度
-        hpbReadProgress.setProgressListener(new OnProgressListener() {
+        hpbReadProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void moveStartProgress(float dur) {
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
             }
 
             @Override
-            public void durProgressChange(float dur) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
             @Override
-            public void moveStopProgress(float dur) {
-                int realDur = (int) Math.ceil(dur);
-                if (hpbReadProgress.getDurProgress() != realDur)
-                    hpbReadProgress.setDurProgress(realDur);
-                menuListener.skipToPage(realDur);
-            }
-
-            @Override
-            public void setDurProgress(float dur) {
-
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                menuListener.skipToPage(seekBar.getProgress());
             }
         });
 
@@ -195,7 +187,7 @@ public class ReadBottomMenu extends FrameLayout {
         fabReadAloud.setContentDescription(text);
     }
 
-    public MHorProgressBar getReadProgress() {
+    public SeekBar getReadProgress() {
         return hpbReadProgress;
     }
 
