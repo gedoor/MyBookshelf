@@ -55,15 +55,14 @@
 
     </LinearLayout>
 
-    <com.monke.mprogressbar.MHorProgressBar
+    <ProgressBar
         android:id="@+id/hpb_download_progress"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:visibility="invisible"
         android:layout_margin="5dp"
-        app:bgdrawable="@color/btn_bg_press"
-        app:cantouch="false"
-        app:fontdrawable="?attr/colorAccent" />
+        android:indeterminate="true"
+        style="@android:style/Widget.ProgressBar.Horizontal" />
 
     <TextView
         android:id="@+id/tv_install_update"

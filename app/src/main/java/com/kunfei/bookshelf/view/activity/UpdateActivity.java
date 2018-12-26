@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,6 @@ import com.kunfei.bookshelf.bean.UpdateInfoBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
-import com.monke.mprogressbar.MHorProgressBar;
 
 import java.io.File;
 
@@ -44,7 +44,7 @@ public class UpdateActivity extends MBaseActivity {
     @BindView(R.id.ll_download)
     LinearLayout llDownload;
     @BindView(R.id.hpb_download_progress)
-    MHorProgressBar hpbDownloadProgress;
+    ProgressBar hpbDownloadProgress;
     @BindView(R.id.tv_install_update)
     TextView tvInstallUpdate;
 
@@ -179,8 +179,8 @@ public class UpdateActivity extends MBaseActivity {
         upMenu();
         if (state > 0) {
             tvDownloadProgress.setText(getString(R.string.progress_show, state, 100));
-            hpbDownloadProgress.setMaxProgress(100);
-            hpbDownloadProgress.setDurProgress(state);
+            hpbDownloadProgress.setMax(100);
+            hpbDownloadProgress.setProgress(state);
         }
     }
 }

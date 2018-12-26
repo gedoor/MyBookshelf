@@ -119,14 +119,12 @@
 
     </FrameLayout>
 
-    <com.monke.mprogressbar.MHorProgressBar
+    <ProgressBar
         android:id="@+id/hpb_next_page_progress"
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_gravity="bottom"
         android:visibility="invisible"
-        app:bgdrawable="@color/btn_bg_press"
-        app:cantouch="false"
-        app:fontdrawable="?attr/colorAccent" />
+        style="@android:style/Widget.ProgressBar.Horizontal" />
 
 </FrameLayout>

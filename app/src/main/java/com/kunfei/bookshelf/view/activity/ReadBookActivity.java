@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.kunfei.basemvplib.AppActivityManager;
@@ -55,7 +56,6 @@ import com.kunfei.bookshelf.widget.page.PageLoader;
 import com.kunfei.bookshelf.widget.page.PageView;
 import com.kunfei.bookshelf.widget.page.TxtChapter;
 import com.kunfei.bookshelf.widget.page.animation.PageAnimation;
-import com.monke.mprogressbar.MHorProgressBar;
 
 import java.util.List;
 import java.util.Objects;
@@ -98,7 +98,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @BindView(R.id.moreSettingPop)
     MoreSettingPop moreSettingPop;
     @BindView(R.id.hpb_next_page_progress)
-    MHorProgressBar hpbNextPageProgress;
+    ProgressBar hpbNextPageProgress;
 
     private Animation menuTopIn;
     private Animation menuTopOut;
@@ -295,7 +295,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
         if (autoPage) {
             hpbNextPageProgress.setVisibility(View.VISIBLE);
             nextPageTime = readBookControl.getClickSensitivity() * 1000;
-            hpbNextPageProgress.setMaxProgress(nextPageTime);
+            hpbNextPageProgress.setMax(nextPageTime);
             mHandler.postDelayed(upHpbNextPage, upHpbInterval);
             mHandler.postDelayed(autoPageRunnable, nextPageTime);
         } else {
@@ -306,7 +306,7 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
 
     private void upHpbNextPage() {
         nextPageTime = nextPageTime - upHpbInterval;
-        hpbNextPageProgress.setDurProgress(nextPageTime);
+        hpbNextPageProgress.setProgress(nextPageTime);
         mHandler.postDelayed(upHpbNextPage, upHpbInterval);
     }
 
