@@ -55,6 +55,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
+                    android:contentDescription="@string/flow_sys"
                     app:color_checked="@color/background_card"
                     app:color_tick="@color/colorAccent"
                     app:color_unchecked="@color/background_menu"
@@ -62,21 +63,13 @@
                     app:duration="150" />
             </LinearLayout>
 
-            <com.monke.mprogressbar.MHorProgressBar
+            <SeekBar
                 android:id="@+id/hpb_light"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                app:bgdrawable="@color/btn_bg_press"
-                app:cantouch="true"
-                app:cursordrawable="@drawable/shape_progress_cursor_read"
-                app:cursordrawable_height="13dp"
-                app:cursordrawable_width="13dp"
-                app:fontdrawable="@color/btn_bg_press_2"
-                app:maxprogress="255"
-                app:progresswidth="2dp" />
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:max="255" />
 
         </LinearLayout>
 
@@ -126,6 +119,7 @@
                     android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
+                    android:contentDescription="@string/flow_sys"
                     app:color_checked="@color/background_card"
                     app:color_tick="@color/colorAccent"
                     app:color_unchecked="@color/background_menu"
@@ -133,21 +127,13 @@
                     app:duration="150" />
             </LinearLayout>
 
-            <com.monke.mprogressbar.MHorProgressBar
+            <SeekBar
                 android:id="@+id/hpb_tts_SpeechRate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                app:bgdrawable="@color/btn_bg_press"
-                app:cantouch="true"
-                app:cursordrawable="@drawable/shape_progress_cursor_read"
-                app:cursordrawable_height="13dp"
-                app:cursordrawable_width="13dp"
-                app:fontdrawable="@color/btn_bg_press_2"
-                app:maxprogress="20"
-                app:progresswidth="2dp" />
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:max="20" />
 
         </LinearLayout>
 
@@ -193,21 +179,13 @@
 
             </LinearLayout>
 
-            <com.monke.mprogressbar.MHorProgressBar
+            <SeekBar
                 android:id="@+id/hpb_click"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                app:bgdrawable="@color/btn_bg_press"
-                app:cantouch="true"
-                app:cursordrawable="@drawable/shape_progress_cursor_read"
-                app:cursordrawable_height="13dp"
-                app:cursordrawable_width="13dp"
-                app:fontdrawable="@color/btn_bg_press_2"
-                app:maxprogress="180"
-                app:progresswidth="2dp" />
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:max="180" />
 
         </LinearLayout>
     </LinearLayout>

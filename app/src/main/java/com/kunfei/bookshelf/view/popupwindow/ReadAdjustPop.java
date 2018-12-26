@@ -12,21 +12,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.widget.checkbox.SmoothCheckBox;
-import com.monke.mprogressbar.MHorProgressBar;
-import com.monke.mprogressbar.OnProgressListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ReadAdjustPop extends FrameLayout {
     @BindView(R.id.hpb_light)
-    MHorProgressBar hpbLight;
+    SeekBar hpbLight;
     @BindView(R.id.scb_follow_sys)
     SmoothCheckBox scbFollowSys;
     @BindView(R.id.ll_follow_sys)
@@ -34,11 +33,11 @@ public class ReadAdjustPop extends FrameLayout {
     @BindView(R.id.ll_click)
     LinearLayout llClick;
     @BindView(R.id.hpb_click)
-    MHorProgressBar hpbClick;
+    SeekBar hpbClick;
     @BindView(R.id.ll_tts_SpeechRate)
     LinearLayout llTtsSpeechRate;
     @BindView(R.id.hpb_tts_SpeechRate)
-    MHorProgressBar hpbTtsSpeechRate;
+    SeekBar hpbTtsSpeechRate;
     @BindView(R.id.scb_tts_follow_sys)
     SmoothCheckBox scbTtsFollowSys;
     @BindView(R.id.tv_auto_page)
@@ -92,10 +91,14 @@ public class ReadAdjustPop extends FrameLayout {
     private void initData() {
         scbTtsFollowSys.setChecked(readBookControl.isSpeechRateFollowSys());
         if (readBookControl.isSpeechRateFollowSys()) {
-            hpbTtsSpeechRate.setCanTouch(false);
+            hpbTtsSpeechRate.setEnabled(false);
+        } else {
+            hpbTtsSpeechRate.setEnabled(true);
         }
-        hpbClick.setDurProgress(readBookControl.getClickSensitivity());
-        hpbTtsSpeechRate.setDurProgress(readBookControl.getSpeechRate() - 5);
+        hpbClick.setMax(180);
+        hpbClick.setProgress(readBookControl.getClickSensitivity());
+        tvAutoPage.setText(String.format("%sS", readBookControl.getClickSensitivity()));
+        hpbTtsSpeechRate.setProgress(readBookControl.getSpeechRate() - 5);
     }
 
     private void bindEvent() {
@@ -111,60 +114,49 @@ public class ReadAdjustPop extends FrameLayout {
             isFollowSys = isChecked;
             if (isChecked) {
                 //跟随系统
-                hpbLight.setCanTouch(false);
+                hpbLight.setEnabled(false);
                 setScreenBrightness();
             } else {
                 //不跟随系统
-                hpbLight.setCanTouch(true);
-                hpbLight.setDurProgress(light);
+                hpbLight.setEnabled(true);
+                hpbLight.setProgress(light);
             }
         });
-        hpbLight.setProgressListener(new OnProgressListener() {
+        hpbLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void moveStartProgress(float dur) {
-
-            }
-
-            @Override
-            public void durProgressChange(float dur) {
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (!isFollowSys) {
-                    light = (int) dur;
-                    setScreenBrightness((int) dur);
+                    light = i;
+                    setScreenBrightness(i);
                 }
             }
 
             @Override
-            public void moveStopProgress(float dur) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
             @Override
-            public void setDurProgress(float dur) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
 
         //自动翻页间隔
-        hpbClick.setMaxProgress(180);
-        hpbClick.setProgressListener(new OnProgressListener() {
+        hpbClick.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void moveStartProgress(float dur) {
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tvAutoPage.setText(String.format("%sS", i));
+                readBookControl.setClickSensitivity(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
             @Override
-            public void durProgressChange(float dur) {
-                tvAutoPage.setText(String.format("%sS", (int) dur));
-                readBookControl.setClickSensitivity((int) dur);
-            }
-
-            @Override
-            public void moveStopProgress(float dur) {
-
-            }
-
-            @Override
-            public void setDurProgress(float dur) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
@@ -173,44 +165,44 @@ public class ReadAdjustPop extends FrameLayout {
         llTtsSpeechRate.setOnClickListener(v -> {
             if (scbTtsFollowSys.isChecked()) {
                 scbTtsFollowSys.setChecked(false, true);
-                //不跟随系统
-                hpbTtsSpeechRate.setCanTouch(true);
-                readBookControl.setSpeechRateFollowSys(false);
-                if (adjustListener != null) {
-                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
-                }
             } else {
                 scbTtsFollowSys.setChecked(true, true);
+            }
+        });
+        scbTtsFollowSys.setOnCheckedChangeListener((checkBox, isChecked) -> {
+            if (isChecked) {
                 //跟随系统
-                hpbTtsSpeechRate.setCanTouch(false);
+                hpbTtsSpeechRate.setEnabled(false);
                 readBookControl.setSpeechRateFollowSys(true);
                 if (adjustListener != null) {
                     adjustListener.speechRateFollowSys();
                 }
-            }
-        });
-        hpbTtsSpeechRate.setProgressListener(new OnProgressListener() {
-            @Override
-            public void moveStartProgress(float dur) {
-
-            }
-
-            @Override
-            public void durProgressChange(float dur) {
-
-            }
-
-            @Override
-            public void moveStopProgress(float dur) {
-                readBookControl.setSpeechRate((int) dur + 5);
+            } else {
+                //不跟随系统
+                hpbTtsSpeechRate.setEnabled(true);
+                readBookControl.setSpeechRateFollowSys(false);
                 if (adjustListener != null) {
                     adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
                 }
             }
+        });
+        hpbTtsSpeechRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
 
             @Override
-            public void setDurProgress(float dur) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                readBookControl.setSpeechRate(seekBar.getProgress() + 5);
+                if (adjustListener != null) {
+                    adjustListener.changeSpeechRate(readBookControl.getSpeechRate());
+                }
             }
         });
     }
@@ -256,7 +248,7 @@ public class ReadAdjustPop extends FrameLayout {
     public void initLight() {
         isFollowSys = getIsFollowSys();
         light = getLight();
-        hpbLight.setDurProgress(light);
+        hpbLight.setProgress(light);
         scbFollowSys.setChecked(isFollowSys);
         if (!isFollowSys) {
             setScreenBrightness(light);
