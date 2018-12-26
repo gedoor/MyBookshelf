@@ -240,24 +240,24 @@ public class MoreSettingPop extends FrameLayout {
 
     private void upView() {
         if (readBookControl.getHideStatusBar()) {
-            llShowTimeBattery.setVisibility(View.VISIBLE);
+            sbShowTimeBattery.setEnabled(true);
         } else {
-            llShowTimeBattery.setVisibility(View.GONE);
+            sbShowTimeBattery.setEnabled(false);
         }
         if (readBookControl.getCanKeyTurn()) {
-            llReadAloudKey.setVisibility(View.VISIBLE);
+            swReadAloudKey.setEnabled(true);
         } else {
-            llReadAloudKey.setVisibility(View.GONE);
+            swReadAloudKey.setEnabled(false);
         }
         if (readBookControl.getCanClickTurn()) {
-            llClickAllNext.setVisibility(View.VISIBLE);
+            sbClickAllNext.setEnabled(true);
         } else {
-            llClickAllNext.setVisibility(View.GONE);
+            sbClickAllNext.setEnabled(false);
         }
         if (readBookControl.getHideNavigationBar()) {
-            llNavigationBarColor.setVisibility(View.GONE);
+            llNavigationBarColor.setEnabled(false);
         } else {
-            llNavigationBarColor.setVisibility(View.VISIBLE);
+            llNavigationBarColor.setEnabled(true);
         }
     }
 

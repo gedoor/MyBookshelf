@@ -147,7 +147,7 @@
                     android:id="@+id/sb_hideStatusBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/pt_hide_status_bar"/>
 
@@ -169,7 +169,7 @@
                     android:id="@+id/sb_hideNavigationBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/pt_hide_navigation_bar"/>
 
@@ -231,7 +231,7 @@
                     android:id="@+id/sb_show_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/showTitle"/>
 
@@ -252,7 +252,7 @@
                     android:id="@+id/sw_volume_next_page"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/volume_open_page"/>
 
@@ -274,7 +274,7 @@
                     android:id="@+id/sw_read_aloud_key"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/aloud_volume_page"/>
 
@@ -295,7 +295,7 @@
                     android:id="@+id/sb_click"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/click_open_page"/>
 
@@ -317,7 +317,7 @@
                     android:id="@+id/sb_click_all_next"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/click_all_next_page"/>
 
@@ -338,7 +338,7 @@
                     android:id="@+id/sb_showLine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/showLine"/>
 
@@ -361,7 +361,7 @@
                     android:id="@+id/sb_showTimeBattery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/showTimeBattery"/>
 
@@ -382,7 +382,7 @@
                     android:id="@+id/sb_tip_margin_change"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:padding="15dp"
                     android:textColor="@color/menu_color_default"
                     android:text="@string/tip_margin_change"/>
 
