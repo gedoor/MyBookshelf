@@ -73,7 +73,7 @@
                             android:paddingTop="3dp"
                             android:paddingBottom="3dp">
 
-                            <me.grantland.widget.AutofitTextView
+                            <TextView
                                 android:id="@+id/tv_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -85,7 +85,6 @@
                                 android:text="@string/book_name"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                app:minTextSize="14sp"
                                 tools:ignore="RtlHardcoded" />
 
                             <ImageView

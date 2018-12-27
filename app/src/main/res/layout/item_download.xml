@@ -30,7 +30,7 @@
             android:paddingRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -38,10 +38,9 @@
                 android:singleLine="true"
                 android:text="@string/book_name"
                 android:textColor="@color/tv_text_default"
-                android:textSize="16sp"
-                app:minTextSize="10sp" />
+                android:textSize="16sp" />
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/tv_download"
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
@@ -49,8 +48,7 @@
                 android:singleLine="true"
                 android:text="@string/download_offline"
                 android:textColor="@color/tv_text_default"
-                android:textSize="14sp"
-                app:minTextSize="10sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

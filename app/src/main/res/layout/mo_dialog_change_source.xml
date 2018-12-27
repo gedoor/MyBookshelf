@@ -20,7 +20,7 @@
             android:orientation="horizontal"
             android:layout_marginBottom="10dp">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/atv_title"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -29,7 +29,6 @@
                 android:layout_marginRight="5dp"
                 android:singleLine="true"
                 android:textSize="16sp"
-                app:minTextSize="14sp"
                 android:gravity="center|start"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
