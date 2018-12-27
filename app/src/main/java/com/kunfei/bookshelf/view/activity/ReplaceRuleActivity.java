@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.view.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,7 +57,6 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
     @BindView(R.id.recycler_view)
     RecyclerView recyclerViewBookSource;
 
-    private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private MoDialogHUD moDialogHUD;
     private ReplaceRuleAdapter adapter;
     private boolean selectAll = true;

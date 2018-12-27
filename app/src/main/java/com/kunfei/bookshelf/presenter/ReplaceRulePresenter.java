@@ -1,19 +1,15 @@
 package com.kunfei.bookshelf.presenter;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
-import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.help.DocumentHelper;
 import com.kunfei.bookshelf.model.ReplaceRuleManager;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import androidx.documentfile.provider.DocumentFile;
@@ -30,7 +26,6 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.View> implements ReplaceRuleContract.Presenter {
-    private BookSourceBean delBookSource;
 
     @Override
     public void detachView() {
@@ -124,47 +119,30 @@ public class ReplaceRulePresenter extends BasePresenterImpl<ReplaceRuleContract.
         DocumentFile file = DocumentFile.fromFile(new File(path));
         json = DocumentHelper.readString(file);
         if (!isEmpty(json)) {
-            try {
-                List<ReplaceRuleBean> dataS = new Gson().fromJson(json, new TypeToken<List<ReplaceRuleBean>>() {
-                }.getType());
-                ReplaceRuleManager.addDataS(dataS);
-                mView.refresh();
-                mView.toast("导入成功");
-            } catch (Exception e) {
-                mView.toast("格式不对");
-            }
+            importDataS(json);
         } else {
             mView.toast("文件读取失败");
         }
     }
 
     @Override
-    public void importDataS(String sourceUrl) {
-        URL url;
-        try {
-            url = new URL(sourceUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
-            mView.toast("URL格式不对");
-            return;
+    public void importDataS(String text) {
+        Observable<Boolean> observable = ReplaceRuleManager.importReplaceRule(text);
+        if (observable != null) {
+            observable.subscribe(new SimpleObserver<Boolean>() {
+                @Override
+                public void onNext(Boolean aBoolean) {
+                    mView.refresh();
+                    mView.toast("导入成功");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    mView.toast("格式不对");
+                }
+            });
+        } else {
+            mView.toast("导入失败");
         }
-        ReplaceRuleManager.importReplaceRuleFromWww(url)
-                .subscribe(new SimpleObserver<Boolean>() {
-                    @Override
-                    public void onNext(Boolean aBoolean) {
-                        if (aBoolean) {
-                            mView.refresh();
-                            mView.toast("导入成功");
-                        } else {
-                            mView.toast("格式不对");
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.toast(e.getMessage());
-                    }
-                });
     }
-
 }

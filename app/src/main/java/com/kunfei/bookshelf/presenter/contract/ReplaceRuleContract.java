@@ -19,7 +19,7 @@ public interface ReplaceRuleContract {
 
         void importDataSLocal(String uri);
 
-        void importDataS(String url);
+        void importDataS(String text);
     }
 
     interface View extends IView {
