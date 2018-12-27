@@ -1,8 +1,6 @@
 package com.kunfei.bookshelf.widget.number;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,9 @@ import android.widget.TextView;
 import com.kunfei.bookshelf.R;
 
 import java.text.DecimalFormat;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class NumberButton extends FrameLayout implements View.OnClickListener {
     public static final int INT = 0;

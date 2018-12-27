@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,8 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.GroupItem;
 import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.List;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by GKF on 2017/12/22.

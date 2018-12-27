@@ -1,7 +1,6 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.presenter;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.hwangjr.rxbus.RxBus;
@@ -26,6 +25,7 @@ import com.kunfei.bookshelf.presenter.contract.MainContract;
 
 import java.net.URL;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;

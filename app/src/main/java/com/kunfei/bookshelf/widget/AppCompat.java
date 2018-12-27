@@ -3,16 +3,6 @@ package com.kunfei.bookshelf.widget;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenuPresenter;
-import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
@@ -23,10 +13,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.internal.NavigationMenuPresenter;
+import com.google.android.material.internal.NavigationMenuView;
+import com.google.android.material.navigation.NavigationView;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ScreenUtils;
 
 import java.lang.reflect.Field;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class AppCompat {
 
@@ -36,7 +37,7 @@ public class AppCompat {
         setTint(close, searchView.getResources().getColor(R.color.menu_color_default));
         close.setPadding(0, ScreenUtils.dpToPx(2), 0, 0);
 
-        AppCompatImageView search = searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+        AppCompatImageView search = searchView.findViewById(androidx.appcompat.R.id.search_button);
         search.setImageResource(R.drawable.ic_search_black_24dp);
         setTint(search, searchView.getResources().getColor(R.color.menu_color_default));
 
@@ -47,9 +48,9 @@ public class AppCompat {
             Drawable bag = searchView.getResources().getDrawable(R.drawable.bg_textfield_search);
             setTintList(bag, createSearchPlateBagState(searchView.getResources().getColor(R.color.colorAccent),
                     searchText.getCurrentHintTextColor()));
-            android.support.v4.view.ViewCompat.setBackground(plate, bag);
+            androidx.core.view.ViewCompat.setBackground(plate, bag);
         } else {
-            android.support.v4.view.ViewCompat.setBackground(plate, null);
+            androidx.core.view.ViewCompat.setBackground(plate, null);
         }
 
         setQueryHintForSearchText(searchText, hint, showSearchIcon);

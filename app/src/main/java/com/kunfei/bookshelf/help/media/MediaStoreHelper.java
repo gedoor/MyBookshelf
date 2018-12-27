@@ -3,13 +3,14 @@ package com.kunfei.bookshelf.help.media;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
+
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 /**
  * Created by newbiechen on 2018/1/14.

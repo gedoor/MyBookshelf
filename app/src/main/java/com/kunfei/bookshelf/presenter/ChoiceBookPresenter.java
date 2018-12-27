@@ -2,13 +2,11 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
@@ -18,17 +16,21 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.View> implements ChoiceBookContract.Presenter {
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private String tag;
     private String url;
     private String title;
@@ -48,7 +50,12 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
             e.onNext(temp);
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<BookShelfBean>>() {
+                .subscribe(new Observer<List<BookShelfBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(List<BookShelfBean> value) {
                         bookShelfs.addAll(value);
@@ -60,6 +67,11 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }
@@ -84,9 +96,13 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
     private void searchBook(final long searchTime) {
         WebBookModel.getInstance().findBook(url, page, tag)
                 .subscribeOn(Schedulers.newThread())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<List<SearchBookBean>>() {
+                .subscribe(new Observer<List<SearchBookBean>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(List<SearchBookBean> value) {
                         if (searchTime == startThisSearchTime) {
@@ -113,6 +129,11 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                         e.printStackTrace();
                         mView.searchBookError();
                     }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,8 +150,12 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
                 .flatMap(bookShelfBean1 -> WebBookModel.getInstance().getChapterList(bookShelfBean1))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(BookShelfBean bookShelfResult) {
                         saveBookToShelf(bookShelfResult);
@@ -158,8 +183,12 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
             e.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(BookShelfBean value) {
                         //成功   //发送RxBus
@@ -183,14 +212,10 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
     @Override
     public void detachView() {
         RxBus.get().unregister(this);
+        compositeDisposable.dispose();
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_ADD_BOOK)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.HAD_ADD_BOOK)})
     public void hadAddBook(BookShelfBean bookShelfBean) {
         bookShelfs.add(bookShelfBean);
         List<SearchBookBean> datas = mView.getSearchBookAdapter().getSearchBooks();
@@ -203,12 +228,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
         }
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {
-                    @Tag(RxBusTag.HAD_REMOVE_BOOK)
-            }
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.HAD_REMOVE_BOOK)})
     public void hadRemoveBook(BookShelfBean bookShelfBean) {
         if (bookShelfs != null) {
             for (int i = 0; i < bookShelfs.size(); i++) {

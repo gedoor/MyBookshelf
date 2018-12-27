@@ -2,16 +2,17 @@ package com.kunfei.bookshelf.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+
+import androidx.annotation.NonNull;
 
 
 /**

@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import com.kunfei.bookshelf.R;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 public class FilletImageView extends AppCompatImageView {
     float width, height;

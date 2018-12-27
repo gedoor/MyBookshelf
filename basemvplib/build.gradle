@@ -28,16 +28,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     //support
-    api "com.android.support:appcompat-v7:$support_library_version"
+    api 'androidx.core:core:1.1.0-alpha03'
+    api 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
     //RxAndroid
     api 'io.reactivex.rxjava2:rxjava:2.2.4'
     api 'io.reactivex.rxjava2:rxandroid:2.1.0'
-
-    //Rx_lifecycle
-    api 'com.trello.rxlifecycle2:rxlifecycle:2.2.2'
-    api 'com.trello.rxlifecycle2:rxlifecycle-android:2.2.2'  // If you want to bind to Android-specific lifecycles
-    api 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.2'  // If you want pre-written Activities and Fragments you can subclass as providers
 
     //Retrofit
     api 'com.squareup.retrofit2:retrofit:2.5.0'

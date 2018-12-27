@@ -6,4 +6,5 @@ public interface IView {
     Context getContext();
 
     void toast(String msg);
+
 }

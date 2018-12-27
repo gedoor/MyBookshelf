@@ -12,7 +12,6 @@ import com.kunfei.bookshelf.bean.ChapterListBean;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.FormatWebText;
 import com.kunfei.bookshelf.utils.RxUtils;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -262,9 +261,13 @@ public class PageLoaderEpub extends PageLoader {
             e.onComplete();
         }).subscribeOn(Schedulers.single())
                 .flatMap(this::checkChapterList)
-                .compose(mPageView.getActivity().bindUntilEvent(ActivityEvent.DESTROY))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SimpleObserver<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(BookShelfBean bookShelfBean) {
                         isChapterListPrepare = true;

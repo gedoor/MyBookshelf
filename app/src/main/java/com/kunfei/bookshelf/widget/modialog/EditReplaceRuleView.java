@@ -2,16 +2,17 @@ package com.kunfei.bookshelf.widget.modialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.bean.ReplaceRuleBean;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 /**
  * Created by GKF on 2018/1/17.

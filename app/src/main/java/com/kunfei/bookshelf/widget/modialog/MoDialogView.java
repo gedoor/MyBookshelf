@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.widget.modialog;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ReadAssets;
 import com.victor.loading.rotate.RotateLoading;
 
+import androidx.cardview.widget.CardView;
 import ru.noties.markwon.Markwon;
 
 /**

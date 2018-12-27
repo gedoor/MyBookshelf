@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.utils;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -13,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+
+import androidx.annotation.StringRes;
 
 /**
  * Created by newbiechen on 17-4-22.

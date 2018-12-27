@@ -22,7 +22,7 @@
             android:text=""
             android:textColor="@color/tv_text_default" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_edit"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -33,7 +33,7 @@
             android:src="@drawable/ic_edit"
             app:tint="@color/tv_text_default" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_del"
             android:layout_width="40dp"
             android:layout_height="40dp"

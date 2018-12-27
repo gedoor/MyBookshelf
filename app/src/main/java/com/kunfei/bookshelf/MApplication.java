@@ -10,8 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.help.AppFrontBackHelper;
@@ -22,6 +20,9 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.RequiresApi;
+import androidx.multidex.MultiDex;
 
 public class MApplication extends Application {
     public final static boolean DEBUG = BuildConfig.DEBUG;

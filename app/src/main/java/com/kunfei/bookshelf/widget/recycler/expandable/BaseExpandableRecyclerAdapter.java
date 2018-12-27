@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.widget.recycler.expandable;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import com.kunfei.bookshelf.widget.recycler.expandable.bean.RecyclerViewData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleViewHolder.VIEW_TYPE_CHILD;
 import static com.kunfei.bookshelf.widget.recycler.expandable.BaseExpandAbleViewHolder.VIEW_TYPE_PARENT;

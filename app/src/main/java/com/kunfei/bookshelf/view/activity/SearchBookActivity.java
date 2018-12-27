@@ -6,11 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -23,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hwangjr.rxbus.RxBus;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
@@ -41,6 +37,10 @@ import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
 
 import java.util.List;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -173,9 +173,9 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
         mSearchAutoComplete.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mSearchAutoComplete.setPadding(15, 0, 0, 0);
         searchView.onActionViewExpanded();
-        LinearLayout editFrame = searchView.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
-        ImageView closeButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-        ImageView goButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_go_btn);
+        LinearLayout editFrame = searchView.findViewById(androidx.appcompat.R.id.search_edit_frame);
+        ImageView closeButton = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        ImageView goButton = searchView.findViewById(androidx.appcompat.R.id.search_go_btn);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame.getLayoutParams();
         params.setMargins(20, 0, 10, 0);
         editFrame.setLayoutParams(params);

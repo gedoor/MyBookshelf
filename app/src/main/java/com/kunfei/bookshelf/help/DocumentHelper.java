@@ -2,7 +2,6 @@ package com.kunfei.bookshelf.help;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v4.provider.DocumentFile;
 import android.text.TextUtils;
 
 import com.kunfei.bookshelf.MApplication;
@@ -15,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import androidx.documentfile.provider.DocumentFile;
 
 
 /**

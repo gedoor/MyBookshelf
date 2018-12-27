@@ -1,6 +1,5 @@
 package com.kunfei.bookshelf.widget.page;
 
-import android.support.annotation.NonNull;
 import android.text.Layout;
 import android.text.StaticLayout;
 
@@ -11,6 +10,8 @@ import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 
 class ChapterProvider {
     private PageLoader pageLoader;

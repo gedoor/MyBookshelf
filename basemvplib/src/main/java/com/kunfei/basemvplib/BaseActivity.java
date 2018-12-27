@@ -6,16 +6,17 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Toast;
 
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.basemvplib.impl.IView;
 import com.monke.basemvplib.R;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
-public abstract class BaseActivity<T extends IPresenter> extends RxAppCompatActivity implements IView {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public abstract class BaseActivity<T extends IPresenter> extends AppCompatActivity implements IView {
     public final static String start_share_ele= "start_with_share_ele";
     public static final int SUCCESS = 1;
     public static final int ERROR = -1;

@@ -2,9 +2,6 @@ package com.kunfei.bookshelf.view.fragment;
 
 import android.graphics.PorterDuff;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -27,6 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

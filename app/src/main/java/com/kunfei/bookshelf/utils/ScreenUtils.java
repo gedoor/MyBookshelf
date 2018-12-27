@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.utils;
 
 import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.view.View;
 import com.kunfei.bookshelf.MApplication;
 
 import java.lang.reflect.Method;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by newbiechen on 17-5-1.

@@ -2,13 +2,14 @@ package com.kunfei.bookshelf.utils.barUtil;
 
 import android.database.ContentObserver;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
 
 /**
  * 沉浸式参数信息

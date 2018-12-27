@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_edit_source"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

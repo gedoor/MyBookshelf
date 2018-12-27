@@ -7,7 +7,7 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 
 
-public class CoverImageView extends android.support.v7.widget.AppCompatImageView {
+public class CoverImageView extends androidx.appcompat.widget.AppCompatImageView {
     float width,height;
 
     public CoverImageView(Context context) {

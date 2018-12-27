@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,6 +16,8 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TabWidget;
 
 import com.kunfei.bookshelf.R;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 
 /**

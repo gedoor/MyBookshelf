@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.help;
 
 import android.content.SharedPreferences;
-import android.support.v4.provider.DocumentFile;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -25,6 +24,7 @@ import java.io.FileOutputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.documentfile.provider.DocumentFile;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;

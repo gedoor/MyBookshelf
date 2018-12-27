@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.widget.number;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,6 +12,8 @@ import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 
 import com.kunfei.bookshelf.R;
+
+import androidx.annotation.NonNull;
 
 /**
  * Displaying a NumberPicker in a DialogPreference

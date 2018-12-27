@@ -2,32 +2,36 @@
 package com.kunfei.bookshelf.presenter;
 
 import com.hwangjr.rxbus.RxBus;
-import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
-import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.ImportBookModel;
 import com.kunfei.bookshelf.presenter.contract.ImportBookContract;
-import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.kunfei.bookshelf.utils.RxUtils;
 
 import java.io.File;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Observer;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public class ImportBookPresenter extends BasePresenterImpl<ImportBookContract.View> implements ImportBookContract.Presenter {
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void importBooks(List<File> books) {
         Observable.fromIterable(books)
                 .flatMap(file -> ImportBookModel.getInstance().importBook(file))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new SimpleObserver<LocBookShelfBean>() {
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Observer<LocBookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(LocBookShelfBean value) {
                         if (value.getNew()) {
@@ -51,6 +55,6 @@ public class ImportBookPresenter extends BasePresenterImpl<ImportBookContract.Vi
 
     @Override
     public void detachView() {
-
+        compositeDisposable.dispose();
     }
 }

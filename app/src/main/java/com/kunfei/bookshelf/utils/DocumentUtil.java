@@ -2,12 +2,13 @@ package com.kunfei.bookshelf.utils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.provider.DocumentFile;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
+
+import androidx.documentfile.provider.DocumentFile;
 
 /**
  * Created by PureDark on 2016/9/24.

@@ -1,7 +1,6 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -24,6 +23,7 @@ import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;

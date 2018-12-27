@@ -1,13 +1,11 @@
 package com.kunfei.bookshelf.presenter;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.BasePresenterImpl;
 import com.kunfei.basemvplib.impl.IView;
 import com.kunfei.bookshelf.BitIntentDataManager;
@@ -19,12 +17,16 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.BookDetailContract;
+import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.View> implements BookDetailContract.Presenter {
@@ -35,6 +37,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     private SearchBookBean searchBook;
     private BookShelfBean bookShelf;
     private Boolean inBookShelf = false;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void initData(Intent intent) {
@@ -96,10 +99,13 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
         })
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getBookInfo(bookShelfBean))
                 .flatMap(bookShelfBean -> WebBookModel.getInstance().getChapterList(bookShelfBean))
-                .subscribeOn(Schedulers.io())
-                .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SimpleObserver<BookShelfBean>() {
+                .compose(RxUtils::toSimpleSingle)
+                .subscribe(new Observer<BookShelfBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
                     @Override
                     public void onNext(BookShelfBean bookShelfResult) {
                         if (openFrom == FROM_BOOKSHELF && bookShelf != null) {
@@ -118,6 +124,11 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         mView.toast(e.getLocalizedMessage());
                         mView.getBookShelfError();
                     }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
 
@@ -130,10 +141,13 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 inBookShelf = true;
                 e.onNext(true);
                 e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SimpleObserver<Boolean>() {
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
+
                         @Override
                         public void onNext(Boolean value) {
                             if (value) {
@@ -149,6 +163,11 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                             e.printStackTrace();
                             mView.toast("放入书架失败!");
                         }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
                     });
         }
     }
@@ -162,10 +181,13 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                 inBookShelf = false;
                 e.onNext(true);
                 e.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .compose(((BaseActivity) mView.getContext()).bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new SimpleObserver<Boolean>() {
+            }).compose(RxUtils::toSimpleSingle)
+                    .subscribe(new Observer<Boolean>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            compositeDisposable.add(d);
+                        }
+
                         @Override
                         public void onNext(Boolean value) {
                             if (value) {
@@ -180,6 +202,11 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
                         public void onError(Throwable e) {
                             e.printStackTrace();
                             mView.toast("删除书籍失败！");
+                        }
+
+                        @Override
+                        public void onComplete() {
+
                         }
                     });
         }
@@ -273,6 +300,7 @@ public class BookDetailPresenter extends BasePresenterImpl<BookDetailContract.Vi
     @Override
     public void detachView() {
         RxBus.get().unregister(this);
+        compositeDisposable.dispose();
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD,
