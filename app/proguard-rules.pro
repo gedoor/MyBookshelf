@@ -75,9 +75,7 @@
 -keep class androidx.** {*;}
 
 # 保留继承的
--keep public class * extends android.support.v4.**
--keep public class * extends android.support.v7.**
--keep public class * extends android.support.annotation.**
+-keep public class * extends android.x.**
 
 # 保留R下面的资源
 -keep class **.R$* {*;}
