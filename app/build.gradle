@@ -72,13 +72,15 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 
-    //support
+    //androidX
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.media:media:1.1.0-alpha01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //google
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.android:flexbox:1.0.0'
 
