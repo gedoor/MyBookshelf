@@ -40,6 +40,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         initImmersionBar();
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
