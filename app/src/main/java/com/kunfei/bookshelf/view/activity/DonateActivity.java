@@ -31,6 +31,8 @@ import butterknife.ButterKnife;
 public class DonateActivity extends MBaseActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.cv_wx_gzh)
+    CardView cvWxGzh;
     @BindView(R.id.vw_zfb_tz)
     CardView vwZfbTz;
     @BindView(R.id.vw_zfb_hb)
@@ -82,6 +84,14 @@ public class DonateActivity extends MBaseActivity {
     @Override
     protected void bindEvent() {
         vwZfbTz.setOnClickListener(view -> Donate.aliDonate(this));
+        cvWxGzh.setOnClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, "开源阅读软件");
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
+                toast(R.string.copy_complete);
+            }
+        });
         vwZfbHb.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbhbrwm.png"));
         vwZfbRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/zfbskrwm.jpg"));
         vwWxRwm.setOnClickListener(view -> openActionViewIntent("https://gedoor.github.io/MyBookshelf/wxskrwm.jpg"));

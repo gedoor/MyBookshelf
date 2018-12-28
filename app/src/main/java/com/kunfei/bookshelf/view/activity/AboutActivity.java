@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.kunfei.basemvplib.impl.IPresenter;
@@ -19,6 +20,8 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
+
+import java.util.Arrays;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -93,7 +96,7 @@ public class AboutActivity extends MBaseActivity {
     CardView vwShare;
 
     private MoDialogHUD moDialogHUD;
-    private String qq = "701903217 788025059";
+    private String allQQ[] = new String[]{"701903217", "788025059", "805192012"};
 
     public static void startThis(Context context) {
         Intent intent = new Intent(context, AboutActivity.class);
@@ -126,7 +129,7 @@ public class AboutActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         tvVersion.setText(getString(R.string.version_name, MApplication.getVersionName()));
-        tvQq.setText(getString(R.string.qq_group, qq));
+        tvQq.setText(getString(R.string.qq_group, Arrays.toString(allQQ)));
     }
 
     @Override
@@ -139,12 +142,15 @@ public class AboutActivity extends MBaseActivity {
         vwUpdate.setOnClickListener(view -> UpdateManager.getInstance(this).checkUpdate(true));
         vwHomePage.setOnClickListener(view -> openIntent(Intent.ACTION_VIEW, getString(R.string.home_page_url)));
         vwQq.setOnClickListener(view -> {
-            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, qq);
-            if (clipboard != null) {
-                clipboard.setPrimaryClip(clipData);
-                toast(R.string.copy_complete);
+            PopupMenu popupMenu = new PopupMenu(AboutActivity.this, view);
+            for (String qq : allQQ) {
+                popupMenu.getMenu().add(qq);
             }
+            popupMenu.setOnMenuItemClickListener(menuItem -> {
+                joinQQGroup(menuItem.getTitle().toString());
+                return true;
+            });
+            popupMenu.show();
         });
         vwUpdateLog.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("updateLog.md"));
         vwFaq.setOnClickListener(view -> moDialogHUD.showAssetMarkdown("faq.md"));
@@ -175,9 +181,28 @@ public class AboutActivity extends MBaseActivity {
         });
     }
 
-    @Override
-    protected void firstRequest() {
-
+    private void joinQQGroup(String qq) {
+        String key;
+        if (qq.equals(allQQ[1])) {
+            key = "9AfUskHwN3_HtMcsFkXMgquoZ2zu6o4D";
+        } else if (qq.equals(allQQ[2])) {
+            key = "6GlFKjLeIk5RhQnR3PNVDaKB6j10royo";
+        } else {
+            key = "-iolizL4cbJSutKRpeImHlXlpLDZnzeF";
+        }
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, qq);
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clipData);
+                toast(R.string.copy_complete);
+            }
+        }
     }
 
     void openIntent(String intentName, String address) {
