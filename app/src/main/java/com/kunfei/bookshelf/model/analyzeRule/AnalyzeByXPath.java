@@ -24,11 +24,61 @@ public class AnalyzeByXPath {
     }
 
     Elements getElements(String xPath) {
+        if (TextUtils.isEmpty(xPath)) {
+            return null;
+        }
         Elements elements = new Elements();
-        List<Object> objects = jxDocument.sel(xPath);
-        for (Object object : objects) {
-            if (object instanceof Element) {
-                elements.add((Element) object);
+        String elementsType;
+        String rules[];
+        if (xPath.contains("&&")) {
+            rules = xPath.split("&&");
+            elementsType = "&";
+        } else if (xPath.contains("%%")) {
+            rules = xPath.split("%%");
+            elementsType = "%";
+        } else {
+            rules = xPath.split("\\|\\|");
+            elementsType = "|";
+        }
+        if (rules.length == 1) {
+            try {
+                List<Object> objects = jxDocument.sel(rules[0]);
+                for (Object object : objects) {
+                    if (object instanceof Element) {
+                        elements.add((Element) object);
+                    }
+                }
+                return elements;
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            List<Elements> results = new ArrayList<>();
+            for (String rl : rules) {
+                Elements temp = getElements(rl);
+                if (temp != null && !temp.isEmpty()) {
+                    results.add(temp);
+                    if (temp.size() > 0 && elementsType.equals("|")) {
+                        break;
+                    }
+                }
+            }
+            if (results.size() > 0) {
+                switch (elementsType) {
+                    case "%":
+                        for (int i = 0; i < results.get(0).size(); i++) {
+                            for (Elements temp : results) {
+                                if (i < temp.size()) {
+                                    elements.add(temp.get(i));
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        for (Elements temp : results) {
+                            elements.addAll(temp);
+                        }
+                }
             }
         }
         return elements;

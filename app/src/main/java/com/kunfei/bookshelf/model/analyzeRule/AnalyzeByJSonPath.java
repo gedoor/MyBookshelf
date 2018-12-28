@@ -112,6 +112,11 @@ public class AnalyzeByJSonPath {
                                 }
                             }
                         }
+                        break;
+                    default:
+                        for (List temp : results) {
+                            result.addAll(temp);
+                        }
                 }
             }
         }
