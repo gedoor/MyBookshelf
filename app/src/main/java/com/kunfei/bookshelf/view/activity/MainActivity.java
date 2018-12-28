@@ -181,7 +181,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
             View customView = tab.getCustomView();
             if (customView == null) return;
             TextView tv = customView.findViewById(R.id.tabtext);
-            tab.setContentDescription(String.format("%s,%s", tv.getText(), "选中时点击可弹出菜单"));
+            tab.setContentDescription(String.format("%s,%s", tv.getText(), getString(R.string.click_on_selected_show_menu)));
             ImageView im = customView.findViewById(R.id.tabicon);
             if (tab.isSelected()) {
                 im.setVisibility(View.VISIBLE);
@@ -270,7 +270,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         if (customView == null) return;
         TextView tv = customView.findViewById(R.id.tabtext);
         tv.setText(getResources().getStringArray(R.array.book_group_array)[group]);
-        tab.setContentDescription(String.format("%s,%s", tv.getText(), "选中时再次点击可切换书架"));
+        tab.setContentDescription(String.format("%s,%s", tv.getText(), getString(R.string.click_on_selected_show_menu)));
     }
 
     private View tab_icon(String name, Integer iconID) {
