@@ -14,7 +14,6 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookContentBean;
 import com.kunfei.bookshelf.bean.BookShelfBean;
-import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
@@ -90,22 +89,12 @@ public class ChapterListFragment extends MBaseFragment {
         unbinder = ButterKnife.bind(this, view);
         rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, isChapterReverse));
         rvList.setItemAnimator(null);
-        chapterListAdapter = new ChapterListAdapter(bookShelf, new ChapterListAdapter.OnItemClickListener() {
-            @Override
-            public void itemClick(int index, int page, int tabPosition) {
-                ((ChapterListActivity) getActivity()).searchViewCollapsed();
-                if (index != bookShelf.getDurChapter()) {
-                    RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
-                }
-                getActivity().finish();
+        chapterListAdapter = new ChapterListAdapter(bookShelf, (index, page) -> {
+            ((ChapterListActivity) getActivity()).searchViewCollapsed();
+            if (index != bookShelf.getDurChapter()) {
+                RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
             }
-
-            @Override
-            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
-                ((ChapterListActivity) getActivity()).searchViewCollapsed();
-                RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
-                getActivity().finish();
-            }
+            getActivity().finish();
         });
         if (bookShelf != null) {
             rvList.setAdapter(chapterListAdapter);
