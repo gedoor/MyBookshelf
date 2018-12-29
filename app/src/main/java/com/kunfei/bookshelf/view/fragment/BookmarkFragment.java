@@ -13,7 +13,7 @@ import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.view.activity.ChapterListActivity;
-import com.kunfei.bookshelf.view.adapter.ChapterListAdapter;
+import com.kunfei.bookshelf.view.adapter.BookmarkAdapter;
 import com.kunfei.bookshelf.widget.modialog.EditBookmarkView;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 import com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView;
@@ -31,7 +31,7 @@ public class BookmarkFragment extends MBaseFragment {
     private Unbinder unbinder;
     public MoDialogHUD moDialogHUD;
     private BookShelfBean bookShelf;
-    private ChapterListAdapter chapterListAdapter;
+    private BookmarkAdapter adapter;
 
     @Override
     public int createLayoutId() {
@@ -69,9 +69,9 @@ public class BookmarkFragment extends MBaseFragment {
     protected void bindView() {
         super.bindView();
         unbinder = ButterKnife.bind(this, view);
-        chapterListAdapter = new ChapterListAdapter(bookShelf, new ChapterListAdapter.OnItemClickListener() {
+        adapter = new BookmarkAdapter(bookShelf, new BookmarkAdapter.OnItemClickListener() {
             @Override
-            public void itemClick(int index, int page, int tabPosition) {
+            public void itemClick(int index, int page) {
                 ((ChapterListActivity) getActivity()).searchViewCollapsed();
                 if (index != bookShelf.getDurChapter()) {
                     RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
@@ -80,14 +80,13 @@ public class BookmarkFragment extends MBaseFragment {
             }
 
             @Override
-            public void itemLongClick(BookmarkBean bookmarkBean, int tabPosition) {
+            public void itemLongClick(BookmarkBean bookmarkBean) {
                 ((ChapterListActivity) getActivity()).searchViewCollapsed();
                 showBookmark(bookmarkBean);
             }
         });
         rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvList.setAdapter(chapterListAdapter);
-        chapterListAdapter.tabChange(1);
+        rvList.setAdapter(adapter);
     }
 
 
@@ -99,7 +98,7 @@ public class BookmarkFragment extends MBaseFragment {
     }
 
     public void startSearch(String key) {
-        chapterListAdapter.search(key);
+        adapter.search(key);
     }
 
     private void showBookmark(BookmarkBean bookmarkBean) {
@@ -108,14 +107,14 @@ public class BookmarkFragment extends MBaseFragment {
             public void saveBookmark(BookmarkBean bookmarkBean) {
                 DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().insertOrReplace(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
-                chapterListAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void delBookmark(BookmarkBean bookmarkBean) {
                 DbHelper.getInstance().getmDaoSession().getBookmarkBeanDao().delete(bookmarkBean);
                 bookShelf.getBookInfoBean().setBookmarkList(BookshelfHelp.getBookmarkList(bookShelf.getBookInfoBean().getName()));
-                chapterListAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
