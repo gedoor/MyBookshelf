@@ -27,7 +27,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@string/app_name"
-            android:textColor="@color/color_chapter_item"
+            android:textColor="@color/selector_chapter_item"
             android:textSize="15sp" />
 
     </LinearLayout>

@@ -39,7 +39,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
     public ChapterListAdapter(BookShelfBean bookShelfBean, @NonNull OnItemClickListener itemClickListener) {
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
-        normalColor = MApplication.getAppResources().getColor(R.color.color_chapter_item);
+        normalColor = MApplication.getAppResources().getColor(R.color.selector_chapter_item);
         highlightColor = MApplication.getAppResources().getColor(R.color.colorAccent);
     }
 

@@ -433,7 +433,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         navigationView.addHeaderView(headerView);
-        ColorStateList colorStateList = getResources().getColorStateList(R.color.navigation_color);
+        ColorStateList colorStateList = getResources().getColorStateList(R.color.selector_navigation_color);
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
         Menu drawerMenu = navigationView.getMenu();
