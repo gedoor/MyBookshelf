@@ -82,6 +82,9 @@ public class ChapterListActivity extends BaseTabActivity {
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_chapterlist);
+        ButterKnife.bind(this);
+        setupActionBar();
+        AppCompat.setToolbarNavIconTint(toolbar, getResources().getColor(R.color.menu_color_default));
     }
 
     @Override
@@ -102,15 +105,6 @@ public class ChapterListActivity extends BaseTabActivity {
     @Override
     protected List<String> createTabTitles() {
         return Arrays.asList(getString(R.string.chapter_list), getString(R.string.bookmark));
-    }
-
-    @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-        super.bindView();
-        setupActionBar();
-        AppCompat.setToolbarNavIconTint(toolbar, getResources().getColor(R.color.menu_color_default));
-
     }
 
     @Override
