@@ -19,6 +19,7 @@ import com.kunfei.bookshelf.widget.AppCompat;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -34,8 +35,7 @@ public class ChapterListActivity extends BaseTabActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    SearchView searchView;
-
+    private SearchView searchView;
     private BookShelfBean bookShelf;
 
     public static void startThis(MBaseActivity activity, BookShelfBean bookShelf) {
@@ -64,7 +64,7 @@ public class ChapterListActivity extends BaseTabActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (bookShelf != null) {
             String key = String.valueOf(System.currentTimeMillis());
@@ -131,7 +131,7 @@ public class ChapterListActivity extends BaseTabActivity {
                 if (mTlIndicator.getSelectedTabPosition() == 1) {
                     ((BookmarkFragment) mFragmentList.get(1)).startSearch(newText);
                 } else {
-                    ((ChapterListFragment) mFragmentList.get(1)).startSearch(newText);
+                    ((ChapterListFragment) mFragmentList.get(0)).startSearch(newText);
                 }
                 return false;
             }
