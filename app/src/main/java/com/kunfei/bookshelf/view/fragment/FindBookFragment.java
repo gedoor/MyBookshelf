@@ -53,7 +53,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
     @BindView(R.id.vw_divider)
     View vwDivider;
 
-    Unbinder unbinder;
+    private Unbinder unbinder;
     private FindLeftAdapter findLeftAdapter;
     private FindRightAdapter findRightAdapter;
     private FindKindAdapter findKindAdapter;

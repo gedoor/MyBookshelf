@@ -25,6 +25,7 @@ import com.kunfei.bookshelf.bean.BookSourceBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.bean.LocBookShelfBean;
+import com.kunfei.bookshelf.bean.OpenChapterBean;
 import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
@@ -35,7 +36,6 @@ import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.presenter.contract.ReadBookContract;
 import com.kunfei.bookshelf.service.DownloadService;
 import com.kunfei.bookshelf.service.ReadAloudService;
-import com.kunfei.bookshelf.view.activity.ChapterListActivity;
 import com.kunfei.bookshelf.widget.modialog.ChangeSourceView;
 
 import java.io.File;
@@ -441,7 +441,7 @@ public class ReadBookPresenter extends BasePresenterImpl<ReadBookContract.View> 
     }
 
     @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.SKIP_TO_CHAPTER)})
-    public void skipToChapter(ChapterListActivity.OpenChapterBean openChapterBean) {
+    public void skipToChapter(OpenChapterBean openChapterBean) {
         mView.skipToChapter(openChapterBean.getChapterIndex(), openChapterBean.getPageIndex());
     }
 
