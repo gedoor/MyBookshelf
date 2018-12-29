@@ -29,7 +29,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/toolbar_tab"
+                android:id="@+id/tab_tl_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
@@ -37,10 +37,10 @@
                 android:layout_marginRight="10dp"
                 android:fillViewport="false"
                 app:layout_scrollFlags="scroll"
-                app:tabIndicatorColor="@color/colorAccent"
+                app:tabIndicatorColor="?attr/colorAccent"
                 app:tabIndicatorHeight="2.0dp"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="@color/colorAccent"
+                app:tabSelectedTextColor="?attr/colorAccent"
                 app:tabTextColor="@color/menu_color_default">
 
                 <com.google.android.material.tabs.TabItem

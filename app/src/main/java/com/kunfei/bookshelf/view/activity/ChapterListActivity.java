@@ -31,6 +31,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,7 +42,7 @@ public class ChapterListActivity extends MBaseActivity {
 
     @BindView(R.id.rv_list)
     FastScrollRecyclerView rvList;
-    @BindView(R.id.toolbar_tab)
+    @BindView(R.id.tab_tl_indicator)
     TabLayout toolbarTab;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -124,7 +125,7 @@ public class ChapterListActivity extends MBaseActivity {
         ButterKnife.bind(this);
         setupActionBar();
         AppCompat.setToolbarNavIconTint(toolbar, getResources().getColor(R.color.menu_color_default));
-        rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, isChapterReverse));
+        rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, isChapterReverse));
         rvList.setItemAnimator(null);
         chapterListAdapter = new ChapterListAdapter(bookShelf, new ChapterListAdapter.OnItemClickListener() {
             @Override
