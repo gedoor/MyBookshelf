@@ -3,7 +3,6 @@ package com.kunfei.bookshelf.view.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -12,14 +11,13 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.hwangjr.rxbus.RxBus;
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
@@ -27,19 +25,19 @@ import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.BitmapUtil;
-import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
-import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReadStyleActivity extends MBaseActivity {
+public class ReadStyleActivity extends MBaseActivity implements ColorPickerDialogListener {
     private final int ResultSelectBg = 103;
+    private final int SELECT_TEXT_COLOR = 201;
+    private final int SELECT_BG_COLOR = 301;
 
     @BindView(R.id.ll_content)
     LinearLayout llContent;
@@ -59,7 +57,6 @@ public class ReadStyleActivity extends MBaseActivity {
     Switch swDarkStatusIcon;
 
     private ReadBookControl readBookControl = ReadBookControl.getInstance();
-    private MoDialogHUD moDialogHUD;
     private int textDrawableIndex;
     private int textColor;
     private int bgColor;
@@ -92,7 +89,6 @@ public class ReadStyleActivity extends MBaseActivity {
         this.setSupportActionBar(toolbar);
         setupActionBar();
         setTextKind(readBookControl);
-        moDialogHUD = new MoDialogHUD(this);
     }
 
     @Override
@@ -140,99 +136,45 @@ public class ReadStyleActivity extends MBaseActivity {
             initImmersionBar();
         });
         //选择文字颜色
-        tvSelectTextColor.setOnClickListener(view -> ColorPickerDialogBuilder
-                .with(this)
-                .setTitle("选择文字颜色")
-                .initialColor(textColor)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(12)
-                .lightnessSliderOnly()
-                .setOnColorSelectedListener(selectedColor -> {
-
-                })
-                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
-                    textColor = selectedColor;
-                    upText();
-                })
-                .setNegativeButton("cancel", (dialog, which) -> {
-
-                })
-                .build()
-                .show());
-        tvSelectTextColor.setOnLongClickListener((View view) -> {
-            moDialogHUD.showInputBox("输入文字颜色",
-                    ColorUtil.intToString(textColor),
-                    null,
-                    inputText -> {
-                try {
-                    textColor = Color.parseColor(inputText);
-                    upText();
-                } catch (Exception e) {
-                    toast("颜色值错误", ERROR);
-                }
-            });
-            return true;
-        });
+        tvSelectTextColor.setOnClickListener(view ->
+                ColorPickerDialog.newBuilder()
+                        .setColor(textColor)
+                        .setShowAlphaSlider(false)
+                        .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
+                        .setDialogId(SELECT_TEXT_COLOR)
+                        .show(ReadStyleActivity.this));
         //选择背景颜色
-        tvSelectBgColor.setOnClickListener(view -> ColorPickerDialogBuilder
-                .with(this)
-                .setTitle("选择背景颜色")
-                .initialColor(bgColor)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(12)
-                .lightnessSliderOnly()
-                .setOnColorSelectedListener(selectedColor -> {
-
-                })
-                .setPositiveButton("ok", (dialog, selectedColor, allColors) -> {
-                    bgCustom = 1;
-                    bgColor = selectedColor;
-                    bgDrawable = new ColorDrawable(bgColor);
-                    upBg();
-                })
-                .setNegativeButton("cancel", (dialog, which) -> {
-
-                })
-                .build()
-                .show());
-        tvSelectBgColor.setOnLongClickListener((View view) -> {
-            moDialogHUD.showInputBox("输入背景颜色",
-                    ColorUtil.intToString(bgColor),
-                    null,
-                    inputText -> {
-                try {
-                    bgColor = Color.parseColor(inputText);
-                    bgDrawable = new ColorDrawable(bgColor);
-                    bgCustom = 1;
-                    upBg();
-                } catch (Exception e) {
-                    toast("颜色值错误", ERROR);
-                }
-            });
-            return true;
-        });
+        tvSelectBgColor.setOnClickListener(view ->
+                ColorPickerDialog.newBuilder()
+                        .setColor(bgColor)
+                        .setShowAlphaSlider(false)
+                        .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
+                        .setDialogId(SELECT_BG_COLOR)
+                        .show(ReadStyleActivity.this));
         //选择背景图片
-        tvSelectBgImage.setOnClickListener(view -> {
-            PermissionUtils.checkMorePermissions(ReadStyleActivity.this, MApplication.PerList, new PermissionUtils.PermissionCheckCallBack() {
-                @Override
-                public void onHasPermission() {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, ResultSelectBg);
-                }
+        tvSelectBgImage.setOnClickListener(view ->
+                PermissionUtils
+                        .checkMorePermissions(ReadStyleActivity.this,
+                                MApplication.PerList,
+                                new PermissionUtils.PermissionCheckCallBack() {
+                                    @Override
+                                    public void onHasPermission() {
+                                        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                        intent.setType("image/*");
+                                        startActivityForResult(intent, ResultSelectBg);
+                                    }
 
-                @Override
-                public void onUserHasAlreadyTurnedDown(String... permission) {
-                    ReadStyleActivity.this.toast("选择背景图片需存储权限");
-                }
+                                    @Override
+                                    public void onUserHasAlreadyTurnedDown(String... permission) {
+                                        ReadStyleActivity.this.toast("选择背景图片需存储权限");
+                                    }
 
-                @Override
-                public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
-                    PermissionUtils.requestMorePermissions(ReadStyleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
-                }
-            });
-        });
+                                    @Override
+                                    public void onUserHasAlreadyTurnedDownAndDontAsk(String... permission) {
+                                        PermissionUtils.requestMorePermissions(ReadStyleActivity.this, MApplication.PerList, MApplication.RESULT__PERMS);
+                                    }
+                                }));
         //恢复默认
         tvDefault.setOnClickListener(view -> {
             bgCustom = 0;
@@ -332,5 +274,36 @@ public class ReadStyleActivity extends MBaseActivity {
                 }
                 break;
         }
+    }
+
+    /**
+     * Callback that is invoked when a color is selected from the color picker dialog.
+     *
+     * @param dialogId The dialog id used to create the dialog instance.
+     * @param color    The selected color
+     */
+    @Override
+    public void onColorSelected(int dialogId, int color) {
+        switch (dialogId) {
+            case SELECT_TEXT_COLOR:
+                textColor = color;
+                upText();
+                break;
+            case SELECT_BG_COLOR:
+                bgCustom = 1;
+                bgColor = color;
+                bgDrawable = new ColorDrawable(bgColor);
+                upBg();
+        }
+    }
+
+    /**
+     * Callback that is invoked when the color picker dialog was dismissed.
+     *
+     * @param dialogId The dialog id used to create the dialog instance.
+     */
+    @Override
+    public void onDialogDismissed(int dialogId) {
+
     }
 }
