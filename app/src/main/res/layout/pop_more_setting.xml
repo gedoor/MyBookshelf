@@ -209,7 +209,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:textColor="@color/menu_color_default"
+                        android:textColor="@color/selector_menu_text"
                         android:text="黑色" />
 
                 </LinearLayout>

@@ -256,8 +256,10 @@ public class MoreSettingPop extends FrameLayout {
         }
         if (readBookControl.getHideNavigationBar()) {
             llNavigationBarColor.setEnabled(false);
+            reNavbarcolorVal.setEnabled(false);
         } else {
             llNavigationBarColor.setEnabled(true);
+            reNavbarcolorVal.setEnabled(true);
         }
     }
 
