@@ -128,7 +128,11 @@ public class ChapterListActivity extends BaseTabActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                if (mTlIndicator.getSelectedTabPosition() == 1) {
+                    ((BookmarkFragment) mFragmentList.get(1)).startSearch(newText);
+                } else {
+                    ((ChapterListFragment) mFragmentList.get(1)).startSearch(newText);
+                }
                 return false;
             }
         });

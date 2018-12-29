@@ -132,6 +132,10 @@ public class ChapterListFragment extends MBaseFragment {
         });
     }
 
+    public void startSearch(String key) {
+        chapterListAdapter.search(key);
+    }
+
     private void updateIndex(int durChapter) {
         chapterListAdapter.setIndex(durChapter);
         layoutManager.scrollToPositionWithOffset(durChapter, 0);

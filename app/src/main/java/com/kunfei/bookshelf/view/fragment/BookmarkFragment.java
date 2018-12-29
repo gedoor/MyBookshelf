@@ -94,5 +94,8 @@ public class BookmarkFragment extends MBaseFragment {
         RxBus.get().unregister(this);
     }
 
+    public void startSearch(String key) {
+        chapterListAdapter.search(key);
+    }
 
 }
