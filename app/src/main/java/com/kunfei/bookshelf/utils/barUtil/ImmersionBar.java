@@ -817,7 +817,7 @@ public class ImmersionBar {
         if (view == null) {
             throw new IllegalArgumentException("View参数不能为空");
         }
-        Map<Integer, Integer> map = new HashMap<>();
+        @SuppressLint("UseSparseArrays") Map<Integer, Integer> map = new HashMap<>();
         map.put(viewColorBeforeTransform, viewColorAfterTransform);
         mBarParams.viewMap.put(view, map);
         return this;
@@ -2130,11 +2130,8 @@ public class ImmersionBar {
      * @return the boolean
      */
     public static boolean isSupportStatusBarDarkFont() {
-        if (OSUtils.isMIUI6Later() || OSUtils.isFlymeOS4Later()
-                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)) {
-            return true;
-        } else
-            return false;
+        return OSUtils.isMIUI6Later() || OSUtils.isFlymeOS4Later()
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
     }
 
     /**

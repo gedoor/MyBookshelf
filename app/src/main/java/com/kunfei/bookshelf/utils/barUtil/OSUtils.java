@@ -1,5 +1,6 @@
 package com.kunfei.bookshelf.utils.barUtil;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import java.lang.reflect.Method;
@@ -179,7 +180,7 @@ public class OSUtils {
 
     private static String getSystemProperty(String key, String defaultValue) {
         try {
-            Class<?> clz = Class.forName("android.os.SystemProperties");
+            @SuppressLint("PrivateApi") Class<?> clz = Class.forName("android.os.SystemProperties");
             Method get = clz.getMethod("get", String.class, String.class);
             return (String) get.invoke(clz, key, defaultValue);
         } catch (Exception e) {

@@ -7,13 +7,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
-import android.view.ViewConfiguration;
 import android.view.WindowManager;
 
 /**
@@ -53,9 +49,7 @@ class BarConfig {
         Display d = windowManager.getDefaultDisplay();
 
         DisplayMetrics realDisplayMetrics = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            d.getRealMetrics(realDisplayMetrics);
-        }
+        d.getRealMetrics(realDisplayMetrics);
 
         int realHeight = realDisplayMetrics.heightPixels;
         int realWidth = realDisplayMetrics.widthPixels;
@@ -71,12 +65,10 @@ class BarConfig {
 
     @TargetApi(14)
     private int getActionBarHeight(Context context) {
-        int result = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            TypedValue tv = new TypedValue();
-            context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
-            result = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
-        }
+        int result;
+        TypedValue tv = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true);
+        result = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         return result;
     }
 
@@ -84,16 +76,14 @@ class BarConfig {
     private int getNavigationBarHeight(Context context) {
         Resources res = context.getResources();
         int result = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (hasNavBar((Activity) context)) {
-                String key;
-                if (mInPortrait) {
-                    key = NAV_BAR_HEIGHT_RES_NAME;
-                } else {
-                    key = NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME;
-                }
-                return getInternalDimensionSize(res, key);
+        if (hasNavBar((Activity) context)) {
+            String key;
+            if (mInPortrait) {
+                key = NAV_BAR_HEIGHT_RES_NAME;
+            } else {
+                key = NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME;
             }
+            return getInternalDimensionSize(res, key);
         }
         return result;
     }
@@ -102,10 +92,8 @@ class BarConfig {
     private int getNavigationBarWidth(Context context) {
         Resources res = context.getResources();
         int result = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (hasNavBar((Activity) context)) {
-                return getInternalDimensionSize(res, NAV_BAR_WIDTH_RES_NAME);
-            }
+        if (hasNavBar((Activity) context)) {
+            return getInternalDimensionSize(res, NAV_BAR_WIDTH_RES_NAME);
         }
         return result;
     }
@@ -113,7 +101,7 @@ class BarConfig {
     private int getInternalDimensionSize(Resources res, String key) {
         int result = 0;
         try {
-            Class clazz = Class.forName("com.android.internal.R$dimen");
+            @SuppressLint("PrivateApi") Class clazz = Class.forName("com.android.internal.R$dimen");
             Object object = clazz.newInstance();
             int resourceId = Integer.parseInt(clazz.getField(key).get(object).toString());
             if (resourceId > 0)
@@ -127,12 +115,7 @@ class BarConfig {
     @SuppressLint("NewApi")
     private float getSmallestWidthDp(Activity activity) {
         DisplayMetrics metrics = new DisplayMetrics();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        } else {
-            // this is not correct, but we don't really care pre-kitkat
-            activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        }
+        activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
         float widthDp = metrics.widthPixels / metrics.density;
         float heightDp = metrics.heightPixels / metrics.density;
         return Math.min(widthDp, heightDp);
@@ -197,23 +180,12 @@ class BarConfig {
     }
 
     public boolean checkDeviceHasNavigationBar(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Display display = activity.getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            Point realSize = new Point();
-            display.getSize(size);
-            display.getRealSize(realSize);
-            boolean result = realSize.y != size.y;
-            return realSize.y != size.y;
-        } else {
-            boolean menu = ViewConfiguration.get(activity).hasPermanentMenuKey();
-            boolean back = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-            if (menu || back) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        Point realSize = new Point();
+        display.getSize(size);
+        display.getRealSize(realSize);
+        return realSize.y != size.y;
     }
 
 }
