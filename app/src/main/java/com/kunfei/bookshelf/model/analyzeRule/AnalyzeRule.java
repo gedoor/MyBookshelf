@@ -140,14 +140,27 @@ public class AnalyzeRule {
     }
 
     public AnalyzeCollection getElements(String rule) {
+        AnalyzeCollection collection;
         SourceRule source = new SourceRule(rule);
-        switch (source.mode) {
-            case JSon:
-                return new AnalyzeCollection(getAnalyzeByJSonPath().readList(source.rule), _isJSON);
-            case XPath:
-                return new AnalyzeCollection(getAnalyzeByXPath().getElements(source.rule));
+        if (!TextUtils.isEmpty(source.rule)) {
+            switch (source.mode) {
+                case JSon:
+                    collection = new AnalyzeCollection(getAnalyzeByJSonPath().readList(source.rule), _isJSON);
+                    break;
+                case XPath:
+                    collection = new AnalyzeCollection(getAnalyzeByXPath().getElements(source.rule));
+                    break;
+                default:
+                    collection = new AnalyzeCollection(getAnalyzeByJSoup().getElements(source.rule));
+            }
+            if (!TextUtils.isEmpty(source.js)) {
+                collection = (AnalyzeCollection) AnalyzeRule.evalJS(source.js, collection, null);
+            }
+            return collection;
+        } else if (!TextUtils.isEmpty(source.js)) {
+            return (AnalyzeCollection) AnalyzeRule.evalJS(source.js, _object, null);
         }
-        return new AnalyzeCollection(getAnalyzeByJSoup().getElements(source.rule));
+        return null;
     }
 
     class SourceRule {
