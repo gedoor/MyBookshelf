@@ -49,9 +49,11 @@ public class LocalBookFragment extends BaseFileFragment {
 
     private void setUpAdapter() {
         mAdapter = new FileSystemAdapter();
-        mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
-        mRvContent.setAdapter(mAdapter);
+        if (getContext() != null) {
+            mRvContent.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRvContent.addItemDecoration(new DividerItemDecoration(getContext()));
+            mRvContent.setAdapter(mAdapter);
+        }
     }
 
     @Override
@@ -79,19 +81,21 @@ public class LocalBookFragment extends BaseFileFragment {
     @Override
     protected void firstRequest() {
         super.firstRequest();
-        MediaStoreHelper.getAllBookFile(getActivity(),
-                (files) -> {
-                    if (files.isEmpty()) {
-                        mRlRefresh.showEmpty();
-                    } else {
-                        mAdapter.refreshItems(files);
-                        mRlRefresh.showFinish();
-                        //反馈
-                        if (mListener != null) {
-                            mListener.onCategoryChanged();
+        if (getActivity() != null) {
+            MediaStoreHelper.getAllBookFile(getActivity(),
+                    (files) -> {
+                        if (files.isEmpty()) {
+                            mRlRefresh.showEmpty();
+                        } else {
+                            mAdapter.refreshItems(files);
+                            mRlRefresh.showFinish();
+                            //反馈
+                            if (mListener != null) {
+                                mListener.onCategoryChanged();
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     @Override
