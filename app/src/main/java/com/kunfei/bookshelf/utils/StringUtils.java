@@ -271,6 +271,16 @@ public class StringUtils {
         return result;
     }
 
+    public static boolean isEmpty(String text) {
+        if (text == null) {
+            return true;
+        }
+        if (text.length() == 0) {
+            return true;
+        }
+        return text.trim().length() == 0;
+    }
+
     public static boolean startWithIgnoreCase(String src, String obj) {
         if (obj.length() > src.length()) {
             return false;

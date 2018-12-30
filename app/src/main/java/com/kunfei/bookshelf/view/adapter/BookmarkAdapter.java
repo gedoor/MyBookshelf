@@ -10,6 +10,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.BookmarkBean;
+import com.kunfei.bookshelf.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ThisVi
         }
 
         BookmarkBean bookmarkBean = isSearch ? bookmarkBeans.get(realPosition) : bookShelfBean.getBookmark(realPosition);
-        holder.tvName.setText(bookmarkBean.getContent());
+        holder.tvName.setText(StringUtils.isEmpty(bookmarkBean.getContent()) ? bookmarkBean.getChapterName() : bookmarkBean.getContent());
         holder.llName.setOnClickListener(v -> {
             if (itemClickListener != null) {
                 itemClickListener.itemClick(bookmarkBean.getChapterIndex(), bookmarkBean.getPageIndex());
