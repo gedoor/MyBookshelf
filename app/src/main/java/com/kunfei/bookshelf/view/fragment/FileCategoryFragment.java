@@ -125,7 +125,7 @@ public class FileCategoryFragment extends BaseFileFragment {
             if (getContext() != null) {
                 List<String> list = FileUtil.getStorageData(getContext());
                 if (list != null) {
-                    String[] filePathS = list.toArray(new String[list.size()]);
+                    String[] filePathS = list.toArray(new String[0]);
                     AlertDialog dialog = new AlertDialog.Builder(getContext())
                             .setTitle("选择SD卡")
                             .setSingleChoiceItems(filePathS, 0, (dialogInterface, i) -> {
