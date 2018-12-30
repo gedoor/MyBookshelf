@@ -16,8 +16,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
-import static android.text.TextUtils.isEmpty;
-
 
 /**
  * Created by REFGD.
@@ -93,7 +91,7 @@ public class AnalyzeRule {
             default:
                 stringList = getAnalyzeByJSoup().getAllResultList(source.rule);
         }
-        if (!TextUtils.isEmpty(baseUrl)) {
+        if (!StringUtils.isTrimEmpty(baseUrl)) {
             List<String> urlList = new ArrayList<>();
             for (String url : stringList) {
                 url = NetworkUtil.getAbsoluteURL(baseUrl, url);
@@ -111,12 +109,12 @@ public class AnalyzeRule {
     }
 
     public String getString(String rule, String _baseUrl) {
-        if (TextUtils.isEmpty(rule)) {
+        if (StringUtils.isTrimEmpty(rule)) {
             return null;
         }
         String result = "";
         SourceRule source = new SourceRule(rule);
-        if (!TextUtils.isEmpty(source.rule)) {
+        if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
                     result = getAnalyzeByJSonPath().read(source.rule);
@@ -134,10 +132,10 @@ public class AnalyzeRule {
         } else {
             result = String.valueOf(_object);
         }
-        if (!isEmpty(source.js)) {
+        if (!StringUtils.isTrimEmpty(source.js)) {
             result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl);
         }
-        if (!isEmpty(_baseUrl)) {
+        if (!StringUtils.isTrimEmpty(_baseUrl)) {
             result = NetworkUtil.getAbsoluteURL(_baseUrl, result);
         }
         return result;
@@ -146,7 +144,7 @@ public class AnalyzeRule {
     public AnalyzeCollection getElements(String rule) {
         AnalyzeCollection collection;
         SourceRule source = new SourceRule(rule);
-        if (!TextUtils.isEmpty(source.rule)) {
+        if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
                     collection = new AnalyzeCollection(getAnalyzeByJSonPath().readList(source.rule), _isJSON);
@@ -157,11 +155,11 @@ public class AnalyzeRule {
                 default:
                     collection = new AnalyzeCollection(getAnalyzeByJSoup().getElements(source.rule));
             }
-            if (!TextUtils.isEmpty(source.js)) {
+            if (!StringUtils.isTrimEmpty(source.js)) {
                 collection = (AnalyzeCollection) AnalyzeRule.evalJS(source.js, collection, null);
             }
             return collection;
-        } else if (!TextUtils.isEmpty(source.js)) {
+        } else if (!StringUtils.isTrimEmpty(source.js)) {
             return (AnalyzeCollection) AnalyzeRule.evalJS(source.js, _object, null);
         }
         return null;

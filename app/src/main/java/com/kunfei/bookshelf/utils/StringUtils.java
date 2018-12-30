@@ -271,7 +271,7 @@ public class StringUtils {
         return result;
     }
 
-    public static boolean isEmpty(String text) {
+    public static boolean isTrimEmpty(String text) {
         if (text == null) {
             return true;
         }
