@@ -47,7 +47,7 @@ public abstract class BaseFileFragment extends MBaseFragment {
 
     //获取文件的总数
     public int getFileCount() {
-        return mAdapter != null ? mAdapter.getItemCount() : null;
+        return mAdapter != null ? mAdapter.getItemCount() : 0;
     }
 
     //获取可点击的文件的数量
