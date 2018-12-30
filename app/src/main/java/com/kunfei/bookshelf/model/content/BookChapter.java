@@ -111,9 +111,9 @@ class BookChapter {
 
         AnalyzeCollection collections = analyzer.getElements(ruleChapterList);
         while (collections.hasNext()) {
-            AnalyzeRule anaer = collections.next();
-            String name = anaer.getString(bookSourceBean.getRuleChapterName());
-            String url = anaer.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
+            AnalyzeRule analyzeRule = collections.next();
+            String name = analyzeRule.getString(bookSourceBean.getRuleChapterName());
+            String url = analyzeRule.getString(bookSourceBean.getRuleContentUrl(), chapterUrl);
             if (!isEmpty(name) && !isEmpty(url)) {
                 ChapterListBean temp = new ChapterListBean();
                 temp.setTag(tag);

@@ -112,23 +112,27 @@ public class AnalyzeRule {
 
     public String getString(String rule, String _baseUrl) {
         if (TextUtils.isEmpty(rule)) {
-            return "";
+            return null;
         }
         String result = "";
         SourceRule source = new SourceRule(rule);
-        switch (source.mode) {
-            case JSon:
-                result = getAnalyzeByJSonPath().read(source.rule);
-                break;
-            case XPath:
-                result = getAnalyzeByXPath().getString(source.rule, _baseUrl);
-                break;
-            case Default:
-                if (TextUtils.isEmpty(_baseUrl)) {
-                    result = getAnalyzeByJSoup().getResult(source.rule);
-                } else {
-                    result = getAnalyzeByJSoup().getResultUrl(source.rule);
-                }
+        if (!TextUtils.isEmpty(source.rule)) {
+            switch (source.mode) {
+                case JSon:
+                    result = getAnalyzeByJSonPath().read(source.rule);
+                    break;
+                case XPath:
+                    result = getAnalyzeByXPath().getString(source.rule, _baseUrl);
+                    break;
+                case Default:
+                    if (TextUtils.isEmpty(_baseUrl)) {
+                        result = getAnalyzeByJSoup().getResult(source.rule);
+                    } else {
+                        result = getAnalyzeByJSoup().getResultUrl(source.rule);
+                    }
+            }
+        } else {
+            result = String.valueOf(_object);
         }
         if (!isEmpty(source.js)) {
             result = (String) AnalyzeRule.evalJS(source.js, result, _baseUrl);
