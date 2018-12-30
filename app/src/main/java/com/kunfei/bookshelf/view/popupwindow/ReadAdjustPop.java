@@ -119,15 +119,15 @@ public class ReadAdjustPop extends FrameLayout {
             } else {
                 //不跟随系统
                 hpbLight.setEnabled(true);
-                hpbLight.setProgress(light);
+                setScreenBrightness(light);
             }
         });
         hpbLight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (!isFollowSys) {
-                    light = i;
-                    setScreenBrightness(i);
+                    light = i < 1 ? 1 : i;
+                    setScreenBrightness(light);
                 }
             }
 
