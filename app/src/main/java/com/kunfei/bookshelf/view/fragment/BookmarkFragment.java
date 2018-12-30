@@ -59,7 +59,9 @@ public class BookmarkFragment extends MBaseFragment {
     protected void initData() {
         super.initData();
         moDialogHUD = new MoDialogHUD(getActivity());
-        bookShelf = ((ChapterListActivity) getActivity()).getBookShelf();
+        if (getFatherActivity() != null) {
+            bookShelf = getFatherActivity().getBookShelf();
+        }
     }
 
     /**
@@ -72,16 +74,20 @@ public class BookmarkFragment extends MBaseFragment {
         adapter = new BookmarkAdapter(bookShelf, new BookmarkAdapter.OnItemClickListener() {
             @Override
             public void itemClick(int index, int page) {
-                ((ChapterListActivity) getActivity()).searchViewCollapsed();
                 if (index != bookShelf.getDurChapter()) {
                     RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
                 }
-                getActivity().finish();
+                if (getFatherActivity() != null) {
+                    getFatherActivity().searchViewCollapsed();
+                    getFatherActivity().finish();
+                }
             }
 
             @Override
             public void itemLongClick(BookmarkBean bookmarkBean) {
-                ((ChapterListActivity) getActivity()).searchViewCollapsed();
+                if (getFatherActivity() != null) {
+                    getFatherActivity().searchViewCollapsed();
+                }
                 showBookmark(bookmarkBean);
             }
         });
@@ -120,10 +126,16 @@ public class BookmarkFragment extends MBaseFragment {
             @Override
             public void openChapter(int chapterIndex, int pageIndex) {
                 RxBus.get().post(RxBusTag.OPEN_BOOK_MARK, bookmarkBean);
-                getActivity().finish();
+                if (getFatherActivity() != null) {
+                    getFatherActivity().finish();
+                }
             }
         });
 
+    }
+
+    private ChapterListActivity getFatherActivity() {
+        return (ChapterListActivity) getActivity();
     }
 
 }

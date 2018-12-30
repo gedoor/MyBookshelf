@@ -76,7 +76,9 @@ public class ChapterListFragment extends MBaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        bookShelf = ((ChapterListActivity) getActivity()).getBookShelf();
+        if (getFatherActivity() != null) {
+            bookShelf = getFatherActivity().getBookShelf();
+        }
         isChapterReverse = preferences.getBoolean("isChapterReverse", false);
     }
 
@@ -90,11 +92,13 @@ public class ChapterListFragment extends MBaseFragment {
         rvList.setLayoutManager(layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, isChapterReverse));
         rvList.setItemAnimator(null);
         chapterListAdapter = new ChapterListAdapter(bookShelf, (index, page) -> {
-            ((ChapterListActivity) getActivity()).searchViewCollapsed();
             if (index != bookShelf.getDurChapter()) {
                 RxBus.get().post(RxBusTag.SKIP_TO_CHAPTER, new OpenChapterBean(index, page));
             }
-            getActivity().finish();
+            if (getFatherActivity() != null) {
+                getFatherActivity().searchViewCollapsed();
+                getFatherActivity().finish();
+            }
         });
         if (bookShelf != null) {
             rvList.setAdapter(chapterListAdapter);
@@ -140,6 +144,9 @@ public class ChapterListFragment extends MBaseFragment {
         }
     }
 
+    private ChapterListActivity getFatherActivity() {
+        return (ChapterListActivity) getActivity();
+    }
 
     @Override
     public void onDestroyView() {
