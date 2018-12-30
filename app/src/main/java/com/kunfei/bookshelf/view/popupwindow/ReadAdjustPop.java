@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.view.popupwindow;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -66,7 +67,7 @@ public class ReadAdjustPop extends FrameLayout {
     }
 
     private void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, null);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(context).inflate(R.layout.pop_read_adjust, null);
         addView(view);
         ButterKnife.bind(this, view);
         view.setOnClickListener(null);
