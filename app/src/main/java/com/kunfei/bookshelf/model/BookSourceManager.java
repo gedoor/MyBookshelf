@@ -195,7 +195,7 @@ public class BookSourceManager extends BaseModelImpl {
     }
 
     public static Observable<List<BookSourceBean>> importSource(String string) {
-        if (TextUtils.isEmpty(string) || string.trim().length() == 0) return null;
+        if (StringUtils.isTrimEmpty(string)) return null;
         if (StringUtils.isJsonType(string)) {
             return importBookSourceFromJson(string.trim())
                     .compose(RxUtils::toSimpleSingle);
