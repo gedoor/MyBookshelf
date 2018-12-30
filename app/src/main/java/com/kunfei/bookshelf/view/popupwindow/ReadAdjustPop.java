@@ -126,7 +126,7 @@ public class ReadAdjustPop extends FrameLayout {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 if (!isFollowSys) {
-                    light = i < 1 ? 1 : i;
+                    light = i;
                     setScreenBrightness(light);
                 }
             }
@@ -225,6 +225,7 @@ public class ReadAdjustPop extends FrameLayout {
     }
 
     public void setScreenBrightness(int value) {
+        if (value < 1) value = 1;
         WindowManager.LayoutParams params = (context).getWindow().getAttributes();
         params.screenBrightness = value * 1.0f / 255f;
         (context).getWindow().setAttributes(params);
