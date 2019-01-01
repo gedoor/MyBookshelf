@@ -44,11 +44,15 @@ public abstract class HorizonPageAnim extends PageAnimation {
     public void changePageEnd() {
         switch (mDirection) {
             case NEXT:
+                mPreBitmap.recycle();
                 mPreBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                mCurBitmap.recycle();
                 mCurBitmap = mNextBitmap.copy(Bitmap.Config.RGB_565, true);
                 break;
             case PRE:
+                mNextBitmap.recycle();
                 mNextBitmap = mCurBitmap.copy(Bitmap.Config.RGB_565, true);
+                mCurBitmap.recycle();
                 mCurBitmap = mPreBitmap.copy(Bitmap.Config.RGB_565, true);
                 break;
         }
