@@ -147,7 +147,7 @@ public class AnalyzeRule {
         if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
-                    collection = new AnalyzeCollection(getAnalyzeByJSonPath().readList(source.rule), _isJSON);
+                    collection = new AnalyzeCollection(getAnalyzeByJSonPath().readList(source.rule), true);
                     break;
                 case XPath:
                     collection = new AnalyzeCollection(getAnalyzeByXPath().getElements(source.rule));
@@ -171,8 +171,6 @@ public class AnalyzeRule {
         String js;
 
         SourceRule(String ruleStr) {
-            if (_isJSON && !StringUtils.startWithIgnoreCase(ruleStr, "@JSON:"))
-                throw new AssertionError("Content analyze");
             String str[] = ruleStr.split("@js:");
             if (StringUtils.startWithIgnoreCase(str[0], "@XPath:")) {
                 mode = Mode.XPath;
@@ -181,7 +179,11 @@ public class AnalyzeRule {
                 mode = Mode.JSon;
                 rule = str[0].substring(6);
             } else {
-                mode = Mode.Default;
+                if (_isJSON) {
+                    mode = Mode.JSon;
+                } else {
+                    mode = Mode.Default;
+                }
                 rule = str[0];
             }
             if (str.length > 1) {
