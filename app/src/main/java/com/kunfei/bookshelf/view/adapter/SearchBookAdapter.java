@@ -177,9 +177,9 @@ public class SearchBookAdapter extends RefreshRecyclerViewAdapter {
                     }
                 }
             }
-            searchBooks = copyDataS;
             Activity activity = activityRef.get();
             if(activity != null) {
+                searchBooks = copyDataS;
                 activity.runOnUiThread(this::notifyDataSetChanged);
             }
         }
