@@ -126,7 +126,7 @@ public class BookListPresenter extends BasePresenterImpl<BookListContract.View> 
         refreshIndex++;
         if (refreshIndex < bookShelfBeans.size()) {
             BookShelfBean bookShelfBean = bookShelfBeans.get(refreshIndex);
-            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && bookShelfBean.getAllowUpdate()) {
+            if (!bookShelfBean.getTag().equals(BookShelfBean.LOCAL_TAG) && bookShelfBean.getAllowUpdate() && bookShelfBean.getGroup() != 3) {
                 int chapterNum = bookShelfBean.getChapterListSize();
                 bookShelfBean.setLoading(true);
                 mView.refreshBook(bookShelfBean.getNoteUrl());
