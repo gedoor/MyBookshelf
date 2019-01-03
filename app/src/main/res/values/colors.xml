@@ -12,8 +12,8 @@
 
     <color name="colorPrimary">#f4f4f4</color>
     <color name="colorPrimaryDark">#949494</color>
-    <color name="colorAccent">@color/blue800</color>
-    <color name="colorAccentDark">@color/blue900</color>
+    <color name="colorAccent">@color/md_blue_800</color>
+    <color name="colorAccentDark">@color/md_blue_900</color>
     <color name="highlight">#d3321b</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
@@ -38,6 +38,9 @@
     <color name="tv_text_button_disable">#dddddd</color>
 
     <color name="welcome">#00000000</color>
+    <color name="light_translucent">#23000000</color>
+    <color name="common_gray">#EEEEEE</color>
+    <color name="darker_gray">#aaaaaaaa</color>
 
     <!-- 分格线背景色 -->
     <color name="bg_divider_line">#FFD4D4D4</color>
@@ -49,84 +52,52 @@
     <color name="translucent">#99343434</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="grey">#9E9E9E</color>
-    <color name="grey50">#FAFAFA</color>
-    <color name="grey100">#F5F5F5</color>
-    <color name="grey200">#EEEEEE</color>
-    <color name="grey300">#E0E0E0</color>
-    <color name="grey400">#BDBDBD</color>
-    <color name="grey500">#9E9E9E</color>
-    <color name="grey600">#757575</color>
-    <color name="grey700">#616161</color>
-    <color name="grey800">#424242</color>
-    <color name="grey900">#212121</color>
-    <color name="bright_pink">#FF007F</color>
-    <color name="red">#FF0000</color>
-    <color name="red50">#FFEBEE</color>
-    <color name="red100">#FFCDD2</color>
-    <color name="red200">#EF9A9A</color>
-    <color name="red300">#E57373</color>
-    <color name="red400">#EF5350</color>
-    <color name="red500">#F44336</color>
-    <color name="red600">#E53935</color>
-    <color name="red700">#D32F2F</color>
-    <color name="red800">#C62828</color>
-    <color name="red900">#B71C1C</color>
-    <color name="orange">#FF7F00</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="green">#00FF00</color>
-    <color name="teal">#008080</color>
-    <color name="teal50">#E0F2F1</color>
-    <color name="teal100">#B2DFDB</color>
-    <color name="teal200">#80CBC4</color>
-    <color name="teal300">#4DB6AC</color>
-    <color name="teal400">#26A69A</color>
-    <color name="teal500">#009688</color>
-    <color name="teal600">#00897B</color>
-    <color name="teal700">#00796B</color>
-    <color name="teal800">#00695C</color>
-    <color name="teal900">#004D40</color>
-    <color name="cyan">#00FFFF</color>
-    <color name="azure">#007FFF</color>
-    <color name="blue">#2196F3</color>
-    <color name="blue50">#E3F2FD</color>
-    <color name="blue100">#BBDEFB</color>
-    <color name="blue200">#90CAF9</color>
-    <color name="blue300">#64B5F6</color>
-    <color name="blue400">#42A5F5</color>
-    <color name="blue500">#2196F3</color>
-    <color name="blue600">#1E88E5</color>
-    <color name="blue700">#1976D2</color>
-    <color name="blue800">#1565C0</color>
-    <color name="blue900">#0D47A1</color>
-    <color name="violet">#7F00FF</color>
-    <color name="magenta">#FF00FF</color>
-    <color name="blue_grey">#607D8B</color>
-    <color name="blue_grey100">#CFD8DC</color>
-    <color name="blue_grey200">#B0BEC5</color>
-    <color name="blue_grey300">#90A4AE</color>
-    <color name="blue_grey400">#78909C</color>
-    <color name="blue_grey500">#607D8B</color>
-    <color name="blue_grey600">#546E7A</color>
-    <color name="blue_grey700">#455A64</color>
-    <color name="blue_grey800">#37474F</color>
-    <color name="blue_grey900">#263238</color>
-    <color name="gray">#b8b8b8</color>
-    <color name="light_pink">#fb9090</color>
-    <color name="light_white">#EEEEEE</color>
-    <color name="light_coffee">#A58D5E</color>
-    <color name="light_red">#EC4A48</color>
-    <color name="light_blue">#03A9F4</color>
-    <color name="light_blue100">#B3E5FC</color>
-    <color name="light_blue200">#81D4FA</color>
-    <color name="light_blue300">#4FC3F7</color>
-    <color name="light_blue400">#29B6F6</color>
-    <color name="light_blue500">#03A9F4</color>
-    <color name="light_blue600">#039BE5</color>
-    <color name="light_blue700">#0288D1</color>
-    <color name="light_blue800">#0277BD</color>
-    <color name="light_blue900">#01579B</color>
-    <color name="light_translucent">#23000000</color>
-    <color name="common_gray">#EEEEEE</color>
-    <color name="darker_gray">#aaaaaaaa</color>
+
+    <!--"control" means checkbox / radio button-->
+
+    <!--LIGHT-->
+    <!--12%-->
+    <color name="ate_switch_track_disabled_light">#1F000000</color>
+    <color name="ate_button_disabled_light">#1F000000</color>
+    <!-- 26% -->
+    <color name="ate_control_disabled_light">#43000000</color>
+    <color name="ate_switch_track_normal_light">#43000000</color>
+    <color name="ate_button_text_disabled_light">#43000000</color>
+    <!-- 38% -->
+    <color name="ate_text_disabled_light">#61000000</color>
+    <!-- 54% -->
+    <color name="ate_secondary_text_light">#8A000000</color>
+    <color name="ate_icon_light">#8A000000</color>
+    <color name="ate_control_normal_light">#8A000000</color>
+    <!-- 87% -->
+    <color name="ate_primary_text_light">#DE000000</color>
+    <!--Grey 50, #FAFAFA, Opacity  100%-->
+    <color name="ate_switch_thumb_normal_light">#FFFAFAFA</color>
+    <!--Grey 400, #BDBDBD, Opacity  100%-->
+    <color name="ate_switch_thumb_disabled_light">#FFBDBDBD</color>
+    <!---->
+    <color name="ate_navigation_drawer_selected_light">#E8E8E8</color>
+
+    <!--DARK-->
+    <!--10%-->
+    <color name="ate_switch_track_disabled_dark">#1AFFFFFF</color>
+    <!--12%-->
+    <color name="ate_button_disabled_dark">#1F000000</color>
+    <!-- 30% -->
+    <color name="ate_control_disabled_dark">#4DFFFFFF</color>
+    <color name="ate_switch_track_normal_dark">#4DFFFFFF</color>
+    <color name="ate_button_text_disabled_dark">#4DFFFFFF</color>
+    <color name="ate_text_disabled_dark">#4DFFFFFF</color>
+    <!-- 70% -->
+    <color name="ate_secondary_text_dark">#B3FFFFFF</color>
+    <color name="ate_icon_dark">#B3FFFFFF</color>
+    <color name="ate_control_normal_dark">#B3FFFFFF</color>
+    <!-- 100% -->
+    <color name="ate_primary_text_dark">#FFFFFFFF</color>
+    <!--Grey 400, #BDBDBD, Opacity  100%-->
+    <color name="ate_switch_thumb_normal_dark">#FFBDBDBD</color>
+    <!--Grey 800, #424242, Opacity 100%-->
+    <color name="ate_switch_thumb_disabled_dark">#FF424242</color>
+    <!---->
+    <color name="ate_navigation_drawer_selected_dark">#202020</color>
 </resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.This.Base" parent="Theme.AppCompat.NoActionBar">
+
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+
+        <!-- just in case-->
+        <item name="colorAccent">@android:color/white</item>
+
+        <!-- necessary to find the overflow button later in the layout-->
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+
+    </style>
+
+    <style name="Theme.This.Base.Light" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+
+        <!-- just in case-->
+        <item name="colorAccent">@android:color/black</item>
+
+        <!-- necessary to find the overflow button later in the layout-->
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+
+    </style>
+
+    <style name="Theme.This.Base.Black" parent="@style/Theme.This.Base">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+
+    <style name="FabParent">
+        <item name="borderWidth">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- content description is necessary to find the overflow button later in the layout-->
+    <style name="Widget.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:contentDescription" tools:ignore="PrivateResource">
+            @string/abc_action_menu_overflow_description
+        </item>
+    </style>
+</resources>
