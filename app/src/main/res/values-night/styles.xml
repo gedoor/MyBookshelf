@@ -1,5 +1,15 @@
 <resources>
 
+    <style name="Base.AppTheme" parent="Theme.This.Base">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowMenuStyle">@style/PopupMenu</item>
+        <item name="android:itemTextAppearance">@style/MenuItemTextStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+    </style>
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark">
         <item name="overlapAnchor">false</item>
     </style>

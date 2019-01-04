@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?attr/actionBarStyle"
         android:transitionName="sharedView"
         tools:ignore="UnusedAttribute">
 

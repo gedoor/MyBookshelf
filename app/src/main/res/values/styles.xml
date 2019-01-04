@@ -11,7 +11,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Base.AppTheme" parent="Theme.This.Base.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

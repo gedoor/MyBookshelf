@@ -13,7 +13,7 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?attr/actionBarStyle"
         tools:ignore="UnusedAttribute">
 
         <androidx.appcompat.widget.Toolbar

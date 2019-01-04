@@ -12,7 +12,7 @@
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?attr/actionBarStyle"
         tools:ignore="UnusedAttribute">
 
         <androidx.appcompat.widget.Toolbar
@@ -36,9 +36,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-5dp"
+                    android:imeOptions="actionSearch"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@null"
                     app:searchIcon="@null"
+                    app:submitBackground="@null"
                     tools:ignore="RtlHardcoded,UnusedAttribute" />
             </androidx.cardview.widget.CardView>
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,20 +18,16 @@ import com.kunfei.basemvplib.BaseActivity;
 import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
-import com.kunfei.bookshelf.utils.Theme.ToolbarContentTintHelper;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 
 import java.lang.reflect.Method;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected ImmersionBar mImmersionBar;
     private Snackbar snackbar;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +64,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         super.onPause();
     }
 
-    @Override
-    public void setSupportActionBar(@Nullable Toolbar toolbar) {
-        this.toolbar = toolbar;
-        super.setSupportActionBar(toolbar);
-    }
-
     /**
      * 设置MENU图标颜色
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Toolbar toolbar = getATHToolbar();
-        ToolbarContentTintHelper.handleOnCreateOptionsMenu(this, toolbar, menu, getToolbarBackgroundColor(toolbar));
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
@@ -89,12 +76,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             }
         }
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, toolbar);
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -195,19 +176,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                 break;
         }
-    }
-
-    protected Toolbar getATHToolbar() {
-        return toolbar;
-    }
-
-    public static int getToolbarBackgroundColor(Toolbar toolbar) {
-        if (toolbar != null) {
-            if (toolbar.getBackground() instanceof ColorDrawable) {
-                return ((ColorDrawable) toolbar.getBackground()).getColor();
-            }
-        }
-        return 0;
     }
 
     public void initNightTheme() {

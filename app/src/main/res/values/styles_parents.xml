@@ -5,6 +5,7 @@
 
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/AppTheme.AppBarOverlay.Dark</item>
 
         <!-- just in case-->
         <item name="colorAccent">@android:color/white</item>
@@ -18,6 +19,7 @@
 
         <item name="android:windowActionBarOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/AppTheme.AppBarOverlay.Light</item>
 
         <!-- just in case-->
         <item name="colorAccent">@android:color/black</item>
@@ -43,4 +45,8 @@
             @string/abc_action_menu_overflow_description
         </item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>
