@@ -62,10 +62,7 @@ public class MApplication extends Application {
         CrashHandler.getInstance().init(this);
         // default theme
         if (!ThemeStore.isConfigured(this, 1)) {
-            ThemeStore.editTheme(this)
-                    .primaryColorRes(R.color.md_white_1000)
-                    .accentColorRes(R.color.md_blue_800)
-                    .commit();
+            upThemeStore();
         }
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -105,6 +102,20 @@ public class MApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+    public void upThemeStore() {
+        if (configPreferences.getBoolean("nightTheme", false)) {
+            ThemeStore.editTheme(this)
+                    .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.colorPrimaryNight)))
+                    .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.colorAccentNight)))
+                    .commit();
+        } else {
+            ThemeStore.editTheme(this)
+                    .primaryColor(configPreferences.getInt("colorPrimary", getResources().getColor(R.color.colorPrimary)))
+                    .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.colorAccent)))
+                    .commit();
+        }
     }
 
     public void setDownloadPath(String downloadPath) {
