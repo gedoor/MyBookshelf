@@ -7,10 +7,10 @@ import android.content.Context;
 import android.os.Build;
 import android.view.View;
 
+import com.kunfei.bookshelf.utils.ColorUtil;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
 
@@ -77,16 +77,6 @@ public final class ATH {
             activity.getWindow().setNavigationBarColor(color);
             setLightNavigationbarAuto(activity, color);
         }
-    }
-
-    public static void setActivityToolbarColorAuto(Activity activity, @Nullable Toolbar toolbar) {
-        setActivityToolbarColor(activity, toolbar, ThemeStore.primaryColor(activity));
-    }
-
-    public static void setActivityToolbarColor(Activity activity, @Nullable Toolbar toolbar, int color) {
-        if (toolbar == null) return;
-        toolbar.setBackgroundColor(color);
-        ToolbarContentTintHelper.setToolbarContentColorBasedOnToolbarColor(activity, toolbar, color);
     }
 
     public static void setTaskDescriptionColorAuto(@NonNull Activity activity) {

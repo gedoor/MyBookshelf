@@ -3,6 +3,8 @@ package com.kunfei.bookshelf.utils.Theme;
 import android.content.Context;
 import android.content.res.TypedArray;
 
+import com.kunfei.bookshelf.utils.ColorUtil;
+
 import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 

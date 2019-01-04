@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.CheckResult;

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
 
 import java.lang.reflect.Field;
 

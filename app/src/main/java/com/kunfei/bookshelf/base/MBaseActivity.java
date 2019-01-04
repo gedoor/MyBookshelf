@@ -82,7 +82,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.setColorFilter(MaterialValueHelper.getPrimaryTextColor(this, com.kunfei.bookshelf.utils.Theme.ColorUtil.isColorLight(ThemeStore.primaryColor(this))), PorterDuff.Mode.SRC_ATOP);
+                drawable.setColorFilter(MaterialValueHelper.getPrimaryTextColor(this, ColorUtil.isColorLight(ThemeStore.primaryColor(this))), PorterDuff.Mode.SRC_ATOP);
             }
         }
         return super.onCreateOptionsMenu(menu);
