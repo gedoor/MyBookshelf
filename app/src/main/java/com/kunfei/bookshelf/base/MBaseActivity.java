@@ -26,6 +26,7 @@ import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 import java.lang.reflect.Method;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
     private static final String TAG = MBaseActivity.class.getSimpleName();
@@ -35,6 +36,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         initTheme();
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,7 +72,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     public void setSupportActionBar(@Nullable androidx.appcompat.widget.Toolbar toolbar) {
-        toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        }
         super.setSupportActionBar(toolbar);
     }
 
