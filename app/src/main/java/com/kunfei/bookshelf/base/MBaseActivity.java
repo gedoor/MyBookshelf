@@ -111,17 +111,19 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
      */
     protected void initImmersionBar() {
         try {
+            View actionBar = findViewById(R.id.action_bar);
             if (isImmersionBarEnabled()) {
-                if (getSupportActionBar() != null && findViewById(R.id.action_bar) != null) {
+                if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
                     mImmersionBar.statusBarColorInt(ThemeStore.primaryColor(this));
                 } else {
                     mImmersionBar.transparentStatusBar();
                 }
             } else {
-                if (getSupportActionBar() != null)
+                if (getSupportActionBar() != null && actionBar != null && actionBar.getVisibility() == View.VISIBLE) {
                     mImmersionBar.statusBarColorInt(ThemeStore.statusBarColor(this));
-                else
+                } else {
                     mImmersionBar.statusBarColor(R.color.status_bar_bag);
+                }
             }
         } catch (Exception e) {
             Log.e("MonkBook", e.getLocalizedMessage());
