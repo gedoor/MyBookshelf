@@ -190,7 +190,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         mView.initImmersionBar();
     }
 
-    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.UPDATE_PX)})
+    @Subscribe(thread = EventThread.MAIN_THREAD, tags = {@Tag(RxBusTag.RECREATE)})
     public void updatePx(Boolean px) {
         mView.recreate();
     }

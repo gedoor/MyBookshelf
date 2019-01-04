@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -73,10 +74,14 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             ThemeStore.editTheme(getActivity())
                     .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
                     .commit();
+            RxBus.get().post(RxBusTag.RECREATE, true);
+            new Handler().postDelayed(() -> getActivity().recreate(), 200);
         } else if (key.equals("colorAccent")) {
             ThemeStore.editTheme(getActivity())
                     .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
                     .commit();
+            RxBus.get().post(RxBusTag.RECREATE, true);
+            new Handler().postDelayed(() -> getActivity().recreate(), 200);
         }
     }
 

@@ -308,7 +308,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
             case "show_nav_shelves":
                 SharedPreferencesUtil.saveData("showNavShelves", enable);
                 msg = "已" + (enable ? "启" : "禁") + "用侧边栏书架！";
-                RxBus.get().post(RxBusTag.UPDATE_PX, true);
+                RxBus.get().post(RxBusTag.RECREATE, true);
                 break;
             case "fade_tts":
                 SharedPreferencesUtil.saveData("fadeTTS", enable);

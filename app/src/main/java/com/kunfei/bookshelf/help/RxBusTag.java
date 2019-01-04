@@ -12,7 +12,7 @@ public class RxBusTag {
     public final static String MEDIA_BUTTON = "media_button";
     public final static String ALOUD_STATE = "aloud_state";
     public final static String ALOUD_TIMER = "aloud_timer";
-    public final static String UPDATE_PX = "update_px";
+    public final static String RECREATE = "recreate";
     public final static String CHECK_SOURCE_STATE = "checkSourceState";
     public final static String IMMERSION_CHANGE = "Immersion_Change";
     public final static String SEARCH_BOOK = "search_book";
