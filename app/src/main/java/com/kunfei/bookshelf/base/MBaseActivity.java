@@ -36,7 +36,6 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         initTheme();
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -191,6 +190,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("nightTheme", isNightTheme);
         editor.apply();
+        initTheme();
     }
 
     protected void initTheme() {
@@ -198,6 +198,11 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             setTheme(R.style.CAppTheme);
         } else {
             setTheme(R.style.CAppThemeBarDark);
+        }
+        if (isNightTheme()) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
