@@ -21,11 +21,11 @@
             app:tint="@color/tv_text_default" />
     </group>
 
-    <group android:id="@+id/drawer_night_theme">
+    <group android:id="@+id/drawer_theme">
         <item
-            android:id="@+id/action_night_theme"
+            android:id="@+id/action_theme"
             android:icon="@drawable/ic_brightness"
-            android:title="@string/night_theme"
+            android:title="@string/theme"
             app:actionLayout="@layout/switch_item_night_theme"
             app:tint="@color/tv_text_default" />
     </group>

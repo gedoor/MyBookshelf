@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,7 +36,6 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -404,7 +402,6 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     //初始化侧边栏
     private void initDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerToggle.getDrawerArrowDrawable().setColorFilter(ThemeStore.textColorPrimary(this), PorterDuff.Mode.SRC_ATOP);
         mDrawerToggle.syncState();
         drawer.addDrawerListener(mDrawerToggle);
 
@@ -440,7 +437,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         navigationView.setItemTextColor(colorStateList);
         navigationView.setItemIconTintList(colorStateList);
         Menu drawerMenu = navigationView.getMenu();
-        swNightTheme = drawerMenu.findItem(R.id.action_night_theme).getActionView().findViewById(R.id.sw_night_theme);
+        swNightTheme = drawerMenu.findItem(R.id.action_theme).getActionView().findViewById(R.id.sw_night_theme);
         swNightTheme.setChecked(isNightTheme());
         swNightTheme.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
@@ -474,9 +471,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
                 case R.id.action_restore:
                     handler.postDelayed(this::restore, 200);
                     break;
-                case R.id.action_night_theme:
-                    swNightTheme.setChecked(!isNightTheme());
-                    setNightTheme(!isNightTheme());
+                case R.id.action_theme:
+                    handler.postDelayed(() -> ThemeSettingActivity.startThis(this), 200);
                     break;
             }
             return true;

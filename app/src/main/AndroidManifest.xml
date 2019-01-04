@@ -113,6 +113,10 @@
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
         <activity
+            android:name=".view.activity.ThemeSettingActivity"
+            android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".view.activity.AboutActivity"
             android:configChanges="locale|keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout"
             android:launchMode="singleTask" />
@@ -166,6 +170,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
 
         <service android:name=".service.DownloadService" />
         <service android:name=".service.ReadAloudService" />

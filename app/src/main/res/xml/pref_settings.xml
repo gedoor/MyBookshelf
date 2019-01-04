@@ -2,18 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_ImmersionStatusBar"
-        android:summary="@string/status_bar_immersion"
-        android:title="@string/immersion_status_bar" />
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pk_navigationBarColorChange"
-        android:summary="@string/navigation_bar_color_change_s"
-        android:title="@string/navigation_bar_color_change" />
-
     <ListPreference
         android:defaultValue="0"
         android:entries="@array/bookshelf_px_title"
