@@ -39,8 +39,7 @@
                 app:tabIndicatorColor="?attr/colorAccent"
                 app:tabIndicatorHeight="2.0dp"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="?attr/colorAccent"
-                app:tabTextColor="@color/menu_color_default">
+                app:tabSelectedTextColor="?attr/colorAccent">
 
             </com.google.android.material.tabs.TabLayout>
 

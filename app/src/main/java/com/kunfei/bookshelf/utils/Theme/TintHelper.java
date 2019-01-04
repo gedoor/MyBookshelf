@@ -29,6 +29,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -150,7 +151,18 @@ public final class TintHelper {
                 setTint((Switch) view, color, isDark);
             else if (view instanceof SwitchCompat)
                 setTint((SwitchCompat) view, color, isDark);
-            else background = true;
+            else if (view instanceof SearchView) {
+                int iconIdS[] = new int[]{androidx.appcompat.R.id.search_button, R.id.search_close_btn,};
+                for (int iconId : iconIdS) {
+                    ImageView icon = view.findViewById(iconId);
+                    if (icon != null) {
+                        setTint(icon, color);
+                    }
+                }
+
+            } else {
+                background = true;
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
                     !background && view.getBackground() instanceof RippleDrawable) {
