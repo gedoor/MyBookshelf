@@ -44,6 +44,8 @@
                 android:background="@color/colorPrimary"
                 android:orientation="vertical">
 
+                <include layout="@layout/status_bar" />
+
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/appBar"
                     android:layout_width="match_parent"

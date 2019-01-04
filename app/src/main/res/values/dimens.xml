@@ -10,6 +10,8 @@
 
     <dimen name="desc_icon_size">18sp</dimen>
 
+    <dimen name="toolbar_elevation">4dp</dimen>
+
     <dimen name="fastscroll_bubble_radius">44dp</dimen>
     <dimen name="fastscroll_bubble_size">88dp</dimen>
     <dimen name="fastscroll_bubble_textsize">48sp</dimen>
