@@ -98,6 +98,7 @@ public class BookDetailActivity extends MBaseActivity<BookDetailContract.Present
 
     @Override
     protected void onCreateActivity() {
+        setTheme(R.style.CAppTransparentTheme);
         setContentView(R.layout.activity_book_detail);
     }
 
