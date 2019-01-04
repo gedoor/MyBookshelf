@@ -21,6 +21,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;
@@ -200,6 +201,7 @@ public class BookShelfListAdapter extends RecyclerView.Adapter<BookShelfListAdap
             tvLast = itemView.findViewById(R.id.tv_last);
             tvAuthor = itemView.findViewById(R.id.tv_author);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
+            rotateLoading.setLoadingColor(ThemeStore.accentColor(itemView.getContext()));
         }
     }
 
