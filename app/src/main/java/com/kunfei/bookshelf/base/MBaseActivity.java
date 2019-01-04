@@ -134,6 +134,8 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         try {
             if (isImmersionBarEnabled() && ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
+            } else if (ColorUtil.isColorLight(ThemeStore.primaryColorDark(this))) {
+                mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
