@@ -152,7 +152,7 @@ public final class TintHelper {
             else if (view instanceof SwitchCompat)
                 setTint((SwitchCompat) view, color, isDark);
             else if (view instanceof SearchView) {
-                int iconIdS[] = new int[]{androidx.appcompat.R.id.search_button, R.id.search_close_btn,};
+                int iconIdS[] = new int[]{androidx.appcompat.R.id.search_button, androidx.appcompat.R.id.search_close_btn,};
                 for (int iconId : iconIdS) {
                     ImageView icon = view.findViewById(iconId);
                     if (icon != null) {
