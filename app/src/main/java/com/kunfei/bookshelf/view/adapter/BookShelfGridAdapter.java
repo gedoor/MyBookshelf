@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.dao.DbHelper;
 import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.help.MyItemTouchHelpCallback;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.base.OnItemClickListenerTwo;
 import com.kunfei.bookshelf.widget.BadgeView;
 import com.victor.loading.rotate.RotateLoading;
@@ -188,6 +189,7 @@ public class BookShelfGridAdapter extends RecyclerView.Adapter<BookShelfGridAdap
             tvName = itemView.findViewById(R.id.tv_name);
             bvUnread = itemView.findViewById(R.id.bv_unread);
             rotateLoading = itemView.findViewById(R.id.rl_loading);
+            rotateLoading.setLoadingColor(ThemeStore.accentColor(itemView.getContext()));
         }
     }
 }
