@@ -10,13 +10,14 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,7 +29,7 @@ import cn.qqtheme.framework.picker.FilePicker;
  * Created by GKF on 2018/1/29.
  */
 
-public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.Delegate {
+public class QRCodeScanActivity extends MBaseActivity implements QRCodeView.Delegate {
 
     @BindView(R.id.zxingview)
     ZXingView zxingview;
@@ -47,11 +48,33 @@ public class QRCodeScanActivity extends AppCompatActivity implements QRCodeView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * P层绑定   若无则返回null;
+     */
+    @Override
+    protected IPresenter initInjector() {
+        return null;
+    }
+
+    /**
+     * 布局载入  setContentView()
+     */
+    @Override
+    protected void onCreateActivity() {
         setContentView(R.layout.activity_qrcode_capture);
         ButterKnife.bind(this);
-        zxingview.setDelegate(this);
         this.setSupportActionBar(toolbar);
         setupActionBar();
+    }
+
+    /**
+     * 数据初始化
+     */
+    @Override
+    protected void initData() {
+        zxingview.setDelegate(this);
         fabFlashlight.setOnClickListener(view -> {
             if (flashlightIsOpen) {
                 flashlightIsOpen = false;

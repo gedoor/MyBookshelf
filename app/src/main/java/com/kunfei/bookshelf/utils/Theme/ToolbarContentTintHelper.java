@@ -3,6 +3,7 @@ package com.kunfei.bookshelf.utils.Theme;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Menu;
@@ -15,11 +16,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.ColorInt;
@@ -110,6 +113,31 @@ public final class ToolbarContentTintHelper {
             if (!(currentClickListener instanceof ATHOnMenuItemClickListener)) {
                 final ATHOnMenuItemClickListener newClickListener = new ATHOnMenuItemClickListener(context, menuWidgetColor, currentClickListener, toolbar);
                 toolbar.setOnMenuItemClickListener(newClickListener);
+            }
+
+            LinkedList<ViewGroup> queue = new LinkedList<>();
+            queue.add(toolbar);
+            while (!queue.isEmpty()) {
+                ViewGroup current = queue.removeFirst();
+                for (int i = 0; i < current.getChildCount(); i++) {
+                    if (current.getChildAt(i) instanceof ViewGroup) {
+                        queue.addLast((ViewGroup) current.getChildAt(i));
+                    } else if (current.getChildAt(i) instanceof TextView) {
+                        ((TextView) current.getChildAt(i)).setTextColor(titleTextColor);
+                        ((TextView) current.getChildAt(i)).setHintTextColor(subtitleTextColor);
+                        Drawable drawableS[] = ((TextView) current.getChildAt(i)).getCompoundDrawablesRelative();
+                        for (Drawable drawable : drawableS) {
+                            if (drawable != null) {
+                                drawable.setColorFilter(subtitleTextColor, PorterDuff.Mode.SRC_ATOP);
+                            }
+                        }
+                    } else if (current.getChildAt(i) instanceof ImageView) {
+                        Drawable drawable = ((ImageView) current.getChildAt(i)).getDrawable();
+                        if (drawable != null) {
+                            drawable.setColorFilter(subtitleTextColor, PorterDuff.Mode.SRC_ATOP);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,30 +279,27 @@ public final class ToolbarContentTintHelper {
 
         public static void applyOverflowMenuTint(final @NonNull Context context, final Toolbar toolbar, final @ColorInt int color) {
             if (toolbar == null) return;
-            toolbar.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Field f1 = Toolbar.class.getDeclaredField("mMenuView");
-                        f1.setAccessible(true);
-                        ActionMenuView actionMenuView = (ActionMenuView) f1.get(toolbar);
-                        Field f2 = ActionMenuView.class.getDeclaredField("mPresenter");
-                        f2.setAccessible(true);
+            toolbar.post(() -> {
+                try {
+                    Field f1 = Toolbar.class.getDeclaredField("mMenuView");
+                    f1.setAccessible(true);
+                    ActionMenuView actionMenuView = (ActionMenuView) f1.get(toolbar);
+                    Field f2 = ActionMenuView.class.getDeclaredField("mPresenter");
+                    f2.setAccessible(true);
 
-                        // Actually ActionMenuPresenter
-                        BaseMenuPresenter presenter = (BaseMenuPresenter) f2.get(actionMenuView);
-                        Field f3 = presenter.getClass().getDeclaredField("mOverflowPopup");
-                        f3.setAccessible(true);
-                        MenuPopupHelper overflowMenuPopupHelper = (MenuPopupHelper) f3.get(presenter);
-                        setTintForMenuPopupHelper(context, overflowMenuPopupHelper, color);
+                    // Actually ActionMenuPresenter
+                    BaseMenuPresenter presenter = (BaseMenuPresenter) f2.get(actionMenuView);
+                    Field f3 = presenter.getClass().getDeclaredField("mOverflowPopup");
+                    f3.setAccessible(true);
+                    MenuPopupHelper overflowMenuPopupHelper = (MenuPopupHelper) f3.get(presenter);
+                    setTintForMenuPopupHelper(context, overflowMenuPopupHelper, color);
 
-                        Field f4 = presenter.getClass().getDeclaredField("mActionButtonPopup");
-                        f4.setAccessible(true);
-                        MenuPopupHelper subMenuPopupHelper = (MenuPopupHelper) f4.get(presenter);
-                        setTintForMenuPopupHelper(context, subMenuPopupHelper, color);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Field f4 = presenter.getClass().getDeclaredField("mActionButtonPopup");
+                    f4.setAccessible(true);
+                    MenuPopupHelper subMenuPopupHelper = (MenuPopupHelper) f4.get(presenter);
+                    setTintForMenuPopupHelper(context, subMenuPopupHelper, color);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -316,12 +341,7 @@ public final class ToolbarContentTintHelper {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            } else {
-                                //noinspection deprecation
-                                listView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            }
+                            listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         }
                     });
                 }
