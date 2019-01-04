@@ -71,17 +71,37 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             settingActivity.initImmersionBar();
             RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
         } else if (key.equals("colorPrimary")) {
-            ThemeStore.editTheme(getActivity())
-                    .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
-                    .commit();
-            RxBus.get().post(RxBusTag.RECREATE, true);
-            new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            if (!settingActivity.isNightTheme()) {
+                ThemeStore.editTheme(getActivity())
+                        .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
+                        .commit();
+                RxBus.get().post(RxBusTag.RECREATE, true);
+                new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            }
         } else if (key.equals("colorAccent")) {
-            ThemeStore.editTheme(getActivity())
-                    .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
-                    .commit();
-            RxBus.get().post(RxBusTag.RECREATE, true);
-            new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            if (!settingActivity.isNightTheme()) {
+                ThemeStore.editTheme(getActivity())
+                        .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
+                        .commit();
+                RxBus.get().post(RxBusTag.RECREATE, true);
+                new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            }
+        } else if (key.equals("colorPrimaryNight")) {
+            if (settingActivity.isNightTheme()) {
+                ThemeStore.editTheme(getActivity())
+                        .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
+                        .commit();
+                RxBus.get().post(RxBusTag.RECREATE, true);
+                new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            }
+        } else if (key.equals("colorAccentNight")) {
+            if (settingActivity.isNightTheme()) {
+                ThemeStore.editTheme(getActivity())
+                        .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
+                        .commit();
+                RxBus.get().post(RxBusTag.RECREATE, true);
+                new Handler().postDelayed(() -> getActivity().recreate(), 200);
+            }
         }
     }
 

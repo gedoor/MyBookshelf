@@ -14,19 +14,40 @@
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 
-    <com.jaredrummler.android.colorpicker.ColorPreference
-        android:defaultValue="@color/colorPrimary"
-        android:key="colorPrimary"
-        android:summary="主题，主色调"
-        android:title="主色调"
-        app:cpv_dialogType="preset" />
+    <PreferenceCategory android:title="白天">
 
-    <com.jaredrummler.android.colorpicker.ColorPreference
-        android:defaultValue="@color/colorAccent"
-        android:key="colorAccent"
-        android:summary="主题，强调色"
-        android:title="强调色"
-        app:cpv_dialogType="preset" />
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorPrimary"
+            android:key="colorPrimary"
+            android:summary="主题，主色调"
+            android:title="主色调"
+            app:cpv_dialogType="preset" />
 
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorAccent"
+            android:key="colorAccent"
+            android:summary="主题，强调色"
+            android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="夜间">
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorPrimaryNight"
+            android:key="colorPrimaryNight"
+            android:summary="主题，主色调"
+            android:title="主色调"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/colorAccentNight"
+            android:key="colorAccentNight"
+            android:summary="主题，强调色"
+            android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

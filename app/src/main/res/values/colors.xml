@@ -11,10 +11,13 @@
     <color name="transparent">#00000000</color>
 
     <color name="colorPrimary">#f4f4f4</color>
-    <color name="colorPrimaryDark">#949494</color>
+    <color name="colorPrimaryDark">#c7c7c7</color>
     <color name="colorAccent">@color/md_blue_800</color>
     <color name="colorAccentDark">@color/md_blue_900</color>
     <color name="highlight">#d3321b</color>
+
+    <color name="colorPrimaryNight">#464646</color>
+    <color name="colorAccentNight">@color/md_blue_800</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>

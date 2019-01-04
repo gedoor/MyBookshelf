@@ -184,7 +184,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
     /**
      * @return 是否夜间模式
      */
-    protected boolean isNightTheme() {
+    public boolean isNightTheme() {
         return preferences.getBoolean("nightTheme", false);
     }
 
@@ -192,6 +192,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("nightTheme", isNightTheme);
         editor.apply();
+        upThemeStore();
         initTheme();
     }
 
@@ -205,6 +206,20 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    protected void upThemeStore() {
+        if (isNightTheme()) {
+            ThemeStore.editTheme(this)
+                    .primaryColor(preferences.getInt("colorPrimaryNight", getResources().getColor(R.color.colorPrimaryNight)))
+                    .accentColor(preferences.getInt("colorAccentNight", getResources().getColor(R.color.colorAccentNight)))
+                    .commit();
+        } else {
+            ThemeStore.editTheme(this)
+                    .primaryColor(preferences.getInt("colorPrimary", getResources().getColor(R.color.colorPrimary)))
+                    .accentColor(preferences.getInt("colorAccent", getResources().getColor(R.color.colorAccent)))
+                    .commit();
         }
     }
 
