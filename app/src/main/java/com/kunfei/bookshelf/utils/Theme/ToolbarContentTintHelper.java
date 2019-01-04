@@ -46,6 +46,7 @@ import androidx.appcompat.widget.ToolbarWidgetWrapper;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public final class ToolbarContentTintHelper {
+    private static final String TAG = ToolbarContentTintHelper.class.getSimpleName();
 
     public static void setToolbarContentColorBasedOnToolbarColor(@NonNull Context context, Toolbar toolbar, int toolbarColor) {
         setToolbarContentColorBasedOnToolbarColor(context, toolbar, null, toolbarColor);
@@ -298,6 +299,7 @@ public final class ToolbarContentTintHelper {
                     f4.setAccessible(true);
                     MenuPopupHelper subMenuPopupHelper = (MenuPopupHelper) f4.get(presenter);
                     setTintForMenuPopupHelper(context, subMenuPopupHelper, color);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

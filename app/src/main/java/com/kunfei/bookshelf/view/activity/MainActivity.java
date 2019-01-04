@@ -37,7 +37,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
-import com.kunfei.bookshelf.utils.Theme.ToolbarContentTintHelper;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -404,7 +404,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     //初始化侧边栏
     private void initDrawer() {
         mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerToggle.getDrawerArrowDrawable().setColorFilter(ToolbarContentTintHelper.toolbarContentColor(this, getToolbarBackgroundColor(toolbar)), PorterDuff.Mode.SRC_ATOP);
+        mDrawerToggle.getDrawerArrowDrawable().setColorFilter(ThemeStore.textColorPrimary(this), PorterDuff.Mode.SRC_ATOP);
         mDrawerToggle.syncState();
         drawer.addDrawerListener(mDrawerToggle);
 

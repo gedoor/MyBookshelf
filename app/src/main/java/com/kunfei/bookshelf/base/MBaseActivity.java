@@ -93,7 +93,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, getATHToolbar());
+        ToolbarContentTintHelper.handleOnPrepareOptionsMenu(this, toolbar);
         return super.onPrepareOptionsMenu(menu);
     }
 

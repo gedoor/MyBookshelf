@@ -36,11 +36,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="-5dp"
-                    android:imeOptions="actionSearch"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@null"
                     app:searchIcon="@null"
-                    app:submitBackground="@null"
                     tools:ignore="RtlHardcoded,UnusedAttribute" />
             </androidx.cardview.widget.CardView>
 
