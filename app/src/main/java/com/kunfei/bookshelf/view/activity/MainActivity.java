@@ -36,6 +36,7 @@ import com.kunfei.bookshelf.model.UpLastChapterModel;
 import com.kunfei.bookshelf.presenter.MainPresenter;
 import com.kunfei.bookshelf.presenter.contract.MainContract;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BookListFragment;
 import com.kunfei.bookshelf.view.fragment.FindBookFragment;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
@@ -157,6 +158,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
         super.bindView();
         setSupportActionBar(toolbar);
         setupActionBar();
+        cardSearch.setCardBackgroundColor(ThemeStore.primaryColorDark(this));
         initDrawer();
         initTabLayout();
         upGroup(group);

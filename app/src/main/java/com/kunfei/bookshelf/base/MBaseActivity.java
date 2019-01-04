@@ -19,12 +19,16 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.Theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
 
 import java.lang.reflect.Method;
 
+import androidx.annotation.Nullable;
+
 public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T> {
+    private static final String TAG = MBaseActivity.class.getSimpleName();
     public final SharedPreferences preferences = MApplication.getInstance().getConfigPreferences();
     protected ImmersionBar mImmersionBar;
     private Snackbar snackbar;
@@ -64,6 +68,12 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         super.onPause();
     }
 
+    @Override
+    public void setSupportActionBar(@Nullable androidx.appcompat.widget.Toolbar toolbar) {
+        toolbar.setBackgroundColor(ThemeStore.primaryColor(this));
+        super.setSupportActionBar(toolbar);
+    }
+
     /**
      * 设置MENU图标颜色
      */
@@ -72,7 +82,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         for (int i = 0; i < menu.size(); i++) {
             Drawable drawable = menu.getItem(i).getIcon();
             if (drawable != null) {
-                drawable.setColorFilter(getResources().getColor(R.color.menu_color_default), PorterDuff.Mode.SRC_ATOP);
+                drawable.setColorFilter(MaterialValueHelper.getPrimaryTextColor(this, com.kunfei.bookshelf.utils.Theme.ColorUtil.isColorLight(ThemeStore.primaryColor(this))), PorterDuff.Mode.SRC_ATOP);
             }
         }
         return super.onCreateOptionsMenu(menu);
@@ -103,13 +113,13 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         try {
             if (isImmersionBarEnabled()) {
                 if (getSupportActionBar() != null && findViewById(R.id.action_bar) != null) {
-                    mImmersionBar.statusBarColor(R.color.colorPrimary);
+                    mImmersionBar.statusBarColorInt(ThemeStore.primaryColor(this));
                 } else {
                     mImmersionBar.transparentStatusBar();
                 }
             } else {
                 if (getSupportActionBar() != null)
-                    mImmersionBar.statusBarColor(R.color.colorPrimaryDark);
+                    mImmersionBar.statusBarColorInt(ThemeStore.statusBarColor(this));
                 else
                     mImmersionBar.statusBarColor(R.color.status_bar_bag);
             }
@@ -117,7 +127,7 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             Log.e("MonkBook", e.getLocalizedMessage());
         }
         try {
-            if (isImmersionBarEnabled()) {
+            if (isImmersionBarEnabled() && ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
                 mImmersionBar.statusBarDarkFont(true, 0.2f);
             } else {
                 mImmersionBar.statusBarDarkFont(false);

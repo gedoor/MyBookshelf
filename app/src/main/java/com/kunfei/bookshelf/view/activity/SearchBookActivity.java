@@ -30,6 +30,7 @@ import com.kunfei.bookshelf.presenter.SearchBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.SearchBookContract;
 import com.kunfei.bookshelf.utils.SharedPreferencesUtil;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.SearchBookAdapter;
 import com.kunfei.bookshelf.widget.explosionfield.ExplosionField;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
@@ -40,6 +41,7 @@ import java.util.List;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +52,8 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     SearchView searchView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.card_search)
+    CardView cardSearch;
     @BindView(R.id.ll_search_history)
     LinearLayout llSearchHistory;
     @BindView(R.id.tv_search_history_clean)
@@ -86,6 +90,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @Override
     protected void onCreateActivity() {
         setContentView(R.layout.activity_search_book);
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class SearchBookActivity extends MBaseActivity<SearchBookContract.Present
     @SuppressLint("InflateParams")
     @Override
     protected void bindView() {
-        ButterKnife.bind(this);
+        cardSearch.setCardBackgroundColor(ThemeStore.primaryColorDark(this));
         initSearchView();
         setSupportActionBar(toolbar);
         setupActionBar();
