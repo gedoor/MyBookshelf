@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kunfei.bookshelf.BitIntentDataManager;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseFragment;
 import com.kunfei.bookshelf.bean.BookShelfBean;
@@ -18,6 +19,7 @@ import com.kunfei.bookshelf.presenter.BookListPresenter;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.BookListContract;
 import com.kunfei.bookshelf.utils.NetworkUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.BookDetailActivity;
 import com.kunfei.bookshelf.view.activity.ReadBookActivity;
 import com.kunfei.bookshelf.view.adapter.BookShelfAdapter;
@@ -93,7 +95,7 @@ public class BookListFragment extends MBaseFragment<BookListContract.Presenter> 
             bookShelfAdapter = new BookShelfGridAdapter(getActivity());
         }
         rvBookshelf.setAdapter((RecyclerView.Adapter) bookShelfAdapter);
-        refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        refreshLayout.setColorSchemeColors(ThemeStore.accentColor(MApplication.getInstance()));
     }
 
     @Override
