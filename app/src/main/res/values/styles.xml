@@ -2,7 +2,11 @@
 
     <!-- Base application theme. -->
     <style name="CAppTheme" parent="Base.AppTheme">
-        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Light</item>
+    </style>
+
+    <style name="CAppThemeBarDark" parent="Base.AppTheme">
+        <item name="actionBarStyle">@style/AppTheme.AppBarOverlay.Dark</item>
     </style>
 
     <style name="CAppTransparentTheme" parent="CAppTheme">
@@ -11,7 +15,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="Base.AppTheme" parent="Theme.This.Base.Light">
+    <style name="Base.AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -43,8 +47,6 @@
         <item name="android:popupBackground">@color/background_menu</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="overlapAnchor">false</item>
     </style>
@@ -65,4 +67,7 @@
         <item name="android:background">@drawable/bg_shadow_bottom</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>
