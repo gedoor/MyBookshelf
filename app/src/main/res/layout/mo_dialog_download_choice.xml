@@ -50,7 +50,7 @@
                     android:textSize="16sp"
                     tools:ignore="RtlHardcoded" />
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <EditText
                     android:id="@+id/edt_start"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                     android:textColor="@color/tv_text_default"
                     android:textSize="16sp" />
 
-                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
+                <EditText
                     android:id="@+id/edt_end"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
