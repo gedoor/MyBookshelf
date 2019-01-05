@@ -12,6 +12,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.BookShelfBean;
+import com.kunfei.bookshelf.help.ReadBookControl;
 import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.Theme.ATH;
 import com.kunfei.bookshelf.utils.Theme.MaterialValueHelper;
@@ -38,6 +39,7 @@ public class ChapterListActivity extends BaseTabActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    private ReadBookControl readBookControl = ReadBookControl.getInstance();
     private SearchView searchView;
     private BookShelfBean bookShelf;
 
@@ -62,6 +64,7 @@ public class ChapterListActivity extends BaseTabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setOrientation(readBookControl.getScreenDirection());
         super.onCreate(savedInstanceState);
         RxBus.get().register(this);
     }

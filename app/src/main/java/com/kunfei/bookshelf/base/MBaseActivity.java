@@ -161,6 +161,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return preferences.getBoolean("immersionStatusBar", false);
     }
 
+    /**
+     * 设置屏幕方向
+     */
     public void setOrientation(int screenDirection) {
         switch (screenDirection) {
             case 0:
