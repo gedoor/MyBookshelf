@@ -1,6 +1,7 @@
 //Copyright (c) 2017. 章钦豪. All rights reserved.
 package com.kunfei.bookshelf.base;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -21,6 +23,9 @@ import com.kunfei.bookshelf.utils.ColorUtil;
 import com.kunfei.bookshelf.utils.Theme.MaterialValueHelper;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.ImmersionBar;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -88,20 +93,31 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("PrivateApi")
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
         if (menu != null) {
             //展开菜单显示图标
-            /*if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
+            if (menu.getClass().getSimpleName().equalsIgnoreCase("MenuBuilder")) {
                 try {
-                    @SuppressLint("PrivateApi")
                     Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
                     method.setAccessible(true);
                     method.invoke(menu, true);
+                    method = menu.getClass().getDeclaredMethod("getNonActionItems");
+                    ArrayList<MenuItem> menuItems = (ArrayList<MenuItem>) method.invoke(menu);
+                    if (!menuItems.isEmpty()) {
+                        for (MenuItem menuItem : menuItems) {
+                            Drawable drawable = menuItem.getIcon();
+                            if (drawable != null) {
+                                drawable.setColorFilter(getResources().getColor(R.color.tv_text_default), PorterDuff.Mode.SRC_ATOP);
+                            }
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
+
         }
         return super.onMenuOpened(featureId, menu);
     }
