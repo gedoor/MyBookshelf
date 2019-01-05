@@ -40,6 +40,7 @@ import com.kunfei.bookshelf.service.ReadAloudService;
 import com.kunfei.bookshelf.utils.BatteryUtil;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.ScreenUtils;
 import com.kunfei.bookshelf.utils.SystemUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.utils.barUtil.BarHide;
@@ -71,8 +72,6 @@ import butterknife.ButterKnife;
  */
 public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> implements ReadBookContract.View {
 
-    @BindView(R.id.status_bar)
-    View statusBar;
     @BindView(R.id.fl_content)
     FrameLayout flContent;
     @BindView(R.id.fl_menu)
@@ -383,11 +382,11 @@ public class ReadBookActivity extends MBaseActivity<ReadBookContract.Presenter> 
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
-        statusBar.setBackgroundColor(ThemeStore.primaryColor(this));
         this.setSupportActionBar(toolbar);
         setupActionBar();
         mPresenter.initData(this);
-
+        appBar.setPadding(0, ScreenUtils.getStatusBarHeight(), 0, 0);
+        appBar.setBackgroundColor(ThemeStore.primaryColor(this));
         llMenuBottom.setFabNightTheme(isNightTheme());
         //弹窗
         moDialogHUD = new MoDialogHUD(this);

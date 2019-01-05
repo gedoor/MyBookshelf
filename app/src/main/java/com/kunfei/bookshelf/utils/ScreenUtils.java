@@ -66,9 +66,7 @@ public class ScreenUtils {
     }
 
     /**
-     * 获取导航栏的高度
-     *
-     * @return
+     * 获取状态栏的高度
      */
     public static int getStatusBarHeight() {
         Resources resources = MApplication.getInstance().getResources();
@@ -78,8 +76,6 @@ public class ScreenUtils {
 
     /**
      * 获取虚拟按键的高度
-     *
-     * @return
      */
     public static int getNavigationBarHeight() {
         int navigationBarHeight = 0;
