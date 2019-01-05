@@ -279,11 +279,7 @@ public final class TintHelper {
                 ContextCompat.getColor(editText.getContext(), useDarker ? R.color.ate_control_normal_dark : R.color.ate_control_normal_light),
                 color
         });
-        if (editText instanceof AppCompatEditText) {
-            editText.setSupportBackgroundTintList(editTextColorStateList);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            editText.setBackgroundTintList(editTextColorStateList);
-        }
+        editText.setSupportBackgroundTintList(editTextColorStateList);
         setCursorTint(editText, color);
     }
 

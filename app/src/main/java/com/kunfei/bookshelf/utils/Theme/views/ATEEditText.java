@@ -30,6 +30,5 @@ public class ATEEditText extends AppCompatEditText {
 
     private void init(Context context, AttributeSet attrs) {
         ATH.setTint(this, ThemeStore.accentColor(context));
-        setTextColor(ThemeStore.textColorPrimary(context));
     }
 }
