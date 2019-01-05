@@ -435,6 +435,8 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
     //侧边栏按钮
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
+        ImageView imageView = headerView.findViewById(R.id.iv_navigation_header);
+        imageView.setColorFilter(ThemeStore.primaryColor(this));
         navigationView.addHeaderView(headerView);
         ColorStateList colorStateList = getResources().getColorStateList(R.color.selector_navigation_color);
         navigationView.setItemTextColor(colorStateList);

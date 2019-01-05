@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_navigation_header"
         android:layout_width="160dp"
         android:layout_height="80dp"
         android:layout_marginLeft="16dp"
