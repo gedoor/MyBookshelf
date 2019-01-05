@@ -10,6 +10,7 @@ import com.kunfei.basemvplib.impl.IPresenter;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.presenter.ReadBookPresenter;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +34,7 @@ public class WelcomeBookActivity extends MBaseActivity {
         }
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
+        ivBg.setColorFilter(ThemeStore.primaryColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {
