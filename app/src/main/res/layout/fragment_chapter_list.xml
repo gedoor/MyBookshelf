@@ -11,10 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/ll_chapter_base_info"
-        android:overScrollMode="never"
-        app:bubbleColor="@color/tv_text_button_deep_pre"
-        app:handleColor="@color/tv_text_button_pre"
-        app:trackColor="@color/bg_divider_line" />
+        android:overScrollMode="never" />
 
     <LinearLayout
         android:id="@+id/ll_chapter_base_info"

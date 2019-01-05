@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kunfei.bookshelf.R;
+import com.kunfei.bookshelf.utils.ColorUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
@@ -488,10 +490,10 @@ public class FastScroller extends LinearLayout {
         mHandleView = findViewById(R.id.fastscroll_handle);
         mTrackView = findViewById(R.id.fastscroll_track);
         mScrollbar = findViewById(R.id.fastscroll_scrollbar);
-        @ColorInt int bubbleColor = Color.rgb(130, 166, 245);
-        @ColorInt int handleColor = Color.rgb(130, 166, 245);
-        @ColorInt int trackColor = Color.DKGRAY;
-        @ColorInt int textColor = Color.WHITE;
+        @ColorInt int bubbleColor = ColorUtil.adjustAlpha(ThemeStore.accentColor(context), 0.8f);
+        @ColorInt int handleColor = ThemeStore.accentColor(context);
+        @ColorInt int trackColor = ColorUtil.adjustAlpha(ColorUtil.invertColor(context.getResources().getColor(R.color.background)), 0.5f);
+        @ColorInt int textColor = ColorUtil.isColorLight(bubbleColor) ? Color.BLACK : Color.WHITE;
         boolean fadeScrollbar = true;
         boolean showBubble = false;
         boolean showTrack = true;
