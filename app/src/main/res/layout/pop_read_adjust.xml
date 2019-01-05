@@ -57,13 +57,12 @@
                     android:clickable="false"
                     android:contentDescription="@string/flow_sys"
                     app:color_checked="@color/background_card"
-                    app:color_tick="@color/colorAccent"
                     app:color_unchecked="@color/background_menu"
                     app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 
-            <SeekBar
+            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
                 android:id="@+id/hpb_light"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -121,13 +120,12 @@
                     android:clickable="false"
                     android:contentDescription="@string/flow_sys"
                     app:color_checked="@color/background_card"
-                    app:color_tick="@color/colorAccent"
                     app:color_unchecked="@color/background_menu"
                     app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 
-            <SeekBar
+            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
                 android:id="@+id/hpb_tts_SpeechRate"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -179,7 +177,7 @@
 
             </LinearLayout>
 
-            <SeekBar
+            <com.kunfei.bookshelf.utils.Theme.views.ATESeekBar
                 android:id="@+id/hpb_click"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"

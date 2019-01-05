@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Switch
+    <com.kunfei.bookshelf.utils.Theme.views.ATESwitch
         android:id="@+id/sw_night_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

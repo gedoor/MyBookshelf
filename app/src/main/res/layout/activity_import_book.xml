@@ -43,7 +43,7 @@
         android:paddingRight="10dp"
         tools:ignore="RtlHardcoded,RtlSymmetry">
 
-        <CheckBox
+        <com.kunfei.bookshelf.utils.Theme.views.ATECheckBox
             android:id="@+id/file_system_cb_selected_all"
             android:layout_width="120dp"
             android:layout_height="40dp"

@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_book_source_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_book_source_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_bookSourceGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_loginUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleFindUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchKind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -162,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchLastChapter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -174,7 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchCoverUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleSearchNoteUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -198,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookUrlPattern"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -210,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -234,7 +234,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleCoverUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookKind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookLastChapter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -270,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleIntroduce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -282,7 +282,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleChapterListUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -294,7 +294,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleChapterList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -306,7 +306,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleChapterListUrlNext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -318,7 +318,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleChapterName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -330,7 +330,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleContentUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -342,7 +342,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleContentUrlNext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -354,7 +354,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_ruleBookContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -366,7 +366,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <com.kunfei.bookshelf.utils.Theme.views.ATEEditText
                     android:id="@+id/tie_httpUserAgent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

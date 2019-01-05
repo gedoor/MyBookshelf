@@ -21,7 +21,7 @@
             app:tint="@color/tv_text_default"
             tools:src="@drawable/ic_folder_black_24dp" />
         <!--选择是否添加文件-->
-        <CheckBox
+        <com.kunfei.bookshelf.utils.Theme.views.ATECheckBox
             android:id="@+id/file_cb_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -17,13 +17,15 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
 
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.DensityUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 public class SmoothCheckBox extends View implements Checkable {
     private static final String KEY_INSTANCE_STATE = "InstanceState";
 
-    private static final int COLOR_TICK = Color.WHITE;
+    private static final int COLOR_TICK = ThemeStore.accentColor(MApplication.getInstance());
     private static final int COLOR_UNCHECKED = Color.WHITE;
     private static final int COLOR_CHECKED = Color.parseColor("#FB4846");
     private static final int COLOR_FLOOR_UNCHECKED = Color.parseColor("#DFDFDF");
