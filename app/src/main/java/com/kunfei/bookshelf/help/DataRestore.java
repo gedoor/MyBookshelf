@@ -60,6 +60,7 @@ public class DataRestore {
             SharedPreferencesUtil.saveData(key, v);
         }
         SharedPreferencesUtil.saveData("versionCode", MApplication.getVersionCode());
+        MApplication.getInstance().upThemeStore();
     }
 
     private void restoreBookShelf(String file) throws Exception {
