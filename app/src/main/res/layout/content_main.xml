@@ -48,11 +48,9 @@
             android:id="@+id/tab_tl_indicator"
             android:layout_width="match_parent"
             android:layout_height="32dp"
-            app:tabBackground="?attr/colorPrimary"
             app:tabGravity="fill"
             app:tabIndicatorGravity="bottom"
             app:tabIndicatorFullWidth="false"
-            app:tabIndicatorColor="@color/colorAccent"
             app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
 
