@@ -11,6 +11,10 @@ import android.os.Bundle;
 public class AppFrontBackHelper {
     private OnAppStatusListener mOnAppStatusListener;
 
+    public static AppFrontBackHelper getInstance() {
+        return new AppFrontBackHelper();
+    }
+
     /**
      * 注册状态监听，仅在Application中使用
      *

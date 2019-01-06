@@ -76,12 +76,11 @@ public class MApplication extends Application {
         configPreferences = getSharedPreferences("CONFIG", 0);
         cookiePreferences = getSharedPreferences("COOKIE", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
-        upThemeStore();
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
-        AppFrontBackHelper frontBackHelper = new AppFrontBackHelper();
-        frontBackHelper.register(this, new AppFrontBackHelper.OnAppStatusListener() {
+        upThemeStore();
+        AppFrontBackHelper.getInstance().register(this, new AppFrontBackHelper.OnAppStatusListener() {
             @Override
             public void onFront() {
                 donateHb = System.currentTimeMillis() - configPreferences.getLong("DonateHb", 0) <= TimeUnit.DAYS.toMillis(3);
