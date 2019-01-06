@@ -77,6 +77,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             case "colorAccent":
             case "colorBackground":
                 MApplication.getInstance().upThemeStore();
+                RxBus.get().post(RxBusTag.RECREATE, true);
                 if (!settingActivity.isNightTheme()) {
                     new Handler().postDelayed(() -> getActivity().recreate(), 200);
                 }
@@ -85,6 +86,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             case "colorAccentNight":
             case "colorBackgroundNight":
                 MApplication.getInstance().upThemeStore();
+                RxBus.get().post(RxBusTag.RECREATE, true);
                 if (settingActivity.isNightTheme()) {
                     new Handler().postDelayed(() -> getActivity().recreate(), 200);
                 }
