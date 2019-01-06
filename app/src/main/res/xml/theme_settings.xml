@@ -4,13 +4,13 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="@string/pk_ImmersionStatusBar"
+        android:key="immersionStatusBar"
         android:summary="@string/status_bar_immersion"
         android:title="@string/immersion_status_bar" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="@string/pk_navigationBarColorChange"
+        android:key="navigationBarColorChange"
         android:summary="@string/navigation_bar_color_change_s"
         android:title="@string/navigation_bar_color_change" />
 

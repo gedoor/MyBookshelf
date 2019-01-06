@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pk_download_path)));
     }
 
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value)-> {
+    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (Preference preference, Object value) -> {
         String stringValue = value.toString();
 
         if (preference instanceof ListPreference) {
@@ -82,10 +82,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pk_ImmersionStatusBar)) || key.equals(getString(R.string.pk_navigationBarColorChange))) {
-            settingActivity.initImmersionBar();
-            RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-        } else if (key.equals(getString(R.string.pk_bookshelf_px))) {
+        if (key.equals(getString(R.string.pk_bookshelf_px))) {
             RxBus.get().post(RxBusTag.RECREATE, true);
         }
     }

@@ -11,9 +11,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
 import com.hwangjr.rxbus.RxBus;
+import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.help.RxBusTag;
-import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.activity.ThemeSettingActivity;
 
 /**
@@ -67,41 +67,28 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pk_ImmersionStatusBar)) || key.equals(getString(R.string.pk_navigationBarColorChange))) {
-            settingActivity.initImmersionBar();
-            RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
-        } else if (key.equals("colorPrimary")) {
-            if (!settingActivity.isNightTheme()) {
-                ThemeStore.editTheme(getActivity())
-                        .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
-                        .apply();
-                RxBus.get().post(RxBusTag.RECREATE, true);
-                new Handler().postDelayed(() -> getActivity().recreate(), 200);
-            }
-        } else if (key.equals("colorAccent")) {
-            if (!settingActivity.isNightTheme()) {
-                ThemeStore.editTheme(getActivity())
-                        .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
-                        .apply();
-                RxBus.get().post(RxBusTag.RECREATE, true);
-                new Handler().postDelayed(() -> getActivity().recreate(), 200);
-            }
-        } else if (key.equals("colorPrimaryNight")) {
-            if (settingActivity.isNightTheme()) {
-                ThemeStore.editTheme(getActivity())
-                        .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
-                        .apply();
-                RxBus.get().post(RxBusTag.RECREATE, true);
-                new Handler().postDelayed(() -> getActivity().recreate(), 200);
-            }
-        } else if (key.equals("colorAccentNight")) {
-            if (settingActivity.isNightTheme()) {
-                ThemeStore.editTheme(getActivity())
-                        .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
-                        .apply();
-                RxBus.get().post(RxBusTag.RECREATE, true);
-                new Handler().postDelayed(() -> getActivity().recreate(), 200);
-            }
+        switch (key) {
+            case "immersionStatusBar":
+            case "navigationBarColorChange":
+                settingActivity.initImmersionBar();
+                RxBus.get().post(RxBusTag.IMMERSION_CHANGE, true);
+                break;
+            case "colorPrimary":
+            case "colorAccent":
+            case "colorBackground":
+                MApplication.getInstance().upThemeStore();
+                if (!settingActivity.isNightTheme()) {
+                    new Handler().postDelayed(() -> getActivity().recreate(), 200);
+                }
+                break;
+            case "colorPrimaryNight":
+            case "colorAccentNight":
+            case "colorBackgroundNight":
+                MApplication.getInstance().upThemeStore();
+                if (settingActivity.isNightTheme()) {
+                    new Handler().postDelayed(() -> getActivity().recreate(), 200);
+                }
+                break;
         }
     }
 
