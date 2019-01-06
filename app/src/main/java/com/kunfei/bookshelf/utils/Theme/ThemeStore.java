@@ -182,6 +182,12 @@ public final class ThemeStore implements ThemeStorePrefKeys, ThemeStoreInterface
     }
 
     @Override
+    public ThemeStore backgroundColor(int color) {
+        mEditor.putInt(KEY_BACKGROUND_COLOR, color);
+        return this;
+    }
+
+    @Override
     public ThemeStore coloredStatusBar(boolean colored) {
         mEditor.putBoolean(KEY_APPLY_PRIMARYDARK_STATUSBAR, colored);
         return this;
@@ -279,6 +285,12 @@ public final class ThemeStore implements ThemeStorePrefKeys, ThemeStoreInterface
     @ColorInt
     public static int textColorSecondaryInverse(@NonNull Context context) {
         return prefs(context).getInt(KEY_TEXT_COLOR_SECONDARY_INVERSE, ATHUtil.resolveColor(context, android.R.attr.textColorSecondaryInverse));
+    }
+
+    @CheckResult
+    @ColorInt
+    public static int backgroundColor(@NonNull Context context) {
+        return prefs(context).getInt(KEY_BACKGROUND_COLOR, ATHUtil.resolveColor(context, android.R.attr.colorBackground));
     }
 
     @CheckResult

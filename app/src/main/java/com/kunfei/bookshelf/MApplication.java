@@ -109,11 +109,13 @@ public class MApplication extends Application {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimaryNight", getResources().getColor(R.color.colorPrimaryNight)))
                     .accentColor(configPreferences.getInt("colorAccentNight", getResources().getColor(R.color.colorAccentNight)))
+                    .backgroundColor(configPreferences.getInt("backgroundColor", getResources().getColor(R.color.backgroundNight)))
                     .apply();
         } else {
             ThemeStore.editTheme(this)
                     .primaryColor(configPreferences.getInt("colorPrimary", getResources().getColor(R.color.colorPrimary)))
                     .accentColor(configPreferences.getInt("colorAccent", getResources().getColor(R.color.colorAccent)))
+                    .backgroundColor(configPreferences.getInt("backgroundColor", getResources().getColor(R.color.background)))
                     .apply();
         }
     }

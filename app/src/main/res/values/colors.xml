@@ -18,6 +18,7 @@
 
     <color name="colorPrimaryNight">#464646</color>
     <color name="colorAccentNight">@color/md_blue_800</color>
+    <color name="backgroundNight">#464646</color>
 
     <color name="btn_bg_press">#c4c4c4</color>
     <color name="btn_bg_press_2">#949494</color>
