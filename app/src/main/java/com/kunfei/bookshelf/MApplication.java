@@ -79,7 +79,7 @@ public class MApplication extends Application {
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
-        if (!ThemeStore.isConfigured(this, 1)) {
+        if (!ThemeStore.isConfigured(this, versionCode)) {
             upThemeStore();
         }
         AppFrontBackHelper.getInstance().register(this, new AppFrontBackHelper.OnAppStatusListener() {
