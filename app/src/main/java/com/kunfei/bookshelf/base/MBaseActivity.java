@@ -155,9 +155,9 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             if (ImmersionBar.canNavigationBarDarkFont()) {
                 mImmersionBar.navigationBarColorInt(ThemeStore.primaryColorDark(this));
                 if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
-                    mImmersionBar.navigationBarDarkFont(false);
-                } else {
                     mImmersionBar.navigationBarDarkFont(true);
+                } else {
+                    mImmersionBar.navigationBarDarkFont(false);
                 }
             }
             if (!preferences.getBoolean("navigationBarColorChange", false)) {
