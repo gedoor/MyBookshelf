@@ -29,7 +29,7 @@ public class WelcomeToReadActivity extends MBaseActivity {
     protected void onCreateActivity() {
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
-        ivBg.setColorFilter(ThemeStore.primaryColor(this));
+        ivBg.setColorFilter(ThemeStore.accentColor(this));
         ValueAnimator welAnimator = ValueAnimator.ofFloat(1f, 0f).setDuration(800);
         welAnimator.setStartDelay(500);
         welAnimator.addUpdateListener(animation -> {

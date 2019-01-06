@@ -433,11 +433,13 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     }
 
-    //侧边栏按钮
+    /**
+     * 侧边栏按钮
+     */
     private void setUpNavigationView() {
         @SuppressLint("InflateParams") View headerView = LayoutInflater.from(this).inflate(R.layout.navigation_header, null);
         ImageView imageView = headerView.findViewById(R.id.iv_navigation_header);
-        imageView.setColorFilter(ThemeStore.primaryColor(this));
+        imageView.setColorFilter(ThemeStore.accentColor(this));
         navigationView.addHeaderView(headerView);
         NavigationViewUtil.setItemTextColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
         NavigationViewUtil.setItemIconColors(navigationView, getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
