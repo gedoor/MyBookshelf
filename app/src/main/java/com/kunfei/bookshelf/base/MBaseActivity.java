@@ -152,17 +152,16 @@ public abstract class MBaseActivity<T extends IPresenter> extends BaseActivity<T
             } else {
                 mImmersionBar.statusBarDarkFont(false);
             }
-            if (ImmersionBar.canNavigationBarDarkFont()) {
+            if (!preferences.getBoolean("navigationBarColorChange", false)) {
+                mImmersionBar.navigationBarColor(R.color.black);
+                mImmersionBar.navigationBarDarkFont(false);
+            } else if (ImmersionBar.canNavigationBarDarkFont()) {
                 mImmersionBar.navigationBarColorInt(ThemeStore.primaryColorDark(this));
                 if (ColorUtil.isColorLight(ThemeStore.primaryColor(this))) {
                     mImmersionBar.navigationBarDarkFont(true);
                 } else {
                     mImmersionBar.navigationBarDarkFont(false);
                 }
-            }
-            if (!preferences.getBoolean("navigationBarColorChange", false)) {
-                mImmersionBar.navigationBarColor(R.color.black);
-                mImmersionBar.navigationBarDarkFont(false);
             }
             mImmersionBar.init();
         } catch (Exception e) {
