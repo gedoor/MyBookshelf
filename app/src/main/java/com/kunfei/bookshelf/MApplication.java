@@ -61,9 +61,6 @@ public class MApplication extends Application {
         instance = this;
         CrashHandler.getInstance().init(this);
         // default theme
-        if (!ThemeStore.isConfigured(this, 1)) {
-            upThemeStore();
-        }
         try {
             versionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
@@ -79,6 +76,7 @@ public class MApplication extends Application {
         configPreferences = getSharedPreferences("CONFIG", 0);
         cookiePreferences = getSharedPreferences("COOKIE", 0);
         downloadPath = configPreferences.getString(getString(R.string.pk_download_path), "");
+        upThemeStore();
         if (TextUtils.isEmpty(downloadPath)) {
             setDownloadPath(FileHelp.getCachePath());
         }
