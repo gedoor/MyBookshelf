@@ -25,7 +25,6 @@ import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 public class SmoothCheckBox extends View implements Checkable {
     private static final String KEY_INSTANCE_STATE = "InstanceState";
 
-    private static final int COLOR_TICK = ThemeStore.accentColor(MApplication.getInstance());
     private static final int COLOR_UNCHECKED = Color.WHITE;
     private static final int COLOR_CHECKED = Color.parseColor("#FB4846");
     private static final int COLOR_FLOOR_UNCHECKED = Color.parseColor("#DFDFDF");
@@ -88,7 +87,8 @@ public class SmoothCheckBox extends View implements Checkable {
     private void init(AttributeSet attrs) {
 
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SmoothCheckBox);
-        int tickColor = ta.getColor(R.styleable.SmoothCheckBox_color_tick, COLOR_TICK);
+        int tickColor = ThemeStore.accentColor(MApplication.getInstance());
+        tickColor = ta.getColor(R.styleable.SmoothCheckBox_color_tick, tickColor);
         mAnimDuration = ta.getInt(R.styleable.SmoothCheckBox_duration, DEF_ANIM_DURATION);
         mFloorColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked_stroke, COLOR_FLOOR_UNCHECKED);
         mCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_checked, COLOR_CHECKED);
