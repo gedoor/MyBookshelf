@@ -6,6 +6,8 @@
 
     <color name="colorPrimary">#464646</color>
 
+    <color name="transparent30">#30ffffff</color>
+
     <color name="bg_divider_line">#363636</color>
     <color name="btn_bg_press">#222222</color>
     <color name="btn_bg_press_2">#363636</color>

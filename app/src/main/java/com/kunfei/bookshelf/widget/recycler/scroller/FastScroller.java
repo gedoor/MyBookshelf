@@ -492,7 +492,7 @@ public class FastScroller extends LinearLayout {
         mScrollbar = findViewById(R.id.fastscroll_scrollbar);
         @ColorInt int bubbleColor = ColorUtil.adjustAlpha(ThemeStore.accentColor(context), 0.8f);
         @ColorInt int handleColor = ThemeStore.accentColor(context);
-        @ColorInt int trackColor = ColorUtil.adjustAlpha(ColorUtil.invertColor(context.getResources().getColor(R.color.background)), 0.5f);
+        @ColorInt int trackColor = context.getResources().getColor(R.color.transparent30);
         @ColorInt int textColor = ColorUtil.isColorLight(bubbleColor) ? Color.BLACK : Color.WHITE;
         boolean fadeScrollbar = true;
         boolean showBubble = false;

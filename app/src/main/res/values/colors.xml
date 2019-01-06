@@ -10,6 +10,8 @@
     <color name="background_menu">#fcfcfc</color>
     <color name="transparent">#00000000</color>
 
+    <color name="transparent30">#30000000</color>
+
     <color name="colorPrimary">#f4f4f4</color>
     <color name="colorPrimaryDark">#c7c7c7</color>
     <color name="colorAccent">@color/md_blue_800</color>
