@@ -15,6 +15,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.MBaseActivity;
 import com.kunfei.bookshelf.bean.DownloadBookBean;
 import com.kunfei.bookshelf.service.DownloadService;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.DownloadAdapter;
 
 import java.lang.ref.WeakReference;
@@ -77,6 +78,7 @@ public class DownloadActivity extends MBaseActivity {
      */
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_recycler_vew);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);

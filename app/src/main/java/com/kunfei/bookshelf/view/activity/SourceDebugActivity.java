@@ -20,6 +20,7 @@ import com.kunfei.bookshelf.help.BookshelfHelp;
 import com.kunfei.bookshelf.model.WebBookModel;
 import com.kunfei.bookshelf.utils.RxUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.List;
@@ -83,6 +84,7 @@ public class SourceDebugActivity extends MBaseActivity {
      */
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_source_debug);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);

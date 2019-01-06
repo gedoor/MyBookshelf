@@ -27,6 +27,7 @@ import com.kunfei.bookshelf.presenter.BookSourcePresenter;
 import com.kunfei.bookshelf.presenter.contract.BookSourceContract;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.BookSourceAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -88,6 +89,7 @@ public class BookSourceActivity extends MBaseActivity<BookSourceContract.Present
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_book_source);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);

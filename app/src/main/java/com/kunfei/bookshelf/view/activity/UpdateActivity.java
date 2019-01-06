@@ -22,6 +22,7 @@ import com.kunfei.bookshelf.bean.UpdateInfoBean;
 import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.help.UpdateManager;
 import com.kunfei.bookshelf.service.UpdateService;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 import java.io.File;
 
@@ -77,6 +78,7 @@ public class UpdateActivity extends MBaseActivity {
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_update);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);

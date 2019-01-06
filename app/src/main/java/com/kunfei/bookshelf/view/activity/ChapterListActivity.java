@@ -88,6 +88,7 @@ public class ChapterListActivity extends BaseTabActivity {
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_chapterlist);
         ButterKnife.bind(this);
         setupActionBar();

@@ -26,6 +26,7 @@ import com.kunfei.bookshelf.help.RxBusTag;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
 import com.kunfei.bookshelf.utils.SoftInputUtil;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
 import java.io.File;
@@ -104,6 +105,7 @@ public class BookInfoActivity extends MBaseActivity {
      */
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_book_info);
         ButterKnife.bind(this);
         this.setSupportActionBar(toolbar);

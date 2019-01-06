@@ -108,6 +108,7 @@ public class MainActivity extends BaseTabActivity<MainContract.Presenter> implem
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }

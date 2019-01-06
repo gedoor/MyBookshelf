@@ -23,6 +23,7 @@ import com.kunfei.bookshelf.presenter.ReplaceRulePresenter;
 import com.kunfei.bookshelf.presenter.contract.ReplaceRuleContract;
 import com.kunfei.bookshelf.utils.FileUtil;
 import com.kunfei.bookshelf.utils.PermissionUtils;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ReplaceRuleAdapter;
 import com.kunfei.bookshelf.widget.modialog.MoDialogHUD;
 
@@ -77,6 +78,7 @@ public class ReplaceRuleActivity extends MBaseActivity<ReplaceRuleContract.Prese
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_recycler_vew);
     }
 

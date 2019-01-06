@@ -14,6 +14,7 @@ import com.kunfei.bookshelf.bean.SearchBookBean;
 import com.kunfei.bookshelf.presenter.BookDetailPresenter;
 import com.kunfei.bookshelf.presenter.ChoiceBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ChoiceBookContract;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.adapter.ChoiceBookAdapter;
 import com.kunfei.bookshelf.widget.recycler.refresh.OnLoadMoreListener;
 import com.kunfei.bookshelf.widget.recycler.refresh.RefreshRecyclerView;
@@ -42,6 +43,7 @@ public class ChoiceBookActivity extends MBaseActivity<ChoiceBookContract.Present
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_book_choice);
     }
 

@@ -9,6 +9,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.BaseTabActivity;
 import com.kunfei.bookshelf.presenter.ImportBookPresenter;
 import com.kunfei.bookshelf.presenter.contract.ImportBookContract;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.kunfei.bookshelf.view.fragment.BaseFileFragment;
 import com.kunfei.bookshelf.view.fragment.FileCategoryFragment;
 import com.kunfei.bookshelf.view.fragment.LocalBookFragment;
@@ -71,6 +72,7 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
 
     @Override
     protected void onCreateActivity() {
+        getWindow().getDecorView().setBackgroundColor(ThemeStore.backgroundColor(this));
         setContentView(R.layout.activity_import_book);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);

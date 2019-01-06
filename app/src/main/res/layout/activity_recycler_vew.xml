@@ -5,7 +5,6 @@
     android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -28,8 +27,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background">
+        android:layout_height="match_parent">
 
         <com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView
             android:id="@+id/recycler_view"

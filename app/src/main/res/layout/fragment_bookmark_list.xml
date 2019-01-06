@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:layout_below="@id/action_bar"
     android:layout_alignParentStart="true"
-    android:background="@color/background"
     android:descendantFocusability="blocksDescendants">
 
     <com.kunfei.bookshelf.widget.recycler.scroller.FastScrollRecyclerView

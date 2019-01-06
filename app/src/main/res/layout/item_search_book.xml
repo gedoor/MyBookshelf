@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:background="@color/background">
+    android:foreground="?android:attr/selectableItemBackground">
 
     <FrameLayout
         android:layout_width="match_parent"
