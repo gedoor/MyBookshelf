@@ -21,6 +21,8 @@ interface ThemeStorePrefKeys {
     String KEY_TEXT_COLOR_SECONDARY = "text_color_secondary";
     String KEY_TEXT_COLOR_SECONDARY_INVERSE = "text_color_secondary_inverse";
 
+    String KEY_BACKGROUND_COLOR = "backgroundColor";
+
     String KEY_APPLY_PRIMARYDARK_STATUSBAR = "apply_primarydark_statusbar";
     String KEY_APPLY_PRIMARY_NAVBAR = "apply_primary_navbar";
     String KEY_AUTO_GENERATE_PRIMARYDARK = "auto_generate_primarydark";

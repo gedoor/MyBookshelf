@@ -86,5 +86,5 @@ interface ThemeStoreInterface {
 
     // Commit/apply
 
-    void commit();
+    void apply();
 }

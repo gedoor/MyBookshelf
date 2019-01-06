@@ -74,7 +74,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             if (!settingActivity.isNightTheme()) {
                 ThemeStore.editTheme(getActivity())
                         .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
-                        .commit();
+                        .apply();
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 new Handler().postDelayed(() -> getActivity().recreate(), 200);
             }
@@ -82,7 +82,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             if (!settingActivity.isNightTheme()) {
                 ThemeStore.editTheme(getActivity())
                         .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
-                        .commit();
+                        .apply();
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 new Handler().postDelayed(() -> getActivity().recreate(), 200);
             }
@@ -90,7 +90,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             if (settingActivity.isNightTheme()) {
                 ThemeStore.editTheme(getActivity())
                         .primaryColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorPrimary)))
-                        .commit();
+                        .apply();
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 new Handler().postDelayed(() -> getActivity().recreate(), 200);
             }
@@ -98,7 +98,7 @@ public class ThemeSettingsFragment extends PreferenceFragment implements SharedP
             if (settingActivity.isNightTheme()) {
                 ThemeStore.editTheme(getActivity())
                         .accentColor(sharedPreferences.getInt(key, getActivity().getResources().getColor(R.color.colorAccent)))
-                        .commit();
+                        .apply();
                 RxBus.get().post(RxBusTag.RECREATE, true);
                 new Handler().postDelayed(() -> getActivity().recreate(), 200);
             }

@@ -203,10 +203,10 @@ public final class ThemeStore implements ThemeStorePrefKeys, ThemeStoreInterface
 
     @SuppressWarnings("unchecked")
     @Override
-    public void commit() {
+    public void apply() {
         mEditor.putLong(VALUES_CHANGED, System.currentTimeMillis())
                 .putBoolean(IS_CONFIGURED_KEY, true)
-                .commit();
+                .apply();
     }
 
     // Static getters
@@ -218,7 +218,7 @@ public final class ThemeStore implements ThemeStorePrefKeys, ThemeStoreInterface
     }
 
     public static void markChanged(@NonNull Context context) {
-        new ThemeStore(context).commit();
+        new ThemeStore(context).apply();
     }
 
     @CheckResult
