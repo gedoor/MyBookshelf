@@ -36,12 +36,8 @@
                 android:layout_marginRight="10dp"
                 android:fillViewport="false"
                 app:layout_scrollFlags="scroll"
-                app:tabIndicatorColor="?attr/colorAccent"
                 app:tabIndicatorHeight="2.0dp"
-                app:tabMode="fixed"
-                app:tabSelectedTextColor="?attr/colorAccent">
-
-            </com.google.android.material.tabs.TabLayout>
+                app:tabMode="fixed" />
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

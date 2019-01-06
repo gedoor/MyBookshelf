@@ -1,6 +1,7 @@
 package com.kunfei.bookshelf.view.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -90,6 +91,9 @@ public class ChapterListActivity extends BaseTabActivity {
         setContentView(R.layout.activity_chapterlist);
         ButterKnife.bind(this);
         setupActionBar();
+        mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
+        mTlIndicator.setTabTextColors(ColorUtil.isColorLight(ThemeStore.primaryColor(this)) ? Color.BLACK : Color.WHITE,
+                ThemeStore.accentColor(this));
     }
 
     @Override
