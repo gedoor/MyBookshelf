@@ -56,9 +56,6 @@
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
                     android:contentDescription="@string/flow_sys"
-                    app:color_checked="@color/background_card"
-                    app:color_unchecked="@color/background_menu"
-                    app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 
@@ -119,9 +116,6 @@
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
                     android:contentDescription="@string/flow_sys"
-                    app:color_checked="@color/background_card"
-                    app:color_unchecked="@color/background_menu"
-                    app:color_unchecked_stroke="@color/tv_btn_press_black"
                     app:duration="150" />
             </LinearLayout>
 

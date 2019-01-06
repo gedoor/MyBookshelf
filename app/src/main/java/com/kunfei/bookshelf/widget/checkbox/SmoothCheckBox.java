@@ -17,17 +17,12 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Checkable;
 
-import com.kunfei.bookshelf.MApplication;
 import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.utils.DensityUtil;
 import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 public class SmoothCheckBox extends View implements Checkable {
     private static final String KEY_INSTANCE_STATE = "InstanceState";
-
-    private static final int COLOR_UNCHECKED = Color.WHITE;
-    private static final int COLOR_CHECKED = Color.parseColor("#FB4846");
-    private static final int COLOR_FLOOR_UNCHECKED = Color.parseColor("#DFDFDF");
 
     private static final int DEF_DRAW_SIZE = 25;
     private static final int DEF_ANIM_DURATION = 300;
@@ -57,13 +52,13 @@ public class SmoothCheckBox extends View implements Checkable {
 
     public SmoothCheckBox(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
+        init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public SmoothCheckBox(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(attrs);
+        init(context, attrs);
     }
 
     private static int getGradientColor(int startColor, int endColor, float percent) {
@@ -84,15 +79,18 @@ public class SmoothCheckBox extends View implements Checkable {
         return Color.argb(currentA, currentR, currentG, currentB);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs) {
 
         TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.SmoothCheckBox);
-        int tickColor = ThemeStore.accentColor(MApplication.getInstance());
+        int tickColor = ThemeStore.accentColor(context);
+        mCheckedColor = context.getResources().getColor(R.color.background_card);
+        mUnCheckedColor = context.getResources().getColor(R.color.background_menu);
+        mFloorColor = context.getResources().getColor(R.color.transparent30);
         tickColor = ta.getColor(R.styleable.SmoothCheckBox_color_tick, tickColor);
         mAnimDuration = ta.getInt(R.styleable.SmoothCheckBox_duration, DEF_ANIM_DURATION);
-        mFloorColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked_stroke, COLOR_FLOOR_UNCHECKED);
-        mCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_checked, COLOR_CHECKED);
-        mUnCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked, COLOR_UNCHECKED);
+        mFloorColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked_stroke, mFloorColor);
+        mCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_checked, mCheckedColor);
+        mUnCheckedColor = ta.getColor(R.styleable.SmoothCheckBox_color_unchecked, mUnCheckedColor);
         mStrokeWidth = ta.getDimensionPixelSize(R.styleable.SmoothCheckBox_stroke_width, DensityUtil.dp2px(getContext(), 0));
         ta.recycle();
 
