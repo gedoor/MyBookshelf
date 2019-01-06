@@ -19,15 +19,22 @@
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimary"
             android:key="colorPrimary"
-            android:summary="主题，主色调"
+            android:summary="白天，主色调"
             android:title="主色调"
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorAccent"
             android:key="colorAccent"
-            android:summary="主题，强调色"
+            android:summary="白天，强调色"
             android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/background"
+            android:key="colorBackground"
+            android:summary="白天，背景色"
+            android:title="背景色"
             app:cpv_dialogType="preset" />
 
     </PreferenceCategory>
@@ -37,15 +44,22 @@
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorPrimaryNight"
             android:key="colorPrimaryNight"
-            android:summary="主题，主色调"
+            android:summary="夜间，主色调"
             android:title="主色调"
             app:cpv_dialogType="preset" />
 
         <com.jaredrummler.android.colorpicker.ColorPreference
             android:defaultValue="@color/colorAccentNight"
             android:key="colorAccentNight"
-            android:summary="主题，强调色"
+            android:summary="夜间，强调色"
             android:title="强调色"
+            app:cpv_dialogType="preset" />
+
+        <com.jaredrummler.android.colorpicker.ColorPreference
+            android:defaultValue="@color/backgroundNight"
+            android:key="colorBackgroundNight"
+            android:summary="夜间，背景色"
+            android:title="背景色"
             app:cpv_dialogType="preset" />
 
     </PreferenceCategory>
