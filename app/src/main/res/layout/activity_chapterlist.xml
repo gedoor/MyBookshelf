@@ -48,7 +48,4 @@
         android:layout_below="@id/action_bar"
         android:layout_alignParentStart="true" />
 
-    <View
-        style="@style/Style.Shadow.Top"
-        android:layout_below="@id/action_bar" />
 </RelativeLayout>
