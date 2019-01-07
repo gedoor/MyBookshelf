@@ -242,6 +242,8 @@ public class SourceDebugActivity extends MBaseActivity {
                             } else {
                                 loading.stop();
                             }
+                        } else {
+                            loading.stop();
                         }
                     }
 
