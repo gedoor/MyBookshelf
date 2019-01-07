@@ -120,7 +120,7 @@ public class FindBookFragment extends MBaseFragment<FindBookContract.Presenter> 
             rlEmptyView.setVisibility(View.GONE);
             rvFindLeft.setVisibility(View.VISIBLE);
             vwDivider.setVisibility(View.VISIBLE);
-            if (group.size() == 1) {
+            if (group.size() <= 1) {
                 rvFindLeft.setVisibility(View.GONE);
                 vwDivider.setVisibility(View.GONE);
             }
