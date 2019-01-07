@@ -94,7 +94,7 @@ class BookContent {
     private WebContentBean analyzeBookContent(final String s, final String chapterUrl) {
         WebContentBean webContentBean = new WebContentBean();
 
-        AnalyzeRule analyzer = new AnalyzeRule();
+        AnalyzeRule analyzer = new AnalyzeRule(null);
         analyzer.setContent(s);
 
         webContentBean.content = analyzer.getString(ruleBookContent);

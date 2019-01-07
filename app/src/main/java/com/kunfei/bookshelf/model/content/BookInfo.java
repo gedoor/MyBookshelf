@@ -38,7 +38,7 @@ class BookInfo {
             bookInfoBean.setNoteUrl(bookShelfBean.getNoteUrl());   //id
             bookInfoBean.setTag(tag);
 
-            AnalyzeRule analyzer = new AnalyzeRule();
+            AnalyzeRule analyzer = new AnalyzeRule(bookShelfBean);
             analyzer.setContent(s);
 
             if (isEmpty(bookInfoBean.getName())) {

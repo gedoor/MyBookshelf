@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
 
@@ -22,7 +23,7 @@ import javax.script.SimpleBindings;
  * 统一解析接口
  */
 public class AnalyzeRule {
-
+    private BookShelfBean book;
     private Object _object;
     private Boolean _isJSON;
 
@@ -31,8 +32,8 @@ public class AnalyzeRule {
     private AnalyzeByJSoup analyzeByJSoup = null;
     private AnalyzeByJSonPath analyzeByJSonPath = null;
 
-    public AnalyzeRule() {
-
+    public AnalyzeRule(BookShelfBean bookShelfBean) {
+        book = bookShelfBean;
     }
 
     AnalyzeRule(Object object, boolean isJSON) {

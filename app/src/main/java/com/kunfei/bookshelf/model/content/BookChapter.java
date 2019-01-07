@@ -23,6 +23,7 @@ import static android.text.TextUtils.isEmpty;
 class BookChapter {
     private String tag;
     private BookSourceBean bookSourceBean;
+    private AnalyzeRule analyzer;
 
     BookChapter(String tag, BookSourceBean bookSourceBean) {
         this.tag = tag;
@@ -35,7 +36,7 @@ class BookChapter {
                 e.onError(new Throwable("目录获取失败"));
                 return;
             }
-
+            analyzer = new AnalyzeRule(bookShelfBean);
             bookShelfBean.setTag(tag);
             boolean dx = false;
             String ruleChapterList = bookSourceBean.getRuleChapterList();
@@ -97,7 +98,6 @@ class BookChapter {
         List<ChapterListBean> chapterBeans = new ArrayList<>();
         List<String> nextUrlList = new ArrayList<>();
 
-        AnalyzeRule analyzer = new AnalyzeRule();
         analyzer.setContent(s);
 
         if (!TextUtils.isEmpty(bookSourceBean.getRuleChapterUrlNext())) {

@@ -4,12 +4,16 @@ package com.kunfei.bookshelf.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 书架item Bean
@@ -41,6 +45,10 @@ public class BookShelfBean implements Parcelable, Cloneable {
     private String customCoverPath;
     private Boolean allowUpdate = true;
     private Boolean useReplaceRule = true;
+    private String variable;
+
+    @Transient
+    private Map<String, String> variableMap;
 
     @Transient
     private BookInfoBean bookInfoBean = new BookInfoBean();
@@ -78,13 +86,14 @@ public class BookShelfBean implements Parcelable, Cloneable {
         customCoverPath = in.readString();
         allowUpdate = in.readByte() != 0 && !tag.equals(LOCAL_TAG);
         useReplaceRule = in.readByte() != 0;
+        variable = in.readString();
     }
 
-    @Generated(hash = 2111310267)
-    public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate,
-                         Boolean hasUpdate, Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData,
-                         Integer group, String durChapterName, String lastChapterName, Integer chapterListSize,
-                         String customCoverPath, Boolean allowUpdate, Boolean useReplaceRule) {
+    @Generated(hash = 63205856)
+    public BookShelfBean(String noteUrl, Integer durChapter, Integer durChapterPage, Long finalDate, Boolean hasUpdate,
+                         Integer newChapters, String tag, Integer serialNumber, Long finalRefreshData, Integer group,
+                         String durChapterName, String lastChapterName, Integer chapterListSize, String customCoverPath,
+                         Boolean allowUpdate, Boolean useReplaceRule, String variable) {
         this.noteUrl = noteUrl;
         this.durChapter = durChapter;
         this.durChapterPage = durChapterPage;
@@ -101,6 +110,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.customCoverPath = customCoverPath;
         this.allowUpdate = allowUpdate;
         this.useReplaceRule = useReplaceRule;
+        this.variable = variable;
     }
 
     @Override
@@ -120,6 +130,7 @@ public class BookShelfBean implements Parcelable, Cloneable {
         dest.writeString(customCoverPath);
         dest.writeByte((byte) (allowUpdate ? 1 : 0));
         dest.writeByte((byte) (useReplaceRule ? 1 : 0));
+        dest.writeString(variable);
     }
 
     @Override
@@ -357,5 +368,26 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.useReplaceRule = useReplaceRule;
     }
 
+    public String getVariable() {
+        return this.variable;
+    }
 
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    public void putVariableMap(Map<String, String> map) {
+        if (variableMap == null) {
+            variableMap = new HashMap<>();
+        }
+        variableMap.putAll(map);
+        variable = new Gson().toJson(variableMap);
+    }
+
+    public Map<String, String> getVariableMap() {
+        if (variableMap == null) {
+            return new Gson().fromJson(variable, Map.class);
+        }
+        return variableMap;
+    }
 }

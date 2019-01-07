@@ -30,7 +30,7 @@ class BookList {
     Observable<List<SearchBookBean>> analyzeSearchBook(final Response<String> response) {
         return Observable.create(e -> {
             List<SearchBookBean> books = new ArrayList<>();
-            AnalyzeRule analyzer = new AnalyzeRule();
+            AnalyzeRule analyzer = new AnalyzeRule(null);
 
             analyzer.setContent(response.body());
 
