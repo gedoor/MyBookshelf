@@ -2,6 +2,7 @@ package com.kunfei.bookshelf.model.analyzeRule;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.utils.NetworkUtil;
 import com.kunfei.bookshelf.utils.StringUtils;
@@ -11,6 +12,9 @@ import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -82,6 +86,9 @@ public class AnalyzeRule {
     public List<String> getStringList(String rule, String baseUrl) {
         List<String> stringList;
         SourceRule source = new SourceRule(rule);
+        if (source.putVariable != null) {
+            analyzeVariable(source.putVariable);
+        }
         switch (source.mode) {
             case JSon:
                 stringList = new ArrayList<>();
@@ -115,6 +122,9 @@ public class AnalyzeRule {
         }
         String result = "";
         SourceRule source = new SourceRule(rule);
+        if (source.putVariable != null) {
+            analyzeVariable(source.putVariable);
+        }
         if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
@@ -145,6 +155,9 @@ public class AnalyzeRule {
     public AnalyzeCollection getElements(String rule) {
         AnalyzeCollection collection;
         SourceRule source = new SourceRule(rule);
+        if (source.putVariable != null) {
+            analyzeVariable(source.putVariable);
+        }
         if (!StringUtils.isTrimEmpty(source.rule)) {
             switch (source.mode) {
                 case JSon:
@@ -166,12 +179,27 @@ public class AnalyzeRule {
         return null;
     }
 
+    private void analyzeVariable(Map<String, String> putVariable) {
+        for (Map.Entry<String, String> entry : putVariable.entrySet()) {
+            book.putVariable(entry.getKey(), getString(entry.getValue()));
+        }
+    }
+
     class SourceRule {
         Mode mode;
         String rule;
         String js;
+        Map<String, String> putVariable;
 
         SourceRule(String ruleStr) {
+            Pattern pattern = Pattern.compile("@put:\\{.+?\\}");
+            Matcher matcher = pattern.matcher(ruleStr);
+            if (matcher.find()) {
+                String find = matcher.group(0);
+                ruleStr = ruleStr.replace(find, "");
+                find = find.substring(5);
+                putVariable = new Gson().fromJson(find, Map.class);
+            }
             String str[] = ruleStr.split("@js:");
             if (StringUtils.startWithIgnoreCase(str[0], "@XPath:")) {
                 mode = Mode.XPath;

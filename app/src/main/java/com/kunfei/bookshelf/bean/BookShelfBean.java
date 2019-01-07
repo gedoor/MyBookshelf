@@ -376,11 +376,11 @@ public class BookShelfBean implements Parcelable, Cloneable {
         this.variable = variable;
     }
 
-    public void putVariableMap(Map<String, String> map) {
+    public void putVariable(String key, String value) {
         if (variableMap == null) {
             variableMap = new HashMap<>();
         }
-        variableMap.putAll(map);
+        variableMap.put(key, value);
         variable = new Gson().toJson(variableMap);
     }
 
