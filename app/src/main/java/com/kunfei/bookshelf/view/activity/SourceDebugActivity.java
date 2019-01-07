@@ -24,6 +24,7 @@ import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.SearchView;
@@ -262,6 +263,7 @@ public class SourceDebugActivity extends MBaseActivity {
 
     private void bookContentDebug(ChapterListBean chapterListBean, String bookName) {
         WebBookModel.getInstance().getBookContent(Schedulers.io(), chapterListBean, bookName)
+                .timeout(20, TimeUnit.SECONDS)
                 .compose(RxUtils::toSimpleSingle)
                 .subscribe(new Observer<BookContentBean>() {
                     @Override

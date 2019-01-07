@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -104,17 +105,13 @@ public class PageLoaderNet extends PageLoader {
                 e.onComplete();
             })
                     .flatMap(index -> WebBookModel.getInstance().getBookContent(scheduler, bookShelfBean.getChapter(chapterIndex), bookShelfBean.getBookInfoBean().getName()))
+                    .timeout(20, TimeUnit.SECONDS)
+                    .subscribeOn(scheduler)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<BookContentBean>() {
                         @Override
                         public void onSubscribe(Disposable d) {
                             compositeDisposable.add(d);
-                            handler.postDelayed(() -> {
-                                if (!d.isDisposed() && bookShelfBean != null) {
-                                    DownloadingList(listHandle.REMOVE, bookShelfBean.getChapter(chapterIndex).getDurChapterUrl());
-                                    d.dispose();
-                                }
-                            }, 30 * 1000);
                         }
 
                         @SuppressLint("DefaultLocale")
