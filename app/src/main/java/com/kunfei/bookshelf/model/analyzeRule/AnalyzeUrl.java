@@ -66,11 +66,12 @@ public class AnalyzeUrl {
      */
     private String analyzeHeader(String ruleUrl, Map<String, String> headerMapF) {
         headerMap.putAll(headerMapF);
-        Pattern pattern = Pattern.compile("(@Header:)\\{.+?\\}");
+        Pattern pattern = Pattern.compile("@Header:\\{.+?\\}");
         Matcher matcher = pattern.matcher(ruleUrl);
         if (matcher.find()) {
             String headerStr = matcher.group(0);
-            ruleUrl = ruleUrl.replace("@Header:" + headerStr, "");
+            ruleUrl = ruleUrl.replace(headerStr, "");
+            headerStr = headerStr.substring(8);
             try {
                 Map<String, String> map = new Gson().fromJson(headerStr, Map.class);
                 headerMap.putAll(map);
