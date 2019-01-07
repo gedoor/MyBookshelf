@@ -77,6 +77,8 @@ public class ImportBookActivity extends BaseTabActivity<ImportBookContract.Prese
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setupActionBar();
+        mTlIndicator.setSelectedTabIndicatorColor(ThemeStore.accentColor(this));
+        mTlIndicator.setTabTextColors(getResources().getColor(R.color.tv_text_default), ThemeStore.accentColor(this));
     }
 
     @Override
