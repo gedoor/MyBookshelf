@@ -11,6 +11,7 @@ import com.kunfei.bookshelf.R;
 import com.kunfei.bookshelf.base.observer.SimpleObserver;
 import com.kunfei.bookshelf.bean.BookShelfBean;
 import com.kunfei.bookshelf.bean.ChapterListBean;
+import com.kunfei.bookshelf.utils.Theme.ThemeStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ChapterListAdapter extends RecyclerView.Adapter<ChapterListAdapter.
         this.bookShelfBean = bookShelfBean;
         this.itemClickListener = itemClickListener;
         normalColor = MApplication.getAppResources().getColor(R.color.selector_chapter_item);
-        highlightColor = MApplication.getAppResources().getColor(R.color.colorAccent);
+        highlightColor = ThemeStore.accentColor(MApplication.getInstance());
     }
 
     public void upChapter(int index) {
