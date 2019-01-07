@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.kunfei.bookshelf.utils.StringUtils;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -19,8 +20,8 @@ import static android.text.TextUtils.isEmpty;
  */
 
 public class AnalyzeUrl {
-    private String searchUrl;
-    private String searchPath;
+    private String hostUrl;
+    private String urlPath;
     private Map<String, String> queryMap;
     private Map<String, String> headerMap;
     private String charCode;
@@ -107,18 +108,18 @@ public class AnalyzeUrl {
         return map;
     }
 
-    private void generateUrlPath(String ruleUrl) throws Exception {
+    private void generateUrlPath(String ruleUrl) throws MalformedURLException {
         URL url = new URL(ruleUrl);
-        searchUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
-        searchPath = ruleUrl.replace(searchUrl, "");
+        hostUrl = String.format("%s://%s", url.getProtocol(), url.getAuthority());
+        urlPath = ruleUrl.replace(hostUrl, "");
     }
 
-    public String getSearchUrl() {
-        return searchUrl;
+    public String getHost() {
+        return hostUrl;
     }
 
-    public String getSearchPath() {
-        return searchPath;
+    public String getUrl() {
+        return urlPath;
     }
 
     public Map<String, String> getQueryMap() {

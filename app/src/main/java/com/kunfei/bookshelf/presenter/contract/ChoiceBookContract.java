@@ -31,7 +31,7 @@ public interface ChoiceBookContract {
 
         void loadMoreFinish(Boolean isAll);
 
-        void searchBookError();
+        void searchBookError(String msg);
 
         void addBookShelfSuccess(List<SearchBookBean> searchBooks);
 

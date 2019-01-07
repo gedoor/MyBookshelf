@@ -82,7 +82,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(url, "", page, headerMap);
-            if (analyzeUrl.getSearchUrl() == null) {
+            if (analyzeUrl.getHost() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
                     emitter.onComplete();
@@ -91,11 +91,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             return getResponseO(analyzeUrl)
                     .flatMap(bookList::analyzeSearchBook);
         } catch (Exception e) {
-            e.printStackTrace();
-            return Observable.create(emitter -> {
-                emitter.onNext(new ArrayList<>());
-                emitter.onComplete();
-            });
+            return Observable.error(new Throwable(String.format("%s错误:%s", url, e.getLocalizedMessage())));
         }
     }
 
@@ -113,7 +109,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
         BookList bookList = new BookList(tag, name, bookSourceBean);
         try {
             AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookSourceBean.getRuleSearchUrl(), content, page, headerMap);
-            if (analyzeUrl.getSearchUrl() == null) {
+            if (analyzeUrl.getHost() == null) {
                 return Observable.create(emitter -> {
                     emitter.onNext(new ArrayList<>());
                     emitter.onComplete();
@@ -200,21 +196,21 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
     private Observable<Response<String>> getResponseO(AnalyzeUrl analyzeUrl) {
         switch (analyzeUrl.getUrlMode()) {
             case POST:
-                return getRetrofitString(analyzeUrl.getSearchUrl())
+                return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpPostApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
+                        .searchBook(analyzeUrl.getUrl(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             case GET:
-                return getRetrofitString(analyzeUrl.getSearchUrl())
+                return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .searchBook(analyzeUrl.getSearchPath(),
+                        .searchBook(analyzeUrl.getUrl(),
                                 analyzeUrl.getQueryMap(),
                                 analyzeUrl.getHeaderMap());
             default:
-                return getRetrofitString(analyzeUrl.getSearchUrl())
+                return getRetrofitString(analyzeUrl.getHost())
                         .create(IHttpGetApi.class)
-                        .getWebContent(analyzeUrl.getSearchPath(),
+                        .getWebContent(analyzeUrl.getUrl(),
                                 analyzeUrl.getHeaderMap());
         }
     }

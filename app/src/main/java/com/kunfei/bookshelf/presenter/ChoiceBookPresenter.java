@@ -126,8 +126,7 @@ public class ChoiceBookPresenter extends BasePresenterImpl<ChoiceBookContract.Vi
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mView.searchBookError();
+                        mView.searchBookError(e.getMessage());
                     }
 
                     @Override
