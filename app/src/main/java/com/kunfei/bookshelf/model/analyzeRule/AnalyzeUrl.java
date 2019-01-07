@@ -23,22 +23,24 @@ public class AnalyzeUrl {
     private String searchPath;
     private Map<String, String> queryMap;
     private Map<String, String> headerMap;
-    private int searchPage;
     private String charCode;
     private UrlMode urlMode = UrlMode.DEFAULT;
 
-    public AnalyzeUrl(String ruleUrl, final String key, final int page, Map<String, String> headerMap) throws Exception {
+    public AnalyzeUrl(String ruleUrl, final String key, final Integer page, Map<String, String> headerMap) throws Exception {
         this.headerMap = headerMap;
-        searchPage = page;
         //替换关键字
-        ruleUrl = ruleUrl.replace("searchKey", key);
+        if (!StringUtils.isTrimEmpty(key)) {
+            ruleUrl = ruleUrl.replace("searchKey", key);
+        }
         //分离编码规则
         String[] ruleUrlS = ruleUrl.split("\\|");
         if (ruleUrlS.length > 1) {
             analyzeQt(ruleUrlS[1]);
         }
         //设置页数
-        setPage(ruleUrlS);
+        if (page != null) {
+            setPage(ruleUrlS, page);
+        }
         //分离post参数
         ruleUrlS = ruleUrlS[0].split("@");
         if (ruleUrlS.length > 1) {
@@ -59,7 +61,7 @@ public class AnalyzeUrl {
     /**
      * 解析页数
      */
-    private void setPage(String[] ruleUrlS) {
+    private void setPage(final String[] ruleUrlS, final int searchPage) {
         Pattern pattern = Pattern.compile("(?<=\\{).+?(?=\\})");
         Matcher matcher = pattern.matcher(ruleUrlS[0]);
         if (matcher.find()) {
@@ -94,22 +96,12 @@ public class AnalyzeUrl {
         Map<String, String> map = new HashMap<>();
         for (String query : queryS) {
             String[] queryM = query.split("=");
-            switch (queryM[1]) {
-                case "searchPage":
-                    map.put(queryM[0], String.valueOf(searchPage));
-                    break;
-                case "searchPage-1":
-                    map.put(queryM[0], String.valueOf(searchPage - 1));
-                    break;
-                default:
-                    if (isEmpty(charCode)) {
-                        map.put(queryM[0], queryM[1]);
-                    } else if (charCode.equals("escape")) {
-                        map.put(queryM[0], StringUtils.escape(queryM[1]));
-                    } else {
-                        map.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
-                    }
-                    break;
+            if (isEmpty(charCode)) {
+                map.put(queryM[0], queryM[1]);
+            } else if (charCode.equals("escape")) {
+                map.put(queryM[0], StringUtils.escape(queryM[1]));
+            } else {
+                map.put(queryM[0], URLEncoder.encode(queryM[1], charCode));
             }
         }
         return map;

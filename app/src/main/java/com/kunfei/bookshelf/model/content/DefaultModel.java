@@ -139,10 +139,13 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             return Observable.error(new Throwable(String.format("无法找到源%s", tag)));
         }
         BookInfo bookInfo = new BookInfo(tag, name, bookSourceBean);
-        return getRetrofitString(tag)
-                .create(IHttpGetApi.class)
-                .getWebContent(bookShelfBean.getNoteUrl(), headerMap)
-                .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getNoteUrl(), null, null, headerMap);
+            return getResponseO(analyzeUrl)
+                    .flatMap(response -> bookInfo.analyzeBookInfo(response.body(), bookShelfBean));
+        } catch (Exception e) {
+            return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getNoteUrl())));
+        }
     }
 
     /**
@@ -157,10 +160,13 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             });
         }
         BookChapter bookChapter = new BookChapter(tag, bookSourceBean);
-        return getRetrofitString(tag)
-                .create(IHttpGetApi.class)
-                .getWebContent(bookShelfBean.getBookInfoBean().getChapterUrl(), headerMap)
-                .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean));
+        try {
+            AnalyzeUrl analyzeUrl = new AnalyzeUrl(bookShelfBean.getBookInfoBean().getChapterUrl(), null, null, headerMap);
+            return getResponseO(analyzeUrl)
+                    .flatMap(response -> bookChapter.analyzeChapterList(response.body(), bookShelfBean));
+        } catch (Exception e) {
+            return Observable.error(new Throwable(String.format("url错误:%s", bookShelfBean.getBookInfoBean().getChapterUrl())));
+        }
     }
 
     /**
@@ -181,11 +187,13 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
                     .observeOn(scheduler)
                     .flatMap(response -> bookContent.analyzeBookContent(response, chapterBean));
         } else {
-            return getRetrofitString(tag)
-                    .create(IHttpGetApi.class)
-                    .getWebContent(chapterBean.getDurChapterUrl(), headerMap)
-                    .subscribeOn(scheduler)
-                    .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
+            try {
+                AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
+                return getResponseO(analyzeUrl)
+                        .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
+            } catch (Exception e) {
+                return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
+            }
         }
     }
 
