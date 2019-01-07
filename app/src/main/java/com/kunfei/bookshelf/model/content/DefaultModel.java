@@ -186,6 +186,7 @@ public class DefaultModel extends BaseModelImpl implements IStationBookModel {
             try {
                 AnalyzeUrl analyzeUrl = new AnalyzeUrl(chapterBean.getDurChapterUrl(), null, null, headerMap);
                 return getResponseO(analyzeUrl)
+                        .subscribeOn(scheduler)
                         .flatMap(response -> bookContent.analyzeBookContent(response.body(), chapterBean));
             } catch (Exception e) {
                 return Observable.error(new Throwable(String.format("url错误:%s", chapterBean.getDurChapterUrl())));
